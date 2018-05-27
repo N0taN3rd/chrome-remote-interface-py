@@ -18,11 +18,8 @@ PressureLevel = str
 
 # SamplingProfileNode: Heap profile sample.
 class SamplingProfileNode(ChromeTypeBase):
-    def __init__(self,
-                 size: Union['float'],
-                 total: Union['float'],
-                 stack: Union['[]'],
-                 ):
+
+    def __init__(self, size: Union["float"], total: Union["float"], stack: Union["[]"]):
 
         self.size = size
         self.total = total
@@ -31,9 +28,8 @@ class SamplingProfileNode(ChromeTypeBase):
 
 # SamplingProfile: Array of heap profile samples.
 class SamplingProfile(ChromeTypeBase):
-    def __init__(self,
-                 samples: Union['[SamplingProfileNode]'],
-                 ):
+
+    def __init__(self, samples: Union["[SamplingProfileNode]"]):
 
         self.samples = samples
 
@@ -41,74 +37,58 @@ class SamplingProfile(ChromeTypeBase):
 class Memory(PayloadMixin):
     """ 
     """
+
     @classmethod
     def getDOMCounters(cls):
         """
         """
         return (
-            cls.build_send_payload("getDOMCounters", {
-            }),
-            cls.convert_payload({
-                "documents": {
-                    "class": int,
-                    "optional": False
-                },
-                "nodes": {
-                    "class": int,
-                    "optional": False
-                },
-                "jsEventListeners": {
-                    "class": int,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getDOMCounters", {}),
+            cls.convert_payload(
+                {
+                    "documents": {"class": int, "optional": False},
+                    "nodes": {"class": int, "optional": False},
+                    "jsEventListeners": {"class": int, "optional": False},
+                }
+            ),
         )
 
     @classmethod
     def prepareForLeakDetection(cls):
         """
         """
-        return (
-            cls.build_send_payload("prepareForLeakDetection", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("prepareForLeakDetection", {}), None)
 
     @classmethod
-    def setPressureNotificationsSuppressed(cls,
-                                           suppressed: Union['bool'],
-                                           ):
+    def setPressureNotificationsSuppressed(cls, suppressed: Union["bool"]):
         """Enable/disable suppressing memory pressure notifications in all processes.
         :param suppressed: If true, memory pressure notifications will be suppressed.
         :type suppressed: bool
         """
         return (
-            cls.build_send_payload("setPressureNotificationsSuppressed", {
-                "suppressed": suppressed,
-            }),
-            None
+            cls.build_send_payload(
+                "setPressureNotificationsSuppressed", {"suppressed": suppressed}
+            ),
+            None,
         )
 
     @classmethod
-    def simulatePressureNotification(cls,
-                                     level: Union['PressureLevel'],
-                                     ):
+    def simulatePressureNotification(cls, level: Union["PressureLevel"]):
         """Simulate a memory pressure notification in all processes.
         :param level: Memory pressure level of the notification.
         :type level: PressureLevel
         """
         return (
-            cls.build_send_payload("simulatePressureNotification", {
-                "level": level,
-            }),
-            None
+            cls.build_send_payload("simulatePressureNotification", {"level": level}),
+            None,
         )
 
     @classmethod
-    def startSampling(cls,
-                      samplingInterval: Optional['int'] = None,
-                      suppressRandomness: Optional['bool'] = None,
-                      ):
+    def startSampling(
+        cls,
+        samplingInterval: Optional["int"] = None,
+        suppressRandomness: Optional["bool"] = None,
+    ):
         """Start collecting native memory profile.
         :param samplingInterval: Average number of bytes between samples.
         :type samplingInterval: int
@@ -116,22 +96,21 @@ class Memory(PayloadMixin):
         :type suppressRandomness: bool
         """
         return (
-            cls.build_send_payload("startSampling", {
-                "samplingInterval": samplingInterval,
-                "suppressRandomness": suppressRandomness,
-            }),
-            None
+            cls.build_send_payload(
+                "startSampling",
+                {
+                    "samplingInterval": samplingInterval,
+                    "suppressRandomness": suppressRandomness,
+                },
+            ),
+            None,
         )
 
     @classmethod
     def stopSampling(cls):
         """Stop collecting native memory profile.
         """
-        return (
-            cls.build_send_payload("stopSampling", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("stopSampling", {}), None)
 
     @classmethod
     def getAllTimeSamplingProfile(cls):
@@ -139,14 +118,10 @@ class Memory(PayloadMixin):
 collected since renderer process startup.
         """
         return (
-            cls.build_send_payload("getAllTimeSamplingProfile", {
-            }),
-            cls.convert_payload({
-                "profile": {
-                    "class": SamplingProfile,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getAllTimeSamplingProfile", {}),
+            cls.convert_payload(
+                {"profile": {"class": SamplingProfile, "optional": False}}
+            ),
         )
 
     @classmethod
@@ -155,14 +130,10 @@ collected since renderer process startup.
 collected since browser process startup.
         """
         return (
-            cls.build_send_payload("getBrowserSamplingProfile", {
-            }),
-            cls.convert_payload({
-                "profile": {
-                    "class": SamplingProfile,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getBrowserSamplingProfile", {}),
+            cls.convert_payload(
+                {"profile": {"class": SamplingProfile, "optional": False}}
+            ),
         )
 
     @classmethod
@@ -171,13 +142,8 @@ collected since browser process startup.
 `startSampling` call.
         """
         return (
-            cls.build_send_payload("getSamplingProfile", {
-            }),
-            cls.convert_payload({
-                "profile": {
-                    "class": SamplingProfile,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getSamplingProfile", {}),
+            cls.convert_payload(
+                {"profile": {"class": SamplingProfile, "optional": False}}
+            ),
         )
-

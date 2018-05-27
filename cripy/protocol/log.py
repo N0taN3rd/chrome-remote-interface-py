@@ -17,18 +17,20 @@ from cripy.protocol import network as Network
 
 # LogEntry: Log entry.
 class LogEntry(ChromeTypeBase):
-    def __init__(self,
-                 source: Union['str'],
-                 level: Union['str'],
-                 text: Union['str'],
-                 timestamp: Union['Runtime.Timestamp'],
-                 url: Optional['str'] = None,
-                 lineNumber: Optional['int'] = None,
-                 stackTrace: Optional['Runtime.StackTrace'] = None,
-                 networkRequestId: Optional['Network.RequestId'] = None,
-                 workerId: Optional['str'] = None,
-                 args: Optional['[Runtime.RemoteObject]'] = None,
-                 ):
+
+    def __init__(
+        self,
+        source: Union["str"],
+        level: Union["str"],
+        text: Union["str"],
+        timestamp: Union["Runtime.Timestamp"],
+        url: Optional["str"] = None,
+        lineNumber: Optional["int"] = None,
+        stackTrace: Optional["Runtime.StackTrace"] = None,
+        networkRequestId: Optional["Network.RequestId"] = None,
+        workerId: Optional["str"] = None,
+        args: Optional["[Runtime.RemoteObject]"] = None,
+    ):
 
         self.source = source
         self.level = level
@@ -44,10 +46,8 @@ class LogEntry(ChromeTypeBase):
 
 # ViolationSetting: Violation configuration setting.
 class ViolationSetting(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 threshold: Union['float'],
-                 ):
+
+    def __init__(self, name: Union["str"], threshold: Union["float"]):
 
         self.name = name
         self.threshold = threshold
@@ -56,73 +56,51 @@ class ViolationSetting(ChromeTypeBase):
 class Log(PayloadMixin):
     """ Provides access to log entries.
     """
+
     @classmethod
     def clear(cls):
         """Clears the log.
         """
-        return (
-            cls.build_send_payload("clear", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("clear", {}), None)
 
     @classmethod
     def disable(cls):
         """Disables log domain, prevents further log entries from being reported to the client.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
     def enable(cls):
         """Enables log domain, sends the entries collected so far to the client by means of the
 `entryAdded` notification.
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("enable", {}), None)
 
     @classmethod
-    def startViolationsReport(cls,
-                              config: Union['[ViolationSetting]'],
-                              ):
+    def startViolationsReport(cls, config: Union["[ViolationSetting]"]):
         """start violation reporting.
         :param config: Configuration for violations.
         :type config: [ViolationSetting]
         """
         return (
-            cls.build_send_payload("startViolationsReport", {
-                "config": config,
-            }),
-            None
+            cls.build_send_payload("startViolationsReport", {"config": config}),
+            None,
         )
 
     @classmethod
     def stopViolationsReport(cls):
         """Stop violation reporting.
         """
-        return (
-            cls.build_send_payload("stopViolationsReport", {
-            }),
-            None
-        )
-
+        return (cls.build_send_payload("stopViolationsReport", {}), None)
 
 
 class EntryAddedEvent(BaseEvent):
 
-    js_name = 'Log.entryAdded'
+    js_name = "Log.entryAdded"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 entry: Union['LogEntry', dict],
-                 ):
+    def __init__(self, entry: Union["LogEntry", dict]):
         if isinstance(entry, dict):
             entry = LogEntry(**entry)
         elif isinstance(entry, list):
@@ -131,4 +109,4 @@ class EntryAddedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")

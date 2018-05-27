@@ -18,15 +18,17 @@ CacheId = str
 
 # DataEntry: Data entry.
 class DataEntry(ChromeTypeBase):
-    def __init__(self,
-                 requestURL: Union['str'],
-                 requestMethod: Union['str'],
-                 requestHeaders: Union['[Header]'],
-                 responseTime: Union['float'],
-                 responseStatus: Union['int'],
-                 responseStatusText: Union['str'],
-                 responseHeaders: Union['[Header]'],
-                 ):
+
+    def __init__(
+        self,
+        requestURL: Union["str"],
+        requestMethod: Union["str"],
+        requestHeaders: Union["[Header]"],
+        responseTime: Union["float"],
+        responseStatus: Union["int"],
+        responseStatusText: Union["str"],
+        responseHeaders: Union["[Header]"],
+    ):
 
         self.requestURL = requestURL
         self.requestMethod = requestMethod
@@ -39,23 +41,23 @@ class DataEntry(ChromeTypeBase):
 
 # Cache: Cache identifier.
 class Cache(ChromeTypeBase):
-    def __init__(self,
-                 cacheId: Union['CacheId'],
-                 securityOrigin: Union['str'],
-                 cacheName: Union['str'],
-                 ):
+
+    def __init__(
+        self,
+        cacheId: Union["CacheId"],
+        securityOrigin: Union["str"],
+        cacheName: Union["str"],
+    ):
 
         self.cacheId = cacheId
         self.securityOrigin = securityOrigin
         self.cacheName = cacheName
 
 
-# Header: 
+# Header:
 class Header(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 value: Union['str'],
-                 ):
+
+    def __init__(self, name: Union["str"], value: Union["str"]):
 
         self.name = name
         self.value = value
@@ -63,9 +65,8 @@ class Header(ChromeTypeBase):
 
 # CachedResponse: Cached response
 class CachedResponse(ChromeTypeBase):
-    def __init__(self,
-                 body: Union['str'],
-                 ):
+
+    def __init__(self, body: Union["str"]):
 
         self.body = body
 
@@ -73,26 +74,17 @@ class CachedResponse(ChromeTypeBase):
 class CacheStorage(PayloadMixin):
     """ 
     """
+
     @classmethod
-    def deleteCache(cls,
-                    cacheId: Union['CacheId'],
-                    ):
+    def deleteCache(cls, cacheId: Union["CacheId"]):
         """Deletes a cache.
         :param cacheId: Id of cache for deletion.
         :type cacheId: CacheId
         """
-        return (
-            cls.build_send_payload("deleteCache", {
-                "cacheId": cacheId,
-            }),
-            None
-        )
+        return (cls.build_send_payload("deleteCache", {"cacheId": cacheId}), None)
 
     @classmethod
-    def deleteEntry(cls,
-                    cacheId: Union['CacheId'],
-                    request: Union['str'],
-                    ):
+    def deleteEntry(cls, cacheId: Union["CacheId"], request: Union["str"]):
         """Deletes a cache entry.
         :param cacheId: Id of cache where the entry will be deleted.
         :type cacheId: CacheId
@@ -100,38 +92,27 @@ class CacheStorage(PayloadMixin):
         :type request: str
         """
         return (
-            cls.build_send_payload("deleteEntry", {
-                "cacheId": cacheId,
-                "request": request,
-            }),
-            None
+            cls.build_send_payload(
+                "deleteEntry", {"cacheId": cacheId, "request": request}
+            ),
+            None,
         )
 
     @classmethod
-    def requestCacheNames(cls,
-                          securityOrigin: Union['str'],
-                          ):
+    def requestCacheNames(cls, securityOrigin: Union["str"]):
         """Requests cache names.
         :param securityOrigin: Security origin.
         :type securityOrigin: str
         """
         return (
-            cls.build_send_payload("requestCacheNames", {
-                "securityOrigin": securityOrigin,
-            }),
-            cls.convert_payload({
-                "caches": {
-                    "class": [Cache],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "requestCacheNames", {"securityOrigin": securityOrigin}
+            ),
+            cls.convert_payload({"caches": {"class": [Cache], "optional": False}}),
         )
 
     @classmethod
-    def requestCachedResponse(cls,
-                              cacheId: Union['CacheId'],
-                              requestURL: Union['str'],
-                              ):
+    def requestCachedResponse(cls, cacheId: Union["CacheId"], requestURL: Union["str"]):
         """Fetches cache entry.
         :param cacheId: Id of cache that contains the enty.
         :type cacheId: CacheId
@@ -139,24 +120,18 @@ class CacheStorage(PayloadMixin):
         :type requestURL: str
         """
         return (
-            cls.build_send_payload("requestCachedResponse", {
-                "cacheId": cacheId,
-                "requestURL": requestURL,
-            }),
-            cls.convert_payload({
-                "response": {
-                    "class": CachedResponse,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "requestCachedResponse", {"cacheId": cacheId, "requestURL": requestURL}
+            ),
+            cls.convert_payload(
+                {"response": {"class": CachedResponse, "optional": False}}
+            ),
         )
 
     @classmethod
-    def requestEntries(cls,
-                       cacheId: Union['CacheId'],
-                       skipCount: Union['int'],
-                       pageSize: Union['int'],
-                       ):
+    def requestEntries(
+        cls, cacheId: Union["CacheId"], skipCount: Union["int"], pageSize: Union["int"]
+    ):
         """Requests data from cache.
         :param cacheId: ID of cache to get entries from.
         :type cacheId: CacheId
@@ -166,20 +141,14 @@ class CacheStorage(PayloadMixin):
         :type pageSize: int
         """
         return (
-            cls.build_send_payload("requestEntries", {
-                "cacheId": cacheId,
-                "skipCount": skipCount,
-                "pageSize": pageSize,
-            }),
-            cls.convert_payload({
-                "cacheDataEntries": {
-                    "class": [DataEntry],
-                    "optional": False
-                },
-                "hasMore": {
-                    "class": bool,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "requestEntries",
+                {"cacheId": cacheId, "skipCount": skipCount, "pageSize": pageSize},
+            ),
+            cls.convert_payload(
+                {
+                    "cacheDataEntries": {"class": [DataEntry], "optional": False},
+                    "hasMore": {"class": bool, "optional": False},
+                }
+            ),
         )
-

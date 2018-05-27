@@ -1,9 +1,11 @@
-import json
+import ujson as json
 import os.path
 import re
 import sys
 
 from jinja2 import Template
+
+from cripy.protogen.domain import Domain
 
 # TODO: circular dependency below
 # PACKAGE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -125,14 +127,14 @@ def collect_deps_refs(domain: dict) -> list:
     return list(depref)
 
 
-if __name__ == "__main__":
+def main() -> None:
     domain_deprefs = {}
     for fpd in [js_json_fp, browser_json_fp]:
         pname, fp = fpd
         with open(fp) as jsonIN:
             data = json.load(jsonIN)
             for domain in data["domains"]:
-                domain_deprefs[domain['domain']] = collect_deps_refs(domain)
+                domain_deprefs[domain["domain"]] = collect_deps_refs(domain)
     processed_data = {}
     hashable_objs_per_prot = {}
     for fpd in [js_json_fp, browser_json_fp]:
@@ -200,10 +202,10 @@ if __name__ == "__main__":
         for prot in processed_data.values():
             for domain in prot["domains"]:
                 name = domain["domain"].lower()
-                domain['dependencies'] = domain_deprefs[domain["domain"]]
-                print(name, domain.get('dependencies', 'nothing'))
+                domain["dependencies"] = domain_deprefs[domain["domain"]]
+                print(name, domain.get("dependencies", "nothing"))
                 # if name == 'page':
-                    # domain['dependencies'].extend(['Runtime', 'Emulation'])
+                # domain['dependencies'].extend(['Runtime', 'Emulation'])
 
                 init_d.append((name, domain["domain"]))
                 with open(os.path.join(output_dir_fp, "%s.py" % name), "w") as f:
@@ -216,3 +218,28 @@ if __name__ == "__main__":
         t = Template(it.read(), trim_blocks=True, lstrip_blocks=True)
         output = t.render(domains=init_d)
         init_out.write(output)
+
+
+def read_json(fp: str) -> dict:
+    with open(fp, "r") as iin:
+        return json.load(iin)
+
+
+PT_PYT = dict(
+    object="dict",
+    string="str",
+    integer="int",
+    number="float",
+    boolean="bool",
+    any="Any",
+)
+
+
+if __name__ == "__main__":
+    for which, fp in [js_json_fp, browser_json_fp]:
+        print(which)
+        data = read_json(fp)
+        print(data)
+        for domain in data["domains"]:
+            Domain(domain)
+        print("--------------")

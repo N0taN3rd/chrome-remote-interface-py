@@ -15,10 +15,8 @@ log = logging.getLogger(__name__)
 
 # StorageId: DOM Storage identifier.
 class StorageId(ChromeTypeBase):
-    def __init__(self,
-                 securityOrigin: Union['str'],
-                 isLocalStorage: Union['bool'],
-                 ):
+
+    def __init__(self, securityOrigin: Union["str"], isLocalStorage: Union["bool"]):
 
         self.securityOrigin = securityOrigin
         self.isLocalStorage = isLocalStorage
@@ -27,69 +25,44 @@ class StorageId(ChromeTypeBase):
 # Item: DOM Storage item.
 Item = [str]
 
+
 class DOMStorage(PayloadMixin):
     """ Query and modify DOM storage.
     """
+
     @classmethod
-    def clear(cls,
-              storageId: Union['StorageId'],
-              ):
+    def clear(cls, storageId: Union["StorageId"]):
         """
         :param storageId: 
         :type storageId: StorageId
         """
-        return (
-            cls.build_send_payload("clear", {
-                "storageId": storageId,
-            }),
-            None
-        )
+        return (cls.build_send_payload("clear", {"storageId": storageId}), None)
 
     @classmethod
     def disable(cls):
         """Disables storage tracking, prevents storage events from being sent to the client.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
     def enable(cls):
         """Enables storage tracking, storage events will now be delivered to the client.
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("enable", {}), None)
 
     @classmethod
-    def getDOMStorageItems(cls,
-                           storageId: Union['StorageId'],
-                           ):
+    def getDOMStorageItems(cls, storageId: Union["StorageId"]):
         """
         :param storageId: 
         :type storageId: StorageId
         """
         return (
-            cls.build_send_payload("getDOMStorageItems", {
-                "storageId": storageId,
-            }),
-            cls.convert_payload({
-                "entries": {
-                    "class": [Item],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getDOMStorageItems", {"storageId": storageId}),
+            cls.convert_payload({"entries": {"class": [Item], "optional": False}}),
         )
 
     @classmethod
-    def removeDOMStorageItem(cls,
-                             storageId: Union['StorageId'],
-                             key: Union['str'],
-                             ):
+    def removeDOMStorageItem(cls, storageId: Union["StorageId"], key: Union["str"]):
         """
         :param storageId: 
         :type storageId: StorageId
@@ -97,19 +70,16 @@ class DOMStorage(PayloadMixin):
         :type key: str
         """
         return (
-            cls.build_send_payload("removeDOMStorageItem", {
-                "storageId": storageId,
-                "key": key,
-            }),
-            None
+            cls.build_send_payload(
+                "removeDOMStorageItem", {"storageId": storageId, "key": key}
+            ),
+            None,
         )
 
     @classmethod
-    def setDOMStorageItem(cls,
-                          storageId: Union['StorageId'],
-                          key: Union['str'],
-                          value: Union['str'],
-                          ):
+    def setDOMStorageItem(
+        cls, storageId: Union["StorageId"], key: Union["str"], value: Union["str"]
+    ):
         """
         :param storageId: 
         :type storageId: StorageId
@@ -119,27 +89,26 @@ class DOMStorage(PayloadMixin):
         :type value: str
         """
         return (
-            cls.build_send_payload("setDOMStorageItem", {
-                "storageId": storageId,
-                "key": key,
-                "value": value,
-            }),
-            None
+            cls.build_send_payload(
+                "setDOMStorageItem",
+                {"storageId": storageId, "key": key, "value": value},
+            ),
+            None,
         )
-
 
 
 class DomStorageItemAddedEvent(BaseEvent):
 
-    js_name = 'Domstorage.domStorageItemAdded'
-    hashable = ['storageId']
+    js_name = "Domstorage.domStorageItemAdded"
+    hashable = ["storageId"]
     is_hashable = True
 
-    def __init__(self,
-                 storageId: Union['StorageId', dict],
-                 key: Union['str', dict],
-                 newValue: Union['str', dict],
-                 ):
+    def __init__(
+        self,
+        storageId: Union["StorageId", dict],
+        key: Union["str", dict],
+        newValue: Union["str", dict],
+    ):
         if isinstance(storageId, dict):
             storageId = StorageId(**storageId)
         elif isinstance(storageId, list):
@@ -159,23 +128,22 @@ class DomStorageItemAddedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, storageId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class DomStorageItemRemovedEvent(BaseEvent):
 
-    js_name = 'Domstorage.domStorageItemRemoved'
-    hashable = ['storageId']
+    js_name = "Domstorage.domStorageItemRemoved"
+    hashable = ["storageId"]
     is_hashable = True
 
-    def __init__(self,
-                 storageId: Union['StorageId', dict],
-                 key: Union['str', dict],
-                 ):
+    def __init__(self, storageId: Union["StorageId", dict], key: Union["str", dict]):
         if isinstance(storageId, dict):
             storageId = StorageId(**storageId)
         elif isinstance(storageId, list):
@@ -190,25 +158,28 @@ class DomStorageItemRemovedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, storageId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class DomStorageItemUpdatedEvent(BaseEvent):
 
-    js_name = 'Domstorage.domStorageItemUpdated'
-    hashable = ['storageId']
+    js_name = "Domstorage.domStorageItemUpdated"
+    hashable = ["storageId"]
     is_hashable = True
 
-    def __init__(self,
-                 storageId: Union['StorageId', dict],
-                 key: Union['str', dict],
-                 oldValue: Union['str', dict],
-                 newValue: Union['str', dict],
-                 ):
+    def __init__(
+        self,
+        storageId: Union["StorageId", dict],
+        key: Union["str", dict],
+        oldValue: Union["str", dict],
+        newValue: Union["str", dict],
+    ):
         if isinstance(storageId, dict):
             storageId = StorageId(**storageId)
         elif isinstance(storageId, list):
@@ -233,22 +204,22 @@ class DomStorageItemUpdatedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, storageId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class DomStorageItemsClearedEvent(BaseEvent):
 
-    js_name = 'Domstorage.domStorageItemsCleared'
-    hashable = ['storageId']
+    js_name = "Domstorage.domStorageItemsCleared"
+    hashable = ["storageId"]
     is_hashable = True
 
-    def __init__(self,
-                 storageId: Union['StorageId', dict],
-                 ):
+    def __init__(self, storageId: Union["StorageId", dict]):
         if isinstance(storageId, dict):
             storageId = StorageId(**storageId)
         elif isinstance(storageId, list):
@@ -258,8 +229,10 @@ class DomStorageItemsClearedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, storageId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h

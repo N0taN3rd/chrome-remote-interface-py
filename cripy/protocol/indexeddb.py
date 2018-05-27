@@ -16,11 +16,13 @@ from cripy.protocol import runtime as Runtime
 
 # DatabaseWithObjectStores: Database with an array of object stores.
 class DatabaseWithObjectStores(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 version: Union['int'],
-                 objectStores: Union['[ObjectStore]'],
-                 ):
+
+    def __init__(
+        self,
+        name: Union["str"],
+        version: Union["int"],
+        objectStores: Union["[ObjectStore]"],
+    ):
 
         self.name = name
         self.version = version
@@ -29,12 +31,14 @@ class DatabaseWithObjectStores(ChromeTypeBase):
 
 # ObjectStore: Object store.
 class ObjectStore(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 keyPath: Union['KeyPath'],
-                 autoIncrement: Union['bool'],
-                 indexes: Union['[ObjectStoreIndex]'],
-                 ):
+
+    def __init__(
+        self,
+        name: Union["str"],
+        keyPath: Union["KeyPath"],
+        autoIncrement: Union["bool"],
+        indexes: Union["[ObjectStoreIndex]"],
+    ):
 
         self.name = name
         self.keyPath = keyPath
@@ -44,12 +48,14 @@ class ObjectStore(ChromeTypeBase):
 
 # ObjectStoreIndex: Object store index.
 class ObjectStoreIndex(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 keyPath: Union['KeyPath'],
-                 unique: Union['bool'],
-                 multiEntry: Union['bool'],
-                 ):
+
+    def __init__(
+        self,
+        name: Union["str"],
+        keyPath: Union["KeyPath"],
+        unique: Union["bool"],
+        multiEntry: Union["bool"],
+    ):
 
         self.name = name
         self.keyPath = keyPath
@@ -59,13 +65,15 @@ class ObjectStoreIndex(ChromeTypeBase):
 
 # Key: Key.
 class Key(ChromeTypeBase):
-    def __init__(self,
-                 type: Union['str'],
-                 number: Optional['float'] = None,
-                 string: Optional['str'] = None,
-                 date: Optional['float'] = None,
-                 array: Optional['[Key]'] = None,
-                 ):
+
+    def __init__(
+        self,
+        type: Union["str"],
+        number: Optional["float"] = None,
+        string: Optional["str"] = None,
+        date: Optional["float"] = None,
+        array: Optional["[Key]"] = None,
+    ):
 
         self.type = type
         self.number = number
@@ -76,12 +84,14 @@ class Key(ChromeTypeBase):
 
 # KeyRange: Key range.
 class KeyRange(ChromeTypeBase):
-    def __init__(self,
-                 lowerOpen: Union['bool'],
-                 upperOpen: Union['bool'],
-                 lower: Optional['Key'] = None,
-                 upper: Optional['Key'] = None,
-                 ):
+
+    def __init__(
+        self,
+        lowerOpen: Union["bool"],
+        upperOpen: Union["bool"],
+        lower: Optional["Key"] = None,
+        upper: Optional["Key"] = None,
+    ):
 
         self.lower = lower
         self.upper = upper
@@ -91,11 +101,13 @@ class KeyRange(ChromeTypeBase):
 
 # DataEntry: Data entry.
 class DataEntry(ChromeTypeBase):
-    def __init__(self,
-                 key: Union['Runtime.RemoteObject'],
-                 primaryKey: Union['Runtime.RemoteObject'],
-                 value: Union['Runtime.RemoteObject'],
-                 ):
+
+    def __init__(
+        self,
+        key: Union["Runtime.RemoteObject"],
+        primaryKey: Union["Runtime.RemoteObject"],
+        value: Union["Runtime.RemoteObject"],
+    ):
 
         self.key = key
         self.primaryKey = primaryKey
@@ -104,11 +116,13 @@ class DataEntry(ChromeTypeBase):
 
 # KeyPath: Key path.
 class KeyPath(ChromeTypeBase):
-    def __init__(self,
-                 type: Union['str'],
-                 string: Optional['str'] = None,
-                 array: Optional['[]'] = None,
-                 ):
+
+    def __init__(
+        self,
+        type: Union["str"],
+        string: Optional["str"] = None,
+        array: Optional["[]"] = None,
+    ):
 
         self.type = type
         self.string = string
@@ -118,12 +132,14 @@ class KeyPath(ChromeTypeBase):
 class IndexedDB(PayloadMixin):
     """ 
     """
+
     @classmethod
-    def clearObjectStore(cls,
-                         securityOrigin: Union['str'],
-                         databaseName: Union['str'],
-                         objectStoreName: Union['str'],
-                         ):
+    def clearObjectStore(
+        cls,
+        securityOrigin: Union["str"],
+        databaseName: Union["str"],
+        objectStoreName: Union["str"],
+    ):
         """Clears all entries from an object store.
         :param securityOrigin: Security origin.
         :type securityOrigin: str
@@ -133,19 +149,19 @@ class IndexedDB(PayloadMixin):
         :type objectStoreName: str
         """
         return (
-            cls.build_send_payload("clearObjectStore", {
-                "securityOrigin": securityOrigin,
-                "databaseName": databaseName,
-                "objectStoreName": objectStoreName,
-            }),
-            None
+            cls.build_send_payload(
+                "clearObjectStore",
+                {
+                    "securityOrigin": securityOrigin,
+                    "databaseName": databaseName,
+                    "objectStoreName": objectStoreName,
+                },
+            ),
+            None,
         )
 
     @classmethod
-    def deleteDatabase(cls,
-                       securityOrigin: Union['str'],
-                       databaseName: Union['str'],
-                       ):
+    def deleteDatabase(cls, securityOrigin: Union["str"], databaseName: Union["str"]):
         """Deletes a database.
         :param securityOrigin: Security origin.
         :type securityOrigin: str
@@ -153,20 +169,21 @@ class IndexedDB(PayloadMixin):
         :type databaseName: str
         """
         return (
-            cls.build_send_payload("deleteDatabase", {
-                "securityOrigin": securityOrigin,
-                "databaseName": databaseName,
-            }),
-            None
+            cls.build_send_payload(
+                "deleteDatabase",
+                {"securityOrigin": securityOrigin, "databaseName": databaseName},
+            ),
+            None,
         )
 
     @classmethod
-    def deleteObjectStoreEntries(cls,
-                                 securityOrigin: Union['str'],
-                                 databaseName: Union['str'],
-                                 objectStoreName: Union['str'],
-                                 keyRange: Union['KeyRange'],
-                                 ):
+    def deleteObjectStoreEntries(
+        cls,
+        securityOrigin: Union["str"],
+        databaseName: Union["str"],
+        objectStoreName: Union["str"],
+        keyRange: Union["KeyRange"],
+    ):
         """Delete a range of entries from an object store
         :param securityOrigin: 
         :type securityOrigin: str
@@ -178,45 +195,41 @@ class IndexedDB(PayloadMixin):
         :type keyRange: KeyRange
         """
         return (
-            cls.build_send_payload("deleteObjectStoreEntries", {
-                "securityOrigin": securityOrigin,
-                "databaseName": databaseName,
-                "objectStoreName": objectStoreName,
-                "keyRange": keyRange,
-            }),
-            None
+            cls.build_send_payload(
+                "deleteObjectStoreEntries",
+                {
+                    "securityOrigin": securityOrigin,
+                    "databaseName": databaseName,
+                    "objectStoreName": objectStoreName,
+                    "keyRange": keyRange,
+                },
+            ),
+            None,
         )
 
     @classmethod
     def disable(cls):
         """Disables events from backend.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
     def enable(cls):
         """Enables events from backend.
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("enable", {}), None)
 
     @classmethod
-    def requestData(cls,
-                    securityOrigin: Union['str'],
-                    databaseName: Union['str'],
-                    objectStoreName: Union['str'],
-                    indexName: Union['str'],
-                    skipCount: Union['int'],
-                    pageSize: Union['int'],
-                    keyRange: Optional['KeyRange'] = None,
-                    ):
+    def requestData(
+        cls,
+        securityOrigin: Union["str"],
+        databaseName: Union["str"],
+        objectStoreName: Union["str"],
+        indexName: Union["str"],
+        skipCount: Union["int"],
+        pageSize: Union["int"],
+        keyRange: Optional["KeyRange"] = None,
+    ):
         """Requests data from object store or index.
         :param securityOrigin: Security origin.
         :type securityOrigin: str
@@ -234,32 +247,28 @@ class IndexedDB(PayloadMixin):
         :type keyRange: KeyRange
         """
         return (
-            cls.build_send_payload("requestData", {
-                "securityOrigin": securityOrigin,
-                "databaseName": databaseName,
-                "objectStoreName": objectStoreName,
-                "indexName": indexName,
-                "skipCount": skipCount,
-                "pageSize": pageSize,
-                "keyRange": keyRange,
-            }),
-            cls.convert_payload({
-                "objectStoreDataEntries": {
-                    "class": [DataEntry],
-                    "optional": False
+            cls.build_send_payload(
+                "requestData",
+                {
+                    "securityOrigin": securityOrigin,
+                    "databaseName": databaseName,
+                    "objectStoreName": objectStoreName,
+                    "indexName": indexName,
+                    "skipCount": skipCount,
+                    "pageSize": pageSize,
+                    "keyRange": keyRange,
                 },
-                "hasMore": {
-                    "class": bool,
-                    "optional": False
-                },
-            })
+            ),
+            cls.convert_payload(
+                {
+                    "objectStoreDataEntries": {"class": [DataEntry], "optional": False},
+                    "hasMore": {"class": bool, "optional": False},
+                }
+            ),
         )
 
     @classmethod
-    def requestDatabase(cls,
-                        securityOrigin: Union['str'],
-                        databaseName: Union['str'],
-                        ):
+    def requestDatabase(cls, securityOrigin: Union["str"], databaseName: Union["str"]):
         """Requests database with given name in given frame.
         :param securityOrigin: Security origin.
         :type securityOrigin: str
@@ -267,35 +276,29 @@ class IndexedDB(PayloadMixin):
         :type databaseName: str
         """
         return (
-            cls.build_send_payload("requestDatabase", {
-                "securityOrigin": securityOrigin,
-                "databaseName": databaseName,
-            }),
-            cls.convert_payload({
-                "databaseWithObjectStores": {
-                    "class": DatabaseWithObjectStores,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "requestDatabase",
+                {"securityOrigin": securityOrigin, "databaseName": databaseName},
+            ),
+            cls.convert_payload(
+                {
+                    "databaseWithObjectStores": {
+                        "class": DatabaseWithObjectStores,
+                        "optional": False,
+                    }
+                }
+            ),
         )
 
     @classmethod
-    def requestDatabaseNames(cls,
-                             securityOrigin: Union['str'],
-                             ):
+    def requestDatabaseNames(cls, securityOrigin: Union["str"]):
         """Requests database names for given security origin.
         :param securityOrigin: Security origin.
         :type securityOrigin: str
         """
         return (
-            cls.build_send_payload("requestDatabaseNames", {
-                "securityOrigin": securityOrigin,
-            }),
-            cls.convert_payload({
-                "databaseNames": {
-                    "class": [],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "requestDatabaseNames", {"securityOrigin": securityOrigin}
+            ),
+            cls.convert_payload({"databaseNames": {"class": [], "optional": False}}),
         )
-

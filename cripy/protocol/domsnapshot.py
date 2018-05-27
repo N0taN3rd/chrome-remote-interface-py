@@ -19,36 +19,38 @@ from cripy.protocol import domdebugger as DOMDebugger
 
 # DOMNode: A Node in the DOM tree.
 class DOMNode(ChromeTypeBase):
-    def __init__(self,
-                 nodeType: Union['int'],
-                 nodeName: Union['str'],
-                 nodeValue: Union['str'],
-                 backendNodeId: Union['DOM.BackendNodeId'],
-                 textValue: Optional['str'] = None,
-                 inputValue: Optional['str'] = None,
-                 inputChecked: Optional['bool'] = None,
-                 optionSelected: Optional['bool'] = None,
-                 childNodeIndexes: Optional['[]'] = None,
-                 attributes: Optional['[NameValue]'] = None,
-                 pseudoElementIndexes: Optional['[]'] = None,
-                 layoutNodeIndex: Optional['int'] = None,
-                 documentURL: Optional['str'] = None,
-                 baseURL: Optional['str'] = None,
-                 contentLanguage: Optional['str'] = None,
-                 documentEncoding: Optional['str'] = None,
-                 publicId: Optional['str'] = None,
-                 systemId: Optional['str'] = None,
-                 frameId: Optional['Page.FrameId'] = None,
-                 contentDocumentIndex: Optional['int'] = None,
-                 importedDocumentIndex: Optional['int'] = None,
-                 templateContentIndex: Optional['int'] = None,
-                 pseudoType: Optional['DOM.PseudoType'] = None,
-                 shadowRootType: Optional['DOM.ShadowRootType'] = None,
-                 isClickable: Optional['bool'] = None,
-                 eventListeners: Optional['[DOMDebugger.EventListener]'] = None,
-                 currentSourceURL: Optional['str'] = None,
-                 originURL: Optional['str'] = None,
-                 ):
+
+    def __init__(
+        self,
+        nodeType: Union["int"],
+        nodeName: Union["str"],
+        nodeValue: Union["str"],
+        backendNodeId: Union["DOM.BackendNodeId"],
+        textValue: Optional["str"] = None,
+        inputValue: Optional["str"] = None,
+        inputChecked: Optional["bool"] = None,
+        optionSelected: Optional["bool"] = None,
+        childNodeIndexes: Optional["[]"] = None,
+        attributes: Optional["[NameValue]"] = None,
+        pseudoElementIndexes: Optional["[]"] = None,
+        layoutNodeIndex: Optional["int"] = None,
+        documentURL: Optional["str"] = None,
+        baseURL: Optional["str"] = None,
+        contentLanguage: Optional["str"] = None,
+        documentEncoding: Optional["str"] = None,
+        publicId: Optional["str"] = None,
+        systemId: Optional["str"] = None,
+        frameId: Optional["Page.FrameId"] = None,
+        contentDocumentIndex: Optional["int"] = None,
+        importedDocumentIndex: Optional["int"] = None,
+        templateContentIndex: Optional["int"] = None,
+        pseudoType: Optional["DOM.PseudoType"] = None,
+        shadowRootType: Optional["DOM.ShadowRootType"] = None,
+        isClickable: Optional["bool"] = None,
+        eventListeners: Optional["[DOMDebugger.EventListener]"] = None,
+        currentSourceURL: Optional["str"] = None,
+        originURL: Optional["str"] = None,
+    ):
 
         self.nodeType = nodeType
         self.nodeName = nodeName
@@ -82,11 +84,13 @@ class DOMNode(ChromeTypeBase):
 
 # InlineTextBox: Details of post layout rendered text positions. The exact layout should not be regarded asstable and may change between versions.
 class InlineTextBox(ChromeTypeBase):
-    def __init__(self,
-                 boundingBox: Union['DOM.Rect'],
-                 startCharacterIndex: Union['int'],
-                 numCharacters: Union['int'],
-                 ):
+
+    def __init__(
+        self,
+        boundingBox: Union["DOM.Rect"],
+        startCharacterIndex: Union["int"],
+        numCharacters: Union["int"],
+    ):
 
         self.boundingBox = boundingBox
         self.startCharacterIndex = startCharacterIndex
@@ -95,14 +99,16 @@ class InlineTextBox(ChromeTypeBase):
 
 # LayoutTreeNode: Details of an element in the DOM tree with a LayoutObject.
 class LayoutTreeNode(ChromeTypeBase):
-    def __init__(self,
-                 domNodeIndex: Union['int'],
-                 boundingBox: Union['DOM.Rect'],
-                 layoutText: Optional['str'] = None,
-                 inlineTextNodes: Optional['[InlineTextBox]'] = None,
-                 styleIndex: Optional['int'] = None,
-                 paintOrder: Optional['int'] = None,
-                 ):
+
+    def __init__(
+        self,
+        domNodeIndex: Union["int"],
+        boundingBox: Union["DOM.Rect"],
+        layoutText: Optional["str"] = None,
+        inlineTextNodes: Optional["[InlineTextBox]"] = None,
+        styleIndex: Optional["int"] = None,
+        paintOrder: Optional["int"] = None,
+    ):
 
         self.domNodeIndex = domNodeIndex
         self.boundingBox = boundingBox
@@ -114,19 +120,16 @@ class LayoutTreeNode(ChromeTypeBase):
 
 # ComputedStyle: A subset of the full ComputedStyle as defined by the request whitelist.
 class ComputedStyle(ChromeTypeBase):
-    def __init__(self,
-                 properties: Union['[NameValue]'],
-                 ):
+
+    def __init__(self, properties: Union["[NameValue]"]):
 
         self.properties = properties
 
 
 # NameValue: A name/value pair.
 class NameValue(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 value: Union['str'],
-                 ):
+
+    def __init__(self, name: Union["str"], value: Union["str"]):
 
         self.name = name
         self.value = value
@@ -135,33 +138,27 @@ class NameValue(ChromeTypeBase):
 class DOMSnapshot(PayloadMixin):
     """ This domain facilitates obtaining document snapshots with DOM, layout, and style information.
     """
+
     @classmethod
     def disable(cls):
         """Disables DOM snapshot agent for the given page.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
     def enable(cls):
         """Enables DOM snapshot agent for the given page.
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("enable", {}), None)
 
     @classmethod
-    def getSnapshot(cls,
-                    computedStyleWhitelist: Union['[]'],
-                    includeEventListeners: Optional['bool'] = None,
-                    includePaintOrder: Optional['bool'] = None,
-                    includeUserAgentShadowTree: Optional['bool'] = None,
-                    ):
+    def getSnapshot(
+        cls,
+        computedStyleWhitelist: Union["[]"],
+        includeEventListeners: Optional["bool"] = None,
+        includePaintOrder: Optional["bool"] = None,
+        includeUserAgentShadowTree: Optional["bool"] = None,
+    ):
         """Returns a document snapshot, including the full DOM tree of the root node (including iframes,
 template contents, and imported documents) in a flattened array, as well as layout and
 white-listed computed style information for the nodes. Shadow DOM in the returned DOM tree is
@@ -176,25 +173,20 @@ flattened.
         :type includeUserAgentShadowTree: bool
         """
         return (
-            cls.build_send_payload("getSnapshot", {
-                "computedStyleWhitelist": computedStyleWhitelist,
-                "includeEventListeners": includeEventListeners,
-                "includePaintOrder": includePaintOrder,
-                "includeUserAgentShadowTree": includeUserAgentShadowTree,
-            }),
-            cls.convert_payload({
-                "domNodes": {
-                    "class": [DOMNode],
-                    "optional": False
+            cls.build_send_payload(
+                "getSnapshot",
+                {
+                    "computedStyleWhitelist": computedStyleWhitelist,
+                    "includeEventListeners": includeEventListeners,
+                    "includePaintOrder": includePaintOrder,
+                    "includeUserAgentShadowTree": includeUserAgentShadowTree,
                 },
-                "layoutTreeNodes": {
-                    "class": [LayoutTreeNode],
-                    "optional": False
-                },
-                "computedStyles": {
-                    "class": [ComputedStyle],
-                    "optional": False
-                },
-            })
+            ),
+            cls.convert_payload(
+                {
+                    "domNodes": {"class": [DOMNode], "optional": False},
+                    "layoutTreeNodes": {"class": [LayoutTreeNode], "optional": False},
+                    "computedStyles": {"class": [ComputedStyle], "optional": False},
+                }
+            ),
         )
-

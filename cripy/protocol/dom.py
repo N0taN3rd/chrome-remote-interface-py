@@ -24,11 +24,13 @@ BackendNodeId = int
 
 # BackendNode: Backend node with a friendly name.
 class BackendNode(ChromeTypeBase):
-    def __init__(self,
-                 nodeType: Union['int'],
-                 nodeName: Union['str'],
-                 backendNodeId: Union['BackendNodeId'],
-                 ):
+
+    def __init__(
+        self,
+        nodeType: Union["int"],
+        nodeName: Union["str"],
+        backendNodeId: Union["BackendNodeId"],
+    ):
 
         self.nodeType = nodeType
         self.nodeName = nodeName
@@ -43,36 +45,38 @@ ShadowRootType = str
 
 # Node: DOM interaction is implemented in terms of mirror objects that represent the actual DOM nodes.DOMNode is a base node mirror type.
 class Node(ChromeTypeBase):
-    def __init__(self,
-                 nodeId: Union['NodeId'],
-                 backendNodeId: Union['BackendNodeId'],
-                 nodeType: Union['int'],
-                 nodeName: Union['str'],
-                 localName: Union['str'],
-                 nodeValue: Union['str'],
-                 parentId: Optional['NodeId'] = None,
-                 childNodeCount: Optional['int'] = None,
-                 children: Optional['[Node]'] = None,
-                 attributes: Optional['[]'] = None,
-                 documentURL: Optional['str'] = None,
-                 baseURL: Optional['str'] = None,
-                 publicId: Optional['str'] = None,
-                 systemId: Optional['str'] = None,
-                 internalSubset: Optional['str'] = None,
-                 xmlVersion: Optional['str'] = None,
-                 name: Optional['str'] = None,
-                 value: Optional['str'] = None,
-                 pseudoType: Optional['PseudoType'] = None,
-                 shadowRootType: Optional['ShadowRootType'] = None,
-                 frameId: Optional['Page.FrameId'] = None,
-                 contentDocument: Optional['Node'] = None,
-                 shadowRoots: Optional['[Node]'] = None,
-                 templateContent: Optional['Node'] = None,
-                 pseudoElements: Optional['[Node]'] = None,
-                 importedDocument: Optional['Node'] = None,
-                 distributedNodes: Optional['[BackendNode]'] = None,
-                 isSVG: Optional['bool'] = None,
-                 ):
+
+    def __init__(
+        self,
+        nodeId: Union["NodeId"],
+        backendNodeId: Union["BackendNodeId"],
+        nodeType: Union["int"],
+        nodeName: Union["str"],
+        localName: Union["str"],
+        nodeValue: Union["str"],
+        parentId: Optional["NodeId"] = None,
+        childNodeCount: Optional["int"] = None,
+        children: Optional["[Node]"] = None,
+        attributes: Optional["[]"] = None,
+        documentURL: Optional["str"] = None,
+        baseURL: Optional["str"] = None,
+        publicId: Optional["str"] = None,
+        systemId: Optional["str"] = None,
+        internalSubset: Optional["str"] = None,
+        xmlVersion: Optional["str"] = None,
+        name: Optional["str"] = None,
+        value: Optional["str"] = None,
+        pseudoType: Optional["PseudoType"] = None,
+        shadowRootType: Optional["ShadowRootType"] = None,
+        frameId: Optional["Page.FrameId"] = None,
+        contentDocument: Optional["Node"] = None,
+        shadowRoots: Optional["[Node]"] = None,
+        templateContent: Optional["Node"] = None,
+        pseudoElements: Optional["[Node]"] = None,
+        importedDocument: Optional["Node"] = None,
+        distributedNodes: Optional["[BackendNode]"] = None,
+        isSVG: Optional["bool"] = None,
+    ):
 
         self.nodeId = nodeId
         self.parentId = parentId
@@ -106,12 +110,14 @@ class Node(ChromeTypeBase):
 
 # RGBA: A structure holding an RGBA color.
 class RGBA(ChromeTypeBase):
-    def __init__(self,
-                 r: Union['int'],
-                 g: Union['int'],
-                 b: Union['int'],
-                 a: Optional['float'] = None,
-                 ):
+
+    def __init__(
+        self,
+        r: Union["int"],
+        g: Union["int"],
+        b: Union["int"],
+        a: Optional["float"] = None,
+    ):
 
         self.r = r
         self.g = g
@@ -124,15 +130,17 @@ Quad = [float]
 
 # BoxModel: Box model.
 class BoxModel(ChromeTypeBase):
-    def __init__(self,
-                 content: Union['Quad'],
-                 padding: Union['Quad'],
-                 border: Union['Quad'],
-                 margin: Union['Quad'],
-                 width: Union['int'],
-                 height: Union['int'],
-                 shapeOutside: Optional['ShapeOutsideInfo'] = None,
-                 ):
+
+    def __init__(
+        self,
+        content: Union["Quad"],
+        padding: Union["Quad"],
+        border: Union["Quad"],
+        margin: Union["Quad"],
+        width: Union["int"],
+        height: Union["int"],
+        shapeOutside: Optional["ShapeOutsideInfo"] = None,
+    ):
 
         self.content = content
         self.padding = padding
@@ -145,11 +153,10 @@ class BoxModel(ChromeTypeBase):
 
 # ShapeOutsideInfo: CSS Shape Outside details.
 class ShapeOutsideInfo(ChromeTypeBase):
-    def __init__(self,
-                 bounds: Union['Quad'],
-                 shape: Union['[]'],
-                 marginShape: Union['[]'],
-                 ):
+
+    def __init__(
+        self, bounds: Union["Quad"], shape: Union["[]"], marginShape: Union["[]"]
+    ):
 
         self.bounds = bounds
         self.shape = shape
@@ -158,12 +165,14 @@ class ShapeOutsideInfo(ChromeTypeBase):
 
 # Rect: Rectangle.
 class Rect(ChromeTypeBase):
-    def __init__(self,
-                 x: Union['float'],
-                 y: Union['float'],
-                 width: Union['float'],
-                 height: Union['float'],
-                 ):
+
+    def __init__(
+        self,
+        x: Union["float"],
+        y: Union["float"],
+        width: Union["float"],
+        height: Union["float"],
+    ):
 
         self.x = x
         self.y = y
@@ -180,32 +189,25 @@ and never sends the same node twice. It is client's responsibility to collect in
 the nodes that were sent to the client.<p>Note that `iframe` owner elements will return
 corresponding document elements as their child nodes.</p>
     """
+
     @classmethod
-    def collectClassNamesFromSubtree(cls,
-                                     nodeId: Union['NodeId'],
-                                     ):
+    def collectClassNamesFromSubtree(cls, nodeId: Union["NodeId"]):
         """Collects class names for the node with given id and all of it's child nodes.
         :param nodeId: Id of the node to collect class names.
         :type nodeId: NodeId
         """
         return (
-            cls.build_send_payload("collectClassNamesFromSubtree", {
-                "nodeId": nodeId,
-            }),
-            cls.convert_payload({
-                "classNames": {
-                    "class": [],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("collectClassNamesFromSubtree", {"nodeId": nodeId}),
+            cls.convert_payload({"classNames": {"class": [], "optional": False}}),
         )
 
     @classmethod
-    def copyTo(cls,
-               nodeId: Union['NodeId'],
-               targetNodeId: Union['NodeId'],
-               insertBeforeNodeId: Optional['NodeId'] = None,
-               ):
+    def copyTo(
+        cls,
+        nodeId: Union["NodeId"],
+        targetNodeId: Union["NodeId"],
+        insertBeforeNodeId: Optional["NodeId"] = None,
+    ):
         """Creates a deep copy of the specified node and places it into the target container before the
 given anchor.
         :param nodeId: Id of the node to copy.
@@ -217,27 +219,26 @@ given anchor.
         :type insertBeforeNodeId: NodeId
         """
         return (
-            cls.build_send_payload("copyTo", {
-                "nodeId": nodeId,
-                "targetNodeId": targetNodeId,
-                "insertBeforeNodeId": insertBeforeNodeId,
-            }),
-            cls.convert_payload({
-                "nodeId": {
-                    "class": NodeId,
-                    "optional": False
+            cls.build_send_payload(
+                "copyTo",
+                {
+                    "nodeId": nodeId,
+                    "targetNodeId": targetNodeId,
+                    "insertBeforeNodeId": insertBeforeNodeId,
                 },
-            })
+            ),
+            cls.convert_payload({"nodeId": {"class": NodeId, "optional": False}}),
         )
 
     @classmethod
-    def describeNode(cls,
-                     nodeId: Optional['NodeId'] = None,
-                     backendNodeId: Optional['BackendNodeId'] = None,
-                     objectId: Optional['Runtime.RemoteObjectId'] = None,
-                     depth: Optional['int'] = None,
-                     pierce: Optional['bool'] = None,
-                     ):
+    def describeNode(
+        cls,
+        nodeId: Optional["NodeId"] = None,
+        backendNodeId: Optional["BackendNodeId"] = None,
+        objectId: Optional["Runtime.RemoteObjectId"] = None,
+        depth: Optional["int"] = None,
+        pierce: Optional["bool"] = None,
+    ):
         """Describes node given its id, does not require domain to be enabled. Does not start tracking any
 objects, can be used for automation.
         :param nodeId: Identifier of the node.
@@ -254,63 +255,50 @@ entire subtree or provide an integer larger than 0.
         :type pierce: bool
         """
         return (
-            cls.build_send_payload("describeNode", {
-                "nodeId": nodeId,
-                "backendNodeId": backendNodeId,
-                "objectId": objectId,
-                "depth": depth,
-                "pierce": pierce,
-            }),
-            cls.convert_payload({
-                "node": {
-                    "class": Node,
-                    "optional": False
+            cls.build_send_payload(
+                "describeNode",
+                {
+                    "nodeId": nodeId,
+                    "backendNodeId": backendNodeId,
+                    "objectId": objectId,
+                    "depth": depth,
+                    "pierce": pierce,
                 },
-            })
+            ),
+            cls.convert_payload({"node": {"class": Node, "optional": False}}),
         )
 
     @classmethod
     def disable(cls):
         """Disables DOM agent for the given page.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
-    def discardSearchResults(cls,
-                             searchId: Union['str'],
-                             ):
+    def discardSearchResults(cls, searchId: Union["str"]):
         """Discards search results from the session with the given id. `getSearchResults` should no longer
 be called for that search.
         :param searchId: Unique search session identifier.
         :type searchId: str
         """
         return (
-            cls.build_send_payload("discardSearchResults", {
-                "searchId": searchId,
-            }),
-            None
+            cls.build_send_payload("discardSearchResults", {"searchId": searchId}),
+            None,
         )
 
     @classmethod
     def enable(cls):
         """Enables DOM agent for the given page.
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("enable", {}), None)
 
     @classmethod
-    def focus(cls,
-              nodeId: Optional['NodeId'] = None,
-              backendNodeId: Optional['BackendNodeId'] = None,
-              objectId: Optional['Runtime.RemoteObjectId'] = None,
-              ):
+    def focus(
+        cls,
+        nodeId: Optional["NodeId"] = None,
+        backendNodeId: Optional["BackendNodeId"] = None,
+        objectId: Optional["Runtime.RemoteObjectId"] = None,
+    ):
         """Focuses the given element.
         :param nodeId: Identifier of the node.
         :type nodeId: NodeId
@@ -320,40 +308,35 @@ be called for that search.
         :type objectId: Runtime.RemoteObjectId
         """
         return (
-            cls.build_send_payload("focus", {
-                "nodeId": nodeId,
-                "backendNodeId": backendNodeId,
-                "objectId": objectId,
-            }),
-            None
+            cls.build_send_payload(
+                "focus",
+                {
+                    "nodeId": nodeId,
+                    "backendNodeId": backendNodeId,
+                    "objectId": objectId,
+                },
+            ),
+            None,
         )
 
     @classmethod
-    def getAttributes(cls,
-                      nodeId: Union['NodeId'],
-                      ):
+    def getAttributes(cls, nodeId: Union["NodeId"]):
         """Returns attributes for the specified node.
         :param nodeId: Id of the node to retrieve attibutes for.
         :type nodeId: NodeId
         """
         return (
-            cls.build_send_payload("getAttributes", {
-                "nodeId": nodeId,
-            }),
-            cls.convert_payload({
-                "attributes": {
-                    "class": [],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getAttributes", {"nodeId": nodeId}),
+            cls.convert_payload({"attributes": {"class": [], "optional": False}}),
         )
 
     @classmethod
-    def getBoxModel(cls,
-                    nodeId: Optional['NodeId'] = None,
-                    backendNodeId: Optional['BackendNodeId'] = None,
-                    objectId: Optional['Runtime.RemoteObjectId'] = None,
-                    ):
+    def getBoxModel(
+        cls,
+        nodeId: Optional["NodeId"] = None,
+        backendNodeId: Optional["BackendNodeId"] = None,
+        objectId: Optional["Runtime.RemoteObjectId"] = None,
+    ):
         """Returns boxes for the given node.
         :param nodeId: Identifier of the node.
         :type nodeId: NodeId
@@ -363,24 +346,21 @@ be called for that search.
         :type objectId: Runtime.RemoteObjectId
         """
         return (
-            cls.build_send_payload("getBoxModel", {
-                "nodeId": nodeId,
-                "backendNodeId": backendNodeId,
-                "objectId": objectId,
-            }),
-            cls.convert_payload({
-                "model": {
-                    "class": BoxModel,
-                    "optional": False
+            cls.build_send_payload(
+                "getBoxModel",
+                {
+                    "nodeId": nodeId,
+                    "backendNodeId": backendNodeId,
+                    "objectId": objectId,
                 },
-            })
+            ),
+            cls.convert_payload({"model": {"class": BoxModel, "optional": False}}),
         )
 
     @classmethod
-    def getDocument(cls,
-                    depth: Optional['int'] = None,
-                    pierce: Optional['bool'] = None,
-                    ):
+    def getDocument(
+        cls, depth: Optional["int"] = None, pierce: Optional["bool"] = None
+    ):
         """Returns the root DOM node (and optionally the subtree) to the caller.
         :param depth: The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the
 entire subtree or provide an integer larger than 0.
@@ -390,23 +370,14 @@ entire subtree or provide an integer larger than 0.
         :type pierce: bool
         """
         return (
-            cls.build_send_payload("getDocument", {
-                "depth": depth,
-                "pierce": pierce,
-            }),
-            cls.convert_payload({
-                "root": {
-                    "class": Node,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getDocument", {"depth": depth, "pierce": pierce}),
+            cls.convert_payload({"root": {"class": Node, "optional": False}}),
         )
 
     @classmethod
-    def getFlattenedDocument(cls,
-                             depth: Optional['int'] = None,
-                             pierce: Optional['bool'] = None,
-                             ):
+    def getFlattenedDocument(
+        cls, depth: Optional["int"] = None, pierce: Optional["bool"] = None
+    ):
         """Returns the root DOM node (and optionally the subtree) to the caller.
         :param depth: The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the
 entire subtree or provide an integer larger than 0.
@@ -416,24 +387,19 @@ entire subtree or provide an integer larger than 0.
         :type pierce: bool
         """
         return (
-            cls.build_send_payload("getFlattenedDocument", {
-                "depth": depth,
-                "pierce": pierce,
-            }),
-            cls.convert_payload({
-                "nodes": {
-                    "class": [Node],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "getFlattenedDocument", {"depth": depth, "pierce": pierce}
+            ),
+            cls.convert_payload({"nodes": {"class": [Node], "optional": False}}),
         )
 
     @classmethod
-    def getNodeForLocation(cls,
-                           x: Union['int'],
-                           y: Union['int'],
-                           includeUserAgentShadowDOM: Optional['bool'] = None,
-                           ):
+    def getNodeForLocation(
+        cls,
+        x: Union["int"],
+        y: Union["int"],
+        includeUserAgentShadowDOM: Optional["bool"] = None,
+    ):
         """Returns node id at given location.
         :param x: X coordinate.
         :type x: int
@@ -443,25 +409,24 @@ entire subtree or provide an integer larger than 0.
         :type includeUserAgentShadowDOM: bool
         """
         return (
-            cls.build_send_payload("getNodeForLocation", {
-                "x": x,
-                "y": y,
-                "includeUserAgentShadowDOM": includeUserAgentShadowDOM,
-            }),
-            cls.convert_payload({
-                "nodeId": {
-                    "class": NodeId,
-                    "optional": False
+            cls.build_send_payload(
+                "getNodeForLocation",
+                {
+                    "x": x,
+                    "y": y,
+                    "includeUserAgentShadowDOM": includeUserAgentShadowDOM,
                 },
-            })
+            ),
+            cls.convert_payload({"nodeId": {"class": NodeId, "optional": False}}),
         )
 
     @classmethod
-    def getOuterHTML(cls,
-                     nodeId: Optional['NodeId'] = None,
-                     backendNodeId: Optional['BackendNodeId'] = None,
-                     objectId: Optional['Runtime.RemoteObjectId'] = None,
-                     ):
+    def getOuterHTML(
+        cls,
+        nodeId: Optional["NodeId"] = None,
+        backendNodeId: Optional["BackendNodeId"] = None,
+        objectId: Optional["Runtime.RemoteObjectId"] = None,
+    ):
         """Returns node's HTML markup.
         :param nodeId: Identifier of the node.
         :type nodeId: NodeId
@@ -471,45 +436,32 @@ entire subtree or provide an integer larger than 0.
         :type objectId: Runtime.RemoteObjectId
         """
         return (
-            cls.build_send_payload("getOuterHTML", {
-                "nodeId": nodeId,
-                "backendNodeId": backendNodeId,
-                "objectId": objectId,
-            }),
-            cls.convert_payload({
-                "outerHTML": {
-                    "class": str,
-                    "optional": False
+            cls.build_send_payload(
+                "getOuterHTML",
+                {
+                    "nodeId": nodeId,
+                    "backendNodeId": backendNodeId,
+                    "objectId": objectId,
                 },
-            })
+            ),
+            cls.convert_payload({"outerHTML": {"class": str, "optional": False}}),
         )
 
     @classmethod
-    def getRelayoutBoundary(cls,
-                            nodeId: Union['NodeId'],
-                            ):
+    def getRelayoutBoundary(cls, nodeId: Union["NodeId"]):
         """Returns the id of the nearest ancestor that is a relayout boundary.
         :param nodeId: Id of the node.
         :type nodeId: NodeId
         """
         return (
-            cls.build_send_payload("getRelayoutBoundary", {
-                "nodeId": nodeId,
-            }),
-            cls.convert_payload({
-                "nodeId": {
-                    "class": NodeId,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getRelayoutBoundary", {"nodeId": nodeId}),
+            cls.convert_payload({"nodeId": {"class": NodeId, "optional": False}}),
         )
 
     @classmethod
-    def getSearchResults(cls,
-                         searchId: Union['str'],
-                         fromIndex: Union['int'],
-                         toIndex: Union['int'],
-                         ):
+    def getSearchResults(
+        cls, searchId: Union["str"], fromIndex: Union["int"], toIndex: Union["int"]
+    ):
         """Returns search results from given `fromIndex` to given `toIndex` from the search with the given
 identifier.
         :param searchId: Unique search session identifier.
@@ -520,65 +472,44 @@ identifier.
         :type toIndex: int
         """
         return (
-            cls.build_send_payload("getSearchResults", {
-                "searchId": searchId,
-                "fromIndex": fromIndex,
-                "toIndex": toIndex,
-            }),
-            cls.convert_payload({
-                "nodeIds": {
-                    "class": [NodeId],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "getSearchResults",
+                {"searchId": searchId, "fromIndex": fromIndex, "toIndex": toIndex},
+            ),
+            cls.convert_payload({"nodeIds": {"class": [NodeId], "optional": False}}),
         )
 
     @classmethod
     def hideHighlight(cls):
         """Hides any highlight.
         """
-        return (
-            cls.build_send_payload("hideHighlight", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("hideHighlight", {}), None)
 
     @classmethod
     def highlightNode(cls):
         """Highlights DOM node.
         """
-        return (
-            cls.build_send_payload("highlightNode", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("highlightNode", {}), None)
 
     @classmethod
     def highlightRect(cls):
         """Highlights given rectangle.
         """
-        return (
-            cls.build_send_payload("highlightRect", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("highlightRect", {}), None)
 
     @classmethod
     def markUndoableState(cls):
         """Marks last undoable state.
         """
-        return (
-            cls.build_send_payload("markUndoableState", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("markUndoableState", {}), None)
 
     @classmethod
-    def moveTo(cls,
-               nodeId: Union['NodeId'],
-               targetNodeId: Union['NodeId'],
-               insertBeforeNodeId: Optional['NodeId'] = None,
-               ):
+    def moveTo(
+        cls,
+        nodeId: Union["NodeId"],
+        targetNodeId: Union["NodeId"],
+        insertBeforeNodeId: Optional["NodeId"] = None,
+    ):
         """Moves node into the new container, places it before the given anchor.
         :param nodeId: Id of the node to move.
         :type nodeId: NodeId
@@ -589,24 +520,21 @@ identifier.
         :type insertBeforeNodeId: NodeId
         """
         return (
-            cls.build_send_payload("moveTo", {
-                "nodeId": nodeId,
-                "targetNodeId": targetNodeId,
-                "insertBeforeNodeId": insertBeforeNodeId,
-            }),
-            cls.convert_payload({
-                "nodeId": {
-                    "class": NodeId,
-                    "optional": False
+            cls.build_send_payload(
+                "moveTo",
+                {
+                    "nodeId": nodeId,
+                    "targetNodeId": targetNodeId,
+                    "insertBeforeNodeId": insertBeforeNodeId,
                 },
-            })
+            ),
+            cls.convert_payload({"nodeId": {"class": NodeId, "optional": False}}),
         )
 
     @classmethod
-    def performSearch(cls,
-                      query: Union['str'],
-                      includeUserAgentShadowDOM: Optional['bool'] = None,
-                      ):
+    def performSearch(
+        cls, query: Union["str"], includeUserAgentShadowDOM: Optional["bool"] = None
+    ):
         """Searches for a given string in the DOM tree. Use `getSearchResults` to access search results or
 `cancelSearch` to end this search session.
         :param query: Plain text or query selector or XPath search query.
@@ -615,67 +543,47 @@ identifier.
         :type includeUserAgentShadowDOM: bool
         """
         return (
-            cls.build_send_payload("performSearch", {
-                "query": query,
-                "includeUserAgentShadowDOM": includeUserAgentShadowDOM,
-            }),
-            cls.convert_payload({
-                "searchId": {
-                    "class": str,
-                    "optional": False
+            cls.build_send_payload(
+                "performSearch",
+                {
+                    "query": query,
+                    "includeUserAgentShadowDOM": includeUserAgentShadowDOM,
                 },
-                "resultCount": {
-                    "class": int,
-                    "optional": False
-                },
-            })
+            ),
+            cls.convert_payload(
+                {
+                    "searchId": {"class": str, "optional": False},
+                    "resultCount": {"class": int, "optional": False},
+                }
+            ),
         )
 
     @classmethod
-    def pushNodeByPathToFrontend(cls,
-                                 path: Union['str'],
-                                 ):
+    def pushNodeByPathToFrontend(cls, path: Union["str"]):
         """Requests that the node is sent to the caller given its path. // FIXME, use XPath
         :param path: Path to node in the proprietary format.
         :type path: str
         """
         return (
-            cls.build_send_payload("pushNodeByPathToFrontend", {
-                "path": path,
-            }),
-            cls.convert_payload({
-                "nodeId": {
-                    "class": NodeId,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("pushNodeByPathToFrontend", {"path": path}),
+            cls.convert_payload({"nodeId": {"class": NodeId, "optional": False}}),
         )
 
     @classmethod
-    def pushNodesByBackendIdsToFrontend(cls,
-                                        backendNodeIds: Union['[BackendNodeId]'],
-                                        ):
+    def pushNodesByBackendIdsToFrontend(cls, backendNodeIds: Union["[BackendNodeId]"]):
         """Requests that a batch of nodes is sent to the caller given their backend node ids.
         :param backendNodeIds: The array of backend node ids.
         :type backendNodeIds: [BackendNodeId]
         """
         return (
-            cls.build_send_payload("pushNodesByBackendIdsToFrontend", {
-                "backendNodeIds": backendNodeIds,
-            }),
-            cls.convert_payload({
-                "nodeIds": {
-                    "class": [NodeId],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "pushNodesByBackendIdsToFrontend", {"backendNodeIds": backendNodeIds}
+            ),
+            cls.convert_payload({"nodeIds": {"class": [NodeId], "optional": False}}),
         )
 
     @classmethod
-    def querySelector(cls,
-                      nodeId: Union['NodeId'],
-                      selector: Union['str'],
-                      ):
+    def querySelector(cls, nodeId: Union["NodeId"], selector: Union["str"]):
         """Executes `querySelector` on a given node.
         :param nodeId: Id of the node to query upon.
         :type nodeId: NodeId
@@ -683,23 +591,14 @@ identifier.
         :type selector: str
         """
         return (
-            cls.build_send_payload("querySelector", {
-                "nodeId": nodeId,
-                "selector": selector,
-            }),
-            cls.convert_payload({
-                "nodeId": {
-                    "class": NodeId,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "querySelector", {"nodeId": nodeId, "selector": selector}
+            ),
+            cls.convert_payload({"nodeId": {"class": NodeId, "optional": False}}),
         )
 
     @classmethod
-    def querySelectorAll(cls,
-                         nodeId: Union['NodeId'],
-                         selector: Union['str'],
-                         ):
+    def querySelectorAll(cls, nodeId: Union["NodeId"], selector: Union["str"]):
         """Executes `querySelectorAll` on a given node.
         :param nodeId: Id of the node to query upon.
         :type nodeId: NodeId
@@ -707,33 +606,20 @@ identifier.
         :type selector: str
         """
         return (
-            cls.build_send_payload("querySelectorAll", {
-                "nodeId": nodeId,
-                "selector": selector,
-            }),
-            cls.convert_payload({
-                "nodeIds": {
-                    "class": [NodeId],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "querySelectorAll", {"nodeId": nodeId, "selector": selector}
+            ),
+            cls.convert_payload({"nodeIds": {"class": [NodeId], "optional": False}}),
         )
 
     @classmethod
     def redo(cls):
         """Re-does the last undone action.
         """
-        return (
-            cls.build_send_payload("redo", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("redo", {}), None)
 
     @classmethod
-    def removeAttribute(cls,
-                        nodeId: Union['NodeId'],
-                        name: Union['str'],
-                        ):
+    def removeAttribute(cls, nodeId: Union["NodeId"], name: Union["str"]):
         """Removes attribute with given name from an element with given id.
         :param nodeId: Id of the element to remove attribute from.
         :type nodeId: NodeId
@@ -741,34 +627,25 @@ identifier.
         :type name: str
         """
         return (
-            cls.build_send_payload("removeAttribute", {
-                "nodeId": nodeId,
-                "name": name,
-            }),
-            None
+            cls.build_send_payload("removeAttribute", {"nodeId": nodeId, "name": name}),
+            None,
         )
 
     @classmethod
-    def removeNode(cls,
-                   nodeId: Union['NodeId'],
-                   ):
+    def removeNode(cls, nodeId: Union["NodeId"]):
         """Removes node with given id.
         :param nodeId: Id of the node to remove.
         :type nodeId: NodeId
         """
-        return (
-            cls.build_send_payload("removeNode", {
-                "nodeId": nodeId,
-            }),
-            None
-        )
+        return (cls.build_send_payload("removeNode", {"nodeId": nodeId}), None)
 
     @classmethod
-    def requestChildNodes(cls,
-                          nodeId: Union['NodeId'],
-                          depth: Optional['int'] = None,
-                          pierce: Optional['bool'] = None,
-                          ):
+    def requestChildNodes(
+        cls,
+        nodeId: Union["NodeId"],
+        depth: Optional["int"] = None,
+        pierce: Optional["bool"] = None,
+    ):
         """Requests that children of the node with given id are returned to the caller in form of
 `setChildNodes` events where not only immediate children are retrieved, but all children down to
 the specified depth.
@@ -782,18 +659,15 @@ entire subtree or provide an integer larger than 0.
         :type pierce: bool
         """
         return (
-            cls.build_send_payload("requestChildNodes", {
-                "nodeId": nodeId,
-                "depth": depth,
-                "pierce": pierce,
-            }),
-            None
+            cls.build_send_payload(
+                "requestChildNodes",
+                {"nodeId": nodeId, "depth": depth, "pierce": pierce},
+            ),
+            None,
         )
 
     @classmethod
-    def requestNode(cls,
-                    objectId: Union['Runtime.RemoteObjectId'],
-                    ):
+    def requestNode(cls, objectId: Union["Runtime.RemoteObjectId"]):
         """Requests that the node is sent to the caller given the JavaScript node object reference. All
 nodes that form the path from the node to the root are also sent to the client as a series of
 `setChildNodes` notifications.
@@ -801,23 +675,17 @@ nodes that form the path from the node to the root are also sent to the client a
         :type objectId: Runtime.RemoteObjectId
         """
         return (
-            cls.build_send_payload("requestNode", {
-                "objectId": objectId,
-            }),
-            cls.convert_payload({
-                "nodeId": {
-                    "class": NodeId,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("requestNode", {"objectId": objectId}),
+            cls.convert_payload({"nodeId": {"class": NodeId, "optional": False}}),
         )
 
     @classmethod
-    def resolveNode(cls,
-                    nodeId: Optional['NodeId'] = None,
-                    backendNodeId: Optional['DOM.BackendNodeId'] = None,
-                    objectGroup: Optional['str'] = None,
-                    ):
+    def resolveNode(
+        cls,
+        nodeId: Optional["NodeId"] = None,
+        backendNodeId: Optional["DOM.BackendNodeId"] = None,
+        objectGroup: Optional["str"] = None,
+    ):
         """Resolves the JavaScript node object for a given NodeId or BackendNodeId.
         :param nodeId: Id of the node to resolve.
         :type nodeId: NodeId
@@ -827,25 +695,23 @@ nodes that form the path from the node to the root are also sent to the client a
         :type objectGroup: str
         """
         return (
-            cls.build_send_payload("resolveNode", {
-                "nodeId": nodeId,
-                "backendNodeId": backendNodeId,
-                "objectGroup": objectGroup,
-            }),
-            cls.convert_payload({
-                "object": {
-                    "class": Runtime.RemoteObject,
-                    "optional": False
+            cls.build_send_payload(
+                "resolveNode",
+                {
+                    "nodeId": nodeId,
+                    "backendNodeId": backendNodeId,
+                    "objectGroup": objectGroup,
                 },
-            })
+            ),
+            cls.convert_payload(
+                {"object": {"class": Runtime.RemoteObject, "optional": False}}
+            ),
         )
 
     @classmethod
-    def setAttributeValue(cls,
-                          nodeId: Union['NodeId'],
-                          name: Union['str'],
-                          value: Union['str'],
-                          ):
+    def setAttributeValue(
+        cls, nodeId: Union["NodeId"], name: Union["str"], value: Union["str"]
+    ):
         """Sets attribute for an element with given id.
         :param nodeId: Id of the element to set attribute for.
         :type nodeId: NodeId
@@ -855,20 +721,16 @@ nodes that form the path from the node to the root are also sent to the client a
         :type value: str
         """
         return (
-            cls.build_send_payload("setAttributeValue", {
-                "nodeId": nodeId,
-                "name": name,
-                "value": value,
-            }),
-            None
+            cls.build_send_payload(
+                "setAttributeValue", {"nodeId": nodeId, "name": name, "value": value}
+            ),
+            None,
         )
 
     @classmethod
-    def setAttributesAsText(cls,
-                            nodeId: Union['NodeId'],
-                            text: Union['str'],
-                            name: Optional['str'] = None,
-                            ):
+    def setAttributesAsText(
+        cls, nodeId: Union["NodeId"], text: Union["str"], name: Optional["str"] = None
+    ):
         """Sets attributes on element with given id. This method is useful when user edits some existing
 attribute value and types in several attribute name/value pairs.
         :param nodeId: Id of the element to set attributes for.
@@ -880,21 +742,20 @@ successfully.
         :type name: str
         """
         return (
-            cls.build_send_payload("setAttributesAsText", {
-                "nodeId": nodeId,
-                "text": text,
-                "name": name,
-            }),
-            None
+            cls.build_send_payload(
+                "setAttributesAsText", {"nodeId": nodeId, "text": text, "name": name}
+            ),
+            None,
         )
 
     @classmethod
-    def setFileInputFiles(cls,
-                          files: Union['[]'],
-                          nodeId: Optional['NodeId'] = None,
-                          backendNodeId: Optional['BackendNodeId'] = None,
-                          objectId: Optional['Runtime.RemoteObjectId'] = None,
-                          ):
+    def setFileInputFiles(
+        cls,
+        files: Union["[]"],
+        nodeId: Optional["NodeId"] = None,
+        backendNodeId: Optional["BackendNodeId"] = None,
+        objectId: Optional["Runtime.RemoteObjectId"] = None,
+    ):
         """Sets files for the given file input element.
         :param files: Array of file paths to set.
         :type files: []
@@ -906,36 +767,29 @@ successfully.
         :type objectId: Runtime.RemoteObjectId
         """
         return (
-            cls.build_send_payload("setFileInputFiles", {
-                "files": files,
-                "nodeId": nodeId,
-                "backendNodeId": backendNodeId,
-                "objectId": objectId,
-            }),
-            None
+            cls.build_send_payload(
+                "setFileInputFiles",
+                {
+                    "files": files,
+                    "nodeId": nodeId,
+                    "backendNodeId": backendNodeId,
+                    "objectId": objectId,
+                },
+            ),
+            None,
         )
 
     @classmethod
-    def setInspectedNode(cls,
-                         nodeId: Union['NodeId'],
-                         ):
+    def setInspectedNode(cls, nodeId: Union["NodeId"]):
         """Enables console to refer to the node with given id via $x (see Command Line API for more details
 $x functions).
         :param nodeId: DOM node id to be accessible by means of $x command line API.
         :type nodeId: NodeId
         """
-        return (
-            cls.build_send_payload("setInspectedNode", {
-                "nodeId": nodeId,
-            }),
-            None
-        )
+        return (cls.build_send_payload("setInspectedNode", {"nodeId": nodeId}), None)
 
     @classmethod
-    def setNodeName(cls,
-                    nodeId: Union['NodeId'],
-                    name: Union['str'],
-                    ):
+    def setNodeName(cls, nodeId: Union["NodeId"], name: Union["str"]):
         """Sets node name for a node with given id.
         :param nodeId: Id of the node to set name for.
         :type nodeId: NodeId
@@ -943,23 +797,12 @@ $x functions).
         :type name: str
         """
         return (
-            cls.build_send_payload("setNodeName", {
-                "nodeId": nodeId,
-                "name": name,
-            }),
-            cls.convert_payload({
-                "nodeId": {
-                    "class": NodeId,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("setNodeName", {"nodeId": nodeId, "name": name}),
+            cls.convert_payload({"nodeId": {"class": NodeId, "optional": False}}),
         )
 
     @classmethod
-    def setNodeValue(cls,
-                     nodeId: Union['NodeId'],
-                     value: Union['str'],
-                     ):
+    def setNodeValue(cls, nodeId: Union["NodeId"], value: Union["str"]):
         """Sets node value for a node with given id.
         :param nodeId: Id of the node to set value for.
         :type nodeId: NodeId
@@ -967,18 +810,12 @@ $x functions).
         :type value: str
         """
         return (
-            cls.build_send_payload("setNodeValue", {
-                "nodeId": nodeId,
-                "value": value,
-            }),
-            None
+            cls.build_send_payload("setNodeValue", {"nodeId": nodeId, "value": value}),
+            None,
         )
 
     @classmethod
-    def setOuterHTML(cls,
-                     nodeId: Union['NodeId'],
-                     outerHTML: Union['str'],
-                     ):
+    def setOuterHTML(cls, nodeId: Union["NodeId"], outerHTML: Union["str"]):
         """Sets node HTML markup, returns new node id.
         :param nodeId: Id of the node to set markup for.
         :type nodeId: NodeId
@@ -986,56 +823,42 @@ $x functions).
         :type outerHTML: str
         """
         return (
-            cls.build_send_payload("setOuterHTML", {
-                "nodeId": nodeId,
-                "outerHTML": outerHTML,
-            }),
-            None
+            cls.build_send_payload(
+                "setOuterHTML", {"nodeId": nodeId, "outerHTML": outerHTML}
+            ),
+            None,
         )
 
     @classmethod
     def undo(cls):
         """Undoes the last performed action.
         """
-        return (
-            cls.build_send_payload("undo", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("undo", {}), None)
 
     @classmethod
-    def getFrameOwner(cls,
-                      frameId: Union['Page.FrameId'],
-                      ):
+    def getFrameOwner(cls, frameId: Union["Page.FrameId"]):
         """Returns iframe node that owns iframe with the given domain.
         :param frameId: 
         :type frameId: Page.FrameId
         """
         return (
-            cls.build_send_payload("getFrameOwner", {
-                "frameId": frameId,
-            }),
-            cls.convert_payload({
-                "nodeId": {
-                    "class": NodeId,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getFrameOwner", {"frameId": frameId}),
+            cls.convert_payload({"nodeId": {"class": NodeId, "optional": False}}),
         )
-
 
 
 class AttributeModifiedEvent(BaseEvent):
 
-    js_name = 'Dom.attributeModified'
-    hashable = ['nodeId']
+    js_name = "Dom.attributeModified"
+    hashable = ["nodeId"]
     is_hashable = True
 
-    def __init__(self,
-                 nodeId: Union['NodeId', dict],
-                 name: Union['str', dict],
-                 value: Union['str', dict],
-                 ):
+    def __init__(
+        self,
+        nodeId: Union["NodeId", dict],
+        name: Union["str", dict],
+        value: Union["str", dict],
+    ):
         if isinstance(nodeId, dict):
             nodeId = NodeId(**nodeId)
         elif isinstance(nodeId, list):
@@ -1055,23 +878,22 @@ class AttributeModifiedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, nodeId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class AttributeRemovedEvent(BaseEvent):
 
-    js_name = 'Dom.attributeRemoved'
-    hashable = ['nodeId']
+    js_name = "Dom.attributeRemoved"
+    hashable = ["nodeId"]
     is_hashable = True
 
-    def __init__(self,
-                 nodeId: Union['NodeId', dict],
-                 name: Union['str', dict],
-                 ):
+    def __init__(self, nodeId: Union["NodeId", dict], name: Union["str", dict]):
         if isinstance(nodeId, dict):
             nodeId = NodeId(**nodeId)
         elif isinstance(nodeId, list):
@@ -1086,23 +908,24 @@ class AttributeRemovedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, nodeId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class CharacterDataModifiedEvent(BaseEvent):
 
-    js_name = 'Dom.characterDataModified'
-    hashable = ['nodeId']
+    js_name = "Dom.characterDataModified"
+    hashable = ["nodeId"]
     is_hashable = True
 
-    def __init__(self,
-                 nodeId: Union['NodeId', dict],
-                 characterData: Union['str', dict],
-                 ):
+    def __init__(
+        self, nodeId: Union["NodeId", dict], characterData: Union["str", dict]
+    ):
         if isinstance(nodeId, dict):
             nodeId = NodeId(**nodeId)
         elif isinstance(nodeId, list):
@@ -1117,23 +940,24 @@ class CharacterDataModifiedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, nodeId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class ChildNodeCountUpdatedEvent(BaseEvent):
 
-    js_name = 'Dom.childNodeCountUpdated'
-    hashable = ['nodeId']
+    js_name = "Dom.childNodeCountUpdated"
+    hashable = ["nodeId"]
     is_hashable = True
 
-    def __init__(self,
-                 nodeId: Union['NodeId', dict],
-                 childNodeCount: Union['int', dict],
-                 ):
+    def __init__(
+        self, nodeId: Union["NodeId", dict], childNodeCount: Union["int", dict]
+    ):
         if isinstance(nodeId, dict):
             nodeId = NodeId(**nodeId)
         elif isinstance(nodeId, list):
@@ -1148,24 +972,27 @@ class ChildNodeCountUpdatedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, nodeId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class ChildNodeInsertedEvent(BaseEvent):
 
-    js_name = 'Dom.childNodeInserted'
-    hashable = ['parentNodeId', 'previousNodeId']
+    js_name = "Dom.childNodeInserted"
+    hashable = ["parentNodeId", "previousNodeId"]
     is_hashable = True
 
-    def __init__(self,
-                 parentNodeId: Union['NodeId', dict],
-                 previousNodeId: Union['NodeId', dict],
-                 node: Union['Node', dict],
-                 ):
+    def __init__(
+        self,
+        parentNodeId: Union["NodeId", dict],
+        previousNodeId: Union["NodeId", dict],
+        node: Union["Node", dict],
+    ):
         if isinstance(parentNodeId, dict):
             parentNodeId = NodeId(**parentNodeId)
         elif isinstance(parentNodeId, list):
@@ -1185,23 +1012,24 @@ class ChildNodeInsertedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, parentNodeId, previousNodeId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class ChildNodeRemovedEvent(BaseEvent):
 
-    js_name = 'Dom.childNodeRemoved'
-    hashable = ['parentNodeId', 'nodeId']
+    js_name = "Dom.childNodeRemoved"
+    hashable = ["parentNodeId", "nodeId"]
     is_hashable = True
 
-    def __init__(self,
-                 parentNodeId: Union['NodeId', dict],
-                 nodeId: Union['NodeId', dict],
-                 ):
+    def __init__(
+        self, parentNodeId: Union["NodeId", dict], nodeId: Union["NodeId", dict]
+    ):
         if isinstance(parentNodeId, dict):
             parentNodeId = NodeId(**parentNodeId)
         elif isinstance(parentNodeId, list):
@@ -1216,23 +1044,26 @@ class ChildNodeRemovedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, parentNodeId, nodeId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class DistributedNodesUpdatedEvent(BaseEvent):
 
-    js_name = 'Dom.distributedNodesUpdated'
-    hashable = ['insertionPointId']
+    js_name = "Dom.distributedNodesUpdated"
+    hashable = ["insertionPointId"]
     is_hashable = True
 
-    def __init__(self,
-                 insertionPointId: Union['NodeId', dict],
-                 distributedNodes: Union['[BackendNode]', dict],
-                 ):
+    def __init__(
+        self,
+        insertionPointId: Union["NodeId", dict],
+        distributedNodes: Union["[BackendNode]", dict],
+    ):
         if isinstance(insertionPointId, dict):
             insertionPointId = NodeId(**insertionPointId)
         elif isinstance(insertionPointId, list):
@@ -1247,16 +1078,18 @@ class DistributedNodesUpdatedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, insertionPointId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class DocumentUpdatedEvent(BaseEvent):
 
-    js_name = 'Dom.documentUpdated'
+    js_name = "Dom.documentUpdated"
     hashable = []
     is_hashable = False
 
@@ -1265,18 +1098,16 @@ class DocumentUpdatedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")
 
 
 class InlineStyleInvalidatedEvent(BaseEvent):
 
-    js_name = 'Dom.inlineStyleInvalidated'
-    hashable = ['nodeIds']
+    js_name = "Dom.inlineStyleInvalidated"
+    hashable = ["nodeIds"]
     is_hashable = True
 
-    def __init__(self,
-                 nodeIds: Union['[NodeId]', dict],
-                 ):
+    def __init__(self, nodeIds: Union["[NodeId]", dict]):
         if isinstance(nodeIds, dict):
             nodeIds = [NodeId](**nodeIds)
         elif isinstance(nodeIds, list):
@@ -1286,23 +1117,24 @@ class InlineStyleInvalidatedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, nodeIds):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class PseudoElementAddedEvent(BaseEvent):
 
-    js_name = 'Dom.pseudoElementAdded'
-    hashable = ['parentId']
+    js_name = "Dom.pseudoElementAdded"
+    hashable = ["parentId"]
     is_hashable = True
 
-    def __init__(self,
-                 parentId: Union['NodeId', dict],
-                 pseudoElement: Union['Node', dict],
-                 ):
+    def __init__(
+        self, parentId: Union["NodeId", dict], pseudoElement: Union["Node", dict]
+    ):
         if isinstance(parentId, dict):
             parentId = NodeId(**parentId)
         elif isinstance(parentId, list):
@@ -1317,23 +1149,24 @@ class PseudoElementAddedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, parentId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class PseudoElementRemovedEvent(BaseEvent):
 
-    js_name = 'Dom.pseudoElementRemoved'
-    hashable = ['pseudoElementId', 'parentId']
+    js_name = "Dom.pseudoElementRemoved"
+    hashable = ["pseudoElementId", "parentId"]
     is_hashable = True
 
-    def __init__(self,
-                 parentId: Union['NodeId', dict],
-                 pseudoElementId: Union['NodeId', dict],
-                 ):
+    def __init__(
+        self, parentId: Union["NodeId", dict], pseudoElementId: Union["NodeId", dict]
+    ):
         if isinstance(parentId, dict):
             parentId = NodeId(**parentId)
         elif isinstance(parentId, list):
@@ -1348,23 +1181,22 @@ class PseudoElementRemovedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, pseudoElementId, parentId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class SetChildNodesEvent(BaseEvent):
 
-    js_name = 'Dom.setChildNodes'
-    hashable = ['parentId']
+    js_name = "Dom.setChildNodes"
+    hashable = ["parentId"]
     is_hashable = True
 
-    def __init__(self,
-                 parentId: Union['NodeId', dict],
-                 nodes: Union['[Node]', dict],
-                 ):
+    def __init__(self, parentId: Union["NodeId", dict], nodes: Union["[Node]", dict]):
         if isinstance(parentId, dict):
             parentId = NodeId(**parentId)
         elif isinstance(parentId, list):
@@ -1379,23 +1211,22 @@ class SetChildNodesEvent(BaseEvent):
     @classmethod
     def build_hash(cls, parentId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class ShadowRootPoppedEvent(BaseEvent):
 
-    js_name = 'Dom.shadowRootPopped'
-    hashable = ['rootId', 'hostId']
+    js_name = "Dom.shadowRootPopped"
+    hashable = ["rootId", "hostId"]
     is_hashable = True
 
-    def __init__(self,
-                 hostId: Union['NodeId', dict],
-                 rootId: Union['NodeId', dict],
-                 ):
+    def __init__(self, hostId: Union["NodeId", dict], rootId: Union["NodeId", dict]):
         if isinstance(hostId, dict):
             hostId = NodeId(**hostId)
         elif isinstance(hostId, list):
@@ -1410,23 +1241,22 @@ class ShadowRootPoppedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, rootId, hostId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class ShadowRootPushedEvent(BaseEvent):
 
-    js_name = 'Dom.shadowRootPushed'
-    hashable = ['hostId']
+    js_name = "Dom.shadowRootPushed"
+    hashable = ["hostId"]
     is_hashable = True
 
-    def __init__(self,
-                 hostId: Union['NodeId', dict],
-                 root: Union['Node', dict],
-                 ):
+    def __init__(self, hostId: Union["NodeId", dict], root: Union["Node", dict]):
         if isinstance(hostId, dict):
             hostId = NodeId(**hostId)
         elif isinstance(hostId, list):
@@ -1441,8 +1271,10 @@ class ShadowRootPushedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, hostId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h

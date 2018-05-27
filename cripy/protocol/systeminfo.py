@@ -15,12 +15,14 @@ log = logging.getLogger(__name__)
 
 # GPUDevice: Describes a single graphics processor (GPU).
 class GPUDevice(ChromeTypeBase):
-    def __init__(self,
-                 vendorId: Union['float'],
-                 deviceId: Union['float'],
-                 vendorString: Union['str'],
-                 deviceString: Union['str'],
-                 ):
+
+    def __init__(
+        self,
+        vendorId: Union["float"],
+        deviceId: Union["float"],
+        vendorString: Union["str"],
+        deviceString: Union["str"],
+    ):
 
         self.vendorId = vendorId
         self.deviceId = deviceId
@@ -30,12 +32,14 @@ class GPUDevice(ChromeTypeBase):
 
 # GPUInfo: Provides information about the GPU(s) on the system.
 class GPUInfo(ChromeTypeBase):
-    def __init__(self,
-                 devices: Union['[GPUDevice]'],
-                 driverBugWorkarounds: Union['[]'],
-                 auxAttributes: Optional['dict'] = None,
-                 featureStatus: Optional['dict'] = None,
-                 ):
+
+    def __init__(
+        self,
+        devices: Union["[GPUDevice]"],
+        driverBugWorkarounds: Union["[]"],
+        auxAttributes: Optional["dict"] = None,
+        featureStatus: Optional["dict"] = None,
+    ):
 
         self.devices = devices
         self.auxAttributes = auxAttributes
@@ -46,30 +50,19 @@ class GPUInfo(ChromeTypeBase):
 class SystemInfo(PayloadMixin):
     """ The SystemInfo domain defines methods and events for querying low-level system information.
     """
+
     @classmethod
     def getInfo(cls):
         """Returns information about the system.
         """
         return (
-            cls.build_send_payload("getInfo", {
-            }),
-            cls.convert_payload({
-                "gpu": {
-                    "class": GPUInfo,
-                    "optional": False
-                },
-                "modelName": {
-                    "class": str,
-                    "optional": False
-                },
-                "modelVersion": {
-                    "class": str,
-                    "optional": False
-                },
-                "commandLine": {
-                    "class": str,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getInfo", {}),
+            cls.convert_payload(
+                {
+                    "gpu": {"class": GPUInfo, "optional": False},
+                    "modelName": {"class": str, "optional": False},
+                    "modelVersion": {"class": str, "optional": False},
+                    "commandLine": {"class": str, "optional": False},
+                }
+            ),
         )
-

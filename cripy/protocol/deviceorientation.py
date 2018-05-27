@@ -13,25 +13,21 @@ from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
 
 log = logging.getLogger(__name__)
 
+
 class DeviceOrientation(PayloadMixin):
     """ 
     """
+
     @classmethod
     def clearDeviceOrientationOverride(cls):
         """Clears the overridden Device Orientation.
         """
-        return (
-            cls.build_send_payload("clearDeviceOrientationOverride", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("clearDeviceOrientationOverride", {}), None)
 
     @classmethod
-    def setDeviceOrientationOverride(cls,
-                                     alpha: Union['float'],
-                                     beta: Union['float'],
-                                     gamma: Union['float'],
-                                     ):
+    def setDeviceOrientationOverride(
+        cls, alpha: Union["float"], beta: Union["float"], gamma: Union["float"]
+    ):
         """Overrides the Device Orientation.
         :param alpha: Mock alpha
         :type alpha: float
@@ -41,11 +37,9 @@ class DeviceOrientation(PayloadMixin):
         :type gamma: float
         """
         return (
-            cls.build_send_payload("setDeviceOrientationOverride", {
-                "alpha": alpha,
-                "beta": beta,
-                "gamma": gamma,
-            }),
-            None
+            cls.build_send_payload(
+                "setDeviceOrientationOverride",
+                {"alpha": alpha, "beta": beta, "gamma": gamma},
+            ),
+            None,
         )
-

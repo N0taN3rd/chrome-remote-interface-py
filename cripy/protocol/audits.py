@@ -14,16 +14,19 @@ from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
 log = logging.getLogger(__name__)
 from cripy.protocol import network as Network
 
+
 class Audits(PayloadMixin):
     """ Audits domain allows investigation of page violations and possible improvements.
     """
+
     @classmethod
-    def getEncodedResponse(cls,
-                           requestId: Union['Network.RequestId'],
-                           encoding: Union['str'],
-                           quality: Optional['float'] = None,
-                           sizeOnly: Optional['bool'] = None,
-                           ):
+    def getEncodedResponse(
+        cls,
+        requestId: Union["Network.RequestId"],
+        encoding: Union["str"],
+        quality: Optional["float"] = None,
+        sizeOnly: Optional["bool"] = None,
+    ):
         """Returns the response body and size if it were re-encoded with the specified settings. Only
 applies to images.
         :param requestId: Identifier of the network request to get content for.
@@ -36,25 +39,20 @@ applies to images.
         :type sizeOnly: bool
         """
         return (
-            cls.build_send_payload("getEncodedResponse", {
-                "requestId": requestId,
-                "encoding": encoding,
-                "quality": quality,
-                "sizeOnly": sizeOnly,
-            }),
-            cls.convert_payload({
-                "body": {
-                    "class": str,
-                    "optional": True
+            cls.build_send_payload(
+                "getEncodedResponse",
+                {
+                    "requestId": requestId,
+                    "encoding": encoding,
+                    "quality": quality,
+                    "sizeOnly": sizeOnly,
                 },
-                "originalSize": {
-                    "class": int,
-                    "optional": False
-                },
-                "encodedSize": {
-                    "class": int,
-                    "optional": False
-                },
-            })
+            ),
+            cls.convert_payload(
+                {
+                    "body": {"class": str, "optional": True},
+                    "originalSize": {"class": int, "optional": False},
+                    "encodedSize": {"class": int, "optional": False},
+                }
+            ),
         )
-

@@ -43,6 +43,7 @@ from .tracing import Tracing
 
 
 class ProtocolMixin(object):
+
     def __init__(self):
         self.Console: Console = Console
         self.Debugger: Debugger = Debugger

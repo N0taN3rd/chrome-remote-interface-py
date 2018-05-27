@@ -24,14 +24,16 @@ SecurityState = str
 
 # SecurityStateExplanation: An explanation of an factor contributing to the security state.
 class SecurityStateExplanation(ChromeTypeBase):
-    def __init__(self,
-                 securityState: Union['SecurityState'],
-                 title: Union['str'],
-                 summary: Union['str'],
-                 description: Union['str'],
-                 mixedContentType: Union['MixedContentType'],
-                 certificate: Union['[]'],
-                 ):
+
+    def __init__(
+        self,
+        securityState: Union["SecurityState"],
+        title: Union["str"],
+        summary: Union["str"],
+        description: Union["str"],
+        mixedContentType: Union["MixedContentType"],
+        certificate: Union["[]"],
+    ):
 
         self.securityState = securityState
         self.title = title
@@ -43,15 +45,17 @@ class SecurityStateExplanation(ChromeTypeBase):
 
 # InsecureContentStatus: Information about insecure content on the page.
 class InsecureContentStatus(ChromeTypeBase):
-    def __init__(self,
-                 ranMixedContent: Union['bool'],
-                 displayedMixedContent: Union['bool'],
-                 containedMixedForm: Union['bool'],
-                 ranContentWithCertErrors: Union['bool'],
-                 displayedContentWithCertErrors: Union['bool'],
-                 ranInsecureContentStyle: Union['SecurityState'],
-                 displayedInsecureContentStyle: Union['SecurityState'],
-                 ):
+
+    def __init__(
+        self,
+        ranMixedContent: Union["bool"],
+        displayedMixedContent: Union["bool"],
+        containedMixedForm: Union["bool"],
+        ranContentWithCertErrors: Union["bool"],
+        displayedContentWithCertErrors: Union["bool"],
+        ranInsecureContentStyle: Union["SecurityState"],
+        displayedInsecureContentStyle: Union["SecurityState"],
+    ):
 
         self.ranMixedContent = ranMixedContent
         self.displayedMixedContent = displayedMixedContent
@@ -65,49 +69,38 @@ class InsecureContentStatus(ChromeTypeBase):
 # CertificateErrorAction: The action to take when a certificate error occurs. continue will continue processing therequest and cancel will cancel the request.
 CertificateErrorAction = str
 
+
 class Security(PayloadMixin):
     """ Security
     """
+
     @classmethod
     def disable(cls):
         """Disables tracking security state changes.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
     def enable(cls):
         """Enables tracking security state changes.
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("enable", {}), None)
 
     @classmethod
-    def setIgnoreCertificateErrors(cls,
-                                   ignore: Union['bool'],
-                                   ):
+    def setIgnoreCertificateErrors(cls, ignore: Union["bool"]):
         """Enable/disable whether all certificate errors should be ignored.
         :param ignore: If true, all certificate errors will be ignored.
         :type ignore: bool
         """
         return (
-            cls.build_send_payload("setIgnoreCertificateErrors", {
-                "ignore": ignore,
-            }),
-            None
+            cls.build_send_payload("setIgnoreCertificateErrors", {"ignore": ignore}),
+            None,
         )
 
     @classmethod
-    def handleCertificateError(cls,
-                               eventId: Union['int'],
-                               action: Union['CertificateErrorAction'],
-                               ):
+    def handleCertificateError(
+        cls, eventId: Union["int"], action: Union["CertificateErrorAction"]
+    ):
         """Handles a certificate error that fired a certificateError event.
         :param eventId: The ID of the event.
         :type eventId: int
@@ -115,42 +108,39 @@ class Security(PayloadMixin):
         :type action: CertificateErrorAction
         """
         return (
-            cls.build_send_payload("handleCertificateError", {
-                "eventId": eventId,
-                "action": action,
-            }),
-            None
+            cls.build_send_payload(
+                "handleCertificateError", {"eventId": eventId, "action": action}
+            ),
+            None,
         )
 
     @classmethod
-    def setOverrideCertificateErrors(cls,
-                                     override: Union['bool'],
-                                     ):
+    def setOverrideCertificateErrors(cls, override: Union["bool"]):
         """Enable/disable overriding certificate errors. If enabled, all certificate error events need to
 be handled by the DevTools client and should be answered with `handleCertificateError` commands.
         :param override: If true, certificate errors will be overridden.
         :type override: bool
         """
         return (
-            cls.build_send_payload("setOverrideCertificateErrors", {
-                "override": override,
-            }),
-            None
+            cls.build_send_payload(
+                "setOverrideCertificateErrors", {"override": override}
+            ),
+            None,
         )
-
 
 
 class CertificateErrorEvent(BaseEvent):
 
-    js_name = 'Security.certificateError'
-    hashable = ['eventId']
+    js_name = "Security.certificateError"
+    hashable = ["eventId"]
     is_hashable = True
 
-    def __init__(self,
-                 eventId: Union['int', dict],
-                 errorType: Union['str', dict],
-                 requestURL: Union['str', dict],
-                 ):
+    def __init__(
+        self,
+        eventId: Union["int", dict],
+        errorType: Union["str", dict],
+        requestURL: Union["str", dict],
+    ):
         if isinstance(eventId, dict):
             eventId = int(**eventId)
         elif isinstance(eventId, list):
@@ -170,26 +160,29 @@ class CertificateErrorEvent(BaseEvent):
     @classmethod
     def build_hash(cls, eventId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class SecurityStateChangedEvent(BaseEvent):
 
-    js_name = 'Security.securityStateChanged'
+    js_name = "Security.securityStateChanged"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 securityState: Union['SecurityState', dict],
-                 schemeIsCryptographic: Union['bool', dict],
-                 explanations: Union['[SecurityStateExplanation]', dict],
-                 insecureContentStatus: Union['InsecureContentStatus', dict],
-                 summary: Union['str', dict, None] = None,
-                 ):
+    def __init__(
+        self,
+        securityState: Union["SecurityState", dict],
+        schemeIsCryptographic: Union["bool", dict],
+        explanations: Union["[SecurityStateExplanation]", dict],
+        insecureContentStatus: Union["InsecureContentStatus", dict],
+        summary: Union["str", dict, None] = None,
+    ):
         if isinstance(securityState, dict):
             securityState = SecurityState(**securityState)
         elif isinstance(securityState, list):
@@ -208,7 +201,9 @@ class SecurityStateChangedEvent(BaseEvent):
         if isinstance(insecureContentStatus, dict):
             insecureContentStatus = InsecureContentStatus(**insecureContentStatus)
         elif isinstance(insecureContentStatus, list):
-            insecureContentStatus = [InsecureContentStatus(**item) for item in insecureContentStatus]
+            insecureContentStatus = [
+                InsecureContentStatus(**item) for item in insecureContentStatus
+            ]
         self.insecureContentStatus = insecureContentStatus
         if isinstance(summary, dict):
             summary = str(**summary)
@@ -218,4 +213,4 @@ class SecurityStateChangedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")

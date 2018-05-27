@@ -47,24 +47,26 @@ CookieSameSite = str
 
 # ResourceTiming: Timing information for the request.
 class ResourceTiming(ChromeTypeBase):
-    def __init__(self,
-                 requestTime: Union['float'],
-                 proxyStart: Union['float'],
-                 proxyEnd: Union['float'],
-                 dnsStart: Union['float'],
-                 dnsEnd: Union['float'],
-                 connectStart: Union['float'],
-                 connectEnd: Union['float'],
-                 sslStart: Union['float'],
-                 sslEnd: Union['float'],
-                 workerStart: Union['float'],
-                 workerReady: Union['float'],
-                 sendStart: Union['float'],
-                 sendEnd: Union['float'],
-                 pushStart: Union['float'],
-                 pushEnd: Union['float'],
-                 receiveHeadersEnd: Union['float'],
-                 ):
+
+    def __init__(
+        self,
+        requestTime: Union["float"],
+        proxyStart: Union["float"],
+        proxyEnd: Union["float"],
+        dnsStart: Union["float"],
+        dnsEnd: Union["float"],
+        connectStart: Union["float"],
+        connectEnd: Union["float"],
+        sslStart: Union["float"],
+        sslEnd: Union["float"],
+        workerStart: Union["float"],
+        workerReady: Union["float"],
+        sendStart: Union["float"],
+        sendEnd: Union["float"],
+        pushStart: Union["float"],
+        pushEnd: Union["float"],
+        receiveHeadersEnd: Union["float"],
+    ):
 
         self.requestTime = requestTime
         self.proxyStart = proxyStart
@@ -89,17 +91,19 @@ ResourcePriority = str
 
 # Request: HTTP request data.
 class Request(ChromeTypeBase):
-    def __init__(self,
-                 url: Union['str'],
-                 method: Union['str'],
-                 headers: Union['Headers'],
-                 initialPriority: Union['ResourcePriority'],
-                 referrerPolicy: Union['str'],
-                 postData: Optional['str'] = None,
-                 hasPostData: Optional['bool'] = None,
-                 mixedContentType: Optional['Security.MixedContentType'] = None,
-                 isLinkPreload: Optional['bool'] = None,
-                 ):
+
+    def __init__(
+        self,
+        url: Union["str"],
+        method: Union["str"],
+        headers: Union["Headers"],
+        initialPriority: Union["ResourcePriority"],
+        referrerPolicy: Union["str"],
+        postData: Optional["str"] = None,
+        hasPostData: Optional["bool"] = None,
+        mixedContentType: Optional["Security.MixedContentType"] = None,
+        isLinkPreload: Optional["bool"] = None,
+    ):
 
         self.url = url
         self.method = method
@@ -114,16 +118,18 @@ class Request(ChromeTypeBase):
 
 # SignedCertificateTimestamp: Details of a signed certificate timestamp (SCT).
 class SignedCertificateTimestamp(ChromeTypeBase):
-    def __init__(self,
-                 status: Union['str'],
-                 origin: Union['str'],
-                 logDescription: Union['str'],
-                 logId: Union['str'],
-                 timestamp: Union['TimeSinceEpoch'],
-                 hashAlgorithm: Union['str'],
-                 signatureAlgorithm: Union['str'],
-                 signatureData: Union['str'],
-                 ):
+
+    def __init__(
+        self,
+        status: Union["str"],
+        origin: Union["str"],
+        logDescription: Union["str"],
+        logId: Union["str"],
+        timestamp: Union["TimeSinceEpoch"],
+        hashAlgorithm: Union["str"],
+        signatureAlgorithm: Union["str"],
+        signatureData: Union["str"],
+    ):
 
         self.status = status
         self.origin = origin
@@ -137,21 +143,23 @@ class SignedCertificateTimestamp(ChromeTypeBase):
 
 # SecurityDetails: Security details about a request.
 class SecurityDetails(ChromeTypeBase):
-    def __init__(self,
-                 protocol: Union['str'],
-                 keyExchange: Union['str'],
-                 cipher: Union['str'],
-                 certificateId: Union['Security.CertificateId'],
-                 subjectName: Union['str'],
-                 sanList: Union['[]'],
-                 issuer: Union['str'],
-                 validFrom: Union['TimeSinceEpoch'],
-                 validTo: Union['TimeSinceEpoch'],
-                 signedCertificateTimestampList: Union['[SignedCertificateTimestamp]'],
-                 certificateTransparencyCompliance: Union['CertificateTransparencyCompliance'],
-                 keyExchangeGroup: Optional['str'] = None,
-                 mac: Optional['str'] = None,
-                 ):
+
+    def __init__(
+        self,
+        protocol: Union["str"],
+        keyExchange: Union["str"],
+        cipher: Union["str"],
+        certificateId: Union["Security.CertificateId"],
+        subjectName: Union["str"],
+        sanList: Union["[]"],
+        issuer: Union["str"],
+        validFrom: Union["TimeSinceEpoch"],
+        validTo: Union["TimeSinceEpoch"],
+        signedCertificateTimestampList: Union["[SignedCertificateTimestamp]"],
+        certificateTransparencyCompliance: Union["CertificateTransparencyCompliance"],
+        keyExchangeGroup: Optional["str"] = None,
+        mac: Optional["str"] = None,
+    ):
 
         self.protocol = protocol
         self.keyExchange = keyExchange
@@ -176,27 +184,29 @@ BlockedReason = str
 
 # Response: HTTP response data.
 class Response(ChromeTypeBase):
-    def __init__(self,
-                 url: Union['str'],
-                 status: Union['int'],
-                 statusText: Union['str'],
-                 headers: Union['Headers'],
-                 mimeType: Union['str'],
-                 connectionReused: Union['bool'],
-                 connectionId: Union['float'],
-                 encodedDataLength: Union['float'],
-                 securityState: Union['Security.SecurityState'],
-                 headersText: Optional['str'] = None,
-                 requestHeaders: Optional['Headers'] = None,
-                 requestHeadersText: Optional['str'] = None,
-                 remoteIPAddress: Optional['str'] = None,
-                 remotePort: Optional['int'] = None,
-                 fromDiskCache: Optional['bool'] = None,
-                 fromServiceWorker: Optional['bool'] = None,
-                 timing: Optional['ResourceTiming'] = None,
-                 protocol: Optional['str'] = None,
-                 securityDetails: Optional['SecurityDetails'] = None,
-                 ):
+
+    def __init__(
+        self,
+        url: Union["str"],
+        status: Union["int"],
+        statusText: Union["str"],
+        headers: Union["Headers"],
+        mimeType: Union["str"],
+        connectionReused: Union["bool"],
+        connectionId: Union["float"],
+        encodedDataLength: Union["float"],
+        securityState: Union["Security.SecurityState"],
+        headersText: Optional["str"] = None,
+        requestHeaders: Optional["Headers"] = None,
+        requestHeadersText: Optional["str"] = None,
+        remoteIPAddress: Optional["str"] = None,
+        remotePort: Optional["int"] = None,
+        fromDiskCache: Optional["bool"] = None,
+        fromServiceWorker: Optional["bool"] = None,
+        timing: Optional["ResourceTiming"] = None,
+        protocol: Optional["str"] = None,
+        securityDetails: Optional["SecurityDetails"] = None,
+    ):
 
         self.url = url
         self.status = status
@@ -221,23 +231,24 @@ class Response(ChromeTypeBase):
 
 # WebSocketRequest: WebSocket request data.
 class WebSocketRequest(ChromeTypeBase):
-    def __init__(self,
-                 headers: Union['Headers'],
-                 ):
+
+    def __init__(self, headers: Union["Headers"]):
 
         self.headers = headers
 
 
 # WebSocketResponse: WebSocket response data.
 class WebSocketResponse(ChromeTypeBase):
-    def __init__(self,
-                 status: Union['int'],
-                 statusText: Union['str'],
-                 headers: Union['Headers'],
-                 headersText: Optional['str'] = None,
-                 requestHeaders: Optional['Headers'] = None,
-                 requestHeadersText: Optional['str'] = None,
-                 ):
+
+    def __init__(
+        self,
+        status: Union["int"],
+        statusText: Union["str"],
+        headers: Union["Headers"],
+        headersText: Optional["str"] = None,
+        requestHeaders: Optional["Headers"] = None,
+        requestHeadersText: Optional["str"] = None,
+    ):
 
         self.status = status
         self.statusText = statusText
@@ -249,11 +260,10 @@ class WebSocketResponse(ChromeTypeBase):
 
 # WebSocketFrame: WebSocket frame data.
 class WebSocketFrame(ChromeTypeBase):
-    def __init__(self,
-                 opcode: Union['float'],
-                 mask: Union['bool'],
-                 payloadData: Union['str'],
-                 ):
+
+    def __init__(
+        self, opcode: Union["float"], mask: Union["bool"], payloadData: Union["str"]
+    ):
 
         self.opcode = opcode
         self.mask = mask
@@ -262,12 +272,14 @@ class WebSocketFrame(ChromeTypeBase):
 
 # CachedResource: Information about the cached resource.
 class CachedResource(ChromeTypeBase):
-    def __init__(self,
-                 url: Union['str'],
-                 type: Union['Page.ResourceType'],
-                 bodySize: Union['float'],
-                 response: Optional['Response'] = None,
-                 ):
+
+    def __init__(
+        self,
+        url: Union["str"],
+        type: Union["Page.ResourceType"],
+        bodySize: Union["float"],
+        response: Optional["Response"] = None,
+    ):
 
         self.url = url
         self.type = type
@@ -277,12 +289,14 @@ class CachedResource(ChromeTypeBase):
 
 # Initiator: Information about the request initiator.
 class Initiator(ChromeTypeBase):
-    def __init__(self,
-                 type: Union['str'],
-                 stack: Optional['Runtime.StackTrace'] = None,
-                 url: Optional['str'] = None,
-                 lineNumber: Optional['float'] = None,
-                 ):
+
+    def __init__(
+        self,
+        type: Union["str"],
+        stack: Optional["Runtime.StackTrace"] = None,
+        url: Optional["str"] = None,
+        lineNumber: Optional["float"] = None,
+    ):
 
         self.type = type
         self.stack = stack
@@ -292,18 +306,20 @@ class Initiator(ChromeTypeBase):
 
 # Cookie: Cookie object
 class Cookie(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 value: Union['str'],
-                 domain: Union['str'],
-                 path: Union['str'],
-                 expires: Union['float'],
-                 size: Union['int'],
-                 httpOnly: Union['bool'],
-                 secure: Union['bool'],
-                 session: Union['bool'],
-                 sameSite: Optional['CookieSameSite'] = None,
-                 ):
+
+    def __init__(
+        self,
+        name: Union["str"],
+        value: Union["str"],
+        domain: Union["str"],
+        path: Union["str"],
+        expires: Union["float"],
+        size: Union["int"],
+        httpOnly: Union["bool"],
+        secure: Union["bool"],
+        session: Union["bool"],
+        sameSite: Optional["CookieSameSite"] = None,
+    ):
 
         self.name = name
         self.value = value
@@ -319,17 +335,19 @@ class Cookie(ChromeTypeBase):
 
 # CookieParam: Cookie parameter object
 class CookieParam(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 value: Union['str'],
-                 url: Optional['str'] = None,
-                 domain: Optional['str'] = None,
-                 path: Optional['str'] = None,
-                 secure: Optional['bool'] = None,
-                 httpOnly: Optional['bool'] = None,
-                 sameSite: Optional['CookieSameSite'] = None,
-                 expires: Optional['TimeSinceEpoch'] = None,
-                 ):
+
+    def __init__(
+        self,
+        name: Union["str"],
+        value: Union["str"],
+        url: Optional["str"] = None,
+        domain: Optional["str"] = None,
+        path: Optional["str"] = None,
+        secure: Optional["bool"] = None,
+        httpOnly: Optional["bool"] = None,
+        sameSite: Optional["CookieSameSite"] = None,
+        expires: Optional["TimeSinceEpoch"] = None,
+    ):
 
         self.name = name
         self.value = value
@@ -344,12 +362,14 @@ class CookieParam(ChromeTypeBase):
 
 # AuthChallenge: Authorization challenge for HTTP status code 401 or 407.
 class AuthChallenge(ChromeTypeBase):
-    def __init__(self,
-                 origin: Union['str'],
-                 scheme: Union['str'],
-                 realm: Union['str'],
-                 source: Optional['str'] = None,
-                 ):
+
+    def __init__(
+        self,
+        origin: Union["str"],
+        scheme: Union["str"],
+        realm: Union["str"],
+        source: Optional["str"] = None,
+    ):
 
         self.source = source
         self.origin = origin
@@ -359,11 +379,13 @@ class AuthChallenge(ChromeTypeBase):
 
 # AuthChallengeResponse: Response to an AuthChallenge.
 class AuthChallengeResponse(ChromeTypeBase):
-    def __init__(self,
-                 response: Union['str'],
-                 username: Optional['str'] = None,
-                 password: Optional['str'] = None,
-                 ):
+
+    def __init__(
+        self,
+        response: Union["str"],
+        username: Optional["str"] = None,
+        password: Optional["str"] = None,
+    ):
 
         self.response = response
         self.username = username
@@ -375,11 +397,13 @@ InterceptionStage = str
 
 # RequestPattern: Request pattern for interception.
 class RequestPattern(ChromeTypeBase):
-    def __init__(self,
-                 urlPattern: Optional['str'] = None,
-                 resourceType: Optional['Page.ResourceType'] = None,
-                 interceptionStage: Optional['InterceptionStage'] = None,
-                 ):
+
+    def __init__(
+        self,
+        urlPattern: Optional["str"] = None,
+        resourceType: Optional["Page.ResourceType"] = None,
+        interceptionStage: Optional["InterceptionStage"] = None,
+    ):
 
         self.urlPattern = urlPattern
         self.resourceType = resourceType
@@ -388,17 +412,19 @@ class RequestPattern(ChromeTypeBase):
 
 # SignedExchangeSignature: Information about a signed exchange signature.https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-impl.html#rfc.section.3.1
 class SignedExchangeSignature(ChromeTypeBase):
-    def __init__(self,
-                 label: Union['str'],
-                 signature: Union['str'],
-                 integrity: Union['str'],
-                 validityUrl: Union['str'],
-                 date: Union['int'],
-                 expires: Union['int'],
-                 certUrl: Optional['str'] = None,
-                 certSha256: Optional['str'] = None,
-                 certificates: Optional['[]'] = None,
-                 ):
+
+    def __init__(
+        self,
+        label: Union["str"],
+        signature: Union["str"],
+        integrity: Union["str"],
+        validityUrl: Union["str"],
+        date: Union["int"],
+        expires: Union["int"],
+        certUrl: Optional["str"] = None,
+        certSha256: Optional["str"] = None,
+        certificates: Optional["[]"] = None,
+    ):
 
         self.label = label
         self.signature = signature
@@ -413,13 +439,15 @@ class SignedExchangeSignature(ChromeTypeBase):
 
 # SignedExchangeHeader: Information about a signed exchange header.https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-impl.html#cbor-representation
 class SignedExchangeHeader(ChromeTypeBase):
-    def __init__(self,
-                 requestUrl: Union['str'],
-                 requestMethod: Union['str'],
-                 responseCode: Union['int'],
-                 responseHeaders: Union['Headers'],
-                 signatures: Union['[SignedExchangeSignature]'],
-                 ):
+
+    def __init__(
+        self,
+        requestUrl: Union["str"],
+        requestMethod: Union["str"],
+        responseCode: Union["int"],
+        responseHeaders: Union["Headers"],
+        signatures: Union["[SignedExchangeSignature]"],
+    ):
 
         self.requestUrl = requestUrl
         self.requestMethod = requestMethod
@@ -430,12 +458,14 @@ class SignedExchangeHeader(ChromeTypeBase):
 
 # SignedExchangeInfo: Information about a signed exchange response.
 class SignedExchangeInfo(ChromeTypeBase):
-    def __init__(self,
-                 outerResponse: Union['Response'],
-                 header: Optional['SignedExchangeHeader'] = None,
-                 securityDetails: Optional['SecurityDetails'] = None,
-                 errors: Optional['[]'] = None,
-                 ):
+
+    def __init__(
+        self,
+        outerResponse: Union["Response"],
+        header: Optional["SignedExchangeHeader"] = None,
+        securityDetails: Optional["SecurityDetails"] = None,
+        errors: Optional["[]"] = None,
+    ):
 
         self.outerResponse = outerResponse
         self.header = header
@@ -447,19 +477,14 @@ class Network(PayloadMixin):
     """ Network domain allows tracking network activities of the page. It exposes information about http,
 file, data and other requests and responses, their headers, bodies, timing, etc.
     """
+
     @classmethod
     def canClearBrowserCache(cls):
         """Tells whether clearing browser cache is supported.
         """
         return (
-            cls.build_send_payload("canClearBrowserCache", {
-            }),
-            cls.convert_payload({
-                "result": {
-                    "class": bool,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("canClearBrowserCache", {}),
+            cls.convert_payload({"result": {"class": bool, "optional": False}}),
         )
 
     @classmethod
@@ -467,14 +492,8 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """Tells whether clearing browser cookies is supported.
         """
         return (
-            cls.build_send_payload("canClearBrowserCookies", {
-            }),
-            cls.convert_payload({
-                "result": {
-                    "class": bool,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("canClearBrowserCookies", {}),
+            cls.convert_payload({"result": {"class": bool, "optional": False}}),
         )
 
     @classmethod
@@ -482,47 +501,34 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """Tells whether emulation of network conditions is supported.
         """
         return (
-            cls.build_send_payload("canEmulateNetworkConditions", {
-            }),
-            cls.convert_payload({
-                "result": {
-                    "class": bool,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("canEmulateNetworkConditions", {}),
+            cls.convert_payload({"result": {"class": bool, "optional": False}}),
         )
 
     @classmethod
     def clearBrowserCache(cls):
         """Clears browser cache.
         """
-        return (
-            cls.build_send_payload("clearBrowserCache", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("clearBrowserCache", {}), None)
 
     @classmethod
     def clearBrowserCookies(cls):
         """Clears browser cookies.
         """
-        return (
-            cls.build_send_payload("clearBrowserCookies", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("clearBrowserCookies", {}), None)
 
     @classmethod
-    def continueInterceptedRequest(cls,
-                                   interceptionId: Union['InterceptionId'],
-                                   errorReason: Optional['ErrorReason'] = None,
-                                   rawResponse: Optional['str'] = None,
-                                   url: Optional['str'] = None,
-                                   method: Optional['str'] = None,
-                                   postData: Optional['str'] = None,
-                                   headers: Optional['Headers'] = None,
-                                   authChallengeResponse: Optional['AuthChallengeResponse'] = None,
-                                   ):
+    def continueInterceptedRequest(
+        cls,
+        interceptionId: Union["InterceptionId"],
+        errorReason: Optional["ErrorReason"] = None,
+        rawResponse: Optional["str"] = None,
+        url: Optional["str"] = None,
+        method: Optional["str"] = None,
+        postData: Optional["str"] = None,
+        headers: Optional["Headers"] = None,
+        authChallengeResponse: Optional["AuthChallengeResponse"] = None,
+    ):
         """Response to Network.requestIntercepted which either modifies the request to continue with any
 modifications, or blocks it, or completes it with the provided response bytes. If a network
 fetch occurs as a result which encounters a redirect an additional Network.requestIntercepted
@@ -551,26 +557,30 @@ authChallenge.
         :type authChallengeResponse: AuthChallengeResponse
         """
         return (
-            cls.build_send_payload("continueInterceptedRequest", {
-                "interceptionId": interceptionId,
-                "errorReason": errorReason,
-                "rawResponse": rawResponse,
-                "url": url,
-                "method": method,
-                "postData": postData,
-                "headers": headers,
-                "authChallengeResponse": authChallengeResponse,
-            }),
-            None
+            cls.build_send_payload(
+                "continueInterceptedRequest",
+                {
+                    "interceptionId": interceptionId,
+                    "errorReason": errorReason,
+                    "rawResponse": rawResponse,
+                    "url": url,
+                    "method": method,
+                    "postData": postData,
+                    "headers": headers,
+                    "authChallengeResponse": authChallengeResponse,
+                },
+            ),
+            None,
         )
 
     @classmethod
-    def deleteCookies(cls,
-                      name: Union['str'],
-                      url: Optional['str'] = None,
-                      domain: Optional['str'] = None,
-                      path: Optional['str'] = None,
-                      ):
+    def deleteCookies(
+        cls,
+        name: Union["str"],
+        url: Optional["str"] = None,
+        domain: Optional["str"] = None,
+        path: Optional["str"] = None,
+    ):
         """Deletes browser cookies with matching name and url or domain/path pair.
         :param name: Name of the cookies to remove.
         :type name: str
@@ -583,33 +593,28 @@ provided URL.
         :type path: str
         """
         return (
-            cls.build_send_payload("deleteCookies", {
-                "name": name,
-                "url": url,
-                "domain": domain,
-                "path": path,
-            }),
-            None
+            cls.build_send_payload(
+                "deleteCookies",
+                {"name": name, "url": url, "domain": domain, "path": path},
+            ),
+            None,
         )
 
     @classmethod
     def disable(cls):
         """Disables network tracking, prevents network events from being sent to the client.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
-    def emulateNetworkConditions(cls,
-                                 offline: Union['bool'],
-                                 latency: Union['float'],
-                                 downloadThroughput: Union['float'],
-                                 uploadThroughput: Union['float'],
-                                 connectionType: Optional['ConnectionType'] = None,
-                                 ):
+    def emulateNetworkConditions(
+        cls,
+        offline: Union["bool"],
+        latency: Union["float"],
+        downloadThroughput: Union["float"],
+        uploadThroughput: Union["float"],
+        connectionType: Optional["ConnectionType"] = None,
+    ):
         """Activates emulation of network conditions.
         :param offline: True to emulate internet disconnection.
         :type offline: bool
@@ -623,22 +628,26 @@ provided URL.
         :type connectionType: ConnectionType
         """
         return (
-            cls.build_send_payload("emulateNetworkConditions", {
-                "offline": offline,
-                "latency": latency,
-                "downloadThroughput": downloadThroughput,
-                "uploadThroughput": uploadThroughput,
-                "connectionType": connectionType,
-            }),
-            None
+            cls.build_send_payload(
+                "emulateNetworkConditions",
+                {
+                    "offline": offline,
+                    "latency": latency,
+                    "downloadThroughput": downloadThroughput,
+                    "uploadThroughput": uploadThroughput,
+                    "connectionType": connectionType,
+                },
+            ),
+            None,
         )
 
     @classmethod
-    def enable(cls,
-               maxTotalBufferSize: Optional['int'] = None,
-               maxResourceBufferSize: Optional['int'] = None,
-               maxPostDataSize: Optional['int'] = None,
-               ):
+    def enable(
+        cls,
+        maxTotalBufferSize: Optional["int"] = None,
+        maxResourceBufferSize: Optional["int"] = None,
+        maxPostDataSize: Optional["int"] = None,
+    ):
         """Enables network tracking, network events will now be delivered to the client.
         :param maxTotalBufferSize: Buffer size in bytes to use when preserving network payloads (XHRs, etc).
         :type maxTotalBufferSize: int
@@ -648,12 +657,15 @@ provided URL.
         :type maxPostDataSize: int
         """
         return (
-            cls.build_send_payload("enable", {
-                "maxTotalBufferSize": maxTotalBufferSize,
-                "maxResourceBufferSize": maxResourceBufferSize,
-                "maxPostDataSize": maxPostDataSize,
-            }),
-            None
+            cls.build_send_payload(
+                "enable",
+                {
+                    "maxTotalBufferSize": maxTotalBufferSize,
+                    "maxResourceBufferSize": maxResourceBufferSize,
+                    "maxPostDataSize": maxPostDataSize,
+                },
+            ),
+            None,
         )
 
     @classmethod
@@ -662,129 +674,82 @@ provided URL.
 information in the `cookies` field.
         """
         return (
-            cls.build_send_payload("getAllCookies", {
-            }),
-            cls.convert_payload({
-                "cookies": {
-                    "class": [Cookie],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getAllCookies", {}),
+            cls.convert_payload({"cookies": {"class": [Cookie], "optional": False}}),
         )
 
     @classmethod
-    def getCertificate(cls,
-                       origin: Union['str'],
-                       ):
+    def getCertificate(cls, origin: Union["str"]):
         """Returns the DER-encoded certificate.
         :param origin: Origin to get certificate for.
         :type origin: str
         """
         return (
-            cls.build_send_payload("getCertificate", {
-                "origin": origin,
-            }),
-            cls.convert_payload({
-                "tableNames": {
-                    "class": [],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getCertificate", {"origin": origin}),
+            cls.convert_payload({"tableNames": {"class": [], "optional": False}}),
         )
 
     @classmethod
-    def getCookies(cls,
-                   urls: Optional['[]'] = None,
-                   ):
+    def getCookies(cls, urls: Optional["[]"] = None):
         """Returns all browser cookies for the current URL. Depending on the backend support, will return
 detailed cookie information in the `cookies` field.
         :param urls: The list of URLs for which applicable cookies will be fetched
         :type urls: []
         """
         return (
-            cls.build_send_payload("getCookies", {
-                "urls": urls,
-            }),
-            cls.convert_payload({
-                "cookies": {
-                    "class": [Cookie],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getCookies", {"urls": urls}),
+            cls.convert_payload({"cookies": {"class": [Cookie], "optional": False}}),
         )
 
     @classmethod
-    def getResponseBody(cls,
-                        requestId: Union['RequestId'],
-                        ):
+    def getResponseBody(cls, requestId: Union["RequestId"]):
         """Returns content served for the given request.
         :param requestId: Identifier of the network request to get content for.
         :type requestId: RequestId
         """
         return (
-            cls.build_send_payload("getResponseBody", {
-                "requestId": requestId,
-            }),
-            cls.convert_payload({
-                "body": {
-                    "class": str,
-                    "optional": False
-                },
-                "base64Encoded": {
-                    "class": bool,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getResponseBody", {"requestId": requestId}),
+            cls.convert_payload(
+                {
+                    "body": {"class": str, "optional": False},
+                    "base64Encoded": {"class": bool, "optional": False},
+                }
+            ),
         )
 
     @classmethod
-    def getRequestPostData(cls,
-                           requestId: Union['RequestId'],
-                           ):
+    def getRequestPostData(cls, requestId: Union["RequestId"]):
         """Returns post data sent with the request. Returns an error when no data was sent with the request.
         :param requestId: Identifier of the network request to get content for.
         :type requestId: RequestId
         """
         return (
-            cls.build_send_payload("getRequestPostData", {
-                "requestId": requestId,
-            }),
-            cls.convert_payload({
-                "postData": {
-                    "class": str,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getRequestPostData", {"requestId": requestId}),
+            cls.convert_payload({"postData": {"class": str, "optional": False}}),
         )
 
     @classmethod
-    def getResponseBodyForInterception(cls,
-                                       interceptionId: Union['InterceptionId'],
-                                       ):
+    def getResponseBodyForInterception(cls, interceptionId: Union["InterceptionId"]):
         """Returns content served for the given currently intercepted request.
         :param interceptionId: Identifier for the intercepted request to get body for.
         :type interceptionId: InterceptionId
         """
         return (
-            cls.build_send_payload("getResponseBodyForInterception", {
-                "interceptionId": interceptionId,
-            }),
-            cls.convert_payload({
-                "body": {
-                    "class": str,
-                    "optional": False
-                },
-                "base64Encoded": {
-                    "class": bool,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "getResponseBodyForInterception", {"interceptionId": interceptionId}
+            ),
+            cls.convert_payload(
+                {
+                    "body": {"class": str, "optional": False},
+                    "base64Encoded": {"class": bool, "optional": False},
+                }
+            ),
         )
 
     @classmethod
-    def takeResponseBodyForInterceptionAsStream(cls,
-                                                interceptionId: Union['InterceptionId'],
-                                                ):
+    def takeResponseBodyForInterceptionAsStream(
+        cls, interceptionId: Union["InterceptionId"]
+    ):
         """Returns a handle to the stream representing the response body. Note that after this command,
 the intercepted request can't be continued as is -- you either need to cancel it or to provide
 the response body. The stream only supports sequential read, IO.read will fail if the position
@@ -793,41 +758,33 @@ is specified.
         :type interceptionId: InterceptionId
         """
         return (
-            cls.build_send_payload("takeResponseBodyForInterceptionAsStream", {
-                "interceptionId": interceptionId,
-            }),
-            cls.convert_payload({
-                "stream": {
-                    "class": IO.StreamHandle,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "takeResponseBodyForInterceptionAsStream",
+                {"interceptionId": interceptionId},
+            ),
+            cls.convert_payload(
+                {"stream": {"class": IO.StreamHandle, "optional": False}}
+            ),
         )
 
     @classmethod
-    def replayXHR(cls,
-                  requestId: Union['RequestId'],
-                  ):
+    def replayXHR(cls, requestId: Union["RequestId"]):
         """This method sends a new XMLHttpRequest which is identical to the original one. The following
 parameters should be identical: method, url, async, request body, extra headers, withCredentials
 attribute, user, password.
         :param requestId: Identifier of XHR to replay.
         :type requestId: RequestId
         """
-        return (
-            cls.build_send_payload("replayXHR", {
-                "requestId": requestId,
-            }),
-            None
-        )
+        return (cls.build_send_payload("replayXHR", {"requestId": requestId}), None)
 
     @classmethod
-    def searchInResponseBody(cls,
-                             requestId: Union['RequestId'],
-                             query: Union['str'],
-                             caseSensitive: Optional['bool'] = None,
-                             isRegex: Optional['bool'] = None,
-                             ):
+    def searchInResponseBody(
+        cls,
+        requestId: Union["RequestId"],
+        query: Union["str"],
+        caseSensitive: Optional["bool"] = None,
+        isRegex: Optional["bool"] = None,
+    ):
         """Searches for given string in response content.
         :param requestId: Identifier of the network response to search.
         :type requestId: RequestId
@@ -839,77 +796,65 @@ attribute, user, password.
         :type isRegex: bool
         """
         return (
-            cls.build_send_payload("searchInResponseBody", {
-                "requestId": requestId,
-                "query": query,
-                "caseSensitive": caseSensitive,
-                "isRegex": isRegex,
-            }),
-            cls.convert_payload({
-                "result": {
-                    "class": [Debugger.SearchMatch],
-                    "optional": False
+            cls.build_send_payload(
+                "searchInResponseBody",
+                {
+                    "requestId": requestId,
+                    "query": query,
+                    "caseSensitive": caseSensitive,
+                    "isRegex": isRegex,
                 },
-            })
+            ),
+            cls.convert_payload(
+                {"result": {"class": [Debugger.SearchMatch], "optional": False}}
+            ),
         )
 
     @classmethod
-    def setBlockedURLs(cls,
-                       urls: Union['[]'],
-                       ):
+    def setBlockedURLs(cls, urls: Union["[]"]):
         """Blocks URLs from loading.
         :param urls: URL patterns to block. Wildcards ('*') are allowed.
         :type urls: []
         """
-        return (
-            cls.build_send_payload("setBlockedURLs", {
-                "urls": urls,
-            }),
-            None
-        )
+        return (cls.build_send_payload("setBlockedURLs", {"urls": urls}), None)
 
     @classmethod
-    def setBypassServiceWorker(cls,
-                               bypass: Union['bool'],
-                               ):
+    def setBypassServiceWorker(cls, bypass: Union["bool"]):
         """Toggles ignoring of service worker for each request.
         :param bypass: Bypass service worker and load from network.
         :type bypass: bool
         """
         return (
-            cls.build_send_payload("setBypassServiceWorker", {
-                "bypass": bypass,
-            }),
-            None
+            cls.build_send_payload("setBypassServiceWorker", {"bypass": bypass}),
+            None,
         )
 
     @classmethod
-    def setCacheDisabled(cls,
-                         cacheDisabled: Union['bool'],
-                         ):
+    def setCacheDisabled(cls, cacheDisabled: Union["bool"]):
         """Toggles ignoring cache for each request. If `true`, cache will not be used.
         :param cacheDisabled: Cache disabled state.
         :type cacheDisabled: bool
         """
         return (
-            cls.build_send_payload("setCacheDisabled", {
-                "cacheDisabled": cacheDisabled,
-            }),
-            None
+            cls.build_send_payload(
+                "setCacheDisabled", {"cacheDisabled": cacheDisabled}
+            ),
+            None,
         )
 
     @classmethod
-    def setCookie(cls,
-                  name: Union['str'],
-                  value: Union['str'],
-                  url: Optional['str'] = None,
-                  domain: Optional['str'] = None,
-                  path: Optional['str'] = None,
-                  secure: Optional['bool'] = None,
-                  httpOnly: Optional['bool'] = None,
-                  sameSite: Optional['CookieSameSite'] = None,
-                  expires: Optional['TimeSinceEpoch'] = None,
-                  ):
+    def setCookie(
+        cls,
+        name: Union["str"],
+        value: Union["str"],
+        url: Optional["str"] = None,
+        domain: Optional["str"] = None,
+        path: Optional["str"] = None,
+        secure: Optional["bool"] = None,
+        httpOnly: Optional["bool"] = None,
+        sameSite: Optional["CookieSameSite"] = None,
+        expires: Optional["TimeSinceEpoch"] = None,
+    ):
         """Sets a cookie with the given cookie data; may overwrite equivalent cookies if they exist.
         :param name: Cookie name.
         :type name: str
@@ -932,45 +877,35 @@ default domain and path values of the created cookie.
         :type expires: TimeSinceEpoch
         """
         return (
-            cls.build_send_payload("setCookie", {
-                "name": name,
-                "value": value,
-                "url": url,
-                "domain": domain,
-                "path": path,
-                "secure": secure,
-                "httpOnly": httpOnly,
-                "sameSite": sameSite,
-                "expires": expires,
-            }),
-            cls.convert_payload({
-                "success": {
-                    "class": bool,
-                    "optional": False
+            cls.build_send_payload(
+                "setCookie",
+                {
+                    "name": name,
+                    "value": value,
+                    "url": url,
+                    "domain": domain,
+                    "path": path,
+                    "secure": secure,
+                    "httpOnly": httpOnly,
+                    "sameSite": sameSite,
+                    "expires": expires,
                 },
-            })
+            ),
+            cls.convert_payload({"success": {"class": bool, "optional": False}}),
         )
 
     @classmethod
-    def setCookies(cls,
-                   cookies: Union['[CookieParam]'],
-                   ):
+    def setCookies(cls, cookies: Union["[CookieParam]"]):
         """Sets given cookies.
         :param cookies: Cookies to be set.
         :type cookies: [CookieParam]
         """
-        return (
-            cls.build_send_payload("setCookies", {
-                "cookies": cookies,
-            }),
-            None
-        )
+        return (cls.build_send_payload("setCookies", {"cookies": cookies}), None)
 
     @classmethod
-    def setDataSizeLimitsForTest(cls,
-                                 maxTotalSize: Union['int'],
-                                 maxResourceSize: Union['int'],
-                                 ):
+    def setDataSizeLimitsForTest(
+        cls, maxTotalSize: Union["int"], maxResourceSize: Union["int"]
+    ):
         """For testing.
         :param maxTotalSize: Maximum total buffer size.
         :type maxTotalSize: int
@@ -978,50 +913,43 @@ default domain and path values of the created cookie.
         :type maxResourceSize: int
         """
         return (
-            cls.build_send_payload("setDataSizeLimitsForTest", {
-                "maxTotalSize": maxTotalSize,
-                "maxResourceSize": maxResourceSize,
-            }),
-            None
+            cls.build_send_payload(
+                "setDataSizeLimitsForTest",
+                {"maxTotalSize": maxTotalSize, "maxResourceSize": maxResourceSize},
+            ),
+            None,
         )
 
     @classmethod
-    def setExtraHTTPHeaders(cls,
-                            headers: Union['Headers'],
-                            ):
+    def setExtraHTTPHeaders(cls, headers: Union["Headers"]):
         """Specifies whether to always send extra HTTP headers with the requests from this page.
         :param headers: Map with extra HTTP headers.
         :type headers: Headers
         """
         return (
-            cls.build_send_payload("setExtraHTTPHeaders", {
-                "headers": headers,
-            }),
-            None
+            cls.build_send_payload("setExtraHTTPHeaders", {"headers": headers}),
+            None,
         )
 
     @classmethod
-    def setRequestInterception(cls,
-                               patterns: Union['[RequestPattern]'],
-                               ):
+    def setRequestInterception(cls, patterns: Union["[RequestPattern]"]):
         """Sets the requests to intercept that match a the provided patterns and optionally resource types.
         :param patterns: Requests matching any of these patterns will be forwarded and wait for the corresponding
 continueInterceptedRequest call.
         :type patterns: [RequestPattern]
         """
         return (
-            cls.build_send_payload("setRequestInterception", {
-                "patterns": patterns,
-            }),
-            None
+            cls.build_send_payload("setRequestInterception", {"patterns": patterns}),
+            None,
         )
 
     @classmethod
-    def setUserAgentOverride(cls,
-                             userAgent: Union['str'],
-                             acceptLanguage: Optional['str'] = None,
-                             platform: Optional['str'] = None,
-                             ):
+    def setUserAgentOverride(
+        cls,
+        userAgent: Union["str"],
+        acceptLanguage: Optional["str"] = None,
+        platform: Optional["str"] = None,
+    ):
         """Allows overriding user agent with the given string.
         :param userAgent: User agent to use.
         :type userAgent: str
@@ -1031,28 +959,31 @@ continueInterceptedRequest call.
         :type platform: str
         """
         return (
-            cls.build_send_payload("setUserAgentOverride", {
-                "userAgent": userAgent,
-                "acceptLanguage": acceptLanguage,
-                "platform": platform,
-            }),
-            None
+            cls.build_send_payload(
+                "setUserAgentOverride",
+                {
+                    "userAgent": userAgent,
+                    "acceptLanguage": acceptLanguage,
+                    "platform": platform,
+                },
+            ),
+            None,
         )
-
 
 
 class DataReceivedEvent(BaseEvent):
 
-    js_name = 'Network.dataReceived'
-    hashable = ['requestId']
+    js_name = "Network.dataReceived"
+    hashable = ["requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 timestamp: Union['MonotonicTime', dict],
-                 dataLength: Union['int', dict],
-                 encodedDataLength: Union['int', dict],
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        timestamp: Union["MonotonicTime", dict],
+        dataLength: Union["int", dict],
+        encodedDataLength: Union["int", dict],
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1077,26 +1008,29 @@ class DataReceivedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class EventSourceMessageReceivedEvent(BaseEvent):
 
-    js_name = 'Network.eventSourceMessageReceived'
-    hashable = ['eventId', 'requestId']
+    js_name = "Network.eventSourceMessageReceived"
+    hashable = ["eventId", "requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 timestamp: Union['MonotonicTime', dict],
-                 eventName: Union['str', dict],
-                 eventId: Union['str', dict],
-                 data: Union['str', dict],
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        timestamp: Union["MonotonicTime", dict],
+        eventName: Union["str", dict],
+        eventId: Union["str", dict],
+        data: Union["str", dict],
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1126,27 +1060,30 @@ class EventSourceMessageReceivedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, eventId, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class LoadingFailedEvent(BaseEvent):
 
-    js_name = 'Network.loadingFailed'
-    hashable = ['requestId']
+    js_name = "Network.loadingFailed"
+    hashable = ["requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 timestamp: Union['MonotonicTime', dict],
-                 type: Union['Page.ResourceType', dict],
-                 errorText: Union['str', dict],
-                 canceled: Union['bool', dict, None] = None,
-                 blockedReason: Union['BlockedReason', dict, None] = None,
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        timestamp: Union["MonotonicTime", dict],
+        type: Union["Page.ResourceType", dict],
+        errorText: Union["str", dict],
+        canceled: Union["bool", dict, None] = None,
+        blockedReason: Union["BlockedReason", dict, None] = None,
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1181,25 +1118,28 @@ class LoadingFailedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class LoadingFinishedEvent(BaseEvent):
 
-    js_name = 'Network.loadingFinished'
-    hashable = ['requestId']
+    js_name = "Network.loadingFinished"
+    hashable = ["requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 timestamp: Union['MonotonicTime', dict],
-                 encodedDataLength: Union['float', dict],
-                 blockedCrossSiteDocument: Union['bool', dict, None] = None,
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        timestamp: Union["MonotonicTime", dict],
+        encodedDataLength: Union["float", dict],
+        blockedCrossSiteDocument: Union["bool", dict, None] = None,
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1218,38 +1158,43 @@ class LoadingFinishedEvent(BaseEvent):
         if isinstance(blockedCrossSiteDocument, dict):
             blockedCrossSiteDocument = bool(**blockedCrossSiteDocument)
         elif isinstance(blockedCrossSiteDocument, list):
-            blockedCrossSiteDocument = [bool(**item) for item in blockedCrossSiteDocument]
+            blockedCrossSiteDocument = [
+                bool(**item) for item in blockedCrossSiteDocument
+            ]
         self.blockedCrossSiteDocument = blockedCrossSiteDocument
 
     @classmethod
     def build_hash(cls, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class RequestInterceptedEvent(BaseEvent):
 
-    js_name = 'Network.requestIntercepted'
-    hashable = ['interceptionId', 'frameId']
+    js_name = "Network.requestIntercepted"
+    hashable = ["interceptionId", "frameId"]
     is_hashable = True
 
-    def __init__(self,
-                 interceptionId: Union['InterceptionId', dict],
-                 request: Union['Request', dict],
-                 frameId: Union['Page.FrameId', dict],
-                 resourceType: Union['Page.ResourceType', dict],
-                 isNavigationRequest: Union['bool', dict],
-                 isDownload: Union['bool', dict, None] = None,
-                 redirectUrl: Union['str', dict, None] = None,
-                 authChallenge: Union['AuthChallenge', dict, None] = None,
-                 responseErrorReason: Union['ErrorReason', dict, None] = None,
-                 responseStatusCode: Union['int', dict, None] = None,
-                 responseHeaders: Union['Headers', dict, None] = None,
-                 ):
+    def __init__(
+        self,
+        interceptionId: Union["InterceptionId", dict],
+        request: Union["Request", dict],
+        frameId: Union["Page.FrameId", dict],
+        resourceType: Union["Page.ResourceType", dict],
+        isNavigationRequest: Union["bool", dict],
+        isDownload: Union["bool", dict, None] = None,
+        redirectUrl: Union["str", dict, None] = None,
+        authChallenge: Union["AuthChallenge", dict, None] = None,
+        responseErrorReason: Union["ErrorReason", dict, None] = None,
+        responseStatusCode: Union["int", dict, None] = None,
+        responseHeaders: Union["Headers", dict, None] = None,
+    ):
         if isinstance(interceptionId, dict):
             interceptionId = InterceptionId(**interceptionId)
         elif isinstance(interceptionId, list):
@@ -1309,22 +1254,22 @@ class RequestInterceptedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, interceptionId, frameId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class RequestServedFromCacheEvent(BaseEvent):
 
-    js_name = 'Network.requestServedFromCache'
-    hashable = ['requestId']
+    js_name = "Network.requestServedFromCache"
+    hashable = ["requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 ):
+    def __init__(self, requestId: Union["RequestId", dict]):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1334,32 +1279,35 @@ class RequestServedFromCacheEvent(BaseEvent):
     @classmethod
     def build_hash(cls, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class RequestWillBeSentEvent(BaseEvent):
 
-    js_name = 'Network.requestWillBeSent'
-    hashable = ['frameId', 'loaderId', 'requestId']
+    js_name = "Network.requestWillBeSent"
+    hashable = ["frameId", "loaderId", "requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 loaderId: Union['LoaderId', dict],
-                 documentURL: Union['str', dict],
-                 request: Union['Request', dict],
-                 timestamp: Union['MonotonicTime', dict],
-                 wallTime: Union['TimeSinceEpoch', dict],
-                 initiator: Union['Initiator', dict],
-                 redirectResponse: Union['Response', dict, None] = None,
-                 type: Union['Page.ResourceType', dict, None] = None,
-                 frameId: Union['Page.FrameId', dict, None] = None,
-                 hasUserGesture: Union['bool', dict, None] = None,
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        loaderId: Union["LoaderId", dict],
+        documentURL: Union["str", dict],
+        request: Union["Request", dict],
+        timestamp: Union["MonotonicTime", dict],
+        wallTime: Union["TimeSinceEpoch", dict],
+        initiator: Union["Initiator", dict],
+        redirectResponse: Union["Response", dict, None] = None,
+        type: Union["Page.ResourceType", dict, None] = None,
+        frameId: Union["Page.FrameId", dict, None] = None,
+        hasUserGesture: Union["bool", dict, None] = None,
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1419,24 +1367,27 @@ class RequestWillBeSentEvent(BaseEvent):
     @classmethod
     def build_hash(cls, frameId, loaderId, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class ResourceChangedPriorityEvent(BaseEvent):
 
-    js_name = 'Network.resourceChangedPriority'
-    hashable = ['requestId']
+    js_name = "Network.resourceChangedPriority"
+    hashable = ["requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 newPriority: Union['ResourcePriority', dict],
-                 timestamp: Union['MonotonicTime', dict],
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        newPriority: Union["ResourcePriority", dict],
+        timestamp: Union["MonotonicTime", dict],
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1456,23 +1407,26 @@ class ResourceChangedPriorityEvent(BaseEvent):
     @classmethod
     def build_hash(cls, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class SignedExchangeReceivedEvent(BaseEvent):
 
-    js_name = 'Network.signedExchangeReceived'
-    hashable = ['requestId']
+    js_name = "Network.signedExchangeReceived"
+    hashable = ["requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 info: Union['SignedExchangeInfo', dict],
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        info: Union["SignedExchangeInfo", dict],
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1487,27 +1441,30 @@ class SignedExchangeReceivedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class ResponseReceivedEvent(BaseEvent):
 
-    js_name = 'Network.responseReceived'
-    hashable = ['frameId', 'loaderId', 'requestId']
+    js_name = "Network.responseReceived"
+    hashable = ["frameId", "loaderId", "requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 loaderId: Union['LoaderId', dict],
-                 timestamp: Union['MonotonicTime', dict],
-                 type: Union['Page.ResourceType', dict],
-                 response: Union['Response', dict],
-                 frameId: Union['Page.FrameId', dict, None] = None,
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        loaderId: Union["LoaderId", dict],
+        timestamp: Union["MonotonicTime", dict],
+        type: Union["Page.ResourceType", dict],
+        response: Union["Response", dict],
+        frameId: Union["Page.FrameId", dict, None] = None,
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1542,23 +1499,26 @@ class ResponseReceivedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, frameId, loaderId, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class WebSocketClosedEvent(BaseEvent):
 
-    js_name = 'Network.webSocketClosed'
-    hashable = ['requestId']
+    js_name = "Network.webSocketClosed"
+    hashable = ["requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 timestamp: Union['MonotonicTime', dict],
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        timestamp: Union["MonotonicTime", dict],
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1573,24 +1533,27 @@ class WebSocketClosedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class WebSocketCreatedEvent(BaseEvent):
 
-    js_name = 'Network.webSocketCreated'
-    hashable = ['requestId']
+    js_name = "Network.webSocketCreated"
+    hashable = ["requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 url: Union['str', dict],
-                 initiator: Union['Initiator', dict, None] = None,
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        url: Union["str", dict],
+        initiator: Union["Initiator", dict, None] = None,
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1610,24 +1573,27 @@ class WebSocketCreatedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class WebSocketFrameErrorEvent(BaseEvent):
 
-    js_name = 'Network.webSocketFrameError'
-    hashable = ['requestId']
+    js_name = "Network.webSocketFrameError"
+    hashable = ["requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 timestamp: Union['MonotonicTime', dict],
-                 errorMessage: Union['str', dict],
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        timestamp: Union["MonotonicTime", dict],
+        errorMessage: Union["str", dict],
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1647,24 +1613,27 @@ class WebSocketFrameErrorEvent(BaseEvent):
     @classmethod
     def build_hash(cls, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class WebSocketFrameReceivedEvent(BaseEvent):
 
-    js_name = 'Network.webSocketFrameReceived'
-    hashable = ['requestId']
+    js_name = "Network.webSocketFrameReceived"
+    hashable = ["requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 timestamp: Union['MonotonicTime', dict],
-                 response: Union['WebSocketFrame', dict],
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        timestamp: Union["MonotonicTime", dict],
+        response: Union["WebSocketFrame", dict],
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1684,24 +1653,27 @@ class WebSocketFrameReceivedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class WebSocketFrameSentEvent(BaseEvent):
 
-    js_name = 'Network.webSocketFrameSent'
-    hashable = ['requestId']
+    js_name = "Network.webSocketFrameSent"
+    hashable = ["requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 timestamp: Union['MonotonicTime', dict],
-                 response: Union['WebSocketFrame', dict],
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        timestamp: Union["MonotonicTime", dict],
+        response: Union["WebSocketFrame", dict],
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1721,24 +1693,27 @@ class WebSocketFrameSentEvent(BaseEvent):
     @classmethod
     def build_hash(cls, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class WebSocketHandshakeResponseReceivedEvent(BaseEvent):
 
-    js_name = 'Network.webSocketHandshakeResponseReceived'
-    hashable = ['requestId']
+    js_name = "Network.webSocketHandshakeResponseReceived"
+    hashable = ["requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 timestamp: Union['MonotonicTime', dict],
-                 response: Union['WebSocketResponse', dict],
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        timestamp: Union["MonotonicTime", dict],
+        response: Union["WebSocketResponse", dict],
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1758,25 +1733,28 @@ class WebSocketHandshakeResponseReceivedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class WebSocketWillSendHandshakeRequestEvent(BaseEvent):
 
-    js_name = 'Network.webSocketWillSendHandshakeRequest'
-    hashable = ['requestId']
+    js_name = "Network.webSocketWillSendHandshakeRequest"
+    hashable = ["requestId"]
     is_hashable = True
 
-    def __init__(self,
-                 requestId: Union['RequestId', dict],
-                 timestamp: Union['MonotonicTime', dict],
-                 wallTime: Union['TimeSinceEpoch', dict],
-                 request: Union['WebSocketRequest', dict],
-                 ):
+    def __init__(
+        self,
+        requestId: Union["RequestId", dict],
+        timestamp: Union["MonotonicTime", dict],
+        wallTime: Union["TimeSinceEpoch", dict],
+        request: Union["WebSocketRequest", dict],
+    ):
         if isinstance(requestId, dict):
             requestId = RequestId(**requestId)
         elif isinstance(requestId, list):
@@ -1801,8 +1779,10 @@ class WebSocketWillSendHandshakeRequestEvent(BaseEvent):
     @classmethod
     def build_hash(cls, requestId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h

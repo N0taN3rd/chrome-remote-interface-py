@@ -3,3 +3,5 @@ jinja2
 black
 pyee
 websockets
+aiohttp
+async-timeout

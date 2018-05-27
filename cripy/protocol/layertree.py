@@ -22,10 +22,8 @@ SnapshotId = str
 
 # ScrollRect: Rectangle where scrolling happens on the main thread.
 class ScrollRect(ChromeTypeBase):
-    def __init__(self,
-                 rect: Union['DOM.Rect'],
-                 type: Union['str'],
-                 ):
+
+    def __init__(self, rect: Union["DOM.Rect"], type: Union["str"]):
 
         self.rect = rect
         self.type = type
@@ -33,12 +31,14 @@ class ScrollRect(ChromeTypeBase):
 
 # StickyPositionConstraint: Sticky position constraints.
 class StickyPositionConstraint(ChromeTypeBase):
-    def __init__(self,
-                 stickyBoxRect: Union['DOM.Rect'],
-                 containingBlockRect: Union['DOM.Rect'],
-                 nearestLayerShiftingStickyBox: Optional['LayerId'] = None,
-                 nearestLayerShiftingContainingBlock: Optional['LayerId'] = None,
-                 ):
+
+    def __init__(
+        self,
+        stickyBoxRect: Union["DOM.Rect"],
+        containingBlockRect: Union["DOM.Rect"],
+        nearestLayerShiftingStickyBox: Optional["LayerId"] = None,
+        nearestLayerShiftingContainingBlock: Optional["LayerId"] = None,
+    ):
 
         self.stickyBoxRect = stickyBoxRect
         self.containingBlockRect = containingBlockRect
@@ -48,11 +48,8 @@ class StickyPositionConstraint(ChromeTypeBase):
 
 # PictureTile: Serialized fragment of layer picture along with its offset within the layer.
 class PictureTile(ChromeTypeBase):
-    def __init__(self,
-                 x: Union['float'],
-                 y: Union['float'],
-                 picture: Union['str'],
-                 ):
+
+    def __init__(self, x: Union["float"], y: Union["float"], picture: Union["str"]):
 
         self.x = x
         self.y = y
@@ -61,24 +58,26 @@ class PictureTile(ChromeTypeBase):
 
 # Layer: Information about a compositing layer.
 class Layer(ChromeTypeBase):
-    def __init__(self,
-                 layerId: Union['LayerId'],
-                 offsetX: Union['float'],
-                 offsetY: Union['float'],
-                 width: Union['float'],
-                 height: Union['float'],
-                 paintCount: Union['int'],
-                 drawsContent: Union['bool'],
-                 parentLayerId: Optional['LayerId'] = None,
-                 backendNodeId: Optional['DOM.BackendNodeId'] = None,
-                 transform: Optional['[]'] = None,
-                 anchorX: Optional['float'] = None,
-                 anchorY: Optional['float'] = None,
-                 anchorZ: Optional['float'] = None,
-                 invisible: Optional['bool'] = None,
-                 scrollRects: Optional['[ScrollRect]'] = None,
-                 stickyPositionConstraint: Optional['StickyPositionConstraint'] = None,
-                 ):
+
+    def __init__(
+        self,
+        layerId: Union["LayerId"],
+        offsetX: Union["float"],
+        offsetY: Union["float"],
+        width: Union["float"],
+        height: Union["float"],
+        paintCount: Union["int"],
+        drawsContent: Union["bool"],
+        parentLayerId: Optional["LayerId"] = None,
+        backendNodeId: Optional["DOM.BackendNodeId"] = None,
+        transform: Optional["[]"] = None,
+        anchorX: Optional["float"] = None,
+        anchorY: Optional["float"] = None,
+        anchorZ: Optional["float"] = None,
+        invisible: Optional["bool"] = None,
+        scrollRects: Optional["[ScrollRect]"] = None,
+        stickyPositionConstraint: Optional["StickyPositionConstraint"] = None,
+    ):
 
         self.layerId = layerId
         self.parentLayerId = parentLayerId
@@ -101,96 +100,70 @@ class Layer(ChromeTypeBase):
 # PaintProfile: Array of timings, one per paint step.
 PaintProfile = [float]
 
+
 class LayerTree(PayloadMixin):
     """ 
     """
+
     @classmethod
-    def compositingReasons(cls,
-                           layerId: Union['LayerId'],
-                           ):
+    def compositingReasons(cls, layerId: Union["LayerId"]):
         """Provides the reasons why the given layer was composited.
         :param layerId: The id of the layer for which we want to get the reasons it was composited.
         :type layerId: LayerId
         """
         return (
-            cls.build_send_payload("compositingReasons", {
-                "layerId": layerId,
-            }),
-            cls.convert_payload({
-                "compositingReasons": {
-                    "class": [],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("compositingReasons", {"layerId": layerId}),
+            cls.convert_payload(
+                {"compositingReasons": {"class": [], "optional": False}}
+            ),
         )
 
     @classmethod
     def disable(cls):
         """Disables compositing tree inspection.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
     def enable(cls):
         """Enables compositing tree inspection.
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("enable", {}), None)
 
     @classmethod
-    def loadSnapshot(cls,
-                     tiles: Union['[PictureTile]'],
-                     ):
+    def loadSnapshot(cls, tiles: Union["[PictureTile]"]):
         """Returns the snapshot identifier.
         :param tiles: An array of tiles composing the snapshot.
         :type tiles: [PictureTile]
         """
         return (
-            cls.build_send_payload("loadSnapshot", {
-                "tiles": tiles,
-            }),
-            cls.convert_payload({
-                "snapshotId": {
-                    "class": SnapshotId,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("loadSnapshot", {"tiles": tiles}),
+            cls.convert_payload(
+                {"snapshotId": {"class": SnapshotId, "optional": False}}
+            ),
         )
 
     @classmethod
-    def makeSnapshot(cls,
-                     layerId: Union['LayerId'],
-                     ):
+    def makeSnapshot(cls, layerId: Union["LayerId"]):
         """Returns the layer snapshot identifier.
         :param layerId: The id of the layer.
         :type layerId: LayerId
         """
         return (
-            cls.build_send_payload("makeSnapshot", {
-                "layerId": layerId,
-            }),
-            cls.convert_payload({
-                "snapshotId": {
-                    "class": SnapshotId,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("makeSnapshot", {"layerId": layerId}),
+            cls.convert_payload(
+                {"snapshotId": {"class": SnapshotId, "optional": False}}
+            ),
         )
 
     @classmethod
-    def profileSnapshot(cls,
-                        snapshotId: Union['SnapshotId'],
-                        minRepeatCount: Optional['int'] = None,
-                        minDuration: Optional['float'] = None,
-                        clipRect: Optional['DOM.Rect'] = None,
-                        ):
+    def profileSnapshot(
+        cls,
+        snapshotId: Union["SnapshotId"],
+        minRepeatCount: Optional["int"] = None,
+        minDuration: Optional["float"] = None,
+        clipRect: Optional["DOM.Rect"] = None,
+    ):
         """
         :param snapshotId: The id of the layer snapshot.
         :type snapshotId: SnapshotId
@@ -202,42 +175,39 @@ class LayerTree(PayloadMixin):
         :type clipRect: DOM.Rect
         """
         return (
-            cls.build_send_payload("profileSnapshot", {
-                "snapshotId": snapshotId,
-                "minRepeatCount": minRepeatCount,
-                "minDuration": minDuration,
-                "clipRect": clipRect,
-            }),
-            cls.convert_payload({
-                "timings": {
-                    "class": [PaintProfile],
-                    "optional": False
+            cls.build_send_payload(
+                "profileSnapshot",
+                {
+                    "snapshotId": snapshotId,
+                    "minRepeatCount": minRepeatCount,
+                    "minDuration": minDuration,
+                    "clipRect": clipRect,
                 },
-            })
+            ),
+            cls.convert_payload(
+                {"timings": {"class": [PaintProfile], "optional": False}}
+            ),
         )
 
     @classmethod
-    def releaseSnapshot(cls,
-                        snapshotId: Union['SnapshotId'],
-                        ):
+    def releaseSnapshot(cls, snapshotId: Union["SnapshotId"]):
         """Releases layer snapshot captured by the back-end.
         :param snapshotId: The id of the layer snapshot.
         :type snapshotId: SnapshotId
         """
         return (
-            cls.build_send_payload("releaseSnapshot", {
-                "snapshotId": snapshotId,
-            }),
-            None
+            cls.build_send_payload("releaseSnapshot", {"snapshotId": snapshotId}),
+            None,
         )
 
     @classmethod
-    def replaySnapshot(cls,
-                       snapshotId: Union['SnapshotId'],
-                       fromStep: Optional['int'] = None,
-                       toStep: Optional['int'] = None,
-                       scale: Optional['float'] = None,
-                       ):
+    def replaySnapshot(
+        cls,
+        snapshotId: Union["SnapshotId"],
+        fromStep: Optional["int"] = None,
+        toStep: Optional["int"] = None,
+        scale: Optional["float"] = None,
+    ):
         """Replays the layer snapshot and returns the resulting bitmap.
         :param snapshotId: The id of the layer snapshot.
         :type snapshotId: SnapshotId
@@ -249,52 +219,37 @@ class LayerTree(PayloadMixin):
         :type scale: float
         """
         return (
-            cls.build_send_payload("replaySnapshot", {
-                "snapshotId": snapshotId,
-                "fromStep": fromStep,
-                "toStep": toStep,
-                "scale": scale,
-            }),
-            cls.convert_payload({
-                "dataURL": {
-                    "class": str,
-                    "optional": False
+            cls.build_send_payload(
+                "replaySnapshot",
+                {
+                    "snapshotId": snapshotId,
+                    "fromStep": fromStep,
+                    "toStep": toStep,
+                    "scale": scale,
                 },
-            })
+            ),
+            cls.convert_payload({"dataURL": {"class": str, "optional": False}}),
         )
 
     @classmethod
-    def snapshotCommandLog(cls,
-                           snapshotId: Union['SnapshotId'],
-                           ):
+    def snapshotCommandLog(cls, snapshotId: Union["SnapshotId"]):
         """Replays the layer snapshot and returns canvas log.
         :param snapshotId: The id of the layer snapshot.
         :type snapshotId: SnapshotId
         """
         return (
-            cls.build_send_payload("snapshotCommandLog", {
-                "snapshotId": snapshotId,
-            }),
-            cls.convert_payload({
-                "commandLog": {
-                    "class": [],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("snapshotCommandLog", {"snapshotId": snapshotId}),
+            cls.convert_payload({"commandLog": {"class": [], "optional": False}}),
         )
-
 
 
 class LayerPaintedEvent(BaseEvent):
 
-    js_name = 'Layertree.layerPainted'
-    hashable = ['layerId']
+    js_name = "Layertree.layerPainted"
+    hashable = ["layerId"]
     is_hashable = True
 
-    def __init__(self,
-                 layerId: Union['LayerId', dict],
-                 clip: Union['DOM.Rect', dict],
-                 ):
+    def __init__(self, layerId: Union["LayerId", dict], clip: Union["DOM.Rect", dict]):
         if isinstance(layerId, dict):
             layerId = LayerId(**layerId)
         elif isinstance(layerId, list):
@@ -309,22 +264,22 @@ class LayerPaintedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, layerId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class LayerTreeDidChangeEvent(BaseEvent):
 
-    js_name = 'Layertree.layerTreeDidChange'
+    js_name = "Layertree.layerTreeDidChange"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 layers: Union['[Layer]', dict, None] = None,
-                 ):
+    def __init__(self, layers: Union["[Layer]", dict, None] = None):
         if isinstance(layers, dict):
             layers = [Layer](**layers)
         elif isinstance(layers, list):
@@ -333,4 +288,4 @@ class LayerTreeDidChangeEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")

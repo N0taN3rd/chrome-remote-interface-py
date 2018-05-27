@@ -18,10 +18,8 @@ StorageType = str
 
 # UsageForType: Usage for a storage type.
 class UsageForType(ChromeTypeBase):
-    def __init__(self,
-                 storageType: Union['StorageType'],
-                 usage: Union['float'],
-                 ):
+
+    def __init__(self, storageType: Union["StorageType"], usage: Union["float"]):
 
         self.storageType = storageType
         self.usage = usage
@@ -30,11 +28,9 @@ class UsageForType(ChromeTypeBase):
 class Storage(PayloadMixin):
     """ 
     """
+
     @classmethod
-    def clearDataForOrigin(cls,
-                           origin: Union['str'],
-                           storageTypes: Union['str'],
-                           ):
+    def clearDataForOrigin(cls, origin: Union["str"], storageTypes: Union["str"]):
         """Clears storage for origin.
         :param origin: Security origin.
         :type origin: str
@@ -42,113 +38,81 @@ class Storage(PayloadMixin):
         :type storageTypes: str
         """
         return (
-            cls.build_send_payload("clearDataForOrigin", {
-                "origin": origin,
-                "storageTypes": storageTypes,
-            }),
-            None
+            cls.build_send_payload(
+                "clearDataForOrigin", {"origin": origin, "storageTypes": storageTypes}
+            ),
+            None,
         )
 
     @classmethod
-    def getUsageAndQuota(cls,
-                         origin: Union['str'],
-                         ):
+    def getUsageAndQuota(cls, origin: Union["str"]):
         """Returns usage and quota in bytes.
         :param origin: Security origin.
         :type origin: str
         """
         return (
-            cls.build_send_payload("getUsageAndQuota", {
-                "origin": origin,
-            }),
-            cls.convert_payload({
-                "usage": {
-                    "class": float,
-                    "optional": False
-                },
-                "quota": {
-                    "class": float,
-                    "optional": False
-                },
-                "usageBreakdown": {
-                    "class": [UsageForType],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getUsageAndQuota", {"origin": origin}),
+            cls.convert_payload(
+                {
+                    "usage": {"class": float, "optional": False},
+                    "quota": {"class": float, "optional": False},
+                    "usageBreakdown": {"class": [UsageForType], "optional": False},
+                }
+            ),
         )
 
     @classmethod
-    def trackCacheStorageForOrigin(cls,
-                                   origin: Union['str'],
-                                   ):
+    def trackCacheStorageForOrigin(cls, origin: Union["str"]):
         """Registers origin to be notified when an update occurs to its cache storage list.
         :param origin: Security origin.
         :type origin: str
         """
         return (
-            cls.build_send_payload("trackCacheStorageForOrigin", {
-                "origin": origin,
-            }),
-            None
+            cls.build_send_payload("trackCacheStorageForOrigin", {"origin": origin}),
+            None,
         )
 
     @classmethod
-    def trackIndexedDBForOrigin(cls,
-                                origin: Union['str'],
-                                ):
+    def trackIndexedDBForOrigin(cls, origin: Union["str"]):
         """Registers origin to be notified when an update occurs to its IndexedDB.
         :param origin: Security origin.
         :type origin: str
         """
         return (
-            cls.build_send_payload("trackIndexedDBForOrigin", {
-                "origin": origin,
-            }),
-            None
+            cls.build_send_payload("trackIndexedDBForOrigin", {"origin": origin}),
+            None,
         )
 
     @classmethod
-    def untrackCacheStorageForOrigin(cls,
-                                     origin: Union['str'],
-                                     ):
+    def untrackCacheStorageForOrigin(cls, origin: Union["str"]):
         """Unregisters origin from receiving notifications for cache storage.
         :param origin: Security origin.
         :type origin: str
         """
         return (
-            cls.build_send_payload("untrackCacheStorageForOrigin", {
-                "origin": origin,
-            }),
-            None
+            cls.build_send_payload("untrackCacheStorageForOrigin", {"origin": origin}),
+            None,
         )
 
     @classmethod
-    def untrackIndexedDBForOrigin(cls,
-                                  origin: Union['str'],
-                                  ):
+    def untrackIndexedDBForOrigin(cls, origin: Union["str"]):
         """Unregisters origin from receiving notifications for IndexedDB.
         :param origin: Security origin.
         :type origin: str
         """
         return (
-            cls.build_send_payload("untrackIndexedDBForOrigin", {
-                "origin": origin,
-            }),
-            None
+            cls.build_send_payload("untrackIndexedDBForOrigin", {"origin": origin}),
+            None,
         )
-
 
 
 class CacheStorageContentUpdatedEvent(BaseEvent):
 
-    js_name = 'Storage.cacheStorageContentUpdated'
+    js_name = "Storage.cacheStorageContentUpdated"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 origin: Union['str', dict],
-                 cacheName: Union['str', dict],
-                 ):
+    def __init__(self, origin: Union["str", dict], cacheName: Union["str", dict]):
         if isinstance(origin, dict):
             origin = str(**origin)
         elif isinstance(origin, list):
@@ -162,18 +126,16 @@ class CacheStorageContentUpdatedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")
 
 
 class CacheStorageListUpdatedEvent(BaseEvent):
 
-    js_name = 'Storage.cacheStorageListUpdated'
+    js_name = "Storage.cacheStorageListUpdated"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 origin: Union['str', dict],
-                 ):
+    def __init__(self, origin: Union["str", dict]):
         if isinstance(origin, dict):
             origin = str(**origin)
         elif isinstance(origin, list):
@@ -182,20 +144,21 @@ class CacheStorageListUpdatedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")
 
 
 class IndexedDBContentUpdatedEvent(BaseEvent):
 
-    js_name = 'Storage.indexedDBContentUpdated'
+    js_name = "Storage.indexedDBContentUpdated"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 origin: Union['str', dict],
-                 databaseName: Union['str', dict],
-                 objectStoreName: Union['str', dict],
-                 ):
+    def __init__(
+        self,
+        origin: Union["str", dict],
+        databaseName: Union["str", dict],
+        objectStoreName: Union["str", dict],
+    ):
         if isinstance(origin, dict):
             origin = str(**origin)
         elif isinstance(origin, list):
@@ -214,18 +177,16 @@ class IndexedDBContentUpdatedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")
 
 
 class IndexedDBListUpdatedEvent(BaseEvent):
 
-    js_name = 'Storage.indexedDBListUpdated'
+    js_name = "Storage.indexedDBListUpdated"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 origin: Union['str', dict],
-                 ):
+    def __init__(self, origin: Union["str", dict]):
         if isinstance(origin, dict):
             origin = str(**origin)
         elif isinstance(origin, list):
@@ -234,4 +195,4 @@ class IndexedDBListUpdatedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")

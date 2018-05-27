@@ -17,14 +17,16 @@ from cripy.protocol import debugger as Debugger
 
 # ProfileNode: Profile node. Holds callsite information, execution statistics and child nodes.
 class ProfileNode(ChromeTypeBase):
-    def __init__(self,
-                 id: Union['int'],
-                 callFrame: Union['Runtime.CallFrame'],
-                 hitCount: Optional['int'] = None,
-                 children: Optional['[]'] = None,
-                 deoptReason: Optional['str'] = None,
-                 positionTicks: Optional['[PositionTickInfo]'] = None,
-                 ):
+
+    def __init__(
+        self,
+        id: Union["int"],
+        callFrame: Union["Runtime.CallFrame"],
+        hitCount: Optional["int"] = None,
+        children: Optional["[]"] = None,
+        deoptReason: Optional["str"] = None,
+        positionTicks: Optional["[PositionTickInfo]"] = None,
+    ):
 
         self.id = id
         self.callFrame = callFrame
@@ -36,13 +38,15 @@ class ProfileNode(ChromeTypeBase):
 
 # Profile: Profile.
 class Profile(ChromeTypeBase):
-    def __init__(self,
-                 nodes: Union['[ProfileNode]'],
-                 startTime: Union['float'],
-                 endTime: Union['float'],
-                 samples: Optional['[]'] = None,
-                 timeDeltas: Optional['[]'] = None,
-                 ):
+
+    def __init__(
+        self,
+        nodes: Union["[ProfileNode]"],
+        startTime: Union["float"],
+        endTime: Union["float"],
+        samples: Optional["[]"] = None,
+        timeDeltas: Optional["[]"] = None,
+    ):
 
         self.nodes = nodes
         self.startTime = startTime
@@ -53,10 +57,8 @@ class Profile(ChromeTypeBase):
 
 # PositionTickInfo: Specifies a number of samples attributed to a certain source position.
 class PositionTickInfo(ChromeTypeBase):
-    def __init__(self,
-                 line: Union['int'],
-                 ticks: Union['int'],
-                 ):
+
+    def __init__(self, line: Union["int"], ticks: Union["int"]):
 
         self.line = line
         self.ticks = ticks
@@ -64,11 +66,10 @@ class PositionTickInfo(ChromeTypeBase):
 
 # CoverageRange: Coverage data for a source range.
 class CoverageRange(ChromeTypeBase):
-    def __init__(self,
-                 startOffset: Union['int'],
-                 endOffset: Union['int'],
-                 count: Union['int'],
-                 ):
+
+    def __init__(
+        self, startOffset: Union["int"], endOffset: Union["int"], count: Union["int"]
+    ):
 
         self.startOffset = startOffset
         self.endOffset = endOffset
@@ -77,11 +78,13 @@ class CoverageRange(ChromeTypeBase):
 
 # FunctionCoverage: Coverage data for a JavaScript function.
 class FunctionCoverage(ChromeTypeBase):
-    def __init__(self,
-                 functionName: Union['str'],
-                 ranges: Union['[CoverageRange]'],
-                 isBlockCoverage: Union['bool'],
-                 ):
+
+    def __init__(
+        self,
+        functionName: Union["str"],
+        ranges: Union["[CoverageRange]"],
+        isBlockCoverage: Union["bool"],
+    ):
 
         self.functionName = functionName
         self.ranges = ranges
@@ -90,11 +93,13 @@ class FunctionCoverage(ChromeTypeBase):
 
 # ScriptCoverage: Coverage data for a JavaScript script.
 class ScriptCoverage(ChromeTypeBase):
-    def __init__(self,
-                 scriptId: Union['Runtime.ScriptId'],
-                 url: Union['str'],
-                 functions: Union['[FunctionCoverage]'],
-                 ):
+
+    def __init__(
+        self,
+        scriptId: Union["Runtime.ScriptId"],
+        url: Union["str"],
+        functions: Union["[FunctionCoverage]"],
+    ):
 
         self.scriptId = scriptId
         self.url = url
@@ -103,19 +108,16 @@ class ScriptCoverage(ChromeTypeBase):
 
 # TypeObject: Describes a type collected during runtime.
 class TypeObject(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 ):
+
+    def __init__(self, name: Union["str"]):
 
         self.name = name
 
 
 # TypeProfileEntry: Source offset and types for a parameter or return value.
 class TypeProfileEntry(ChromeTypeBase):
-    def __init__(self,
-                 offset: Union['int'],
-                 types: Union['[TypeObject]'],
-                 ):
+
+    def __init__(self, offset: Union["int"], types: Union["[TypeObject]"]):
 
         self.offset = offset
         self.types = types
@@ -123,11 +125,13 @@ class TypeProfileEntry(ChromeTypeBase):
 
 # ScriptTypeProfile: Type profile data collected during runtime for a JavaScript script.
 class ScriptTypeProfile(ChromeTypeBase):
-    def __init__(self,
-                 scriptId: Union['Runtime.ScriptId'],
-                 url: Union['str'],
-                 entries: Union['[TypeProfileEntry]'],
-                 ):
+
+    def __init__(
+        self,
+        scriptId: Union["Runtime.ScriptId"],
+        url: Union["str"],
+        entries: Union["[TypeProfileEntry]"],
+    ):
 
         self.scriptId = scriptId
         self.url = url
@@ -137,25 +141,18 @@ class ScriptTypeProfile(ChromeTypeBase):
 class Profiler(PayloadMixin):
     """ 
     """
+
     @classmethod
     def disable(cls):
         """
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
     def enable(cls):
         """
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("enable", {}), None)
 
     @classmethod
     def getBestEffortCoverage(cls):
@@ -163,46 +160,33 @@ class Profiler(PayloadMixin):
 garbage collection.
         """
         return (
-            cls.build_send_payload("getBestEffortCoverage", {
-            }),
-            cls.convert_payload({
-                "result": {
-                    "class": [ScriptCoverage],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getBestEffortCoverage", {}),
+            cls.convert_payload(
+                {"result": {"class": [ScriptCoverage], "optional": False}}
+            ),
         )
 
     @classmethod
-    def setSamplingInterval(cls,
-                            interval: Union['int'],
-                            ):
+    def setSamplingInterval(cls, interval: Union["int"]):
         """Changes CPU profiler sampling interval. Must be called before CPU profiles recording started.
         :param interval: New sampling interval in microseconds.
         :type interval: int
         """
         return (
-            cls.build_send_payload("setSamplingInterval", {
-                "interval": interval,
-            }),
-            None
+            cls.build_send_payload("setSamplingInterval", {"interval": interval}),
+            None,
         )
 
     @classmethod
     def start(cls):
         """
         """
-        return (
-            cls.build_send_payload("start", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("start", {}), None)
 
     @classmethod
-    def startPreciseCoverage(cls,
-                             callCount: Optional['bool'] = None,
-                             detailed: Optional['bool'] = None,
-                             ):
+    def startPreciseCoverage(
+        cls, callCount: Optional["bool"] = None, detailed: Optional["bool"] = None
+    ):
         """Enable precise code coverage. Coverage data for JavaScript executed before enabling precise code
 coverage may be incomplete. Enabling prevents running optimized code and resets execution
 counters.
@@ -212,36 +196,25 @@ counters.
         :type detailed: bool
         """
         return (
-            cls.build_send_payload("startPreciseCoverage", {
-                "callCount": callCount,
-                "detailed": detailed,
-            }),
-            None
+            cls.build_send_payload(
+                "startPreciseCoverage", {"callCount": callCount, "detailed": detailed}
+            ),
+            None,
         )
 
     @classmethod
     def startTypeProfile(cls):
         """Enable type profile.
         """
-        return (
-            cls.build_send_payload("startTypeProfile", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("startTypeProfile", {}), None)
 
     @classmethod
     def stop(cls):
         """
         """
         return (
-            cls.build_send_payload("stop", {
-            }),
-            cls.convert_payload({
-                "profile": {
-                    "class": Profile,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("stop", {}),
+            cls.convert_payload({"profile": {"class": Profile, "optional": False}}),
         )
 
     @classmethod
@@ -249,21 +222,13 @@ counters.
         """Disable precise code coverage. Disabling releases unnecessary execution count records and allows
 executing optimized code.
         """
-        return (
-            cls.build_send_payload("stopPreciseCoverage", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("stopPreciseCoverage", {}), None)
 
     @classmethod
     def stopTypeProfile(cls):
         """Disable type profile. Disabling releases type profile data collected so far.
         """
-        return (
-            cls.build_send_payload("stopTypeProfile", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("stopTypeProfile", {}), None)
 
     @classmethod
     def takePreciseCoverage(cls):
@@ -271,14 +236,10 @@ executing optimized code.
 coverage needs to have started.
         """
         return (
-            cls.build_send_payload("takePreciseCoverage", {
-            }),
-            cls.convert_payload({
-                "result": {
-                    "class": [ScriptCoverage],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("takePreciseCoverage", {}),
+            cls.convert_payload(
+                {"result": {"class": [ScriptCoverage], "optional": False}}
+            ),
         )
 
     @classmethod
@@ -286,30 +247,26 @@ coverage needs to have started.
         """Collect type profile.
         """
         return (
-            cls.build_send_payload("takeTypeProfile", {
-            }),
-            cls.convert_payload({
-                "result": {
-                    "class": [ScriptTypeProfile],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("takeTypeProfile", {}),
+            cls.convert_payload(
+                {"result": {"class": [ScriptTypeProfile], "optional": False}}
+            ),
         )
-
 
 
 class ConsoleProfileFinishedEvent(BaseEvent):
 
-    js_name = 'Profiler.consoleProfileFinished'
-    hashable = ['id']
+    js_name = "Profiler.consoleProfileFinished"
+    hashable = ["id"]
     is_hashable = True
 
-    def __init__(self,
-                 id: Union['str', dict],
-                 location: Union['Debugger.Location', dict],
-                 profile: Union['Profile', dict],
-                 title: Union['str', dict, None] = None,
-                 ):
+    def __init__(
+        self,
+        id: Union["str", dict],
+        location: Union["Debugger.Location", dict],
+        profile: Union["Profile", dict],
+        title: Union["str", dict, None] = None,
+    ):
         if isinstance(id, dict):
             id = str(**id)
         elif isinstance(id, list):
@@ -334,24 +291,27 @@ class ConsoleProfileFinishedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, id):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class ConsoleProfileStartedEvent(BaseEvent):
 
-    js_name = 'Profiler.consoleProfileStarted'
-    hashable = ['id']
+    js_name = "Profiler.consoleProfileStarted"
+    hashable = ["id"]
     is_hashable = True
 
-    def __init__(self,
-                 id: Union['str', dict],
-                 location: Union['Debugger.Location', dict],
-                 title: Union['str', dict, None] = None,
-                 ):
+    def __init__(
+        self,
+        id: Union["str", dict],
+        location: Union["Debugger.Location", dict],
+        title: Union["str", dict, None] = None,
+    ):
         if isinstance(id, dict):
             id = str(**id)
         elif isinstance(id, list):
@@ -371,8 +331,10 @@ class ConsoleProfileStartedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, id):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h

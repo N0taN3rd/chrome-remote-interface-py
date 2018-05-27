@@ -18,21 +18,23 @@ from cripy.protocol import page as Page
 
 # HighlightConfig: Configuration data for the highlighting of page elements.
 class HighlightConfig(ChromeTypeBase):
-    def __init__(self,
-                 showInfo: Optional['bool'] = None,
-                 showRulers: Optional['bool'] = None,
-                 showExtensionLines: Optional['bool'] = None,
-                 displayAsMaterial: Optional['bool'] = None,
-                 contentColor: Optional['DOM.RGBA'] = None,
-                 paddingColor: Optional['DOM.RGBA'] = None,
-                 borderColor: Optional['DOM.RGBA'] = None,
-                 marginColor: Optional['DOM.RGBA'] = None,
-                 eventTargetColor: Optional['DOM.RGBA'] = None,
-                 shapeColor: Optional['DOM.RGBA'] = None,
-                 shapeMarginColor: Optional['DOM.RGBA'] = None,
-                 selectorList: Optional['str'] = None,
-                 cssGridColor: Optional['DOM.RGBA'] = None,
-                 ):
+
+    def __init__(
+        self,
+        showInfo: Optional["bool"] = None,
+        showRulers: Optional["bool"] = None,
+        showExtensionLines: Optional["bool"] = None,
+        displayAsMaterial: Optional["bool"] = None,
+        contentColor: Optional["DOM.RGBA"] = None,
+        paddingColor: Optional["DOM.RGBA"] = None,
+        borderColor: Optional["DOM.RGBA"] = None,
+        marginColor: Optional["DOM.RGBA"] = None,
+        eventTargetColor: Optional["DOM.RGBA"] = None,
+        shapeColor: Optional["DOM.RGBA"] = None,
+        shapeMarginColor: Optional["DOM.RGBA"] = None,
+        selectorList: Optional["str"] = None,
+        cssGridColor: Optional["DOM.RGBA"] = None,
+    ):
 
         self.showInfo = showInfo
         self.showRulers = showRulers
@@ -49,68 +51,50 @@ class HighlightConfig(ChromeTypeBase):
         self.cssGridColor = cssGridColor
 
 
-# InspectMode: 
+# InspectMode:
 InspectMode = str
+
 
 class Overlay(PayloadMixin):
     """ This domain provides various functionality related to drawing atop the inspected page.
     """
+
     @classmethod
     def disable(cls):
         """Disables domain notifications.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
     def enable(cls):
         """Enables domain notifications.
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("enable", {}), None)
 
     @classmethod
-    def getHighlightObjectForTest(cls,
-                                  nodeId: Union['DOM.NodeId'],
-                                  ):
+    def getHighlightObjectForTest(cls, nodeId: Union["DOM.NodeId"]):
         """For testing.
         :param nodeId: Id of the node to get highlight object for.
         :type nodeId: DOM.NodeId
         """
         return (
-            cls.build_send_payload("getHighlightObjectForTest", {
-                "nodeId": nodeId,
-            }),
-            cls.convert_payload({
-                "highlight": {
-                    "class": dict,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getHighlightObjectForTest", {"nodeId": nodeId}),
+            cls.convert_payload({"highlight": {"class": dict, "optional": False}}),
         )
 
     @classmethod
     def hideHighlight(cls):
         """Hides any highlight.
         """
-        return (
-            cls.build_send_payload("hideHighlight", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("hideHighlight", {}), None)
 
     @classmethod
-    def highlightFrame(cls,
-                       frameId: Union['Page.FrameId'],
-                       contentColor: Optional['DOM.RGBA'] = None,
-                       contentOutlineColor: Optional['DOM.RGBA'] = None,
-                       ):
+    def highlightFrame(
+        cls,
+        frameId: Union["Page.FrameId"],
+        contentColor: Optional["DOM.RGBA"] = None,
+        contentOutlineColor: Optional["DOM.RGBA"] = None,
+    ):
         """Highlights owner element of the frame with given id.
         :param frameId: Identifier of the frame to highlight.
         :type frameId: Page.FrameId
@@ -120,21 +104,25 @@ class Overlay(PayloadMixin):
         :type contentOutlineColor: DOM.RGBA
         """
         return (
-            cls.build_send_payload("highlightFrame", {
-                "frameId": frameId,
-                "contentColor": contentColor,
-                "contentOutlineColor": contentOutlineColor,
-            }),
-            None
+            cls.build_send_payload(
+                "highlightFrame",
+                {
+                    "frameId": frameId,
+                    "contentColor": contentColor,
+                    "contentOutlineColor": contentOutlineColor,
+                },
+            ),
+            None,
         )
 
     @classmethod
-    def highlightNode(cls,
-                      highlightConfig: Union['HighlightConfig'],
-                      nodeId: Optional['DOM.NodeId'] = None,
-                      backendNodeId: Optional['DOM.BackendNodeId'] = None,
-                      objectId: Optional['Runtime.RemoteObjectId'] = None,
-                      ):
+    def highlightNode(
+        cls,
+        highlightConfig: Union["HighlightConfig"],
+        nodeId: Optional["DOM.NodeId"] = None,
+        backendNodeId: Optional["DOM.BackendNodeId"] = None,
+        objectId: Optional["Runtime.RemoteObjectId"] = None,
+    ):
         """Highlights DOM node with given id or with the given JavaScript object wrapper. Either nodeId or
 objectId must be specified.
         :param highlightConfig: A descriptor for the highlight appearance.
@@ -147,21 +135,25 @@ objectId must be specified.
         :type objectId: Runtime.RemoteObjectId
         """
         return (
-            cls.build_send_payload("highlightNode", {
-                "highlightConfig": highlightConfig,
-                "nodeId": nodeId,
-                "backendNodeId": backendNodeId,
-                "objectId": objectId,
-            }),
-            None
+            cls.build_send_payload(
+                "highlightNode",
+                {
+                    "highlightConfig": highlightConfig,
+                    "nodeId": nodeId,
+                    "backendNodeId": backendNodeId,
+                    "objectId": objectId,
+                },
+            ),
+            None,
         )
 
     @classmethod
-    def highlightQuad(cls,
-                      quad: Union['DOM.Quad'],
-                      color: Optional['DOM.RGBA'] = None,
-                      outlineColor: Optional['DOM.RGBA'] = None,
-                      ):
+    def highlightQuad(
+        cls,
+        quad: Union["DOM.Quad"],
+        color: Optional["DOM.RGBA"] = None,
+        outlineColor: Optional["DOM.RGBA"] = None,
+    ):
         """Highlights given quad. Coordinates are absolute with respect to the main frame viewport.
         :param quad: Quad to highlight
         :type quad: DOM.Quad
@@ -171,23 +163,23 @@ objectId must be specified.
         :type outlineColor: DOM.RGBA
         """
         return (
-            cls.build_send_payload("highlightQuad", {
-                "quad": quad,
-                "color": color,
-                "outlineColor": outlineColor,
-            }),
-            None
+            cls.build_send_payload(
+                "highlightQuad",
+                {"quad": quad, "color": color, "outlineColor": outlineColor},
+            ),
+            None,
         )
 
     @classmethod
-    def highlightRect(cls,
-                      x: Union['int'],
-                      y: Union['int'],
-                      width: Union['int'],
-                      height: Union['int'],
-                      color: Optional['DOM.RGBA'] = None,
-                      outlineColor: Optional['DOM.RGBA'] = None,
-                      ):
+    def highlightRect(
+        cls,
+        x: Union["int"],
+        y: Union["int"],
+        width: Union["int"],
+        height: Union["int"],
+        color: Optional["DOM.RGBA"] = None,
+        outlineColor: Optional["DOM.RGBA"] = None,
+    ):
         """Highlights given rectangle. Coordinates are absolute with respect to the main frame viewport.
         :param x: X coordinate
         :type x: int
@@ -203,22 +195,26 @@ objectId must be specified.
         :type outlineColor: DOM.RGBA
         """
         return (
-            cls.build_send_payload("highlightRect", {
-                "x": x,
-                "y": y,
-                "width": width,
-                "height": height,
-                "color": color,
-                "outlineColor": outlineColor,
-            }),
-            None
+            cls.build_send_payload(
+                "highlightRect",
+                {
+                    "x": x,
+                    "y": y,
+                    "width": width,
+                    "height": height,
+                    "color": color,
+                    "outlineColor": outlineColor,
+                },
+            ),
+            None,
         )
 
     @classmethod
-    def setInspectMode(cls,
-                       mode: Union['InspectMode'],
-                       highlightConfig: Optional['HighlightConfig'] = None,
-                       ):
+    def setInspectMode(
+        cls,
+        mode: Union["InspectMode"],
+        highlightConfig: Optional["HighlightConfig"] = None,
+    ):
         """Enters the 'inspect' mode. In this mode, elements that user is hovering over are highlighted.
 Backend then generates 'inspectNodeRequested' event upon element selection.
         :param mode: Set an inspection mode.
@@ -228,129 +224,85 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         :type highlightConfig: HighlightConfig
         """
         return (
-            cls.build_send_payload("setInspectMode", {
-                "mode": mode,
-                "highlightConfig": highlightConfig,
-            }),
-            None
+            cls.build_send_payload(
+                "setInspectMode", {"mode": mode, "highlightConfig": highlightConfig}
+            ),
+            None,
         )
 
     @classmethod
-    def setPausedInDebuggerMessage(cls,
-                                   message: Optional['str'] = None,
-                                   ):
+    def setPausedInDebuggerMessage(cls, message: Optional["str"] = None):
         """
         :param message: The message to display, also triggers resume and step over controls.
         :type message: str
         """
         return (
-            cls.build_send_payload("setPausedInDebuggerMessage", {
-                "message": message,
-            }),
-            None
+            cls.build_send_payload("setPausedInDebuggerMessage", {"message": message}),
+            None,
         )
 
     @classmethod
-    def setShowDebugBorders(cls,
-                            show: Union['bool'],
-                            ):
+    def setShowDebugBorders(cls, show: Union["bool"]):
         """Requests that backend shows debug borders on layers
         :param show: True for showing debug borders
         :type show: bool
         """
-        return (
-            cls.build_send_payload("setShowDebugBorders", {
-                "show": show,
-            }),
-            None
-        )
+        return (cls.build_send_payload("setShowDebugBorders", {"show": show}), None)
 
     @classmethod
-    def setShowFPSCounter(cls,
-                          show: Union['bool'],
-                          ):
+    def setShowFPSCounter(cls, show: Union["bool"]):
         """Requests that backend shows the FPS counter
         :param show: True for showing the FPS counter
         :type show: bool
         """
-        return (
-            cls.build_send_payload("setShowFPSCounter", {
-                "show": show,
-            }),
-            None
-        )
+        return (cls.build_send_payload("setShowFPSCounter", {"show": show}), None)
 
     @classmethod
-    def setShowPaintRects(cls,
-                          result: Union['bool'],
-                          ):
+    def setShowPaintRects(cls, result: Union["bool"]):
         """Requests that backend shows paint rectangles
         :param result: True for showing paint rectangles
         :type result: bool
         """
-        return (
-            cls.build_send_payload("setShowPaintRects", {
-                "result": result,
-            }),
-            None
-        )
+        return (cls.build_send_payload("setShowPaintRects", {"result": result}), None)
 
     @classmethod
-    def setShowScrollBottleneckRects(cls,
-                                     show: Union['bool'],
-                                     ):
+    def setShowScrollBottleneckRects(cls, show: Union["bool"]):
         """Requests that backend shows scroll bottleneck rects
         :param show: True for showing scroll bottleneck rects
         :type show: bool
         """
         return (
-            cls.build_send_payload("setShowScrollBottleneckRects", {
-                "show": show,
-            }),
-            None
+            cls.build_send_payload("setShowScrollBottleneckRects", {"show": show}),
+            None,
         )
 
     @classmethod
-    def setShowViewportSizeOnResize(cls,
-                                    show: Union['bool'],
-                                    ):
+    def setShowViewportSizeOnResize(cls, show: Union["bool"]):
         """Paints viewport size upon main frame resize.
         :param show: Whether to paint size or not.
         :type show: bool
         """
         return (
-            cls.build_send_payload("setShowViewportSizeOnResize", {
-                "show": show,
-            }),
-            None
+            cls.build_send_payload("setShowViewportSizeOnResize", {"show": show}),
+            None,
         )
 
     @classmethod
-    def setSuspended(cls,
-                     suspended: Union['bool'],
-                     ):
+    def setSuspended(cls, suspended: Union["bool"]):
         """
         :param suspended: Whether overlay should be suspended and not consume any resources until resumed.
         :type suspended: bool
         """
-        return (
-            cls.build_send_payload("setSuspended", {
-                "suspended": suspended,
-            }),
-            None
-        )
-
+        return (cls.build_send_payload("setSuspended", {"suspended": suspended}), None)
 
 
 class InspectNodeRequestedEvent(BaseEvent):
 
-    js_name = 'Overlay.inspectNodeRequested'
-    hashable = ['backendNodeId']
+    js_name = "Overlay.inspectNodeRequested"
+    hashable = ["backendNodeId"]
     is_hashable = True
 
-    def __init__(self,
-                 backendNodeId: Union['DOM.BackendNodeId', dict],
-                 ):
+    def __init__(self, backendNodeId: Union["DOM.BackendNodeId", dict]):
         if isinstance(backendNodeId, dict):
             backendNodeId = DOM.BackendNodeId(**backendNodeId)
         elif isinstance(backendNodeId, list):
@@ -360,22 +312,22 @@ class InspectNodeRequestedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, backendNodeId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class NodeHighlightRequestedEvent(BaseEvent):
 
-    js_name = 'Overlay.nodeHighlightRequested'
-    hashable = ['nodeId']
+    js_name = "Overlay.nodeHighlightRequested"
+    hashable = ["nodeId"]
     is_hashable = True
 
-    def __init__(self,
-                 nodeId: Union['DOM.NodeId', dict],
-                 ):
+    def __init__(self, nodeId: Union["DOM.NodeId", dict]):
         if isinstance(nodeId, dict):
             nodeId = DOM.NodeId(**nodeId)
         elif isinstance(nodeId, list):
@@ -385,22 +337,22 @@ class NodeHighlightRequestedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, nodeId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class ScreenshotRequestedEvent(BaseEvent):
 
-    js_name = 'Overlay.screenshotRequested'
+    js_name = "Overlay.screenshotRequested"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 viewport: Union['Page.Viewport', dict],
-                 ):
+    def __init__(self, viewport: Union["Page.Viewport", dict]):
         if isinstance(viewport, dict):
             viewport = Page.Viewport(**viewport)
         elif isinstance(viewport, list):
@@ -409,4 +361,4 @@ class ScreenshotRequestedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")

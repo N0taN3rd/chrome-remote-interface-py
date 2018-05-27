@@ -24,17 +24,19 @@ UnserializableValue = str
 
 # RemoteObject: Mirror object referencing original JavaScript object.
 class RemoteObject(ChromeTypeBase):
-    def __init__(self,
-                 type: Union['str'],
-                 subtype: Optional['str'] = None,
-                 className: Optional['str'] = None,
-                 value: Optional['Any'] = None,
-                 unserializableValue: Optional['UnserializableValue'] = None,
-                 description: Optional['str'] = None,
-                 objectId: Optional['RemoteObjectId'] = None,
-                 preview: Optional['ObjectPreview'] = None,
-                 customPreview: Optional['CustomPreview'] = None,
-                 ):
+
+    def __init__(
+        self,
+        type: Union["str"],
+        subtype: Optional["str"] = None,
+        className: Optional["str"] = None,
+        value: Optional["Any"] = None,
+        unserializableValue: Optional["UnserializableValue"] = None,
+        description: Optional["str"] = None,
+        objectId: Optional["RemoteObjectId"] = None,
+        preview: Optional["ObjectPreview"] = None,
+        customPreview: Optional["CustomPreview"] = None,
+    ):
 
         self.type = type
         self.subtype = subtype
@@ -47,15 +49,17 @@ class RemoteObject(ChromeTypeBase):
         self.customPreview = customPreview
 
 
-# CustomPreview: 
+# CustomPreview:
 class CustomPreview(ChromeTypeBase):
-    def __init__(self,
-                 header: Union['str'],
-                 hasBody: Union['bool'],
-                 formatterObjectId: Union['RemoteObjectId'],
-                 bindRemoteObjectFunctionId: Union['RemoteObjectId'],
-                 configObjectId: Optional['RemoteObjectId'] = None,
-                 ):
+
+    def __init__(
+        self,
+        header: Union["str"],
+        hasBody: Union["bool"],
+        formatterObjectId: Union["RemoteObjectId"],
+        bindRemoteObjectFunctionId: Union["RemoteObjectId"],
+        configObjectId: Optional["RemoteObjectId"] = None,
+    ):
 
         self.header = header
         self.hasBody = hasBody
@@ -66,14 +70,16 @@ class CustomPreview(ChromeTypeBase):
 
 # ObjectPreview: Object containing abbreviated remote object value.
 class ObjectPreview(ChromeTypeBase):
-    def __init__(self,
-                 type: Union['str'],
-                 overflow: Union['bool'],
-                 properties: Union['[PropertyPreview]'],
-                 subtype: Optional['str'] = None,
-                 description: Optional['str'] = None,
-                 entries: Optional['[EntryPreview]'] = None,
-                 ):
+
+    def __init__(
+        self,
+        type: Union["str"],
+        overflow: Union["bool"],
+        properties: Union["[PropertyPreview]"],
+        subtype: Optional["str"] = None,
+        description: Optional["str"] = None,
+        entries: Optional["[EntryPreview]"] = None,
+    ):
 
         self.type = type
         self.subtype = subtype
@@ -83,15 +89,17 @@ class ObjectPreview(ChromeTypeBase):
         self.entries = entries
 
 
-# PropertyPreview: 
+# PropertyPreview:
 class PropertyPreview(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 type: Union['str'],
-                 value: Optional['str'] = None,
-                 valuePreview: Optional['ObjectPreview'] = None,
-                 subtype: Optional['str'] = None,
-                 ):
+
+    def __init__(
+        self,
+        name: Union["str"],
+        type: Union["str"],
+        value: Optional["str"] = None,
+        valuePreview: Optional["ObjectPreview"] = None,
+        subtype: Optional["str"] = None,
+    ):
 
         self.name = name
         self.type = type
@@ -100,12 +108,12 @@ class PropertyPreview(ChromeTypeBase):
         self.subtype = subtype
 
 
-# EntryPreview: 
+# EntryPreview:
 class EntryPreview(ChromeTypeBase):
-    def __init__(self,
-                 value: Union['ObjectPreview'],
-                 key: Optional['ObjectPreview'] = None,
-                 ):
+
+    def __init__(
+        self, value: Union["ObjectPreview"], key: Optional["ObjectPreview"] = None
+    ):
 
         self.key = key
         self.value = value
@@ -113,18 +121,20 @@ class EntryPreview(ChromeTypeBase):
 
 # PropertyDescriptor: Object property descriptor.
 class PropertyDescriptor(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 configurable: Union['bool'],
-                 enumerable: Union['bool'],
-                 value: Optional['RemoteObject'] = None,
-                 writable: Optional['bool'] = None,
-                 get: Optional['RemoteObject'] = None,
-                 set: Optional['RemoteObject'] = None,
-                 wasThrown: Optional['bool'] = None,
-                 isOwn: Optional['bool'] = None,
-                 symbol: Optional['RemoteObject'] = None,
-                 ):
+
+    def __init__(
+        self,
+        name: Union["str"],
+        configurable: Union["bool"],
+        enumerable: Union["bool"],
+        value: Optional["RemoteObject"] = None,
+        writable: Optional["bool"] = None,
+        get: Optional["RemoteObject"] = None,
+        set: Optional["RemoteObject"] = None,
+        wasThrown: Optional["bool"] = None,
+        isOwn: Optional["bool"] = None,
+        symbol: Optional["RemoteObject"] = None,
+    ):
 
         self.name = name
         self.value = value
@@ -140,10 +150,8 @@ class PropertyDescriptor(ChromeTypeBase):
 
 # InternalPropertyDescriptor: Object internal property descriptor. This property isn't normally visible in JavaScript code.
 class InternalPropertyDescriptor(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 value: Optional['RemoteObject'] = None,
-                 ):
+
+    def __init__(self, name: Union["str"], value: Optional["RemoteObject"] = None):
 
         self.name = name
         self.value = value
@@ -151,11 +159,13 @@ class InternalPropertyDescriptor(ChromeTypeBase):
 
 # CallArgument: Represents function call argument. Either remote object id `objectId`, primitive `value`,unserializable primitive value or neither of (for undefined) them should be specified.
 class CallArgument(ChromeTypeBase):
-    def __init__(self,
-                 value: Optional['Any'] = None,
-                 unserializableValue: Optional['UnserializableValue'] = None,
-                 objectId: Optional['RemoteObjectId'] = None,
-                 ):
+
+    def __init__(
+        self,
+        value: Optional["Any"] = None,
+        unserializableValue: Optional["UnserializableValue"] = None,
+        objectId: Optional["RemoteObjectId"] = None,
+    ):
 
         self.value = value
         self.unserializableValue = unserializableValue
@@ -167,12 +177,14 @@ ExecutionContextId = int
 
 # ExecutionContextDescription: Description of an isolated world.
 class ExecutionContextDescription(ChromeTypeBase):
-    def __init__(self,
-                 id: Union['ExecutionContextId'],
-                 origin: Union['str'],
-                 name: Union['str'],
-                 auxData: Optional['dict'] = None,
-                 ):
+
+    def __init__(
+        self,
+        id: Union["ExecutionContextId"],
+        origin: Union["str"],
+        name: Union["str"],
+        auxData: Optional["dict"] = None,
+    ):
 
         self.id = id
         self.origin = origin
@@ -182,17 +194,19 @@ class ExecutionContextDescription(ChromeTypeBase):
 
 # ExceptionDetails: Detailed information about exception (or error) that was thrown during script compilation orexecution.
 class ExceptionDetails(ChromeTypeBase):
-    def __init__(self,
-                 exceptionId: Union['int'],
-                 text: Union['str'],
-                 lineNumber: Union['int'],
-                 columnNumber: Union['int'],
-                 scriptId: Optional['ScriptId'] = None,
-                 url: Optional['str'] = None,
-                 stackTrace: Optional['StackTrace'] = None,
-                 exception: Optional['RemoteObject'] = None,
-                 executionContextId: Optional['ExecutionContextId'] = None,
-                 ):
+
+    def __init__(
+        self,
+        exceptionId: Union["int"],
+        text: Union["str"],
+        lineNumber: Union["int"],
+        columnNumber: Union["int"],
+        scriptId: Optional["ScriptId"] = None,
+        url: Optional["str"] = None,
+        stackTrace: Optional["StackTrace"] = None,
+        exception: Optional["RemoteObject"] = None,
+        executionContextId: Optional["ExecutionContextId"] = None,
+    ):
 
         self.exceptionId = exceptionId
         self.text = text
@@ -213,13 +227,15 @@ TimeDelta = float
 
 # CallFrame: Stack entry for runtime errors and assertions.
 class CallFrame(ChromeTypeBase):
-    def __init__(self,
-                 functionName: Union['str'],
-                 scriptId: Union['ScriptId'],
-                 url: Union['str'],
-                 lineNumber: Union['int'],
-                 columnNumber: Union['int'],
-                 ):
+
+    def __init__(
+        self,
+        functionName: Union["str"],
+        scriptId: Union["ScriptId"],
+        url: Union["str"],
+        lineNumber: Union["int"],
+        columnNumber: Union["int"],
+    ):
 
         self.functionName = functionName
         self.scriptId = scriptId
@@ -230,12 +246,14 @@ class CallFrame(ChromeTypeBase):
 
 # StackTrace: Call frames for assertions or error messages.
 class StackTrace(ChromeTypeBase):
-    def __init__(self,
-                 callFrames: Union['[CallFrame]'],
-                 description: Optional['str'] = None,
-                 parent: Optional['StackTrace'] = None,
-                 parentId: Optional['StackTraceId'] = None,
-                 ):
+
+    def __init__(
+        self,
+        callFrames: Union["[CallFrame]"],
+        description: Optional["str"] = None,
+        parent: Optional["StackTrace"] = None,
+        parentId: Optional["StackTraceId"] = None,
+    ):
 
         self.description = description
         self.callFrames = callFrames
@@ -248,10 +266,10 @@ UniqueDebuggerId = str
 
 # StackTraceId: If `debuggerId` is set stack trace comes from another debugger and can be resolved there. Thisallows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.paused` for usages.
 class StackTraceId(ChromeTypeBase):
-    def __init__(self,
-                 id: Union['str'],
-                 debuggerId: Optional['UniqueDebuggerId'] = None,
-                 ):
+
+    def __init__(
+        self, id: Union["str"], debuggerId: Optional["UniqueDebuggerId"] = None
+    ):
 
         self.id = id
         self.debuggerId = debuggerId
@@ -264,12 +282,14 @@ and unique identifier that can be used for further object reference. Original ob
 maintained in memory unless they are either explicitly released or are released along with the
 other objects in their object group.
     """
+
     @classmethod
-    def awaitPromise(cls,
-                     promiseObjectId: Union['RemoteObjectId'],
-                     returnByValue: Optional['bool'] = None,
-                     generatePreview: Optional['bool'] = None,
-                     ):
+    def awaitPromise(
+        cls,
+        promiseObjectId: Union["RemoteObjectId"],
+        returnByValue: Optional["bool"] = None,
+        generatePreview: Optional["bool"] = None,
+    ):
         """Add handler to promise with given promise object id.
         :param promiseObjectId: Identifier of the promise.
         :type promiseObjectId: RemoteObjectId
@@ -279,36 +299,36 @@ other objects in their object group.
         :type generatePreview: bool
         """
         return (
-            cls.build_send_payload("awaitPromise", {
-                "promiseObjectId": promiseObjectId,
-                "returnByValue": returnByValue,
-                "generatePreview": generatePreview,
-            }),
-            cls.convert_payload({
-                "result": {
-                    "class": RemoteObject,
-                    "optional": False
+            cls.build_send_payload(
+                "awaitPromise",
+                {
+                    "promiseObjectId": promiseObjectId,
+                    "returnByValue": returnByValue,
+                    "generatePreview": generatePreview,
                 },
-                "exceptionDetails": {
-                    "class": ExceptionDetails,
-                    "optional": True
-                },
-            })
+            ),
+            cls.convert_payload(
+                {
+                    "result": {"class": RemoteObject, "optional": False},
+                    "exceptionDetails": {"class": ExceptionDetails, "optional": True},
+                }
+            ),
         )
 
     @classmethod
-    def callFunctionOn(cls,
-                       functionDeclaration: Union['str'],
-                       objectId: Optional['RemoteObjectId'] = None,
-                       arguments: Optional['[CallArgument]'] = None,
-                       silent: Optional['bool'] = None,
-                       returnByValue: Optional['bool'] = None,
-                       generatePreview: Optional['bool'] = None,
-                       userGesture: Optional['bool'] = None,
-                       awaitPromise: Optional['bool'] = None,
-                       executionContextId: Optional['ExecutionContextId'] = None,
-                       objectGroup: Optional['str'] = None,
-                       ):
+    def callFunctionOn(
+        cls,
+        functionDeclaration: Union["str"],
+        objectId: Optional["RemoteObjectId"] = None,
+        arguments: Optional["[CallArgument]"] = None,
+        silent: Optional["bool"] = None,
+        returnByValue: Optional["bool"] = None,
+        generatePreview: Optional["bool"] = None,
+        userGesture: Optional["bool"] = None,
+        awaitPromise: Optional["bool"] = None,
+        executionContextId: Optional["ExecutionContextId"] = None,
+        objectGroup: Optional["str"] = None,
+    ):
         """Calls function with given declaration on the given object. Object group of the result is
 inherited from the target object.
         :param functionDeclaration: Declaration of the function to call.
@@ -339,37 +359,37 @@ specified and objectId is, objectGroup will be inherited from object.
         :type objectGroup: str
         """
         return (
-            cls.build_send_payload("callFunctionOn", {
-                "functionDeclaration": functionDeclaration,
-                "objectId": objectId,
-                "arguments": arguments,
-                "silent": silent,
-                "returnByValue": returnByValue,
-                "generatePreview": generatePreview,
-                "userGesture": userGesture,
-                "awaitPromise": awaitPromise,
-                "executionContextId": executionContextId,
-                "objectGroup": objectGroup,
-            }),
-            cls.convert_payload({
-                "result": {
-                    "class": RemoteObject,
-                    "optional": False
+            cls.build_send_payload(
+                "callFunctionOn",
+                {
+                    "functionDeclaration": functionDeclaration,
+                    "objectId": objectId,
+                    "arguments": arguments,
+                    "silent": silent,
+                    "returnByValue": returnByValue,
+                    "generatePreview": generatePreview,
+                    "userGesture": userGesture,
+                    "awaitPromise": awaitPromise,
+                    "executionContextId": executionContextId,
+                    "objectGroup": objectGroup,
                 },
-                "exceptionDetails": {
-                    "class": ExceptionDetails,
-                    "optional": True
-                },
-            })
+            ),
+            cls.convert_payload(
+                {
+                    "result": {"class": RemoteObject, "optional": False},
+                    "exceptionDetails": {"class": ExceptionDetails, "optional": True},
+                }
+            ),
         )
 
     @classmethod
-    def compileScript(cls,
-                      expression: Union['str'],
-                      sourceURL: Union['str'],
-                      persistScript: Union['bool'],
-                      executionContextId: Optional['ExecutionContextId'] = None,
-                      ):
+    def compileScript(
+        cls,
+        expression: Union["str"],
+        sourceURL: Union["str"],
+        persistScript: Union["bool"],
+        executionContextId: Optional["ExecutionContextId"] = None,
+    ):
         """Compiles expression.
         :param expression: Expression to compile.
         :type expression: str
@@ -382,43 +402,34 @@ evaluation will be performed in the context of the inspected page.
         :type executionContextId: ExecutionContextId
         """
         return (
-            cls.build_send_payload("compileScript", {
-                "expression": expression,
-                "sourceURL": sourceURL,
-                "persistScript": persistScript,
-                "executionContextId": executionContextId,
-            }),
-            cls.convert_payload({
-                "scriptId": {
-                    "class": ScriptId,
-                    "optional": True
+            cls.build_send_payload(
+                "compileScript",
+                {
+                    "expression": expression,
+                    "sourceURL": sourceURL,
+                    "persistScript": persistScript,
+                    "executionContextId": executionContextId,
                 },
-                "exceptionDetails": {
-                    "class": ExceptionDetails,
-                    "optional": True
-                },
-            })
+            ),
+            cls.convert_payload(
+                {
+                    "scriptId": {"class": ScriptId, "optional": True},
+                    "exceptionDetails": {"class": ExceptionDetails, "optional": True},
+                }
+            ),
         )
 
     @classmethod
     def disable(cls):
         """Disables reporting of execution contexts creation.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
     def discardConsoleEntries(cls):
         """Discards collected exceptions and console API calls.
         """
-        return (
-            cls.build_send_payload("discardConsoleEntries", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("discardConsoleEntries", {}), None)
 
     @classmethod
     def enable(cls):
@@ -426,26 +437,23 @@ evaluation will be performed in the context of the inspected page.
 When the reporting gets enabled the event will be sent immediately for each existing execution
 context.
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("enable", {}), None)
 
     @classmethod
-    def evaluate(cls,
-                 expression: Union['str'],
-                 objectGroup: Optional['str'] = None,
-                 includeCommandLineAPI: Optional['bool'] = None,
-                 silent: Optional['bool'] = None,
-                 contextId: Optional['ExecutionContextId'] = None,
-                 returnByValue: Optional['bool'] = None,
-                 generatePreview: Optional['bool'] = None,
-                 userGesture: Optional['bool'] = None,
-                 awaitPromise: Optional['bool'] = None,
-                 throwOnSideEffect: Optional['bool'] = None,
-                 timeout: Optional['TimeDelta'] = None,
-                 ):
+    def evaluate(
+        cls,
+        expression: Union["str"],
+        objectGroup: Optional["str"] = None,
+        includeCommandLineAPI: Optional["bool"] = None,
+        silent: Optional["bool"] = None,
+        contextId: Optional["ExecutionContextId"] = None,
+        returnByValue: Optional["bool"] = None,
+        generatePreview: Optional["bool"] = None,
+        userGesture: Optional["bool"] = None,
+        awaitPromise: Optional["bool"] = None,
+        throwOnSideEffect: Optional["bool"] = None,
+        timeout: Optional["TimeDelta"] = None,
+    ):
         """Evaluates expression on global object.
         :param expression: Expression to evaluate.
         :type expression: str
@@ -474,29 +482,28 @@ resolved.
         :type timeout: TimeDelta
         """
         return (
-            cls.build_send_payload("evaluate", {
-                "expression": expression,
-                "objectGroup": objectGroup,
-                "includeCommandLineAPI": includeCommandLineAPI,
-                "silent": silent,
-                "contextId": contextId,
-                "returnByValue": returnByValue,
-                "generatePreview": generatePreview,
-                "userGesture": userGesture,
-                "awaitPromise": awaitPromise,
-                "throwOnSideEffect": throwOnSideEffect,
-                "timeout": timeout,
-            }),
-            cls.convert_payload({
-                "result": {
-                    "class": RemoteObject,
-                    "optional": False
+            cls.build_send_payload(
+                "evaluate",
+                {
+                    "expression": expression,
+                    "objectGroup": objectGroup,
+                    "includeCommandLineAPI": includeCommandLineAPI,
+                    "silent": silent,
+                    "contextId": contextId,
+                    "returnByValue": returnByValue,
+                    "generatePreview": generatePreview,
+                    "userGesture": userGesture,
+                    "awaitPromise": awaitPromise,
+                    "throwOnSideEffect": throwOnSideEffect,
+                    "timeout": timeout,
                 },
-                "exceptionDetails": {
-                    "class": ExceptionDetails,
-                    "optional": True
-                },
-            })
+            ),
+            cls.convert_payload(
+                {
+                    "result": {"class": RemoteObject, "optional": False},
+                    "exceptionDetails": {"class": ExceptionDetails, "optional": True},
+                }
+            ),
         )
 
     @classmethod
@@ -504,14 +511,8 @@ resolved.
         """Returns the isolate id.
         """
         return (
-            cls.build_send_payload("getIsolateId", {
-            }),
-            cls.convert_payload({
-                "id": {
-                    "class": str,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getIsolateId", {}),
+            cls.convert_payload({"id": {"class": str, "optional": False}}),
         )
 
     @classmethod
@@ -520,27 +521,23 @@ resolved.
 It is the total usage of the corresponding isolate not scoped to a particular Runtime.
         """
         return (
-            cls.build_send_payload("getHeapUsage", {
-            }),
-            cls.convert_payload({
-                "usedSize": {
-                    "class": float,
-                    "optional": False
-                },
-                "totalSize": {
-                    "class": float,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getHeapUsage", {}),
+            cls.convert_payload(
+                {
+                    "usedSize": {"class": float, "optional": False},
+                    "totalSize": {"class": float, "optional": False},
+                }
+            ),
         )
 
     @classmethod
-    def getProperties(cls,
-                      objectId: Union['RemoteObjectId'],
-                      ownProperties: Optional['bool'] = None,
-                      accessorPropertiesOnly: Optional['bool'] = None,
-                      generatePreview: Optional['bool'] = None,
-                      ):
+    def getProperties(
+        cls,
+        objectId: Union["RemoteObjectId"],
+        ownProperties: Optional["bool"] = None,
+        accessorPropertiesOnly: Optional["bool"] = None,
+        generatePreview: Optional["bool"] = None,
+    ):
         """Returns properties of a given object. Object group of the result is inherited from the target
 object.
         :param objectId: Identifier of the object to return properties for.
@@ -555,53 +552,48 @@ returned either.
         :type generatePreview: bool
         """
         return (
-            cls.build_send_payload("getProperties", {
-                "objectId": objectId,
-                "ownProperties": ownProperties,
-                "accessorPropertiesOnly": accessorPropertiesOnly,
-                "generatePreview": generatePreview,
-            }),
-            cls.convert_payload({
-                "result": {
-                    "class": [PropertyDescriptor],
-                    "optional": False
+            cls.build_send_payload(
+                "getProperties",
+                {
+                    "objectId": objectId,
+                    "ownProperties": ownProperties,
+                    "accessorPropertiesOnly": accessorPropertiesOnly,
+                    "generatePreview": generatePreview,
                 },
-                "internalProperties": {
-                    "class": [InternalPropertyDescriptor],
-                    "optional": True
-                },
-                "exceptionDetails": {
-                    "class": ExceptionDetails,
-                    "optional": True
-                },
-            })
+            ),
+            cls.convert_payload(
+                {
+                    "result": {"class": [PropertyDescriptor], "optional": False},
+                    "internalProperties": {
+                        "class": [InternalPropertyDescriptor],
+                        "optional": True,
+                    },
+                    "exceptionDetails": {"class": ExceptionDetails, "optional": True},
+                }
+            ),
         )
 
     @classmethod
-    def globalLexicalScopeNames(cls,
-                                executionContextId: Optional['ExecutionContextId'] = None,
-                                ):
+    def globalLexicalScopeNames(
+        cls, executionContextId: Optional["ExecutionContextId"] = None
+    ):
         """Returns all let, const and class variables from global scope.
         :param executionContextId: Specifies in which execution context to lookup global scope variables.
         :type executionContextId: ExecutionContextId
         """
         return (
-            cls.build_send_payload("globalLexicalScopeNames", {
-                "executionContextId": executionContextId,
-            }),
-            cls.convert_payload({
-                "names": {
-                    "class": [],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "globalLexicalScopeNames", {"executionContextId": executionContextId}
+            ),
+            cls.convert_payload({"names": {"class": [], "optional": False}}),
         )
 
     @classmethod
-    def queryObjects(cls,
-                     prototypeObjectId: Union['RemoteObjectId'],
-                     objectGroup: Optional['str'] = None,
-                     ):
+    def queryObjects(
+        cls,
+        prototypeObjectId: Union["RemoteObjectId"],
+        objectGroup: Optional["str"] = None,
+    ):
         """
         :param prototypeObjectId: Identifier of the prototype to return objects for.
         :type prototypeObjectId: RemoteObjectId
@@ -609,69 +601,52 @@ returned either.
         :type objectGroup: str
         """
         return (
-            cls.build_send_payload("queryObjects", {
-                "prototypeObjectId": prototypeObjectId,
-                "objectGroup": objectGroup,
-            }),
-            cls.convert_payload({
-                "objects": {
-                    "class": RemoteObject,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "queryObjects",
+                {"prototypeObjectId": prototypeObjectId, "objectGroup": objectGroup},
+            ),
+            cls.convert_payload(
+                {"objects": {"class": RemoteObject, "optional": False}}
+            ),
         )
 
     @classmethod
-    def releaseObject(cls,
-                      objectId: Union['RemoteObjectId'],
-                      ):
+    def releaseObject(cls, objectId: Union["RemoteObjectId"]):
         """Releases remote object with given id.
         :param objectId: Identifier of the object to release.
         :type objectId: RemoteObjectId
         """
-        return (
-            cls.build_send_payload("releaseObject", {
-                "objectId": objectId,
-            }),
-            None
-        )
+        return (cls.build_send_payload("releaseObject", {"objectId": objectId}), None)
 
     @classmethod
-    def releaseObjectGroup(cls,
-                           objectGroup: Union['str'],
-                           ):
+    def releaseObjectGroup(cls, objectGroup: Union["str"]):
         """Releases all remote objects that belong to a given group.
         :param objectGroup: Symbolic object group name.
         :type objectGroup: str
         """
         return (
-            cls.build_send_payload("releaseObjectGroup", {
-                "objectGroup": objectGroup,
-            }),
-            None
+            cls.build_send_payload("releaseObjectGroup", {"objectGroup": objectGroup}),
+            None,
         )
 
     @classmethod
     def runIfWaitingForDebugger(cls):
         """Tells inspected instance to run if it was waiting for debugger to attach.
         """
-        return (
-            cls.build_send_payload("runIfWaitingForDebugger", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("runIfWaitingForDebugger", {}), None)
 
     @classmethod
-    def runScript(cls,
-                  scriptId: Union['ScriptId'],
-                  executionContextId: Optional['ExecutionContextId'] = None,
-                  objectGroup: Optional['str'] = None,
-                  silent: Optional['bool'] = None,
-                  includeCommandLineAPI: Optional['bool'] = None,
-                  returnByValue: Optional['bool'] = None,
-                  generatePreview: Optional['bool'] = None,
-                  awaitPromise: Optional['bool'] = None,
-                  ):
+    def runScript(
+        cls,
+        scriptId: Union["ScriptId"],
+        executionContextId: Optional["ExecutionContextId"] = None,
+        objectGroup: Optional["str"] = None,
+        silent: Optional["bool"] = None,
+        includeCommandLineAPI: Optional["bool"] = None,
+        returnByValue: Optional["bool"] = None,
+        generatePreview: Optional["bool"] = None,
+        awaitPromise: Optional["bool"] = None,
+    ):
         """Runs script with given id in a given context.
         :param scriptId: Id of the script to run.
         :type scriptId: ScriptId
@@ -694,41 +669,38 @@ resolved.
         :type awaitPromise: bool
         """
         return (
-            cls.build_send_payload("runScript", {
-                "scriptId": scriptId,
-                "executionContextId": executionContextId,
-                "objectGroup": objectGroup,
-                "silent": silent,
-                "includeCommandLineAPI": includeCommandLineAPI,
-                "returnByValue": returnByValue,
-                "generatePreview": generatePreview,
-                "awaitPromise": awaitPromise,
-            }),
-            cls.convert_payload({
-                "result": {
-                    "class": RemoteObject,
-                    "optional": False
+            cls.build_send_payload(
+                "runScript",
+                {
+                    "scriptId": scriptId,
+                    "executionContextId": executionContextId,
+                    "objectGroup": objectGroup,
+                    "silent": silent,
+                    "includeCommandLineAPI": includeCommandLineAPI,
+                    "returnByValue": returnByValue,
+                    "generatePreview": generatePreview,
+                    "awaitPromise": awaitPromise,
                 },
-                "exceptionDetails": {
-                    "class": ExceptionDetails,
-                    "optional": True
-                },
-            })
+            ),
+            cls.convert_payload(
+                {
+                    "result": {"class": RemoteObject, "optional": False},
+                    "exceptionDetails": {"class": ExceptionDetails, "optional": True},
+                }
+            ),
         )
 
     @classmethod
-    def setCustomObjectFormatterEnabled(cls,
-                                        enabled: Union['bool'],
-                                        ):
+    def setCustomObjectFormatterEnabled(cls, enabled: Union["bool"]):
         """
         :param enabled: 
         :type enabled: bool
         """
         return (
-            cls.build_send_payload("setCustomObjectFormatterEnabled", {
-                "enabled": enabled,
-            }),
-            None
+            cls.build_send_payload(
+                "setCustomObjectFormatterEnabled", {"enabled": enabled}
+            ),
+            None,
         )
 
     @classmethod
@@ -736,28 +708,24 @@ resolved.
         """Terminate current or next JavaScript execution.
 Will cancel the termination when the outer-most script execution ends.
         """
-        return (
-            cls.build_send_payload("terminateExecution", {
-            }),
-            None
-        )
-
+        return (cls.build_send_payload("terminateExecution", {}), None)
 
 
 class ConsoleAPICalledEvent(BaseEvent):
 
-    js_name = 'Runtime.consoleAPICalled'
-    hashable = ['executionContextId']
+    js_name = "Runtime.consoleAPICalled"
+    hashable = ["executionContextId"]
     is_hashable = True
 
-    def __init__(self,
-                 type: Union['str', dict],
-                 args: Union['[RemoteObject]', dict],
-                 executionContextId: Union['ExecutionContextId', dict],
-                 timestamp: Union['Timestamp', dict],
-                 stackTrace: Union['StackTrace', dict, None] = None,
-                 context: Union['str', dict, None] = None,
-                 ):
+    def __init__(
+        self,
+        type: Union["str", dict],
+        args: Union["[RemoteObject]", dict],
+        executionContextId: Union["ExecutionContextId", dict],
+        timestamp: Union["Timestamp", dict],
+        stackTrace: Union["StackTrace", dict, None] = None,
+        context: Union["str", dict, None] = None,
+    ):
         if isinstance(type, dict):
             type = str(**type)
         elif isinstance(type, list):
@@ -771,7 +739,9 @@ class ConsoleAPICalledEvent(BaseEvent):
         if isinstance(executionContextId, dict):
             executionContextId = ExecutionContextId(**executionContextId)
         elif isinstance(executionContextId, list):
-            executionContextId = [ExecutionContextId(**item) for item in executionContextId]
+            executionContextId = [
+                ExecutionContextId(**item) for item in executionContextId
+            ]
         self.executionContextId = executionContextId
         if isinstance(timestamp, dict):
             timestamp = Timestamp(**timestamp)
@@ -792,23 +762,22 @@ class ConsoleAPICalledEvent(BaseEvent):
     @classmethod
     def build_hash(cls, executionContextId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class ExceptionRevokedEvent(BaseEvent):
 
-    js_name = 'Runtime.exceptionRevoked'
-    hashable = ['exceptionId']
+    js_name = "Runtime.exceptionRevoked"
+    hashable = ["exceptionId"]
     is_hashable = True
 
-    def __init__(self,
-                 reason: Union['str', dict],
-                 exceptionId: Union['int', dict],
-                 ):
+    def __init__(self, reason: Union["str", dict], exceptionId: Union["int", dict]):
         if isinstance(reason, dict):
             reason = str(**reason)
         elif isinstance(reason, list):
@@ -823,23 +792,26 @@ class ExceptionRevokedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, exceptionId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class ExceptionThrownEvent(BaseEvent):
 
-    js_name = 'Runtime.exceptionThrown'
+    js_name = "Runtime.exceptionThrown"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 timestamp: Union['Timestamp', dict],
-                 exceptionDetails: Union['ExceptionDetails', dict],
-                 ):
+    def __init__(
+        self,
+        timestamp: Union["Timestamp", dict],
+        exceptionDetails: Union["ExceptionDetails", dict],
+    ):
         if isinstance(timestamp, dict):
             timestamp = Timestamp(**timestamp)
         elif isinstance(timestamp, list):
@@ -853,18 +825,16 @@ class ExceptionThrownEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")
 
 
 class ExecutionContextCreatedEvent(BaseEvent):
 
-    js_name = 'Runtime.executionContextCreated'
-    hashable = ['contextId']
+    js_name = "Runtime.executionContextCreated"
+    hashable = ["contextId"]
     is_hashable = True
 
-    def __init__(self,
-                 context: Union['ExecutionContextDescription', dict],
-                 ):
+    def __init__(self, context: Union["ExecutionContextDescription", dict]):
         if isinstance(context, dict):
             context = ExecutionContextDescription(**context)
         elif isinstance(context, list):
@@ -874,41 +844,45 @@ class ExecutionContextCreatedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, contextId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class ExecutionContextDestroyedEvent(BaseEvent):
 
-    js_name = 'Runtime.executionContextDestroyed'
-    hashable = ['executionContextId']
+    js_name = "Runtime.executionContextDestroyed"
+    hashable = ["executionContextId"]
     is_hashable = True
 
-    def __init__(self,
-                 executionContextId: Union['ExecutionContextId', dict],
-                 ):
+    def __init__(self, executionContextId: Union["ExecutionContextId", dict]):
         if isinstance(executionContextId, dict):
             executionContextId = ExecutionContextId(**executionContextId)
         elif isinstance(executionContextId, list):
-            executionContextId = [ExecutionContextId(**item) for item in executionContextId]
+            executionContextId = [
+                ExecutionContextId(**item) for item in executionContextId
+            ]
         self.executionContextId = executionContextId
 
     @classmethod
     def build_hash(cls, executionContextId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class ExecutionContextsClearedEvent(BaseEvent):
 
-    js_name = 'Runtime.executionContextsCleared'
+    js_name = "Runtime.executionContextsCleared"
     hashable = []
     is_hashable = False
 
@@ -917,19 +891,16 @@ class ExecutionContextsClearedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")
 
 
 class InspectRequestedEvent(BaseEvent):
 
-    js_name = 'Runtime.inspectRequested'
+    js_name = "Runtime.inspectRequested"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 object: Union['RemoteObject', dict],
-                 hints: Union['dict', dict],
-                 ):
+    def __init__(self, object: Union["RemoteObject", dict], hints: Union["dict", dict]):
         if isinstance(object, dict):
             object = RemoteObject(**object)
         elif isinstance(object, list):
@@ -943,4 +914,4 @@ class InspectRequestedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")

@@ -29,17 +29,19 @@ AXValueNativeSourceType = str
 
 # AXValueSource: A single source for a computed AX property.
 class AXValueSource(ChromeTypeBase):
-    def __init__(self,
-                 type: Union['AXValueSourceType'],
-                 value: Optional['AXValue'] = None,
-                 attribute: Optional['str'] = None,
-                 attributeValue: Optional['AXValue'] = None,
-                 superseded: Optional['bool'] = None,
-                 nativeSource: Optional['AXValueNativeSourceType'] = None,
-                 nativeSourceValue: Optional['AXValue'] = None,
-                 invalid: Optional['bool'] = None,
-                 invalidReason: Optional['str'] = None,
-                 ):
+
+    def __init__(
+        self,
+        type: Union["AXValueSourceType"],
+        value: Optional["AXValue"] = None,
+        attribute: Optional["str"] = None,
+        attributeValue: Optional["AXValue"] = None,
+        superseded: Optional["bool"] = None,
+        nativeSource: Optional["AXValueNativeSourceType"] = None,
+        nativeSourceValue: Optional["AXValue"] = None,
+        invalid: Optional["bool"] = None,
+        invalidReason: Optional["str"] = None,
+    ):
 
         self.type = type
         self.value = value
@@ -52,25 +54,25 @@ class AXValueSource(ChromeTypeBase):
         self.invalidReason = invalidReason
 
 
-# AXRelatedNode: 
+# AXRelatedNode:
 class AXRelatedNode(ChromeTypeBase):
-    def __init__(self,
-                 backendDOMNodeId: Union['DOM.BackendNodeId'],
-                 idref: Optional['str'] = None,
-                 text: Optional['str'] = None,
-                 ):
+
+    def __init__(
+        self,
+        backendDOMNodeId: Union["DOM.BackendNodeId"],
+        idref: Optional["str"] = None,
+        text: Optional["str"] = None,
+    ):
 
         self.backendDOMNodeId = backendDOMNodeId
         self.idref = idref
         self.text = text
 
 
-# AXProperty: 
+# AXProperty:
 class AXProperty(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['AXPropertyName'],
-                 value: Union['AXValue'],
-                 ):
+
+    def __init__(self, name: Union["AXPropertyName"], value: Union["AXValue"]):
 
         self.name = name
         self.value = value
@@ -78,12 +80,14 @@ class AXProperty(ChromeTypeBase):
 
 # AXValue: A single computed AX property.
 class AXValue(ChromeTypeBase):
-    def __init__(self,
-                 type: Union['AXValueType'],
-                 value: Optional['Any'] = None,
-                 relatedNodes: Optional['[AXRelatedNode]'] = None,
-                 sources: Optional['[AXValueSource]'] = None,
-                 ):
+
+    def __init__(
+        self,
+        type: Union["AXValueType"],
+        value: Optional["Any"] = None,
+        relatedNodes: Optional["[AXRelatedNode]"] = None,
+        sources: Optional["[AXValueSource]"] = None,
+    ):
 
         self.type = type
         self.value = value
@@ -96,18 +100,20 @@ AXPropertyName = str
 
 # AXNode: A node in the accessibility tree.
 class AXNode(ChromeTypeBase):
-    def __init__(self,
-                 nodeId: Union['AXNodeId'],
-                 ignored: Union['bool'],
-                 ignoredReasons: Optional['[AXProperty]'] = None,
-                 role: Optional['AXValue'] = None,
-                 name: Optional['AXValue'] = None,
-                 description: Optional['AXValue'] = None,
-                 value: Optional['AXValue'] = None,
-                 properties: Optional['[AXProperty]'] = None,
-                 childIds: Optional['[AXNodeId]'] = None,
-                 backendDOMNodeId: Optional['DOM.BackendNodeId'] = None,
-                 ):
+
+    def __init__(
+        self,
+        nodeId: Union["AXNodeId"],
+        ignored: Union["bool"],
+        ignoredReasons: Optional["[AXProperty]"] = None,
+        role: Optional["AXValue"] = None,
+        name: Optional["AXValue"] = None,
+        description: Optional["AXValue"] = None,
+        value: Optional["AXValue"] = None,
+        properties: Optional["[AXProperty]"] = None,
+        childIds: Optional["[AXNodeId]"] = None,
+        backendDOMNodeId: Optional["DOM.BackendNodeId"] = None,
+    ):
 
         self.nodeId = nodeId
         self.ignored = ignored
@@ -124,13 +130,15 @@ class AXNode(ChromeTypeBase):
 class Accessibility(PayloadMixin):
     """ 
     """
+
     @classmethod
-    def getPartialAXTree(cls,
-                         nodeId: Optional['DOM.NodeId'] = None,
-                         backendNodeId: Optional['DOM.BackendNodeId'] = None,
-                         objectId: Optional['Runtime.RemoteObjectId'] = None,
-                         fetchRelatives: Optional['bool'] = None,
-                         ):
+    def getPartialAXTree(
+        cls,
+        nodeId: Optional["DOM.NodeId"] = None,
+        backendNodeId: Optional["DOM.BackendNodeId"] = None,
+        objectId: Optional["Runtime.RemoteObjectId"] = None,
+        fetchRelatives: Optional["bool"] = None,
+    ):
         """Fetches the accessibility node and partial accessibility tree for this DOM node, if it exists.
         :param nodeId: Identifier of the node to get the partial accessibility tree for.
         :type nodeId: DOM.NodeId
@@ -142,17 +150,14 @@ class Accessibility(PayloadMixin):
         :type fetchRelatives: bool
         """
         return (
-            cls.build_send_payload("getPartialAXTree", {
-                "nodeId": nodeId,
-                "backendNodeId": backendNodeId,
-                "objectId": objectId,
-                "fetchRelatives": fetchRelatives,
-            }),
-            cls.convert_payload({
-                "nodes": {
-                    "class": [AXNode],
-                    "optional": False
+            cls.build_send_payload(
+                "getPartialAXTree",
+                {
+                    "nodeId": nodeId,
+                    "backendNodeId": backendNodeId,
+                    "objectId": objectId,
+                    "fetchRelatives": fetchRelatives,
                 },
-            })
+            ),
+            cls.convert_payload({"nodes": {"class": [AXNode], "optional": False}}),
         )
-

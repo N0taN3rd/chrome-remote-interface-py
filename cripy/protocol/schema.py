@@ -15,10 +15,8 @@ log = logging.getLogger(__name__)
 
 # Domain: Description of the protocol domain.
 class Domain(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 version: Union['str'],
-                 ):
+
+    def __init__(self, name: Union["str"], version: Union["str"]):
 
         self.name = name
         self.version = version
@@ -27,18 +25,12 @@ class Domain(ChromeTypeBase):
 class Schema(PayloadMixin):
     """ This domain is deprecated.
     """
+
     @classmethod
     def getDomains(cls):
         """Returns supported domains.
         """
         return (
-            cls.build_send_payload("getDomains", {
-            }),
-            cls.convert_payload({
-                "domains": {
-                    "class": [Domain],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getDomains", {}),
+            cls.convert_payload({"domains": {"class": [Domain], "optional": False}}),
         )
-

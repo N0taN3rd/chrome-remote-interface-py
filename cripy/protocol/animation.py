@@ -17,18 +17,20 @@ from cripy.protocol import runtime as Runtime
 
 # Animation: Animation instance.
 class Animation(ChromeTypeBase):
-    def __init__(self,
-                 id: Union['str'],
-                 name: Union['str'],
-                 pausedState: Union['bool'],
-                 playState: Union['str'],
-                 playbackRate: Union['float'],
-                 startTime: Union['float'],
-                 currentTime: Union['float'],
-                 type: Union['str'],
-                 source: Optional['AnimationEffect'] = None,
-                 cssId: Optional['str'] = None,
-                 ):
+
+    def __init__(
+        self,
+        id: Union["str"],
+        name: Union["str"],
+        pausedState: Union["bool"],
+        playState: Union["str"],
+        playbackRate: Union["float"],
+        startTime: Union["float"],
+        currentTime: Union["float"],
+        type: Union["str"],
+        source: Optional["AnimationEffect"] = None,
+        cssId: Optional["str"] = None,
+    ):
 
         self.id = id
         self.name = name
@@ -44,18 +46,20 @@ class Animation(ChromeTypeBase):
 
 # AnimationEffect: AnimationEffect instance
 class AnimationEffect(ChromeTypeBase):
-    def __init__(self,
-                 delay: Union['float'],
-                 endDelay: Union['float'],
-                 iterationStart: Union['float'],
-                 iterations: Union['float'],
-                 duration: Union['float'],
-                 direction: Union['str'],
-                 fill: Union['str'],
-                 easing: Union['str'],
-                 backendNodeId: Optional['DOM.BackendNodeId'] = None,
-                 keyframesRule: Optional['KeyframesRule'] = None,
-                 ):
+
+    def __init__(
+        self,
+        delay: Union["float"],
+        endDelay: Union["float"],
+        iterationStart: Union["float"],
+        iterations: Union["float"],
+        duration: Union["float"],
+        direction: Union["str"],
+        fill: Union["str"],
+        easing: Union["str"],
+        backendNodeId: Optional["DOM.BackendNodeId"] = None,
+        keyframesRule: Optional["KeyframesRule"] = None,
+    ):
 
         self.delay = delay
         self.endDelay = endDelay
@@ -71,10 +75,10 @@ class AnimationEffect(ChromeTypeBase):
 
 # KeyframesRule: Keyframes Rule
 class KeyframesRule(ChromeTypeBase):
-    def __init__(self,
-                 keyframes: Union['[KeyframeStyle]'],
-                 name: Optional['str'] = None,
-                 ):
+
+    def __init__(
+        self, keyframes: Union["[KeyframeStyle]"], name: Optional["str"] = None
+    ):
 
         self.name = name
         self.keyframes = keyframes
@@ -82,10 +86,8 @@ class KeyframesRule(ChromeTypeBase):
 
 # KeyframeStyle: Keyframe Style
 class KeyframeStyle(ChromeTypeBase):
-    def __init__(self,
-                 offset: Union['str'],
-                 easing: Union['str'],
-                 ):
+
+    def __init__(self, offset: Union["str"], easing: Union["str"]):
 
         self.offset = offset
         self.easing = easing
@@ -94,44 +96,28 @@ class KeyframeStyle(ChromeTypeBase):
 class Animation(PayloadMixin):
     """ 
     """
+
     @classmethod
     def disable(cls):
         """Disables animation domain notifications.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
     def enable(cls):
         """Enables animation domain notifications.
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("enable", {}), None)
 
     @classmethod
-    def getCurrentTime(cls,
-                       id: Union['str'],
-                       ):
+    def getCurrentTime(cls, id: Union["str"]):
         """Returns the current time of the an animation.
         :param id: Id of animation.
         :type id: str
         """
         return (
-            cls.build_send_payload("getCurrentTime", {
-                "id": id,
-            }),
-            cls.convert_payload({
-                "currentTime": {
-                    "class": float,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getCurrentTime", {"id": id}),
+            cls.convert_payload({"currentTime": {"class": float, "optional": False}}),
         )
 
     @classmethod
@@ -139,56 +125,36 @@ class Animation(PayloadMixin):
         """Gets the playback rate of the document timeline.
         """
         return (
-            cls.build_send_payload("getPlaybackRate", {
-            }),
-            cls.convert_payload({
-                "playbackRate": {
-                    "class": float,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getPlaybackRate", {}),
+            cls.convert_payload({"playbackRate": {"class": float, "optional": False}}),
         )
 
     @classmethod
-    def releaseAnimations(cls,
-                          animations: Union['[]'],
-                          ):
+    def releaseAnimations(cls, animations: Union["[]"]):
         """Releases a set of animations to no longer be manipulated.
         :param animations: List of animation ids to seek.
         :type animations: []
         """
         return (
-            cls.build_send_payload("releaseAnimations", {
-                "animations": animations,
-            }),
-            None
+            cls.build_send_payload("releaseAnimations", {"animations": animations}),
+            None,
         )
 
     @classmethod
-    def resolveAnimation(cls,
-                         animationId: Union['str'],
-                         ):
+    def resolveAnimation(cls, animationId: Union["str"]):
         """Gets the remote object of the Animation.
         :param animationId: Animation id.
         :type animationId: str
         """
         return (
-            cls.build_send_payload("resolveAnimation", {
-                "animationId": animationId,
-            }),
-            cls.convert_payload({
-                "remoteObject": {
-                    "class": Runtime.RemoteObject,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("resolveAnimation", {"animationId": animationId}),
+            cls.convert_payload(
+                {"remoteObject": {"class": Runtime.RemoteObject, "optional": False}}
+            ),
         )
 
     @classmethod
-    def seekAnimations(cls,
-                       animations: Union['[]'],
-                       currentTime: Union['float'],
-                       ):
+    def seekAnimations(cls, animations: Union["[]"], currentTime: Union["float"]):
         """Seek a set of animations to a particular time within each animation.
         :param animations: List of animation ids to seek.
         :type animations: []
@@ -196,18 +162,14 @@ class Animation(PayloadMixin):
         :type currentTime: float
         """
         return (
-            cls.build_send_payload("seekAnimations", {
-                "animations": animations,
-                "currentTime": currentTime,
-            }),
-            None
+            cls.build_send_payload(
+                "seekAnimations", {"animations": animations, "currentTime": currentTime}
+            ),
+            None,
         )
 
     @classmethod
-    def setPaused(cls,
-                  animations: Union['[]'],
-                  paused: Union['bool'],
-                  ):
+    def setPaused(cls, animations: Union["[]"], paused: Union["bool"]):
         """Sets the paused state of a set of animations.
         :param animations: Animations to set the pause state of.
         :type animations: []
@@ -215,34 +177,27 @@ class Animation(PayloadMixin):
         :type paused: bool
         """
         return (
-            cls.build_send_payload("setPaused", {
-                "animations": animations,
-                "paused": paused,
-            }),
-            None
+            cls.build_send_payload(
+                "setPaused", {"animations": animations, "paused": paused}
+            ),
+            None,
         )
 
     @classmethod
-    def setPlaybackRate(cls,
-                        playbackRate: Union['float'],
-                        ):
+    def setPlaybackRate(cls, playbackRate: Union["float"]):
         """Sets the playback rate of the document timeline.
         :param playbackRate: Playback rate for animations on page
         :type playbackRate: float
         """
         return (
-            cls.build_send_payload("setPlaybackRate", {
-                "playbackRate": playbackRate,
-            }),
-            None
+            cls.build_send_payload("setPlaybackRate", {"playbackRate": playbackRate}),
+            None,
         )
 
     @classmethod
-    def setTiming(cls,
-                  animationId: Union['str'],
-                  duration: Union['float'],
-                  delay: Union['float'],
-                  ):
+    def setTiming(
+        cls, animationId: Union["str"], duration: Union["float"], delay: Union["float"]
+    ):
         """Sets the timing of an animation node.
         :param animationId: Animation id.
         :type animationId: str
@@ -252,25 +207,21 @@ class Animation(PayloadMixin):
         :type delay: float
         """
         return (
-            cls.build_send_payload("setTiming", {
-                "animationId": animationId,
-                "duration": duration,
-                "delay": delay,
-            }),
-            None
+            cls.build_send_payload(
+                "setTiming",
+                {"animationId": animationId, "duration": duration, "delay": delay},
+            ),
+            None,
         )
-
 
 
 class AnimationCanceledEvent(BaseEvent):
 
-    js_name = 'Animation.animationCanceled'
-    hashable = ['id']
+    js_name = "Animation.animationCanceled"
+    hashable = ["id"]
     is_hashable = True
 
-    def __init__(self,
-                 id: Union['str', dict],
-                 ):
+    def __init__(self, id: Union["str", dict]):
         if isinstance(id, dict):
             id = str(**id)
         elif isinstance(id, list):
@@ -280,22 +231,22 @@ class AnimationCanceledEvent(BaseEvent):
     @classmethod
     def build_hash(cls, id):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class AnimationCreatedEvent(BaseEvent):
 
-    js_name = 'Animation.animationCreated'
-    hashable = ['id']
+    js_name = "Animation.animationCreated"
+    hashable = ["id"]
     is_hashable = True
 
-    def __init__(self,
-                 id: Union['str', dict],
-                 ):
+    def __init__(self, id: Union["str", dict]):
         if isinstance(id, dict):
             id = str(**id)
         elif isinstance(id, list):
@@ -305,22 +256,22 @@ class AnimationCreatedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, id):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class AnimationStartedEvent(BaseEvent):
 
-    js_name = 'Animation.animationStarted'
-    hashable = ['animationId']
+    js_name = "Animation.animationStarted"
+    hashable = ["animationId"]
     is_hashable = True
 
-    def __init__(self,
-                 animation: Union['Animation', dict],
-                 ):
+    def __init__(self, animation: Union["Animation", dict]):
         if isinstance(animation, dict):
             animation = Animation(**animation)
         elif isinstance(animation, list):
@@ -330,8 +281,10 @@ class AnimationStartedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, animationId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h

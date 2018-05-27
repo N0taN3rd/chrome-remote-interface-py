@@ -15,10 +15,8 @@ log = logging.getLogger(__name__)
 
 # Metric: Run-time execution metric.
 class Metric(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 value: Union['float'],
-                 ):
+
+    def __init__(self, name: Union["str"], value: Union["float"]):
 
         self.name = name
         self.value = value
@@ -27,53 +25,36 @@ class Metric(ChromeTypeBase):
 class Performance(PayloadMixin):
     """ 
     """
+
     @classmethod
     def disable(cls):
         """Disable collecting and reporting metrics.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
     def enable(cls):
         """Enable collecting and reporting metrics.
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("enable", {}), None)
 
     @classmethod
     def getMetrics(cls):
         """Retrieve current values of run-time metrics.
         """
         return (
-            cls.build_send_payload("getMetrics", {
-            }),
-            cls.convert_payload({
-                "metrics": {
-                    "class": [Metric],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getMetrics", {}),
+            cls.convert_payload({"metrics": {"class": [Metric], "optional": False}}),
         )
-
 
 
 class MetricsEvent(BaseEvent):
 
-    js_name = 'Performance.metrics'
+    js_name = "Performance.metrics"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 metrics: Union['[Metric]', dict],
-                 title: Union['str', dict],
-                 ):
+    def __init__(self, metrics: Union["[Metric]", dict], title: Union["str", dict]):
         if isinstance(metrics, dict):
             metrics = [Metric](**metrics)
         elif isinstance(metrics, list):
@@ -87,4 +68,4 @@ class MetricsEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")

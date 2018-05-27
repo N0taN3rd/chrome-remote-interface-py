@@ -16,14 +16,16 @@ from cripy.protocol import runtime as Runtime
 
 # ConsoleMessage: Console message.
 class ConsoleMessage(ChromeTypeBase):
-    def __init__(self,
-                 source: Union['str'],
-                 level: Union['str'],
-                 text: Union['str'],
-                 url: Optional['str'] = None,
-                 line: Optional['int'] = None,
-                 column: Optional['int'] = None,
-                 ):
+
+    def __init__(
+        self,
+        source: Union["str"],
+        level: Union["str"],
+        text: Union["str"],
+        url: Optional["str"] = None,
+        line: Optional["int"] = None,
+        column: Optional["int"] = None,
+    ):
 
         self.source = source
         self.level = level
@@ -36,48 +38,34 @@ class ConsoleMessage(ChromeTypeBase):
 class Console(PayloadMixin):
     """ This domain is deprecated - use Runtime or Log instead.
     """
+
     @classmethod
     def clearMessages(cls):
         """Does nothing.
         """
-        return (
-            cls.build_send_payload("clearMessages", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("clearMessages", {}), None)
 
     @classmethod
     def disable(cls):
         """Disables console domain, prevents further console messages from being reported to the client.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
     def enable(cls):
         """Enables console domain, sends the messages collected so far to the client by means of the
 `messageAdded` notification.
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
-
+        return (cls.build_send_payload("enable", {}), None)
 
 
 class MessageAddedEvent(BaseEvent):
 
-    js_name = 'Console.messageAdded'
+    js_name = "Console.messageAdded"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 message: Union['ConsoleMessage', dict],
-                 ):
+    def __init__(self, message: Union["ConsoleMessage", dict]):
         if isinstance(message, dict):
             message = ConsoleMessage(**message)
         elif isinstance(message, list):
@@ -86,4 +74,4 @@ class MessageAddedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")

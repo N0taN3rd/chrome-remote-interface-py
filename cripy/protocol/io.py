@@ -17,30 +17,26 @@ from cripy.protocol import runtime as Runtime
 # StreamHandle: This is either obtained from another method or specifed as `blob:&lt;uuid&gt;` where`&lt;uuid&gt` is an UUID of a Blob.
 StreamHandle = str
 
+
 class IO(PayloadMixin):
     """ Input/Output operations for streams produced by DevTools.
     """
+
     @classmethod
-    def close(cls,
-              handle: Union['StreamHandle'],
-              ):
+    def close(cls, handle: Union["StreamHandle"]):
         """Close the stream, discard any temporary backing storage.
         :param handle: Handle of the stream to close.
         :type handle: StreamHandle
         """
-        return (
-            cls.build_send_payload("close", {
-                "handle": handle,
-            }),
-            None
-        )
+        return (cls.build_send_payload("close", {"handle": handle}), None)
 
     @classmethod
-    def read(cls,
-             handle: Union['StreamHandle'],
-             offset: Optional['int'] = None,
-             size: Optional['int'] = None,
-             ):
+    def read(
+        cls,
+        handle: Union["StreamHandle"],
+        offset: Optional["int"] = None,
+        size: Optional["int"] = None,
+    ):
         """Read a chunk of the stream
         :param handle: Handle of the stream to read.
         :type handle: StreamHandle
@@ -51,44 +47,25 @@ following the last read). Some types of streams may only support sequential read
         :type size: int
         """
         return (
-            cls.build_send_payload("read", {
-                "handle": handle,
-                "offset": offset,
-                "size": size,
-            }),
-            cls.convert_payload({
-                "base64Encoded": {
-                    "class": bool,
-                    "optional": True
-                },
-                "data": {
-                    "class": str,
-                    "optional": False
-                },
-                "eof": {
-                    "class": bool,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "read", {"handle": handle, "offset": offset, "size": size}
+            ),
+            cls.convert_payload(
+                {
+                    "base64Encoded": {"class": bool, "optional": True},
+                    "data": {"class": str, "optional": False},
+                    "eof": {"class": bool, "optional": False},
+                }
+            ),
         )
 
     @classmethod
-    def resolveBlob(cls,
-                    objectId: Union['Runtime.RemoteObjectId'],
-                    ):
+    def resolveBlob(cls, objectId: Union["Runtime.RemoteObjectId"]):
         """Return UUID of Blob object specified by a remote object id.
         :param objectId: Object id of a Blob object wrapper.
         :type objectId: Runtime.RemoteObjectId
         """
         return (
-            cls.build_send_payload("resolveBlob", {
-                "objectId": objectId,
-            }),
-            cls.convert_payload({
-                "uuid": {
-                    "class": str,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("resolveBlob", {"objectId": objectId}),
+            cls.convert_payload({"uuid": {"class": str, "optional": False}}),
         )
-

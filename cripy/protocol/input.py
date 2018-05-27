@@ -13,17 +13,19 @@ from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
 
 log = logging.getLogger(__name__)
 
-# TouchPoint: 
+# TouchPoint:
 class TouchPoint(ChromeTypeBase):
-    def __init__(self,
-                 x: Union['float'],
-                 y: Union['float'],
-                 radiusX: Optional['float'] = None,
-                 radiusY: Optional['float'] = None,
-                 rotationAngle: Optional['float'] = None,
-                 force: Optional['float'] = None,
-                 id: Optional['float'] = None,
-                 ):
+
+    def __init__(
+        self,
+        x: Union["float"],
+        y: Union["float"],
+        radiusX: Optional["float"] = None,
+        radiusY: Optional["float"] = None,
+        rotationAngle: Optional["float"] = None,
+        force: Optional["float"] = None,
+        id: Optional["float"] = None,
+    ):
 
         self.x = x
         self.y = y
@@ -34,32 +36,35 @@ class TouchPoint(ChromeTypeBase):
         self.id = id
 
 
-# GestureSourceType: 
+# GestureSourceType:
 GestureSourceType = str
 
 # TimeSinceEpoch: UTC time in seconds, counted from January 1, 1970.
 TimeSinceEpoch = float
 
+
 class Input(PayloadMixin):
     """ 
     """
+
     @classmethod
-    def dispatchKeyEvent(cls,
-                         type: Union['str'],
-                         modifiers: Optional['int'] = None,
-                         timestamp: Optional['TimeSinceEpoch'] = None,
-                         text: Optional['str'] = None,
-                         unmodifiedText: Optional['str'] = None,
-                         keyIdentifier: Optional['str'] = None,
-                         code: Optional['str'] = None,
-                         key: Optional['str'] = None,
-                         windowsVirtualKeyCode: Optional['int'] = None,
-                         nativeVirtualKeyCode: Optional['int'] = None,
-                         autoRepeat: Optional['bool'] = None,
-                         isKeypad: Optional['bool'] = None,
-                         isSystemKey: Optional['bool'] = None,
-                         location: Optional['int'] = None,
-                         ):
+    def dispatchKeyEvent(
+        cls,
+        type: Union["str"],
+        modifiers: Optional["int"] = None,
+        timestamp: Optional["TimeSinceEpoch"] = None,
+        text: Optional["str"] = None,
+        unmodifiedText: Optional["str"] = None,
+        keyIdentifier: Optional["str"] = None,
+        code: Optional["str"] = None,
+        key: Optional["str"] = None,
+        windowsVirtualKeyCode: Optional["int"] = None,
+        nativeVirtualKeyCode: Optional["int"] = None,
+        autoRepeat: Optional["bool"] = None,
+        isKeypad: Optional["bool"] = None,
+        isSystemKey: Optional["bool"] = None,
+        location: Optional["int"] = None,
+    ):
         """Dispatches a key event to the page.
         :param type: Type of the key event.
         :type type: str
@@ -96,37 +101,41 @@ modifiers, keyboard layout, etc (e.g., 'AltGr') (default: "").
         :type location: int
         """
         return (
-            cls.build_send_payload("dispatchKeyEvent", {
-                "type": type,
-                "modifiers": modifiers,
-                "timestamp": timestamp,
-                "text": text,
-                "unmodifiedText": unmodifiedText,
-                "keyIdentifier": keyIdentifier,
-                "code": code,
-                "key": key,
-                "windowsVirtualKeyCode": windowsVirtualKeyCode,
-                "nativeVirtualKeyCode": nativeVirtualKeyCode,
-                "autoRepeat": autoRepeat,
-                "isKeypad": isKeypad,
-                "isSystemKey": isSystemKey,
-                "location": location,
-            }),
-            None
+            cls.build_send_payload(
+                "dispatchKeyEvent",
+                {
+                    "type": type,
+                    "modifiers": modifiers,
+                    "timestamp": timestamp,
+                    "text": text,
+                    "unmodifiedText": unmodifiedText,
+                    "keyIdentifier": keyIdentifier,
+                    "code": code,
+                    "key": key,
+                    "windowsVirtualKeyCode": windowsVirtualKeyCode,
+                    "nativeVirtualKeyCode": nativeVirtualKeyCode,
+                    "autoRepeat": autoRepeat,
+                    "isKeypad": isKeypad,
+                    "isSystemKey": isSystemKey,
+                    "location": location,
+                },
+            ),
+            None,
         )
 
     @classmethod
-    def dispatchMouseEvent(cls,
-                           type: Union['str'],
-                           x: Union['float'],
-                           y: Union['float'],
-                           modifiers: Optional['int'] = None,
-                           timestamp: Optional['TimeSinceEpoch'] = None,
-                           button: Optional['str'] = None,
-                           clickCount: Optional['int'] = None,
-                           deltaX: Optional['float'] = None,
-                           deltaY: Optional['float'] = None,
-                           ):
+    def dispatchMouseEvent(
+        cls,
+        type: Union["str"],
+        x: Union["float"],
+        y: Union["float"],
+        modifiers: Optional["int"] = None,
+        timestamp: Optional["TimeSinceEpoch"] = None,
+        button: Optional["str"] = None,
+        clickCount: Optional["int"] = None,
+        deltaX: Optional["float"] = None,
+        deltaY: Optional["float"] = None,
+    ):
         """Dispatches a mouse event to the page.
         :param type: Type of the mouse event.
         :type type: str
@@ -150,27 +159,31 @@ the top of the viewport and Y increases as it proceeds towards the bottom of the
         :type deltaY: float
         """
         return (
-            cls.build_send_payload("dispatchMouseEvent", {
-                "type": type,
-                "x": x,
-                "y": y,
-                "modifiers": modifiers,
-                "timestamp": timestamp,
-                "button": button,
-                "clickCount": clickCount,
-                "deltaX": deltaX,
-                "deltaY": deltaY,
-            }),
-            None
+            cls.build_send_payload(
+                "dispatchMouseEvent",
+                {
+                    "type": type,
+                    "x": x,
+                    "y": y,
+                    "modifiers": modifiers,
+                    "timestamp": timestamp,
+                    "button": button,
+                    "clickCount": clickCount,
+                    "deltaX": deltaX,
+                    "deltaY": deltaY,
+                },
+            ),
+            None,
         )
 
     @classmethod
-    def dispatchTouchEvent(cls,
-                           type: Union['str'],
-                           touchPoints: Union['[TouchPoint]'],
-                           modifiers: Optional['int'] = None,
-                           timestamp: Optional['TimeSinceEpoch'] = None,
-                           ):
+    def dispatchTouchEvent(
+        cls,
+        type: Union["str"],
+        touchPoints: Union["[TouchPoint]"],
+        modifiers: Optional["int"] = None,
+        timestamp: Optional["TimeSinceEpoch"] = None,
+    ):
         """Dispatches a touch event to the page.
         :param type: Type of the touch event. TouchEnd and TouchCancel must not contain any touch points, while
 TouchStart and TouchMove must contains at least one.
@@ -186,27 +199,31 @@ one by one.
         :type timestamp: TimeSinceEpoch
         """
         return (
-            cls.build_send_payload("dispatchTouchEvent", {
-                "type": type,
-                "touchPoints": touchPoints,
-                "modifiers": modifiers,
-                "timestamp": timestamp,
-            }),
-            None
+            cls.build_send_payload(
+                "dispatchTouchEvent",
+                {
+                    "type": type,
+                    "touchPoints": touchPoints,
+                    "modifiers": modifiers,
+                    "timestamp": timestamp,
+                },
+            ),
+            None,
         )
 
     @classmethod
-    def emulateTouchFromMouseEvent(cls,
-                                   type: Union['str'],
-                                   x: Union['int'],
-                                   y: Union['int'],
-                                   button: Union['str'],
-                                   timestamp: Optional['TimeSinceEpoch'] = None,
-                                   deltaX: Optional['float'] = None,
-                                   deltaY: Optional['float'] = None,
-                                   modifiers: Optional['int'] = None,
-                                   clickCount: Optional['int'] = None,
-                                   ):
+    def emulateTouchFromMouseEvent(
+        cls,
+        type: Union["str"],
+        x: Union["int"],
+        y: Union["int"],
+        button: Union["str"],
+        timestamp: Optional["TimeSinceEpoch"] = None,
+        deltaX: Optional["float"] = None,
+        deltaY: Optional["float"] = None,
+        modifiers: Optional["int"] = None,
+        clickCount: Optional["int"] = None,
+    ):
         """Emulates touch event from the mouse event parameters.
         :param type: Type of the mouse event.
         :type type: str
@@ -229,43 +246,43 @@ one by one.
         :type clickCount: int
         """
         return (
-            cls.build_send_payload("emulateTouchFromMouseEvent", {
-                "type": type,
-                "x": x,
-                "y": y,
-                "button": button,
-                "timestamp": timestamp,
-                "deltaX": deltaX,
-                "deltaY": deltaY,
-                "modifiers": modifiers,
-                "clickCount": clickCount,
-            }),
-            None
+            cls.build_send_payload(
+                "emulateTouchFromMouseEvent",
+                {
+                    "type": type,
+                    "x": x,
+                    "y": y,
+                    "button": button,
+                    "timestamp": timestamp,
+                    "deltaX": deltaX,
+                    "deltaY": deltaY,
+                    "modifiers": modifiers,
+                    "clickCount": clickCount,
+                },
+            ),
+            None,
         )
 
     @classmethod
-    def setIgnoreInputEvents(cls,
-                             ignore: Union['bool'],
-                             ):
+    def setIgnoreInputEvents(cls, ignore: Union["bool"]):
         """Ignores input events (useful while auditing page).
         :param ignore: Ignores input events processing when set to true.
         :type ignore: bool
         """
         return (
-            cls.build_send_payload("setIgnoreInputEvents", {
-                "ignore": ignore,
-            }),
-            None
+            cls.build_send_payload("setIgnoreInputEvents", {"ignore": ignore}),
+            None,
         )
 
     @classmethod
-    def synthesizePinchGesture(cls,
-                               x: Union['float'],
-                               y: Union['float'],
-                               scaleFactor: Union['float'],
-                               relativeSpeed: Optional['int'] = None,
-                               gestureSourceType: Optional['GestureSourceType'] = None,
-                               ):
+    def synthesizePinchGesture(
+        cls,
+        x: Union["float"],
+        y: Union["float"],
+        scaleFactor: Union["float"],
+        relativeSpeed: Optional["int"] = None,
+        gestureSourceType: Optional["GestureSourceType"] = None,
+    ):
         """Synthesizes a pinch gesture over a time period by issuing appropriate touch events.
         :param x: X coordinate of the start of the gesture in CSS pixels.
         :type x: float
@@ -280,31 +297,35 @@ for the preferred input type).
         :type gestureSourceType: GestureSourceType
         """
         return (
-            cls.build_send_payload("synthesizePinchGesture", {
-                "x": x,
-                "y": y,
-                "scaleFactor": scaleFactor,
-                "relativeSpeed": relativeSpeed,
-                "gestureSourceType": gestureSourceType,
-            }),
-            None
+            cls.build_send_payload(
+                "synthesizePinchGesture",
+                {
+                    "x": x,
+                    "y": y,
+                    "scaleFactor": scaleFactor,
+                    "relativeSpeed": relativeSpeed,
+                    "gestureSourceType": gestureSourceType,
+                },
+            ),
+            None,
         )
 
     @classmethod
-    def synthesizeScrollGesture(cls,
-                                x: Union['float'],
-                                y: Union['float'],
-                                xDistance: Optional['float'] = None,
-                                yDistance: Optional['float'] = None,
-                                xOverscroll: Optional['float'] = None,
-                                yOverscroll: Optional['float'] = None,
-                                preventFling: Optional['bool'] = None,
-                                speed: Optional['int'] = None,
-                                gestureSourceType: Optional['GestureSourceType'] = None,
-                                repeatCount: Optional['int'] = None,
-                                repeatDelayMs: Optional['int'] = None,
-                                interactionMarkerName: Optional['str'] = None,
-                                ):
+    def synthesizeScrollGesture(
+        cls,
+        x: Union["float"],
+        y: Union["float"],
+        xDistance: Optional["float"] = None,
+        yDistance: Optional["float"] = None,
+        xOverscroll: Optional["float"] = None,
+        yOverscroll: Optional["float"] = None,
+        preventFling: Optional["bool"] = None,
+        speed: Optional["int"] = None,
+        gestureSourceType: Optional["GestureSourceType"] = None,
+        repeatCount: Optional["int"] = None,
+        repeatDelayMs: Optional["int"] = None,
+        interactionMarkerName: Optional["str"] = None,
+    ):
         """Synthesizes a scroll gesture over a time period by issuing appropriate touch events.
         :param x: X coordinate of the start of the gesture in CSS pixels.
         :type x: float
@@ -335,31 +356,35 @@ for the preferred input type).
         :type interactionMarkerName: str
         """
         return (
-            cls.build_send_payload("synthesizeScrollGesture", {
-                "x": x,
-                "y": y,
-                "xDistance": xDistance,
-                "yDistance": yDistance,
-                "xOverscroll": xOverscroll,
-                "yOverscroll": yOverscroll,
-                "preventFling": preventFling,
-                "speed": speed,
-                "gestureSourceType": gestureSourceType,
-                "repeatCount": repeatCount,
-                "repeatDelayMs": repeatDelayMs,
-                "interactionMarkerName": interactionMarkerName,
-            }),
-            None
+            cls.build_send_payload(
+                "synthesizeScrollGesture",
+                {
+                    "x": x,
+                    "y": y,
+                    "xDistance": xDistance,
+                    "yDistance": yDistance,
+                    "xOverscroll": xOverscroll,
+                    "yOverscroll": yOverscroll,
+                    "preventFling": preventFling,
+                    "speed": speed,
+                    "gestureSourceType": gestureSourceType,
+                    "repeatCount": repeatCount,
+                    "repeatDelayMs": repeatDelayMs,
+                    "interactionMarkerName": interactionMarkerName,
+                },
+            ),
+            None,
         )
 
     @classmethod
-    def synthesizeTapGesture(cls,
-                             x: Union['float'],
-                             y: Union['float'],
-                             duration: Optional['int'] = None,
-                             tapCount: Optional['int'] = None,
-                             gestureSourceType: Optional['GestureSourceType'] = None,
-                             ):
+    def synthesizeTapGesture(
+        cls,
+        x: Union["float"],
+        y: Union["float"],
+        duration: Optional["int"] = None,
+        tapCount: Optional["int"] = None,
+        gestureSourceType: Optional["GestureSourceType"] = None,
+    ):
         """Synthesizes a tap gesture over a time period by issuing appropriate touch events.
         :param x: X coordinate of the start of the gesture in CSS pixels.
         :type x: float
@@ -374,13 +399,15 @@ for the preferred input type).
         :type gestureSourceType: GestureSourceType
         """
         return (
-            cls.build_send_payload("synthesizeTapGesture", {
-                "x": x,
-                "y": y,
-                "duration": duration,
-                "tapCount": tapCount,
-                "gestureSourceType": gestureSourceType,
-            }),
-            None
+            cls.build_send_payload(
+                "synthesizeTapGesture",
+                {
+                    "x": x,
+                    "y": y,
+                    "duration": duration,
+                    "tapCount": tapCount,
+                    "gestureSourceType": gestureSourceType,
+                },
+            ),
+            None,
         )
-

@@ -21,18 +21,20 @@ DOMBreakpointType = str
 
 # EventListener: Object event listener.
 class EventListener(ChromeTypeBase):
-    def __init__(self,
-                 type: Union['str'],
-                 useCapture: Union['bool'],
-                 passive: Union['bool'],
-                 once: Union['bool'],
-                 scriptId: Union['Runtime.ScriptId'],
-                 lineNumber: Union['int'],
-                 columnNumber: Union['int'],
-                 handler: Optional['Runtime.RemoteObject'] = None,
-                 originalHandler: Optional['Runtime.RemoteObject'] = None,
-                 backendNodeId: Optional['DOM.BackendNodeId'] = None,
-                 ):
+
+    def __init__(
+        self,
+        type: Union["str"],
+        useCapture: Union["bool"],
+        passive: Union["bool"],
+        once: Union["bool"],
+        scriptId: Union["Runtime.ScriptId"],
+        lineNumber: Union["int"],
+        columnNumber: Union["int"],
+        handler: Optional["Runtime.RemoteObject"] = None,
+        originalHandler: Optional["Runtime.RemoteObject"] = None,
+        backendNodeId: Optional["DOM.BackendNodeId"] = None,
+    ):
 
         self.type = type
         self.useCapture = useCapture
@@ -50,12 +52,14 @@ class DOMDebugger(PayloadMixin):
     """ DOM debugging allows setting breakpoints on particular DOM operations and events. JavaScript
 execution will stop on these operations as if there was a regular breakpoint set.
     """
+
     @classmethod
-    def getEventListeners(cls,
-                          objectId: Union['Runtime.RemoteObjectId'],
-                          depth: Optional['int'] = None,
-                          pierce: Optional['bool'] = None,
-                          ):
+    def getEventListeners(
+        cls,
+        objectId: Union["Runtime.RemoteObjectId"],
+        depth: Optional["int"] = None,
+        pierce: Optional["bool"] = None,
+    ):
         """Returns event listeners of the given object.
         :param objectId: Identifier of the object to return listeners for.
         :type objectId: Runtime.RemoteObjectId
@@ -67,24 +71,19 @@ entire subtree or provide an integer larger than 0.
         :type pierce: bool
         """
         return (
-            cls.build_send_payload("getEventListeners", {
-                "objectId": objectId,
-                "depth": depth,
-                "pierce": pierce,
-            }),
-            cls.convert_payload({
-                "listeners": {
-                    "class": [EventListener],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "getEventListeners",
+                {"objectId": objectId, "depth": depth, "pierce": pierce},
+            ),
+            cls.convert_payload(
+                {"listeners": {"class": [EventListener], "optional": False}}
+            ),
         )
 
     @classmethod
-    def removeDOMBreakpoint(cls,
-                            nodeId: Union['DOM.NodeId'],
-                            type: Union['DOMBreakpointType'],
-                            ):
+    def removeDOMBreakpoint(
+        cls, nodeId: Union["DOM.NodeId"], type: Union["DOMBreakpointType"]
+    ):
         """Removes DOM breakpoint that was set using `setDOMBreakpoint`.
         :param nodeId: Identifier of the node to remove breakpoint from.
         :type nodeId: DOM.NodeId
@@ -92,18 +91,16 @@ entire subtree or provide an integer larger than 0.
         :type type: DOMBreakpointType
         """
         return (
-            cls.build_send_payload("removeDOMBreakpoint", {
-                "nodeId": nodeId,
-                "type": type,
-            }),
-            None
+            cls.build_send_payload(
+                "removeDOMBreakpoint", {"nodeId": nodeId, "type": type}
+            ),
+            None,
         )
 
     @classmethod
-    def removeEventListenerBreakpoint(cls,
-                                      eventName: Union['str'],
-                                      targetName: Optional['str'] = None,
-                                      ):
+    def removeEventListenerBreakpoint(
+        cls, eventName: Union["str"], targetName: Optional["str"] = None
+    ):
         """Removes breakpoint on particular DOM event.
         :param eventName: Event name.
         :type eventName: str
@@ -111,48 +108,38 @@ entire subtree or provide an integer larger than 0.
         :type targetName: str
         """
         return (
-            cls.build_send_payload("removeEventListenerBreakpoint", {
-                "eventName": eventName,
-                "targetName": targetName,
-            }),
-            None
+            cls.build_send_payload(
+                "removeEventListenerBreakpoint",
+                {"eventName": eventName, "targetName": targetName},
+            ),
+            None,
         )
 
     @classmethod
-    def removeInstrumentationBreakpoint(cls,
-                                        eventName: Union['str'],
-                                        ):
+    def removeInstrumentationBreakpoint(cls, eventName: Union["str"]):
         """Removes breakpoint on particular native event.
         :param eventName: Instrumentation name to stop on.
         :type eventName: str
         """
         return (
-            cls.build_send_payload("removeInstrumentationBreakpoint", {
-                "eventName": eventName,
-            }),
-            None
+            cls.build_send_payload(
+                "removeInstrumentationBreakpoint", {"eventName": eventName}
+            ),
+            None,
         )
 
     @classmethod
-    def removeXHRBreakpoint(cls,
-                            url: Union['str'],
-                            ):
+    def removeXHRBreakpoint(cls, url: Union["str"]):
         """Removes breakpoint from XMLHttpRequest.
         :param url: Resource URL substring.
         :type url: str
         """
-        return (
-            cls.build_send_payload("removeXHRBreakpoint", {
-                "url": url,
-            }),
-            None
-        )
+        return (cls.build_send_payload("removeXHRBreakpoint", {"url": url}), None)
 
     @classmethod
-    def setDOMBreakpoint(cls,
-                         nodeId: Union['DOM.NodeId'],
-                         type: Union['DOMBreakpointType'],
-                         ):
+    def setDOMBreakpoint(
+        cls, nodeId: Union["DOM.NodeId"], type: Union["DOMBreakpointType"]
+    ):
         """Sets breakpoint on particular operation with DOM.
         :param nodeId: Identifier of the node to set breakpoint on.
         :type nodeId: DOM.NodeId
@@ -160,18 +147,16 @@ entire subtree or provide an integer larger than 0.
         :type type: DOMBreakpointType
         """
         return (
-            cls.build_send_payload("setDOMBreakpoint", {
-                "nodeId": nodeId,
-                "type": type,
-            }),
-            None
+            cls.build_send_payload(
+                "setDOMBreakpoint", {"nodeId": nodeId, "type": type}
+            ),
+            None,
         )
 
     @classmethod
-    def setEventListenerBreakpoint(cls,
-                                   eventName: Union['str'],
-                                   targetName: Optional['str'] = None,
-                                   ):
+    def setEventListenerBreakpoint(
+        cls, eventName: Union["str"], targetName: Optional["str"] = None
+    ):
         """Sets breakpoint on particular DOM event.
         :param eventName: DOM Event name to stop on (any DOM event will do).
         :type eventName: str
@@ -180,40 +165,30 @@ EventTarget.
         :type targetName: str
         """
         return (
-            cls.build_send_payload("setEventListenerBreakpoint", {
-                "eventName": eventName,
-                "targetName": targetName,
-            }),
-            None
+            cls.build_send_payload(
+                "setEventListenerBreakpoint",
+                {"eventName": eventName, "targetName": targetName},
+            ),
+            None,
         )
 
     @classmethod
-    def setInstrumentationBreakpoint(cls,
-                                     eventName: Union['str'],
-                                     ):
+    def setInstrumentationBreakpoint(cls, eventName: Union["str"]):
         """Sets breakpoint on particular native event.
         :param eventName: Instrumentation name to stop on.
         :type eventName: str
         """
         return (
-            cls.build_send_payload("setInstrumentationBreakpoint", {
-                "eventName": eventName,
-            }),
-            None
+            cls.build_send_payload(
+                "setInstrumentationBreakpoint", {"eventName": eventName}
+            ),
+            None,
         )
 
     @classmethod
-    def setXHRBreakpoint(cls,
-                         url: Union['str'],
-                         ):
+    def setXHRBreakpoint(cls, url: Union["str"]):
         """Sets breakpoint on XMLHttpRequest.
         :param url: Resource URL substring. All XHRs having this substring in the URL will get stopped upon.
         :type url: str
         """
-        return (
-            cls.build_send_payload("setXHRBreakpoint", {
-                "url": url,
-            }),
-            None
-        )
-
+        return (cls.build_send_payload("setXHRBreakpoint", {"url": url}), None)

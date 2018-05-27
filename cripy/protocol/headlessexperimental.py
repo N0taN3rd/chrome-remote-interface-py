@@ -17,10 +17,8 @@ from cripy.protocol import page as Page
 
 # ScreenshotParams: Encoding options for a screenshot.
 class ScreenshotParams(ChromeTypeBase):
-    def __init__(self,
-                 format: Optional['str'] = None,
-                 quality: Optional['int'] = None,
-                 ):
+
+    def __init__(self, format: Optional["str"] = None, quality: Optional["int"] = None):
 
         self.format = format
         self.quality = quality
@@ -29,13 +27,15 @@ class ScreenshotParams(ChromeTypeBase):
 class HeadlessExperimental(PayloadMixin):
     """ This domain provides experimental commands only supported in headless mode.
     """
+
     @classmethod
-    def beginFrame(cls,
-                   frameTimeTicks: Optional['float'] = None,
-                   interval: Optional['float'] = None,
-                   noDisplayUpdates: Optional['bool'] = None,
-                   screenshot: Optional['ScreenshotParams'] = None,
-                   ):
+    def beginFrame(
+        cls,
+        frameTimeTicks: Optional["float"] = None,
+        interval: Optional["float"] = None,
+        noDisplayUpdates: Optional["bool"] = None,
+        screenshot: Optional["ScreenshotParams"] = None,
+    ):
         """Sends a BeginFrame to the target and returns when the frame was completed. Optionally captures a
 screenshot from the resulting frame. Requires that the target was created with enabled
 BeginFrameControl. Designed for use with --run-all-compositor-stages-before-draw, see also
@@ -56,55 +56,43 @@ during renderer initialization. In such a case, no screenshot data will be retur
         :type screenshot: ScreenshotParams
         """
         return (
-            cls.build_send_payload("beginFrame", {
-                "frameTimeTicks": frameTimeTicks,
-                "interval": interval,
-                "noDisplayUpdates": noDisplayUpdates,
-                "screenshot": screenshot,
-            }),
-            cls.convert_payload({
-                "hasDamage": {
-                    "class": bool,
-                    "optional": False
+            cls.build_send_payload(
+                "beginFrame",
+                {
+                    "frameTimeTicks": frameTimeTicks,
+                    "interval": interval,
+                    "noDisplayUpdates": noDisplayUpdates,
+                    "screenshot": screenshot,
                 },
-                "screenshotData": {
-                    "class": str,
-                    "optional": True
-                },
-            })
+            ),
+            cls.convert_payload(
+                {
+                    "hasDamage": {"class": bool, "optional": False},
+                    "screenshotData": {"class": str, "optional": True},
+                }
+            ),
         )
 
     @classmethod
     def disable(cls):
         """Disables headless events for the target.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
     def enable(cls):
         """Enables headless events for the target.
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
-
+        return (cls.build_send_payload("enable", {}), None)
 
 
 class NeedsBeginFramesChangedEvent(BaseEvent):
 
-    js_name = 'Headlessexperimental.needsBeginFramesChanged'
+    js_name = "Headlessexperimental.needsBeginFramesChanged"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 needsBeginFrames: Union['bool', dict],
-                 ):
+    def __init__(self, needsBeginFrames: Union["bool", dict]):
         if isinstance(needsBeginFrames, dict):
             needsBeginFrames = bool(**needsBeginFrames)
         elif isinstance(needsBeginFrames, list):
@@ -113,4 +101,4 @@ class NeedsBeginFramesChangedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")

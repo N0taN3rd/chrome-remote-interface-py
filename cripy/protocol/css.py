@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 from cripy.protocol import dom as DOM
 from cripy.protocol import page as Page
 
-# StyleSheetId: 
+# StyleSheetId:
 StyleSheetId = str
 
 # StyleSheetOrigin: Stylesheet type: "injected" for stylesheets injected via extension, "user-agent" for user-agentstylesheets, "inspector" for stylesheets created by the inspector (i.e. those holding the "viainspector" rules), "regular" for regular stylesheets.
@@ -23,10 +23,10 @@ StyleSheetOrigin = str
 
 # PseudoElementMatches: CSS rule collection for a single pseudo style.
 class PseudoElementMatches(ChromeTypeBase):
-    def __init__(self,
-                 pseudoType: Union['DOM.PseudoType'],
-                 matches: Union['[RuleMatch]'],
-                 ):
+
+    def __init__(
+        self, pseudoType: Union["DOM.PseudoType"], matches: Union["[RuleMatch]"]
+    ):
 
         self.pseudoType = pseudoType
         self.matches = matches
@@ -34,10 +34,12 @@ class PseudoElementMatches(ChromeTypeBase):
 
 # InheritedStyleEntry: Inherited CSS rule collection from ancestor node.
 class InheritedStyleEntry(ChromeTypeBase):
-    def __init__(self,
-                 matchedCSSRules: Union['[RuleMatch]'],
-                 inlineStyle: Optional['CSSStyle'] = None,
-                 ):
+
+    def __init__(
+        self,
+        matchedCSSRules: Union["[RuleMatch]"],
+        inlineStyle: Optional["CSSStyle"] = None,
+    ):
 
         self.inlineStyle = inlineStyle
         self.matchedCSSRules = matchedCSSRules
@@ -45,10 +47,8 @@ class InheritedStyleEntry(ChromeTypeBase):
 
 # RuleMatch: Match data for a CSS rule.
 class RuleMatch(ChromeTypeBase):
-    def __init__(self,
-                 rule: Union['CSSRule'],
-                 matchingSelectors: Union['[]'],
-                 ):
+
+    def __init__(self, rule: Union["CSSRule"], matchingSelectors: Union["[]"]):
 
         self.rule = rule
         self.matchingSelectors = matchingSelectors
@@ -56,10 +56,8 @@ class RuleMatch(ChromeTypeBase):
 
 # Value: Data for a simple selector (these are delimited by commas in a selector list).
 class Value(ChromeTypeBase):
-    def __init__(self,
-                 text: Union['str'],
-                 range: Optional['SourceRange'] = None,
-                 ):
+
+    def __init__(self, text: Union["str"], range: Optional["SourceRange"] = None):
 
         self.text = text
         self.range = range
@@ -67,10 +65,8 @@ class Value(ChromeTypeBase):
 
 # SelectorList: Selector list data.
 class SelectorList(ChromeTypeBase):
-    def __init__(self,
-                 selectors: Union['[Value]'],
-                 text: Union['str'],
-                 ):
+
+    def __init__(self, selectors: Union["[Value]"], text: Union["str"]):
 
         self.selectors = selectors
         self.text = text
@@ -78,21 +74,23 @@ class SelectorList(ChromeTypeBase):
 
 # CSSStyleSheetHeader: CSS stylesheet metainformation.
 class CSSStyleSheetHeader(ChromeTypeBase):
-    def __init__(self,
-                 styleSheetId: Union['StyleSheetId'],
-                 frameId: Union['Page.FrameId'],
-                 sourceURL: Union['str'],
-                 origin: Union['StyleSheetOrigin'],
-                 title: Union['str'],
-                 disabled: Union['bool'],
-                 isInline: Union['bool'],
-                 startLine: Union['float'],
-                 startColumn: Union['float'],
-                 length: Union['float'],
-                 sourceMapURL: Optional['str'] = None,
-                 ownerNode: Optional['DOM.BackendNodeId'] = None,
-                 hasSourceURL: Optional['bool'] = None,
-                 ):
+
+    def __init__(
+        self,
+        styleSheetId: Union["StyleSheetId"],
+        frameId: Union["Page.FrameId"],
+        sourceURL: Union["str"],
+        origin: Union["StyleSheetOrigin"],
+        title: Union["str"],
+        disabled: Union["bool"],
+        isInline: Union["bool"],
+        startLine: Union["float"],
+        startColumn: Union["float"],
+        length: Union["float"],
+        sourceMapURL: Optional["str"] = None,
+        ownerNode: Optional["DOM.BackendNodeId"] = None,
+        hasSourceURL: Optional["bool"] = None,
+    ):
 
         self.styleSheetId = styleSheetId
         self.frameId = frameId
@@ -111,13 +109,15 @@ class CSSStyleSheetHeader(ChromeTypeBase):
 
 # CSSRule: CSS rule representation.
 class CSSRule(ChromeTypeBase):
-    def __init__(self,
-                 selectorList: Union['SelectorList'],
-                 origin: Union['StyleSheetOrigin'],
-                 style: Union['CSSStyle'],
-                 styleSheetId: Optional['StyleSheetId'] = None,
-                 media: Optional['[CSSMedia]'] = None,
-                 ):
+
+    def __init__(
+        self,
+        selectorList: Union["SelectorList"],
+        origin: Union["StyleSheetOrigin"],
+        style: Union["CSSStyle"],
+        styleSheetId: Optional["StyleSheetId"] = None,
+        media: Optional["[CSSMedia]"] = None,
+    ):
 
         self.styleSheetId = styleSheetId
         self.selectorList = selectorList
@@ -128,12 +128,14 @@ class CSSRule(ChromeTypeBase):
 
 # RuleUsage: CSS coverage information.
 class RuleUsage(ChromeTypeBase):
-    def __init__(self,
-                 styleSheetId: Union['StyleSheetId'],
-                 startOffset: Union['float'],
-                 endOffset: Union['float'],
-                 used: Union['bool'],
-                 ):
+
+    def __init__(
+        self,
+        styleSheetId: Union["StyleSheetId"],
+        startOffset: Union["float"],
+        endOffset: Union["float"],
+        used: Union["bool"],
+    ):
 
         self.styleSheetId = styleSheetId
         self.startOffset = startOffset
@@ -143,12 +145,14 @@ class RuleUsage(ChromeTypeBase):
 
 # SourceRange: Text range within a resource. All numbers are zero-based.
 class SourceRange(ChromeTypeBase):
-    def __init__(self,
-                 startLine: Union['int'],
-                 startColumn: Union['int'],
-                 endLine: Union['int'],
-                 endColumn: Union['int'],
-                 ):
+
+    def __init__(
+        self,
+        startLine: Union["int"],
+        startColumn: Union["int"],
+        endLine: Union["int"],
+        endColumn: Union["int"],
+    ):
 
         self.startLine = startLine
         self.startColumn = startColumn
@@ -156,25 +160,25 @@ class SourceRange(ChromeTypeBase):
         self.endColumn = endColumn
 
 
-# ShorthandEntry: 
+# ShorthandEntry:
 class ShorthandEntry(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 value: Union['str'],
-                 important: Optional['bool'] = None,
-                 ):
+
+    def __init__(
+        self,
+        name: Union["str"],
+        value: Union["str"],
+        important: Optional["bool"] = None,
+    ):
 
         self.name = name
         self.value = value
         self.important = important
 
 
-# CSSComputedStyleProperty: 
+# CSSComputedStyleProperty:
 class CSSComputedStyleProperty(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 value: Union['str'],
-                 ):
+
+    def __init__(self, name: Union["str"], value: Union["str"]):
 
         self.name = name
         self.value = value
@@ -182,13 +186,15 @@ class CSSComputedStyleProperty(ChromeTypeBase):
 
 # CSSStyle: CSS style representation.
 class CSSStyle(ChromeTypeBase):
-    def __init__(self,
-                 cssProperties: Union['[CSSProperty]'],
-                 shorthandEntries: Union['[ShorthandEntry]'],
-                 styleSheetId: Optional['StyleSheetId'] = None,
-                 cssText: Optional['str'] = None,
-                 range: Optional['SourceRange'] = None,
-                 ):
+
+    def __init__(
+        self,
+        cssProperties: Union["[CSSProperty]"],
+        shorthandEntries: Union["[ShorthandEntry]"],
+        styleSheetId: Optional["StyleSheetId"] = None,
+        cssText: Optional["str"] = None,
+        range: Optional["SourceRange"] = None,
+    ):
 
         self.styleSheetId = styleSheetId
         self.cssProperties = cssProperties
@@ -199,16 +205,18 @@ class CSSStyle(ChromeTypeBase):
 
 # CSSProperty: CSS property declaration data.
 class CSSProperty(ChromeTypeBase):
-    def __init__(self,
-                 name: Union['str'],
-                 value: Union['str'],
-                 important: Optional['bool'] = None,
-                 implicit: Optional['bool'] = None,
-                 text: Optional['str'] = None,
-                 parsedOk: Optional['bool'] = None,
-                 disabled: Optional['bool'] = None,
-                 range: Optional['SourceRange'] = None,
-                 ):
+
+    def __init__(
+        self,
+        name: Union["str"],
+        value: Union["str"],
+        important: Optional["bool"] = None,
+        implicit: Optional["bool"] = None,
+        text: Optional["str"] = None,
+        parsedOk: Optional["bool"] = None,
+        disabled: Optional["bool"] = None,
+        range: Optional["SourceRange"] = None,
+    ):
 
         self.name = name
         self.value = value
@@ -222,14 +230,16 @@ class CSSProperty(ChromeTypeBase):
 
 # CSSMedia: CSS media rule descriptor.
 class CSSMedia(ChromeTypeBase):
-    def __init__(self,
-                 text: Union['str'],
-                 source: Union['str'],
-                 sourceURL: Optional['str'] = None,
-                 range: Optional['SourceRange'] = None,
-                 styleSheetId: Optional['StyleSheetId'] = None,
-                 mediaList: Optional['[MediaQuery]'] = None,
-                 ):
+
+    def __init__(
+        self,
+        text: Union["str"],
+        source: Union["str"],
+        sourceURL: Optional["str"] = None,
+        range: Optional["SourceRange"] = None,
+        styleSheetId: Optional["StyleSheetId"] = None,
+        mediaList: Optional["[MediaQuery]"] = None,
+    ):
 
         self.text = text
         self.source = source
@@ -241,10 +251,10 @@ class CSSMedia(ChromeTypeBase):
 
 # MediaQuery: Media query descriptor.
 class MediaQuery(ChromeTypeBase):
-    def __init__(self,
-                 expressions: Union['[MediaQueryExpression]'],
-                 active: Union['bool'],
-                 ):
+
+    def __init__(
+        self, expressions: Union["[MediaQueryExpression]"], active: Union["bool"]
+    ):
 
         self.expressions = expressions
         self.active = active
@@ -252,13 +262,15 @@ class MediaQuery(ChromeTypeBase):
 
 # MediaQueryExpression: Media query expression descriptor.
 class MediaQueryExpression(ChromeTypeBase):
-    def __init__(self,
-                 value: Union['float'],
-                 unit: Union['str'],
-                 feature: Union['str'],
-                 valueRange: Optional['SourceRange'] = None,
-                 computedLength: Optional['float'] = None,
-                 ):
+
+    def __init__(
+        self,
+        value: Union["float"],
+        unit: Union["str"],
+        feature: Union["str"],
+        valueRange: Optional["SourceRange"] = None,
+        computedLength: Optional["float"] = None,
+    ):
 
         self.value = value
         self.unit = unit
@@ -269,11 +281,13 @@ class MediaQueryExpression(ChromeTypeBase):
 
 # PlatformFontUsage: Information about amount of glyphs that were rendered with given font.
 class PlatformFontUsage(ChromeTypeBase):
-    def __init__(self,
-                 familyName: Union['str'],
-                 isCustomFont: Union['bool'],
-                 glyphCount: Union['float'],
-                 ):
+
+    def __init__(
+        self,
+        familyName: Union["str"],
+        isCustomFont: Union["bool"],
+        glyphCount: Union["float"],
+    ):
 
         self.familyName = familyName
         self.isCustomFont = isCustomFont
@@ -282,16 +296,18 @@ class PlatformFontUsage(ChromeTypeBase):
 
 # FontFace: Properties of a web font: https://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#font-descriptions
 class FontFace(ChromeTypeBase):
-    def __init__(self,
-                 fontFamily: Union['str'],
-                 fontStyle: Union['str'],
-                 fontVariant: Union['str'],
-                 fontWeight: Union['str'],
-                 fontStretch: Union['str'],
-                 unicodeRange: Union['str'],
-                 src: Union['str'],
-                 platformFontFamily: Union['str'],
-                 ):
+
+    def __init__(
+        self,
+        fontFamily: Union["str"],
+        fontStyle: Union["str"],
+        fontVariant: Union["str"],
+        fontWeight: Union["str"],
+        fontStretch: Union["str"],
+        unicodeRange: Union["str"],
+        src: Union["str"],
+        platformFontFamily: Union["str"],
+    ):
 
         self.fontFamily = fontFamily
         self.fontStyle = fontStyle
@@ -305,10 +321,10 @@ class FontFace(ChromeTypeBase):
 
 # CSSKeyframesRule: CSS keyframes rule representation.
 class CSSKeyframesRule(ChromeTypeBase):
-    def __init__(self,
-                 animationName: Union['Value'],
-                 keyframes: Union['[CSSKeyframeRule]'],
-                 ):
+
+    def __init__(
+        self, animationName: Union["Value"], keyframes: Union["[CSSKeyframeRule]"]
+    ):
 
         self.animationName = animationName
         self.keyframes = keyframes
@@ -316,12 +332,14 @@ class CSSKeyframesRule(ChromeTypeBase):
 
 # CSSKeyframeRule: CSS keyframe rule representation.
 class CSSKeyframeRule(ChromeTypeBase):
-    def __init__(self,
-                 origin: Union['StyleSheetOrigin'],
-                 keyText: Union['Value'],
-                 style: Union['CSSStyle'],
-                 styleSheetId: Optional['StyleSheetId'] = None,
-                 ):
+
+    def __init__(
+        self,
+        origin: Union["StyleSheetOrigin"],
+        keyText: Union["Value"],
+        style: Union["CSSStyle"],
+        styleSheetId: Optional["StyleSheetId"] = None,
+    ):
 
         self.styleSheetId = styleSheetId
         self.origin = origin
@@ -331,11 +349,13 @@ class CSSKeyframeRule(ChromeTypeBase):
 
 # StyleDeclarationEdit: A descriptor of operation to mutate style declaration text.
 class StyleDeclarationEdit(ChromeTypeBase):
-    def __init__(self,
-                 styleSheetId: Union['StyleSheetId'],
-                 range: Union['SourceRange'],
-                 text: Union['str'],
-                 ):
+
+    def __init__(
+        self,
+        styleSheetId: Union["StyleSheetId"],
+        range: Union["SourceRange"],
+        text: Union["str"],
+    ):
 
         self.styleSheetId = styleSheetId
         self.range = range
@@ -350,12 +370,14 @@ CSS objects can be loaded using the `get*ForNode()` calls (which accept a DOM no
 can also keep track of stylesheets via the `styleSheetAdded`/`styleSheetRemoved` events and
 subsequently load the required stylesheet contents using the `getStyleSheet[Text]()` methods.
     """
+
     @classmethod
-    def addRule(cls,
-                styleSheetId: Union['StyleSheetId'],
-                ruleText: Union['str'],
-                location: Union['SourceRange'],
-                ):
+    def addRule(
+        cls,
+        styleSheetId: Union["StyleSheetId"],
+        ruleText: Union["str"],
+        location: Union["SourceRange"],
+    ):
         """Inserts a new rule with the given `ruleText` in a stylesheet with given `styleSheetId`, at the
 position specified by `location`.
         :param styleSheetId: The css style sheet identifier where a new rule should be inserted.
@@ -366,85 +388,58 @@ position specified by `location`.
         :type location: SourceRange
         """
         return (
-            cls.build_send_payload("addRule", {
-                "styleSheetId": styleSheetId,
-                "ruleText": ruleText,
-                "location": location,
-            }),
-            cls.convert_payload({
-                "rule": {
-                    "class": CSSRule,
-                    "optional": False
+            cls.build_send_payload(
+                "addRule",
+                {
+                    "styleSheetId": styleSheetId,
+                    "ruleText": ruleText,
+                    "location": location,
                 },
-            })
+            ),
+            cls.convert_payload({"rule": {"class": CSSRule, "optional": False}}),
         )
 
     @classmethod
-    def collectClassNames(cls,
-                          styleSheetId: Union['StyleSheetId'],
-                          ):
+    def collectClassNames(cls, styleSheetId: Union["StyleSheetId"]):
         """Returns all class names from specified stylesheet.
         :param styleSheetId: 
         :type styleSheetId: StyleSheetId
         """
         return (
-            cls.build_send_payload("collectClassNames", {
-                "styleSheetId": styleSheetId,
-            }),
-            cls.convert_payload({
-                "classNames": {
-                    "class": [],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("collectClassNames", {"styleSheetId": styleSheetId}),
+            cls.convert_payload({"classNames": {"class": [], "optional": False}}),
         )
 
     @classmethod
-    def createStyleSheet(cls,
-                         frameId: Union['Page.FrameId'],
-                         ):
+    def createStyleSheet(cls, frameId: Union["Page.FrameId"]):
         """Creates a new special "via-inspector" stylesheet in the frame with given `frameId`.
         :param frameId: Identifier of the frame where "via-inspector" stylesheet should be created.
         :type frameId: Page.FrameId
         """
         return (
-            cls.build_send_payload("createStyleSheet", {
-                "frameId": frameId,
-            }),
-            cls.convert_payload({
-                "styleSheetId": {
-                    "class": StyleSheetId,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("createStyleSheet", {"frameId": frameId}),
+            cls.convert_payload(
+                {"styleSheetId": {"class": StyleSheetId, "optional": False}}
+            ),
         )
 
     @classmethod
     def disable(cls):
         """Disables the CSS agent for the given page.
         """
-        return (
-            cls.build_send_payload("disable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("disable", {}), None)
 
     @classmethod
     def enable(cls):
         """Enables the CSS agent for the given page. Clients should not assume that the CSS agent has been
 enabled until the result of this command is received.
         """
-        return (
-            cls.build_send_payload("enable", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("enable", {}), None)
 
     @classmethod
-    def forcePseudoState(cls,
-                         nodeId: Union['DOM.NodeId'],
-                         forcedPseudoClasses: Union['[]'],
-                         ):
+    def forcePseudoState(
+        cls, nodeId: Union["DOM.NodeId"], forcedPseudoClasses: Union["[]"]
+    ):
         """Ensures that the given node will have specified pseudo-classes whenever its style is computed by
 the browser.
         :param nodeId: The element id for which to force the pseudo state.
@@ -453,128 +448,90 @@ the browser.
         :type forcedPseudoClasses: []
         """
         return (
-            cls.build_send_payload("forcePseudoState", {
-                "nodeId": nodeId,
-                "forcedPseudoClasses": forcedPseudoClasses,
-            }),
-            None
+            cls.build_send_payload(
+                "forcePseudoState",
+                {"nodeId": nodeId, "forcedPseudoClasses": forcedPseudoClasses},
+            ),
+            None,
         )
 
     @classmethod
-    def getBackgroundColors(cls,
-                            nodeId: Union['DOM.NodeId'],
-                            ):
+    def getBackgroundColors(cls, nodeId: Union["DOM.NodeId"]):
         """
         :param nodeId: Id of the node to get background colors for.
         :type nodeId: DOM.NodeId
         """
         return (
-            cls.build_send_payload("getBackgroundColors", {
-                "nodeId": nodeId,
-            }),
-            cls.convert_payload({
-                "backgroundColors": {
-                    "class": [],
-                    "optional": True
-                },
-                "computedFontSize": {
-                    "class": str,
-                    "optional": True
-                },
-                "computedFontWeight": {
-                    "class": str,
-                    "optional": True
-                },
-                "computedBodyFontSize": {
-                    "class": str,
-                    "optional": True
-                },
-            })
+            cls.build_send_payload("getBackgroundColors", {"nodeId": nodeId}),
+            cls.convert_payload(
+                {
+                    "backgroundColors": {"class": [], "optional": True},
+                    "computedFontSize": {"class": str, "optional": True},
+                    "computedFontWeight": {"class": str, "optional": True},
+                    "computedBodyFontSize": {"class": str, "optional": True},
+                }
+            ),
         )
 
     @classmethod
-    def getComputedStyleForNode(cls,
-                                nodeId: Union['DOM.NodeId'],
-                                ):
+    def getComputedStyleForNode(cls, nodeId: Union["DOM.NodeId"]):
         """Returns the computed style for a DOM node identified by `nodeId`.
         :param nodeId: 
         :type nodeId: DOM.NodeId
         """
         return (
-            cls.build_send_payload("getComputedStyleForNode", {
-                "nodeId": nodeId,
-            }),
-            cls.convert_payload({
-                "computedStyle": {
-                    "class": [CSSComputedStyleProperty],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getComputedStyleForNode", {"nodeId": nodeId}),
+            cls.convert_payload(
+                {
+                    "computedStyle": {
+                        "class": [CSSComputedStyleProperty],
+                        "optional": False,
+                    }
+                }
+            ),
         )
 
     @classmethod
-    def getInlineStylesForNode(cls,
-                               nodeId: Union['DOM.NodeId'],
-                               ):
+    def getInlineStylesForNode(cls, nodeId: Union["DOM.NodeId"]):
         """Returns the styles defined inline (explicitly in the "style" attribute and implicitly, using DOM
 attributes) for a DOM node identified by `nodeId`.
         :param nodeId: 
         :type nodeId: DOM.NodeId
         """
         return (
-            cls.build_send_payload("getInlineStylesForNode", {
-                "nodeId": nodeId,
-            }),
-            cls.convert_payload({
-                "inlineStyle": {
-                    "class": CSSStyle,
-                    "optional": True
-                },
-                "attributesStyle": {
-                    "class": CSSStyle,
-                    "optional": True
-                },
-            })
+            cls.build_send_payload("getInlineStylesForNode", {"nodeId": nodeId}),
+            cls.convert_payload(
+                {
+                    "inlineStyle": {"class": CSSStyle, "optional": True},
+                    "attributesStyle": {"class": CSSStyle, "optional": True},
+                }
+            ),
         )
 
     @classmethod
-    def getMatchedStylesForNode(cls,
-                                nodeId: Union['DOM.NodeId'],
-                                ):
+    def getMatchedStylesForNode(cls, nodeId: Union["DOM.NodeId"]):
         """Returns requested styles for a DOM node identified by `nodeId`.
         :param nodeId: 
         :type nodeId: DOM.NodeId
         """
         return (
-            cls.build_send_payload("getMatchedStylesForNode", {
-                "nodeId": nodeId,
-            }),
-            cls.convert_payload({
-                "inlineStyle": {
-                    "class": CSSStyle,
-                    "optional": True
-                },
-                "attributesStyle": {
-                    "class": CSSStyle,
-                    "optional": True
-                },
-                "matchedCSSRules": {
-                    "class": [RuleMatch],
-                    "optional": True
-                },
-                "pseudoElements": {
-                    "class": [PseudoElementMatches],
-                    "optional": True
-                },
-                "inherited": {
-                    "class": [InheritedStyleEntry],
-                    "optional": True
-                },
-                "cssKeyframesRules": {
-                    "class": [CSSKeyframesRule],
-                    "optional": True
-                },
-            })
+            cls.build_send_payload("getMatchedStylesForNode", {"nodeId": nodeId}),
+            cls.convert_payload(
+                {
+                    "inlineStyle": {"class": CSSStyle, "optional": True},
+                    "attributesStyle": {"class": CSSStyle, "optional": True},
+                    "matchedCSSRules": {"class": [RuleMatch], "optional": True},
+                    "pseudoElements": {
+                        "class": [PseudoElementMatches],
+                        "optional": True,
+                    },
+                    "inherited": {"class": [InheritedStyleEntry], "optional": True},
+                    "cssKeyframesRules": {
+                        "class": [CSSKeyframesRule],
+                        "optional": True,
+                    },
+                }
+            ),
         )
 
     @classmethod
@@ -582,63 +539,42 @@ attributes) for a DOM node identified by `nodeId`.
         """Returns all media queries parsed by the rendering engine.
         """
         return (
-            cls.build_send_payload("getMediaQueries", {
-            }),
-            cls.convert_payload({
-                "medias": {
-                    "class": [CSSMedia],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getMediaQueries", {}),
+            cls.convert_payload({"medias": {"class": [CSSMedia], "optional": False}}),
         )
 
     @classmethod
-    def getPlatformFontsForNode(cls,
-                                nodeId: Union['DOM.NodeId'],
-                                ):
+    def getPlatformFontsForNode(cls, nodeId: Union["DOM.NodeId"]):
         """Requests information about platform fonts which we used to render child TextNodes in the given
 node.
         :param nodeId: 
         :type nodeId: DOM.NodeId
         """
         return (
-            cls.build_send_payload("getPlatformFontsForNode", {
-                "nodeId": nodeId,
-            }),
-            cls.convert_payload({
-                "fonts": {
-                    "class": [PlatformFontUsage],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getPlatformFontsForNode", {"nodeId": nodeId}),
+            cls.convert_payload(
+                {"fonts": {"class": [PlatformFontUsage], "optional": False}}
+            ),
         )
 
     @classmethod
-    def getStyleSheetText(cls,
-                          styleSheetId: Union['StyleSheetId'],
-                          ):
+    def getStyleSheetText(cls, styleSheetId: Union["StyleSheetId"]):
         """Returns the current textual content for a stylesheet.
         :param styleSheetId: 
         :type styleSheetId: StyleSheetId
         """
         return (
-            cls.build_send_payload("getStyleSheetText", {
-                "styleSheetId": styleSheetId,
-            }),
-            cls.convert_payload({
-                "text": {
-                    "class": str,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("getStyleSheetText", {"styleSheetId": styleSheetId}),
+            cls.convert_payload({"text": {"class": str, "optional": False}}),
         )
 
     @classmethod
-    def setEffectivePropertyValueForNode(cls,
-                                         nodeId: Union['DOM.NodeId'],
-                                         propertyName: Union['str'],
-                                         value: Union['str'],
-                                         ):
+    def setEffectivePropertyValueForNode(
+        cls,
+        nodeId: Union["DOM.NodeId"],
+        propertyName: Union["str"],
+        value: Union["str"],
+    ):
         """Find a rule with the given active property for the given node and set the new value for this
 property
         :param nodeId: The element id for which to set property.
@@ -649,20 +585,20 @@ property
         :type value: str
         """
         return (
-            cls.build_send_payload("setEffectivePropertyValueForNode", {
-                "nodeId": nodeId,
-                "propertyName": propertyName,
-                "value": value,
-            }),
-            None
+            cls.build_send_payload(
+                "setEffectivePropertyValueForNode",
+                {"nodeId": nodeId, "propertyName": propertyName, "value": value},
+            ),
+            None,
         )
 
     @classmethod
-    def setKeyframeKey(cls,
-                       styleSheetId: Union['StyleSheetId'],
-                       range: Union['SourceRange'],
-                       keyText: Union['str'],
-                       ):
+    def setKeyframeKey(
+        cls,
+        styleSheetId: Union["StyleSheetId"],
+        range: Union["SourceRange"],
+        keyText: Union["str"],
+    ):
         """Modifies the keyframe rule key text.
         :param styleSheetId: 
         :type styleSheetId: StyleSheetId
@@ -672,25 +608,20 @@ property
         :type keyText: str
         """
         return (
-            cls.build_send_payload("setKeyframeKey", {
-                "styleSheetId": styleSheetId,
-                "range": range,
-                "keyText": keyText,
-            }),
-            cls.convert_payload({
-                "keyText": {
-                    "class": Value,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "setKeyframeKey",
+                {"styleSheetId": styleSheetId, "range": range, "keyText": keyText},
+            ),
+            cls.convert_payload({"keyText": {"class": Value, "optional": False}}),
         )
 
     @classmethod
-    def setMediaText(cls,
-                     styleSheetId: Union['StyleSheetId'],
-                     range: Union['SourceRange'],
-                     text: Union['str'],
-                     ):
+    def setMediaText(
+        cls,
+        styleSheetId: Union["StyleSheetId"],
+        range: Union["SourceRange"],
+        text: Union["str"],
+    ):
         """Modifies the rule selector.
         :param styleSheetId: 
         :type styleSheetId: StyleSheetId
@@ -700,25 +631,20 @@ property
         :type text: str
         """
         return (
-            cls.build_send_payload("setMediaText", {
-                "styleSheetId": styleSheetId,
-                "range": range,
-                "text": text,
-            }),
-            cls.convert_payload({
-                "media": {
-                    "class": CSSMedia,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "setMediaText",
+                {"styleSheetId": styleSheetId, "range": range, "text": text},
+            ),
+            cls.convert_payload({"media": {"class": CSSMedia, "optional": False}}),
         )
 
     @classmethod
-    def setRuleSelector(cls,
-                        styleSheetId: Union['StyleSheetId'],
-                        range: Union['SourceRange'],
-                        selector: Union['str'],
-                        ):
+    def setRuleSelector(
+        cls,
+        styleSheetId: Union["StyleSheetId"],
+        range: Union["SourceRange"],
+        selector: Union["str"],
+    ):
         """Modifies the rule selector.
         :param styleSheetId: 
         :type styleSheetId: StyleSheetId
@@ -728,24 +654,17 @@ property
         :type selector: str
         """
         return (
-            cls.build_send_payload("setRuleSelector", {
-                "styleSheetId": styleSheetId,
-                "range": range,
-                "selector": selector,
-            }),
-            cls.convert_payload({
-                "selectorList": {
-                    "class": SelectorList,
-                    "optional": False
-                },
-            })
+            cls.build_send_payload(
+                "setRuleSelector",
+                {"styleSheetId": styleSheetId, "range": range, "selector": selector},
+            ),
+            cls.convert_payload(
+                {"selectorList": {"class": SelectorList, "optional": False}}
+            ),
         )
 
     @classmethod
-    def setStyleSheetText(cls,
-                          styleSheetId: Union['StyleSheetId'],
-                          text: Union['str'],
-                          ):
+    def setStyleSheetText(cls, styleSheetId: Union["StyleSheetId"], text: Union["str"]):
         """Sets the new stylesheet text.
         :param styleSheetId: 
         :type styleSheetId: StyleSheetId
@@ -753,47 +672,28 @@ property
         :type text: str
         """
         return (
-            cls.build_send_payload("setStyleSheetText", {
-                "styleSheetId": styleSheetId,
-                "text": text,
-            }),
-            cls.convert_payload({
-                "sourceMapURL": {
-                    "class": str,
-                    "optional": True
-                },
-            })
+            cls.build_send_payload(
+                "setStyleSheetText", {"styleSheetId": styleSheetId, "text": text}
+            ),
+            cls.convert_payload({"sourceMapURL": {"class": str, "optional": True}}),
         )
 
     @classmethod
-    def setStyleTexts(cls,
-                      edits: Union['[StyleDeclarationEdit]'],
-                      ):
+    def setStyleTexts(cls, edits: Union["[StyleDeclarationEdit]"]):
         """Applies specified style edits one after another in the given order.
         :param edits: 
         :type edits: [StyleDeclarationEdit]
         """
         return (
-            cls.build_send_payload("setStyleTexts", {
-                "edits": edits,
-            }),
-            cls.convert_payload({
-                "styles": {
-                    "class": [CSSStyle],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("setStyleTexts", {"edits": edits}),
+            cls.convert_payload({"styles": {"class": [CSSStyle], "optional": False}}),
         )
 
     @classmethod
     def startRuleUsageTracking(cls):
         """Enables the selector recording.
         """
-        return (
-            cls.build_send_payload("startRuleUsageTracking", {
-            }),
-            None
-        )
+        return (cls.build_send_payload("startRuleUsageTracking", {}), None)
 
     @classmethod
     def stopRuleUsageTracking(cls):
@@ -801,14 +701,10 @@ property
 `takeCoverageDelta` (or since start of coverage instrumentation)
         """
         return (
-            cls.build_send_payload("stopRuleUsageTracking", {
-            }),
-            cls.convert_payload({
-                "ruleUsage": {
-                    "class": [RuleUsage],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("stopRuleUsageTracking", {}),
+            cls.convert_payload(
+                {"ruleUsage": {"class": [RuleUsage], "optional": False}}
+            ),
         )
 
     @classmethod
@@ -817,27 +713,20 @@ property
 instrumentation)
         """
         return (
-            cls.build_send_payload("takeCoverageDelta", {
-            }),
-            cls.convert_payload({
-                "coverage": {
-                    "class": [RuleUsage],
-                    "optional": False
-                },
-            })
+            cls.build_send_payload("takeCoverageDelta", {}),
+            cls.convert_payload(
+                {"coverage": {"class": [RuleUsage], "optional": False}}
+            ),
         )
-
 
 
 class FontsUpdatedEvent(BaseEvent):
 
-    js_name = 'Css.fontsUpdated'
+    js_name = "Css.fontsUpdated"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 font: Union['FontFace', dict, None] = None,
-                 ):
+    def __init__(self, font: Union["FontFace", dict, None] = None):
         if isinstance(font, dict):
             font = FontFace(**font)
         elif isinstance(font, list):
@@ -846,12 +735,12 @@ class FontsUpdatedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")
 
 
 class MediaQueryResultChangedEvent(BaseEvent):
 
-    js_name = 'Css.mediaQueryResultChanged'
+    js_name = "Css.mediaQueryResultChanged"
     hashable = []
     is_hashable = False
 
@@ -860,18 +749,16 @@ class MediaQueryResultChangedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")
 
 
 class StyleSheetAddedEvent(BaseEvent):
 
-    js_name = 'Css.styleSheetAdded'
+    js_name = "Css.styleSheetAdded"
     hashable = []
     is_hashable = False
 
-    def __init__(self,
-                 header: Union['CSSStyleSheetHeader', dict],
-                 ):
+    def __init__(self, header: Union["CSSStyleSheetHeader", dict]):
         if isinstance(header, dict):
             header = CSSStyleSheetHeader(**header)
         elif isinstance(header, list):
@@ -880,18 +767,16 @@ class StyleSheetAddedEvent(BaseEvent):
 
     @classmethod
     def build_hash(cls):
-        raise ValueError('Unable to build hash for non-hashable type')
+        raise ValueError("Unable to build hash for non-hashable type")
 
 
 class StyleSheetChangedEvent(BaseEvent):
 
-    js_name = 'Css.styleSheetChanged'
-    hashable = ['styleSheetId']
+    js_name = "Css.styleSheetChanged"
+    hashable = ["styleSheetId"]
     is_hashable = True
 
-    def __init__(self,
-                 styleSheetId: Union['StyleSheetId', dict],
-                 ):
+    def __init__(self, styleSheetId: Union["StyleSheetId", dict]):
         if isinstance(styleSheetId, dict):
             styleSheetId = StyleSheetId(**styleSheetId)
         elif isinstance(styleSheetId, list):
@@ -901,22 +786,22 @@ class StyleSheetChangedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, styleSheetId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
 
 
 class StyleSheetRemovedEvent(BaseEvent):
 
-    js_name = 'Css.styleSheetRemoved'
-    hashable = ['styleSheetId']
+    js_name = "Css.styleSheetRemoved"
+    hashable = ["styleSheetId"]
     is_hashable = True
 
-    def __init__(self,
-                 styleSheetId: Union['StyleSheetId', dict],
-                 ):
+    def __init__(self, styleSheetId: Union["StyleSheetId", dict]):
         if isinstance(styleSheetId, dict):
             styleSheetId = StyleSheetId(**styleSheetId)
         elif isinstance(styleSheetId, list):
@@ -926,8 +811,10 @@ class StyleSheetRemovedEvent(BaseEvent):
     @classmethod
     def build_hash(cls, styleSheetId):
         kwargs = locals()
-        kwargs.pop('cls')
-        serialized_id_params = ','.join(['='.join([p, str(v)]) for p, v in kwargs.items()])
-        h = '{}:{}'.format(cls.js_name, serialized_id_params)
-        log.debug('generated hash = %s' % h)
+        kwargs.pop("cls")
+        serialized_id_params = ",".join(
+            ["=".join([p, str(v)]) for p, v in kwargs.items()]
+        )
+        h = "{}:{}".format(cls.js_name, serialized_id_params)
+        log.debug("generated hash = %s" % h)
         return h
