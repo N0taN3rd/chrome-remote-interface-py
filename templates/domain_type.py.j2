@@ -11,7 +11,22 @@ from cripy.protocol.{{ import | lower }} import types as {{ import }}
 
 {%+ for dt in obj_types %}
 class {{ dt.id }}(ChromeTypeBase):
+    {% if dt.description %}
+    """{{ dt.description }}"""
+    {% endif %}
+
     def __init__(self, {{ dt.constructor_string }}) -> None:
+        {% if dt.has_properties %}
+        """
+        {% for prop in dt.properties %}
+        {% if prop.description %}
+        :param {{ prop.name }}: {{ prop.description }}
+        {% else %}
+        :param {{ prop.name }}: The {{ prop.name }}
+        {% endif %}
+        {% endfor %}
+        """
+        {% endif %}
         super().__init__()
     {% if dt.has_properties %}
     {% for prop in dt.properties %}

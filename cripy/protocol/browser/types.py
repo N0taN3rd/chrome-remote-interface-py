@@ -7,6 +7,7 @@ WindowState = str
 
 
 class Bounds(ChromeTypeBase):
+    """Browser window bounds information"""
 
     def __init__(
         self,
@@ -16,6 +17,13 @@ class Bounds(ChromeTypeBase):
         height: Optional[int] = None,
         windowState: Optional["WindowState"] = None,
     ) -> None:
+        """
+        :param left: The offset from the left edge of the screen to the window in pixels.
+        :param top: The offset from the top edge of the screen to the window in pixels.
+        :param width: The window width in pixels.
+        :param height: The window height in pixels.
+        :param windowState: The window state. Default to normal.
+        """
         super().__init__()
         self.left: Optional[int] = left
         self.top: Optional[int] = top
@@ -25,8 +33,14 @@ class Bounds(ChromeTypeBase):
 
 
 class Bucket(ChromeTypeBase):
+    """Chrome histogram bucket."""
 
     def __init__(self, low: int, high: int, count: int) -> None:
+        """
+        :param low: Minimum value (inclusive).
+        :param high: Maximum value (exclusive).
+        :param count: Number of samples.
+        """
         super().__init__()
         self.low: int = low
         self.high: int = high
@@ -34,10 +48,17 @@ class Bucket(ChromeTypeBase):
 
 
 class Histogram(ChromeTypeBase):
+    """Chrome histogram."""
 
     def __init__(
         self, name: str, sum: int, count: int, buckets: List["Bucket"]
     ) -> None:
+        """
+        :param name: Name.
+        :param sum: Sum of sample values.
+        :param count: Total number of samples.
+        :param buckets: Buckets.
+        """
         super().__init__()
         self.name: str = name
         self.sum: int = sum

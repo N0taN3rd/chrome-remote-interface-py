@@ -5,6 +5,7 @@ StreamCompression = str
 
 
 class MemoryDumpConfig(ChromeTypeBase):
+    """Configuration for memory dump. Used only when "memory-infra" category is enabled."""
 
     def __init__(self,) -> None:
         super().__init__()
@@ -23,6 +24,16 @@ class TraceConfig(ChromeTypeBase):
         syntheticDelays: Optional[List["str"]] = None,
         memoryDumpConfig: Optional["MemoryDumpConfig"] = None,
     ) -> None:
+        """
+        :param recordMode: Controls how the trace buffer stores data.
+        :param enableSampling: Turns on JavaScript stack sampling.
+        :param enableSystrace: Turns on system tracing.
+        :param enableArgumentFilter: Turns on argument filter.
+        :param includedCategories: Included category filters.
+        :param excludedCategories: Excluded category filters.
+        :param syntheticDelays: Configuration to synthesize the delays in tracing.
+        :param memoryDumpConfig: Configuration for memory dump triggers. Used only when "memory-infra" category is enabled.
+        """
         super().__init__()
         self.recordMode: Optional[str] = recordMode
         self.enableSampling: Optional[bool] = enableSampling

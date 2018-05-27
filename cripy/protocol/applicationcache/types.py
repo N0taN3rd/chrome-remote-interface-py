@@ -4,8 +4,14 @@ from cripy.protocol.page import types as Page
 
 
 class ApplicationCacheResource(ChromeTypeBase):
+    """Detailed application cache resource information."""
 
     def __init__(self, url: str, size: int, type: str) -> None:
+        """
+        :param url: Resource url.
+        :param size: Resource size.
+        :param type: Resource type.
+        """
         super().__init__()
         self.url: str = url
         self.size: int = size
@@ -13,6 +19,7 @@ class ApplicationCacheResource(ChromeTypeBase):
 
 
 class ApplicationCache(ChromeTypeBase):
+    """Detailed application cache information."""
 
     def __init__(
         self,
@@ -22,6 +29,13 @@ class ApplicationCache(ChromeTypeBase):
         updateTime: float,
         resources: List["ApplicationCacheResource"],
     ) -> None:
+        """
+        :param manifestURL: Manifest URL.
+        :param size: Application cache size.
+        :param creationTime: Application cache creation time.
+        :param updateTime: Application cache update time.
+        :param resources: Application cache resources.
+        """
         super().__init__()
         self.manifestURL: str = manifestURL
         self.size: float = size
@@ -31,8 +45,14 @@ class ApplicationCache(ChromeTypeBase):
 
 
 class FrameWithManifest(ChromeTypeBase):
+    """Frame identifier - manifest URL pair."""
 
     def __init__(self, frameId: "Page.FrameId", manifestURL: str, status: int) -> None:
+        """
+        :param frameId: Frame identifier.
+        :param manifestURL: Manifest URL.
+        :param status: Application cache status.
+        """
         super().__init__()
         self.frameId: Page.FrameId = frameId
         self.manifestURL: str = manifestURL

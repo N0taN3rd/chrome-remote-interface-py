@@ -1,10 +1,11 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
-from cripy.protocol.network import types as Network
 from cripy.protocol.runtime import types as Runtime
+from cripy.protocol.network import types as Network
 
 
 class LogEntry(ChromeTypeBase):
+    """Log entry."""
 
     def __init__(
         self,
@@ -19,6 +20,18 @@ class LogEntry(ChromeTypeBase):
         workerId: Optional[str] = None,
         args: Optional[List["Runtime.RemoteObject"]] = None,
     ) -> None:
+        """
+        :param source: Log entry source.
+        :param level: Log entry severity.
+        :param text: Logged text.
+        :param timestamp: Timestamp when this entry was added.
+        :param url: URL of the resource if known.
+        :param lineNumber: Line number in the resource.
+        :param stackTrace: JavaScript stack trace.
+        :param networkRequestId: Identifier of the network request associated with this entry.
+        :param workerId: Identifier of the worker associated with this entry.
+        :param args: Call arguments.
+        """
         super().__init__()
         self.source: str = source
         self.level: str = level
@@ -33,8 +46,13 @@ class LogEntry(ChromeTypeBase):
 
 
 class ViolationSetting(ChromeTypeBase):
+    """Violation configuration setting."""
 
     def __init__(self, name: str, threshold: float) -> None:
+        """
+        :param name: Violation type.
+        :param threshold: Time threshold to trigger upon.
+        """
         super().__init__()
         self.name: str = name
         self.threshold: float = threshold

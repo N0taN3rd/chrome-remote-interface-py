@@ -10,14 +10,20 @@ PaintProfile = list
 
 
 class ScrollRect(ChromeTypeBase):
+    """Rectangle where scrolling happens on the main thread."""
 
     def __init__(self, rect: "DOM.Rect", type: str) -> None:
+        """
+        :param rect: Rectangle itself.
+        :param type: Reason for rectangle to force scrolling on the main thread
+        """
         super().__init__()
         self.rect: DOM.Rect = rect
         self.type: str = type
 
 
 class StickyPositionConstraint(ChromeTypeBase):
+    """Sticky position constraints."""
 
     def __init__(
         self,
@@ -26,6 +32,12 @@ class StickyPositionConstraint(ChromeTypeBase):
         nearestLayerShiftingStickyBox: Optional["LayerId"] = None,
         nearestLayerShiftingContainingBlock: Optional["LayerId"] = None,
     ) -> None:
+        """
+        :param stickyBoxRect: Layout rectangle of the sticky element before being shifted
+        :param containingBlockRect: Layout rectangle of the containing block of the sticky element
+        :param nearestLayerShiftingStickyBox: The nearest sticky layer that shifts the sticky box
+        :param nearestLayerShiftingContainingBlock: The nearest sticky layer that shifts the containing block
+        """
         super().__init__()
         self.stickyBoxRect: DOM.Rect = stickyBoxRect
         self.containingBlockRect: DOM.Rect = containingBlockRect
@@ -38,8 +50,14 @@ class StickyPositionConstraint(ChromeTypeBase):
 
 
 class PictureTile(ChromeTypeBase):
+    """Serialized fragment of layer picture along with its offset within the layer."""
 
     def __init__(self, x: float, y: float, picture: str) -> None:
+        """
+        :param x: Offset from owning layer left boundary
+        :param y: Offset from owning layer top boundary
+        :param picture: Base64-encoded snapshot data.
+        """
         super().__init__()
         self.x: float = x
         self.y: float = y
@@ -47,6 +65,7 @@ class PictureTile(ChromeTypeBase):
 
 
 class Layer(ChromeTypeBase):
+    """Information about a compositing layer."""
 
     def __init__(
         self,
@@ -67,6 +86,25 @@ class Layer(ChromeTypeBase):
         scrollRects: Optional[List["ScrollRect"]] = None,
         stickyPositionConstraint: Optional["StickyPositionConstraint"] = None,
     ) -> None:
+        """
+        :param layerId: The unique id for this layer.
+        :param parentLayerId: The id of parent (not present for root).
+        :param backendNodeId: The backend id for the node associated with this layer.
+        :param offsetX: Offset from parent layer, X coordinate.
+        :param offsetY: Offset from parent layer, Y coordinate.
+        :param width: Layer width.
+        :param height: Layer height.
+        :param transform: Transformation matrix for layer, default is identity matrix
+        :param anchorX: Transform anchor point X, absent if no transform specified
+        :param anchorY: Transform anchor point Y, absent if no transform specified
+        :param anchorZ: Transform anchor point Z, absent if no transform specified
+        :param paintCount: Indicates how many time this layer has painted.
+        :param drawsContent: Indicates whether this layer hosts any content, rather than being used for
+transform/scrolling purposes only.
+        :param invisible: Set if layer is not visible.
+        :param scrollRects: Rectangles scrolling on main thread only.
+        :param stickyPositionConstraint: Sticky position constraint information
+        """
         super().__init__()
         self.layerId: LayerId = layerId
         self.parentLayerId: Optional[LayerId] = parentLayerId

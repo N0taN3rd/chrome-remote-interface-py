@@ -6,6 +6,7 @@ InspectMode = str
 
 
 class HighlightConfig(ChromeTypeBase):
+    """Configuration data for the highlighting of page elements."""
 
     def __init__(
         self,
@@ -23,6 +24,21 @@ class HighlightConfig(ChromeTypeBase):
         selectorList: Optional[str] = None,
         cssGridColor: Optional["DOM.RGBA"] = None,
     ) -> None:
+        """
+        :param showInfo: Whether the node info tooltip should be shown (default: false).
+        :param showRulers: Whether the rulers should be shown (default: false).
+        :param showExtensionLines: Whether the extension lines from node to the rulers should be shown (default: false).
+        :param displayAsMaterial: The displayAsMaterial
+        :param contentColor: The content box highlight fill color (default: transparent).
+        :param paddingColor: The padding highlight fill color (default: transparent).
+        :param borderColor: The border highlight fill color (default: transparent).
+        :param marginColor: The margin highlight fill color (default: transparent).
+        :param eventTargetColor: The event target element highlight fill color (default: transparent).
+        :param shapeColor: The shape outside fill color (default: transparent).
+        :param shapeMarginColor: The shape margin fill color (default: transparent).
+        :param selectorList: Selectors to highlight relevant nodes.
+        :param cssGridColor: The grid layout color (default: transparent).
+        """
         super().__init__()
         self.showInfo: Optional[bool] = showInfo
         self.showRulers: Optional[bool] = showRulers

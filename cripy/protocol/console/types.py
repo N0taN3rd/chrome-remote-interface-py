@@ -3,6 +3,7 @@ from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
 
 
 class ConsoleMessage(ChromeTypeBase):
+    """Console message."""
 
     def __init__(
         self,
@@ -13,6 +14,14 @@ class ConsoleMessage(ChromeTypeBase):
         line: Optional[int] = None,
         column: Optional[int] = None,
     ) -> None:
+        """
+        :param source: Message source.
+        :param level: Message severity.
+        :param text: Message text.
+        :param url: URL of the message origin.
+        :param line: Line number in the resource that generated this message (1-based).
+        :param column: Column number in the resource that generated this message (1-based).
+        """
         super().__init__()
         self.source: str = source
         self.level: str = level

@@ -4,10 +4,16 @@ from cripy.protocol.runtime import types as Runtime
 
 
 class DatabaseWithObjectStores(ChromeTypeBase):
+    """Database with an array of object stores."""
 
     def __init__(
         self, name: str, version: int, objectStores: List["ObjectStore"]
     ) -> None:
+        """
+        :param name: Database name.
+        :param version: Database version.
+        :param objectStores: Object stores in this database.
+        """
         super().__init__()
         self.name: str = name
         self.version: int = version
@@ -15,6 +21,7 @@ class DatabaseWithObjectStores(ChromeTypeBase):
 
 
 class ObjectStore(ChromeTypeBase):
+    """Object store."""
 
     def __init__(
         self,
@@ -23,6 +30,12 @@ class ObjectStore(ChromeTypeBase):
         autoIncrement: bool,
         indexes: List["ObjectStoreIndex"],
     ) -> None:
+        """
+        :param name: Object store name.
+        :param keyPath: Object store key path.
+        :param autoIncrement: If true, object store has auto increment flag set.
+        :param indexes: Indexes in this object store.
+        """
         super().__init__()
         self.name: str = name
         self.keyPath: KeyPath = keyPath
@@ -31,10 +44,17 @@ class ObjectStore(ChromeTypeBase):
 
 
 class ObjectStoreIndex(ChromeTypeBase):
+    """Object store index."""
 
     def __init__(
         self, name: str, keyPath: "KeyPath", unique: bool, multiEntry: bool
     ) -> None:
+        """
+        :param name: Index name.
+        :param keyPath: Index key path.
+        :param unique: If true, index is unique.
+        :param multiEntry: If true, index allows multiple entries for a key.
+        """
         super().__init__()
         self.name: str = name
         self.keyPath: KeyPath = keyPath
@@ -43,6 +63,7 @@ class ObjectStoreIndex(ChromeTypeBase):
 
 
 class Key(ChromeTypeBase):
+    """Key."""
 
     def __init__(
         self,
@@ -52,6 +73,13 @@ class Key(ChromeTypeBase):
         date: Optional[float] = None,
         array: Optional[List["Key"]] = None,
     ) -> None:
+        """
+        :param type: Key type.
+        :param number: Number value.
+        :param string: String value.
+        :param date: Date value.
+        :param array: Array value.
+        """
         super().__init__()
         self.type: str = type
         self.number: Optional[float] = number
@@ -61,6 +89,7 @@ class Key(ChromeTypeBase):
 
 
 class KeyRange(ChromeTypeBase):
+    """Key range."""
 
     def __init__(
         self,
@@ -69,6 +98,12 @@ class KeyRange(ChromeTypeBase):
         lower: Optional["Key"] = None,
         upper: Optional["Key"] = None,
     ) -> None:
+        """
+        :param lower: Lower bound.
+        :param upper: Upper bound.
+        :param lowerOpen: If true lower bound is open.
+        :param upperOpen: If true upper bound is open.
+        """
         super().__init__()
         self.lower: Optional[Key] = lower
         self.upper: Optional[Key] = upper
@@ -77,6 +112,7 @@ class KeyRange(ChromeTypeBase):
 
 
 class DataEntry(ChromeTypeBase):
+    """Data entry."""
 
     def __init__(
         self,
@@ -84,6 +120,11 @@ class DataEntry(ChromeTypeBase):
         primaryKey: "Runtime.RemoteObject",
         value: "Runtime.RemoteObject",
     ) -> None:
+        """
+        :param key: Key object.
+        :param primaryKey: Primary key object.
+        :param value: Value object.
+        """
         super().__init__()
         self.key: Runtime.RemoteObject = key
         self.primaryKey: Runtime.RemoteObject = primaryKey
@@ -91,6 +132,7 @@ class DataEntry(ChromeTypeBase):
 
 
 class KeyPath(ChromeTypeBase):
+    """Key path."""
 
     def __init__(
         self,
@@ -98,6 +140,11 @@ class KeyPath(ChromeTypeBase):
         string: Optional[str] = None,
         array: Optional[List["str"]] = None,
     ) -> None:
+        """
+        :param type: Key path type.
+        :param string: String value.
+        :param array: Array value.
+        """
         super().__init__()
         self.type: str = type
         self.string: Optional[str] = string
