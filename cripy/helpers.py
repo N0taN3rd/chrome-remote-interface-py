@@ -8,6 +8,8 @@ import logging
 import re
 import sys
 
+from typing import Optional
+
 
 class PayloadMixin:
 
@@ -83,7 +85,7 @@ class BaseEvent:
 
 
 # TODO: how do
-def json_to_event(payload) -> BaseEvent:
+def json_to_event(payload) -> Optional[BaseEvent]:
     try:
         prot_name, js_event = payload["method"].split(".")
     except KeyError:

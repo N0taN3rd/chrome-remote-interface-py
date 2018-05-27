@@ -2,7 +2,7 @@ from typing import Optional, List
 
 from .shared_typings import ForeignRefs
 from .property import Property
-from .type import Type
+from .protocol_type import Type
 
 Props = Optional[List[Property]]
 

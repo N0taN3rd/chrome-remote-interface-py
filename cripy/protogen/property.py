@@ -1,7 +1,7 @@
 from typing import List, Optional, Set, Union
 
 from .shared_typings import ForeignRefs
-from .type import Type
+from .protocol_type import Type
 
 Enum = Optional[List[str]]
 
@@ -10,8 +10,8 @@ Items = Optional[Union[List[Type], Type]]
 
 class Property(object):
 
-    def __init__(self, prop_of: str, prop: dict) -> None:
-        self.prop_of: str = prop_of
+    def __init__(self, owner: str, prop: dict) -> None:
+        self.owner: str = owner
         self.name: str = prop["name"]
         self.description: Optional[str] = prop.get("description", None)
         self.foreign_refs: ForeignRefs = None
