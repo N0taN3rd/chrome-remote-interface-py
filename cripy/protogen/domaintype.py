@@ -1,45 +1,93 @@
-from typing import Optional, List
+from typing import Optional, List, Dict
+from collections import OrderedDict
 
-from .shared_typings import ForeignRefs
+from .shared import FRefCollector
 from .property import Property
-from .protocol_type import Type
+from .ptype import Type
+
 
 Props = Optional[List[Property]]
 
 
-class DomainType(object):
+class DomainType(FRefCollector):
 
-    def __init__(self, dt: dict) -> None:
+    def __init__(self, domain: str, dt: dict) -> None:
+        super().__init__()
+        self.domain = domain
         self.id: str = dt["id"]
+        self.scoped_name: str = f"{self.domain}.{self.id}"
         self.description: Optional[str] = dt.get("description", None)
         self.type: Type = Type(dt)
         self.experimental: bool = dt.get("experimental", False)
-        self.foreign_refs: ForeignRefs = None
-        props = dt.get("properties", None)
-        self.properties: Props = self._build_props(
-            props
-        ) if props is not None else props
+        self.properties: Props = self._build_props(dt.get("properties", None))
 
     @property
-    def has_foreign_refs(self) -> None:
-        return self.foreign_refs is not None
+    def is_array(self) -> bool:
+        return self.type.is_array
+
+    @property
+    def is_object(self) -> bool:
+        return self.type.is_object
 
     @property
     def has_properties(self):
         return self.properties is not None
 
-    def _build_props(self, props_list: List[dict]) -> Props:
+    @property
+    def properties_dict(self) -> Optional[Dict[str, Property]]:
+        if not self.has_properties:
+            return None
+        pdict = OrderedDict()
+        for prop in self.properties:
+            pdict[prop.name] = prop
+        return pdict
+
+    @property
+    def constructor_string(self) -> str:
+        if self.type.is_object:
+            if self.has_properties:
+                optionals = []
+                notoptional = []
+                for prop in self.properties:
+                    if prop.optional:
+                        optionals.append(
+                            prop.constructor_string.replace("'Any'", "Any")
+                        )
+                    else:
+                        notoptional.append(
+                            prop.constructor_string.replace("'Any'", "Any")
+                        )
+                return ", ".join(notoptional + optionals)
+            else:
+                return ""
+        else:
+            return ""
+
+    def _build_props(self, props_list: Optional[List[dict]]) -> Props:
+        if props_list is None:
+            return props_list
         props = []
         for aprop in props_list:
             prop = Property(self.id, aprop)
-            self._if_prop_foreign_ref_add(prop)
+            self._if_foreign_ref_add(prop)
             props.append(prop)
         return props
 
-    def _if_prop_foreign_ref_add(self, prop: Property) -> None:
-        if self.foreign_refs is None:
-            self.foreign_refs = set()
-        if prop.is_foreign_ref:
-            self.foreign_refs.add(prop.foreign_ref)
-        if prop.has_foreign_refs:
-            self.foreign_refs.update(prop.foreign_refs)
+    def __str__(self) -> str:
+        if self.type.is_array:
+            return f"{self.id}[]"
+        elif self.type.is_object:
+            if self.has_properties:
+                ps = (
+                    "\n "
+                    + "\n ".join([prop.tinfo_str for prop in self.properties])
+                    + "\n"
+                )
+            else:
+                ps = ""
+            return f"{self.id}" + " {%s}" % ps
+        else:
+            return f"{self.id}<{self.type}>"
+
+    def __repr__(self) -> str:
+        return self.__str__()

@@ -1,6 +1,11 @@
 
 PT_PYT = dict(
-    object="dict", string="str", integer="int", number="float", boolean="bool"
+    object="dict",
+    string="str",
+    integer="int",
+    number="float",
+    boolean="bool",
+    any="Any",
 )
 
 
@@ -16,16 +21,31 @@ class Type(object):
             self.is_ref: bool = True
 
     @property
-    def is_pytype(self) -> bool:
-        return PT_PYT.get(self.type, None) is not None
+    def safe_type(self) -> str:
+        if self.is_array:
+            return "list"
+        else:
+            return self.pytype
 
     @property
     def pytype(self) -> str:
         return PT_PYT[self.type]
 
     @property
+    def is_pytype(self) -> bool:
+        return PT_PYT.get(self.type, None) is not None
+
+    @property
     def is_array(self) -> bool:
         return self.type == "array"
+
+    @property
+    def is_object(self) -> bool:
+        return self.type == "object"
+
+    @property
+    def is_primitive(self) -> bool:
+        return not self.is_array and not self.is_object and self.is_pytype
 
     @property
     def is_foreign_ref(self) -> bool:
@@ -44,6 +64,8 @@ class Type(object):
             return False
 
     def __str__(self) -> str:
+        if self.is_pytype:
+            return f"{self.pytype}"
         return f"{self.type}"
 
     def __repr__(self) -> str:

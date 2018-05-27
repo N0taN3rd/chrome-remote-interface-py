@@ -1,0 +1,23 @@
+from typing import Any, List, Optional, Set, Union
+from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+{% for import in timports %}
+from cripy.protocol.{{ import | lower }} import types as {{ import }}
+{% endfor %}
+
+{%+ for dt in py_types %}
+{{ dt.id }} = {{ dt.type.safe_type }}
+
+{% endfor %}
+
+{%+ for dt in obj_types %}
+class {{ dt.id }}(ChromeTypeBase):
+    def __init__(self, {{ dt.constructor_string }}) -> None:
+        super().__init__()
+    {% if dt.has_properties %}
+    {% for prop in dt.properties %}
+        self.{{ prop.tinfo_str }} = {{ prop.name }}
+    {% endfor %}
+    {% endif %}
+
+
+{% endfor %}

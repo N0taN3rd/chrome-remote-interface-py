@@ -1,39 +1,76 @@
 from typing import List, Optional, Set, Union
 
-from .shared_typings import ForeignRefs
-from .protocol_type import Type
+from .shared import FRefCollector
+from .ptype import Type
 
 Enum = Optional[List[str]]
 
 Items = Optional[Union[List[Type], Type]]
 
 
-class Property(object):
+def cstring_mapper(t: Type) -> Union[str, Type]:
+    if not t.is_pytype and not t.is_array:
+        return f"'{t}'"
+    return t
+
+
+class Property(FRefCollector):
 
     def __init__(self, owner: str, prop: dict) -> None:
+        super().__init__()
         self.owner: str = owner
         self.name: str = prop["name"]
+        self.scoped_name: str = f"{self.owner}.{self.name}"
         self.description: Optional[str] = prop.get("description", None)
-        self.foreign_refs: ForeignRefs = None
         self.type: Type = Type(prop)
         self._if_foreign_ref_add(self.type)
         self.enum: Enum = prop.get("enum", None)
         self.optional: bool = prop.get("optional", False)
-        self.items: Items = self._build_items(
-            prop["items"]
-        ) if self.type.is_array else None
+        self.items: Items = self._build_items(prop.get("items", None))
+        self._oprop = prop
+
+    def _wrap_if_optional(self, to_wrap: Union[str, Type]) -> str:
+        if self.optional:
+            return f"Optional[{to_wrap}]"
+        return to_wrap
+
+    def _wrap_if_optionalc(self, to_wrap: Union[str, Type]) -> str:
+        if self.optional:
+            return f"Optional[{to_wrap}] = None"
+        return to_wrap
 
     @property
-    def has_foreign_refs(self) -> None:
-        return self.foreign_refs is not None
+    def tinfo_str(self) -> str:
+        if self.is_array:
+            ars = ",".join(self.items) if isinstance(self.items, list) else self.items
+            ts = self._wrap_if_optional(f"List[{ars}]")
+        else:
+            ts = self._wrap_if_optional(self.type)
+        return f"{self.name}: {ts}"
 
     @property
-    def is_foreign_ref(self) -> bool:
-        return self.type.is_ref and self.type.is_foreign_ref
+    def constructor_string(self) -> str:
+        if self.is_array:
+            if isinstance(self.items, list):
+                ars = ",".join(map(cstring_mapper, self.items))
+            else:
+                ars = f"'{self.items}'"
+            ts = self._wrap_if_optionalc(f"List[{ars}]")
+        else:
+            if not self.type.is_pytype and not self.type.is_array:
+                ts_ = f"'{self.type}'"
+            else:
+                ts_ = self.type
+            ts = self._wrap_if_optionalc(ts_)
+        return f"{self.name}: {ts}"
 
     @property
     def foreign_ref(self) -> str:
         return self.type.foreign_ref
+
+    @property
+    def is_foreign_ref(self) -> bool:
+        return self.type.is_ref and self.type.is_foreign_ref
 
     @property
     def is_enum(self) -> bool:
@@ -43,13 +80,9 @@ class Property(object):
     def is_array(self) -> bool:
         return self.type.is_array
 
-    def _if_foreign_ref_add(self, t: Type) -> None:
-        if self.foreign_refs is None:
-            self.foreign_refs = set()
-        if t.is_foreign_ref:
-            self.foreign_refs.add(t.foreign_ref)
-
-    def _build_items(self, item_list: Union[dict, List]) -> Items:
+    def _build_items(self, item_list: Optional[Union[dict, List[dict]]]) -> Items:
+        if item_list is None or not self.is_array:
+            return None
         if isinstance(item_list, dict):
             t = Type(item_list)
             self._if_foreign_ref_add(t)

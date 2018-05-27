@@ -1,5 +1,6 @@
 import ujson as json
 import os.path
+from pathlib import Path
 import re
 import sys
 
@@ -236,10 +237,31 @@ PT_PYT = dict(
 
 
 if __name__ == "__main__":
+    with open("templates/domain_type.py.j2", "r") as iin:
+        domain_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
+
     for which, fp in [js_json_fp, browser_json_fp]:
-        print(which)
         data = read_json(fp)
-        print(data)
         for domain in data["domains"]:
-            Domain(domain)
+            d = Domain(domain)
+            dp = Path(output_dir_fp, d.domain.lower())
+            print(dp)
+            if not dp.exists():
+                dp.mkdir()
+            if d.has_types:
+                obj_types = []
+                py_types = []
+                timports = set()
+                for dt in d.types:
+                    dt.prune(set(d.domain))
+                    if dt.has_foreign_refs:
+                        timports.update(dt.foreign_refs)
+                    if dt.is_object:
+                        obj_types.append(dt)
+                    else:
+                        py_types.append(dt)
+                typep = dp.joinpath('types.py')
+                with typep.open('w') as tout:
+                    tout.write(domain_template.render(py_types=py_types, obj_types=obj_types, timports=timports))
+                print()
         print("--------------")
