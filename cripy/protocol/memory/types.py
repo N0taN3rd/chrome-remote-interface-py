@@ -9,9 +9,12 @@ class SamplingProfileNode(ChromeTypeBase):
     """Heap profile sample."""
     def __init__(self, size: float, total: float, stack: List['str']) -> None:
         """
-        :param float size: Size of the sampled allocation.
-        :param float total: Total bytes attributed to this sample.
-        :param array stack: Execution stack at the point of allocation.
+        :param size: Size of the sampled allocation.
+        :type size: float
+        :param total: Total bytes attributed to this sample.
+        :type total: float
+        :param stack: Execution stack at the point of allocation.
+        :type stack: array
         """
         super().__init__()
         self.size: float = size
@@ -23,7 +26,8 @@ class SamplingProfile(ChromeTypeBase):
     """Array of heap profile samples."""
     def __init__(self, samples: List['SamplingProfileNode']) -> None:
         """
-        :param array samples: The samples
+        :param samples: The samples
+        :type samples: array
         """
         super().__init__()
         self.samples: List[SamplingProfileNode] = samples

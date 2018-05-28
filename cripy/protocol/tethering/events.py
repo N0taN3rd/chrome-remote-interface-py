@@ -10,7 +10,9 @@ class AcceptedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param int port: Port number that was successfully bound.
+        :type port: int
         :param str connectionId: Connection id to be used.
+        :type connectionId: str
         """
         super().__init__()
 

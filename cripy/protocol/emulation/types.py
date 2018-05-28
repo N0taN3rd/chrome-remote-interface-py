@@ -9,8 +9,10 @@ class ScreenOrientation(ChromeTypeBase):
     """Screen orientation."""
     def __init__(self, type: str, angle: int) -> None:
         """
-        :param str type: Orientation type.
-        :param int angle: Orientation angle.
+        :param type: Orientation type.
+        :type type: str
+        :param angle: Orientation angle.
+        :type angle: int
         """
         super().__init__()
         self.type: str = type

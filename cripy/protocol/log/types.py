@@ -1,23 +1,33 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
-from cripy.protocol.runtime import types as Runtime
 from cripy.protocol.network import types as Network
+from cripy.protocol.runtime import types as Runtime
 
 
 class LogEntry(ChromeTypeBase):
     """Log entry."""
     def __init__(self, source: str, level: str, text: str, timestamp: 'Runtime.Timestamp', url: Optional[str] = None, lineNumber: Optional[int] = None, stackTrace: Optional['Runtime.StackTrace'] = None, networkRequestId: Optional['Network.RequestId'] = None, workerId: Optional[str] = None, args: Optional[List['Runtime.RemoteObject']] = None) -> None:
         """
-        :param str source: Log entry source.
-        :param str level: Log entry severity.
-        :param str text: Logged text.
-        :param Runtime.Timestamp timestamp: Timestamp when this entry was added.
-        :param str url: URL of the resource if known.
-        :param int lineNumber: Line number in the resource.
-        :param Runtime.StackTrace stackTrace: JavaScript stack trace.
-        :param Network.RequestId networkRequestId: Identifier of the network request associated with this entry.
-        :param str workerId: Identifier of the worker associated with this entry.
-        :param array args: Call arguments.
+        :param source: Log entry source.
+        :type source: str
+        :param level: Log entry severity.
+        :type level: str
+        :param text: Logged text.
+        :type text: str
+        :param timestamp: Timestamp when this entry was added.
+        :type timestamp: Runtime.Timestamp
+        :param url: URL of the resource if known.
+        :type url: str
+        :param lineNumber: Line number in the resource.
+        :type lineNumber: int
+        :param stackTrace: JavaScript stack trace.
+        :type stackTrace: Runtime.StackTrace
+        :param networkRequestId: Identifier of the network request associated with this entry.
+        :type networkRequestId: Network.RequestId
+        :param workerId: Identifier of the worker associated with this entry.
+        :type workerId: str
+        :param args: Call arguments.
+        :type args: array
         """
         super().__init__()
         self.source: str = source
@@ -36,8 +46,10 @@ class ViolationSetting(ChromeTypeBase):
     """Violation configuration setting."""
     def __init__(self, name: str, threshold: float) -> None:
         """
-        :param str name: Violation type.
-        :param float threshold: Time threshold to trigger upon.
+        :param name: Violation type.
+        :type name: str
+        :param threshold: Time threshold to trigger upon.
+        :type threshold: float
         """
         super().__init__()
         self.name: str = name

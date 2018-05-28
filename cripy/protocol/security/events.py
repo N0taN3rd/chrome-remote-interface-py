@@ -13,8 +13,11 @@ class CertificateErrorEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param int eventId: The ID of the event.
+        :type eventId: int
         :param str errorType: The type of the error.
+        :type errorType: str
         :param str requestURL: The url that was requested.
+        :type requestURL: str
         """
         super().__init__()
 
@@ -27,10 +30,15 @@ class SecurityStateChangedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param SecurityState securityState: Security state.
+        :type securityState: SecurityState
         :param bool schemeIsCryptographic: True if the page was loaded over cryptographic transport such as HTTPS.
+        :type schemeIsCryptographic: bool
         :param array explanations: List of explanations for the security state. If the overall security state is `insecure` or `warning`, at least one corresponding explanation should be included.
+        :type explanations: array
         :param InsecureContentStatus insecureContentStatus: Information about insecure content on the page.
+        :type insecureContentStatus: InsecureContentStatus
         :param str summary: Overrides user-visible description of the state.
+        :type summary: str
         """
         super().__init__()
 

@@ -11,6 +11,7 @@ class FontsUpdatedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param FontFace font: The web font that has loaded.
+        :type font: FontFace
         """
         super().__init__()
 
@@ -32,6 +33,7 @@ class StyleSheetAddedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param CSSStyleSheetHeader header: Added stylesheet metainfo.
+        :type header: CSSStyleSheetHeader
         """
         super().__init__()
 
@@ -44,6 +46,7 @@ class StyleSheetChangedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param StyleSheetId styleSheetId: The styleSheetId
+        :type styleSheetId: StyleSheetId
         """
         super().__init__()
 
@@ -56,6 +59,7 @@ class StyleSheetRemovedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param StyleSheetId styleSheetId: Identifier of the removed stylesheet.
+        :type styleSheetId: StyleSheetId
         """
         super().__init__()
 

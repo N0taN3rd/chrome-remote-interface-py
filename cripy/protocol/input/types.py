@@ -12,13 +12,20 @@ class TouchPoint(ChromeTypeBase):
     pass
     def __init__(self, x: float, y: float, radiusX: Optional[float] = None, radiusY: Optional[float] = None, rotationAngle: Optional[float] = None, force: Optional[float] = None, id: Optional[float] = None) -> None:
         """
-        :param float x: X coordinate of the event relative to the main frame's viewport in CSS pixels.
-        :param float y: Y coordinate of the event relative to the main frame's viewport in CSS pixels. 0 refers to the top of the viewport and Y increases as it proceeds towards the bottom of the viewport.
-        :param float radiusX: X radius of the touch area (default: 1.0).
-        :param float radiusY: Y radius of the touch area (default: 1.0).
-        :param float rotationAngle: Rotation angle (default: 0.0).
-        :param float force: Force (default: 1.0).
-        :param float id: Identifier used to track touch sources between events, must be unique within an event.
+        :param x: X coordinate of the event relative to the main frame's viewport in CSS pixels.
+        :type x: float
+        :param y: Y coordinate of the event relative to the main frame's viewport in CSS pixels. 0 refers to the top of the viewport and Y increases as it proceeds towards the bottom of the viewport.
+        :type y: float
+        :param radiusX: X radius of the touch area (default: 1.0).
+        :type radiusX: float
+        :param radiusY: Y radius of the touch area (default: 1.0).
+        :type radiusY: float
+        :param rotationAngle: Rotation angle (default: 0.0).
+        :type rotationAngle: float
+        :param force: Force (default: 1.0).
+        :type force: float
+        :param id: Identifier used to track touch sources between events, must be unique within an event.
+        :type id: float
         """
         super().__init__()
         self.x: float = x

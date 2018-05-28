@@ -10,6 +10,7 @@ class EntryAddedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param LogEntry entry: The entry.
+        :type entry: LogEntry
         """
         super().__init__()
 

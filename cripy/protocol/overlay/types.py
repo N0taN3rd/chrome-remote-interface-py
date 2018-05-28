@@ -10,19 +10,32 @@ class HighlightConfig(ChromeTypeBase):
     """Configuration data for the highlighting of page elements."""
     def __init__(self, showInfo: Optional[bool] = None, showRulers: Optional[bool] = None, showExtensionLines: Optional[bool] = None, displayAsMaterial: Optional[bool] = None, contentColor: Optional['DOM.RGBA'] = None, paddingColor: Optional['DOM.RGBA'] = None, borderColor: Optional['DOM.RGBA'] = None, marginColor: Optional['DOM.RGBA'] = None, eventTargetColor: Optional['DOM.RGBA'] = None, shapeColor: Optional['DOM.RGBA'] = None, shapeMarginColor: Optional['DOM.RGBA'] = None, selectorList: Optional[str] = None, cssGridColor: Optional['DOM.RGBA'] = None) -> None:
         """
-        :param bool showInfo: Whether the node info tooltip should be shown (default: false).
-        :param bool showRulers: Whether the rulers should be shown (default: false).
-        :param bool showExtensionLines: Whether the extension lines from node to the rulers should be shown (default: false).
-        :param bool displayAsMaterial: The displayAsMaterial
-        :param DOM.RGBA contentColor: The content box highlight fill color (default: transparent).
-        :param DOM.RGBA paddingColor: The padding highlight fill color (default: transparent).
-        :param DOM.RGBA borderColor: The border highlight fill color (default: transparent).
-        :param DOM.RGBA marginColor: The margin highlight fill color (default: transparent).
-        :param DOM.RGBA eventTargetColor: The event target element highlight fill color (default: transparent).
-        :param DOM.RGBA shapeColor: The shape outside fill color (default: transparent).
-        :param DOM.RGBA shapeMarginColor: The shape margin fill color (default: transparent).
-        :param str selectorList: Selectors to highlight relevant nodes.
-        :param DOM.RGBA cssGridColor: The grid layout color (default: transparent).
+        :param showInfo: Whether the node info tooltip should be shown (default: false).
+        :type showInfo: bool
+        :param showRulers: Whether the rulers should be shown (default: false).
+        :type showRulers: bool
+        :param showExtensionLines: Whether the extension lines from node to the rulers should be shown (default: false).
+        :type showExtensionLines: bool
+        :param displayAsMaterial: The displayAsMaterial
+        :type displayAsMaterial: bool
+        :param contentColor: The content box highlight fill color (default: transparent).
+        :type contentColor: DOM.RGBA
+        :param paddingColor: The padding highlight fill color (default: transparent).
+        :type paddingColor: DOM.RGBA
+        :param borderColor: The border highlight fill color (default: transparent).
+        :type borderColor: DOM.RGBA
+        :param marginColor: The margin highlight fill color (default: transparent).
+        :type marginColor: DOM.RGBA
+        :param eventTargetColor: The event target element highlight fill color (default: transparent).
+        :type eventTargetColor: DOM.RGBA
+        :param shapeColor: The shape outside fill color (default: transparent).
+        :type shapeColor: DOM.RGBA
+        :param shapeMarginColor: The shape margin fill color (default: transparent).
+        :type shapeMarginColor: DOM.RGBA
+        :param selectorList: Selectors to highlight relevant nodes.
+        :type selectorList: str
+        :param cssGridColor: The grid layout color (default: transparent).
+        :type cssGridColor: DOM.RGBA
         """
         super().__init__()
         self.showInfo: Optional[bool] = showInfo

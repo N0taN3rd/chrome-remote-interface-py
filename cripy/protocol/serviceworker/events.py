@@ -9,6 +9,7 @@ class WorkerErrorReportedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param ServiceWorkerErrorMessage errorMessage: The errorMessage
+        :type errorMessage: ServiceWorkerErrorMessage
         """
         super().__init__()
 
@@ -20,6 +21,7 @@ class WorkerRegistrationUpdatedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param array registrations: The registrations
+        :type registrations: array
         """
         super().__init__()
 
@@ -31,6 +33,7 @@ class WorkerVersionUpdatedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param array versions: The versions
+        :type versions: array
         """
         super().__init__()
 

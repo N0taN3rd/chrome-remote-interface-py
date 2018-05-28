@@ -11,6 +11,7 @@ class InspectNodeRequestedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param DOM.BackendNodeId backendNodeId: Id of the node to inspect.
+        :type backendNodeId: DOM.BackendNodeId
         """
         super().__init__()
 
@@ -24,6 +25,7 @@ class NodeHighlightRequestedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param DOM.NodeId nodeId: The nodeId
+        :type nodeId: DOM.NodeId
         """
         super().__init__()
 
@@ -36,6 +38,7 @@ class ScreenshotRequestedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param Page.Viewport viewport: Viewport to capture, in CSS.
+        :type viewport: Page.Viewport
         """
         super().__init__()
 

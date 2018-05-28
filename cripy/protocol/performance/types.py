@@ -6,8 +6,10 @@ class Metric(ChromeTypeBase):
     """Run-time execution metric."""
     def __init__(self, name: str, value: float) -> None:
         """
-        :param str name: Metric name.
-        :param float value: Metric value.
+        :param name: Metric name.
+        :type name: str
+        :param value: Metric value.
+        :type value: float
         """
         super().__init__()
         self.name: str = name

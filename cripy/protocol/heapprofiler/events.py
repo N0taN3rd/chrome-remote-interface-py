@@ -9,6 +9,7 @@ class AddHeapSnapshotChunkEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param str chunk: The chunk
+        :type chunk: str
         """
         super().__init__()
 
@@ -21,6 +22,7 @@ class HeapStatsUpdateEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param array statsUpdate: An array of triplets. Each triplet describes a fragment. The first integer is the fragment index, the second integer is a total count of objects for the fragment, the third integer is a total size of the objects for the fragment.
+        :type statsUpdate: array
         """
         super().__init__()
 
@@ -34,7 +36,9 @@ class LastSeenObjectIdEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param int lastSeenObjectId: The lastSeenObjectId
+        :type lastSeenObjectId: int
         :param float timestamp: The timestamp
+        :type timestamp: float
         """
         super().__init__()
 
@@ -46,8 +50,11 @@ class ReportHeapSnapshotProgressEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param int done: The done
+        :type done: int
         :param int total: The total
+        :type total: int
         :param bool finished: The finished
+        :type finished: bool
         """
         super().__init__()
 

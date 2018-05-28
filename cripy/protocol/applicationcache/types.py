@@ -7,9 +7,12 @@ class ApplicationCacheResource(ChromeTypeBase):
     """Detailed application cache resource information."""
     def __init__(self, url: str, size: int, type: str) -> None:
         """
-        :param str url: Resource url.
-        :param int size: Resource size.
-        :param str type: Resource type.
+        :param url: Resource url.
+        :type url: str
+        :param size: Resource size.
+        :type size: int
+        :param type: Resource type.
+        :type type: str
         """
         super().__init__()
         self.url: str = url
@@ -21,11 +24,16 @@ class ApplicationCache(ChromeTypeBase):
     """Detailed application cache information."""
     def __init__(self, manifestURL: str, size: float, creationTime: float, updateTime: float, resources: List['ApplicationCacheResource']) -> None:
         """
-        :param str manifestURL: Manifest URL.
-        :param float size: Application cache size.
-        :param float creationTime: Application cache creation time.
-        :param float updateTime: Application cache update time.
-        :param array resources: Application cache resources.
+        :param manifestURL: Manifest URL.
+        :type manifestURL: str
+        :param size: Application cache size.
+        :type size: float
+        :param creationTime: Application cache creation time.
+        :type creationTime: float
+        :param updateTime: Application cache update time.
+        :type updateTime: float
+        :param resources: Application cache resources.
+        :type resources: array
         """
         super().__init__()
         self.manifestURL: str = manifestURL
@@ -39,9 +47,12 @@ class FrameWithManifest(ChromeTypeBase):
     """Frame identifier - manifest URL pair."""
     def __init__(self, frameId: 'Page.FrameId', manifestURL: str, status: int) -> None:
         """
-        :param Page.FrameId frameId: Frame identifier.
-        :param str manifestURL: Manifest URL.
-        :param int status: Application cache status.
+        :param frameId: Frame identifier.
+        :type frameId: Page.FrameId
+        :param manifestURL: Manifest URL.
+        :type manifestURL: str
+        :param status: Application cache status.
+        :type status: int
         """
         super().__init__()
         self.frameId: Page.FrameId = frameId

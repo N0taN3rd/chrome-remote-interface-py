@@ -10,8 +10,11 @@ class AttachedToTargetEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param SessionID sessionId: Identifier assigned to the session used to send/receive messages.
+        :type sessionId: SessionID
         :param TargetInfo targetInfo: The targetInfo
+        :type targetInfo: TargetInfo
         :param bool waitingForDebugger: The waitingForDebugger
+        :type waitingForDebugger: bool
         """
         super().__init__()
 
@@ -25,7 +28,9 @@ class DetachedFromTargetEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param SessionID sessionId: Detached session identifier.
+        :type sessionId: SessionID
         :param TargetID targetId: Deprecated.
+        :type targetId: TargetID
         """
         super().__init__()
 
@@ -38,8 +43,11 @@ class ReceivedMessageFromTargetEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param SessionID sessionId: Identifier of a session which sends a message.
+        :type sessionId: SessionID
         :param str message: The message
+        :type message: str
         :param TargetID targetId: Deprecated.
+        :type targetId: TargetID
         """
         super().__init__()
 
@@ -52,6 +60,7 @@ class TargetCreatedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param TargetInfo targetInfo: The targetInfo
+        :type targetInfo: TargetInfo
         """
         super().__init__()
 
@@ -64,6 +73,7 @@ class TargetDestroyedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param TargetID targetId: The targetId
+        :type targetId: TargetID
         """
         super().__init__()
 
@@ -77,6 +87,7 @@ class TargetInfoChangedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param TargetInfo targetInfo: The targetInfo
+        :type targetInfo: TargetInfo
         """
         super().__init__()
 

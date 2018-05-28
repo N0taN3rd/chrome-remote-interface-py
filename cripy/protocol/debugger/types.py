@@ -13,9 +13,12 @@ class Location(ChromeTypeBase):
     """Location in the source code."""
     def __init__(self, scriptId: 'Runtime.ScriptId', lineNumber: int, columnNumber: Optional[int] = None) -> None:
         """
-        :param Runtime.ScriptId scriptId: Script identifier as reported in the `Debugger.scriptParsed`.
-        :param int lineNumber: Line number in the script (0-based).
-        :param int columnNumber: Column number in the script (0-based).
+        :param scriptId: Script identifier as reported in the `Debugger.scriptParsed`.
+        :type scriptId: Runtime.ScriptId
+        :param lineNumber: Line number in the script (0-based).
+        :type lineNumber: int
+        :param columnNumber: Column number in the script (0-based).
+        :type columnNumber: int
         """
         super().__init__()
         self.scriptId: Runtime.ScriptId = scriptId
@@ -27,8 +30,10 @@ class ScriptPosition(ChromeTypeBase):
     """Location in the source code."""
     def __init__(self, lineNumber: int, columnNumber: int) -> None:
         """
-        :param int lineNumber: The lineNumber
-        :param int columnNumber: The columnNumber
+        :param lineNumber: The lineNumber
+        :type lineNumber: int
+        :param columnNumber: The columnNumber
+        :type columnNumber: int
         """
         super().__init__()
         self.lineNumber: int = lineNumber
@@ -39,14 +44,22 @@ class CallFrame(ChromeTypeBase):
     """JavaScript call frame. Array of call frames form the call stack."""
     def __init__(self, callFrameId: 'CallFrameId', functionName: str, location: 'Location', url: str, scopeChain: List['Scope'], this: 'Runtime.RemoteObject', functionLocation: Optional['Location'] = None, returnValue: Optional['Runtime.RemoteObject'] = None) -> None:
         """
-        :param CallFrameId callFrameId: Call frame identifier. This identifier is only valid while the virtual machine is paused.
-        :param str functionName: Name of the JavaScript function called on this call frame.
-        :param Location functionLocation: Location in the source code.
-        :param Location location: Location in the source code.
-        :param str url: JavaScript script name or url.
-        :param array scopeChain: Scope chain for this call frame.
-        :param Runtime.RemoteObject this: `this` object for this call frame.
-        :param Runtime.RemoteObject returnValue: The value being returned, if the function is at return point.
+        :param callFrameId: Call frame identifier. This identifier is only valid while the virtual machine is paused.
+        :type callFrameId: CallFrameId
+        :param functionName: Name of the JavaScript function called on this call frame.
+        :type functionName: str
+        :param functionLocation: Location in the source code.
+        :type functionLocation: Location
+        :param location: Location in the source code.
+        :type location: Location
+        :param url: JavaScript script name or url.
+        :type url: str
+        :param scopeChain: Scope chain for this call frame.
+        :type scopeChain: array
+        :param this: `this` object for this call frame.
+        :type this: Runtime.RemoteObject
+        :param returnValue: The value being returned, if the function is at return point.
+        :type returnValue: Runtime.RemoteObject
         """
         super().__init__()
         self.callFrameId: CallFrameId = callFrameId
@@ -63,11 +76,16 @@ class Scope(ChromeTypeBase):
     """Scope description."""
     def __init__(self, type: str, object: 'Runtime.RemoteObject', name: Optional[str] = None, startLocation: Optional['Location'] = None, endLocation: Optional['Location'] = None) -> None:
         """
-        :param str type: Scope type.
-        :param Runtime.RemoteObject object: Object representing the scope. For `global` and `with` scopes it represents the actual object; for the rest of the scopes, it is artificial transient object enumerating scope variables as its properties.
-        :param str name: The name
-        :param Location startLocation: Location in the source code where scope starts
-        :param Location endLocation: Location in the source code where scope ends
+        :param type: Scope type.
+        :type type: str
+        :param object: Object representing the scope. For `global` and `with` scopes it represents the actual object; for the rest of the scopes, it is artificial transient object enumerating scope variables as its properties.
+        :type object: Runtime.RemoteObject
+        :param name: The name
+        :type name: str
+        :param startLocation: Location in the source code where scope starts
+        :type startLocation: Location
+        :param endLocation: Location in the source code where scope ends
+        :type endLocation: Location
         """
         super().__init__()
         self.type: str = type
@@ -81,8 +99,10 @@ class SearchMatch(ChromeTypeBase):
     """Search match for resource."""
     def __init__(self, lineNumber: float, lineContent: str) -> None:
         """
-        :param float lineNumber: Line number in resource content.
-        :param str lineContent: Line with match content.
+        :param lineNumber: Line number in resource content.
+        :type lineNumber: float
+        :param lineContent: Line with match content.
+        :type lineContent: str
         """
         super().__init__()
         self.lineNumber: float = lineNumber
@@ -93,10 +113,14 @@ class BreakLocation(ChromeTypeBase):
     pass
     def __init__(self, scriptId: 'Runtime.ScriptId', lineNumber: int, columnNumber: Optional[int] = None, type: Optional[str] = None) -> None:
         """
-        :param Runtime.ScriptId scriptId: Script identifier as reported in the `Debugger.scriptParsed`.
-        :param int lineNumber: Line number in the script (0-based).
-        :param int columnNumber: Column number in the script (0-based).
-        :param str type: The type
+        :param scriptId: Script identifier as reported in the `Debugger.scriptParsed`.
+        :type scriptId: Runtime.ScriptId
+        :param lineNumber: Line number in the script (0-based).
+        :type lineNumber: int
+        :param columnNumber: Column number in the script (0-based).
+        :type columnNumber: int
+        :param type: The type
+        :type type: str
         """
         super().__init__()
         self.scriptId: Runtime.ScriptId = scriptId

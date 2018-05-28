@@ -9,6 +9,7 @@ class DomContentEventFiredEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param Network.MonotonicTime timestamp: The timestamp
+        :type timestamp: Network.MonotonicTime
         """
         super().__init__()
 
@@ -21,8 +22,11 @@ class FrameAttachedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param FrameId frameId: Id of the frame that has been attached.
+        :type frameId: FrameId
         :param FrameId parentFrameId: Parent frame identifier.
+        :type parentFrameId: FrameId
         :param Runtime.StackTrace stack: JavaScript stack trace of when frame was attached, only set if frame initiated from script.
+        :type stack: Runtime.StackTrace
         """
         super().__init__()
 
@@ -35,6 +39,7 @@ class FrameClearedScheduledNavigationEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param FrameId frameId: Id of the frame that has cleared its scheduled navigation.
+        :type frameId: FrameId
         """
         super().__init__()
 
@@ -47,6 +52,7 @@ class FrameDetachedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param FrameId frameId: Id of the frame that has been detached.
+        :type frameId: FrameId
         """
         super().__init__()
 
@@ -60,6 +66,7 @@ class FrameNavigatedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param Frame frame: Frame object.
+        :type frame: Frame
         """
         super().__init__()
 
@@ -80,9 +87,13 @@ class FrameScheduledNavigationEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param FrameId frameId: Id of the frame that has scheduled a navigation.
+        :type frameId: FrameId
         :param float delay: Delay (in seconds) until the navigation is scheduled to begin. The navigation is not guaranteed to start.
+        :type delay: float
         :param str reason: The reason for the navigation.
+        :type reason: str
         :param str url: The destination URL for the scheduled navigation.
+        :type url: str
         """
         super().__init__()
 
@@ -95,6 +106,7 @@ class FrameStartedLoadingEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param FrameId frameId: Id of the frame that has started loading.
+        :type frameId: FrameId
         """
         super().__init__()
 
@@ -107,6 +119,7 @@ class FrameStoppedLoadingEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param FrameId frameId: Id of the frame that has stopped loading.
+        :type frameId: FrameId
         """
         super().__init__()
 
@@ -137,7 +150,9 @@ class JavascriptDialogClosedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param bool result: Whether dialog was confirmed.
+        :type result: bool
         :param str userInput: User input in case of prompt.
+        :type userInput: str
         """
         super().__init__()
 
@@ -150,10 +165,15 @@ class JavascriptDialogOpeningEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param str url: Frame url.
+        :type url: str
         :param str message: Message that will be displayed by the dialog.
+        :type message: str
         :param DialogType type: Dialog type.
+        :type type: DialogType
         :param bool hasBrowserHandler: True iff browser is capable showing or acting on the given dialog. When browser has no dialog handler for given target, calling alert while Page domain is engaged will stall the page execution. Execution can be resumed via calling Page.handleJavaScriptDialog.
+        :type hasBrowserHandler: bool
         :param str defaultPrompt: Default dialog prompt.
+        :type defaultPrompt: str
         """
         super().__init__()
 
@@ -166,9 +186,13 @@ class LifecycleEventEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param FrameId frameId: Id of the frame.
+        :type frameId: FrameId
         :param Network.LoaderId loaderId: Loader identifier. Empty string if the request is fetched from worker.
+        :type loaderId: Network.LoaderId
         :param str name: The name
+        :type name: str
         :param Network.MonotonicTime timestamp: The timestamp
+        :type timestamp: Network.MonotonicTime
         """
         super().__init__()
 
@@ -180,6 +204,7 @@ class LoadEventFiredEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param Network.MonotonicTime timestamp: The timestamp
+        :type timestamp: Network.MonotonicTime
         """
         super().__init__()
 
@@ -193,7 +218,9 @@ class NavigatedWithinDocumentEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param FrameId frameId: Id of the frame.
+        :type frameId: FrameId
         :param str url: Frame's new url.
+        :type url: str
         """
         super().__init__()
 
@@ -206,8 +233,11 @@ class ScreencastFrameEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param str data: Base64-encoded compressed image.
+        :type data: str
         :param ScreencastFrameMetadata metadata: Screencast frame metadata.
+        :type metadata: ScreencastFrameMetadata
         :param int sessionId: Frame number.
+        :type sessionId: int
         """
         super().__init__()
 
@@ -220,6 +250,7 @@ class ScreencastVisibilityChangedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param bool visible: True if the page is visible.
+        :type visible: bool
         """
         super().__init__()
 
@@ -232,9 +263,13 @@ class WindowOpenEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param str url: The URL for the new window.
+        :type url: str
         :param str windowName: Window name.
+        :type windowName: str
         :param array windowFeatures: An array of enabled window features.
+        :type windowFeatures: array
         :param bool userGesture: Whether or not it was triggered by user gesture.
+        :type userGesture: bool
         """
         super().__init__()
 

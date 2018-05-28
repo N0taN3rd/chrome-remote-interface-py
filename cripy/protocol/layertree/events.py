@@ -9,7 +9,9 @@ class LayerPaintedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param LayerId layerId: The id of the painted layer.
+        :type layerId: LayerId
         :param DOM.Rect clip: Clip rectangle.
+        :type clip: DOM.Rect
         """
         super().__init__()
 
@@ -21,6 +23,7 @@ class LayerTreeDidChangeEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param array layers: Layer tree, absent if not in the comspositing mode.
+        :type layers: array
         """
         super().__init__()
 

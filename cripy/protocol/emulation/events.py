@@ -10,6 +10,7 @@ class VirtualTimeAdvancedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param float virtualTimeElapsed: The amount of virtual time that has elapsed in milliseconds since virtual time was first enabled.
+        :type virtualTimeElapsed: float
         """
         super().__init__()
 
@@ -31,6 +32,7 @@ class VirtualTimePausedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param float virtualTimeElapsed: The amount of virtual time that has elapsed in milliseconds since virtual time was first enabled.
+        :type virtualTimeElapsed: float
         """
         super().__init__()
 

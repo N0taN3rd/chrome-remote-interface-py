@@ -9,9 +9,13 @@ class ConsoleProfileFinishedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param str id: The id
+        :type id: str
         :param Debugger.Location location: Location of console.profileEnd().
+        :type location: Debugger.Location
         :param Profile profile: The profile
+        :type profile: Profile
         :param str title: Profile title passed as an argument to console.profile().
+        :type title: str
         """
         super().__init__()
 
@@ -24,8 +28,11 @@ class ConsoleProfileStartedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param str id: The id
+        :type id: str
         :param Debugger.Location location: Location of console.profile().
+        :type location: Debugger.Location
         :param str title: Profile title passed as an argument to console.profile().
+        :type title: str
         """
         super().__init__()
 

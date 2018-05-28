@@ -12,11 +12,16 @@ class Bounds(ChromeTypeBase):
     """Browser window bounds information"""
     def __init__(self, left: Optional[int] = None, top: Optional[int] = None, width: Optional[int] = None, height: Optional[int] = None, windowState: Optional['WindowState'] = None) -> None:
         """
-        :param int left: The offset from the left edge of the screen to the window in pixels.
-        :param int top: The offset from the top edge of the screen to the window in pixels.
-        :param int width: The window width in pixels.
-        :param int height: The window height in pixels.
-        :param WindowState windowState: The window state. Default to normal.
+        :param left: The offset from the left edge of the screen to the window in pixels.
+        :type left: int
+        :param top: The offset from the top edge of the screen to the window in pixels.
+        :type top: int
+        :param width: The window width in pixels.
+        :type width: int
+        :param height: The window height in pixels.
+        :type height: int
+        :param windowState: The window state. Default to normal.
+        :type windowState: WindowState
         """
         super().__init__()
         self.left: Optional[int] = left
@@ -30,9 +35,12 @@ class Bucket(ChromeTypeBase):
     """Chrome histogram bucket."""
     def __init__(self, low: int, high: int, count: int) -> None:
         """
-        :param int low: Minimum value (inclusive).
-        :param int high: Maximum value (exclusive).
-        :param int count: Number of samples.
+        :param low: Minimum value (inclusive).
+        :type low: int
+        :param high: Maximum value (exclusive).
+        :type high: int
+        :param count: Number of samples.
+        :type count: int
         """
         super().__init__()
         self.low: int = low
@@ -44,10 +52,14 @@ class Histogram(ChromeTypeBase):
     """Chrome histogram."""
     def __init__(self, name: str, sum: int, count: int, buckets: List['Bucket']) -> None:
         """
-        :param str name: Name.
-        :param int sum: Sum of sample values.
-        :param int count: Total number of samples.
-        :param array buckets: Buckets.
+        :param name: Name.
+        :type name: str
+        :param sum: Sum of sample values.
+        :type sum: int
+        :param count: Total number of samples.
+        :type count: int
+        :param buckets: Buckets.
+        :type buckets: array
         """
         super().__init__()
         self.name: str = name

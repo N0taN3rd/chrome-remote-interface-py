@@ -6,8 +6,10 @@ class Domain(ChromeTypeBase):
     """Description of the protocol domain."""
     def __init__(self, name: str, version: str) -> None:
         """
-        :param str name: Domain name.
-        :param str version: Domain version.
+        :param name: Domain name.
+        :type name: str
+        :param version: Domain version.
+        :type version: str
         """
         super().__init__()
         self.name: str = name

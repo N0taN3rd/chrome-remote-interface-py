@@ -9,10 +9,14 @@ class Database(ChromeTypeBase):
     """Database object."""
     def __init__(self, id: 'DatabaseId', domain: str, name: str, version: str) -> None:
         """
-        :param DatabaseId id: Database ID.
-        :param str domain: Database domain.
-        :param str name: Database name.
-        :param str version: Database version.
+        :param id: Database ID.
+        :type id: DatabaseId
+        :param domain: Database domain.
+        :type domain: str
+        :param name: Database name.
+        :type name: str
+        :param version: Database version.
+        :type version: str
         """
         super().__init__()
         self.id: DatabaseId = id
@@ -25,8 +29,10 @@ class Error(ChromeTypeBase):
     """Database error."""
     def __init__(self, message: str, code: int) -> None:
         """
-        :param str message: Error message.
-        :param int code: Error code.
+        :param message: Error message.
+        :type message: str
+        :param code: Error code.
+        :type code: int
         """
         super().__init__()
         self.message: str = message

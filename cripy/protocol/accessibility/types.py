@@ -22,15 +22,24 @@ class AXValueSource(ChromeTypeBase):
     """A single source for a computed AX property."""
     def __init__(self, type: 'AXValueSourceType', value: Optional['AXValue'] = None, attribute: Optional[str] = None, attributeValue: Optional['AXValue'] = None, superseded: Optional[bool] = None, nativeSource: Optional['AXValueNativeSourceType'] = None, nativeSourceValue: Optional['AXValue'] = None, invalid: Optional[bool] = None, invalidReason: Optional[str] = None) -> None:
         """
-        :param AXValueSourceType type: What type of source this is.
-        :param AXValue value: The value of this property source.
-        :param str attribute: The name of the relevant attribute, if any.
-        :param AXValue attributeValue: The value of the relevant attribute, if any.
-        :param bool superseded: Whether this source is superseded by a higher priority source.
-        :param AXValueNativeSourceType nativeSource: The native markup source for this value, e.g. a <label> element.
-        :param AXValue nativeSourceValue: The value, such as a node or node list, of the native source.
-        :param bool invalid: Whether the value for this property is invalid.
-        :param str invalidReason: Reason for the value being invalid, if it is.
+        :param type: What type of source this is.
+        :type type: AXValueSourceType
+        :param value: The value of this property source.
+        :type value: AXValue
+        :param attribute: The name of the relevant attribute, if any.
+        :type attribute: str
+        :param attributeValue: The value of the relevant attribute, if any.
+        :type attributeValue: AXValue
+        :param superseded: Whether this source is superseded by a higher priority source.
+        :type superseded: bool
+        :param nativeSource: The native markup source for this value, e.g. a <label> element.
+        :type nativeSource: AXValueNativeSourceType
+        :param nativeSourceValue: The value, such as a node or node list, of the native source.
+        :type nativeSourceValue: AXValue
+        :param invalid: Whether the value for this property is invalid.
+        :type invalid: bool
+        :param invalidReason: Reason for the value being invalid, if it is.
+        :type invalidReason: str
         """
         super().__init__()
         self.type: AXValueSourceType = type
@@ -48,9 +57,12 @@ class AXRelatedNode(ChromeTypeBase):
     pass
     def __init__(self, backendDOMNodeId: 'DOM.BackendNodeId', idref: Optional[str] = None, text: Optional[str] = None) -> None:
         """
-        :param DOM.BackendNodeId backendDOMNodeId: The BackendNodeId of the related DOM node.
-        :param str idref: The IDRef value provided, if any.
-        :param str text: The text alternative of this node in the current context.
+        :param backendDOMNodeId: The BackendNodeId of the related DOM node.
+        :type backendDOMNodeId: DOM.BackendNodeId
+        :param idref: The IDRef value provided, if any.
+        :type idref: str
+        :param text: The text alternative of this node in the current context.
+        :type text: str
         """
         super().__init__()
         self.backendDOMNodeId: DOM.BackendNodeId = backendDOMNodeId
@@ -62,8 +74,10 @@ class AXProperty(ChromeTypeBase):
     pass
     def __init__(self, name: 'AXPropertyName', value: 'AXValue') -> None:
         """
-        :param AXPropertyName name: The name of this property.
-        :param AXValue value: The value of this property.
+        :param name: The name of this property.
+        :type name: AXPropertyName
+        :param value: The value of this property.
+        :type value: AXValue
         """
         super().__init__()
         self.name: AXPropertyName = name
@@ -74,10 +88,14 @@ class AXValue(ChromeTypeBase):
     """A single computed AX property."""
     def __init__(self, type: 'AXValueType', value: Optional[Any] = None, relatedNodes: Optional[List['AXRelatedNode']] = None, sources: Optional[List['AXValueSource']] = None) -> None:
         """
-        :param AXValueType type: The type of this value.
-        :param Any value: The computed value of this property.
-        :param array relatedNodes: One or more related nodes, if applicable.
-        :param array sources: The sources which contributed to the computation of this property.
+        :param type: The type of this value.
+        :type type: AXValueType
+        :param value: The computed value of this property.
+        :type value: Any
+        :param relatedNodes: One or more related nodes, if applicable.
+        :type relatedNodes: array
+        :param sources: The sources which contributed to the computation of this property.
+        :type sources: array
         """
         super().__init__()
         self.type: AXValueType = type
@@ -90,16 +108,26 @@ class AXNode(ChromeTypeBase):
     """A node in the accessibility tree."""
     def __init__(self, nodeId: 'AXNodeId', ignored: bool, ignoredReasons: Optional[List['AXProperty']] = None, role: Optional['AXValue'] = None, name: Optional['AXValue'] = None, description: Optional['AXValue'] = None, value: Optional['AXValue'] = None, properties: Optional[List['AXProperty']] = None, childIds: Optional[List['AXNodeId']] = None, backendDOMNodeId: Optional['DOM.BackendNodeId'] = None) -> None:
         """
-        :param AXNodeId nodeId: Unique identifier for this node.
-        :param bool ignored: Whether this node is ignored for accessibility
-        :param array ignoredReasons: Collection of reasons why this node is hidden.
-        :param AXValue role: This `Node`'s role, whether explicit or implicit.
-        :param AXValue name: The accessible name for this `Node`.
-        :param AXValue description: The accessible description for this `Node`.
-        :param AXValue value: The value for this `Node`.
-        :param array properties: All other properties
-        :param array childIds: IDs for each of this node's child nodes.
-        :param DOM.BackendNodeId backendDOMNodeId: The backend ID for the associated DOM node, if any.
+        :param nodeId: Unique identifier for this node.
+        :type nodeId: AXNodeId
+        :param ignored: Whether this node is ignored for accessibility
+        :type ignored: bool
+        :param ignoredReasons: Collection of reasons why this node is hidden.
+        :type ignoredReasons: array
+        :param role: This `Node`'s role, whether explicit or implicit.
+        :type role: AXValue
+        :param name: The accessible name for this `Node`.
+        :type name: AXValue
+        :param description: The accessible description for this `Node`.
+        :type description: AXValue
+        :param value: The value for this `Node`.
+        :type value: AXValue
+        :param properties: All other properties
+        :type properties: array
+        :param childIds: IDs for each of this node's child nodes.
+        :type childIds: array
+        :param backendDOMNodeId: The backend ID for the associated DOM node, if any.
+        :type backendDOMNodeId: DOM.BackendNodeId
         """
         super().__init__()
         self.nodeId: AXNodeId = nodeId

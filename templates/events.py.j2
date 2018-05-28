@@ -19,6 +19,7 @@ class {{ event.class_name }}(BaseEvent):
         {% else %}
         :param {{ prop.type }} {{ prop.name }}: The {{ prop.name }}
         {% endif %}
+        :type {{ prop.name }}: {{ prop.type }}
         {% endfor %}
         """
         {% endif %}

@@ -15,13 +15,20 @@ class TargetInfo(ChromeTypeBase):
     pass
     def __init__(self, targetId: 'TargetID', type: str, title: str, url: str, attached: bool, openerId: Optional['TargetID'] = None, browserContextId: Optional['BrowserContextID'] = None) -> None:
         """
-        :param TargetID targetId: The targetId
-        :param str type: The type
-        :param str title: The title
-        :param str url: The url
-        :param bool attached: Whether the target has an attached client.
-        :param TargetID openerId: Opener target Id
-        :param BrowserContextID browserContextId: The browserContextId
+        :param targetId: The targetId
+        :type targetId: TargetID
+        :param type: The type
+        :type type: str
+        :param title: The title
+        :type title: str
+        :param url: The url
+        :type url: str
+        :param attached: Whether the target has an attached client.
+        :type attached: bool
+        :param openerId: Opener target Id
+        :type openerId: TargetID
+        :param browserContextId: The browserContextId
+        :type browserContextId: BrowserContextID
         """
         super().__init__()
         self.targetId: TargetID = targetId
@@ -37,8 +44,10 @@ class RemoteLocation(ChromeTypeBase):
     pass
     def __init__(self, host: str, port: int) -> None:
         """
-        :param str host: The host
-        :param int port: The port
+        :param host: The host
+        :type host: str
+        :param port: The port
+        :type port: int
         """
         super().__init__()
         self.host: str = host

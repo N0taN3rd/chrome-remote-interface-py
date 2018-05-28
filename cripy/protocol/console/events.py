@@ -10,6 +10,7 @@ class MessageAddedEvent(BaseEvent):
     def __init__(self) -> None:
         """
         :param ConsoleMessage message: Console message that has been added.
+        :type message: ConsoleMessage
         """
         super().__init__()
 
