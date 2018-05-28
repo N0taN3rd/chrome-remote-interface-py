@@ -1,7 +1,7 @@
 from typing import Optional, List, Dict
 from collections import OrderedDict
 
-from .shared import FRefCollector
+from .shared import FRefCollector, TYPE_COLLECTOR
 from .property import Property
 from .ptype import Type
 

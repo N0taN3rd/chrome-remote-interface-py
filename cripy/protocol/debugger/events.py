@@ -2,8 +2,8 @@ from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.runtime import types as Runtime
 from cripy.protocol.debugger.types import (
-    BreakpointId,
     Location,
+    BreakpointId,
 )
 
 

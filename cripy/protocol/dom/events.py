@@ -1,8 +1,8 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.dom.types import (
-    NodeId,
     Node,
+    NodeId,
 )
 
 

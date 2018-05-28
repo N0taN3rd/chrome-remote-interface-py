@@ -1,8 +1,8 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
 from cripy.helpers import ChromeTypeBase
-from cripy.protocol.security import types as Security
 from cripy.protocol.page import types as Page
 from cripy.protocol.runtime import types as Runtime
+from cripy.protocol.security import types as Security
 
 TimeSinceEpoch = TypeVar("TimeSinceEpoch", float, float)
 """UTC time in seconds, counted from January 1, 1970."""

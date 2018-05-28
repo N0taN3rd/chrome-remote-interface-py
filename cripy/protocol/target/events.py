@@ -2,8 +2,8 @@ from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.target.types import (
     TargetInfo,
-    TargetID,
     SessionID,
+    TargetID,
 )
 
 

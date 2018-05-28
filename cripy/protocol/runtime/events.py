@@ -2,11 +2,11 @@ from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.runtime.types import (
     ExecutionContextId,
-    ExecutionContextDescription,
+    RemoteObject,
     ExceptionDetails,
     StackTrace,
     Timestamp,
-    RemoteObject,
+    ExecutionContextDescription,
 )
 
 

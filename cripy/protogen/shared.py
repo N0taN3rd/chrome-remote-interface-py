@@ -1,5 +1,7 @@
 from typing import Iterable, Optional, Set, Union
 
+from protogen.ptype import Type
+
 ForeignRefs = Optional[Set[str]]
 
 
@@ -33,3 +35,29 @@ class FRefCollector(object):
             self.foreign_refs.add(ref)
         else:
             self.foreign_refs.update(ref)
+
+
+class Typer(object):
+
+    def __init__(self) -> None:
+        self.objects: Set[str] = set()
+        self.primitives: Set[str] = set()
+        self.lists: Set[str] = set()
+
+    def add_type(self, name: str, type: Type) -> None:
+        if type.is_object:
+            self.objects.add(name)
+        if type.is_array:
+            self.lists.add(name)
+
+    def is_object(self, what: str) -> bool:
+        return what in self.objects
+
+    def is_primitive(self, what: str) -> bool:
+        return what in self.primitives
+
+    def is_list(self, what: str) -> bool:
+        return what in self.lists
+
+
+TYPER = Typer()

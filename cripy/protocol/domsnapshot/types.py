@@ -1,8 +1,8 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
 from cripy.helpers import ChromeTypeBase
-from cripy.protocol.domdebugger import types as DOMDebugger
 from cripy.protocol.page import types as Page
 from cripy.protocol.dom import types as DOM
+from cripy.protocol.domdebugger import types as DOMDebugger
 
 
 class NameValue(ChromeTypeBase):
