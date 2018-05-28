@@ -8,8 +8,12 @@ class Metric(ChromeTypeBase):
     def __init__(self, name: str, value: float) -> None:
         """
         :param name: Metric name.
+        :type str:
         :param value: Metric value.
+        :type float:
         """
         super().__init__()
         self.name: str = name
         self.value: float = value
+
+

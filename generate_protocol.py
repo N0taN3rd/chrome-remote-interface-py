@@ -236,32 +236,50 @@ PT_PYT = dict(
 )
 
 
+def generate_types(d, template, dp) -> None:
+    if d.has_types:
+        obj_types = []
+        py_types = []
+        timports = set()
+        for dt in d.types:
+            dt.prune(set(d.domain))
+            if dt.has_foreign_refs:
+                timports.update(dt.foreign_refs)
+            if dt.is_object:
+                obj_types.append(dt)
+            else:
+                py_types.append(dt)
+        typep = dp.joinpath("types.py")
+        with typep.open("w") as tout:
+            tout.write(
+                template.render(
+                    py_types=py_types, obj_types=obj_types, timports=timports
+                )
+            )
+
+
+def generate_events(d: Domain, template, dp):
+    if d.has_events:
+        eventsp = dp.joinpath("events.py")
+        with eventsp.open("w") as tout:
+            event_to_clazz = []
+            for e in d.events:
+                event_to_clazz.append((e.scoped_name, e.class_name))
+            tout.write(template.render(events=d.events, event_to_clazz=event_to_clazz))
+
+
 if __name__ == "__main__":
     with open("templates/domain_type.py.j2", "r") as iin:
         domain_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
+    with open("templates/events.py.j2", "r") as iin:
+        event_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
 
     for which, fp in [js_json_fp, browser_json_fp]:
         data = read_json(fp)
         for domain in data["domains"]:
             d = Domain(domain)
             dp = Path(output_dir_fp, d.domain.lower())
-            print(dp)
             if not dp.exists():
                 dp.mkdir()
-            if d.has_types:
-                obj_types = []
-                py_types = []
-                timports = set()
-                for dt in d.types:
-                    dt.prune(set(d.domain))
-                    if dt.has_foreign_refs:
-                        timports.update(dt.foreign_refs)
-                    if dt.is_object:
-                        obj_types.append(dt)
-                    else:
-                        py_types.append(dt)
-                typep = dp.joinpath('types.py')
-                with typep.open('w') as tout:
-                    tout.write(domain_template.render(py_types=py_types, obj_types=obj_types, timports=timports))
-                print()
-        print("--------------")
+            generate_types(d, domain_template, dp)
+            generate_events(d, event_template, dp)

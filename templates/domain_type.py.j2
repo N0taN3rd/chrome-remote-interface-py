@@ -5,34 +5,41 @@ from cripy.protocol.{{ import | lower }} import types as {{ import }}
 {% endfor %}
 
 {%+ for dt in py_types %}
+{% if dt.description is defined %}
+# {{ dt.code_description }}
+{% endif %}
 {{ dt.id }} = {{ dt.type.safe_type }}
 
 {% endfor %}
 
 {%+ for dt in obj_types %}
+{% if dt.has_properties %}
 class {{ dt.id }}(ChromeTypeBase):
+{% else %}
+class {{ dt.id }}(ChromeTypeBase, dict):
+{% endif %}
     {% if dt.description %}
     """{{ dt.description }}"""
+    {% else %}
+    pass
     {% endif %}
-
+{% if dt.has_properties %}
     def __init__(self, {{ dt.constructor_string }}) -> None:
-        {% if dt.has_properties %}
         """
         {% for prop in dt.properties %}
         {% if prop.description %}
-        :param {{ prop.name }}: {{ prop.description }}
+        :param {{ prop.name }}: {{ prop.nice_description }}
         {% else %}
         :param {{ prop.name }}: The {{ prop.name }}
         {% endif %}
+        :type {{ prop.type }}:
         {% endfor %}
         """
-        {% endif %}
         super().__init__()
-    {% if dt.has_properties %}
     {% for prop in dt.properties %}
         self.{{ prop.tinfo_str }} = {{ prop.name }}
     {% endfor %}
-    {% endif %}
+{% endif %}
 
 
 {% endfor %}

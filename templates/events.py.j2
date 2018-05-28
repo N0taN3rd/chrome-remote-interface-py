@@ -1,0 +1,36 @@
+from typing import Any, List, Optional, Set, Union
+from cripy.helpers import BaseEvent
+
+
+{%+ for event in events %}
+class {{ event.class_name }}(BaseEvent):
+    {% if event.description %}
+    """{{ event.description }}"""
+    {% endif %}
+
+    event: str = "{{ event.scoped_name }}"
+
+    def __init__(self) -> None:
+        {% if event.has_parameters %}
+        """
+        {% for prop in event.parameters %}
+        {% if prop.description %}
+        :param {{ prop.name }}: {{ prop.nice_description }}
+        {% else %}
+        :param {{ prop.name }}: The {{ prop.name }}
+        {% endif %}
+        :type {{ prop.type }}:
+        {% endfor %}
+        """
+        {% endif %}
+        super().__init__()
+
+
+{% endfor %}
+EVENT_TO_CLASS = {
+{% for ename, clazz in event_to_clazz %}
+   "{{ ename }}": {{ clazz }},
+{% endfor %}
+}
+
+

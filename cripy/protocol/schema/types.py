@@ -8,8 +8,12 @@ class Domain(ChromeTypeBase):
     def __init__(self, name: str, version: str) -> None:
         """
         :param name: Domain name.
+        :type str:
         :param version: Domain version.
+        :type str:
         """
         super().__init__()
         self.name: str = name
         self.version: str = version
+
+

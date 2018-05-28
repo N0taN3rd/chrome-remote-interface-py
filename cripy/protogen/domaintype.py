@@ -22,6 +22,10 @@ class DomainType(FRefCollector):
         self.properties: Props = self._build_props(dt.get("properties", None))
 
     @property
+    def code_description(self) -> str:
+        return " ".join(self.description.split("\n"))
+
+    @property
     def is_array(self) -> bool:
         return self.type.is_array
 

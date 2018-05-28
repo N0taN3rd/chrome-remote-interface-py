@@ -1,3 +1,5 @@
-if __name__ == '__main__':
-    import ujson
-    print(ujson.JSONEncoder)
+if __name__ == "__main__":
+    class IT(dict):
+        """"""
+        pass
+    print(IT(**{'a':1}))

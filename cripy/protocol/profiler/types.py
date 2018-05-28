@@ -6,23 +6,21 @@ from cripy.protocol.runtime import types as Runtime
 class ProfileNode(ChromeTypeBase):
     """Profile node. Holds callsite information, execution statistics and child nodes."""
 
-    def __init__(
-        self,
-        id: int,
-        callFrame: "Runtime.CallFrame",
-        hitCount: Optional[int] = None,
-        children: Optional[List["int"]] = None,
-        deoptReason: Optional[str] = None,
-        positionTicks: Optional[List["PositionTickInfo"]] = None,
-    ) -> None:
+    def __init__(self, id: int, callFrame: 'Runtime.CallFrame', hitCount: Optional[int] = None, children: Optional[List['int']] = None, deoptReason: Optional[str] = None, positionTicks: Optional[List['PositionTickInfo']] = None) -> None:
         """
         :param id: Unique id of the node.
+        :type int:
         :param callFrame: Function location.
+        :type Runtime.CallFrame:
         :param hitCount: Number of samples where this node was on top of the call stack.
+        :type int:
         :param children: Child node ids.
+        :type array:
         :param deoptReason: The reason of being not optimized. The function may be deoptimized or marked as don't
-optimize.
+        optimize.
+        :type str:
         :param positionTicks: An array of source position ticks.
+        :type array:
         """
         super().__init__()
         self.id: int = id
@@ -36,21 +34,19 @@ optimize.
 class Profile(ChromeTypeBase):
     """Profile."""
 
-    def __init__(
-        self,
-        nodes: List["ProfileNode"],
-        startTime: float,
-        endTime: float,
-        samples: Optional[List["int"]] = None,
-        timeDeltas: Optional[List["int"]] = None,
-    ) -> None:
+    def __init__(self, nodes: List['ProfileNode'], startTime: float, endTime: float, samples: Optional[List['int']] = None, timeDeltas: Optional[List['int']] = None) -> None:
         """
         :param nodes: The list of profile nodes. First item is the root node.
+        :type array:
         :param startTime: Profiling start timestamp in microseconds.
+        :type float:
         :param endTime: Profiling end timestamp in microseconds.
+        :type float:
         :param samples: Ids of samples top nodes.
-        :param timeDeltas: Time intervals between adjacent samples in microseconds. The first delta is relative to the
-profile startTime.
+        :type array:
+        :param timeDeltas: Time intervals between adjacent samples in microseconds. The first delta is relative
+        to the profile startTime.
+        :type array:
         """
         super().__init__()
         self.nodes: List[ProfileNode] = nodes
@@ -66,7 +62,9 @@ class PositionTickInfo(ChromeTypeBase):
     def __init__(self, line: int, ticks: int) -> None:
         """
         :param line: Source line number (1-based).
+        :type int:
         :param ticks: Number of samples attributed to the source line.
+        :type int:
         """
         super().__init__()
         self.line: int = line
@@ -79,8 +77,11 @@ class CoverageRange(ChromeTypeBase):
     def __init__(self, startOffset: int, endOffset: int, count: int) -> None:
         """
         :param startOffset: JavaScript script source offset for the range start.
+        :type int:
         :param endOffset: JavaScript script source offset for the range end.
+        :type int:
         :param count: Collected execution count of the source range.
+        :type int:
         """
         super().__init__()
         self.startOffset: int = startOffset
@@ -91,13 +92,14 @@ class CoverageRange(ChromeTypeBase):
 class FunctionCoverage(ChromeTypeBase):
     """Coverage data for a JavaScript function."""
 
-    def __init__(
-        self, functionName: str, ranges: List["CoverageRange"], isBlockCoverage: bool
-    ) -> None:
+    def __init__(self, functionName: str, ranges: List['CoverageRange'], isBlockCoverage: bool) -> None:
         """
         :param functionName: JavaScript function name.
+        :type str:
         :param ranges: Source ranges inside the function with coverage data.
+        :type array:
         :param isBlockCoverage: Whether coverage data for this function has block granularity.
+        :type bool:
         """
         super().__init__()
         self.functionName: str = functionName
@@ -108,16 +110,14 @@ class FunctionCoverage(ChromeTypeBase):
 class ScriptCoverage(ChromeTypeBase):
     """Coverage data for a JavaScript script."""
 
-    def __init__(
-        self,
-        scriptId: "Runtime.ScriptId",
-        url: str,
-        functions: List["FunctionCoverage"],
-    ) -> None:
+    def __init__(self, scriptId: 'Runtime.ScriptId', url: str, functions: List['FunctionCoverage']) -> None:
         """
         :param scriptId: JavaScript script id.
+        :type Runtime.ScriptId:
         :param url: JavaScript script name or url.
+        :type str:
         :param functions: Functions contained in the script that has coverage data.
+        :type array:
         """
         super().__init__()
         self.scriptId: Runtime.ScriptId = scriptId
@@ -131,6 +131,7 @@ class TypeObject(ChromeTypeBase):
     def __init__(self, name: str) -> None:
         """
         :param name: Name of a type collected with type profiling.
+        :type str:
         """
         super().__init__()
         self.name: str = name
@@ -139,10 +140,12 @@ class TypeObject(ChromeTypeBase):
 class TypeProfileEntry(ChromeTypeBase):
     """Source offset and types for a parameter or return value."""
 
-    def __init__(self, offset: int, types: List["TypeObject"]) -> None:
+    def __init__(self, offset: int, types: List['TypeObject']) -> None:
         """
         :param offset: Source offset of the parameter or end of function for return values.
+        :type int:
         :param types: The types for this parameter or return value.
+        :type array:
         """
         super().__init__()
         self.offset: int = offset
@@ -152,15 +155,18 @@ class TypeProfileEntry(ChromeTypeBase):
 class ScriptTypeProfile(ChromeTypeBase):
     """Type profile data collected during runtime for a JavaScript script."""
 
-    def __init__(
-        self, scriptId: "Runtime.ScriptId", url: str, entries: List["TypeProfileEntry"]
-    ) -> None:
+    def __init__(self, scriptId: 'Runtime.ScriptId', url: str, entries: List['TypeProfileEntry']) -> None:
         """
         :param scriptId: JavaScript script id.
+        :type Runtime.ScriptId:
         :param url: JavaScript script name or url.
+        :type str:
         :param entries: Type profile entries for parameters and return values of the functions in the script.
+        :type array:
         """
         super().__init__()
         self.scriptId: Runtime.ScriptId = scriptId
         self.url: str = url
         self.entries: List[TypeProfileEntry] = entries
+
+

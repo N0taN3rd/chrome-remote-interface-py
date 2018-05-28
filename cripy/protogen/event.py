@@ -1,4 +1,5 @@
 from typing import List, Optional
+from stringcase import pascalcase
 
 from .property import Property
 from .shared import FRefCollector
@@ -13,16 +14,26 @@ class Event(FRefCollector):
         self.domain: str = domain
         self.name: str = event["name"]
         self.scoped_name: str = f"{self.domain}.{self.name}"
-        self.description: Optional[str] = event.get("description", None)
-        self.properties: PropertyList = self._build_properties(
-            event.get("properties", None)
+        self.description: Optional[str] = self._get_description(event)
+        self.parameters: PropertyList = self._build_parameters(
+            event.get("parameters", None)
         )
 
-    @property
-    def has_properties(self):
-        return self.properties is not None
+    def _get_description(self, event: dict) -> Optional[str]:
+        des = event.get("description", None)
+        if des is not None:
+            return " ".join(des.split("\n")).replace(". ", ".\n\t")
+        return des
 
-    def _build_properties(self, plist: Optional[List[dict]]) -> PropertyList:
+    @property
+    def class_name(self) -> str:
+        return f"{pascalcase(self.name)}Event"
+
+    @property
+    def has_parameters(self):
+        return self.parameters is not None
+
+    def _build_parameters(self, plist: Optional[List[dict]]) -> PropertyList:
         if plist is None:
             return plist
         props: List[Property] = list()

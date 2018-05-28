@@ -5,3 +5,4 @@ pyee
 websockets
 aiohttp
 async-timeout
+stringcase

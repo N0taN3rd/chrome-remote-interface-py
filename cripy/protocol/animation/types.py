@@ -6,31 +6,29 @@ from cripy.protocol.dom import types as DOM
 class Animation(ChromeTypeBase):
     """Animation instance."""
 
-    def __init__(
-        self,
-        id: str,
-        name: str,
-        pausedState: bool,
-        playState: str,
-        playbackRate: float,
-        startTime: float,
-        currentTime: float,
-        type: str,
-        source: Optional["AnimationEffect"] = None,
-        cssId: Optional[str] = None,
-    ) -> None:
+    def __init__(self, id: str, name: str, pausedState: bool, playState: str, playbackRate: float, startTime: float, currentTime: float, type: str, source: Optional['AnimationEffect'] = None, cssId: Optional[str] = None) -> None:
         """
         :param id: `Animation`'s id.
+        :type str:
         :param name: `Animation`'s name.
+        :type str:
         :param pausedState: `Animation`'s internal paused state.
+        :type bool:
         :param playState: `Animation`'s play state.
+        :type str:
         :param playbackRate: `Animation`'s playback rate.
+        :type float:
         :param startTime: `Animation`'s start time.
+        :type float:
         :param currentTime: `Animation`'s current time.
+        :type float:
         :param type: Animation type of `Animation`.
+        :type str:
         :param source: `Animation`'s source animation node.
+        :type AnimationEffect:
         :param cssId: A unique ID for `Animation` representing the sources that triggered this CSS
-animation/transition.
+        animation/transition.
+        :type str:
         """
         super().__init__()
         self.id: str = id
@@ -48,30 +46,28 @@ animation/transition.
 class AnimationEffect(ChromeTypeBase):
     """AnimationEffect instance"""
 
-    def __init__(
-        self,
-        delay: float,
-        endDelay: float,
-        iterationStart: float,
-        iterations: float,
-        duration: float,
-        direction: str,
-        fill: str,
-        easing: str,
-        backendNodeId: Optional["DOM.BackendNodeId"] = None,
-        keyframesRule: Optional["KeyframesRule"] = None,
-    ) -> None:
+    def __init__(self, delay: float, endDelay: float, iterationStart: float, iterations: float, duration: float, direction: str, fill: str, easing: str, backendNodeId: Optional['DOM.BackendNodeId'] = None, keyframesRule: Optional['KeyframesRule'] = None) -> None:
         """
         :param delay: `AnimationEffect`'s delay.
+        :type float:
         :param endDelay: `AnimationEffect`'s end delay.
+        :type float:
         :param iterationStart: `AnimationEffect`'s iteration start.
+        :type float:
         :param iterations: `AnimationEffect`'s iterations.
+        :type float:
         :param duration: `AnimationEffect`'s iteration duration.
+        :type float:
         :param direction: `AnimationEffect`'s playback direction.
+        :type str:
         :param fill: `AnimationEffect`'s fill mode.
+        :type str:
         :param backendNodeId: `AnimationEffect`'s target node.
+        :type DOM.BackendNodeId:
         :param keyframesRule: `AnimationEffect`'s keyframes.
+        :type KeyframesRule:
         :param easing: `AnimationEffect`'s timing function.
+        :type str:
         """
         super().__init__()
         self.delay: float = delay
@@ -89,12 +85,12 @@ class AnimationEffect(ChromeTypeBase):
 class KeyframesRule(ChromeTypeBase):
     """Keyframes Rule"""
 
-    def __init__(
-        self, keyframes: List["KeyframeStyle"], name: Optional[str] = None
-    ) -> None:
+    def __init__(self, keyframes: List['KeyframeStyle'], name: Optional[str] = None) -> None:
         """
         :param name: CSS keyframed animation's name.
+        :type str:
         :param keyframes: List of animation keyframes.
+        :type array:
         """
         super().__init__()
         self.name: Optional[str] = name
@@ -107,8 +103,12 @@ class KeyframeStyle(ChromeTypeBase):
     def __init__(self, offset: str, easing: str) -> None:
         """
         :param offset: Keyframe's time offset.
+        :type str:
         :param easing: `AnimationEffect`'s timing function.
+        :type str:
         """
         super().__init__()
         self.offset: str = offset
         self.easing: str = easing
+
+

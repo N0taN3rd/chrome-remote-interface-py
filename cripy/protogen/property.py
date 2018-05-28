@@ -1,5 +1,7 @@
 from typing import List, Optional, Set, Union
 
+import textwrap
+
 from .shared import FRefCollector
 from .ptype import Type
 
@@ -12,6 +14,11 @@ def cstring_mapper(t: Type) -> Union[str, Type]:
     if not t.is_pytype and not t.is_array:
         return f"'{t}'"
     return t
+
+
+def clean_string(s: str) -> str:
+    print(s)
+    return s.rstrip(" ").lstrip(" ")
 
 
 class Property(FRefCollector):
@@ -38,6 +45,10 @@ class Property(FRefCollector):
         if self.optional:
             return f"Optional[{to_wrap}] = None"
         return to_wrap
+
+    @property
+    def nice_description(self) -> str:
+        return '\n        '.join(textwrap.wrap(self.description, width=85))
 
     @property
     def tinfo_str(self) -> str:

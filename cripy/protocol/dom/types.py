@@ -2,27 +2,33 @@ from typing import Any, List, Optional, Set, Union
 from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
 from cripy.protocol.page import types as Page
 
+# Unique DOM node identifier.
 NodeId = int
 
+# Unique DOM node identifier used to reference a node that may not have been pushed to the front-end.
 BackendNodeId = int
 
+# Pseudo element type.
 PseudoType = str
 
+# Shadow root type.
 ShadowRootType = str
 
+# An array of quad vertices, x immediately followed by y for each point, points clock-wise.
 Quad = list
 
 
 class BackendNode(ChromeTypeBase):
     """Backend node with a friendly name."""
 
-    def __init__(
-        self, nodeType: int, nodeName: str, backendNodeId: "BackendNodeId"
-    ) -> None:
+    def __init__(self, nodeType: int, nodeName: str, backendNodeId: 'BackendNodeId') -> None:
         """
         :param nodeType: `Node`'s nodeType.
+        :type int:
         :param nodeName: `Node`'s nodeName.
+        :type str:
         :param backendNodeId: The backendNodeId
+        :type BackendNodeId:
         """
         super().__init__()
         self.nodeType: int = nodeType
@@ -34,68 +40,67 @@ class Node(ChromeTypeBase):
     """DOM interaction is implemented in terms of mirror objects that represent the actual DOM nodes.
 DOMNode is a base node mirror type."""
 
-    def __init__(
-        self,
-        nodeId: "NodeId",
-        backendNodeId: "BackendNodeId",
-        nodeType: int,
-        nodeName: str,
-        localName: str,
-        nodeValue: str,
-        parentId: Optional["NodeId"] = None,
-        childNodeCount: Optional[int] = None,
-        children: Optional[List["Node"]] = None,
-        attributes: Optional[List["str"]] = None,
-        documentURL: Optional[str] = None,
-        baseURL: Optional[str] = None,
-        publicId: Optional[str] = None,
-        systemId: Optional[str] = None,
-        internalSubset: Optional[str] = None,
-        xmlVersion: Optional[str] = None,
-        name: Optional[str] = None,
-        value: Optional[str] = None,
-        pseudoType: Optional["PseudoType"] = None,
-        shadowRootType: Optional["ShadowRootType"] = None,
-        frameId: Optional["Page.FrameId"] = None,
-        contentDocument: Optional["Node"] = None,
-        shadowRoots: Optional[List["Node"]] = None,
-        templateContent: Optional["Node"] = None,
-        pseudoElements: Optional[List["Node"]] = None,
-        importedDocument: Optional["Node"] = None,
-        distributedNodes: Optional[List["BackendNode"]] = None,
-        isSVG: Optional[bool] = None,
-    ) -> None:
+    def __init__(self, nodeId: 'NodeId', backendNodeId: 'BackendNodeId', nodeType: int, nodeName: str, localName: str, nodeValue: str, parentId: Optional['NodeId'] = None, childNodeCount: Optional[int] = None, children: Optional[List['Node']] = None, attributes: Optional[List['str']] = None, documentURL: Optional[str] = None, baseURL: Optional[str] = None, publicId: Optional[str] = None, systemId: Optional[str] = None, internalSubset: Optional[str] = None, xmlVersion: Optional[str] = None, name: Optional[str] = None, value: Optional[str] = None, pseudoType: Optional['PseudoType'] = None, shadowRootType: Optional['ShadowRootType'] = None, frameId: Optional['Page.FrameId'] = None, contentDocument: Optional['Node'] = None, shadowRoots: Optional[List['Node']] = None, templateContent: Optional['Node'] = None, pseudoElements: Optional[List['Node']] = None, importedDocument: Optional['Node'] = None, distributedNodes: Optional[List['BackendNode']] = None, isSVG: Optional[bool] = None) -> None:
         """
-        :param nodeId: Node identifier that is passed into the rest of the DOM messages as the `nodeId`. Backend
-will only push node with given `id` once. It is aware of all requested nodes and will only
-fire DOM events for nodes known to the client.
+        :param nodeId: Node identifier that is passed into the rest of the DOM messages as the `nodeId`.
+        Backend will only push node with given `id` once. It is aware of all requested nodes
+        and will only fire DOM events for nodes known to the client.
+        :type NodeId:
         :param parentId: The id of the parent node if any.
+        :type NodeId:
         :param backendNodeId: The BackendNodeId for this node.
+        :type BackendNodeId:
         :param nodeType: `Node`'s nodeType.
+        :type int:
         :param nodeName: `Node`'s nodeName.
+        :type str:
         :param localName: `Node`'s localName.
+        :type str:
         :param nodeValue: `Node`'s nodeValue.
+        :type str:
         :param childNodeCount: Child count for `Container` nodes.
+        :type int:
         :param children: Child nodes of this node when requested with children.
-        :param attributes: Attributes of the `Element` node in the form of flat array `[name1, value1, name2, value2]`.
+        :type array:
+        :param attributes: Attributes of the `Element` node in the form of flat array `[name1, value1, name2,
+        value2]`.
+        :type array:
         :param documentURL: Document URL that `Document` or `FrameOwner` node points to.
+        :type str:
         :param baseURL: Base URL that `Document` or `FrameOwner` node uses for URL completion.
+        :type str:
         :param publicId: `DocumentType`'s publicId.
+        :type str:
         :param systemId: `DocumentType`'s systemId.
+        :type str:
         :param internalSubset: `DocumentType`'s internalSubset.
+        :type str:
         :param xmlVersion: `Document`'s XML version in case of XML documents.
+        :type str:
         :param name: `Attr`'s name.
+        :type str:
         :param value: `Attr`'s value.
+        :type str:
         :param pseudoType: Pseudo element type for this node.
+        :type PseudoType:
         :param shadowRootType: Shadow root type.
+        :type ShadowRootType:
         :param frameId: Frame ID for frame owner elements.
+        :type Page.FrameId:
         :param contentDocument: Content document for frame owner elements.
+        :type Node:
         :param shadowRoots: Shadow root list for given element host.
+        :type array:
         :param templateContent: Content document fragment for template elements.
+        :type Node:
         :param pseudoElements: Pseudo elements associated with this node.
+        :type array:
         :param importedDocument: Import document for the HTMLImport links.
+        :type Node:
         :param distributedNodes: Distributed nodes for given insertion point.
+        :type array:
         :param isSVG: Whether the node is SVG.
+        :type bool:
         """
         super().__init__()
         self.nodeId: NodeId = nodeId
@@ -134,9 +139,13 @@ class RGBA(ChromeTypeBase):
     def __init__(self, r: int, g: int, b: int, a: Optional[float] = None) -> None:
         """
         :param r: The red component, in the [0-255] range.
+        :type int:
         :param g: The green component, in the [0-255] range.
+        :type int:
         :param b: The blue component, in the [0-255] range.
+        :type int:
         :param a: The alpha component, in the [0-1] range (default: 1).
+        :type float:
         """
         super().__init__()
         self.r: int = r
@@ -148,24 +157,22 @@ class RGBA(ChromeTypeBase):
 class BoxModel(ChromeTypeBase):
     """Box model."""
 
-    def __init__(
-        self,
-        content: "Quad",
-        padding: "Quad",
-        border: "Quad",
-        margin: "Quad",
-        width: int,
-        height: int,
-        shapeOutside: Optional["ShapeOutsideInfo"] = None,
-    ) -> None:
+    def __init__(self, content: 'Quad', padding: 'Quad', border: 'Quad', margin: 'Quad', width: int, height: int, shapeOutside: Optional['ShapeOutsideInfo'] = None) -> None:
         """
         :param content: Content box
+        :type Quad:
         :param padding: Padding box
+        :type Quad:
         :param border: Border box
+        :type Quad:
         :param margin: Margin box
+        :type Quad:
         :param width: Node width
+        :type int:
         :param height: Node height
+        :type int:
         :param shapeOutside: Shape outside coordinates
+        :type ShapeOutsideInfo:
         """
         super().__init__()
         self.content: Quad = content
@@ -180,13 +187,14 @@ class BoxModel(ChromeTypeBase):
 class ShapeOutsideInfo(ChromeTypeBase):
     """CSS Shape Outside details."""
 
-    def __init__(
-        self, bounds: "Quad", shape: List[Any], marginShape: List[Any]
-    ) -> None:
+    def __init__(self, bounds: 'Quad', shape: List[Any], marginShape: List[Any]) -> None:
         """
         :param bounds: Shape bounds
+        :type Quad:
         :param shape: Shape coordinate details
+        :type array:
         :param marginShape: Margin shape bounds
+        :type array:
         """
         super().__init__()
         self.bounds: Quad = bounds
@@ -200,12 +208,18 @@ class Rect(ChromeTypeBase):
     def __init__(self, x: float, y: float, width: float, height: float) -> None:
         """
         :param x: X coordinate
+        :type float:
         :param y: Y coordinate
+        :type float:
         :param width: Rectangle width
+        :type float:
         :param height: Rectangle height
+        :type float:
         """
         super().__init__()
         self.x: float = x
         self.y: float = y
         self.width: float = width
         self.height: float = height
+
+

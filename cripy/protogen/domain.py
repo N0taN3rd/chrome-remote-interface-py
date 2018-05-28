@@ -23,7 +23,7 @@ class Domain(FRefCollector):
 
     @property
     def has_events(self) -> bool:
-        return len(self.types) > 0
+        return len(self.events) > 0
 
     @property
     def has_commands(self) -> bool:
