@@ -10,8 +10,7 @@ class DetachedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param reason: The reason why connection has been terminated.
-        :type str:
+        :param str reason: The reason why connection has been terminated.
         """
         super().__init__()
 

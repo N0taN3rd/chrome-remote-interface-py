@@ -11,15 +11,11 @@ ServiceWorkerVersionStatus = str
 
 class ServiceWorkerRegistration(ChromeTypeBase):
     """ServiceWorker registration."""
-
     def __init__(self, registrationId: str, scopeURL: str, isDeleted: bool) -> None:
         """
-        :param registrationId: The registrationId
-        :type str:
-        :param scopeURL: The scopeURL
-        :type str:
-        :param isDeleted: The isDeleted
-        :type bool:
+        :param str registrationId: The registrationId
+        :param str scopeURL: The scopeURL
+        :param bool isDeleted: The isDeleted
         """
         super().__init__()
         self.registrationId: str = registrationId
@@ -29,28 +25,17 @@ class ServiceWorkerRegistration(ChromeTypeBase):
 
 class ServiceWorkerVersion(ChromeTypeBase):
     """ServiceWorker version."""
-
     def __init__(self, versionId: str, registrationId: str, scriptURL: str, runningStatus: 'ServiceWorkerVersionRunningStatus', status: 'ServiceWorkerVersionStatus', scriptLastModified: Optional[float] = None, scriptResponseTime: Optional[float] = None, controlledClients: Optional[List['Target.TargetID']] = None, targetId: Optional['Target.TargetID'] = None) -> None:
         """
-        :param versionId: The versionId
-        :type str:
-        :param registrationId: The registrationId
-        :type str:
-        :param scriptURL: The scriptURL
-        :type str:
-        :param runningStatus: The runningStatus
-        :type ServiceWorkerVersionRunningStatus:
-        :param status: The status
-        :type ServiceWorkerVersionStatus:
-        :param scriptLastModified: The Last-Modified header value of the main script.
-        :type float:
-        :param scriptResponseTime: The time at which the response headers of the main script were received from the
-        server. For cached script it is the last time the cache entry was validated.
-        :type float:
-        :param controlledClients: The controlledClients
-        :type array:
-        :param targetId: The targetId
-        :type Target.TargetID:
+        :param str versionId: The versionId
+        :param str registrationId: The registrationId
+        :param str scriptURL: The scriptURL
+        :param ServiceWorkerVersionRunningStatus runningStatus: The runningStatus
+        :param ServiceWorkerVersionStatus status: The status
+        :param float scriptLastModified: The Last-Modified header value of the main script.
+        :param float scriptResponseTime: The time at which the response headers of the main script were received from the server. For cached script it is the last time the cache entry was validated.
+        :param array controlledClients: The controlledClients
+        :param Target.TargetID targetId: The targetId
         """
         super().__init__()
         self.versionId: str = versionId
@@ -66,21 +51,14 @@ class ServiceWorkerVersion(ChromeTypeBase):
 
 class ServiceWorkerErrorMessage(ChromeTypeBase):
     """ServiceWorker error message."""
-
     def __init__(self, errorMessage: str, registrationId: str, versionId: str, sourceURL: str, lineNumber: int, columnNumber: int) -> None:
         """
-        :param errorMessage: The errorMessage
-        :type str:
-        :param registrationId: The registrationId
-        :type str:
-        :param versionId: The versionId
-        :type str:
-        :param sourceURL: The sourceURL
-        :type str:
-        :param lineNumber: The lineNumber
-        :type int:
-        :param columnNumber: The columnNumber
-        :type int:
+        :param str errorMessage: The errorMessage
+        :param str registrationId: The registrationId
+        :param str versionId: The versionId
+        :param str sourceURL: The sourceURL
+        :param int lineNumber: The lineNumber
+        :param int columnNumber: The columnNumber
         """
         super().__init__()
         self.errorMessage: str = errorMessage

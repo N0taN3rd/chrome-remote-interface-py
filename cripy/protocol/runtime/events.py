@@ -9,20 +9,12 @@ class ConsoleAPICalledEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param type: Type of the call.
-        :type str:
-        :param args: Call arguments.
-        :type array:
-        :param executionContextId: Identifier of the context where the call was made.
-        :type ExecutionContextId:
-        :param timestamp: Call timestamp.
-        :type Timestamp:
-        :param stackTrace: Stack trace captured when the call was made.
-        :type StackTrace:
-        :param context: Console context descriptor for calls on non-default console context (not console.*):
-        'anonymous#unique-logger-id' for call on unnamed context, 'name#unique-logger-id' for
-        call on named context.
-        :type str:
+        :param str type: Type of the call.
+        :param array args: Call arguments.
+        :param ExecutionContextId executionContextId: Identifier of the context where the call was made.
+        :param Timestamp timestamp: Call timestamp.
+        :param StackTrace stackTrace: Stack trace captured when the call was made.
+        :param str context: Console context descriptor for calls on non-default console context (not console.*): 'anonymous#unique-logger-id' for call on unnamed context, 'name#unique-logger-id' for call on named context.
         """
         super().__init__()
 
@@ -34,10 +26,8 @@ class ExceptionRevokedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param reason: Reason describing why exception was revoked.
-        :type str:
-        :param exceptionId: The id of revoked exception, as reported in `exceptionThrown`.
-        :type int:
+        :param str reason: Reason describing why exception was revoked.
+        :param int exceptionId: The id of revoked exception, as reported in `exceptionThrown`.
         """
         super().__init__()
 
@@ -49,10 +39,8 @@ class ExceptionThrownEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param timestamp: Timestamp of the exception.
-        :type Timestamp:
-        :param exceptionDetails: The exceptionDetails
-        :type ExceptionDetails:
+        :param Timestamp timestamp: Timestamp of the exception.
+        :param ExceptionDetails exceptionDetails: The exceptionDetails
         """
         super().__init__()
 
@@ -64,8 +52,7 @@ class ExecutionContextCreatedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param context: A newly created execution context.
-        :type ExecutionContextDescription:
+        :param ExecutionContextDescription context: A newly created execution context.
         """
         super().__init__()
 
@@ -77,8 +64,7 @@ class ExecutionContextDestroyedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param executionContextId: Id of the destroyed context
-        :type ExecutionContextId:
+        :param ExecutionContextId executionContextId: Id of the destroyed context
         """
         super().__init__()
 
@@ -99,10 +85,8 @@ class InspectRequestedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param object: The object
-        :type RemoteObject:
-        :param hints: The hints
-        :type dict:
+        :param RemoteObject object: The object
+        :param dict hints: The hints
         """
         super().__init__()
 

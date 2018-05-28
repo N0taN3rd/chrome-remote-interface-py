@@ -9,12 +9,9 @@ class AttributeModifiedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param nodeId: Id of the node that has changed.
-        :type NodeId:
-        :param name: Attribute name.
-        :type str:
-        :param value: Attribute value.
-        :type str:
+        :param NodeId nodeId: Id of the node that has changed.
+        :param str name: Attribute name.
+        :param str value: Attribute value.
         """
         super().__init__()
 
@@ -26,10 +23,8 @@ class AttributeRemovedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param nodeId: Id of the node that has changed.
-        :type NodeId:
-        :param name: A ttribute name.
-        :type str:
+        :param NodeId nodeId: Id of the node that has changed.
+        :param str name: A ttribute name.
         """
         super().__init__()
 
@@ -41,10 +36,8 @@ class CharacterDataModifiedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param nodeId: Id of the node that has changed.
-        :type NodeId:
-        :param characterData: New text value.
-        :type str:
+        :param NodeId nodeId: Id of the node that has changed.
+        :param str characterData: New text value.
         """
         super().__init__()
 
@@ -56,10 +49,8 @@ class ChildNodeCountUpdatedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param nodeId: Id of the node that has changed.
-        :type NodeId:
-        :param childNodeCount: New node count.
-        :type int:
+        :param NodeId nodeId: Id of the node that has changed.
+        :param int childNodeCount: New node count.
         """
         super().__init__()
 
@@ -71,12 +62,9 @@ class ChildNodeInsertedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param parentNodeId: Id of the node that has changed.
-        :type NodeId:
-        :param previousNodeId: If of the previous siblint.
-        :type NodeId:
-        :param node: Inserted node data.
-        :type Node:
+        :param NodeId parentNodeId: Id of the node that has changed.
+        :param NodeId previousNodeId: If of the previous siblint.
+        :param Node node: Inserted node data.
         """
         super().__init__()
 
@@ -88,10 +76,8 @@ class ChildNodeRemovedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param parentNodeId: Parent id.
-        :type NodeId:
-        :param nodeId: Id of the node that has been removed.
-        :type NodeId:
+        :param NodeId parentNodeId: Parent id.
+        :param NodeId nodeId: Id of the node that has been removed.
         """
         super().__init__()
 
@@ -103,10 +89,8 @@ class DistributedNodesUpdatedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param insertionPointId: Insertion point where distrubuted nodes were updated.
-        :type NodeId:
-        :param distributedNodes: Distributed nodes for given insertion point.
-        :type array:
+        :param NodeId insertionPointId: Insertion point where distrubuted nodes were updated.
+        :param array distributedNodes: Distributed nodes for given insertion point.
         """
         super().__init__()
 
@@ -128,8 +112,7 @@ class InlineStyleInvalidatedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param nodeIds: Ids of the nodes for which the inline styles have been invalidated.
-        :type array:
+        :param array nodeIds: Ids of the nodes for which the inline styles have been invalidated.
         """
         super().__init__()
 
@@ -141,10 +124,8 @@ class PseudoElementAddedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param parentId: Pseudo element's parent element id.
-        :type NodeId:
-        :param pseudoElement: The added pseudo element.
-        :type Node:
+        :param NodeId parentId: Pseudo element's parent element id.
+        :param Node pseudoElement: The added pseudo element.
         """
         super().__init__()
 
@@ -156,10 +137,8 @@ class PseudoElementRemovedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param parentId: Pseudo element's parent element id.
-        :type NodeId:
-        :param pseudoElementId: The removed pseudo element id.
-        :type NodeId:
+        :param NodeId parentId: Pseudo element's parent element id.
+        :param NodeId pseudoElementId: The removed pseudo element id.
         """
         super().__init__()
 
@@ -172,10 +151,8 @@ class SetChildNodesEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param parentId: Parent node id to populate with children.
-        :type NodeId:
-        :param nodes: Child nodes array.
-        :type array:
+        :param NodeId parentId: Parent node id to populate with children.
+        :param array nodes: Child nodes array.
         """
         super().__init__()
 
@@ -187,10 +164,8 @@ class ShadowRootPoppedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param hostId: Host element id.
-        :type NodeId:
-        :param rootId: Shadow root id.
-        :type NodeId:
+        :param NodeId hostId: Host element id.
+        :param NodeId rootId: Shadow root id.
         """
         super().__init__()
 
@@ -202,10 +177,8 @@ class ShadowRootPushedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param hostId: Host element id.
-        :type NodeId:
-        :param root: Shadow root.
-        :type Node:
+        :param NodeId hostId: Host element id.
+        :param Node root: Shadow root.
         """
         super().__init__()
 

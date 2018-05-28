@@ -48,7 +48,7 @@ class Property(FRefCollector):
 
     @property
     def nice_description(self) -> str:
-        return '\n        '.join(textwrap.wrap(self.description, width=85))
+        return ' '.join(self.description.split('\n'))
 
     @property
     def tinfo_str(self) -> str:

@@ -8,8 +8,7 @@ class DomContentEventFiredEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param timestamp: The timestamp
-        :type Network.MonotonicTime:
+        :param Network.MonotonicTime timestamp: The timestamp
         """
         super().__init__()
 
@@ -21,13 +20,9 @@ class FrameAttachedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param frameId: Id of the frame that has been attached.
-        :type FrameId:
-        :param parentFrameId: Parent frame identifier.
-        :type FrameId:
-        :param stack: JavaScript stack trace of when frame was attached, only set if frame initiated from
-        script.
-        :type Runtime.StackTrace:
+        :param FrameId frameId: Id of the frame that has been attached.
+        :param FrameId parentFrameId: Parent frame identifier.
+        :param Runtime.StackTrace stack: JavaScript stack trace of when frame was attached, only set if frame initiated from script.
         """
         super().__init__()
 
@@ -39,8 +34,7 @@ class FrameClearedScheduledNavigationEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param frameId: Id of the frame that has cleared its scheduled navigation.
-        :type FrameId:
+        :param FrameId frameId: Id of the frame that has cleared its scheduled navigation.
         """
         super().__init__()
 
@@ -52,8 +46,7 @@ class FrameDetachedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param frameId: Id of the frame that has been detached.
-        :type FrameId:
+        :param FrameId frameId: Id of the frame that has been detached.
         """
         super().__init__()
 
@@ -66,8 +59,7 @@ class FrameNavigatedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param frame: Frame object.
-        :type Frame:
+        :param Frame frame: Frame object.
         """
         super().__init__()
 
@@ -87,15 +79,10 @@ class FrameScheduledNavigationEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param frameId: Id of the frame that has scheduled a navigation.
-        :type FrameId:
-        :param delay: Delay (in seconds) until the navigation is scheduled to begin. The navigation is not
-        guaranteed to start.
-        :type float:
-        :param reason: The reason for the navigation.
-        :type str:
-        :param url: The destination URL for the scheduled navigation.
-        :type str:
+        :param FrameId frameId: Id of the frame that has scheduled a navigation.
+        :param float delay: Delay (in seconds) until the navigation is scheduled to begin. The navigation is not guaranteed to start.
+        :param str reason: The reason for the navigation.
+        :param str url: The destination URL for the scheduled navigation.
         """
         super().__init__()
 
@@ -107,8 +94,7 @@ class FrameStartedLoadingEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param frameId: Id of the frame that has started loading.
-        :type FrameId:
+        :param FrameId frameId: Id of the frame that has started loading.
         """
         super().__init__()
 
@@ -120,8 +106,7 @@ class FrameStoppedLoadingEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param frameId: Id of the frame that has stopped loading.
-        :type FrameId:
+        :param FrameId frameId: Id of the frame that has stopped loading.
         """
         super().__init__()
 
@@ -151,10 +136,8 @@ class JavascriptDialogClosedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param result: Whether dialog was confirmed.
-        :type bool:
-        :param userInput: User input in case of prompt.
-        :type str:
+        :param bool result: Whether dialog was confirmed.
+        :param str userInput: User input in case of prompt.
         """
         super().__init__()
 
@@ -166,19 +149,11 @@ class JavascriptDialogOpeningEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param url: Frame url.
-        :type str:
-        :param message: Message that will be displayed by the dialog.
-        :type str:
-        :param type: Dialog type.
-        :type DialogType:
-        :param hasBrowserHandler: True iff browser is capable showing or acting on the given dialog. When browser has
-        no dialog handler for given target, calling alert while Page domain is engaged will
-        stall the page execution. Execution can be resumed via calling
-        Page.handleJavaScriptDialog.
-        :type bool:
-        :param defaultPrompt: Default dialog prompt.
-        :type str:
+        :param str url: Frame url.
+        :param str message: Message that will be displayed by the dialog.
+        :param DialogType type: Dialog type.
+        :param bool hasBrowserHandler: True iff browser is capable showing or acting on the given dialog. When browser has no dialog handler for given target, calling alert while Page domain is engaged will stall the page execution. Execution can be resumed via calling Page.handleJavaScriptDialog.
+        :param str defaultPrompt: Default dialog prompt.
         """
         super().__init__()
 
@@ -190,14 +165,10 @@ class LifecycleEventEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param frameId: Id of the frame.
-        :type FrameId:
-        :param loaderId: Loader identifier. Empty string if the request is fetched from worker.
-        :type Network.LoaderId:
-        :param name: The name
-        :type str:
-        :param timestamp: The timestamp
-        :type Network.MonotonicTime:
+        :param FrameId frameId: Id of the frame.
+        :param Network.LoaderId loaderId: Loader identifier. Empty string if the request is fetched from worker.
+        :param str name: The name
+        :param Network.MonotonicTime timestamp: The timestamp
         """
         super().__init__()
 
@@ -208,8 +179,7 @@ class LoadEventFiredEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param timestamp: The timestamp
-        :type Network.MonotonicTime:
+        :param Network.MonotonicTime timestamp: The timestamp
         """
         super().__init__()
 
@@ -222,10 +192,8 @@ class NavigatedWithinDocumentEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param frameId: Id of the frame.
-        :type FrameId:
-        :param url: Frame's new url.
-        :type str:
+        :param FrameId frameId: Id of the frame.
+        :param str url: Frame's new url.
         """
         super().__init__()
 
@@ -237,12 +205,9 @@ class ScreencastFrameEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param data: Base64-encoded compressed image.
-        :type str:
-        :param metadata: Screencast frame metadata.
-        :type ScreencastFrameMetadata:
-        :param sessionId: Frame number.
-        :type int:
+        :param str data: Base64-encoded compressed image.
+        :param ScreencastFrameMetadata metadata: Screencast frame metadata.
+        :param int sessionId: Frame number.
         """
         super().__init__()
 
@@ -254,8 +219,7 @@ class ScreencastVisibilityChangedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param visible: True if the page is visible.
-        :type bool:
+        :param bool visible: True if the page is visible.
         """
         super().__init__()
 
@@ -267,14 +231,10 @@ class WindowOpenEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param url: The URL for the new window.
-        :type str:
-        :param windowName: Window name.
-        :type str:
-        :param windowFeatures: An array of enabled window features.
-        :type array:
-        :param userGesture: Whether or not it was triggered by user gesture.
-        :type bool:
+        :param str url: The URL for the new window.
+        :param str windowName: Window name.
+        :param array windowFeatures: An array of enabled window features.
+        :param bool userGesture: Whether or not it was triggered by user gesture.
         """
         super().__init__()
 

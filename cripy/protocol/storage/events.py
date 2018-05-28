@@ -9,10 +9,8 @@ class CacheStorageContentUpdatedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param origin: Origin to update.
-        :type str:
-        :param cacheName: Name of cache in origin.
-        :type str:
+        :param str origin: Origin to update.
+        :param str cacheName: Name of cache in origin.
         """
         super().__init__()
 
@@ -24,8 +22,7 @@ class CacheStorageListUpdatedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param origin: Origin to update.
-        :type str:
+        :param str origin: Origin to update.
         """
         super().__init__()
 
@@ -37,12 +34,9 @@ class IndexedDBContentUpdatedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param origin: Origin to update.
-        :type str:
-        :param databaseName: Database to update.
-        :type str:
-        :param objectStoreName: ObjectStore to update.
-        :type str:
+        :param str origin: Origin to update.
+        :param str databaseName: Database to update.
+        :param str objectStoreName: ObjectStore to update.
         """
         super().__init__()
 
@@ -54,8 +48,7 @@ class IndexedDBListUpdatedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param origin: Origin to update.
-        :type str:
+        :param str origin: Origin to update.
         """
         super().__init__()
 

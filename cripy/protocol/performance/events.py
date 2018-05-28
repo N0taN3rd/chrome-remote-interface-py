@@ -9,10 +9,8 @@ class MetricsEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param metrics: Current values of the metrics.
-        :type array:
-        :param title: Timestamp title.
-        :type str:
+        :param array metrics: Current values of the metrics.
+        :param str title: Timestamp title.
         """
         super().__init__()
 

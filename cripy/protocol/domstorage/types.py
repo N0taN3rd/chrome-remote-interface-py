@@ -7,13 +7,10 @@ Item = list
 
 class StorageId(ChromeTypeBase):
     """DOM Storage identifier."""
-
     def __init__(self, securityOrigin: str, isLocalStorage: bool) -> None:
         """
-        :param securityOrigin: Security origin for the storage.
-        :type str:
-        :param isLocalStorage: Whether the storage is local storage (not session storage).
-        :type bool:
+        :param str securityOrigin: Security origin for the storage.
+        :param bool isLocalStorage: Whether the storage is local storage (not session storage).
         """
         super().__init__()
         self.securityOrigin: str = securityOrigin

@@ -5,15 +5,11 @@ from cripy.protocol.runtime import types as Runtime
 
 class DatabaseWithObjectStores(ChromeTypeBase):
     """Database with an array of object stores."""
-
     def __init__(self, name: str, version: int, objectStores: List['ObjectStore']) -> None:
         """
-        :param name: Database name.
-        :type str:
-        :param version: Database version.
-        :type int:
-        :param objectStores: Object stores in this database.
-        :type array:
+        :param str name: Database name.
+        :param int version: Database version.
+        :param array objectStores: Object stores in this database.
         """
         super().__init__()
         self.name: str = name
@@ -23,17 +19,12 @@ class DatabaseWithObjectStores(ChromeTypeBase):
 
 class ObjectStore(ChromeTypeBase):
     """Object store."""
-
     def __init__(self, name: str, keyPath: 'KeyPath', autoIncrement: bool, indexes: List['ObjectStoreIndex']) -> None:
         """
-        :param name: Object store name.
-        :type str:
-        :param keyPath: Object store key path.
-        :type KeyPath:
-        :param autoIncrement: If true, object store has auto increment flag set.
-        :type bool:
-        :param indexes: Indexes in this object store.
-        :type array:
+        :param str name: Object store name.
+        :param KeyPath keyPath: Object store key path.
+        :param bool autoIncrement: If true, object store has auto increment flag set.
+        :param array indexes: Indexes in this object store.
         """
         super().__init__()
         self.name: str = name
@@ -44,17 +35,12 @@ class ObjectStore(ChromeTypeBase):
 
 class ObjectStoreIndex(ChromeTypeBase):
     """Object store index."""
-
     def __init__(self, name: str, keyPath: 'KeyPath', unique: bool, multiEntry: bool) -> None:
         """
-        :param name: Index name.
-        :type str:
-        :param keyPath: Index key path.
-        :type KeyPath:
-        :param unique: If true, index is unique.
-        :type bool:
-        :param multiEntry: If true, index allows multiple entries for a key.
-        :type bool:
+        :param str name: Index name.
+        :param KeyPath keyPath: Index key path.
+        :param bool unique: If true, index is unique.
+        :param bool multiEntry: If true, index allows multiple entries for a key.
         """
         super().__init__()
         self.name: str = name
@@ -65,19 +51,13 @@ class ObjectStoreIndex(ChromeTypeBase):
 
 class Key(ChromeTypeBase):
     """Key."""
-
     def __init__(self, type: str, number: Optional[float] = None, string: Optional[str] = None, date: Optional[float] = None, array: Optional[List['Key']] = None) -> None:
         """
-        :param type: Key type.
-        :type str:
-        :param number: Number value.
-        :type float:
-        :param string: String value.
-        :type str:
-        :param date: Date value.
-        :type float:
-        :param array: Array value.
-        :type array:
+        :param str type: Key type.
+        :param float number: Number value.
+        :param str string: String value.
+        :param float date: Date value.
+        :param array array: Array value.
         """
         super().__init__()
         self.type: str = type
@@ -89,17 +69,12 @@ class Key(ChromeTypeBase):
 
 class KeyRange(ChromeTypeBase):
     """Key range."""
-
     def __init__(self, lowerOpen: bool, upperOpen: bool, lower: Optional['Key'] = None, upper: Optional['Key'] = None) -> None:
         """
-        :param lower: Lower bound.
-        :type Key:
-        :param upper: Upper bound.
-        :type Key:
-        :param lowerOpen: If true lower bound is open.
-        :type bool:
-        :param upperOpen: If true upper bound is open.
-        :type bool:
+        :param Key lower: Lower bound.
+        :param Key upper: Upper bound.
+        :param bool lowerOpen: If true lower bound is open.
+        :param bool upperOpen: If true upper bound is open.
         """
         super().__init__()
         self.lower: Optional[Key] = lower
@@ -110,15 +85,11 @@ class KeyRange(ChromeTypeBase):
 
 class DataEntry(ChromeTypeBase):
     """Data entry."""
-
     def __init__(self, key: 'Runtime.RemoteObject', primaryKey: 'Runtime.RemoteObject', value: 'Runtime.RemoteObject') -> None:
         """
-        :param key: Key object.
-        :type Runtime.RemoteObject:
-        :param primaryKey: Primary key object.
-        :type Runtime.RemoteObject:
-        :param value: Value object.
-        :type Runtime.RemoteObject:
+        :param Runtime.RemoteObject key: Key object.
+        :param Runtime.RemoteObject primaryKey: Primary key object.
+        :param Runtime.RemoteObject value: Value object.
         """
         super().__init__()
         self.key: Runtime.RemoteObject = key
@@ -128,15 +99,11 @@ class DataEntry(ChromeTypeBase):
 
 class KeyPath(ChromeTypeBase):
     """Key path."""
-
     def __init__(self, type: str, string: Optional[str] = None, array: Optional[List['str']] = None) -> None:
         """
-        :param type: Key path type.
-        :type str:
-        :param string: String value.
-        :type str:
-        :param array: Array value.
-        :type array:
+        :param str type: Key path type.
+        :param str string: String value.
+        :param array array: Array value.
         """
         super().__init__()
         self.type: str = type

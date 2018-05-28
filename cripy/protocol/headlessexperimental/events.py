@@ -9,8 +9,7 @@ class NeedsBeginFramesChangedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param needsBeginFrames: True if BeginFrames are needed, false otherwise.
-        :type bool:
+        :param bool needsBeginFrames: True if BeginFrames are needed, false otherwise.
         """
         super().__init__()
 

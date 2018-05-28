@@ -8,14 +8,9 @@ class BufferUsageEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param percentFull: A number in range [0..1] that indicates the used size of event buffer as a fraction
-        of its total size.
-        :type float:
-        :param eventCount: An approximate number of events in the trace log.
-        :type float:
-        :param value: A number in range [0..1] that indicates the used size of event buffer as a fraction
-        of its total size.
-        :type float:
+        :param float percentFull: A number in range [0..1] that indicates the used size of event buffer as a fraction of its total size.
+        :param float eventCount: An approximate number of events in the trace log.
+        :param float value: A number in range [0..1] that indicates the used size of event buffer as a fraction of its total size.
         """
         super().__init__()
 
@@ -28,8 +23,7 @@ class DataCollectedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param value: The value
-        :type array:
+        :param array value: The value
         """
         super().__init__()
 
@@ -41,10 +35,8 @@ class TracingCompleteEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param stream: A handle of the stream that holds resulting trace data.
-        :type IO.StreamHandle:
-        :param streamCompression: Compression format of returned stream.
-        :type StreamCompression:
+        :param IO.StreamHandle stream: A handle of the stream that holds resulting trace data.
+        :param StreamCompression streamCompression: Compression format of returned stream.
         """
         super().__init__()
 

@@ -7,15 +7,11 @@ PressureLevel = str
 
 class SamplingProfileNode(ChromeTypeBase):
     """Heap profile sample."""
-
     def __init__(self, size: float, total: float, stack: List['str']) -> None:
         """
-        :param size: Size of the sampled allocation.
-        :type float:
-        :param total: Total bytes attributed to this sample.
-        :type float:
-        :param stack: Execution stack at the point of allocation.
-        :type array:
+        :param float size: Size of the sampled allocation.
+        :param float total: Total bytes attributed to this sample.
+        :param array stack: Execution stack at the point of allocation.
         """
         super().__init__()
         self.size: float = size
@@ -25,11 +21,9 @@ class SamplingProfileNode(ChromeTypeBase):
 
 class SamplingProfile(ChromeTypeBase):
     """Array of heap profile samples."""
-
     def __init__(self, samples: List['SamplingProfileNode']) -> None:
         """
-        :param samples: The samples
-        :type array:
+        :param array samples: The samples
         """
         super().__init__()
         self.samples: List[SamplingProfileNode] = samples

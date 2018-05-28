@@ -7,13 +7,10 @@ VirtualTimePolicy = str
 
 class ScreenOrientation(ChromeTypeBase):
     """Screen orientation."""
-
     def __init__(self, type: str, angle: int) -> None:
         """
-        :param type: Orientation type.
-        :type str:
-        :param angle: Orientation angle.
-        :type int:
+        :param str type: Orientation type.
+        :param int angle: Orientation angle.
         """
         super().__init__()
         self.type: str = type

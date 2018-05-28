@@ -7,23 +7,15 @@ CacheId = str
 
 class DataEntry(ChromeTypeBase):
     """Data entry."""
-
     def __init__(self, requestURL: str, requestMethod: str, requestHeaders: List['Header'], responseTime: float, responseStatus: int, responseStatusText: str, responseHeaders: List['Header']) -> None:
         """
-        :param requestURL: Request URL.
-        :type str:
-        :param requestMethod: Request method.
-        :type str:
-        :param requestHeaders: Request headers
-        :type array:
-        :param responseTime: Number of seconds since epoch.
-        :type float:
-        :param responseStatus: HTTP response status code.
-        :type int:
-        :param responseStatusText: HTTP response status text.
-        :type str:
-        :param responseHeaders: Response headers
-        :type array:
+        :param str requestURL: Request URL.
+        :param str requestMethod: Request method.
+        :param array requestHeaders: Request headers
+        :param float responseTime: Number of seconds since epoch.
+        :param int responseStatus: HTTP response status code.
+        :param str responseStatusText: HTTP response status text.
+        :param array responseHeaders: Response headers
         """
         super().__init__()
         self.requestURL: str = requestURL
@@ -37,15 +29,11 @@ class DataEntry(ChromeTypeBase):
 
 class Cache(ChromeTypeBase):
     """Cache identifier."""
-
     def __init__(self, cacheId: 'CacheId', securityOrigin: str, cacheName: str) -> None:
         """
-        :param cacheId: An opaque unique id of the cache.
-        :type CacheId:
-        :param securityOrigin: Security origin of the cache.
-        :type str:
-        :param cacheName: The name of the cache.
-        :type str:
+        :param CacheId cacheId: An opaque unique id of the cache.
+        :param str securityOrigin: Security origin of the cache.
+        :param str cacheName: The name of the cache.
         """
         super().__init__()
         self.cacheId: CacheId = cacheId
@@ -54,13 +42,11 @@ class Cache(ChromeTypeBase):
 
 
 class Header(ChromeTypeBase):
-
+    pass
     def __init__(self, name: str, value: str) -> None:
         """
-        :param name: The name
-        :type str:
-        :param value: The value
-        :type str:
+        :param str name: The name
+        :param str value: The value
         """
         super().__init__()
         self.name: str = name
@@ -69,11 +55,9 @@ class Header(ChromeTypeBase):
 
 class CachedResponse(ChromeTypeBase):
     """Cached response"""
-
     def __init__(self, body: str) -> None:
         """
-        :param body: Entry content, base64-encoded.
-        :type str:
+        :param str body: Entry content, base64-encoded.
         """
         super().__init__()
         self.body: str = body

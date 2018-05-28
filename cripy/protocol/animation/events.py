@@ -9,8 +9,7 @@ class AnimationCanceledEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param id: Id of the animation that was cancelled.
-        :type str:
+        :param str id: Id of the animation that was cancelled.
         """
         super().__init__()
 
@@ -22,8 +21,7 @@ class AnimationCreatedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param id: Id of the animation that was created.
-        :type str:
+        :param str id: Id of the animation that was created.
         """
         super().__init__()
 
@@ -35,8 +33,7 @@ class AnimationStartedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param animation: Animation that was started.
-        :type Animation:
+        :param Animation animation: Animation that was started.
         """
         super().__init__()
 

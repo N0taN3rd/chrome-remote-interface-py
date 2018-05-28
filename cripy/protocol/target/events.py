@@ -9,12 +9,9 @@ class AttachedToTargetEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param sessionId: Identifier assigned to the session used to send/receive messages.
-        :type SessionID:
-        :param targetInfo: The targetInfo
-        :type TargetInfo:
-        :param waitingForDebugger: The waitingForDebugger
-        :type bool:
+        :param SessionID sessionId: Identifier assigned to the session used to send/receive messages.
+        :param TargetInfo targetInfo: The targetInfo
+        :param bool waitingForDebugger: The waitingForDebugger
         """
         super().__init__()
 
@@ -27,10 +24,8 @@ class DetachedFromTargetEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param sessionId: Detached session identifier.
-        :type SessionID:
-        :param targetId: Deprecated.
-        :type TargetID:
+        :param SessionID sessionId: Detached session identifier.
+        :param TargetID targetId: Deprecated.
         """
         super().__init__()
 
@@ -42,12 +37,9 @@ class ReceivedMessageFromTargetEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param sessionId: Identifier of a session which sends a message.
-        :type SessionID:
-        :param message: The message
-        :type str:
-        :param targetId: Deprecated.
-        :type TargetID:
+        :param SessionID sessionId: Identifier of a session which sends a message.
+        :param str message: The message
+        :param TargetID targetId: Deprecated.
         """
         super().__init__()
 
@@ -59,8 +51,7 @@ class TargetCreatedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param targetInfo: The targetInfo
-        :type TargetInfo:
+        :param TargetInfo targetInfo: The targetInfo
         """
         super().__init__()
 
@@ -72,8 +63,7 @@ class TargetDestroyedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param targetId: The targetId
-        :type TargetID:
+        :param TargetID targetId: The targetId
         """
         super().__init__()
 
@@ -86,8 +76,7 @@ class TargetInfoChangedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param targetInfo: The targetInfo
-        :type TargetInfo:
+        :param TargetInfo targetInfo: The targetInfo
         """
         super().__init__()
 

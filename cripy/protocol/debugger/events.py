@@ -9,10 +9,8 @@ class BreakpointResolvedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param breakpointId: Breakpoint unique identifier.
-        :type BreakpointId:
-        :param location: Actual breakpoint location.
-        :type Location:
+        :param BreakpointId breakpointId: Breakpoint unique identifier.
+        :param Location location: Actual breakpoint location.
         """
         super().__init__()
 
@@ -24,22 +22,13 @@ class PausedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param callFrames: Call stack the virtual machine stopped on.
-        :type array:
-        :param reason: Pause reason.
-        :type str:
-        :param data: Object containing break-specific auxiliary properties.
-        :type dict:
-        :param hitBreakpoints: Hit breakpoints IDs
-        :type array:
-        :param asyncStackTrace: Async stack trace, if any.
-        :type Runtime.StackTrace:
-        :param asyncStackTraceId: Async stack trace, if any.
-        :type Runtime.StackTraceId:
-        :param asyncCallStackTraceId: Just scheduled async call will have this stack trace as parent stack during async
-        execution. This field is available only after `Debugger.stepInto` call with
-        `breakOnAsynCall` flag.
-        :type Runtime.StackTraceId:
+        :param array callFrames: Call stack the virtual machine stopped on.
+        :param str reason: Pause reason.
+        :param dict data: Object containing break-specific auxiliary properties.
+        :param array hitBreakpoints: Hit breakpoints IDs
+        :param Runtime.StackTrace asyncStackTrace: Async stack trace, if any.
+        :param Runtime.StackTraceId asyncStackTraceId: Async stack trace, if any.
+        :param Runtime.StackTraceId asyncCallStackTraceId: Just scheduled async call will have this stack trace as parent stack during async execution. This field is available only after `Debugger.stepInto` call with `breakOnAsynCall` flag.
         """
         super().__init__()
 
@@ -60,35 +49,20 @@ class ScriptFailedToParseEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param scriptId: Identifier of the script parsed.
-        :type Runtime.ScriptId:
-        :param url: URL or name of the script parsed (if any).
-        :type str:
-        :param startLine: Line offset of the script within the resource with given URL (for script tags).
-        :type int:
-        :param startColumn: Column offset of the script within the resource with given URL.
-        :type int:
-        :param endLine: Last line of the script.
-        :type int:
-        :param endColumn: Length of the last line of the script.
-        :type int:
-        :param executionContextId: Specifies script creation context.
-        :type Runtime.ExecutionContextId:
-        :param hash: Content hash of the script.
-        :type str:
-        :param executionContextAuxData: Embedder-specific auxiliary data.
-        :type dict:
-        :param sourceMapURL: URL of source map associated with script (if any).
-        :type str:
-        :param hasSourceURL: True, if this script has sourceURL.
-        :type bool:
-        :param isModule: True, if this script is ES6 module.
-        :type bool:
-        :param length: This script length.
-        :type int:
-        :param stackTrace: JavaScript top stack frame of where the script parsed event was triggered if
-        available.
-        :type Runtime.StackTrace:
+        :param Runtime.ScriptId scriptId: Identifier of the script parsed.
+        :param str url: URL or name of the script parsed (if any).
+        :param int startLine: Line offset of the script within the resource with given URL (for script tags).
+        :param int startColumn: Column offset of the script within the resource with given URL.
+        :param int endLine: Last line of the script.
+        :param int endColumn: Length of the last line of the script.
+        :param Runtime.ExecutionContextId executionContextId: Specifies script creation context.
+        :param str hash: Content hash of the script.
+        :param dict executionContextAuxData: Embedder-specific auxiliary data.
+        :param str sourceMapURL: URL of source map associated with script (if any).
+        :param bool hasSourceURL: True, if this script has sourceURL.
+        :param bool isModule: True, if this script is ES6 module.
+        :param int length: This script length.
+        :param Runtime.StackTrace stackTrace: JavaScript top stack frame of where the script parsed event was triggered if available.
         """
         super().__init__()
 
@@ -101,37 +75,21 @@ class ScriptParsedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param scriptId: Identifier of the script parsed.
-        :type Runtime.ScriptId:
-        :param url: URL or name of the script parsed (if any).
-        :type str:
-        :param startLine: Line offset of the script within the resource with given URL (for script tags).
-        :type int:
-        :param startColumn: Column offset of the script within the resource with given URL.
-        :type int:
-        :param endLine: Last line of the script.
-        :type int:
-        :param endColumn: Length of the last line of the script.
-        :type int:
-        :param executionContextId: Specifies script creation context.
-        :type Runtime.ExecutionContextId:
-        :param hash: Content hash of the script.
-        :type str:
-        :param executionContextAuxData: Embedder-specific auxiliary data.
-        :type dict:
-        :param isLiveEdit: True, if this script is generated as a result of the live edit operation.
-        :type bool:
-        :param sourceMapURL: URL of source map associated with script (if any).
-        :type str:
-        :param hasSourceURL: True, if this script has sourceURL.
-        :type bool:
-        :param isModule: True, if this script is ES6 module.
-        :type bool:
-        :param length: This script length.
-        :type int:
-        :param stackTrace: JavaScript top stack frame of where the script parsed event was triggered if
-        available.
-        :type Runtime.StackTrace:
+        :param Runtime.ScriptId scriptId: Identifier of the script parsed.
+        :param str url: URL or name of the script parsed (if any).
+        :param int startLine: Line offset of the script within the resource with given URL (for script tags).
+        :param int startColumn: Column offset of the script within the resource with given URL.
+        :param int endLine: Last line of the script.
+        :param int endColumn: Length of the last line of the script.
+        :param Runtime.ExecutionContextId executionContextId: Specifies script creation context.
+        :param str hash: Content hash of the script.
+        :param dict executionContextAuxData: Embedder-specific auxiliary data.
+        :param bool isLiveEdit: True, if this script is generated as a result of the live edit operation.
+        :param str sourceMapURL: URL of source map associated with script (if any).
+        :param bool hasSourceURL: True, if this script has sourceURL.
+        :param bool isModule: True, if this script is ES6 module.
+        :param int length: This script length.
+        :param Runtime.StackTrace stackTrace: JavaScript top stack frame of where the script parsed event was triggered if available.
         """
         super().__init__()
 

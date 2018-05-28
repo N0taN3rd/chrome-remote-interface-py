@@ -8,12 +8,9 @@ class DomStorageItemAddedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param storageId: The storageId
-        :type StorageId:
-        :param key: The key
-        :type str:
-        :param newValue: The newValue
-        :type str:
+        :param StorageId storageId: The storageId
+        :param str key: The key
+        :param str newValue: The newValue
         """
         super().__init__()
 
@@ -24,10 +21,8 @@ class DomStorageItemRemovedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param storageId: The storageId
-        :type StorageId:
-        :param key: The key
-        :type str:
+        :param StorageId storageId: The storageId
+        :param str key: The key
         """
         super().__init__()
 
@@ -38,14 +33,10 @@ class DomStorageItemUpdatedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param storageId: The storageId
-        :type StorageId:
-        :param key: The key
-        :type str:
-        :param oldValue: The oldValue
-        :type str:
-        :param newValue: The newValue
-        :type str:
+        :param StorageId storageId: The storageId
+        :param str key: The key
+        :param str oldValue: The oldValue
+        :param str newValue: The newValue
         """
         super().__init__()
 
@@ -56,8 +47,7 @@ class DomStorageItemsClearedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param storageId: The storageId
-        :type StorageId:
+        :param StorageId storageId: The storageId
         """
         super().__init__()
 

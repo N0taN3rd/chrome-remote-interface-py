@@ -8,8 +8,7 @@ class AddDatabaseEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param database: The database
-        :type Database:
+        :param Database database: The database
         """
         super().__init__()
 

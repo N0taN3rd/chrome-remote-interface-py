@@ -4,21 +4,14 @@ from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
 
 class ConsoleMessage(ChromeTypeBase):
     """Console message."""
-
     def __init__(self, source: str, level: str, text: str, url: Optional[str] = None, line: Optional[int] = None, column: Optional[int] = None) -> None:
         """
-        :param source: Message source.
-        :type str:
-        :param level: Message severity.
-        :type str:
-        :param text: Message text.
-        :type str:
-        :param url: URL of the message origin.
-        :type str:
-        :param line: Line number in the resource that generated this message (1-based).
-        :type int:
-        :param column: Column number in the resource that generated this message (1-based).
-        :type int:
+        :param str source: Message source.
+        :param str level: Message severity.
+        :param str text: Message text.
+        :param str url: URL of the message origin.
+        :param int line: Line number in the resource that generated this message (1-based).
+        :param int column: Column number in the resource that generated this message (1-based).
         """
         super().__init__()
         self.source: str = source

@@ -12,23 +12,16 @@ BrowserContextID = str
 
 
 class TargetInfo(ChromeTypeBase):
-
+    pass
     def __init__(self, targetId: 'TargetID', type: str, title: str, url: str, attached: bool, openerId: Optional['TargetID'] = None, browserContextId: Optional['BrowserContextID'] = None) -> None:
         """
-        :param targetId: The targetId
-        :type TargetID:
-        :param type: The type
-        :type str:
-        :param title: The title
-        :type str:
-        :param url: The url
-        :type str:
-        :param attached: Whether the target has an attached client.
-        :type bool:
-        :param openerId: Opener target Id
-        :type TargetID:
-        :param browserContextId: The browserContextId
-        :type BrowserContextID:
+        :param TargetID targetId: The targetId
+        :param str type: The type
+        :param str title: The title
+        :param str url: The url
+        :param bool attached: Whether the target has an attached client.
+        :param TargetID openerId: Opener target Id
+        :param BrowserContextID browserContextId: The browserContextId
         """
         super().__init__()
         self.targetId: TargetID = targetId
@@ -41,13 +34,11 @@ class TargetInfo(ChromeTypeBase):
 
 
 class RemoteLocation(ChromeTypeBase):
-
+    pass
     def __init__(self, host: str, port: int) -> None:
         """
-        :param host: The host
-        :type str:
-        :param port: The port
-        :type int:
+        :param str host: The host
+        :param int port: The port
         """
         super().__init__()
         self.host: str = host

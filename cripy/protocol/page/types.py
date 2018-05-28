@@ -20,25 +20,16 @@ DialogType = str
 
 class Frame(ChromeTypeBase):
     """Information about the Frame on the page."""
-
     def __init__(self, id: str, loaderId: 'Network.LoaderId', url: str, securityOrigin: str, mimeType: str, parentId: Optional[str] = None, name: Optional[str] = None, unreachableUrl: Optional[str] = None) -> None:
         """
-        :param id: Frame unique identifier.
-        :type str:
-        :param parentId: Parent frame identifier.
-        :type str:
-        :param loaderId: Identifier of the loader associated with this frame.
-        :type Network.LoaderId:
-        :param name: Frame's name as specified in the tag.
-        :type str:
-        :param url: Frame document's URL.
-        :type str:
-        :param securityOrigin: Frame document's security origin.
-        :type str:
-        :param mimeType: Frame document's mimeType as determined by the browser.
-        :type str:
-        :param unreachableUrl: If the frame failed to load, this contains the URL that could not be loaded.
-        :type str:
+        :param str id: Frame unique identifier.
+        :param str parentId: Parent frame identifier.
+        :param Network.LoaderId loaderId: Identifier of the loader associated with this frame.
+        :param str name: Frame's name as specified in the tag.
+        :param str url: Frame document's URL.
+        :param str securityOrigin: Frame document's security origin.
+        :param str mimeType: Frame document's mimeType as determined by the browser.
+        :param str unreachableUrl: If the frame failed to load, this contains the URL that could not be loaded.
         """
         super().__init__()
         self.id: str = id
@@ -53,23 +44,15 @@ class Frame(ChromeTypeBase):
 
 class FrameResource(ChromeTypeBase):
     """Information about the Resource on the page."""
-
     def __init__(self, url: str, type: 'ResourceType', mimeType: str, lastModified: Optional['Network.TimeSinceEpoch'] = None, contentSize: Optional[float] = None, failed: Optional[bool] = None, canceled: Optional[bool] = None) -> None:
         """
-        :param url: Resource URL.
-        :type str:
-        :param type: Type of this resource.
-        :type ResourceType:
-        :param mimeType: Resource mimeType as determined by the browser.
-        :type str:
-        :param lastModified: last-modified timestamp as reported by server.
-        :type Network.TimeSinceEpoch:
-        :param contentSize: Resource content size.
-        :type float:
-        :param failed: True if the resource failed to load.
-        :type bool:
-        :param canceled: True if the resource was canceled during loading.
-        :type bool:
+        :param str url: Resource URL.
+        :param ResourceType type: Type of this resource.
+        :param str mimeType: Resource mimeType as determined by the browser.
+        :param Network.TimeSinceEpoch lastModified: last-modified timestamp as reported by server.
+        :param float contentSize: Resource content size.
+        :param bool failed: True if the resource failed to load.
+        :param bool canceled: True if the resource was canceled during loading.
         """
         super().__init__()
         self.url: str = url
@@ -83,15 +66,11 @@ class FrameResource(ChromeTypeBase):
 
 class FrameResourceTree(ChromeTypeBase):
     """Information about the Frame hierarchy along with their cached resources."""
-
     def __init__(self, frame: 'Frame', resources: List['FrameResource'], childFrames: Optional[List['FrameResourceTree']] = None) -> None:
         """
-        :param frame: Frame information for this tree item.
-        :type Frame:
-        :param childFrames: Child frames.
-        :type array:
-        :param resources: Information about frame resources.
-        :type array:
+        :param Frame frame: Frame information for this tree item.
+        :param array childFrames: Child frames.
+        :param array resources: Information about frame resources.
         """
         super().__init__()
         self.frame: Frame = frame
@@ -101,13 +80,10 @@ class FrameResourceTree(ChromeTypeBase):
 
 class FrameTree(ChromeTypeBase):
     """Information about the Frame hierarchy."""
-
     def __init__(self, frame: 'Frame', childFrames: Optional[List['FrameTree']] = None) -> None:
         """
-        :param frame: Frame information for this tree item.
-        :type Frame:
-        :param childFrames: Child frames.
-        :type array:
+        :param Frame frame: Frame information for this tree item.
+        :param array childFrames: Child frames.
         """
         super().__init__()
         self.frame: Frame = frame
@@ -116,19 +92,13 @@ class FrameTree(ChromeTypeBase):
 
 class NavigationEntry(ChromeTypeBase):
     """Navigation history entry."""
-
     def __init__(self, id: int, url: str, userTypedURL: str, title: str, transitionType: 'TransitionType') -> None:
         """
-        :param id: Unique id of the navigation history entry.
-        :type int:
-        :param url: URL of the navigation history entry.
-        :type str:
-        :param userTypedURL: URL that the user typed in the url bar.
-        :type str:
-        :param title: Title of the navigation history entry.
-        :type str:
-        :param transitionType: Transition type.
-        :type TransitionType:
+        :param int id: Unique id of the navigation history entry.
+        :param str url: URL of the navigation history entry.
+        :param str userTypedURL: URL that the user typed in the url bar.
+        :param str title: Title of the navigation history entry.
+        :param TransitionType transitionType: Transition type.
         """
         super().__init__()
         self.id: int = id
@@ -140,23 +110,15 @@ class NavigationEntry(ChromeTypeBase):
 
 class ScreencastFrameMetadata(ChromeTypeBase):
     """Screencast frame metadata."""
-
     def __init__(self, offsetTop: float, pageScaleFactor: float, deviceWidth: float, deviceHeight: float, scrollOffsetX: float, scrollOffsetY: float, timestamp: Optional['Network.TimeSinceEpoch'] = None) -> None:
         """
-        :param offsetTop: Top offset in DIP.
-        :type float:
-        :param pageScaleFactor: Page scale factor.
-        :type float:
-        :param deviceWidth: Device screen width in DIP.
-        :type float:
-        :param deviceHeight: Device screen height in DIP.
-        :type float:
-        :param scrollOffsetX: Position of horizontal scroll in CSS pixels.
-        :type float:
-        :param scrollOffsetY: Position of vertical scroll in CSS pixels.
-        :type float:
-        :param timestamp: Frame swap timestamp.
-        :type Network.TimeSinceEpoch:
+        :param float offsetTop: Top offset in DIP.
+        :param float pageScaleFactor: Page scale factor.
+        :param float deviceWidth: Device screen width in DIP.
+        :param float deviceHeight: Device screen height in DIP.
+        :param float scrollOffsetX: Position of horizontal scroll in CSS pixels.
+        :param float scrollOffsetY: Position of vertical scroll in CSS pixels.
+        :param Network.TimeSinceEpoch timestamp: Frame swap timestamp.
         """
         super().__init__()
         self.offsetTop: float = offsetTop
@@ -170,17 +132,12 @@ class ScreencastFrameMetadata(ChromeTypeBase):
 
 class AppManifestError(ChromeTypeBase):
     """Error while paring app manifest."""
-
     def __init__(self, message: str, critical: int, line: int, column: int) -> None:
         """
-        :param message: Error message.
-        :type str:
-        :param critical: If criticial, this is a non-recoverable parse error.
-        :type int:
-        :param line: Error line.
-        :type int:
-        :param column: Error column.
-        :type int:
+        :param str message: Error message.
+        :param int critical: If criticial, this is a non-recoverable parse error.
+        :param int line: Error line.
+        :param int column: Error column.
         """
         super().__init__()
         self.message: str = message
@@ -191,17 +148,12 @@ class AppManifestError(ChromeTypeBase):
 
 class LayoutViewport(ChromeTypeBase):
     """Layout viewport position and dimensions."""
-
     def __init__(self, pageX: int, pageY: int, clientWidth: int, clientHeight: int) -> None:
         """
-        :param pageX: Horizontal offset relative to the document (CSS pixels).
-        :type int:
-        :param pageY: Vertical offset relative to the document (CSS pixels).
-        :type int:
-        :param clientWidth: Width (CSS pixels), excludes scrollbar if present.
-        :type int:
-        :param clientHeight: Height (CSS pixels), excludes scrollbar if present.
-        :type int:
+        :param int pageX: Horizontal offset relative to the document (CSS pixels).
+        :param int pageY: Vertical offset relative to the document (CSS pixels).
+        :param int clientWidth: Width (CSS pixels), excludes scrollbar if present.
+        :param int clientHeight: Height (CSS pixels), excludes scrollbar if present.
         """
         super().__init__()
         self.pageX: int = pageX
@@ -212,23 +164,15 @@ class LayoutViewport(ChromeTypeBase):
 
 class VisualViewport(ChromeTypeBase):
     """Visual viewport position, dimensions, and scale."""
-
     def __init__(self, offsetX: float, offsetY: float, pageX: float, pageY: float, clientWidth: float, clientHeight: float, scale: float) -> None:
         """
-        :param offsetX: Horizontal offset relative to the layout viewport (CSS pixels).
-        :type float:
-        :param offsetY: Vertical offset relative to the layout viewport (CSS pixels).
-        :type float:
-        :param pageX: Horizontal offset relative to the document (CSS pixels).
-        :type float:
-        :param pageY: Vertical offset relative to the document (CSS pixels).
-        :type float:
-        :param clientWidth: Width (CSS pixels), excludes scrollbar if present.
-        :type float:
-        :param clientHeight: Height (CSS pixels), excludes scrollbar if present.
-        :type float:
-        :param scale: Scale relative to the ideal viewport (size at width=device-width).
-        :type float:
+        :param float offsetX: Horizontal offset relative to the layout viewport (CSS pixels).
+        :param float offsetY: Vertical offset relative to the layout viewport (CSS pixels).
+        :param float pageX: Horizontal offset relative to the document (CSS pixels).
+        :param float pageY: Vertical offset relative to the document (CSS pixels).
+        :param float clientWidth: Width (CSS pixels), excludes scrollbar if present.
+        :param float clientHeight: Height (CSS pixels), excludes scrollbar if present.
+        :param float scale: Scale relative to the ideal viewport (size at width=device-width).
         """
         super().__init__()
         self.offsetX: float = offsetX
@@ -242,19 +186,13 @@ class VisualViewport(ChromeTypeBase):
 
 class Viewport(ChromeTypeBase):
     """Viewport for capturing screenshot."""
-
     def __init__(self, x: float, y: float, width: float, height: float, scale: float) -> None:
         """
-        :param x: X offset in CSS pixels.
-        :type float:
-        :param y: Y offset in CSS pixels
-        :type float:
-        :param width: Rectangle width in CSS pixels
-        :type float:
-        :param height: Rectangle height in CSS pixels
-        :type float:
-        :param scale: Page scale factor.
-        :type float:
+        :param float x: X offset in CSS pixels.
+        :param float y: Y offset in CSS pixels
+        :param float width: Rectangle width in CSS pixels
+        :param float height: Rectangle height in CSS pixels
+        :param float scale: Page scale factor.
         """
         super().__init__()
         self.x: float = x

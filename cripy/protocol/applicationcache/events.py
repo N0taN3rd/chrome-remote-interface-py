@@ -8,12 +8,9 @@ class ApplicationCacheStatusUpdatedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param frameId: Identifier of the frame containing document whose application cache updated status.
-        :type Page.FrameId:
-        :param manifestURL: Manifest URL.
-        :type str:
-        :param status: Updated application cache status.
-        :type int:
+        :param Page.FrameId frameId: Identifier of the frame containing document whose application cache updated status.
+        :param str manifestURL: Manifest URL.
+        :param int status: Updated application cache status.
         """
         super().__init__()
 
@@ -24,8 +21,7 @@ class NetworkStateUpdatedEvent(BaseEvent):
 
     def __init__(self) -> None:
         """
-        :param isNowOnline: The isNowOnline
-        :type bool:
+        :param bool isNowOnline: The isNowOnline
         """
         super().__init__()
 

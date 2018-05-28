@@ -28,11 +28,10 @@ class {{ dt.id }}(ChromeTypeBase, dict):
         """
         {% for prop in dt.properties %}
         {% if prop.description %}
-        :param {{ prop.name }}: {{ prop.nice_description }}
+        :param {{ prop.type }} {{ prop.name }}: {{ prop.nice_description }}
         {% else %}
-        :param {{ prop.name }}: The {{ prop.name }}
+        :param {{ prop.type }} {{ prop.name }}: The {{ prop.name }}
         {% endif %}
-        :type {{ prop.type }}:
         {% endfor %}
         """
         super().__init__()
