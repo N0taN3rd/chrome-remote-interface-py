@@ -1,12 +1,63 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 from cripy.protocol.runtime import types as Runtime
 
-# Breakpoint identifier.
-BreakpointId = str
+CallFrameId = TypeVar("CallFrameId", str, str)
+"""Call frame identifier."""
 
-# Call frame identifier.
-CallFrameId = str
+BreakpointId = TypeVar("BreakpointId", str, str)
+"""Breakpoint identifier."""
+
+
+class SearchMatch(ChromeTypeBase):
+    """Search match for resource."""
+    def __init__(self, lineNumber: float, lineContent: str) -> None:
+        """
+        :param lineNumber: Line number in resource content.
+        :type lineNumber: float
+        :param lineContent: Line with match content.
+        :type lineContent: str
+        """
+        super().__init__()
+        self.lineNumber: float = lineNumber
+        self.lineContent: str = lineContent
+
+
+class ScriptPosition(ChromeTypeBase):
+    """Location in the source code."""
+    def __init__(self, lineNumber: int, columnNumber: int) -> None:
+        """
+        :param lineNumber: The lineNumber
+        :type lineNumber: int
+        :param columnNumber: The columnNumber
+        :type columnNumber: int
+        """
+        super().__init__()
+        self.lineNumber: int = lineNumber
+        self.columnNumber: int = columnNumber
+
+
+class Scope(ChromeTypeBase):
+    """Scope description."""
+    def __init__(self, type: str, object: 'Runtime.RemoteObject', name: Optional[str] = None, startLocation: Optional['Location'] = None, endLocation: Optional['Location'] = None) -> None:
+        """
+        :param type: Scope type.
+        :type type: str
+        :param object: Object representing the scope. For `global` and `with` scopes it represents the actual object; for the rest of the scopes, it is artificial transient object enumerating scope variables as its properties.
+        :type object: Runtime.RemoteObject
+        :param name: The name
+        :type name: str
+        :param startLocation: Location in the source code where scope starts
+        :type startLocation: Location
+        :param endLocation: Location in the source code where scope ends
+        :type endLocation: Location
+        """
+        super().__init__()
+        self.type: str = type
+        self.object: Runtime.RemoteObject = object
+        self.name: Optional[str] = name
+        self.startLocation: Optional[Location] = startLocation
+        self.endLocation: Optional[Location] = endLocation
 
 
 class Location(ChromeTypeBase):
@@ -24,20 +75,6 @@ class Location(ChromeTypeBase):
         self.scriptId: Runtime.ScriptId = scriptId
         self.lineNumber: int = lineNumber
         self.columnNumber: Optional[int] = columnNumber
-
-
-class ScriptPosition(ChromeTypeBase):
-    """Location in the source code."""
-    def __init__(self, lineNumber: int, columnNumber: int) -> None:
-        """
-        :param lineNumber: The lineNumber
-        :type lineNumber: int
-        :param columnNumber: The columnNumber
-        :type columnNumber: int
-        """
-        super().__init__()
-        self.lineNumber: int = lineNumber
-        self.columnNumber: int = columnNumber
 
 
 class CallFrame(ChromeTypeBase):
@@ -72,45 +109,7 @@ class CallFrame(ChromeTypeBase):
         self.returnValue: Optional[Runtime.RemoteObject] = returnValue
 
 
-class Scope(ChromeTypeBase):
-    """Scope description."""
-    def __init__(self, type: str, object: 'Runtime.RemoteObject', name: Optional[str] = None, startLocation: Optional['Location'] = None, endLocation: Optional['Location'] = None) -> None:
-        """
-        :param type: Scope type.
-        :type type: str
-        :param object: Object representing the scope. For `global` and `with` scopes it represents the actual object; for the rest of the scopes, it is artificial transient object enumerating scope variables as its properties.
-        :type object: Runtime.RemoteObject
-        :param name: The name
-        :type name: str
-        :param startLocation: Location in the source code where scope starts
-        :type startLocation: Location
-        :param endLocation: Location in the source code where scope ends
-        :type endLocation: Location
-        """
-        super().__init__()
-        self.type: str = type
-        self.object: Runtime.RemoteObject = object
-        self.name: Optional[str] = name
-        self.startLocation: Optional[Location] = startLocation
-        self.endLocation: Optional[Location] = endLocation
-
-
-class SearchMatch(ChromeTypeBase):
-    """Search match for resource."""
-    def __init__(self, lineNumber: float, lineContent: str) -> None:
-        """
-        :param lineNumber: Line number in resource content.
-        :type lineNumber: float
-        :param lineContent: Line with match content.
-        :type lineContent: str
-        """
-        super().__init__()
-        self.lineNumber: float = lineNumber
-        self.lineContent: str = lineContent
-
-
 class BreakLocation(ChromeTypeBase):
-    pass
     def __init__(self, scriptId: 'Runtime.ScriptId', lineNumber: int, columnNumber: Optional[int] = None, type: Optional[str] = None) -> None:
         """
         :param scriptId: Script identifier as reported in the `Debugger.scriptParsed`.

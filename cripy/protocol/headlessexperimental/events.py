@@ -7,12 +7,13 @@ class NeedsBeginFramesChangedEvent(BaseEvent):
 
     event: str = "HeadlessExperimental.needsBeginFramesChanged"
 
-    def __init__(self) -> None:
+    def __init__(self, needsBeginFrames: bool) -> None:
         """
-        :param bool needsBeginFrames: True if BeginFrames are needed, false otherwise.
+        :param needsBeginFrames: True if BeginFrames are needed, false otherwise.
         :type needsBeginFrames: bool
         """
         super().__init__()
+        self.needsBeginFrames: bool = needsBeginFrames
 
 
 EVENT_TO_CLASS = {

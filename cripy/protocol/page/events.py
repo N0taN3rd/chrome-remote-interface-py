@@ -1,17 +1,26 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
+from cripy.protocol.network import types as Network
+from cripy.protocol.runtime import types as Runtime
+from cripy.protocol.page.types import (
+    ScreencastFrameMetadata,
+    DialogType,
+    Frame,
+    FrameId,
+)
 
 
 class DomContentEventFiredEvent(BaseEvent):
 
     event: str = "Page.domContentEventFired"
 
-    def __init__(self) -> None:
+    def __init__(self, timestamp: Network.MonotonicTime) -> None:
         """
-        :param Network.MonotonicTime timestamp: The timestamp
+        :param timestamp: The timestamp
         :type timestamp: Network.MonotonicTime
         """
         super().__init__()
+        self.timestamp: Network.MonotonicTime = timestamp
 
 
 class FrameAttachedEvent(BaseEvent):
@@ -19,16 +28,19 @@ class FrameAttachedEvent(BaseEvent):
 
     event: str = "Page.frameAttached"
 
-    def __init__(self) -> None:
+    def __init__(self, frameId: FrameId, parentFrameId: FrameId, stack: Optional[Runtime.StackTrace] = None) -> None:
         """
-        :param FrameId frameId: Id of the frame that has been attached.
+        :param frameId: Id of the frame that has been attached.
         :type frameId: FrameId
-        :param FrameId parentFrameId: Parent frame identifier.
+        :param parentFrameId: Parent frame identifier.
         :type parentFrameId: FrameId
-        :param Runtime.StackTrace stack: JavaScript stack trace of when frame was attached, only set if frame initiated from script.
+        :param stack: JavaScript stack trace of when frame was attached, only set if frame initiated from script.
         :type stack: Runtime.StackTrace
         """
         super().__init__()
+        self.frameId: FrameId = frameId
+        self.parentFrameId: FrameId = parentFrameId
+        self.stack: Optional[Runtime.StackTrace] = stack
 
 
 class FrameClearedScheduledNavigationEvent(BaseEvent):
@@ -36,12 +48,13 @@ class FrameClearedScheduledNavigationEvent(BaseEvent):
 
     event: str = "Page.frameClearedScheduledNavigation"
 
-    def __init__(self) -> None:
+    def __init__(self, frameId: FrameId) -> None:
         """
-        :param FrameId frameId: Id of the frame that has cleared its scheduled navigation.
+        :param frameId: Id of the frame that has cleared its scheduled navigation.
         :type frameId: FrameId
         """
         super().__init__()
+        self.frameId: FrameId = frameId
 
 
 class FrameDetachedEvent(BaseEvent):
@@ -49,12 +62,13 @@ class FrameDetachedEvent(BaseEvent):
 
     event: str = "Page.frameDetached"
 
-    def __init__(self) -> None:
+    def __init__(self, frameId: FrameId) -> None:
         """
-        :param FrameId frameId: Id of the frame that has been detached.
+        :param frameId: Id of the frame that has been detached.
         :type frameId: FrameId
         """
         super().__init__()
+        self.frameId: FrameId = frameId
 
 
 class FrameNavigatedEvent(BaseEvent):
@@ -63,19 +77,20 @@ class FrameNavigatedEvent(BaseEvent):
 
     event: str = "Page.frameNavigated"
 
-    def __init__(self) -> None:
+    def __init__(self, frame: Frame) -> None:
         """
-        :param Frame frame: Frame object.
+        :param frame: Frame object.
         :type frame: Frame
         """
         super().__init__()
+        self.frame: Frame = frame
 
 
 class FrameResizedEvent(BaseEvent):
 
     event: str = "Page.frameResized"
 
-    def __init__(self) -> None:
+    def __init__(self, ) -> None:
         super().__init__()
 
 
@@ -84,18 +99,22 @@ class FrameScheduledNavigationEvent(BaseEvent):
 
     event: str = "Page.frameScheduledNavigation"
 
-    def __init__(self) -> None:
+    def __init__(self, frameId: FrameId, delay: float, reason: str, url: str) -> None:
         """
-        :param FrameId frameId: Id of the frame that has scheduled a navigation.
+        :param frameId: Id of the frame that has scheduled a navigation.
         :type frameId: FrameId
-        :param float delay: Delay (in seconds) until the navigation is scheduled to begin. The navigation is not guaranteed to start.
+        :param delay: Delay (in seconds) until the navigation is scheduled to begin. The navigation is not guaranteed to start.
         :type delay: float
-        :param str reason: The reason for the navigation.
+        :param reason: The reason for the navigation.
         :type reason: str
-        :param str url: The destination URL for the scheduled navigation.
+        :param url: The destination URL for the scheduled navigation.
         :type url: str
         """
         super().__init__()
+        self.frameId: FrameId = frameId
+        self.delay: float = delay
+        self.reason: str = reason
+        self.url: str = url
 
 
 class FrameStartedLoadingEvent(BaseEvent):
@@ -103,12 +122,13 @@ class FrameStartedLoadingEvent(BaseEvent):
 
     event: str = "Page.frameStartedLoading"
 
-    def __init__(self) -> None:
+    def __init__(self, frameId: FrameId) -> None:
         """
-        :param FrameId frameId: Id of the frame that has started loading.
+        :param frameId: Id of the frame that has started loading.
         :type frameId: FrameId
         """
         super().__init__()
+        self.frameId: FrameId = frameId
 
 
 class FrameStoppedLoadingEvent(BaseEvent):
@@ -116,12 +136,13 @@ class FrameStoppedLoadingEvent(BaseEvent):
 
     event: str = "Page.frameStoppedLoading"
 
-    def __init__(self) -> None:
+    def __init__(self, frameId: FrameId) -> None:
         """
-        :param FrameId frameId: Id of the frame that has stopped loading.
+        :param frameId: Id of the frame that has stopped loading.
         :type frameId: FrameId
         """
         super().__init__()
+        self.frameId: FrameId = frameId
 
 
 class InterstitialHiddenEvent(BaseEvent):
@@ -129,7 +150,7 @@ class InterstitialHiddenEvent(BaseEvent):
 
     event: str = "Page.interstitialHidden"
 
-    def __init__(self) -> None:
+    def __init__(self, ) -> None:
         super().__init__()
 
 
@@ -138,7 +159,7 @@ class InterstitialShownEvent(BaseEvent):
 
     event: str = "Page.interstitialShown"
 
-    def __init__(self) -> None:
+    def __init__(self, ) -> None:
         super().__init__()
 
 
@@ -147,14 +168,16 @@ class JavascriptDialogClosedEvent(BaseEvent):
 
     event: str = "Page.javascriptDialogClosed"
 
-    def __init__(self) -> None:
+    def __init__(self, result: bool, userInput: str) -> None:
         """
-        :param bool result: Whether dialog was confirmed.
+        :param result: Whether dialog was confirmed.
         :type result: bool
-        :param str userInput: User input in case of prompt.
+        :param userInput: User input in case of prompt.
         :type userInput: str
         """
         super().__init__()
+        self.result: bool = result
+        self.userInput: str = userInput
 
 
 class JavascriptDialogOpeningEvent(BaseEvent):
@@ -162,20 +185,25 @@ class JavascriptDialogOpeningEvent(BaseEvent):
 
     event: str = "Page.javascriptDialogOpening"
 
-    def __init__(self) -> None:
+    def __init__(self, url: str, message: str, type: DialogType, hasBrowserHandler: bool, defaultPrompt: Optional[str] = None) -> None:
         """
-        :param str url: Frame url.
+        :param url: Frame url.
         :type url: str
-        :param str message: Message that will be displayed by the dialog.
+        :param message: Message that will be displayed by the dialog.
         :type message: str
-        :param DialogType type: Dialog type.
+        :param type: Dialog type.
         :type type: DialogType
-        :param bool hasBrowserHandler: True iff browser is capable showing or acting on the given dialog. When browser has no dialog handler for given target, calling alert while Page domain is engaged will stall the page execution. Execution can be resumed via calling Page.handleJavaScriptDialog.
+        :param hasBrowserHandler: True iff browser is capable showing or acting on the given dialog. When browser has no dialog handler for given target, calling alert while Page domain is engaged will stall the page execution. Execution can be resumed via calling Page.handleJavaScriptDialog.
         :type hasBrowserHandler: bool
-        :param str defaultPrompt: Default dialog prompt.
+        :param defaultPrompt: Default dialog prompt.
         :type defaultPrompt: str
         """
         super().__init__()
+        self.url: str = url
+        self.message: str = message
+        self.type: DialogType = type
+        self.hasBrowserHandler: bool = hasBrowserHandler
+        self.defaultPrompt: Optional[str] = defaultPrompt
 
 
 class LifecycleEventEvent(BaseEvent):
@@ -183,30 +211,35 @@ class LifecycleEventEvent(BaseEvent):
 
     event: str = "Page.lifecycleEvent"
 
-    def __init__(self) -> None:
+    def __init__(self, frameId: FrameId, loaderId: Network.LoaderId, name: str, timestamp: Network.MonotonicTime) -> None:
         """
-        :param FrameId frameId: Id of the frame.
+        :param frameId: Id of the frame.
         :type frameId: FrameId
-        :param Network.LoaderId loaderId: Loader identifier. Empty string if the request is fetched from worker.
+        :param loaderId: Loader identifier. Empty string if the request is fetched from worker.
         :type loaderId: Network.LoaderId
-        :param str name: The name
+        :param name: The name
         :type name: str
-        :param Network.MonotonicTime timestamp: The timestamp
+        :param timestamp: The timestamp
         :type timestamp: Network.MonotonicTime
         """
         super().__init__()
+        self.frameId: FrameId = frameId
+        self.loaderId: Network.LoaderId = loaderId
+        self.name: str = name
+        self.timestamp: Network.MonotonicTime = timestamp
 
 
 class LoadEventFiredEvent(BaseEvent):
 
     event: str = "Page.loadEventFired"
 
-    def __init__(self) -> None:
+    def __init__(self, timestamp: Network.MonotonicTime) -> None:
         """
-        :param Network.MonotonicTime timestamp: The timestamp
+        :param timestamp: The timestamp
         :type timestamp: Network.MonotonicTime
         """
         super().__init__()
+        self.timestamp: Network.MonotonicTime = timestamp
 
 
 class NavigatedWithinDocumentEvent(BaseEvent):
@@ -215,14 +248,16 @@ class NavigatedWithinDocumentEvent(BaseEvent):
 
     event: str = "Page.navigatedWithinDocument"
 
-    def __init__(self) -> None:
+    def __init__(self, frameId: FrameId, url: str) -> None:
         """
-        :param FrameId frameId: Id of the frame.
+        :param frameId: Id of the frame.
         :type frameId: FrameId
-        :param str url: Frame's new url.
+        :param url: Frame's new url.
         :type url: str
         """
         super().__init__()
+        self.frameId: FrameId = frameId
+        self.url: str = url
 
 
 class ScreencastFrameEvent(BaseEvent):
@@ -230,16 +265,19 @@ class ScreencastFrameEvent(BaseEvent):
 
     event: str = "Page.screencastFrame"
 
-    def __init__(self) -> None:
+    def __init__(self, data: str, metadata: ScreencastFrameMetadata, sessionId: int) -> None:
         """
-        :param str data: Base64-encoded compressed image.
+        :param data: Base64-encoded compressed image.
         :type data: str
-        :param ScreencastFrameMetadata metadata: Screencast frame metadata.
+        :param metadata: Screencast frame metadata.
         :type metadata: ScreencastFrameMetadata
-        :param int sessionId: Frame number.
+        :param sessionId: Frame number.
         :type sessionId: int
         """
         super().__init__()
+        self.data: str = data
+        self.metadata: ScreencastFrameMetadata = metadata
+        self.sessionId: int = sessionId
 
 
 class ScreencastVisibilityChangedEvent(BaseEvent):
@@ -247,12 +285,13 @@ class ScreencastVisibilityChangedEvent(BaseEvent):
 
     event: str = "Page.screencastVisibilityChanged"
 
-    def __init__(self) -> None:
+    def __init__(self, visible: bool) -> None:
         """
-        :param bool visible: True if the page is visible.
+        :param visible: True if the page is visible.
         :type visible: bool
         """
         super().__init__()
+        self.visible: bool = visible
 
 
 class WindowOpenEvent(BaseEvent):
@@ -260,18 +299,22 @@ class WindowOpenEvent(BaseEvent):
 
     event: str = "Page.windowOpen"
 
-    def __init__(self) -> None:
+    def __init__(self, url: str, windowName: str, windowFeatures: List[str], userGesture: bool) -> None:
         """
-        :param str url: The URL for the new window.
+        :param url: The URL for the new window.
         :type url: str
-        :param str windowName: Window name.
+        :param windowName: Window name.
         :type windowName: str
-        :param array windowFeatures: An array of enabled window features.
+        :param windowFeatures: An array of enabled window features.
         :type windowFeatures: array
-        :param bool userGesture: Whether or not it was triggered by user gesture.
+        :param userGesture: Whether or not it was triggered by user gesture.
         :type userGesture: bool
         """
         super().__init__()
+        self.url: str = url
+        self.windowName: str = windowName
+        self.windowFeatures: List[str] = windowFeatures
+        self.userGesture: bool = userGesture
 
 
 EVENT_TO_CLASS = {

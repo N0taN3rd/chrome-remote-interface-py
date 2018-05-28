@@ -7,14 +7,16 @@ class MetricsEvent(BaseEvent):
 
     event: str = "Performance.metrics"
 
-    def __init__(self) -> None:
+    def __init__(self, metrics: List[Metric], title: str) -> None:
         """
-        :param array metrics: Current values of the metrics.
+        :param metrics: Current values of the metrics.
         :type metrics: array
-        :param str title: Timestamp title.
+        :param title: Timestamp title.
         :type title: str
         """
         super().__init__()
+        self.metrics: List[Metric] = metrics
+        self.title: str = title
 
 
 EVENT_TO_CLASS = {

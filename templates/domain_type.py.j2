@@ -1,14 +1,14 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 {% for import in timports %}
 from cripy.protocol.{{ import | lower }} import types as {{ import }}
 {% endfor %}
 
 {%+ for dt in py_types %}
+{{ dt.id }} = TypeVar("{{ dt.id }}", {{ dt.type.safe_type }}, {{ dt.type.safe_type }})
 {% if dt.description is defined %}
-# {{ dt.code_description }}
+"""{{ dt.code_description }}"""
 {% endif %}
-{{ dt.id }} = {{ dt.type.safe_type }}
 
 {% endfor %}
 
@@ -18,11 +18,13 @@ class {{ dt.id }}(ChromeTypeBase):
 {% else %}
 class {{ dt.id }}(ChromeTypeBase, dict):
 {% endif %}
-    {% if dt.description %}
+{% if dt.description %}
     """{{ dt.description }}"""
-    {% else %}
+{% else %}
+    {% if not dt.has_properties %}
     pass
     {% endif %}
+{% endif %}
 {% if dt.has_properties %}
     def __init__(self, {{ dt.constructor_string }}) -> None:
         """
@@ -37,6 +39,7 @@ class {{ dt.id }}(ChromeTypeBase, dict):
         """
         super().__init__()
     {% for prop in dt.properties %}
+{#        {{ prop.construct_theyself }}#}
         self.{{ prop.tinfo_str }} = {{ prop.name }}
     {% endfor %}
 {% endif %}

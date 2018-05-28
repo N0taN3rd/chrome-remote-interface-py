@@ -1,10 +1,10 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
-from cripy.protocol.runtime import types as Runtime
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 from cripy.protocol.dom import types as DOM
+from cripy.protocol.runtime import types as Runtime
 
-# DOM breakpoint type.
-DOMBreakpointType = str
+DOMBreakpointType = TypeVar("DOMBreakpointType", str, str)
+"""DOM breakpoint type."""
 
 
 class EventListener(ChromeTypeBase):

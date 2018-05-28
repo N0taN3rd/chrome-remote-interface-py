@@ -1,26 +1,61 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 
-# Unique script identifier.
-ScriptId = str
+UnserializableValue = TypeVar("UnserializableValue", str, str)
+"""Primitive value which cannot be JSON-stringified. Includes values `-0`, `NaN`, `Infinity`, `-Infinity`, and bigint literals."""
 
-# Unique object identifier.
-RemoteObjectId = str
+UniqueDebuggerId = TypeVar("UniqueDebuggerId", str, str)
+"""Unique identifier of current debugger."""
 
-# Primitive value which cannot be JSON-stringified. Includes values `-0`, `NaN`, `Infinity`, `-Infinity`, and bigint literals.
-UnserializableValue = str
+Timestamp = TypeVar("Timestamp", float, float)
+"""Number of milliseconds since epoch."""
 
-# Id of an execution context.
-ExecutionContextId = int
+TimeDelta = TypeVar("TimeDelta", float, float)
+"""Number of milliseconds."""
 
-# Number of milliseconds since epoch.
-Timestamp = float
+ScriptId = TypeVar("ScriptId", str, str)
+"""Unique script identifier."""
 
-# Number of milliseconds.
-TimeDelta = float
+RemoteObjectId = TypeVar("RemoteObjectId", str, str)
+"""Unique object identifier."""
 
-# Unique identifier of current debugger.
-UniqueDebuggerId = str
+ExecutionContextId = TypeVar("ExecutionContextId", int, int)
+"""Id of an execution context."""
+
+
+class StackTraceId(ChromeTypeBase):
+    """If `debuggerId` is set stack trace comes from another debugger and can be resolved there. This
+allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.paused` for usages."""
+    def __init__(self, id: str, debuggerId: Optional['UniqueDebuggerId'] = None) -> None:
+        """
+        :param id: The id
+        :type id: str
+        :param debuggerId: The debuggerId
+        :type debuggerId: UniqueDebuggerId
+        """
+        super().__init__()
+        self.id: str = id
+        self.debuggerId: Optional[UniqueDebuggerId] = debuggerId
+
+
+class StackTrace(ChromeTypeBase):
+    """Call frames for assertions or error messages."""
+    def __init__(self, callFrames: List['CallFrame'], description: Optional[str] = None, parent: Optional['StackTrace'] = None, parentId: Optional['StackTraceId'] = None) -> None:
+        """
+        :param description: String label of this stack trace. For async traces this may be a name of the function that initiated the async call.
+        :type description: str
+        :param callFrames: JavaScript function name.
+        :type callFrames: array
+        :param parent: Asynchronous JavaScript stack trace that preceded this stack, if available.
+        :type parent: StackTrace
+        :param parentId: Asynchronous JavaScript stack trace that preceded this stack, if available.
+        :type parentId: StackTraceId
+        """
+        super().__init__()
+        self.description: Optional[str] = description
+        self.callFrames: List[CallFrame] = callFrames
+        self.parent: Optional[StackTrace] = parent
+        self.parentId: Optional[StackTraceId] = parentId
 
 
 class RemoteObject(ChromeTypeBase):
@@ -58,57 +93,7 @@ class RemoteObject(ChromeTypeBase):
         self.customPreview: Optional[CustomPreview] = customPreview
 
 
-class CustomPreview(ChromeTypeBase):
-    pass
-    def __init__(self, header: str, hasBody: bool, formatterObjectId: 'RemoteObjectId', bindRemoteObjectFunctionId: 'RemoteObjectId', configObjectId: Optional['RemoteObjectId'] = None) -> None:
-        """
-        :param header: The header
-        :type header: str
-        :param hasBody: The hasBody
-        :type hasBody: bool
-        :param formatterObjectId: The formatterObjectId
-        :type formatterObjectId: RemoteObjectId
-        :param bindRemoteObjectFunctionId: The bindRemoteObjectFunctionId
-        :type bindRemoteObjectFunctionId: RemoteObjectId
-        :param configObjectId: The configObjectId
-        :type configObjectId: RemoteObjectId
-        """
-        super().__init__()
-        self.header: str = header
-        self.hasBody: bool = hasBody
-        self.formatterObjectId: RemoteObjectId = formatterObjectId
-        self.bindRemoteObjectFunctionId: RemoteObjectId = bindRemoteObjectFunctionId
-        self.configObjectId: Optional[RemoteObjectId] = configObjectId
-
-
-class ObjectPreview(ChromeTypeBase):
-    """Object containing abbreviated remote object value."""
-    def __init__(self, type: str, overflow: bool, properties: List['PropertyPreview'], subtype: Optional[str] = None, description: Optional[str] = None, entries: Optional[List['EntryPreview']] = None) -> None:
-        """
-        :param type: Object type.
-        :type type: str
-        :param subtype: Object subtype hint. Specified for `object` type values only.
-        :type subtype: str
-        :param description: String representation of the object.
-        :type description: str
-        :param overflow: True iff some of the properties or entries of the original object did not fit.
-        :type overflow: bool
-        :param properties: List of the properties.
-        :type properties: array
-        :param entries: List of the entries. Specified for `map` and `set` subtype values only.
-        :type entries: array
-        """
-        super().__init__()
-        self.type: str = type
-        self.subtype: Optional[str] = subtype
-        self.description: Optional[str] = description
-        self.overflow: bool = overflow
-        self.properties: List[PropertyPreview] = properties
-        self.entries: Optional[List[EntryPreview]] = entries
-
-
 class PropertyPreview(ChromeTypeBase):
-    pass
     def __init__(self, name: str, type: str, value: Optional[str] = None, valuePreview: Optional['ObjectPreview'] = None, subtype: Optional[str] = None) -> None:
         """
         :param name: Property name.
@@ -128,20 +113,6 @@ class PropertyPreview(ChromeTypeBase):
         self.value: Optional[str] = value
         self.valuePreview: Optional[ObjectPreview] = valuePreview
         self.subtype: Optional[str] = subtype
-
-
-class EntryPreview(ChromeTypeBase):
-    pass
-    def __init__(self, value: 'ObjectPreview', key: Optional['ObjectPreview'] = None) -> None:
-        """
-        :param key: Preview of the key. Specified for map-like collection entries.
-        :type key: ObjectPreview
-        :param value: Preview of the value.
-        :type value: ObjectPreview
-        """
-        super().__init__()
-        self.key: Optional[ObjectPreview] = key
-        self.value: ObjectPreview = value
 
 
 class PropertyDescriptor(ChromeTypeBase):
@@ -182,6 +153,32 @@ class PropertyDescriptor(ChromeTypeBase):
         self.symbol: Optional[RemoteObject] = symbol
 
 
+class ObjectPreview(ChromeTypeBase):
+    """Object containing abbreviated remote object value."""
+    def __init__(self, type: str, overflow: bool, properties: List['PropertyPreview'], subtype: Optional[str] = None, description: Optional[str] = None, entries: Optional[List['EntryPreview']] = None) -> None:
+        """
+        :param type: Object type.
+        :type type: str
+        :param subtype: Object subtype hint. Specified for `object` type values only.
+        :type subtype: str
+        :param description: String representation of the object.
+        :type description: str
+        :param overflow: True iff some of the properties or entries of the original object did not fit.
+        :type overflow: bool
+        :param properties: List of the properties.
+        :type properties: array
+        :param entries: List of the entries. Specified for `map` and `set` subtype values only.
+        :type entries: array
+        """
+        super().__init__()
+        self.type: str = type
+        self.subtype: Optional[str] = subtype
+        self.description: Optional[str] = description
+        self.overflow: bool = overflow
+        self.properties: List[PropertyPreview] = properties
+        self.entries: Optional[List[EntryPreview]] = entries
+
+
 class InternalPropertyDescriptor(ChromeTypeBase):
     """Object internal property descriptor. This property isn't normally visible in JavaScript code."""
     def __init__(self, name: str, value: Optional['RemoteObject'] = None) -> None:
@@ -194,24 +191,6 @@ class InternalPropertyDescriptor(ChromeTypeBase):
         super().__init__()
         self.name: str = name
         self.value: Optional[RemoteObject] = value
-
-
-class CallArgument(ChromeTypeBase):
-    """Represents function call argument. Either remote object id `objectId`, primitive `value`,
-unserializable primitive value or neither of (for undefined) them should be specified."""
-    def __init__(self, value: Optional[Any] = None, unserializableValue: Optional['UnserializableValue'] = None, objectId: Optional['RemoteObjectId'] = None) -> None:
-        """
-        :param value: Primitive value or serializable javascript object.
-        :type value: Any
-        :param unserializableValue: Primitive value which can not be JSON-stringified.
-        :type unserializableValue: UnserializableValue
-        :param objectId: Remote object handle.
-        :type objectId: RemoteObjectId
-        """
-        super().__init__()
-        self.value: Optional[Any] = value
-        self.unserializableValue: Optional[UnserializableValue] = unserializableValue
-        self.objectId: Optional[RemoteObjectId] = objectId
 
 
 class ExecutionContextDescription(ChromeTypeBase):
@@ -270,6 +249,41 @@ execution."""
         self.executionContextId: Optional[ExecutionContextId] = executionContextId
 
 
+class EntryPreview(ChromeTypeBase):
+    def __init__(self, value: 'ObjectPreview', key: Optional['ObjectPreview'] = None) -> None:
+        """
+        :param key: Preview of the key. Specified for map-like collection entries.
+        :type key: ObjectPreview
+        :param value: Preview of the value.
+        :type value: ObjectPreview
+        """
+        super().__init__()
+        self.key: Optional[ObjectPreview] = key
+        self.value: ObjectPreview = value
+
+
+class CustomPreview(ChromeTypeBase):
+    def __init__(self, header: str, hasBody: bool, formatterObjectId: 'RemoteObjectId', bindRemoteObjectFunctionId: 'RemoteObjectId', configObjectId: Optional['RemoteObjectId'] = None) -> None:
+        """
+        :param header: The header
+        :type header: str
+        :param hasBody: The hasBody
+        :type hasBody: bool
+        :param formatterObjectId: The formatterObjectId
+        :type formatterObjectId: RemoteObjectId
+        :param bindRemoteObjectFunctionId: The bindRemoteObjectFunctionId
+        :type bindRemoteObjectFunctionId: RemoteObjectId
+        :param configObjectId: The configObjectId
+        :type configObjectId: RemoteObjectId
+        """
+        super().__init__()
+        self.header: str = header
+        self.hasBody: bool = hasBody
+        self.formatterObjectId: RemoteObjectId = formatterObjectId
+        self.bindRemoteObjectFunctionId: RemoteObjectId = bindRemoteObjectFunctionId
+        self.configObjectId: Optional[RemoteObjectId] = configObjectId
+
+
 class CallFrame(ChromeTypeBase):
     """Stack entry for runtime errors and assertions."""
     def __init__(self, functionName: str, scriptId: 'ScriptId', url: str, lineNumber: int, columnNumber: int) -> None:
@@ -293,38 +307,21 @@ class CallFrame(ChromeTypeBase):
         self.columnNumber: int = columnNumber
 
 
-class StackTrace(ChromeTypeBase):
-    """Call frames for assertions or error messages."""
-    def __init__(self, callFrames: List['CallFrame'], description: Optional[str] = None, parent: Optional['StackTrace'] = None, parentId: Optional['StackTraceId'] = None) -> None:
+class CallArgument(ChromeTypeBase):
+    """Represents function call argument. Either remote object id `objectId`, primitive `value`,
+unserializable primitive value or neither of (for undefined) them should be specified."""
+    def __init__(self, value: Optional[Any] = None, unserializableValue: Optional['UnserializableValue'] = None, objectId: Optional['RemoteObjectId'] = None) -> None:
         """
-        :param description: String label of this stack trace. For async traces this may be a name of the function that initiated the async call.
-        :type description: str
-        :param callFrames: JavaScript function name.
-        :type callFrames: array
-        :param parent: Asynchronous JavaScript stack trace that preceded this stack, if available.
-        :type parent: StackTrace
-        :param parentId: Asynchronous JavaScript stack trace that preceded this stack, if available.
-        :type parentId: StackTraceId
-        """
-        super().__init__()
-        self.description: Optional[str] = description
-        self.callFrames: List[CallFrame] = callFrames
-        self.parent: Optional[StackTrace] = parent
-        self.parentId: Optional[StackTraceId] = parentId
-
-
-class StackTraceId(ChromeTypeBase):
-    """If `debuggerId` is set stack trace comes from another debugger and can be resolved there. This
-allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.paused` for usages."""
-    def __init__(self, id: str, debuggerId: Optional['UniqueDebuggerId'] = None) -> None:
-        """
-        :param id: The id
-        :type id: str
-        :param debuggerId: The debuggerId
-        :type debuggerId: UniqueDebuggerId
+        :param value: Primitive value or serializable javascript object.
+        :type value: Any
+        :param unserializableValue: Primitive value which can not be JSON-stringified.
+        :type unserializableValue: UnserializableValue
+        :param objectId: Remote object handle.
+        :type objectId: RemoteObjectId
         """
         super().__init__()
-        self.id: str = id
-        self.debuggerId: Optional[UniqueDebuggerId] = debuggerId
+        self.value: Optional[Any] = value
+        self.unserializableValue: Optional[UnserializableValue] = unserializableValue
+        self.objectId: Optional[RemoteObjectId] = objectId
 
 

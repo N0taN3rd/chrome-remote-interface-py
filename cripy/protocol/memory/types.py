@@ -1,8 +1,8 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 
-# Memory pressure level.
-PressureLevel = str
+PressureLevel = TypeVar("PressureLevel", str, str)
+"""Memory pressure level."""
 
 
 class SamplingProfileNode(ChromeTypeBase):

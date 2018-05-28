@@ -7,14 +7,16 @@ class CacheStorageContentUpdatedEvent(BaseEvent):
 
     event: str = "Storage.cacheStorageContentUpdated"
 
-    def __init__(self) -> None:
+    def __init__(self, origin: str, cacheName: str) -> None:
         """
-        :param str origin: Origin to update.
+        :param origin: Origin to update.
         :type origin: str
-        :param str cacheName: Name of cache in origin.
+        :param cacheName: Name of cache in origin.
         :type cacheName: str
         """
         super().__init__()
+        self.origin: str = origin
+        self.cacheName: str = cacheName
 
 
 class CacheStorageListUpdatedEvent(BaseEvent):
@@ -22,12 +24,13 @@ class CacheStorageListUpdatedEvent(BaseEvent):
 
     event: str = "Storage.cacheStorageListUpdated"
 
-    def __init__(self) -> None:
+    def __init__(self, origin: str) -> None:
         """
-        :param str origin: Origin to update.
+        :param origin: Origin to update.
         :type origin: str
         """
         super().__init__()
+        self.origin: str = origin
 
 
 class IndexedDBContentUpdatedEvent(BaseEvent):
@@ -35,16 +38,19 @@ class IndexedDBContentUpdatedEvent(BaseEvent):
 
     event: str = "Storage.indexedDBContentUpdated"
 
-    def __init__(self) -> None:
+    def __init__(self, origin: str, databaseName: str, objectStoreName: str) -> None:
         """
-        :param str origin: Origin to update.
+        :param origin: Origin to update.
         :type origin: str
-        :param str databaseName: Database to update.
+        :param databaseName: Database to update.
         :type databaseName: str
-        :param str objectStoreName: ObjectStore to update.
+        :param objectStoreName: ObjectStore to update.
         :type objectStoreName: str
         """
         super().__init__()
+        self.origin: str = origin
+        self.databaseName: str = databaseName
+        self.objectStoreName: str = objectStoreName
 
 
 class IndexedDBListUpdatedEvent(BaseEvent):
@@ -52,12 +58,13 @@ class IndexedDBListUpdatedEvent(BaseEvent):
 
     event: str = "Storage.indexedDBListUpdated"
 
-    def __init__(self) -> None:
+    def __init__(self, origin: str) -> None:
         """
-        :param str origin: Origin to update.
+        :param origin: Origin to update.
         :type origin: str
         """
         super().__init__()
+        self.origin: str = origin
 
 
 EVENT_TO_CLASS = {

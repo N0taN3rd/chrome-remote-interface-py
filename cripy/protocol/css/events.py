@@ -1,5 +1,10 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
+from cripy.protocol.css.types import (
+    CSSStyleSheetHeader,
+    FontFace,
+    StyleSheetId,
+)
 
 
 class FontsUpdatedEvent(BaseEvent):
@@ -8,12 +13,13 @@ class FontsUpdatedEvent(BaseEvent):
 
     event: str = "CSS.fontsUpdated"
 
-    def __init__(self) -> None:
+    def __init__(self, font: Optional[FontFace] = None) -> None:
         """
-        :param FontFace font: The web font that has loaded.
+        :param font: The web font that has loaded.
         :type font: FontFace
         """
         super().__init__()
+        self.font: Optional[FontFace] = font
 
 
 class MediaQueryResultChangedEvent(BaseEvent):
@@ -21,7 +27,7 @@ class MediaQueryResultChangedEvent(BaseEvent):
 
     event: str = "CSS.mediaQueryResultChanged"
 
-    def __init__(self) -> None:
+    def __init__(self, ) -> None:
         super().__init__()
 
 
@@ -30,12 +36,13 @@ class StyleSheetAddedEvent(BaseEvent):
 
     event: str = "CSS.styleSheetAdded"
 
-    def __init__(self) -> None:
+    def __init__(self, header: CSSStyleSheetHeader) -> None:
         """
-        :param CSSStyleSheetHeader header: Added stylesheet metainfo.
+        :param header: Added stylesheet metainfo.
         :type header: CSSStyleSheetHeader
         """
         super().__init__()
+        self.header: CSSStyleSheetHeader = header
 
 
 class StyleSheetChangedEvent(BaseEvent):
@@ -43,12 +50,13 @@ class StyleSheetChangedEvent(BaseEvent):
 
     event: str = "CSS.styleSheetChanged"
 
-    def __init__(self) -> None:
+    def __init__(self, styleSheetId: StyleSheetId) -> None:
         """
-        :param StyleSheetId styleSheetId: The styleSheetId
+        :param styleSheetId: The styleSheetId
         :type styleSheetId: StyleSheetId
         """
         super().__init__()
+        self.styleSheetId: StyleSheetId = styleSheetId
 
 
 class StyleSheetRemovedEvent(BaseEvent):
@@ -56,12 +64,13 @@ class StyleSheetRemovedEvent(BaseEvent):
 
     event: str = "CSS.styleSheetRemoved"
 
-    def __init__(self) -> None:
+    def __init__(self, styleSheetId: StyleSheetId) -> None:
         """
-        :param StyleSheetId styleSheetId: Identifier of the removed stylesheet.
+        :param styleSheetId: Identifier of the removed stylesheet.
         :type styleSheetId: StyleSheetId
         """
         super().__init__()
+        self.styleSheetId: StyleSheetId = styleSheetId
 
 
 EVENT_TO_CLASS = {

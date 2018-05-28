@@ -1,8 +1,22 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 
-# Unique identifier of Database object.
-DatabaseId = str
+DatabaseId = TypeVar("DatabaseId", str, str)
+"""Unique identifier of Database object."""
+
+
+class Error(ChromeTypeBase):
+    """Database error."""
+    def __init__(self, message: str, code: int) -> None:
+        """
+        :param message: Error message.
+        :type message: str
+        :param code: Error code.
+        :type code: int
+        """
+        super().__init__()
+        self.message: str = message
+        self.code: int = code
 
 
 class Database(ChromeTypeBase):
@@ -23,19 +37,5 @@ class Database(ChromeTypeBase):
         self.domain: str = domain
         self.name: str = name
         self.version: str = version
-
-
-class Error(ChromeTypeBase):
-    """Database error."""
-    def __init__(self, message: str, code: int) -> None:
-        """
-        :param message: Error message.
-        :type message: str
-        :param code: Error code.
-        :type code: int
-        """
-        super().__init__()
-        self.message: str = message
-        self.code: int = code
 
 

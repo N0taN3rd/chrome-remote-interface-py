@@ -1,8 +1,8 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 
-# Enum of possible storage types.
-StorageType = str
+StorageType = TypeVar("StorageType", str, str)
+"""Enum of possible storage types."""
 
 
 class UsageForType(ChromeTypeBase):

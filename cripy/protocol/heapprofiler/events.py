@@ -6,12 +6,13 @@ class AddHeapSnapshotChunkEvent(BaseEvent):
 
     event: str = "HeapProfiler.addHeapSnapshotChunk"
 
-    def __init__(self) -> None:
+    def __init__(self, chunk: str) -> None:
         """
-        :param str chunk: The chunk
+        :param chunk: The chunk
         :type chunk: str
         """
         super().__init__()
+        self.chunk: str = chunk
 
 
 class HeapStatsUpdateEvent(BaseEvent):
@@ -19,12 +20,13 @@ class HeapStatsUpdateEvent(BaseEvent):
 
     event: str = "HeapProfiler.heapStatsUpdate"
 
-    def __init__(self) -> None:
+    def __init__(self, statsUpdate: List[int]) -> None:
         """
-        :param array statsUpdate: An array of triplets. Each triplet describes a fragment. The first integer is the fragment index, the second integer is a total count of objects for the fragment, the third integer is a total size of the objects for the fragment.
+        :param statsUpdate: An array of triplets. Each triplet describes a fragment. The first integer is the fragment index, the second integer is a total count of objects for the fragment, the third integer is a total size of the objects for the fragment.
         :type statsUpdate: array
         """
         super().__init__()
+        self.statsUpdate: List[int] = statsUpdate
 
 
 class LastSeenObjectIdEvent(BaseEvent):
@@ -33,37 +35,42 @@ class LastSeenObjectIdEvent(BaseEvent):
 
     event: str = "HeapProfiler.lastSeenObjectId"
 
-    def __init__(self) -> None:
+    def __init__(self, lastSeenObjectId: int, timestamp: float) -> None:
         """
-        :param int lastSeenObjectId: The lastSeenObjectId
+        :param lastSeenObjectId: The lastSeenObjectId
         :type lastSeenObjectId: int
-        :param float timestamp: The timestamp
+        :param timestamp: The timestamp
         :type timestamp: float
         """
         super().__init__()
+        self.lastSeenObjectId: int = lastSeenObjectId
+        self.timestamp: float = timestamp
 
 
 class ReportHeapSnapshotProgressEvent(BaseEvent):
 
     event: str = "HeapProfiler.reportHeapSnapshotProgress"
 
-    def __init__(self) -> None:
+    def __init__(self, done: int, total: int, finished: Optional[bool] = None) -> None:
         """
-        :param int done: The done
+        :param done: The done
         :type done: int
-        :param int total: The total
+        :param total: The total
         :type total: int
-        :param bool finished: The finished
+        :param finished: The finished
         :type finished: bool
         """
         super().__init__()
+        self.done: int = done
+        self.total: int = total
+        self.finished: Optional[bool] = finished
 
 
 class ResetProfilesEvent(BaseEvent):
 
     event: str = "HeapProfiler.resetProfiles"
 
-    def __init__(self) -> None:
+    def __init__(self, ) -> None:
         super().__init__()
 
 

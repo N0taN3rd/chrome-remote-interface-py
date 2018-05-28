@@ -8,12 +8,13 @@ class DetachedEvent(BaseEvent):
 
     event: str = "Inspector.detached"
 
-    def __init__(self) -> None:
+    def __init__(self, reason: str) -> None:
         """
-        :param str reason: The reason why connection has been terminated.
+        :param reason: The reason why connection has been terminated.
         :type reason: str
         """
         super().__init__()
+        self.reason: str = reason
 
 
 class TargetCrashedEvent(BaseEvent):
@@ -21,7 +22,7 @@ class TargetCrashedEvent(BaseEvent):
 
     event: str = "Inspector.targetCrashed"
 
-    def __init__(self) -> None:
+    def __init__(self, ) -> None:
         super().__init__()
 
 
@@ -30,7 +31,7 @@ class TargetReloadedAfterCrashEvent(BaseEvent):
 
     event: str = "Inspector.targetReloadedAfterCrash"
 
-    def __init__(self) -> None:
+    def __init__(self, ) -> None:
         super().__init__()
 
 

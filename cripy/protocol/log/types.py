@@ -1,7 +1,21 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 from cripy.protocol.network import types as Network
 from cripy.protocol.runtime import types as Runtime
+
+
+class ViolationSetting(ChromeTypeBase):
+    """Violation configuration setting."""
+    def __init__(self, name: str, threshold: float) -> None:
+        """
+        :param name: Violation type.
+        :type name: str
+        :param threshold: Time threshold to trigger upon.
+        :type threshold: float
+        """
+        super().__init__()
+        self.name: str = name
+        self.threshold: float = threshold
 
 
 class LogEntry(ChromeTypeBase):
@@ -40,19 +54,5 @@ class LogEntry(ChromeTypeBase):
         self.networkRequestId: Optional[Network.RequestId] = networkRequestId
         self.workerId: Optional[str] = workerId
         self.args: Optional[List[Runtime.RemoteObject]] = args
-
-
-class ViolationSetting(ChromeTypeBase):
-    """Violation configuration setting."""
-    def __init__(self, name: str, threshold: float) -> None:
-        """
-        :param name: Violation type.
-        :type name: str
-        :param threshold: Time threshold to trigger upon.
-        :type threshold: float
-        """
-        super().__init__()
-        self.name: str = name
-        self.threshold: float = threshold
 
 

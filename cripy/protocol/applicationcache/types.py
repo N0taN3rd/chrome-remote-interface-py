@@ -1,6 +1,23 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 from cripy.protocol.page import types as Page
+
+
+class FrameWithManifest(ChromeTypeBase):
+    """Frame identifier - manifest URL pair."""
+    def __init__(self, frameId: 'Page.FrameId', manifestURL: str, status: int) -> None:
+        """
+        :param frameId: Frame identifier.
+        :type frameId: Page.FrameId
+        :param manifestURL: Manifest URL.
+        :type manifestURL: str
+        :param status: Application cache status.
+        :type status: int
+        """
+        super().__init__()
+        self.frameId: Page.FrameId = frameId
+        self.manifestURL: str = manifestURL
+        self.status: int = status
 
 
 class ApplicationCacheResource(ChromeTypeBase):
@@ -41,22 +58,5 @@ class ApplicationCache(ChromeTypeBase):
         self.creationTime: float = creationTime
         self.updateTime: float = updateTime
         self.resources: List[ApplicationCacheResource] = resources
-
-
-class FrameWithManifest(ChromeTypeBase):
-    """Frame identifier - manifest URL pair."""
-    def __init__(self, frameId: 'Page.FrameId', manifestURL: str, status: int) -> None:
-        """
-        :param frameId: Frame identifier.
-        :type frameId: Page.FrameId
-        :param manifestURL: Manifest URL.
-        :type manifestURL: str
-        :param status: Application cache status.
-        :type status: int
-        """
-        super().__init__()
-        self.frameId: Page.FrameId = frameId
-        self.manifestURL: str = manifestURL
-        self.status: int = status
 
 

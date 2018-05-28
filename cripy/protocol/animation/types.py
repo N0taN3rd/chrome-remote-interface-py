@@ -1,44 +1,34 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 from cripy.protocol.dom import types as DOM
 
 
-class Animation(ChromeTypeBase):
-    """Animation instance."""
-    def __init__(self, id: str, name: str, pausedState: bool, playState: str, playbackRate: float, startTime: float, currentTime: float, type: str, source: Optional['AnimationEffect'] = None, cssId: Optional[str] = None) -> None:
+class KeyframesRule(ChromeTypeBase):
+    """Keyframes Rule"""
+    def __init__(self, keyframes: List['KeyframeStyle'], name: Optional[str] = None) -> None:
         """
-        :param id: `Animation`'s id.
-        :type id: str
-        :param name: `Animation`'s name.
+        :param name: CSS keyframed animation's name.
         :type name: str
-        :param pausedState: `Animation`'s internal paused state.
-        :type pausedState: bool
-        :param playState: `Animation`'s play state.
-        :type playState: str
-        :param playbackRate: `Animation`'s playback rate.
-        :type playbackRate: float
-        :param startTime: `Animation`'s start time.
-        :type startTime: float
-        :param currentTime: `Animation`'s current time.
-        :type currentTime: float
-        :param type: Animation type of `Animation`.
-        :type type: str
-        :param source: `Animation`'s source animation node.
-        :type source: AnimationEffect
-        :param cssId: A unique ID for `Animation` representing the sources that triggered this CSS animation/transition.
-        :type cssId: str
+        :param keyframes: List of animation keyframes.
+        :type keyframes: array
         """
         super().__init__()
-        self.id: str = id
-        self.name: str = name
-        self.pausedState: bool = pausedState
-        self.playState: str = playState
-        self.playbackRate: float = playbackRate
-        self.startTime: float = startTime
-        self.currentTime: float = currentTime
-        self.type: str = type
-        self.source: Optional[AnimationEffect] = source
-        self.cssId: Optional[str] = cssId
+        self.name: Optional[str] = name
+        self.keyframes: List[KeyframeStyle] = keyframes
+
+
+class KeyframeStyle(ChromeTypeBase):
+    """Keyframe Style"""
+    def __init__(self, offset: str, easing: str) -> None:
+        """
+        :param offset: Keyframe's time offset.
+        :type offset: str
+        :param easing: `AnimationEffect`'s timing function.
+        :type easing: str
+        """
+        super().__init__()
+        self.offset: str = offset
+        self.easing: str = easing
 
 
 class AnimationEffect(ChromeTypeBase):
@@ -79,31 +69,41 @@ class AnimationEffect(ChromeTypeBase):
         self.easing: str = easing
 
 
-class KeyframesRule(ChromeTypeBase):
-    """Keyframes Rule"""
-    def __init__(self, keyframes: List['KeyframeStyle'], name: Optional[str] = None) -> None:
+class Animation(ChromeTypeBase):
+    """Animation instance."""
+    def __init__(self, id: str, name: str, pausedState: bool, playState: str, playbackRate: float, startTime: float, currentTime: float, type: str, source: Optional['AnimationEffect'] = None, cssId: Optional[str] = None) -> None:
         """
-        :param name: CSS keyframed animation's name.
+        :param id: `Animation`'s id.
+        :type id: str
+        :param name: `Animation`'s name.
         :type name: str
-        :param keyframes: List of animation keyframes.
-        :type keyframes: array
+        :param pausedState: `Animation`'s internal paused state.
+        :type pausedState: bool
+        :param playState: `Animation`'s play state.
+        :type playState: str
+        :param playbackRate: `Animation`'s playback rate.
+        :type playbackRate: float
+        :param startTime: `Animation`'s start time.
+        :type startTime: float
+        :param currentTime: `Animation`'s current time.
+        :type currentTime: float
+        :param type: Animation type of `Animation`.
+        :type type: str
+        :param source: `Animation`'s source animation node.
+        :type source: AnimationEffect
+        :param cssId: A unique ID for `Animation` representing the sources that triggered this CSS animation/transition.
+        :type cssId: str
         """
         super().__init__()
-        self.name: Optional[str] = name
-        self.keyframes: List[KeyframeStyle] = keyframes
-
-
-class KeyframeStyle(ChromeTypeBase):
-    """Keyframe Style"""
-    def __init__(self, offset: str, easing: str) -> None:
-        """
-        :param offset: Keyframe's time offset.
-        :type offset: str
-        :param easing: `AnimationEffect`'s timing function.
-        :type easing: str
-        """
-        super().__init__()
-        self.offset: str = offset
-        self.easing: str = easing
+        self.id: str = id
+        self.name: str = name
+        self.pausedState: bool = pausedState
+        self.playState: str = playState
+        self.playbackRate: float = playbackRate
+        self.startTime: float = startTime
+        self.currentTime: float = currentTime
+        self.type: str = type
+        self.source: Optional[AnimationEffect] = source
+        self.cssId: Optional[str] = cssId
 
 

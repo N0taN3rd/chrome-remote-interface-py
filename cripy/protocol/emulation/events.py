@@ -7,12 +7,13 @@ class VirtualTimeAdvancedEvent(BaseEvent):
 
     event: str = "Emulation.virtualTimeAdvanced"
 
-    def __init__(self) -> None:
+    def __init__(self, virtualTimeElapsed: float) -> None:
         """
-        :param float virtualTimeElapsed: The amount of virtual time that has elapsed in milliseconds since virtual time was first enabled.
+        :param virtualTimeElapsed: The amount of virtual time that has elapsed in milliseconds since virtual time was first enabled.
         :type virtualTimeElapsed: float
         """
         super().__init__()
+        self.virtualTimeElapsed: float = virtualTimeElapsed
 
 
 class VirtualTimeBudgetExpiredEvent(BaseEvent):
@@ -20,7 +21,7 @@ class VirtualTimeBudgetExpiredEvent(BaseEvent):
 
     event: str = "Emulation.virtualTimeBudgetExpired"
 
-    def __init__(self) -> None:
+    def __init__(self, ) -> None:
         super().__init__()
 
 
@@ -29,12 +30,13 @@ class VirtualTimePausedEvent(BaseEvent):
 
     event: str = "Emulation.virtualTimePaused"
 
-    def __init__(self) -> None:
+    def __init__(self, virtualTimeElapsed: float) -> None:
         """
-        :param float virtualTimeElapsed: The amount of virtual time that has elapsed in milliseconds since virtual time was first enabled.
+        :param virtualTimeElapsed: The amount of virtual time that has elapsed in milliseconds since virtual time was first enabled.
         :type virtualTimeElapsed: float
         """
         super().__init__()
+        self.virtualTimeElapsed: float = virtualTimeElapsed
 
 
 EVENT_TO_CLASS = {

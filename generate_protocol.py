@@ -241,7 +241,7 @@ def generate_types(d, template, dp) -> None:
         obj_types = []
         py_types = []
         timports = set()
-        for dt in d.types:
+        for dt in sorted(d.types, key=lambda t: t.id, reverse=True):
             dt.prune(set(d.domain))
             if dt.has_foreign_refs:
                 timports.update(dt.foreign_refs)
@@ -258,14 +258,23 @@ def generate_types(d, template, dp) -> None:
             )
 
 
-def generate_events(d: Domain, template, dp):
+def generate_events(d: Domain, template, dp: Path) -> None:
     if d.has_events:
         eventsp = dp.joinpath("events.py")
         with eventsp.open("w") as tout:
             event_to_clazz = []
+            timports = set()
+            types = set()
             for e in d.events:
+                e.prune(set(e.domain))
+                if e.has_foreign_refs:
+                    timports.update(e.foreign_refs)
+                if e.has_parameters:
+                    for param in e.parameters:
+                        if param.type.is_ref and not param.type.is_foreign_ref:
+                            types.add(param.type)
                 event_to_clazz.append((e.scoped_name, e.class_name))
-            tout.write(template.render(events=d.events, event_to_clazz=event_to_clazz))
+            tout.write(template.render(events=d.events, domain=d.domain, event_to_clazz=event_to_clazz, timports=timports, types=types))
 
 
 if __name__ == "__main__":

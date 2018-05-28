@@ -1,11 +1,48 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 
-# 
-WindowID = int
+WindowState = TypeVar("WindowState", str, str)
+"""The state of the browser window."""
 
-# The state of the browser window.
-WindowState = str
+WindowID = TypeVar("WindowID", int, int)
+""""""
+
+
+class Histogram(ChromeTypeBase):
+    """Chrome histogram."""
+    def __init__(self, name: str, sum: int, count: int, buckets: List['Bucket']) -> None:
+        """
+        :param name: Name.
+        :type name: str
+        :param sum: Sum of sample values.
+        :type sum: int
+        :param count: Total number of samples.
+        :type count: int
+        :param buckets: Buckets.
+        :type buckets: array
+        """
+        super().__init__()
+        self.name: str = name
+        self.sum: int = sum
+        self.count: int = count
+        self.buckets: List[Bucket] = buckets
+
+
+class Bucket(ChromeTypeBase):
+    """Chrome histogram bucket."""
+    def __init__(self, low: int, high: int, count: int) -> None:
+        """
+        :param low: Minimum value (inclusive).
+        :type low: int
+        :param high: Maximum value (exclusive).
+        :type high: int
+        :param count: Number of samples.
+        :type count: int
+        """
+        super().__init__()
+        self.low: int = low
+        self.high: int = high
+        self.count: int = count
 
 
 class Bounds(ChromeTypeBase):
@@ -29,42 +66,5 @@ class Bounds(ChromeTypeBase):
         self.width: Optional[int] = width
         self.height: Optional[int] = height
         self.windowState: Optional[WindowState] = windowState
-
-
-class Bucket(ChromeTypeBase):
-    """Chrome histogram bucket."""
-    def __init__(self, low: int, high: int, count: int) -> None:
-        """
-        :param low: Minimum value (inclusive).
-        :type low: int
-        :param high: Maximum value (exclusive).
-        :type high: int
-        :param count: Number of samples.
-        :type count: int
-        """
-        super().__init__()
-        self.low: int = low
-        self.high: int = high
-        self.count: int = count
-
-
-class Histogram(ChromeTypeBase):
-    """Chrome histogram."""
-    def __init__(self, name: str, sum: int, count: int, buckets: List['Bucket']) -> None:
-        """
-        :param name: Name.
-        :type name: str
-        :param sum: Sum of sample values.
-        :type sum: int
-        :param count: Total number of samples.
-        :type count: int
-        :param buckets: Buckets.
-        :type buckets: array
-        """
-        super().__init__()
-        self.name: str = name
-        self.sum: int = sum
-        self.count: int = count
-        self.buckets: List[Bucket] = buckets
 
 

@@ -1,5 +1,7 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
+from cripy.protocol.page import types as Page
+from cripy.protocol.dom import types as DOM
 
 
 class InspectNodeRequestedEvent(BaseEvent):
@@ -8,12 +10,13 @@ class InspectNodeRequestedEvent(BaseEvent):
 
     event: str = "Overlay.inspectNodeRequested"
 
-    def __init__(self) -> None:
+    def __init__(self, backendNodeId: DOM.BackendNodeId) -> None:
         """
-        :param DOM.BackendNodeId backendNodeId: Id of the node to inspect.
+        :param backendNodeId: Id of the node to inspect.
         :type backendNodeId: DOM.BackendNodeId
         """
         super().__init__()
+        self.backendNodeId: DOM.BackendNodeId = backendNodeId
 
 
 class NodeHighlightRequestedEvent(BaseEvent):
@@ -22,12 +25,13 @@ class NodeHighlightRequestedEvent(BaseEvent):
 
     event: str = "Overlay.nodeHighlightRequested"
 
-    def __init__(self) -> None:
+    def __init__(self, nodeId: DOM.NodeId) -> None:
         """
-        :param DOM.NodeId nodeId: The nodeId
+        :param nodeId: The nodeId
         :type nodeId: DOM.NodeId
         """
         super().__init__()
+        self.nodeId: DOM.NodeId = nodeId
 
 
 class ScreenshotRequestedEvent(BaseEvent):
@@ -35,12 +39,13 @@ class ScreenshotRequestedEvent(BaseEvent):
 
     event: str = "Overlay.screenshotRequested"
 
-    def __init__(self) -> None:
+    def __init__(self, viewport: Page.Viewport) -> None:
         """
-        :param Page.Viewport viewport: Viewport to capture, in CSS.
+        :param viewport: Viewport to capture, in CSS.
         :type viewport: Page.Viewport
         """
         super().__init__()
+        self.viewport: Page.Viewport = viewport
 
 
 EVENT_TO_CLASS = {

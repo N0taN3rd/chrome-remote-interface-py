@@ -1,21 +1,21 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 from cripy.protocol.dom import types as DOM
 
-# Unique accessibility node identifier.
-AXNodeId = str
+AXValueType = TypeVar("AXValueType", str, str)
+"""Enum of possible property types."""
 
-# Enum of possible property types.
-AXValueType = str
+AXValueSourceType = TypeVar("AXValueSourceType", str, str)
+"""Enum of possible property sources."""
 
-# Enum of possible property sources.
-AXValueSourceType = str
+AXValueNativeSourceType = TypeVar("AXValueNativeSourceType", str, str)
+"""Enum of possible native property sources (as a subtype of a particular AXValueSourceType)."""
 
-# Enum of possible native property sources (as a subtype of a particular AXValueSourceType).
-AXValueNativeSourceType = str
+AXPropertyName = TypeVar("AXPropertyName", str, str)
+"""Values of AXProperty name: from 'busy' to 'roledescription' - states which apply to every AX node, from 'live' to 'root' - attributes which apply to nodes in live regions, from 'autocomplete' to 'valuetext' - attributes which apply to widgets, from 'checked' to 'selected' - states which apply to widgets, from 'activedescendant' to 'owns' - relationships between elements other than parent/child/sibling."""
 
-# Values of AXProperty name: from 'busy' to 'roledescription' - states which apply to every AX node, from 'live' to 'root' - attributes which apply to nodes in live regions, from 'autocomplete' to 'valuetext' - attributes which apply to widgets, from 'checked' to 'selected' - states which apply to widgets, from 'activedescendant' to 'owns' - relationships between elements other than parent/child/sibling.
-AXPropertyName = str
+AXNodeId = TypeVar("AXNodeId", str, str)
+"""Unique accessibility node identifier."""
 
 
 class AXValueSource(ChromeTypeBase):
@@ -53,37 +53,6 @@ class AXValueSource(ChromeTypeBase):
         self.invalidReason: Optional[str] = invalidReason
 
 
-class AXRelatedNode(ChromeTypeBase):
-    pass
-    def __init__(self, backendDOMNodeId: 'DOM.BackendNodeId', idref: Optional[str] = None, text: Optional[str] = None) -> None:
-        """
-        :param backendDOMNodeId: The BackendNodeId of the related DOM node.
-        :type backendDOMNodeId: DOM.BackendNodeId
-        :param idref: The IDRef value provided, if any.
-        :type idref: str
-        :param text: The text alternative of this node in the current context.
-        :type text: str
-        """
-        super().__init__()
-        self.backendDOMNodeId: DOM.BackendNodeId = backendDOMNodeId
-        self.idref: Optional[str] = idref
-        self.text: Optional[str] = text
-
-
-class AXProperty(ChromeTypeBase):
-    pass
-    def __init__(self, name: 'AXPropertyName', value: 'AXValue') -> None:
-        """
-        :param name: The name of this property.
-        :type name: AXPropertyName
-        :param value: The value of this property.
-        :type value: AXValue
-        """
-        super().__init__()
-        self.name: AXPropertyName = name
-        self.value: AXValue = value
-
-
 class AXValue(ChromeTypeBase):
     """A single computed AX property."""
     def __init__(self, type: 'AXValueType', value: Optional[Any] = None, relatedNodes: Optional[List['AXRelatedNode']] = None, sources: Optional[List['AXValueSource']] = None) -> None:
@@ -102,6 +71,35 @@ class AXValue(ChromeTypeBase):
         self.value: Optional[Any] = value
         self.relatedNodes: Optional[List[AXRelatedNode]] = relatedNodes
         self.sources: Optional[List[AXValueSource]] = sources
+
+
+class AXRelatedNode(ChromeTypeBase):
+    def __init__(self, backendDOMNodeId: 'DOM.BackendNodeId', idref: Optional[str] = None, text: Optional[str] = None) -> None:
+        """
+        :param backendDOMNodeId: The BackendNodeId of the related DOM node.
+        :type backendDOMNodeId: DOM.BackendNodeId
+        :param idref: The IDRef value provided, if any.
+        :type idref: str
+        :param text: The text alternative of this node in the current context.
+        :type text: str
+        """
+        super().__init__()
+        self.backendDOMNodeId: DOM.BackendNodeId = backendDOMNodeId
+        self.idref: Optional[str] = idref
+        self.text: Optional[str] = text
+
+
+class AXProperty(ChromeTypeBase):
+    def __init__(self, name: 'AXPropertyName', value: 'AXValue') -> None:
+        """
+        :param name: The name of this property.
+        :type name: AXPropertyName
+        :param value: The value of this property.
+        :type value: AXValue
+        """
+        super().__init__()
+        self.name: AXPropertyName = name
+        self.value: AXValue = value
 
 
 class AXNode(ChromeTypeBase):

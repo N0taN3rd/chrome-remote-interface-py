@@ -1,18 +1,17 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 
-# 
-TargetID = str
+TargetID = TypeVar("TargetID", str, str)
+""""""
 
-# Unique identifier of attached debugging session.
-SessionID = str
+SessionID = TypeVar("SessionID", str, str)
+"""Unique identifier of attached debugging session."""
 
-# 
-BrowserContextID = str
+BrowserContextID = TypeVar("BrowserContextID", str, str)
+""""""
 
 
 class TargetInfo(ChromeTypeBase):
-    pass
     def __init__(self, targetId: 'TargetID', type: str, title: str, url: str, attached: bool, openerId: Optional['TargetID'] = None, browserContextId: Optional['BrowserContextID'] = None) -> None:
         """
         :param targetId: The targetId
@@ -41,7 +40,6 @@ class TargetInfo(ChromeTypeBase):
 
 
 class RemoteLocation(ChromeTypeBase):
-    pass
     def __init__(self, host: str, port: int) -> None:
         """
         :param host: The host

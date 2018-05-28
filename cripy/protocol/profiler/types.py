@@ -1,6 +1,65 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 from cripy.protocol.runtime import types as Runtime
+
+
+class TypeProfileEntry(ChromeTypeBase):
+    """Source offset and types for a parameter or return value."""
+    def __init__(self, offset: int, types: List['TypeObject']) -> None:
+        """
+        :param offset: Source offset of the parameter or end of function for return values.
+        :type offset: int
+        :param types: The types for this parameter or return value.
+        :type types: array
+        """
+        super().__init__()
+        self.offset: int = offset
+        self.types: List[TypeObject] = types
+
+
+class TypeObject(ChromeTypeBase):
+    """Describes a type collected during runtime."""
+    def __init__(self, name: str) -> None:
+        """
+        :param name: Name of a type collected with type profiling.
+        :type name: str
+        """
+        super().__init__()
+        self.name: str = name
+
+
+class ScriptTypeProfile(ChromeTypeBase):
+    """Type profile data collected during runtime for a JavaScript script."""
+    def __init__(self, scriptId: 'Runtime.ScriptId', url: str, entries: List['TypeProfileEntry']) -> None:
+        """
+        :param scriptId: JavaScript script id.
+        :type scriptId: Runtime.ScriptId
+        :param url: JavaScript script name or url.
+        :type url: str
+        :param entries: Type profile entries for parameters and return values of the functions in the script.
+        :type entries: array
+        """
+        super().__init__()
+        self.scriptId: Runtime.ScriptId = scriptId
+        self.url: str = url
+        self.entries: List[TypeProfileEntry] = entries
+
+
+class ScriptCoverage(ChromeTypeBase):
+    """Coverage data for a JavaScript script."""
+    def __init__(self, scriptId: 'Runtime.ScriptId', url: str, functions: List['FunctionCoverage']) -> None:
+        """
+        :param scriptId: JavaScript script id.
+        :type scriptId: Runtime.ScriptId
+        :param url: JavaScript script name or url.
+        :type url: str
+        :param functions: Functions contained in the script that has coverage data.
+        :type functions: array
+        """
+        super().__init__()
+        self.scriptId: Runtime.ScriptId = scriptId
+        self.url: str = url
+        self.functions: List[FunctionCoverage] = functions
 
 
 class ProfileNode(ChromeTypeBase):
@@ -66,23 +125,6 @@ class PositionTickInfo(ChromeTypeBase):
         self.ticks: int = ticks
 
 
-class CoverageRange(ChromeTypeBase):
-    """Coverage data for a source range."""
-    def __init__(self, startOffset: int, endOffset: int, count: int) -> None:
-        """
-        :param startOffset: JavaScript script source offset for the range start.
-        :type startOffset: int
-        :param endOffset: JavaScript script source offset for the range end.
-        :type endOffset: int
-        :param count: Collected execution count of the source range.
-        :type count: int
-        """
-        super().__init__()
-        self.startOffset: int = startOffset
-        self.endOffset: int = endOffset
-        self.count: int = count
-
-
 class FunctionCoverage(ChromeTypeBase):
     """Coverage data for a JavaScript function."""
     def __init__(self, functionName: str, ranges: List['CoverageRange'], isBlockCoverage: bool) -> None:
@@ -100,62 +142,20 @@ class FunctionCoverage(ChromeTypeBase):
         self.isBlockCoverage: bool = isBlockCoverage
 
 
-class ScriptCoverage(ChromeTypeBase):
-    """Coverage data for a JavaScript script."""
-    def __init__(self, scriptId: 'Runtime.ScriptId', url: str, functions: List['FunctionCoverage']) -> None:
+class CoverageRange(ChromeTypeBase):
+    """Coverage data for a source range."""
+    def __init__(self, startOffset: int, endOffset: int, count: int) -> None:
         """
-        :param scriptId: JavaScript script id.
-        :type scriptId: Runtime.ScriptId
-        :param url: JavaScript script name or url.
-        :type url: str
-        :param functions: Functions contained in the script that has coverage data.
-        :type functions: array
-        """
-        super().__init__()
-        self.scriptId: Runtime.ScriptId = scriptId
-        self.url: str = url
-        self.functions: List[FunctionCoverage] = functions
-
-
-class TypeObject(ChromeTypeBase):
-    """Describes a type collected during runtime."""
-    def __init__(self, name: str) -> None:
-        """
-        :param name: Name of a type collected with type profiling.
-        :type name: str
+        :param startOffset: JavaScript script source offset for the range start.
+        :type startOffset: int
+        :param endOffset: JavaScript script source offset for the range end.
+        :type endOffset: int
+        :param count: Collected execution count of the source range.
+        :type count: int
         """
         super().__init__()
-        self.name: str = name
-
-
-class TypeProfileEntry(ChromeTypeBase):
-    """Source offset and types for a parameter or return value."""
-    def __init__(self, offset: int, types: List['TypeObject']) -> None:
-        """
-        :param offset: Source offset of the parameter or end of function for return values.
-        :type offset: int
-        :param types: The types for this parameter or return value.
-        :type types: array
-        """
-        super().__init__()
-        self.offset: int = offset
-        self.types: List[TypeObject] = types
-
-
-class ScriptTypeProfile(ChromeTypeBase):
-    """Type profile data collected during runtime for a JavaScript script."""
-    def __init__(self, scriptId: 'Runtime.ScriptId', url: str, entries: List['TypeProfileEntry']) -> None:
-        """
-        :param scriptId: JavaScript script id.
-        :type scriptId: Runtime.ScriptId
-        :param url: JavaScript script name or url.
-        :type url: str
-        :param entries: Type profile entries for parameters and return values of the functions in the script.
-        :type entries: array
-        """
-        super().__init__()
-        self.scriptId: Runtime.ScriptId = scriptId
-        self.url: str = url
-        self.entries: List[TypeProfileEntry] = entries
+        self.startOffset: int = startOffset
+        self.endOffset: int = endOffset
+        self.count: int = count
 
 

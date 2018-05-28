@@ -19,6 +19,20 @@ class Event(FRefCollector):
             event.get("parameters", None)
         )
 
+    @property
+    def constructor_string(self) -> str:
+        if self.has_parameters:
+            optionals = []
+            notoptional = []
+            for prop in self.parameters:
+                if prop.optional:
+                    optionals.append(prop.constructor_string.replace("'", ""))
+                else:
+                    notoptional.append(prop.constructor_string.replace("'", ""))
+            return ", ".join(notoptional + optionals)
+        else:
+            return ""
+
     def _get_description(self, event: dict) -> Optional[str]:
         des = event.get("description", None)
         if des is not None:

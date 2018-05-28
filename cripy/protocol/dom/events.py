@@ -1,5 +1,9 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
+from cripy.protocol.dom.types import (
+    NodeId,
+    Node,
+)
 
 
 class AttributeModifiedEvent(BaseEvent):
@@ -7,16 +11,19 @@ class AttributeModifiedEvent(BaseEvent):
 
     event: str = "DOM.attributeModified"
 
-    def __init__(self) -> None:
+    def __init__(self, nodeId: NodeId, name: str, value: str) -> None:
         """
-        :param NodeId nodeId: Id of the node that has changed.
+        :param nodeId: Id of the node that has changed.
         :type nodeId: NodeId
-        :param str name: Attribute name.
+        :param name: Attribute name.
         :type name: str
-        :param str value: Attribute value.
+        :param value: Attribute value.
         :type value: str
         """
         super().__init__()
+        self.nodeId: NodeId = nodeId
+        self.name: str = name
+        self.value: str = value
 
 
 class AttributeRemovedEvent(BaseEvent):
@@ -24,14 +31,16 @@ class AttributeRemovedEvent(BaseEvent):
 
     event: str = "DOM.attributeRemoved"
 
-    def __init__(self) -> None:
+    def __init__(self, nodeId: NodeId, name: str) -> None:
         """
-        :param NodeId nodeId: Id of the node that has changed.
+        :param nodeId: Id of the node that has changed.
         :type nodeId: NodeId
-        :param str name: A ttribute name.
+        :param name: A ttribute name.
         :type name: str
         """
         super().__init__()
+        self.nodeId: NodeId = nodeId
+        self.name: str = name
 
 
 class CharacterDataModifiedEvent(BaseEvent):
@@ -39,14 +48,16 @@ class CharacterDataModifiedEvent(BaseEvent):
 
     event: str = "DOM.characterDataModified"
 
-    def __init__(self) -> None:
+    def __init__(self, nodeId: NodeId, characterData: str) -> None:
         """
-        :param NodeId nodeId: Id of the node that has changed.
+        :param nodeId: Id of the node that has changed.
         :type nodeId: NodeId
-        :param str characterData: New text value.
+        :param characterData: New text value.
         :type characterData: str
         """
         super().__init__()
+        self.nodeId: NodeId = nodeId
+        self.characterData: str = characterData
 
 
 class ChildNodeCountUpdatedEvent(BaseEvent):
@@ -54,14 +65,16 @@ class ChildNodeCountUpdatedEvent(BaseEvent):
 
     event: str = "DOM.childNodeCountUpdated"
 
-    def __init__(self) -> None:
+    def __init__(self, nodeId: NodeId, childNodeCount: int) -> None:
         """
-        :param NodeId nodeId: Id of the node that has changed.
+        :param nodeId: Id of the node that has changed.
         :type nodeId: NodeId
-        :param int childNodeCount: New node count.
+        :param childNodeCount: New node count.
         :type childNodeCount: int
         """
         super().__init__()
+        self.nodeId: NodeId = nodeId
+        self.childNodeCount: int = childNodeCount
 
 
 class ChildNodeInsertedEvent(BaseEvent):
@@ -69,16 +82,19 @@ class ChildNodeInsertedEvent(BaseEvent):
 
     event: str = "DOM.childNodeInserted"
 
-    def __init__(self) -> None:
+    def __init__(self, parentNodeId: NodeId, previousNodeId: NodeId, node: Node) -> None:
         """
-        :param NodeId parentNodeId: Id of the node that has changed.
+        :param parentNodeId: Id of the node that has changed.
         :type parentNodeId: NodeId
-        :param NodeId previousNodeId: If of the previous siblint.
+        :param previousNodeId: If of the previous siblint.
         :type previousNodeId: NodeId
-        :param Node node: Inserted node data.
+        :param node: Inserted node data.
         :type node: Node
         """
         super().__init__()
+        self.parentNodeId: NodeId = parentNodeId
+        self.previousNodeId: NodeId = previousNodeId
+        self.node: Node = node
 
 
 class ChildNodeRemovedEvent(BaseEvent):
@@ -86,14 +102,16 @@ class ChildNodeRemovedEvent(BaseEvent):
 
     event: str = "DOM.childNodeRemoved"
 
-    def __init__(self) -> None:
+    def __init__(self, parentNodeId: NodeId, nodeId: NodeId) -> None:
         """
-        :param NodeId parentNodeId: Parent id.
+        :param parentNodeId: Parent id.
         :type parentNodeId: NodeId
-        :param NodeId nodeId: Id of the node that has been removed.
+        :param nodeId: Id of the node that has been removed.
         :type nodeId: NodeId
         """
         super().__init__()
+        self.parentNodeId: NodeId = parentNodeId
+        self.nodeId: NodeId = nodeId
 
 
 class DistributedNodesUpdatedEvent(BaseEvent):
@@ -101,14 +119,16 @@ class DistributedNodesUpdatedEvent(BaseEvent):
 
     event: str = "DOM.distributedNodesUpdated"
 
-    def __init__(self) -> None:
+    def __init__(self, insertionPointId: NodeId, distributedNodes: List[BackendNode]) -> None:
         """
-        :param NodeId insertionPointId: Insertion point where distrubuted nodes were updated.
+        :param insertionPointId: Insertion point where distrubuted nodes were updated.
         :type insertionPointId: NodeId
-        :param array distributedNodes: Distributed nodes for given insertion point.
+        :param distributedNodes: Distributed nodes for given insertion point.
         :type distributedNodes: array
         """
         super().__init__()
+        self.insertionPointId: NodeId = insertionPointId
+        self.distributedNodes: List[BackendNode] = distributedNodes
 
 
 class DocumentUpdatedEvent(BaseEvent):
@@ -117,7 +137,7 @@ class DocumentUpdatedEvent(BaseEvent):
 
     event: str = "DOM.documentUpdated"
 
-    def __init__(self) -> None:
+    def __init__(self, ) -> None:
         super().__init__()
 
 
@@ -126,12 +146,13 @@ class InlineStyleInvalidatedEvent(BaseEvent):
 
     event: str = "DOM.inlineStyleInvalidated"
 
-    def __init__(self) -> None:
+    def __init__(self, nodeIds: List[NodeId]) -> None:
         """
-        :param array nodeIds: Ids of the nodes for which the inline styles have been invalidated.
+        :param nodeIds: Ids of the nodes for which the inline styles have been invalidated.
         :type nodeIds: array
         """
         super().__init__()
+        self.nodeIds: List[NodeId] = nodeIds
 
 
 class PseudoElementAddedEvent(BaseEvent):
@@ -139,14 +160,16 @@ class PseudoElementAddedEvent(BaseEvent):
 
     event: str = "DOM.pseudoElementAdded"
 
-    def __init__(self) -> None:
+    def __init__(self, parentId: NodeId, pseudoElement: Node) -> None:
         """
-        :param NodeId parentId: Pseudo element's parent element id.
+        :param parentId: Pseudo element's parent element id.
         :type parentId: NodeId
-        :param Node pseudoElement: The added pseudo element.
+        :param pseudoElement: The added pseudo element.
         :type pseudoElement: Node
         """
         super().__init__()
+        self.parentId: NodeId = parentId
+        self.pseudoElement: Node = pseudoElement
 
 
 class PseudoElementRemovedEvent(BaseEvent):
@@ -154,14 +177,16 @@ class PseudoElementRemovedEvent(BaseEvent):
 
     event: str = "DOM.pseudoElementRemoved"
 
-    def __init__(self) -> None:
+    def __init__(self, parentId: NodeId, pseudoElementId: NodeId) -> None:
         """
-        :param NodeId parentId: Pseudo element's parent element id.
+        :param parentId: Pseudo element's parent element id.
         :type parentId: NodeId
-        :param NodeId pseudoElementId: The removed pseudo element id.
+        :param pseudoElementId: The removed pseudo element id.
         :type pseudoElementId: NodeId
         """
         super().__init__()
+        self.parentId: NodeId = parentId
+        self.pseudoElementId: NodeId = pseudoElementId
 
 
 class SetChildNodesEvent(BaseEvent):
@@ -170,14 +195,16 @@ class SetChildNodesEvent(BaseEvent):
 
     event: str = "DOM.setChildNodes"
 
-    def __init__(self) -> None:
+    def __init__(self, parentId: NodeId, nodes: List[Node]) -> None:
         """
-        :param NodeId parentId: Parent node id to populate with children.
+        :param parentId: Parent node id to populate with children.
         :type parentId: NodeId
-        :param array nodes: Child nodes array.
+        :param nodes: Child nodes array.
         :type nodes: array
         """
         super().__init__()
+        self.parentId: NodeId = parentId
+        self.nodes: List[Node] = nodes
 
 
 class ShadowRootPoppedEvent(BaseEvent):
@@ -185,14 +212,16 @@ class ShadowRootPoppedEvent(BaseEvent):
 
     event: str = "DOM.shadowRootPopped"
 
-    def __init__(self) -> None:
+    def __init__(self, hostId: NodeId, rootId: NodeId) -> None:
         """
-        :param NodeId hostId: Host element id.
+        :param hostId: Host element id.
         :type hostId: NodeId
-        :param NodeId rootId: Shadow root id.
+        :param rootId: Shadow root id.
         :type rootId: NodeId
         """
         super().__init__()
+        self.hostId: NodeId = hostId
+        self.rootId: NodeId = rootId
 
 
 class ShadowRootPushedEvent(BaseEvent):
@@ -200,14 +229,16 @@ class ShadowRootPushedEvent(BaseEvent):
 
     event: str = "DOM.shadowRootPushed"
 
-    def __init__(self) -> None:
+    def __init__(self, hostId: NodeId, root: Node) -> None:
         """
-        :param NodeId hostId: Host element id.
+        :param hostId: Host element id.
         :type hostId: NodeId
-        :param Node root: Shadow root.
+        :param root: Shadow root.
         :type root: Node
         """
         super().__init__()
+        self.hostId: NodeId = hostId
+        self.root: Node = root
 
 
 EVENT_TO_CLASS = {

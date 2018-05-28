@@ -1,17 +1,17 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 
-# An internal certificate ID value.
-CertificateId = int
+SecurityState = TypeVar("SecurityState", str, str)
+"""The security level of a page or resource."""
 
-# A description of mixed content (HTTP resources on HTTPS pages), as defined by https://www.w3.org/TR/mixed-content/#categories
-MixedContentType = str
+MixedContentType = TypeVar("MixedContentType", str, str)
+"""A description of mixed content (HTTP resources on HTTPS pages), as defined by https://www.w3.org/TR/mixed-content/#categories"""
 
-# The security level of a page or resource.
-SecurityState = str
+CertificateId = TypeVar("CertificateId", int, int)
+"""An internal certificate ID value."""
 
-# The action to take when a certificate error occurs. continue will continue processing the request and cancel will cancel the request.
-CertificateErrorAction = str
+CertificateErrorAction = TypeVar("CertificateErrorAction", str, str)
+"""The action to take when a certificate error occurs. continue will continue processing the request and cancel will cancel the request."""
 
 
 class SecurityStateExplanation(ChromeTypeBase):

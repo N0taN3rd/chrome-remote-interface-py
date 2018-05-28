@@ -1,8 +1,21 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 
-# Unique identifier of the Cache object.
-CacheId = str
+CacheId = TypeVar("CacheId", str, str)
+"""Unique identifier of the Cache object."""
+
+
+class Header(ChromeTypeBase):
+    def __init__(self, name: str, value: str) -> None:
+        """
+        :param name: The name
+        :type name: str
+        :param value: The value
+        :type value: str
+        """
+        super().__init__()
+        self.name: str = name
+        self.value: str = value
 
 
 class DataEntry(ChromeTypeBase):
@@ -34,6 +47,17 @@ class DataEntry(ChromeTypeBase):
         self.responseHeaders: List[Header] = responseHeaders
 
 
+class CachedResponse(ChromeTypeBase):
+    """Cached response"""
+    def __init__(self, body: str) -> None:
+        """
+        :param body: Entry content, base64-encoded.
+        :type body: str
+        """
+        super().__init__()
+        self.body: str = body
+
+
 class Cache(ChromeTypeBase):
     """Cache identifier."""
     def __init__(self, cacheId: 'CacheId', securityOrigin: str, cacheName: str) -> None:
@@ -49,30 +73,5 @@ class Cache(ChromeTypeBase):
         self.cacheId: CacheId = cacheId
         self.securityOrigin: str = securityOrigin
         self.cacheName: str = cacheName
-
-
-class Header(ChromeTypeBase):
-    pass
-    def __init__(self, name: str, value: str) -> None:
-        """
-        :param name: The name
-        :type name: str
-        :param value: The value
-        :type value: str
-        """
-        super().__init__()
-        self.name: str = name
-        self.value: str = value
-
-
-class CachedResponse(ChromeTypeBase):
-    """Cached response"""
-    def __init__(self, body: str) -> None:
-        """
-        :param body: Entry content, base64-encoded.
-        :type body: str
-        """
-        super().__init__()
-        self.body: str = body
 
 

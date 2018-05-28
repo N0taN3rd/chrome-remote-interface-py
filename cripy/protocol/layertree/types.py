@@ -1,29 +1,15 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 from cripy.protocol.dom import types as DOM
 
-# Unique Layer identifier.
-LayerId = str
+SnapshotId = TypeVar("SnapshotId", str, str)
+"""Unique snapshot identifier."""
 
-# Unique snapshot identifier.
-SnapshotId = str
+PaintProfile = TypeVar("PaintProfile", list, list)
+"""Array of timings, one per paint step."""
 
-# Array of timings, one per paint step.
-PaintProfile = list
-
-
-class ScrollRect(ChromeTypeBase):
-    """Rectangle where scrolling happens on the main thread."""
-    def __init__(self, rect: 'DOM.Rect', type: str) -> None:
-        """
-        :param rect: Rectangle itself.
-        :type rect: DOM.Rect
-        :param type: Reason for rectangle to force scrolling on the main thread
-        :type type: str
-        """
-        super().__init__()
-        self.rect: DOM.Rect = rect
-        self.type: str = type
+LayerId = TypeVar("LayerId", str, str)
+"""Unique Layer identifier."""
 
 
 class StickyPositionConstraint(ChromeTypeBase):
@@ -44,6 +30,20 @@ class StickyPositionConstraint(ChromeTypeBase):
         self.containingBlockRect: DOM.Rect = containingBlockRect
         self.nearestLayerShiftingStickyBox: Optional[LayerId] = nearestLayerShiftingStickyBox
         self.nearestLayerShiftingContainingBlock: Optional[LayerId] = nearestLayerShiftingContainingBlock
+
+
+class ScrollRect(ChromeTypeBase):
+    """Rectangle where scrolling happens on the main thread."""
+    def __init__(self, rect: 'DOM.Rect', type: str) -> None:
+        """
+        :param rect: Rectangle itself.
+        :type rect: DOM.Rect
+        :param type: Reason for rectangle to force scrolling on the main thread
+        :type type: str
+        """
+        super().__init__()
+        self.rect: DOM.Rect = rect
+        self.type: str = type
 
 
 class PictureTile(ChromeTypeBase):

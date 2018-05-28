@@ -70,3 +70,6 @@ class Type(object):
 
     def __repr__(self) -> str:
         return self.__str__()
+
+    def __hash__(self):
+        return self.__str__().__hash__()

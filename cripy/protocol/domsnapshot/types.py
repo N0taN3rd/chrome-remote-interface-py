@@ -1,8 +1,66 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 from cripy.protocol.domdebugger import types as DOMDebugger
-from cripy.protocol.dom import types as DOM
 from cripy.protocol.page import types as Page
+from cripy.protocol.dom import types as DOM
+
+
+class NameValue(ChromeTypeBase):
+    """A name/value pair."""
+    def __init__(self, name: str, value: str) -> None:
+        """
+        :param name: Attribute/property name.
+        :type name: str
+        :param value: Attribute/property value.
+        :type value: str
+        """
+        super().__init__()
+        self.name: str = name
+        self.value: str = value
+
+
+class LayoutTreeNode(ChromeTypeBase):
+    """Details of an element in the DOM tree with a LayoutObject."""
+    def __init__(self, domNodeIndex: int, boundingBox: 'DOM.Rect', layoutText: Optional[str] = None, inlineTextNodes: Optional[List['InlineTextBox']] = None, styleIndex: Optional[int] = None, paintOrder: Optional[int] = None) -> None:
+        """
+        :param domNodeIndex: The index of the related DOM node in the `domNodes` array returned by `getSnapshot`.
+        :type domNodeIndex: int
+        :param boundingBox: The absolute position bounding box.
+        :type boundingBox: DOM.Rect
+        :param layoutText: Contents of the LayoutText, if any.
+        :type layoutText: str
+        :param inlineTextNodes: The post-layout inline text nodes, if any.
+        :type inlineTextNodes: array
+        :param styleIndex: Index into the `computedStyles` array returned by `getSnapshot`.
+        :type styleIndex: int
+        :param paintOrder: Global paint order index, which is determined by the stacking order of the nodes. Nodes that are painted together will have the same index. Only provided if includePaintOrder in getSnapshot was true.
+        :type paintOrder: int
+        """
+        super().__init__()
+        self.domNodeIndex: int = domNodeIndex
+        self.boundingBox: DOM.Rect = boundingBox
+        self.layoutText: Optional[str] = layoutText
+        self.inlineTextNodes: Optional[List[InlineTextBox]] = inlineTextNodes
+        self.styleIndex: Optional[int] = styleIndex
+        self.paintOrder: Optional[int] = paintOrder
+
+
+class InlineTextBox(ChromeTypeBase):
+    """Details of post layout rendered text positions. The exact layout should not be regarded as
+stable and may change between versions."""
+    def __init__(self, boundingBox: 'DOM.Rect', startCharacterIndex: int, numCharacters: int) -> None:
+        """
+        :param boundingBox: The absolute position bounding box.
+        :type boundingBox: DOM.Rect
+        :param startCharacterIndex: The starting index in characters, for this post layout textbox substring. Characters that would be represented as a surrogate pair in UTF-16 have length 2.
+        :type startCharacterIndex: int
+        :param numCharacters: The number of characters in this post layout textbox substring. Characters that would be represented as a surrogate pair in UTF-16 have length 2.
+        :type numCharacters: int
+        """
+        super().__init__()
+        self.boundingBox: DOM.Rect = boundingBox
+        self.startCharacterIndex: int = startCharacterIndex
+        self.numCharacters: int = numCharacters
 
 
 class DOMNode(ChromeTypeBase):
@@ -97,50 +155,6 @@ class DOMNode(ChromeTypeBase):
         self.originURL: Optional[str] = originURL
 
 
-class InlineTextBox(ChromeTypeBase):
-    """Details of post layout rendered text positions. The exact layout should not be regarded as
-stable and may change between versions."""
-    def __init__(self, boundingBox: 'DOM.Rect', startCharacterIndex: int, numCharacters: int) -> None:
-        """
-        :param boundingBox: The absolute position bounding box.
-        :type boundingBox: DOM.Rect
-        :param startCharacterIndex: The starting index in characters, for this post layout textbox substring. Characters that would be represented as a surrogate pair in UTF-16 have length 2.
-        :type startCharacterIndex: int
-        :param numCharacters: The number of characters in this post layout textbox substring. Characters that would be represented as a surrogate pair in UTF-16 have length 2.
-        :type numCharacters: int
-        """
-        super().__init__()
-        self.boundingBox: DOM.Rect = boundingBox
-        self.startCharacterIndex: int = startCharacterIndex
-        self.numCharacters: int = numCharacters
-
-
-class LayoutTreeNode(ChromeTypeBase):
-    """Details of an element in the DOM tree with a LayoutObject."""
-    def __init__(self, domNodeIndex: int, boundingBox: 'DOM.Rect', layoutText: Optional[str] = None, inlineTextNodes: Optional[List['InlineTextBox']] = None, styleIndex: Optional[int] = None, paintOrder: Optional[int] = None) -> None:
-        """
-        :param domNodeIndex: The index of the related DOM node in the `domNodes` array returned by `getSnapshot`.
-        :type domNodeIndex: int
-        :param boundingBox: The absolute position bounding box.
-        :type boundingBox: DOM.Rect
-        :param layoutText: Contents of the LayoutText, if any.
-        :type layoutText: str
-        :param inlineTextNodes: The post-layout inline text nodes, if any.
-        :type inlineTextNodes: array
-        :param styleIndex: Index into the `computedStyles` array returned by `getSnapshot`.
-        :type styleIndex: int
-        :param paintOrder: Global paint order index, which is determined by the stacking order of the nodes. Nodes that are painted together will have the same index. Only provided if includePaintOrder in getSnapshot was true.
-        :type paintOrder: int
-        """
-        super().__init__()
-        self.domNodeIndex: int = domNodeIndex
-        self.boundingBox: DOM.Rect = boundingBox
-        self.layoutText: Optional[str] = layoutText
-        self.inlineTextNodes: Optional[List[InlineTextBox]] = inlineTextNodes
-        self.styleIndex: Optional[int] = styleIndex
-        self.paintOrder: Optional[int] = paintOrder
-
-
 class ComputedStyle(ChromeTypeBase):
     """A subset of the full ComputedStyle as defined by the request whitelist."""
     def __init__(self, properties: List['NameValue']) -> None:
@@ -150,19 +164,5 @@ class ComputedStyle(ChromeTypeBase):
         """
         super().__init__()
         self.properties: List[NameValue] = properties
-
-
-class NameValue(ChromeTypeBase):
-    """A name/value pair."""
-    def __init__(self, name: str, value: str) -> None:
-        """
-        :param name: Attribute/property name.
-        :type name: str
-        :param value: Attribute/property value.
-        :type value: str
-        """
-        super().__init__()
-        self.name: str = name
-        self.value: str = value
 
 

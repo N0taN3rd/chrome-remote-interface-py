@@ -1,23 +1,26 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 from cripy.protocol.runtime import types as Runtime
 
 
-class DatabaseWithObjectStores(ChromeTypeBase):
-    """Database with an array of object stores."""
-    def __init__(self, name: str, version: int, objectStores: List['ObjectStore']) -> None:
+class ObjectStoreIndex(ChromeTypeBase):
+    """Object store index."""
+    def __init__(self, name: str, keyPath: 'KeyPath', unique: bool, multiEntry: bool) -> None:
         """
-        :param name: Database name.
+        :param name: Index name.
         :type name: str
-        :param version: Database version.
-        :type version: int
-        :param objectStores: Object stores in this database.
-        :type objectStores: array
+        :param keyPath: Index key path.
+        :type keyPath: KeyPath
+        :param unique: If true, index is unique.
+        :type unique: bool
+        :param multiEntry: If true, index allows multiple entries for a key.
+        :type multiEntry: bool
         """
         super().__init__()
         self.name: str = name
-        self.version: int = version
-        self.objectStores: List[ObjectStore] = objectStores
+        self.keyPath: KeyPath = keyPath
+        self.unique: bool = unique
+        self.multiEntry: bool = multiEntry
 
 
 class ObjectStore(ChromeTypeBase):
@@ -40,24 +43,41 @@ class ObjectStore(ChromeTypeBase):
         self.indexes: List[ObjectStoreIndex] = indexes
 
 
-class ObjectStoreIndex(ChromeTypeBase):
-    """Object store index."""
-    def __init__(self, name: str, keyPath: 'KeyPath', unique: bool, multiEntry: bool) -> None:
+class KeyRange(ChromeTypeBase):
+    """Key range."""
+    def __init__(self, lowerOpen: bool, upperOpen: bool, lower: Optional['Key'] = None, upper: Optional['Key'] = None) -> None:
         """
-        :param name: Index name.
-        :type name: str
-        :param keyPath: Index key path.
-        :type keyPath: KeyPath
-        :param unique: If true, index is unique.
-        :type unique: bool
-        :param multiEntry: If true, index allows multiple entries for a key.
-        :type multiEntry: bool
+        :param lower: Lower bound.
+        :type lower: Key
+        :param upper: Upper bound.
+        :type upper: Key
+        :param lowerOpen: If true lower bound is open.
+        :type lowerOpen: bool
+        :param upperOpen: If true upper bound is open.
+        :type upperOpen: bool
         """
         super().__init__()
-        self.name: str = name
-        self.keyPath: KeyPath = keyPath
-        self.unique: bool = unique
-        self.multiEntry: bool = multiEntry
+        self.lower: Optional[Key] = lower
+        self.upper: Optional[Key] = upper
+        self.lowerOpen: bool = lowerOpen
+        self.upperOpen: bool = upperOpen
+
+
+class KeyPath(ChromeTypeBase):
+    """Key path."""
+    def __init__(self, type: str, string: Optional[str] = None, array: Optional[List['str']] = None) -> None:
+        """
+        :param type: Key path type.
+        :type type: str
+        :param string: String value.
+        :type string: str
+        :param array: Array value.
+        :type array: array
+        """
+        super().__init__()
+        self.type: str = type
+        self.string: Optional[str] = string
+        self.array: Optional[List[str]] = array
 
 
 class Key(ChromeTypeBase):
@@ -83,24 +103,21 @@ class Key(ChromeTypeBase):
         self.array: Optional[List[Key]] = array
 
 
-class KeyRange(ChromeTypeBase):
-    """Key range."""
-    def __init__(self, lowerOpen: bool, upperOpen: bool, lower: Optional['Key'] = None, upper: Optional['Key'] = None) -> None:
+class DatabaseWithObjectStores(ChromeTypeBase):
+    """Database with an array of object stores."""
+    def __init__(self, name: str, version: int, objectStores: List['ObjectStore']) -> None:
         """
-        :param lower: Lower bound.
-        :type lower: Key
-        :param upper: Upper bound.
-        :type upper: Key
-        :param lowerOpen: If true lower bound is open.
-        :type lowerOpen: bool
-        :param upperOpen: If true upper bound is open.
-        :type upperOpen: bool
+        :param name: Database name.
+        :type name: str
+        :param version: Database version.
+        :type version: int
+        :param objectStores: Object stores in this database.
+        :type objectStores: array
         """
         super().__init__()
-        self.lower: Optional[Key] = lower
-        self.upper: Optional[Key] = upper
-        self.lowerOpen: bool = lowerOpen
-        self.upperOpen: bool = upperOpen
+        self.name: str = name
+        self.version: int = version
+        self.objectStores: List[ObjectStore] = objectStores
 
 
 class DataEntry(ChromeTypeBase):
@@ -118,22 +135,5 @@ class DataEntry(ChromeTypeBase):
         self.key: Runtime.RemoteObject = key
         self.primaryKey: Runtime.RemoteObject = primaryKey
         self.value: Runtime.RemoteObject = value
-
-
-class KeyPath(ChromeTypeBase):
-    """Key path."""
-    def __init__(self, type: str, string: Optional[str] = None, array: Optional[List['str']] = None) -> None:
-        """
-        :param type: Key path type.
-        :type type: str
-        :param string: String value.
-        :type string: str
-        :param array: Array value.
-        :type array: array
-        """
-        super().__init__()
-        self.type: str = type
-        self.string: Optional[str] = string
-        self.array: Optional[List[str]] = array
 
 

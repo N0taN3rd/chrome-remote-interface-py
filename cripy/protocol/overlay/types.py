@@ -1,9 +1,9 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 from cripy.protocol.dom import types as DOM
 
-# 
-InspectMode = str
+InspectMode = TypeVar("InspectMode", str, str)
+""""""
 
 
 class HighlightConfig(ChromeTypeBase):

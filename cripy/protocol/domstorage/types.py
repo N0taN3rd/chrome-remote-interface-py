@@ -1,8 +1,8 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 
-# DOM Storage item.
-Item = list
+Item = TypeVar("Item", list, list)
+"""DOM Storage item."""
 
 
 class StorageId(ChromeTypeBase):

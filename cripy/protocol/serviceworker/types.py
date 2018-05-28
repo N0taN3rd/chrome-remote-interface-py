@@ -1,29 +1,12 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 from cripy.protocol.target import types as Target
 
-# 
-ServiceWorkerVersionRunningStatus = str
+ServiceWorkerVersionStatus = TypeVar("ServiceWorkerVersionStatus", str, str)
+""""""
 
-# 
-ServiceWorkerVersionStatus = str
-
-
-class ServiceWorkerRegistration(ChromeTypeBase):
-    """ServiceWorker registration."""
-    def __init__(self, registrationId: str, scopeURL: str, isDeleted: bool) -> None:
-        """
-        :param registrationId: The registrationId
-        :type registrationId: str
-        :param scopeURL: The scopeURL
-        :type scopeURL: str
-        :param isDeleted: The isDeleted
-        :type isDeleted: bool
-        """
-        super().__init__()
-        self.registrationId: str = registrationId
-        self.scopeURL: str = scopeURL
-        self.isDeleted: bool = isDeleted
+ServiceWorkerVersionRunningStatus = TypeVar("ServiceWorkerVersionRunningStatus", str, str)
+""""""
 
 
 class ServiceWorkerVersion(ChromeTypeBase):
@@ -59,6 +42,23 @@ class ServiceWorkerVersion(ChromeTypeBase):
         self.scriptResponseTime: Optional[float] = scriptResponseTime
         self.controlledClients: Optional[List[Target.TargetID]] = controlledClients
         self.targetId: Optional[Target.TargetID] = targetId
+
+
+class ServiceWorkerRegistration(ChromeTypeBase):
+    """ServiceWorker registration."""
+    def __init__(self, registrationId: str, scopeURL: str, isDeleted: bool) -> None:
+        """
+        :param registrationId: The registrationId
+        :type registrationId: str
+        :param scopeURL: The scopeURL
+        :type scopeURL: str
+        :param isDeleted: The isDeleted
+        :type isDeleted: bool
+        """
+        super().__init__()
+        self.registrationId: str = registrationId
+        self.scopeURL: str = scopeURL
+        self.isDeleted: bool = isDeleted
 
 
 class ServiceWorkerErrorMessage(ChromeTypeBase):

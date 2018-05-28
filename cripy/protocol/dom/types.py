@@ -1,38 +1,78 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 from cripy.protocol.page import types as Page
 
-# Unique DOM node identifier.
-NodeId = int
+ShadowRootType = TypeVar("ShadowRootType", str, str)
+"""Shadow root type."""
 
-# Unique DOM node identifier used to reference a node that may not have been pushed to the front-end.
-BackendNodeId = int
+Quad = TypeVar("Quad", list, list)
+"""An array of quad vertices, x immediately followed by y for each point, points clock-wise."""
 
-# Pseudo element type.
-PseudoType = str
+PseudoType = TypeVar("PseudoType", str, str)
+"""Pseudo element type."""
 
-# Shadow root type.
-ShadowRootType = str
+NodeId = TypeVar("NodeId", int, int)
+"""Unique DOM node identifier."""
 
-# An array of quad vertices, x immediately followed by y for each point, points clock-wise.
-Quad = list
+BackendNodeId = TypeVar("BackendNodeId", int, int)
+"""Unique DOM node identifier used to reference a node that may not have been pushed to the front-end."""
 
 
-class BackendNode(ChromeTypeBase):
-    """Backend node with a friendly name."""
-    def __init__(self, nodeType: int, nodeName: str, backendNodeId: 'BackendNodeId') -> None:
+class ShapeOutsideInfo(ChromeTypeBase):
+    """CSS Shape Outside details."""
+    def __init__(self, bounds: 'Quad', shape: List[Any], marginShape: List[Any]) -> None:
         """
-        :param nodeType: `Node`'s nodeType.
-        :type nodeType: int
-        :param nodeName: `Node`'s nodeName.
-        :type nodeName: str
-        :param backendNodeId: The backendNodeId
-        :type backendNodeId: BackendNodeId
+        :param bounds: Shape bounds
+        :type bounds: Quad
+        :param shape: Shape coordinate details
+        :type shape: array
+        :param marginShape: Margin shape bounds
+        :type marginShape: array
         """
         super().__init__()
-        self.nodeType: int = nodeType
-        self.nodeName: str = nodeName
-        self.backendNodeId: BackendNodeId = backendNodeId
+        self.bounds: Quad = bounds
+        self.shape: List[Any] = shape
+        self.marginShape: List[Any] = marginShape
+
+
+class Rect(ChromeTypeBase):
+    """Rectangle."""
+    def __init__(self, x: float, y: float, width: float, height: float) -> None:
+        """
+        :param x: X coordinate
+        :type x: float
+        :param y: Y coordinate
+        :type y: float
+        :param width: Rectangle width
+        :type width: float
+        :param height: Rectangle height
+        :type height: float
+        """
+        super().__init__()
+        self.x: float = x
+        self.y: float = y
+        self.width: float = width
+        self.height: float = height
+
+
+class RGBA(ChromeTypeBase):
+    """A structure holding an RGBA color."""
+    def __init__(self, r: int, g: int, b: int, a: Optional[float] = None) -> None:
+        """
+        :param r: The red component, in the [0-255] range.
+        :type r: int
+        :param g: The green component, in the [0-255] range.
+        :type g: int
+        :param b: The blue component, in the [0-255] range.
+        :type b: int
+        :param a: The alpha component, in the [0-1] range (default: 1).
+        :type a: float
+        """
+        super().__init__()
+        self.r: int = r
+        self.g: int = g
+        self.b: int = b
+        self.a: Optional[float] = a
 
 
 class Node(ChromeTypeBase):
@@ -128,26 +168,6 @@ DOMNode is a base node mirror type."""
         self.isSVG: Optional[bool] = isSVG
 
 
-class RGBA(ChromeTypeBase):
-    """A structure holding an RGBA color."""
-    def __init__(self, r: int, g: int, b: int, a: Optional[float] = None) -> None:
-        """
-        :param r: The red component, in the [0-255] range.
-        :type r: int
-        :param g: The green component, in the [0-255] range.
-        :type g: int
-        :param b: The blue component, in the [0-255] range.
-        :type b: int
-        :param a: The alpha component, in the [0-1] range (default: 1).
-        :type a: float
-        """
-        super().__init__()
-        self.r: int = r
-        self.g: int = g
-        self.b: int = b
-        self.a: Optional[float] = a
-
-
 class BoxModel(ChromeTypeBase):
     """Box model."""
     def __init__(self, content: 'Quad', padding: 'Quad', border: 'Quad', margin: 'Quad', width: int, height: int, shapeOutside: Optional['ShapeOutsideInfo'] = None) -> None:
@@ -177,40 +197,20 @@ class BoxModel(ChromeTypeBase):
         self.shapeOutside: Optional[ShapeOutsideInfo] = shapeOutside
 
 
-class ShapeOutsideInfo(ChromeTypeBase):
-    """CSS Shape Outside details."""
-    def __init__(self, bounds: 'Quad', shape: List[Any], marginShape: List[Any]) -> None:
+class BackendNode(ChromeTypeBase):
+    """Backend node with a friendly name."""
+    def __init__(self, nodeType: int, nodeName: str, backendNodeId: 'BackendNodeId') -> None:
         """
-        :param bounds: Shape bounds
-        :type bounds: Quad
-        :param shape: Shape coordinate details
-        :type shape: array
-        :param marginShape: Margin shape bounds
-        :type marginShape: array
-        """
-        super().__init__()
-        self.bounds: Quad = bounds
-        self.shape: List[Any] = shape
-        self.marginShape: List[Any] = marginShape
-
-
-class Rect(ChromeTypeBase):
-    """Rectangle."""
-    def __init__(self, x: float, y: float, width: float, height: float) -> None:
-        """
-        :param x: X coordinate
-        :type x: float
-        :param y: Y coordinate
-        :type y: float
-        :param width: Rectangle width
-        :type width: float
-        :param height: Rectangle height
-        :type height: float
+        :param nodeType: `Node`'s nodeType.
+        :type nodeType: int
+        :param nodeName: `Node`'s nodeName.
+        :type nodeName: str
+        :param backendNodeId: The backendNodeId
+        :type backendNodeId: BackendNodeId
         """
         super().__init__()
-        self.x: float = x
-        self.y: float = y
-        self.width: float = width
-        self.height: float = height
+        self.nodeType: int = nodeType
+        self.nodeName: str = nodeName
+        self.backendNodeId: BackendNodeId = backendNodeId
 
 

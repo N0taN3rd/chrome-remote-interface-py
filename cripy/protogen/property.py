@@ -48,7 +48,7 @@ class Property(FRefCollector):
 
     @property
     def nice_description(self) -> str:
-        return ' '.join(self.description.split('\n'))
+        return " ".join(self.description.split("\n"))
 
     @property
     def tinfo_str(self) -> str:
@@ -58,6 +58,11 @@ class Property(FRefCollector):
         else:
             ts = self._wrap_if_optional(self.type)
         return f"{self.name}: {ts}"
+
+    @property
+    def construct_theyself(self) -> str:
+        if not self.type.is_pytype and not self.type.is_array:
+            return f"self.{self.name} = {self.type}(**{self.name})"
 
     @property
     def constructor_string(self) -> str:

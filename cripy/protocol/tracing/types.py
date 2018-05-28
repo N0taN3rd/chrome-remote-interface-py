@@ -1,16 +1,11 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 
-# Compression type to use for traces returned via streams.
-StreamCompression = str
-
-
-class MemoryDumpConfig(ChromeTypeBase, dict):
-    """Configuration for memory dump. Used only when "memory-infra" category is enabled."""
+StreamCompression = TypeVar("StreamCompression", str, str)
+"""Compression type to use for traces returned via streams."""
 
 
 class TraceConfig(ChromeTypeBase):
-    pass
     def __init__(self, recordMode: Optional[str] = None, enableSampling: Optional[bool] = None, enableSystrace: Optional[bool] = None, enableArgumentFilter: Optional[bool] = None, includedCategories: Optional[List['str']] = None, excludedCategories: Optional[List['str']] = None, syntheticDelays: Optional[List['str']] = None, memoryDumpConfig: Optional['MemoryDumpConfig'] = None) -> None:
         """
         :param recordMode: Controls how the trace buffer stores data.
@@ -39,5 +34,9 @@ class TraceConfig(ChromeTypeBase):
         self.excludedCategories: Optional[List[str]] = excludedCategories
         self.syntheticDelays: Optional[List[str]] = syntheticDelays
         self.memoryDumpConfig: Optional[MemoryDumpConfig] = memoryDumpConfig
+
+
+class MemoryDumpConfig(ChromeTypeBase, dict):
+    """Configuration for memory dump. Used only when "memory-infra" category is enabled."""
 
 

@@ -1,9 +1,9 @@
-from typing import Any, List, Optional, Set, Union
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from typing import Any, List, Optional, Set, Union, TypeVar
+from cripy.helpers import ChromeTypeBase
 from cripy.protocol.runtime import types as Runtime
 
-# Heap snapshot object id.
-HeapSnapshotObjectId = str
+HeapSnapshotObjectId = TypeVar("HeapSnapshotObjectId", str, str)
+"""Heap snapshot object id."""
 
 
 class SamplingHeapProfileNode(ChromeTypeBase):
