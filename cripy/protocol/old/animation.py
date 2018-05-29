@@ -9,14 +9,14 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 from cripy.protocol import dom as DOM
 from cripy.protocol import runtime as Runtime
 
 # Animation: Animation instance.
-class Animation(ChromeTypeBase):
+class Animation(ProtocolType):
 
     def __init__(
         self,
@@ -45,7 +45,7 @@ class Animation(ChromeTypeBase):
 
 
 # AnimationEffect: AnimationEffect instance
-class AnimationEffect(ChromeTypeBase):
+class AnimationEffect(ProtocolType):
 
     def __init__(
         self,
@@ -74,7 +74,7 @@ class AnimationEffect(ChromeTypeBase):
 
 
 # KeyframesRule: Keyframes Rule
-class KeyframesRule(ChromeTypeBase):
+class KeyframesRule(ProtocolType):
 
     def __init__(
         self, keyframes: Union["[KeyframeStyle]"], name: Optional["str"] = None
@@ -85,7 +85,7 @@ class KeyframesRule(ChromeTypeBase):
 
 
 # KeyframeStyle: Keyframe Style
-class KeyframeStyle(ChromeTypeBase):
+class KeyframeStyle(ProtocolType):
 
     def __init__(self, offset: Union["str"], easing: Union["str"]):
 

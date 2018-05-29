@@ -9,12 +9,12 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 
 # StorageId: DOM Storage identifier.
-class StorageId(ChromeTypeBase):
+class StorageId(ProtocolType):
 
     def __init__(self, securityOrigin: Union["str"], isLocalStorage: Union["bool"]):
 

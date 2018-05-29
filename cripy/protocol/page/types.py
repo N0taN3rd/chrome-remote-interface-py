@@ -1,5 +1,5 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 from cripy.protocol.network import types as Network
 
 TransitionType = TypeVar("TransitionType", str, str)
@@ -18,9 +18,19 @@ DialogType = TypeVar("DialogType", str, str)
 """Javascript dialog type."""
 
 
-class VisualViewport(ChromeTypeBase):
+class VisualViewport(ProtocolType):
     """Visual viewport position, dimensions, and scale."""
-    def __init__(self, offsetX: float, offsetY: float, pageX: float, pageY: float, clientWidth: float, clientHeight: float, scale: float) -> None:
+
+    def __init__(
+        self,
+        offsetX: float,
+        offsetY: float,
+        pageX: float,
+        pageY: float,
+        clientWidth: float,
+        clientHeight: float,
+        scale: float,
+    ) -> None:
         """
         :param offsetX: Horizontal offset relative to the layout viewport (CSS pixels).
         :type offsetX: float
@@ -47,9 +57,12 @@ class VisualViewport(ChromeTypeBase):
         self.scale: float = scale
 
 
-class Viewport(ChromeTypeBase):
+class Viewport(ProtocolType):
     """Viewport for capturing screenshot."""
-    def __init__(self, x: float, y: float, width: float, height: float, scale: float) -> None:
+
+    def __init__(
+        self, x: float, y: float, width: float, height: float, scale: float
+    ) -> None:
         """
         :param x: X offset in CSS pixels.
         :type x: float
@@ -70,9 +83,19 @@ class Viewport(ChromeTypeBase):
         self.scale: float = scale
 
 
-class ScreencastFrameMetadata(ChromeTypeBase):
+class ScreencastFrameMetadata(ProtocolType):
     """Screencast frame metadata."""
-    def __init__(self, offsetTop: float, pageScaleFactor: float, deviceWidth: float, deviceHeight: float, scrollOffsetX: float, scrollOffsetY: float, timestamp: Optional['Network.TimeSinceEpoch'] = None) -> None:
+
+    def __init__(
+        self,
+        offsetTop: float,
+        pageScaleFactor: float,
+        deviceWidth: float,
+        deviceHeight: float,
+        scrollOffsetX: float,
+        scrollOffsetY: float,
+        timestamp: Optional["Network.TimeSinceEpoch"] = None,
+    ) -> None:
         """
         :param offsetTop: Top offset in DIP.
         :type offsetTop: float
@@ -99,9 +122,17 @@ class ScreencastFrameMetadata(ChromeTypeBase):
         self.timestamp: Optional[Network.TimeSinceEpoch] = timestamp
 
 
-class NavigationEntry(ChromeTypeBase):
+class NavigationEntry(ProtocolType):
     """Navigation history entry."""
-    def __init__(self, id: int, url: str, userTypedURL: str, title: str, transitionType: 'TransitionType') -> None:
+
+    def __init__(
+        self,
+        id: int,
+        url: str,
+        userTypedURL: str,
+        title: str,
+        transitionType: "TransitionType",
+    ) -> None:
         """
         :param id: Unique id of the navigation history entry.
         :type id: int
@@ -122,9 +153,12 @@ class NavigationEntry(ChromeTypeBase):
         self.transitionType: TransitionType = transitionType
 
 
-class LayoutViewport(ChromeTypeBase):
+class LayoutViewport(ProtocolType):
     """Layout viewport position and dimensions."""
-    def __init__(self, pageX: int, pageY: int, clientWidth: int, clientHeight: int) -> None:
+
+    def __init__(
+        self, pageX: int, pageY: int, clientWidth: int, clientHeight: int
+    ) -> None:
         """
         :param pageX: Horizontal offset relative to the document (CSS pixels).
         :type pageX: int
@@ -142,9 +176,14 @@ class LayoutViewport(ChromeTypeBase):
         self.clientHeight: int = clientHeight
 
 
-class FrameTree(ChromeTypeBase):
+class FrameTree(ProtocolType):
     """Information about the Frame hierarchy."""
-    def __init__(self, frame: 'Frame', childFrames: Optional[List['FrameTree']] = None) -> None:
+
+    def __init__(
+        self,
+        frame: "Frame",
+        childFrames: Optional[List[Union["FrameTree", dict]]] = None,
+    ) -> None:
         """
         :param frame: Frame information for this tree item.
         :type frame: Frame
@@ -156,9 +195,15 @@ class FrameTree(ChromeTypeBase):
         self.childFrames: Optional[List[FrameTree]] = childFrames
 
 
-class FrameResourceTree(ChromeTypeBase):
+class FrameResourceTree(ProtocolType):
     """Information about the Frame hierarchy along with their cached resources."""
-    def __init__(self, frame: 'Frame', resources: List['FrameResource'], childFrames: Optional[List['FrameResourceTree']] = None) -> None:
+
+    def __init__(
+        self,
+        frame: "Frame",
+        resources: List[Union["FrameResource", dict]],
+        childFrames: Optional[List[Union["FrameResourceTree", dict]]] = None,
+    ) -> None:
         """
         :param frame: Frame information for this tree item.
         :type frame: Frame
@@ -173,9 +218,19 @@ class FrameResourceTree(ChromeTypeBase):
         self.resources: List[FrameResource] = resources
 
 
-class FrameResource(ChromeTypeBase):
+class FrameResource(ProtocolType):
     """Information about the Resource on the page."""
-    def __init__(self, url: str, type: 'ResourceType', mimeType: str, lastModified: Optional['Network.TimeSinceEpoch'] = None, contentSize: Optional[float] = None, failed: Optional[bool] = None, canceled: Optional[bool] = None) -> None:
+
+    def __init__(
+        self,
+        url: str,
+        type: "ResourceType",
+        mimeType: str,
+        lastModified: Optional["Network.TimeSinceEpoch"] = None,
+        contentSize: Optional[float] = None,
+        failed: Optional[bool] = None,
+        canceled: Optional[bool] = None,
+    ) -> None:
         """
         :param url: Resource URL.
         :type url: str
@@ -202,9 +257,20 @@ class FrameResource(ChromeTypeBase):
         self.canceled: Optional[bool] = canceled
 
 
-class Frame(ChromeTypeBase):
+class Frame(ProtocolType):
     """Information about the Frame on the page."""
-    def __init__(self, id: str, loaderId: 'Network.LoaderId', url: str, securityOrigin: str, mimeType: str, parentId: Optional[str] = None, name: Optional[str] = None, unreachableUrl: Optional[str] = None) -> None:
+
+    def __init__(
+        self,
+        id: str,
+        loaderId: "Network.LoaderId",
+        url: str,
+        securityOrigin: str,
+        mimeType: str,
+        parentId: Optional[str] = None,
+        name: Optional[str] = None,
+        unreachableUrl: Optional[str] = None,
+    ) -> None:
         """
         :param id: Frame unique identifier.
         :type id: str
@@ -234,8 +300,9 @@ class Frame(ChromeTypeBase):
         self.unreachableUrl: Optional[str] = unreachableUrl
 
 
-class AppManifestError(ChromeTypeBase):
+class AppManifestError(ProtocolType):
     """Error while paring app manifest."""
+
     def __init__(self, message: str, critical: int, line: int, column: int) -> None:
         """
         :param message: Error message.
@@ -254,3 +321,15 @@ class AppManifestError(ChromeTypeBase):
         self.column: int = column
 
 
+OBJECT_LIST = {
+    "VisualViewport": VisualViewport,
+    "Viewport": Viewport,
+    "ScreencastFrameMetadata": ScreencastFrameMetadata,
+    "NavigationEntry": NavigationEntry,
+    "LayoutViewport": LayoutViewport,
+    "FrameTree": FrameTree,
+    "FrameResourceTree": FrameResourceTree,
+    "FrameResource": FrameResource,
+    "Frame": Frame,
+    "AppManifestError": AppManifestError,
+}

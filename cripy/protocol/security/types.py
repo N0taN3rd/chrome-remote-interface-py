@@ -1,5 +1,5 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 SecurityState = TypeVar("SecurityState", str, str)
 """The security level of a page or resource."""
@@ -14,9 +14,18 @@ CertificateErrorAction = TypeVar("CertificateErrorAction", str, str)
 """The action to take when a certificate error occurs. continue will continue processing the request and cancel will cancel the request."""
 
 
-class SecurityStateExplanation(ChromeTypeBase):
+class SecurityStateExplanation(ProtocolType):
     """An explanation of an factor contributing to the security state."""
-    def __init__(self, securityState: 'SecurityState', title: str, summary: str, description: str, mixedContentType: 'MixedContentType', certificate: List['str']) -> None:
+
+    def __init__(
+        self,
+        securityState: "SecurityState",
+        title: str,
+        summary: str,
+        description: str,
+        mixedContentType: "MixedContentType",
+        certificate: List[str],
+    ) -> None:
         """
         :param securityState: Security state representing the severity of the factor being explained.
         :type securityState: SecurityState
@@ -40,9 +49,19 @@ class SecurityStateExplanation(ChromeTypeBase):
         self.certificate: List[str] = certificate
 
 
-class InsecureContentStatus(ChromeTypeBase):
+class InsecureContentStatus(ProtocolType):
     """Information about insecure content on the page."""
-    def __init__(self, ranMixedContent: bool, displayedMixedContent: bool, containedMixedForm: bool, ranContentWithCertErrors: bool, displayedContentWithCertErrors: bool, ranInsecureContentStyle: 'SecurityState', displayedInsecureContentStyle: 'SecurityState') -> None:
+
+    def __init__(
+        self,
+        ranMixedContent: bool,
+        displayedMixedContent: bool,
+        containedMixedForm: bool,
+        ranContentWithCertErrors: bool,
+        displayedContentWithCertErrors: bool,
+        ranInsecureContentStyle: "SecurityState",
+        displayedInsecureContentStyle: "SecurityState",
+    ) -> None:
         """
         :param ranMixedContent: True if the page was loaded over HTTPS and ran mixed (HTTP) content such as scripts.
         :type ranMixedContent: bool
@@ -69,3 +88,7 @@ class InsecureContentStatus(ChromeTypeBase):
         self.displayedInsecureContentStyle: SecurityState = displayedInsecureContentStyle
 
 
+OBJECT_LIST = {
+    "SecurityStateExplanation": SecurityStateExplanation,
+    "InsecureContentStatus": InsecureContentStatus,
+}

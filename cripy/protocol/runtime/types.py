@@ -1,5 +1,5 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 UnserializableValue = TypeVar("UnserializableValue", str, str)
 """Primitive value which cannot be JSON-stringified. Includes values `-0`, `NaN`, `Infinity`, `-Infinity`, and bigint literals."""
@@ -23,10 +23,13 @@ ExecutionContextId = TypeVar("ExecutionContextId", int, int)
 """Id of an execution context."""
 
 
-class StackTraceId(ChromeTypeBase):
+class StackTraceId(ProtocolType):
     """If `debuggerId` is set stack trace comes from another debugger and can be resolved there. This
 allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.paused` for usages."""
-    def __init__(self, id: str, debuggerId: Optional['UniqueDebuggerId'] = None) -> None:
+
+    def __init__(
+        self, id: str, debuggerId: Optional["UniqueDebuggerId"] = None
+    ) -> None:
         """
         :param id: The id
         :type id: str
@@ -38,9 +41,16 @@ allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.pau
         self.debuggerId: Optional[UniqueDebuggerId] = debuggerId
 
 
-class StackTrace(ChromeTypeBase):
+class StackTrace(ProtocolType):
     """Call frames for assertions or error messages."""
-    def __init__(self, callFrames: List['CallFrame'], description: Optional[str] = None, parent: Optional['StackTrace'] = None, parentId: Optional['StackTraceId'] = None) -> None:
+
+    def __init__(
+        self,
+        callFrames: List[Union["CallFrame", dict]],
+        description: Optional[str] = None,
+        parent: Optional["StackTrace"] = None,
+        parentId: Optional["StackTraceId"] = None,
+    ) -> None:
         """
         :param description: String label of this stack trace. For async traces this may be a name of the function that initiated the async call.
         :type description: str
@@ -58,9 +68,21 @@ class StackTrace(ChromeTypeBase):
         self.parentId: Optional[StackTraceId] = parentId
 
 
-class RemoteObject(ChromeTypeBase):
+class RemoteObject(ProtocolType):
     """Mirror object referencing original JavaScript object."""
-    def __init__(self, type: str, subtype: Optional[str] = None, className: Optional[str] = None, value: Optional[Any] = None, unserializableValue: Optional['UnserializableValue'] = None, description: Optional[str] = None, objectId: Optional['RemoteObjectId'] = None, preview: Optional['ObjectPreview'] = None, customPreview: Optional['CustomPreview'] = None) -> None:
+
+    def __init__(
+        self,
+        type: str,
+        subtype: Optional[str] = None,
+        className: Optional[str] = None,
+        value: Optional[Any] = None,
+        unserializableValue: Optional["UnserializableValue"] = None,
+        description: Optional[str] = None,
+        objectId: Optional["RemoteObjectId"] = None,
+        preview: Optional["ObjectPreview"] = None,
+        customPreview: Optional["CustomPreview"] = None,
+    ) -> None:
         """
         :param type: Object type.
         :type type: str
@@ -93,8 +115,16 @@ class RemoteObject(ChromeTypeBase):
         self.customPreview: Optional[CustomPreview] = customPreview
 
 
-class PropertyPreview(ChromeTypeBase):
-    def __init__(self, name: str, type: str, value: Optional[str] = None, valuePreview: Optional['ObjectPreview'] = None, subtype: Optional[str] = None) -> None:
+class PropertyPreview(ProtocolType):
+
+    def __init__(
+        self,
+        name: str,
+        type: str,
+        value: Optional[str] = None,
+        valuePreview: Optional["ObjectPreview"] = None,
+        subtype: Optional[str] = None,
+    ) -> None:
         """
         :param name: Property name.
         :type name: str
@@ -115,9 +145,22 @@ class PropertyPreview(ChromeTypeBase):
         self.subtype: Optional[str] = subtype
 
 
-class PropertyDescriptor(ChromeTypeBase):
+class PropertyDescriptor(ProtocolType):
     """Object property descriptor."""
-    def __init__(self, name: str, configurable: bool, enumerable: bool, value: Optional['RemoteObject'] = None, writable: Optional[bool] = None, get: Optional['RemoteObject'] = None, set: Optional['RemoteObject'] = None, wasThrown: Optional[bool] = None, isOwn: Optional[bool] = None, symbol: Optional['RemoteObject'] = None) -> None:
+
+    def __init__(
+        self,
+        name: str,
+        configurable: bool,
+        enumerable: bool,
+        value: Optional["RemoteObject"] = None,
+        writable: Optional[bool] = None,
+        get: Optional["RemoteObject"] = None,
+        set: Optional["RemoteObject"] = None,
+        wasThrown: Optional[bool] = None,
+        isOwn: Optional[bool] = None,
+        symbol: Optional["RemoteObject"] = None,
+    ) -> None:
         """
         :param name: Property name or symbol description.
         :type name: str
@@ -153,9 +196,18 @@ class PropertyDescriptor(ChromeTypeBase):
         self.symbol: Optional[RemoteObject] = symbol
 
 
-class ObjectPreview(ChromeTypeBase):
+class ObjectPreview(ProtocolType):
     """Object containing abbreviated remote object value."""
-    def __init__(self, type: str, overflow: bool, properties: List['PropertyPreview'], subtype: Optional[str] = None, description: Optional[str] = None, entries: Optional[List['EntryPreview']] = None) -> None:
+
+    def __init__(
+        self,
+        type: str,
+        overflow: bool,
+        properties: List[Union["PropertyPreview", dict]],
+        subtype: Optional[str] = None,
+        description: Optional[str] = None,
+        entries: Optional[List[Union["EntryPreview", dict]]] = None,
+    ) -> None:
         """
         :param type: Object type.
         :type type: str
@@ -179,9 +231,10 @@ class ObjectPreview(ChromeTypeBase):
         self.entries: Optional[List[EntryPreview]] = entries
 
 
-class InternalPropertyDescriptor(ChromeTypeBase):
+class InternalPropertyDescriptor(ProtocolType):
     """Object internal property descriptor. This property isn't normally visible in JavaScript code."""
-    def __init__(self, name: str, value: Optional['RemoteObject'] = None) -> None:
+
+    def __init__(self, name: str, value: Optional["RemoteObject"] = None) -> None:
         """
         :param name: Conventional property name.
         :type name: str
@@ -193,9 +246,16 @@ class InternalPropertyDescriptor(ChromeTypeBase):
         self.value: Optional[RemoteObject] = value
 
 
-class ExecutionContextDescription(ChromeTypeBase):
+class ExecutionContextDescription(ProtocolType):
     """Description of an isolated world."""
-    def __init__(self, id: 'ExecutionContextId', origin: str, name: str, auxData: Optional[dict] = None) -> None:
+
+    def __init__(
+        self,
+        id: "ExecutionContextId",
+        origin: str,
+        name: str,
+        auxData: Optional[dict] = None,
+    ) -> None:
         """
         :param id: Unique id of the execution context. It can be used to specify in which execution context script evaluation should be performed.
         :type id: ExecutionContextId
@@ -213,10 +273,22 @@ class ExecutionContextDescription(ChromeTypeBase):
         self.auxData: Optional[dict] = auxData
 
 
-class ExceptionDetails(ChromeTypeBase):
+class ExceptionDetails(ProtocolType):
     """Detailed information about exception (or error) that was thrown during script compilation or
 execution."""
-    def __init__(self, exceptionId: int, text: str, lineNumber: int, columnNumber: int, scriptId: Optional['ScriptId'] = None, url: Optional[str] = None, stackTrace: Optional['StackTrace'] = None, exception: Optional['RemoteObject'] = None, executionContextId: Optional['ExecutionContextId'] = None) -> None:
+
+    def __init__(
+        self,
+        exceptionId: int,
+        text: str,
+        lineNumber: int,
+        columnNumber: int,
+        scriptId: Optional["ScriptId"] = None,
+        url: Optional[str] = None,
+        stackTrace: Optional["StackTrace"] = None,
+        exception: Optional["RemoteObject"] = None,
+        executionContextId: Optional["ExecutionContextId"] = None,
+    ) -> None:
         """
         :param exceptionId: Exception id.
         :type exceptionId: int
@@ -249,8 +321,11 @@ execution."""
         self.executionContextId: Optional[ExecutionContextId] = executionContextId
 
 
-class EntryPreview(ChromeTypeBase):
-    def __init__(self, value: 'ObjectPreview', key: Optional['ObjectPreview'] = None) -> None:
+class EntryPreview(ProtocolType):
+
+    def __init__(
+        self, value: "ObjectPreview", key: Optional["ObjectPreview"] = None
+    ) -> None:
         """
         :param key: Preview of the key. Specified for map-like collection entries.
         :type key: ObjectPreview
@@ -262,8 +337,16 @@ class EntryPreview(ChromeTypeBase):
         self.value: ObjectPreview = value
 
 
-class CustomPreview(ChromeTypeBase):
-    def __init__(self, header: str, hasBody: bool, formatterObjectId: 'RemoteObjectId', bindRemoteObjectFunctionId: 'RemoteObjectId', configObjectId: Optional['RemoteObjectId'] = None) -> None:
+class CustomPreview(ProtocolType):
+
+    def __init__(
+        self,
+        header: str,
+        hasBody: bool,
+        formatterObjectId: "RemoteObjectId",
+        bindRemoteObjectFunctionId: "RemoteObjectId",
+        configObjectId: Optional["RemoteObjectId"] = None,
+    ) -> None:
         """
         :param header: The header
         :type header: str
@@ -284,9 +367,17 @@ class CustomPreview(ChromeTypeBase):
         self.configObjectId: Optional[RemoteObjectId] = configObjectId
 
 
-class CallFrame(ChromeTypeBase):
+class CallFrame(ProtocolType):
     """Stack entry for runtime errors and assertions."""
-    def __init__(self, functionName: str, scriptId: 'ScriptId', url: str, lineNumber: int, columnNumber: int) -> None:
+
+    def __init__(
+        self,
+        functionName: str,
+        scriptId: "ScriptId",
+        url: str,
+        lineNumber: int,
+        columnNumber: int,
+    ) -> None:
         """
         :param functionName: JavaScript function name.
         :type functionName: str
@@ -307,10 +398,16 @@ class CallFrame(ChromeTypeBase):
         self.columnNumber: int = columnNumber
 
 
-class CallArgument(ChromeTypeBase):
+class CallArgument(ProtocolType):
     """Represents function call argument. Either remote object id `objectId`, primitive `value`,
 unserializable primitive value or neither of (for undefined) them should be specified."""
-    def __init__(self, value: Optional[Any] = None, unserializableValue: Optional['UnserializableValue'] = None, objectId: Optional['RemoteObjectId'] = None) -> None:
+
+    def __init__(
+        self,
+        value: Optional[Any] = None,
+        unserializableValue: Optional["UnserializableValue"] = None,
+        objectId: Optional["RemoteObjectId"] = None,
+    ) -> None:
         """
         :param value: Primitive value or serializable javascript object.
         :type value: Any
@@ -325,3 +422,18 @@ unserializable primitive value or neither of (for undefined) them should be spec
         self.objectId: Optional[RemoteObjectId] = objectId
 
 
+OBJECT_LIST = {
+    "StackTraceId": StackTraceId,
+    "StackTrace": StackTrace,
+    "RemoteObject": RemoteObject,
+    "PropertyPreview": PropertyPreview,
+    "PropertyDescriptor": PropertyDescriptor,
+    "ObjectPreview": ObjectPreview,
+    "InternalPropertyDescriptor": InternalPropertyDescriptor,
+    "ExecutionContextDescription": ExecutionContextDescription,
+    "ExceptionDetails": ExceptionDetails,
+    "EntryPreview": EntryPreview,
+    "CustomPreview": CustomPreview,
+    "CallFrame": CallFrame,
+    "CallArgument": CallArgument,
+}

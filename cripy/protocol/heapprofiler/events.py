@@ -70,15 +70,14 @@ class ResetProfilesEvent(BaseEvent):
 
     event: str = "HeapProfiler.resetProfiles"
 
-    def __init__(self, ) -> None:
+    def __init__(self,) -> None:
         super().__init__()
 
 
 EVENT_TO_CLASS = {
-   "HeapProfiler.addHeapSnapshotChunk": AddHeapSnapshotChunkEvent,
-   "HeapProfiler.heapStatsUpdate": HeapStatsUpdateEvent,
-   "HeapProfiler.lastSeenObjectId": LastSeenObjectIdEvent,
-   "HeapProfiler.reportHeapSnapshotProgress": ReportHeapSnapshotProgressEvent,
-   "HeapProfiler.resetProfiles": ResetProfilesEvent,
+    "HeapProfiler.addHeapSnapshotChunk": AddHeapSnapshotChunkEvent,
+    "HeapProfiler.heapStatsUpdate": HeapStatsUpdateEvent,
+    "HeapProfiler.lastSeenObjectId": LastSeenObjectIdEvent,
+    "HeapProfiler.reportHeapSnapshotProgress": ReportHeapSnapshotProgressEvent,
+    "HeapProfiler.resetProfiles": ResetProfilesEvent,
 }
-

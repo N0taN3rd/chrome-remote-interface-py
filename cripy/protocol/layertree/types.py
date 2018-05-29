@@ -1,5 +1,5 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 
 SnapshotId = TypeVar("SnapshotId", str, str)
@@ -12,9 +12,16 @@ LayerId = TypeVar("LayerId", str, str)
 """Unique Layer identifier."""
 
 
-class StickyPositionConstraint(ChromeTypeBase):
+class StickyPositionConstraint(ProtocolType):
     """Sticky position constraints."""
-    def __init__(self, stickyBoxRect: 'DOM.Rect', containingBlockRect: 'DOM.Rect', nearestLayerShiftingStickyBox: Optional['LayerId'] = None, nearestLayerShiftingContainingBlock: Optional['LayerId'] = None) -> None:
+
+    def __init__(
+        self,
+        stickyBoxRect: "DOM.Rect",
+        containingBlockRect: "DOM.Rect",
+        nearestLayerShiftingStickyBox: Optional["LayerId"] = None,
+        nearestLayerShiftingContainingBlock: Optional["LayerId"] = None,
+    ) -> None:
         """
         :param stickyBoxRect: Layout rectangle of the sticky element before being shifted
         :type stickyBoxRect: DOM.Rect
@@ -28,13 +35,18 @@ class StickyPositionConstraint(ChromeTypeBase):
         super().__init__()
         self.stickyBoxRect: DOM.Rect = stickyBoxRect
         self.containingBlockRect: DOM.Rect = containingBlockRect
-        self.nearestLayerShiftingStickyBox: Optional[LayerId] = nearestLayerShiftingStickyBox
-        self.nearestLayerShiftingContainingBlock: Optional[LayerId] = nearestLayerShiftingContainingBlock
+        self.nearestLayerShiftingStickyBox: Optional[
+            LayerId
+        ] = nearestLayerShiftingStickyBox
+        self.nearestLayerShiftingContainingBlock: Optional[
+            LayerId
+        ] = nearestLayerShiftingContainingBlock
 
 
-class ScrollRect(ChromeTypeBase):
+class ScrollRect(ProtocolType):
     """Rectangle where scrolling happens on the main thread."""
-    def __init__(self, rect: 'DOM.Rect', type: str) -> None:
+
+    def __init__(self, rect: "DOM.Rect", type: str) -> None:
         """
         :param rect: Rectangle itself.
         :type rect: DOM.Rect
@@ -46,8 +58,9 @@ class ScrollRect(ChromeTypeBase):
         self.type: str = type
 
 
-class PictureTile(ChromeTypeBase):
+class PictureTile(ProtocolType):
     """Serialized fragment of layer picture along with its offset within the layer."""
+
     def __init__(self, x: float, y: float, picture: str) -> None:
         """
         :param x: Offset from owning layer left boundary
@@ -63,9 +76,28 @@ class PictureTile(ChromeTypeBase):
         self.picture: str = picture
 
 
-class Layer(ChromeTypeBase):
+class Layer(ProtocolType):
     """Information about a compositing layer."""
-    def __init__(self, layerId: 'LayerId', offsetX: float, offsetY: float, width: float, height: float, paintCount: int, drawsContent: bool, parentLayerId: Optional['LayerId'] = None, backendNodeId: Optional['DOM.BackendNodeId'] = None, transform: Optional[List['float']] = None, anchorX: Optional[float] = None, anchorY: Optional[float] = None, anchorZ: Optional[float] = None, invisible: Optional[bool] = None, scrollRects: Optional[List['ScrollRect']] = None, stickyPositionConstraint: Optional['StickyPositionConstraint'] = None) -> None:
+
+    def __init__(
+        self,
+        layerId: "LayerId",
+        offsetX: float,
+        offsetY: float,
+        width: float,
+        height: float,
+        paintCount: int,
+        drawsContent: bool,
+        parentLayerId: Optional["LayerId"] = None,
+        backendNodeId: Optional["DOM.BackendNodeId"] = None,
+        transform: Optional[List[float]] = None,
+        anchorX: Optional[float] = None,
+        anchorY: Optional[float] = None,
+        anchorZ: Optional[float] = None,
+        invisible: Optional[bool] = None,
+        scrollRects: Optional[List[Union["ScrollRect", dict]]] = None,
+        stickyPositionConstraint: Optional["StickyPositionConstraint"] = None,
+    ) -> None:
         """
         :param layerId: The unique id for this layer.
         :type layerId: LayerId
@@ -116,6 +148,14 @@ class Layer(ChromeTypeBase):
         self.drawsContent: bool = drawsContent
         self.invisible: Optional[bool] = invisible
         self.scrollRects: Optional[List[ScrollRect]] = scrollRects
-        self.stickyPositionConstraint: Optional[StickyPositionConstraint] = stickyPositionConstraint
+        self.stickyPositionConstraint: Optional[
+            StickyPositionConstraint
+        ] = stickyPositionConstraint
 
 
+OBJECT_LIST = {
+    "StickyPositionConstraint": StickyPositionConstraint,
+    "ScrollRect": ScrollRect,
+    "PictureTile": PictureTile,
+    "Layer": Layer,
+}

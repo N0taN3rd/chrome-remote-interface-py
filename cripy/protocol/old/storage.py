@@ -9,7 +9,7 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 StorageType = str
 
 # UsageForType: Usage for a storage type.
-class UsageForType(ChromeTypeBase):
+class UsageForType(ProtocolType):
 
     def __init__(self, storageType: Union["StorageType"], usage: Union["float"]):
 

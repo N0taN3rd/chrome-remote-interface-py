@@ -1,5 +1,5 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 TimeSinceEpoch = TypeVar("TimeSinceEpoch", float, float)
 """UTC time in seconds, counted from January 1, 1970."""
@@ -8,8 +8,18 @@ GestureSourceType = TypeVar("GestureSourceType", str, str)
 """"""
 
 
-class TouchPoint(ChromeTypeBase):
-    def __init__(self, x: float, y: float, radiusX: Optional[float] = None, radiusY: Optional[float] = None, rotationAngle: Optional[float] = None, force: Optional[float] = None, id: Optional[float] = None) -> None:
+class TouchPoint(ProtocolType):
+
+    def __init__(
+        self,
+        x: float,
+        y: float,
+        radiusX: Optional[float] = None,
+        radiusY: Optional[float] = None,
+        rotationAngle: Optional[float] = None,
+        force: Optional[float] = None,
+        id: Optional[float] = None,
+    ) -> None:
         """
         :param x: X coordinate of the event relative to the main frame's viewport in CSS pixels.
         :type x: float
@@ -36,3 +46,4 @@ class TouchPoint(ChromeTypeBase):
         self.id: Optional[float] = id
 
 
+OBJECT_LIST = {"TouchPoint": TouchPoint}

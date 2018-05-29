@@ -1,9 +1,6 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.dom.types import (
-    Node,
-    NodeId,
-)
+from cripy.protocol.dom.types import NodeId, Node
 
 
 class AttributeModifiedEvent(BaseEvent):
@@ -82,7 +79,9 @@ class ChildNodeInsertedEvent(BaseEvent):
 
     event: str = "DOM.childNodeInserted"
 
-    def __init__(self, parentNodeId: NodeId, previousNodeId: NodeId, node: Node) -> None:
+    def __init__(
+        self, parentNodeId: NodeId, previousNodeId: NodeId, node: Node
+    ) -> None:
         """
         :param parentNodeId: Id of the node that has changed.
         :type parentNodeId: NodeId
@@ -119,7 +118,9 @@ class DistributedNodesUpdatedEvent(BaseEvent):
 
     event: str = "DOM.distributedNodesUpdated"
 
-    def __init__(self, insertionPointId: NodeId, distributedNodes: List[BackendNode]) -> None:
+    def __init__(
+        self, insertionPointId: NodeId, distributedNodes: List[Union[BackendNode, dict]]
+    ) -> None:
         """
         :param insertionPointId: Insertion point where distrubuted nodes were updated.
         :type insertionPointId: NodeId
@@ -137,7 +138,7 @@ class DocumentUpdatedEvent(BaseEvent):
 
     event: str = "DOM.documentUpdated"
 
-    def __init__(self, ) -> None:
+    def __init__(self,) -> None:
         super().__init__()
 
 
@@ -195,7 +196,7 @@ class SetChildNodesEvent(BaseEvent):
 
     event: str = "DOM.setChildNodes"
 
-    def __init__(self, parentId: NodeId, nodes: List[Node]) -> None:
+    def __init__(self, parentId: NodeId, nodes: List[Union[Node, dict]]) -> None:
         """
         :param parentId: Parent node id to populate with children.
         :type parentId: NodeId
@@ -242,19 +243,18 @@ class ShadowRootPushedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "DOM.attributeModified": AttributeModifiedEvent,
-   "DOM.attributeRemoved": AttributeRemovedEvent,
-   "DOM.characterDataModified": CharacterDataModifiedEvent,
-   "DOM.childNodeCountUpdated": ChildNodeCountUpdatedEvent,
-   "DOM.childNodeInserted": ChildNodeInsertedEvent,
-   "DOM.childNodeRemoved": ChildNodeRemovedEvent,
-   "DOM.distributedNodesUpdated": DistributedNodesUpdatedEvent,
-   "DOM.documentUpdated": DocumentUpdatedEvent,
-   "DOM.inlineStyleInvalidated": InlineStyleInvalidatedEvent,
-   "DOM.pseudoElementAdded": PseudoElementAddedEvent,
-   "DOM.pseudoElementRemoved": PseudoElementRemovedEvent,
-   "DOM.setChildNodes": SetChildNodesEvent,
-   "DOM.shadowRootPopped": ShadowRootPoppedEvent,
-   "DOM.shadowRootPushed": ShadowRootPushedEvent,
+    "DOM.attributeModified": AttributeModifiedEvent,
+    "DOM.attributeRemoved": AttributeRemovedEvent,
+    "DOM.characterDataModified": CharacterDataModifiedEvent,
+    "DOM.childNodeCountUpdated": ChildNodeCountUpdatedEvent,
+    "DOM.childNodeInserted": ChildNodeInsertedEvent,
+    "DOM.childNodeRemoved": ChildNodeRemovedEvent,
+    "DOM.distributedNodesUpdated": DistributedNodesUpdatedEvent,
+    "DOM.documentUpdated": DocumentUpdatedEvent,
+    "DOM.inlineStyleInvalidated": InlineStyleInvalidatedEvent,
+    "DOM.pseudoElementAdded": PseudoElementAddedEvent,
+    "DOM.pseudoElementRemoved": PseudoElementRemovedEvent,
+    "DOM.setChildNodes": SetChildNodesEvent,
+    "DOM.shadowRootPopped": ShadowRootPoppedEvent,
+    "DOM.shadowRootPushed": ShadowRootPushedEvent,
 }
-

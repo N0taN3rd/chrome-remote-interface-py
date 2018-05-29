@@ -1,7 +1,7 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
-from cripy.protocol.page import types as Page
+from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
+from cripy.protocol.page import types as Page
 
 StyleSheetOrigin = TypeVar("StyleSheetOrigin", str, str)
 """Stylesheet type: "injected" for stylesheets injected via extension, "user-agent" for user-agent stylesheets, "inspector" for stylesheets created by the inspector (i.e. those holding the "via inspector" rules), "regular" for regular stylesheets."""
@@ -10,9 +10,10 @@ StyleSheetId = TypeVar("StyleSheetId", str, str)
 """"""
 
 
-class Value(ChromeTypeBase):
+class Value(ProtocolType):
     """Data for a simple selector (these are delimited by commas in a selector list)."""
-    def __init__(self, text: str, range: Optional['SourceRange'] = None) -> None:
+
+    def __init__(self, text: str, range: Optional["SourceRange"] = None) -> None:
         """
         :param text: Value text.
         :type text: str
@@ -24,9 +25,12 @@ class Value(ChromeTypeBase):
         self.range: Optional[SourceRange] = range
 
 
-class StyleDeclarationEdit(ChromeTypeBase):
+class StyleDeclarationEdit(ProtocolType):
     """A descriptor of operation to mutate style declaration text."""
-    def __init__(self, styleSheetId: 'StyleSheetId', range: 'SourceRange', text: str) -> None:
+
+    def __init__(
+        self, styleSheetId: "StyleSheetId", range: "SourceRange", text: str
+    ) -> None:
         """
         :param styleSheetId: The css style sheet identifier.
         :type styleSheetId: StyleSheetId
@@ -41,9 +45,12 @@ class StyleDeclarationEdit(ChromeTypeBase):
         self.text: str = text
 
 
-class SourceRange(ChromeTypeBase):
+class SourceRange(ProtocolType):
     """Text range within a resource. All numbers are zero-based."""
-    def __init__(self, startLine: int, startColumn: int, endLine: int, endColumn: int) -> None:
+
+    def __init__(
+        self, startLine: int, startColumn: int, endLine: int, endColumn: int
+    ) -> None:
         """
         :param startLine: Start line of range.
         :type startLine: int
@@ -61,7 +68,8 @@ class SourceRange(ChromeTypeBase):
         self.endColumn: int = endColumn
 
 
-class ShorthandEntry(ChromeTypeBase):
+class ShorthandEntry(ProtocolType):
+
     def __init__(self, name: str, value: str, important: Optional[bool] = None) -> None:
         """
         :param name: Shorthand name.
@@ -77,9 +85,10 @@ class ShorthandEntry(ChromeTypeBase):
         self.important: Optional[bool] = important
 
 
-class SelectorList(ChromeTypeBase):
+class SelectorList(ProtocolType):
     """Selector list data."""
-    def __init__(self, selectors: List['Value'], text: str) -> None:
+
+    def __init__(self, selectors: List[Union["Value", dict]], text: str) -> None:
         """
         :param selectors: Selectors in the list.
         :type selectors: array
@@ -91,9 +100,16 @@ class SelectorList(ChromeTypeBase):
         self.text: str = text
 
 
-class RuleUsage(ChromeTypeBase):
+class RuleUsage(ProtocolType):
     """CSS coverage information."""
-    def __init__(self, styleSheetId: 'StyleSheetId', startOffset: float, endOffset: float, used: bool) -> None:
+
+    def __init__(
+        self,
+        styleSheetId: "StyleSheetId",
+        startOffset: float,
+        endOffset: float,
+        used: bool,
+    ) -> None:
         """
         :param styleSheetId: The css style sheet identifier (absent for user agent stylesheet and user-specified stylesheet rules) this rule came from.
         :type styleSheetId: StyleSheetId
@@ -111,9 +127,10 @@ class RuleUsage(ChromeTypeBase):
         self.used: bool = used
 
 
-class RuleMatch(ChromeTypeBase):
+class RuleMatch(ProtocolType):
     """Match data for a CSS rule."""
-    def __init__(self, rule: 'CSSRule', matchingSelectors: List['int']) -> None:
+
+    def __init__(self, rule: "CSSRule", matchingSelectors: List[int]) -> None:
         """
         :param rule: CSS rule in the match.
         :type rule: CSSRule
@@ -125,9 +142,12 @@ class RuleMatch(ChromeTypeBase):
         self.matchingSelectors: List[int] = matchingSelectors
 
 
-class PseudoElementMatches(ChromeTypeBase):
+class PseudoElementMatches(ProtocolType):
     """CSS rule collection for a single pseudo style."""
-    def __init__(self, pseudoType: 'DOM.PseudoType', matches: List['RuleMatch']) -> None:
+
+    def __init__(
+        self, pseudoType: "DOM.PseudoType", matches: List[Union["RuleMatch", dict]]
+    ) -> None:
         """
         :param pseudoType: Pseudo element type.
         :type pseudoType: DOM.PseudoType
@@ -139,8 +159,9 @@ class PseudoElementMatches(ChromeTypeBase):
         self.matches: List[RuleMatch] = matches
 
 
-class PlatformFontUsage(ChromeTypeBase):
+class PlatformFontUsage(ProtocolType):
     """Information about amount of glyphs that were rendered with given font."""
+
     def __init__(self, familyName: str, isCustomFont: bool, glyphCount: float) -> None:
         """
         :param familyName: Font's family name reported by platform.
@@ -156,9 +177,17 @@ class PlatformFontUsage(ChromeTypeBase):
         self.glyphCount: float = glyphCount
 
 
-class MediaQueryExpression(ChromeTypeBase):
+class MediaQueryExpression(ProtocolType):
     """Media query expression descriptor."""
-    def __init__(self, value: float, unit: str, feature: str, valueRange: Optional['SourceRange'] = None, computedLength: Optional[float] = None) -> None:
+
+    def __init__(
+        self,
+        value: float,
+        unit: str,
+        feature: str,
+        valueRange: Optional["SourceRange"] = None,
+        computedLength: Optional[float] = None,
+    ) -> None:
         """
         :param value: Media query expression value.
         :type value: float
@@ -179,9 +208,12 @@ class MediaQueryExpression(ChromeTypeBase):
         self.computedLength: Optional[float] = computedLength
 
 
-class MediaQuery(ChromeTypeBase):
+class MediaQuery(ProtocolType):
     """Media query descriptor."""
-    def __init__(self, expressions: List['MediaQueryExpression'], active: bool) -> None:
+
+    def __init__(
+        self, expressions: List[Union["MediaQueryExpression", dict]], active: bool
+    ) -> None:
         """
         :param expressions: Array of media query expressions.
         :type expressions: array
@@ -193,9 +225,14 @@ class MediaQuery(ChromeTypeBase):
         self.active: bool = active
 
 
-class InheritedStyleEntry(ChromeTypeBase):
+class InheritedStyleEntry(ProtocolType):
     """Inherited CSS rule collection from ancestor node."""
-    def __init__(self, matchedCSSRules: List['RuleMatch'], inlineStyle: Optional['CSSStyle'] = None) -> None:
+
+    def __init__(
+        self,
+        matchedCSSRules: List[Union["RuleMatch", dict]],
+        inlineStyle: Optional["CSSStyle"] = None,
+    ) -> None:
         """
         :param inlineStyle: The ancestor node's inline style, if any, in the style inheritance chain.
         :type inlineStyle: CSSStyle
@@ -207,9 +244,20 @@ class InheritedStyleEntry(ChromeTypeBase):
         self.matchedCSSRules: List[RuleMatch] = matchedCSSRules
 
 
-class FontFace(ChromeTypeBase):
+class FontFace(ProtocolType):
     """Properties of a web font: https://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#font-descriptions"""
-    def __init__(self, fontFamily: str, fontStyle: str, fontVariant: str, fontWeight: str, fontStretch: str, unicodeRange: str, src: str, platformFontFamily: str) -> None:
+
+    def __init__(
+        self,
+        fontFamily: str,
+        fontStyle: str,
+        fontVariant: str,
+        fontWeight: str,
+        fontStretch: str,
+        unicodeRange: str,
+        src: str,
+        platformFontFamily: str,
+    ) -> None:
         """
         :param fontFamily: The font-family.
         :type fontFamily: str
@@ -239,9 +287,25 @@ class FontFace(ChromeTypeBase):
         self.platformFontFamily: str = platformFontFamily
 
 
-class CSSStyleSheetHeader(ChromeTypeBase):
+class CSSStyleSheetHeader(ProtocolType):
     """CSS stylesheet metainformation."""
-    def __init__(self, styleSheetId: 'StyleSheetId', frameId: 'Page.FrameId', sourceURL: str, origin: 'StyleSheetOrigin', title: str, disabled: bool, isInline: bool, startLine: float, startColumn: float, length: float, sourceMapURL: Optional[str] = None, ownerNode: Optional['DOM.BackendNodeId'] = None, hasSourceURL: Optional[bool] = None) -> None:
+
+    def __init__(
+        self,
+        styleSheetId: "StyleSheetId",
+        frameId: "Page.FrameId",
+        sourceURL: str,
+        origin: "StyleSheetOrigin",
+        title: str,
+        disabled: bool,
+        isInline: bool,
+        startLine: float,
+        startColumn: float,
+        length: float,
+        sourceMapURL: Optional[str] = None,
+        ownerNode: Optional["DOM.BackendNodeId"] = None,
+        hasSourceURL: Optional[bool] = None,
+    ) -> None:
         """
         :param styleSheetId: The stylesheet identifier.
         :type styleSheetId: StyleSheetId
@@ -286,9 +350,17 @@ class CSSStyleSheetHeader(ChromeTypeBase):
         self.length: float = length
 
 
-class CSSStyle(ChromeTypeBase):
+class CSSStyle(ProtocolType):
     """CSS style representation."""
-    def __init__(self, cssProperties: List['CSSProperty'], shorthandEntries: List['ShorthandEntry'], styleSheetId: Optional['StyleSheetId'] = None, cssText: Optional[str] = None, range: Optional['SourceRange'] = None) -> None:
+
+    def __init__(
+        self,
+        cssProperties: List[Union["CSSProperty", dict]],
+        shorthandEntries: List[Union["ShorthandEntry", dict]],
+        styleSheetId: Optional["StyleSheetId"] = None,
+        cssText: Optional[str] = None,
+        range: Optional["SourceRange"] = None,
+    ) -> None:
         """
         :param styleSheetId: The css style sheet identifier (absent for user agent stylesheet and user-specified stylesheet rules) this rule came from.
         :type styleSheetId: StyleSheetId
@@ -309,9 +381,17 @@ class CSSStyle(ChromeTypeBase):
         self.range: Optional[SourceRange] = range
 
 
-class CSSRule(ChromeTypeBase):
+class CSSRule(ProtocolType):
     """CSS rule representation."""
-    def __init__(self, selectorList: 'SelectorList', origin: 'StyleSheetOrigin', style: 'CSSStyle', styleSheetId: Optional['StyleSheetId'] = None, media: Optional[List['CSSMedia']] = None) -> None:
+
+    def __init__(
+        self,
+        selectorList: "SelectorList",
+        origin: "StyleSheetOrigin",
+        style: "CSSStyle",
+        styleSheetId: Optional["StyleSheetId"] = None,
+        media: Optional[List[Union["CSSMedia", dict]]] = None,
+    ) -> None:
         """
         :param styleSheetId: The css style sheet identifier (absent for user agent stylesheet and user-specified stylesheet rules) this rule came from.
         :type styleSheetId: StyleSheetId
@@ -332,9 +412,20 @@ class CSSRule(ChromeTypeBase):
         self.media: Optional[List[CSSMedia]] = media
 
 
-class CSSProperty(ChromeTypeBase):
+class CSSProperty(ProtocolType):
     """CSS property declaration data."""
-    def __init__(self, name: str, value: str, important: Optional[bool] = None, implicit: Optional[bool] = None, text: Optional[str] = None, parsedOk: Optional[bool] = None, disabled: Optional[bool] = None, range: Optional['SourceRange'] = None) -> None:
+
+    def __init__(
+        self,
+        name: str,
+        value: str,
+        important: Optional[bool] = None,
+        implicit: Optional[bool] = None,
+        text: Optional[str] = None,
+        parsedOk: Optional[bool] = None,
+        disabled: Optional[bool] = None,
+        range: Optional["SourceRange"] = None,
+    ) -> None:
         """
         :param name: The property name.
         :type name: str
@@ -364,9 +455,18 @@ class CSSProperty(ChromeTypeBase):
         self.range: Optional[SourceRange] = range
 
 
-class CSSMedia(ChromeTypeBase):
+class CSSMedia(ProtocolType):
     """CSS media rule descriptor."""
-    def __init__(self, text: str, source: str, sourceURL: Optional[str] = None, range: Optional['SourceRange'] = None, styleSheetId: Optional['StyleSheetId'] = None, mediaList: Optional[List['MediaQuery']] = None) -> None:
+
+    def __init__(
+        self,
+        text: str,
+        source: str,
+        sourceURL: Optional[str] = None,
+        range: Optional["SourceRange"] = None,
+        styleSheetId: Optional["StyleSheetId"] = None,
+        mediaList: Optional[List[Union["MediaQuery", dict]]] = None,
+    ) -> None:
         """
         :param text: Media query text.
         :type text: str
@@ -390,9 +490,12 @@ class CSSMedia(ChromeTypeBase):
         self.mediaList: Optional[List[MediaQuery]] = mediaList
 
 
-class CSSKeyframesRule(ChromeTypeBase):
+class CSSKeyframesRule(ProtocolType):
     """CSS keyframes rule representation."""
-    def __init__(self, animationName: 'Value', keyframes: List['CSSKeyframeRule']) -> None:
+
+    def __init__(
+        self, animationName: "Value", keyframes: List[Union["CSSKeyframeRule", dict]]
+    ) -> None:
         """
         :param animationName: Animation name.
         :type animationName: Value
@@ -404,9 +507,16 @@ class CSSKeyframesRule(ChromeTypeBase):
         self.keyframes: List[CSSKeyframeRule] = keyframes
 
 
-class CSSKeyframeRule(ChromeTypeBase):
+class CSSKeyframeRule(ProtocolType):
     """CSS keyframe rule representation."""
-    def __init__(self, origin: 'StyleSheetOrigin', keyText: 'Value', style: 'CSSStyle', styleSheetId: Optional['StyleSheetId'] = None) -> None:
+
+    def __init__(
+        self,
+        origin: "StyleSheetOrigin",
+        keyText: "Value",
+        style: "CSSStyle",
+        styleSheetId: Optional["StyleSheetId"] = None,
+    ) -> None:
         """
         :param styleSheetId: The css style sheet identifier (absent for user agent stylesheet and user-specified stylesheet rules) this rule came from.
         :type styleSheetId: StyleSheetId
@@ -424,7 +534,8 @@ class CSSKeyframeRule(ChromeTypeBase):
         self.style: CSSStyle = style
 
 
-class CSSComputedStyleProperty(ChromeTypeBase):
+class CSSComputedStyleProperty(ProtocolType):
+
     def __init__(self, name: str, value: str) -> None:
         """
         :param name: Computed style property name.
@@ -437,3 +548,26 @@ class CSSComputedStyleProperty(ChromeTypeBase):
         self.value: str = value
 
 
+OBJECT_LIST = {
+    "Value": Value,
+    "StyleDeclarationEdit": StyleDeclarationEdit,
+    "SourceRange": SourceRange,
+    "ShorthandEntry": ShorthandEntry,
+    "SelectorList": SelectorList,
+    "RuleUsage": RuleUsage,
+    "RuleMatch": RuleMatch,
+    "PseudoElementMatches": PseudoElementMatches,
+    "PlatformFontUsage": PlatformFontUsage,
+    "MediaQueryExpression": MediaQueryExpression,
+    "MediaQuery": MediaQuery,
+    "InheritedStyleEntry": InheritedStyleEntry,
+    "FontFace": FontFace,
+    "CSSStyleSheetHeader": CSSStyleSheetHeader,
+    "CSSStyle": CSSStyle,
+    "CSSRule": CSSRule,
+    "CSSProperty": CSSProperty,
+    "CSSMedia": CSSMedia,
+    "CSSKeyframesRule": CSSKeyframesRule,
+    "CSSKeyframeRule": CSSKeyframeRule,
+    "CSSComputedStyleProperty": CSSComputedStyleProperty,
+}

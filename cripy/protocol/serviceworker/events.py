@@ -1,8 +1,6 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.serviceworker.types import (
-    ServiceWorkerErrorMessage,
-)
+from cripy.protocol.serviceworker.types import ServiceWorkerErrorMessage
 
 
 class WorkerErrorReportedEvent(BaseEvent):
@@ -22,7 +20,9 @@ class WorkerRegistrationUpdatedEvent(BaseEvent):
 
     event: str = "ServiceWorker.workerRegistrationUpdated"
 
-    def __init__(self, registrations: List[ServiceWorkerRegistration]) -> None:
+    def __init__(
+        self, registrations: List[Union[ServiceWorkerRegistration, dict]]
+    ) -> None:
         """
         :param registrations: The registrations
         :type registrations: array
@@ -35,7 +35,7 @@ class WorkerVersionUpdatedEvent(BaseEvent):
 
     event: str = "ServiceWorker.workerVersionUpdated"
 
-    def __init__(self, versions: List[ServiceWorkerVersion]) -> None:
+    def __init__(self, versions: List[Union[ServiceWorkerVersion, dict]]) -> None:
         """
         :param versions: The versions
         :type versions: array
@@ -45,8 +45,7 @@ class WorkerVersionUpdatedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "ServiceWorker.workerErrorReported": WorkerErrorReportedEvent,
-   "ServiceWorker.workerRegistrationUpdated": WorkerRegistrationUpdatedEvent,
-   "ServiceWorker.workerVersionUpdated": WorkerVersionUpdatedEvent,
+    "ServiceWorker.workerErrorReported": WorkerErrorReportedEvent,
+    "ServiceWorker.workerRegistrationUpdated": WorkerRegistrationUpdatedEvent,
+    "ServiceWorker.workerVersionUpdated": WorkerVersionUpdatedEvent,
 }
-

@@ -1,10 +1,13 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 
-class ScreenshotParams(ChromeTypeBase):
+class ScreenshotParams(ProtocolType):
     """Encoding options for a screenshot."""
-    def __init__(self, format: Optional[str] = None, quality: Optional[int] = None) -> None:
+
+    def __init__(
+        self, format: Optional[str] = None, quality: Optional[int] = None
+    ) -> None:
         """
         :param format: Image compression format (defaults to png).
         :type format: str
@@ -16,3 +19,4 @@ class ScreenshotParams(ChromeTypeBase):
         self.quality: Optional[int] = quality
 
 
+OBJECT_LIST = {"ScreenshotParams": ScreenshotParams}

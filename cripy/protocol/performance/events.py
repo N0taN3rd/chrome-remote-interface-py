@@ -7,7 +7,7 @@ class MetricsEvent(BaseEvent):
 
     event: str = "Performance.metrics"
 
-    def __init__(self, metrics: List[Metric], title: str) -> None:
+    def __init__(self, metrics: List[Union[Metric, dict]], title: str) -> None:
         """
         :param metrics: Current values of the metrics.
         :type metrics: array
@@ -19,7 +19,4 @@ class MetricsEvent(BaseEvent):
         self.title: str = title
 
 
-EVENT_TO_CLASS = {
-   "Performance.metrics": MetricsEvent,
-}
-
+EVENT_TO_CLASS = {"Performance.metrics": MetricsEvent}

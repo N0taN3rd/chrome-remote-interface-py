@@ -1,11 +1,11 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.network import types as Network
 from cripy.protocol.runtime import types as Runtime
+from cripy.protocol.network import types as Network
 from cripy.protocol.page.types import (
-    ScreencastFrameMetadata,
     DialogType,
     Frame,
+    ScreencastFrameMetadata,
     FrameId,
 )
 
@@ -28,7 +28,12 @@ class FrameAttachedEvent(BaseEvent):
 
     event: str = "Page.frameAttached"
 
-    def __init__(self, frameId: FrameId, parentFrameId: FrameId, stack: Optional[Runtime.StackTrace] = None) -> None:
+    def __init__(
+        self,
+        frameId: FrameId,
+        parentFrameId: FrameId,
+        stack: Optional[Runtime.StackTrace] = None,
+    ) -> None:
         """
         :param frameId: Id of the frame that has been attached.
         :type frameId: FrameId
@@ -90,7 +95,7 @@ class FrameResizedEvent(BaseEvent):
 
     event: str = "Page.frameResized"
 
-    def __init__(self, ) -> None:
+    def __init__(self,) -> None:
         super().__init__()
 
 
@@ -150,7 +155,7 @@ class InterstitialHiddenEvent(BaseEvent):
 
     event: str = "Page.interstitialHidden"
 
-    def __init__(self, ) -> None:
+    def __init__(self,) -> None:
         super().__init__()
 
 
@@ -159,7 +164,7 @@ class InterstitialShownEvent(BaseEvent):
 
     event: str = "Page.interstitialShown"
 
-    def __init__(self, ) -> None:
+    def __init__(self,) -> None:
         super().__init__()
 
 
@@ -185,7 +190,14 @@ class JavascriptDialogOpeningEvent(BaseEvent):
 
     event: str = "Page.javascriptDialogOpening"
 
-    def __init__(self, url: str, message: str, type: DialogType, hasBrowserHandler: bool, defaultPrompt: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        url: str,
+        message: str,
+        type: DialogType,
+        hasBrowserHandler: bool,
+        defaultPrompt: Optional[str] = None,
+    ) -> None:
         """
         :param url: Frame url.
         :type url: str
@@ -211,7 +223,13 @@ class LifecycleEventEvent(BaseEvent):
 
     event: str = "Page.lifecycleEvent"
 
-    def __init__(self, frameId: FrameId, loaderId: Network.LoaderId, name: str, timestamp: Network.MonotonicTime) -> None:
+    def __init__(
+        self,
+        frameId: FrameId,
+        loaderId: Network.LoaderId,
+        name: str,
+        timestamp: Network.MonotonicTime,
+    ) -> None:
         """
         :param frameId: Id of the frame.
         :type frameId: FrameId
@@ -265,7 +283,9 @@ class ScreencastFrameEvent(BaseEvent):
 
     event: str = "Page.screencastFrame"
 
-    def __init__(self, data: str, metadata: ScreencastFrameMetadata, sessionId: int) -> None:
+    def __init__(
+        self, data: str, metadata: ScreencastFrameMetadata, sessionId: int
+    ) -> None:
         """
         :param data: Base64-encoded compressed image.
         :type data: str
@@ -299,7 +319,9 @@ class WindowOpenEvent(BaseEvent):
 
     event: str = "Page.windowOpen"
 
-    def __init__(self, url: str, windowName: str, windowFeatures: List[str], userGesture: bool) -> None:
+    def __init__(
+        self, url: str, windowName: str, windowFeatures: List[str], userGesture: bool
+    ) -> None:
         """
         :param url: The URL for the new window.
         :type url: str
@@ -318,24 +340,23 @@ class WindowOpenEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Page.domContentEventFired": DomContentEventFiredEvent,
-   "Page.frameAttached": FrameAttachedEvent,
-   "Page.frameClearedScheduledNavigation": FrameClearedScheduledNavigationEvent,
-   "Page.frameDetached": FrameDetachedEvent,
-   "Page.frameNavigated": FrameNavigatedEvent,
-   "Page.frameResized": FrameResizedEvent,
-   "Page.frameScheduledNavigation": FrameScheduledNavigationEvent,
-   "Page.frameStartedLoading": FrameStartedLoadingEvent,
-   "Page.frameStoppedLoading": FrameStoppedLoadingEvent,
-   "Page.interstitialHidden": InterstitialHiddenEvent,
-   "Page.interstitialShown": InterstitialShownEvent,
-   "Page.javascriptDialogClosed": JavascriptDialogClosedEvent,
-   "Page.javascriptDialogOpening": JavascriptDialogOpeningEvent,
-   "Page.lifecycleEvent": LifecycleEventEvent,
-   "Page.loadEventFired": LoadEventFiredEvent,
-   "Page.navigatedWithinDocument": NavigatedWithinDocumentEvent,
-   "Page.screencastFrame": ScreencastFrameEvent,
-   "Page.screencastVisibilityChanged": ScreencastVisibilityChangedEvent,
-   "Page.windowOpen": WindowOpenEvent,
+    "Page.domContentEventFired": DomContentEventFiredEvent,
+    "Page.frameAttached": FrameAttachedEvent,
+    "Page.frameClearedScheduledNavigation": FrameClearedScheduledNavigationEvent,
+    "Page.frameDetached": FrameDetachedEvent,
+    "Page.frameNavigated": FrameNavigatedEvent,
+    "Page.frameResized": FrameResizedEvent,
+    "Page.frameScheduledNavigation": FrameScheduledNavigationEvent,
+    "Page.frameStartedLoading": FrameStartedLoadingEvent,
+    "Page.frameStoppedLoading": FrameStoppedLoadingEvent,
+    "Page.interstitialHidden": InterstitialHiddenEvent,
+    "Page.interstitialShown": InterstitialShownEvent,
+    "Page.javascriptDialogClosed": JavascriptDialogClosedEvent,
+    "Page.javascriptDialogOpening": JavascriptDialogOpeningEvent,
+    "Page.lifecycleEvent": LifecycleEventEvent,
+    "Page.loadEventFired": LoadEventFiredEvent,
+    "Page.navigatedWithinDocument": NavigatedWithinDocumentEvent,
+    "Page.screencastFrame": ScreencastFrameEvent,
+    "Page.screencastVisibilityChanged": ScreencastVisibilityChangedEvent,
+    "Page.windowOpen": WindowOpenEvent,
 }
-

@@ -1,16 +1,19 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.io import types as IO
-from cripy.protocol.tracing.types import (
-    StreamCompression,
-)
+from cripy.protocol.tracing.types import StreamCompression
 
 
 class BufferUsageEvent(BaseEvent):
 
     event: str = "Tracing.bufferUsage"
 
-    def __init__(self, percentFull: Optional[float] = None, eventCount: Optional[float] = None, value: Optional[float] = None) -> None:
+    def __init__(
+        self,
+        percentFull: Optional[float] = None,
+        eventCount: Optional[float] = None,
+        value: Optional[float] = None,
+    ) -> None:
         """
         :param percentFull: A number in range [0..1] that indicates the used size of event buffer as a fraction of its total size.
         :type percentFull: float
@@ -45,7 +48,11 @@ class TracingCompleteEvent(BaseEvent):
 
     event: str = "Tracing.tracingComplete"
 
-    def __init__(self, stream: Optional[IO.StreamHandle] = None, streamCompression: Optional[StreamCompression] = None) -> None:
+    def __init__(
+        self,
+        stream: Optional[IO.StreamHandle] = None,
+        streamCompression: Optional[StreamCompression] = None,
+    ) -> None:
         """
         :param stream: A handle of the stream that holds resulting trace data.
         :type stream: IO.StreamHandle
@@ -58,8 +65,7 @@ class TracingCompleteEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Tracing.bufferUsage": BufferUsageEvent,
-   "Tracing.dataCollected": DataCollectedEvent,
-   "Tracing.tracingComplete": TracingCompleteEvent,
+    "Tracing.bufferUsage": BufferUsageEvent,
+    "Tracing.dataCollected": DataCollectedEvent,
+    "Tracing.tracingComplete": TracingCompleteEvent,
 }
-

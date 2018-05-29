@@ -1,12 +1,23 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 StreamCompression = TypeVar("StreamCompression", str, str)
 """Compression type to use for traces returned via streams."""
 
 
-class TraceConfig(ChromeTypeBase):
-    def __init__(self, recordMode: Optional[str] = None, enableSampling: Optional[bool] = None, enableSystrace: Optional[bool] = None, enableArgumentFilter: Optional[bool] = None, includedCategories: Optional[List['str']] = None, excludedCategories: Optional[List['str']] = None, syntheticDelays: Optional[List['str']] = None, memoryDumpConfig: Optional['MemoryDumpConfig'] = None) -> None:
+class TraceConfig(ProtocolType):
+
+    def __init__(
+        self,
+        recordMode: Optional[str] = None,
+        enableSampling: Optional[bool] = None,
+        enableSystrace: Optional[bool] = None,
+        enableArgumentFilter: Optional[bool] = None,
+        includedCategories: Optional[List[str]] = None,
+        excludedCategories: Optional[List[str]] = None,
+        syntheticDelays: Optional[List[str]] = None,
+        memoryDumpConfig: Optional["MemoryDumpConfig"] = None,
+    ) -> None:
         """
         :param recordMode: Controls how the trace buffer stores data.
         :type recordMode: str
@@ -36,7 +47,8 @@ class TraceConfig(ChromeTypeBase):
         self.memoryDumpConfig: Optional[MemoryDumpConfig] = memoryDumpConfig
 
 
-class MemoryDumpConfig(ChromeTypeBase, dict):
+class MemoryDumpConfig(ProtocolType, dict):
     """Configuration for memory dump. Used only when "memory-infra" category is enabled."""
 
 
+OBJECT_LIST = {"TraceConfig": TraceConfig, "MemoryDumpConfig": MemoryDumpConfig}

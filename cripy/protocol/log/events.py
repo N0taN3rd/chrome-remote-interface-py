@@ -1,8 +1,6 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.log.types import (
-    LogEntry,
-)
+from cripy.protocol.log.types import LogEntry
 
 
 class EntryAddedEvent(BaseEvent):
@@ -19,7 +17,4 @@ class EntryAddedEvent(BaseEvent):
         self.entry: LogEntry = entry
 
 
-EVENT_TO_CLASS = {
-   "Log.entryAdded": EntryAddedEvent,
-}
-
+EVENT_TO_CLASS = {"Log.entryAdded": EntryAddedEvent}

@@ -36,7 +36,6 @@ class NetworkStateUpdatedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "ApplicationCache.applicationCacheStatusUpdated": ApplicationCacheStatusUpdatedEvent,
-   "ApplicationCache.networkStateUpdated": NetworkStateUpdatedEvent,
+    "ApplicationCache.applicationCacheStatusUpdated": ApplicationCacheStatusUpdatedEvent,
+    "ApplicationCache.networkStateUpdated": NetworkStateUpdatedEvent,
 }
-

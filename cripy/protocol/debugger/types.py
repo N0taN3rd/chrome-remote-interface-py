@@ -1,5 +1,5 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 from cripy.protocol.runtime import types as Runtime
 
 CallFrameId = TypeVar("CallFrameId", str, str)
@@ -9,8 +9,9 @@ BreakpointId = TypeVar("BreakpointId", str, str)
 """Breakpoint identifier."""
 
 
-class SearchMatch(ChromeTypeBase):
+class SearchMatch(ProtocolType):
     """Search match for resource."""
+
     def __init__(self, lineNumber: float, lineContent: str) -> None:
         """
         :param lineNumber: Line number in resource content.
@@ -23,8 +24,9 @@ class SearchMatch(ChromeTypeBase):
         self.lineContent: str = lineContent
 
 
-class ScriptPosition(ChromeTypeBase):
+class ScriptPosition(ProtocolType):
     """Location in the source code."""
+
     def __init__(self, lineNumber: int, columnNumber: int) -> None:
         """
         :param lineNumber: The lineNumber
@@ -37,9 +39,17 @@ class ScriptPosition(ChromeTypeBase):
         self.columnNumber: int = columnNumber
 
 
-class Scope(ChromeTypeBase):
+class Scope(ProtocolType):
     """Scope description."""
-    def __init__(self, type: str, object: 'Runtime.RemoteObject', name: Optional[str] = None, startLocation: Optional['Location'] = None, endLocation: Optional['Location'] = None) -> None:
+
+    def __init__(
+        self,
+        type: str,
+        object: "Runtime.RemoteObject",
+        name: Optional[str] = None,
+        startLocation: Optional["Location"] = None,
+        endLocation: Optional["Location"] = None,
+    ) -> None:
         """
         :param type: Scope type.
         :type type: str
@@ -60,9 +70,15 @@ class Scope(ChromeTypeBase):
         self.endLocation: Optional[Location] = endLocation
 
 
-class Location(ChromeTypeBase):
+class Location(ProtocolType):
     """Location in the source code."""
-    def __init__(self, scriptId: 'Runtime.ScriptId', lineNumber: int, columnNumber: Optional[int] = None) -> None:
+
+    def __init__(
+        self,
+        scriptId: "Runtime.ScriptId",
+        lineNumber: int,
+        columnNumber: Optional[int] = None,
+    ) -> None:
         """
         :param scriptId: Script identifier as reported in the `Debugger.scriptParsed`.
         :type scriptId: Runtime.ScriptId
@@ -77,9 +93,20 @@ class Location(ChromeTypeBase):
         self.columnNumber: Optional[int] = columnNumber
 
 
-class CallFrame(ChromeTypeBase):
+class CallFrame(ProtocolType):
     """JavaScript call frame. Array of call frames form the call stack."""
-    def __init__(self, callFrameId: 'CallFrameId', functionName: str, location: 'Location', url: str, scopeChain: List['Scope'], this: 'Runtime.RemoteObject', functionLocation: Optional['Location'] = None, returnValue: Optional['Runtime.RemoteObject'] = None) -> None:
+
+    def __init__(
+        self,
+        callFrameId: "CallFrameId",
+        functionName: str,
+        location: "Location",
+        url: str,
+        scopeChain: List[Union["Scope", dict]],
+        this: "Runtime.RemoteObject",
+        functionLocation: Optional["Location"] = None,
+        returnValue: Optional["Runtime.RemoteObject"] = None,
+    ) -> None:
         """
         :param callFrameId: Call frame identifier. This identifier is only valid while the virtual machine is paused.
         :type callFrameId: CallFrameId
@@ -109,8 +136,15 @@ class CallFrame(ChromeTypeBase):
         self.returnValue: Optional[Runtime.RemoteObject] = returnValue
 
 
-class BreakLocation(ChromeTypeBase):
-    def __init__(self, scriptId: 'Runtime.ScriptId', lineNumber: int, columnNumber: Optional[int] = None, type: Optional[str] = None) -> None:
+class BreakLocation(ProtocolType):
+
+    def __init__(
+        self,
+        scriptId: "Runtime.ScriptId",
+        lineNumber: int,
+        columnNumber: Optional[int] = None,
+        type: Optional[str] = None,
+    ) -> None:
         """
         :param scriptId: Script identifier as reported in the `Debugger.scriptParsed`.
         :type scriptId: Runtime.ScriptId
@@ -128,3 +162,11 @@ class BreakLocation(ChromeTypeBase):
         self.type: Optional[str] = type
 
 
+OBJECT_LIST = {
+    "SearchMatch": SearchMatch,
+    "ScriptPosition": ScriptPosition,
+    "Scope": Scope,
+    "Location": Location,
+    "CallFrame": CallFrame,
+    "BreakLocation": BreakLocation,
+}

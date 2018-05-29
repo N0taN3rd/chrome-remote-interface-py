@@ -1,8 +1,6 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.console.types import (
-    ConsoleMessage,
-)
+from cripy.protocol.console.types import ConsoleMessage
 
 
 class MessageAddedEvent(BaseEvent):
@@ -19,7 +17,4 @@ class MessageAddedEvent(BaseEvent):
         self.message: ConsoleMessage = message
 
 
-EVENT_TO_CLASS = {
-   "Console.messageAdded": MessageAddedEvent,
-}
-
+EVENT_TO_CLASS = {"Console.messageAdded": MessageAddedEvent}

@@ -9,14 +9,14 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 from cripy.protocol import runtime as Runtime
 from cripy.protocol import debugger as Debugger
 
 # ProfileNode: Profile node. Holds callsite information, execution statistics and child nodes.
-class ProfileNode(ChromeTypeBase):
+class ProfileNode(ProtocolType):
 
     def __init__(
         self,
@@ -37,7 +37,7 @@ class ProfileNode(ChromeTypeBase):
 
 
 # Profile: Profile.
-class Profile(ChromeTypeBase):
+class Profile(ProtocolType):
 
     def __init__(
         self,
@@ -56,7 +56,7 @@ class Profile(ChromeTypeBase):
 
 
 # PositionTickInfo: Specifies a number of samples attributed to a certain source position.
-class PositionTickInfo(ChromeTypeBase):
+class PositionTickInfo(ProtocolType):
 
     def __init__(self, line: Union["int"], ticks: Union["int"]):
 
@@ -65,7 +65,7 @@ class PositionTickInfo(ChromeTypeBase):
 
 
 # CoverageRange: Coverage data for a source range.
-class CoverageRange(ChromeTypeBase):
+class CoverageRange(ProtocolType):
 
     def __init__(
         self, startOffset: Union["int"], endOffset: Union["int"], count: Union["int"]
@@ -77,7 +77,7 @@ class CoverageRange(ChromeTypeBase):
 
 
 # FunctionCoverage: Coverage data for a JavaScript function.
-class FunctionCoverage(ChromeTypeBase):
+class FunctionCoverage(ProtocolType):
 
     def __init__(
         self,
@@ -92,7 +92,7 @@ class FunctionCoverage(ChromeTypeBase):
 
 
 # ScriptCoverage: Coverage data for a JavaScript script.
-class ScriptCoverage(ChromeTypeBase):
+class ScriptCoverage(ProtocolType):
 
     def __init__(
         self,
@@ -107,7 +107,7 @@ class ScriptCoverage(ChromeTypeBase):
 
 
 # TypeObject: Describes a type collected during runtime.
-class TypeObject(ChromeTypeBase):
+class TypeObject(ProtocolType):
 
     def __init__(self, name: Union["str"]):
 
@@ -115,7 +115,7 @@ class TypeObject(ChromeTypeBase):
 
 
 # TypeProfileEntry: Source offset and types for a parameter or return value.
-class TypeProfileEntry(ChromeTypeBase):
+class TypeProfileEntry(ProtocolType):
 
     def __init__(self, offset: Union["int"], types: Union["[TypeObject]"]):
 
@@ -124,7 +124,7 @@ class TypeProfileEntry(ChromeTypeBase):
 
 
 # ScriptTypeProfile: Type profile data collected during runtime for a JavaScript script.
-class ScriptTypeProfile(ChromeTypeBase):
+class ScriptTypeProfile(ProtocolType):
 
     def __init__(
         self,

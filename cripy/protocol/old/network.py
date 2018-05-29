@@ -9,7 +9,7 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 from cripy.protocol import security as Security
@@ -46,7 +46,7 @@ ConnectionType = str
 CookieSameSite = str
 
 # ResourceTiming: Timing information for the request.
-class ResourceTiming(ChromeTypeBase):
+class ResourceTiming(ProtocolType):
 
     def __init__(
         self,
@@ -90,7 +90,7 @@ class ResourceTiming(ChromeTypeBase):
 ResourcePriority = str
 
 # Request: HTTP request data.
-class Request(ChromeTypeBase):
+class Request(ProtocolType):
 
     def __init__(
         self,
@@ -117,7 +117,7 @@ class Request(ChromeTypeBase):
 
 
 # SignedCertificateTimestamp: Details of a signed certificate timestamp (SCT).
-class SignedCertificateTimestamp(ChromeTypeBase):
+class SignedCertificateTimestamp(ProtocolType):
 
     def __init__(
         self,
@@ -142,7 +142,7 @@ class SignedCertificateTimestamp(ChromeTypeBase):
 
 
 # SecurityDetails: Security details about a request.
-class SecurityDetails(ChromeTypeBase):
+class SecurityDetails(ProtocolType):
 
     def __init__(
         self,
@@ -183,7 +183,7 @@ CertificateTransparencyCompliance = str
 BlockedReason = str
 
 # Response: HTTP response data.
-class Response(ChromeTypeBase):
+class Response(ProtocolType):
 
     def __init__(
         self,
@@ -230,7 +230,7 @@ class Response(ChromeTypeBase):
 
 
 # WebSocketRequest: WebSocket request data.
-class WebSocketRequest(ChromeTypeBase):
+class WebSocketRequest(ProtocolType):
 
     def __init__(self, headers: Union["Headers"]):
 
@@ -238,7 +238,7 @@ class WebSocketRequest(ChromeTypeBase):
 
 
 # WebSocketResponse: WebSocket response data.
-class WebSocketResponse(ChromeTypeBase):
+class WebSocketResponse(ProtocolType):
 
     def __init__(
         self,
@@ -259,7 +259,7 @@ class WebSocketResponse(ChromeTypeBase):
 
 
 # WebSocketFrame: WebSocket frame data.
-class WebSocketFrame(ChromeTypeBase):
+class WebSocketFrame(ProtocolType):
 
     def __init__(
         self, opcode: Union["float"], mask: Union["bool"], payloadData: Union["str"]
@@ -271,7 +271,7 @@ class WebSocketFrame(ChromeTypeBase):
 
 
 # CachedResource: Information about the cached resource.
-class CachedResource(ChromeTypeBase):
+class CachedResource(ProtocolType):
 
     def __init__(
         self,
@@ -288,7 +288,7 @@ class CachedResource(ChromeTypeBase):
 
 
 # Initiator: Information about the request initiator.
-class Initiator(ChromeTypeBase):
+class Initiator(ProtocolType):
 
     def __init__(
         self,
@@ -305,7 +305,7 @@ class Initiator(ChromeTypeBase):
 
 
 # Cookie: Cookie object
-class Cookie(ChromeTypeBase):
+class Cookie(ProtocolType):
 
     def __init__(
         self,
@@ -334,7 +334,7 @@ class Cookie(ChromeTypeBase):
 
 
 # CookieParam: Cookie parameter object
-class CookieParam(ChromeTypeBase):
+class CookieParam(ProtocolType):
 
     def __init__(
         self,
@@ -361,7 +361,7 @@ class CookieParam(ChromeTypeBase):
 
 
 # AuthChallenge: Authorization challenge for HTTP status code 401 or 407.
-class AuthChallenge(ChromeTypeBase):
+class AuthChallenge(ProtocolType):
 
     def __init__(
         self,
@@ -378,7 +378,7 @@ class AuthChallenge(ChromeTypeBase):
 
 
 # AuthChallengeResponse: Response to an AuthChallenge.
-class AuthChallengeResponse(ChromeTypeBase):
+class AuthChallengeResponse(ProtocolType):
 
     def __init__(
         self,
@@ -396,7 +396,7 @@ class AuthChallengeResponse(ChromeTypeBase):
 InterceptionStage = str
 
 # RequestPattern: Request pattern for interception.
-class RequestPattern(ChromeTypeBase):
+class RequestPattern(ProtocolType):
 
     def __init__(
         self,
@@ -411,7 +411,7 @@ class RequestPattern(ChromeTypeBase):
 
 
 # SignedExchangeSignature: Information about a signed exchange signature.https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-impl.html#rfc.section.3.1
-class SignedExchangeSignature(ChromeTypeBase):
+class SignedExchangeSignature(ProtocolType):
 
     def __init__(
         self,
@@ -438,7 +438,7 @@ class SignedExchangeSignature(ChromeTypeBase):
 
 
 # SignedExchangeHeader: Information about a signed exchange header.https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-impl.html#cbor-representation
-class SignedExchangeHeader(ChromeTypeBase):
+class SignedExchangeHeader(ProtocolType):
 
     def __init__(
         self,
@@ -457,7 +457,7 @@ class SignedExchangeHeader(ChromeTypeBase):
 
 
 # SignedExchangeInfo: Information about a signed exchange response.
-class SignedExchangeInfo(ChromeTypeBase):
+class SignedExchangeInfo(ProtocolType):
 
     def __init__(
         self,

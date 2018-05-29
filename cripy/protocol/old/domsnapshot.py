@@ -9,7 +9,7 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 from cripy.protocol import dom as DOM
@@ -18,7 +18,7 @@ from cripy.protocol import css as CSS
 from cripy.protocol import domdebugger as DOMDebugger
 
 # DOMNode: A Node in the DOM tree.
-class DOMNode(ChromeTypeBase):
+class DOMNode(ProtocolType):
 
     def __init__(
         self,
@@ -83,7 +83,7 @@ class DOMNode(ChromeTypeBase):
 
 
 # InlineTextBox: Details of post layout rendered text positions. The exact layout should not be regarded asstable and may change between versions.
-class InlineTextBox(ChromeTypeBase):
+class InlineTextBox(ProtocolType):
 
     def __init__(
         self,
@@ -98,7 +98,7 @@ class InlineTextBox(ChromeTypeBase):
 
 
 # LayoutTreeNode: Details of an element in the DOM tree with a LayoutObject.
-class LayoutTreeNode(ChromeTypeBase):
+class LayoutTreeNode(ProtocolType):
 
     def __init__(
         self,
@@ -119,7 +119,7 @@ class LayoutTreeNode(ChromeTypeBase):
 
 
 # ComputedStyle: A subset of the full ComputedStyle as defined by the request whitelist.
-class ComputedStyle(ChromeTypeBase):
+class ComputedStyle(ProtocolType):
 
     def __init__(self, properties: Union["[NameValue]"]):
 
@@ -127,7 +127,7 @@ class ComputedStyle(ChromeTypeBase):
 
 
 # NameValue: A name/value pair.
-class NameValue(ChromeTypeBase):
+class NameValue(ProtocolType):
 
     def __init__(self, name: Union["str"], value: Union["str"]):
 

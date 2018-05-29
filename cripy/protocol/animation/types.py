@@ -1,11 +1,14 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 
 
-class KeyframesRule(ChromeTypeBase):
+class KeyframesRule(ProtocolType):
     """Keyframes Rule"""
-    def __init__(self, keyframes: List['KeyframeStyle'], name: Optional[str] = None) -> None:
+
+    def __init__(
+        self, keyframes: List[Union["KeyframeStyle", dict]], name: Optional[str] = None
+    ) -> None:
         """
         :param name: CSS keyframed animation's name.
         :type name: str
@@ -17,8 +20,9 @@ class KeyframesRule(ChromeTypeBase):
         self.keyframes: List[KeyframeStyle] = keyframes
 
 
-class KeyframeStyle(ChromeTypeBase):
+class KeyframeStyle(ProtocolType):
     """Keyframe Style"""
+
     def __init__(self, offset: str, easing: str) -> None:
         """
         :param offset: Keyframe's time offset.
@@ -31,9 +35,22 @@ class KeyframeStyle(ChromeTypeBase):
         self.easing: str = easing
 
 
-class AnimationEffect(ChromeTypeBase):
+class AnimationEffect(ProtocolType):
     """AnimationEffect instance"""
-    def __init__(self, delay: float, endDelay: float, iterationStart: float, iterations: float, duration: float, direction: str, fill: str, easing: str, backendNodeId: Optional['DOM.BackendNodeId'] = None, keyframesRule: Optional['KeyframesRule'] = None) -> None:
+
+    def __init__(
+        self,
+        delay: float,
+        endDelay: float,
+        iterationStart: float,
+        iterations: float,
+        duration: float,
+        direction: str,
+        fill: str,
+        easing: str,
+        backendNodeId: Optional["DOM.BackendNodeId"] = None,
+        keyframesRule: Optional["KeyframesRule"] = None,
+    ) -> None:
         """
         :param delay: `AnimationEffect`'s delay.
         :type delay: float
@@ -69,9 +86,22 @@ class AnimationEffect(ChromeTypeBase):
         self.easing: str = easing
 
 
-class Animation(ChromeTypeBase):
+class Animation(ProtocolType):
     """Animation instance."""
-    def __init__(self, id: str, name: str, pausedState: bool, playState: str, playbackRate: float, startTime: float, currentTime: float, type: str, source: Optional['AnimationEffect'] = None, cssId: Optional[str] = None) -> None:
+
+    def __init__(
+        self,
+        id: str,
+        name: str,
+        pausedState: bool,
+        playState: str,
+        playbackRate: float,
+        startTime: float,
+        currentTime: float,
+        type: str,
+        source: Optional["AnimationEffect"] = None,
+        cssId: Optional[str] = None,
+    ) -> None:
         """
         :param id: `Animation`'s id.
         :type id: str
@@ -107,3 +137,9 @@ class Animation(ChromeTypeBase):
         self.cssId: Optional[str] = cssId
 
 
+OBJECT_LIST = {
+    "KeyframesRule": KeyframesRule,
+    "KeyframeStyle": KeyframeStyle,
+    "AnimationEffect": AnimationEffect,
+    "Animation": Animation,
+}

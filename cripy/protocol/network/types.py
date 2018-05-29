@@ -1,8 +1,8 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 from cripy.protocol.page import types as Page
-from cripy.protocol.runtime import types as Runtime
 from cripy.protocol.security import types as Security
+from cripy.protocol.runtime import types as Runtime
 
 TimeSinceEpoch = TypeVar("TimeSinceEpoch", float, float)
 """UTC time in seconds, counted from January 1, 1970."""
@@ -34,16 +34,27 @@ CookieSameSite = TypeVar("CookieSameSite", str, str)
 ConnectionType = TypeVar("ConnectionType", str, str)
 """The underlying connection technology that the browser is supposedly using."""
 
-CertificateTransparencyCompliance = TypeVar("CertificateTransparencyCompliance", str, str)
+CertificateTransparencyCompliance = TypeVar(
+    "CertificateTransparencyCompliance", str, str
+)
 """Whether the request complied with Certificate Transparency policy."""
 
 BlockedReason = TypeVar("BlockedReason", str, str)
 """The reason why request was blocked."""
 
 
-class WebSocketResponse(ChromeTypeBase):
+class WebSocketResponse(ProtocolType):
     """WebSocket response data."""
-    def __init__(self, status: int, statusText: str, headers: 'Headers', headersText: Optional[str] = None, requestHeaders: Optional['Headers'] = None, requestHeadersText: Optional[str] = None) -> None:
+
+    def __init__(
+        self,
+        status: int,
+        statusText: str,
+        headers: "Headers",
+        headersText: Optional[str] = None,
+        requestHeaders: Optional["Headers"] = None,
+        requestHeadersText: Optional[str] = None,
+    ) -> None:
         """
         :param status: HTTP response status code.
         :type status: int
@@ -67,9 +78,10 @@ class WebSocketResponse(ChromeTypeBase):
         self.requestHeadersText: Optional[str] = requestHeadersText
 
 
-class WebSocketRequest(ChromeTypeBase):
+class WebSocketRequest(ProtocolType):
     """WebSocket request data."""
-    def __init__(self, headers: 'Headers') -> None:
+
+    def __init__(self, headers: "Headers") -> None:
         """
         :param headers: HTTP request headers.
         :type headers: Headers
@@ -78,8 +90,9 @@ class WebSocketRequest(ChromeTypeBase):
         self.headers: Headers = headers
 
 
-class WebSocketFrame(ChromeTypeBase):
+class WebSocketFrame(ProtocolType):
     """WebSocket frame data."""
+
     def __init__(self, opcode: float, mask: bool, payloadData: str) -> None:
         """
         :param opcode: WebSocket frame opcode.
@@ -95,10 +108,22 @@ class WebSocketFrame(ChromeTypeBase):
         self.payloadData: str = payloadData
 
 
-class SignedExchangeSignature(ChromeTypeBase):
+class SignedExchangeSignature(ProtocolType):
     """Information about a signed exchange signature.
 https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-impl.html#rfc.section.3.1"""
-    def __init__(self, label: str, signature: str, integrity: str, validityUrl: str, date: int, expires: int, certUrl: Optional[str] = None, certSha256: Optional[str] = None, certificates: Optional[List['str']] = None) -> None:
+
+    def __init__(
+        self,
+        label: str,
+        signature: str,
+        integrity: str,
+        validityUrl: str,
+        date: int,
+        expires: int,
+        certUrl: Optional[str] = None,
+        certSha256: Optional[str] = None,
+        certificates: Optional[List[str]] = None,
+    ) -> None:
         """
         :param label: Signed exchange signature label.
         :type label: str
@@ -131,9 +156,16 @@ https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-
         self.certificates: Optional[List[str]] = certificates
 
 
-class SignedExchangeInfo(ChromeTypeBase):
+class SignedExchangeInfo(ProtocolType):
     """Information about a signed exchange response."""
-    def __init__(self, outerResponse: 'Response', header: Optional['SignedExchangeHeader'] = None, securityDetails: Optional['SecurityDetails'] = None, errors: Optional[List['str']] = None) -> None:
+
+    def __init__(
+        self,
+        outerResponse: "Response",
+        header: Optional["SignedExchangeHeader"] = None,
+        securityDetails: Optional["SecurityDetails"] = None,
+        errors: Optional[List[str]] = None,
+    ) -> None:
         """
         :param outerResponse: The outer response of signed HTTP exchange which was received from network.
         :type outerResponse: Response
@@ -151,10 +183,18 @@ class SignedExchangeInfo(ChromeTypeBase):
         self.errors: Optional[List[str]] = errors
 
 
-class SignedExchangeHeader(ChromeTypeBase):
+class SignedExchangeHeader(ProtocolType):
     """Information about a signed exchange header.
 https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-impl.html#cbor-representation"""
-    def __init__(self, requestUrl: str, requestMethod: str, responseCode: int, responseHeaders: 'Headers', signatures: List['SignedExchangeSignature']) -> None:
+
+    def __init__(
+        self,
+        requestUrl: str,
+        requestMethod: str,
+        responseCode: int,
+        responseHeaders: "Headers",
+        signatures: List[Union["SignedExchangeSignature", dict]],
+    ) -> None:
         """
         :param requestUrl: Signed exchange request URL.
         :type requestUrl: str
@@ -175,9 +215,20 @@ https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-
         self.signatures: List[SignedExchangeSignature] = signatures
 
 
-class SignedCertificateTimestamp(ChromeTypeBase):
+class SignedCertificateTimestamp(ProtocolType):
     """Details of a signed certificate timestamp (SCT)."""
-    def __init__(self, status: str, origin: str, logDescription: str, logId: str, timestamp: 'TimeSinceEpoch', hashAlgorithm: str, signatureAlgorithm: str, signatureData: str) -> None:
+
+    def __init__(
+        self,
+        status: str,
+        origin: str,
+        logDescription: str,
+        logId: str,
+        timestamp: "TimeSinceEpoch",
+        hashAlgorithm: str,
+        signatureAlgorithm: str,
+        signatureData: str,
+    ) -> None:
         """
         :param status: Validation status.
         :type status: str
@@ -207,9 +258,25 @@ class SignedCertificateTimestamp(ChromeTypeBase):
         self.signatureData: str = signatureData
 
 
-class SecurityDetails(ChromeTypeBase):
+class SecurityDetails(ProtocolType):
     """Security details about a request."""
-    def __init__(self, protocol: str, keyExchange: str, cipher: str, certificateId: 'Security.CertificateId', subjectName: str, sanList: List['str'], issuer: str, validFrom: 'TimeSinceEpoch', validTo: 'TimeSinceEpoch', signedCertificateTimestampList: List['SignedCertificateTimestamp'], certificateTransparencyCompliance: 'CertificateTransparencyCompliance', keyExchangeGroup: Optional[str] = None, mac: Optional[str] = None) -> None:
+
+    def __init__(
+        self,
+        protocol: str,
+        keyExchange: str,
+        cipher: str,
+        certificateId: "Security.CertificateId",
+        subjectName: str,
+        sanList: List[str],
+        issuer: str,
+        validFrom: "TimeSinceEpoch",
+        validTo: "TimeSinceEpoch",
+        signedCertificateTimestampList: List[Union["SignedCertificateTimestamp", dict]],
+        certificateTransparencyCompliance: "CertificateTransparencyCompliance",
+        keyExchangeGroup: Optional[str] = None,
+        mac: Optional[str] = None,
+    ) -> None:
         """
         :param protocol: Protocol name (e.g. "TLS 1.2" or "QUIC").
         :type protocol: str
@@ -250,13 +317,37 @@ class SecurityDetails(ChromeTypeBase):
         self.issuer: str = issuer
         self.validFrom: TimeSinceEpoch = validFrom
         self.validTo: TimeSinceEpoch = validTo
-        self.signedCertificateTimestampList: List[SignedCertificateTimestamp] = signedCertificateTimestampList
+        self.signedCertificateTimestampList: List[
+            SignedCertificateTimestamp
+        ] = signedCertificateTimestampList
         self.certificateTransparencyCompliance: CertificateTransparencyCompliance = certificateTransparencyCompliance
 
 
-class Response(ChromeTypeBase):
+class Response(ProtocolType):
     """HTTP response data."""
-    def __init__(self, url: str, status: int, statusText: str, headers: 'Headers', mimeType: str, connectionReused: bool, connectionId: float, encodedDataLength: float, securityState: 'Security.SecurityState', headersText: Optional[str] = None, requestHeaders: Optional['Headers'] = None, requestHeadersText: Optional[str] = None, remoteIPAddress: Optional[str] = None, remotePort: Optional[int] = None, fromDiskCache: Optional[bool] = None, fromServiceWorker: Optional[bool] = None, timing: Optional['ResourceTiming'] = None, protocol: Optional[str] = None, securityDetails: Optional['SecurityDetails'] = None) -> None:
+
+    def __init__(
+        self,
+        url: str,
+        status: int,
+        statusText: str,
+        headers: "Headers",
+        mimeType: str,
+        connectionReused: bool,
+        connectionId: float,
+        encodedDataLength: float,
+        securityState: "Security.SecurityState",
+        headersText: Optional[str] = None,
+        requestHeaders: Optional["Headers"] = None,
+        requestHeadersText: Optional[str] = None,
+        remoteIPAddress: Optional[str] = None,
+        remotePort: Optional[int] = None,
+        fromDiskCache: Optional[bool] = None,
+        fromServiceWorker: Optional[bool] = None,
+        timing: Optional["ResourceTiming"] = None,
+        protocol: Optional[str] = None,
+        securityDetails: Optional["SecurityDetails"] = None,
+    ) -> None:
         """
         :param url: Response URL. This URL can be different from CachedResource.url in case of redirect.
         :type url: str
@@ -319,9 +410,28 @@ class Response(ChromeTypeBase):
         self.securityDetails: Optional[SecurityDetails] = securityDetails
 
 
-class ResourceTiming(ChromeTypeBase):
+class ResourceTiming(ProtocolType):
     """Timing information for the request."""
-    def __init__(self, requestTime: float, proxyStart: float, proxyEnd: float, dnsStart: float, dnsEnd: float, connectStart: float, connectEnd: float, sslStart: float, sslEnd: float, workerStart: float, workerReady: float, sendStart: float, sendEnd: float, pushStart: float, pushEnd: float, receiveHeadersEnd: float) -> None:
+
+    def __init__(
+        self,
+        requestTime: float,
+        proxyStart: float,
+        proxyEnd: float,
+        dnsStart: float,
+        dnsEnd: float,
+        connectStart: float,
+        connectEnd: float,
+        sslStart: float,
+        sslEnd: float,
+        workerStart: float,
+        workerReady: float,
+        sendStart: float,
+        sendEnd: float,
+        pushStart: float,
+        pushEnd: float,
+        receiveHeadersEnd: float,
+    ) -> None:
         """
         :param requestTime: Timing's requestTime is a baseline in seconds, while the other numbers are ticks in milliseconds relatively to this requestTime.
         :type requestTime: float
@@ -375,9 +485,15 @@ class ResourceTiming(ChromeTypeBase):
         self.receiveHeadersEnd: float = receiveHeadersEnd
 
 
-class RequestPattern(ChromeTypeBase):
+class RequestPattern(ProtocolType):
     """Request pattern for interception."""
-    def __init__(self, urlPattern: Optional[str] = None, resourceType: Optional['Page.ResourceType'] = None, interceptionStage: Optional['InterceptionStage'] = None) -> None:
+
+    def __init__(
+        self,
+        urlPattern: Optional[str] = None,
+        resourceType: Optional["Page.ResourceType"] = None,
+        interceptionStage: Optional["InterceptionStage"] = None,
+    ) -> None:
         """
         :param urlPattern: Wildcards ('*' -> zero or more, '?' -> exactly one) are allowed. Escape character is backslash. Omitting is equivalent to "*".
         :type urlPattern: str
@@ -392,9 +508,21 @@ class RequestPattern(ChromeTypeBase):
         self.interceptionStage: Optional[InterceptionStage] = interceptionStage
 
 
-class Request(ChromeTypeBase):
+class Request(ProtocolType):
     """HTTP request data."""
-    def __init__(self, url: str, method: str, headers: 'Headers', initialPriority: 'ResourcePriority', referrerPolicy: str, postData: Optional[str] = None, hasPostData: Optional[bool] = None, mixedContentType: Optional['Security.MixedContentType'] = None, isLinkPreload: Optional[bool] = None) -> None:
+
+    def __init__(
+        self,
+        url: str,
+        method: str,
+        headers: "Headers",
+        initialPriority: "ResourcePriority",
+        referrerPolicy: str,
+        postData: Optional[str] = None,
+        hasPostData: Optional[bool] = None,
+        mixedContentType: Optional["Security.MixedContentType"] = None,
+        isLinkPreload: Optional[bool] = None,
+    ) -> None:
         """
         :param url: Request URL.
         :type url: str
@@ -427,9 +555,16 @@ class Request(ChromeTypeBase):
         self.isLinkPreload: Optional[bool] = isLinkPreload
 
 
-class Initiator(ChromeTypeBase):
+class Initiator(ProtocolType):
     """Information about the request initiator."""
-    def __init__(self, type: str, stack: Optional['Runtime.StackTrace'] = None, url: Optional[str] = None, lineNumber: Optional[float] = None) -> None:
+
+    def __init__(
+        self,
+        type: str,
+        stack: Optional["Runtime.StackTrace"] = None,
+        url: Optional[str] = None,
+        lineNumber: Optional[float] = None,
+    ) -> None:
         """
         :param type: Type of this initiator.
         :type type: str
@@ -447,13 +582,25 @@ class Initiator(ChromeTypeBase):
         self.lineNumber: Optional[float] = lineNumber
 
 
-class Headers(ChromeTypeBase, dict):
+class Headers(ProtocolType, dict):
     """Request / response headers as keys / values of JSON object."""
 
 
-class CookieParam(ChromeTypeBase):
+class CookieParam(ProtocolType):
     """Cookie parameter object"""
-    def __init__(self, name: str, value: str, url: Optional[str] = None, domain: Optional[str] = None, path: Optional[str] = None, secure: Optional[bool] = None, httpOnly: Optional[bool] = None, sameSite: Optional['CookieSameSite'] = None, expires: Optional['TimeSinceEpoch'] = None) -> None:
+
+    def __init__(
+        self,
+        name: str,
+        value: str,
+        url: Optional[str] = None,
+        domain: Optional[str] = None,
+        path: Optional[str] = None,
+        secure: Optional[bool] = None,
+        httpOnly: Optional[bool] = None,
+        sameSite: Optional["CookieSameSite"] = None,
+        expires: Optional["TimeSinceEpoch"] = None,
+    ) -> None:
         """
         :param name: Cookie name.
         :type name: str
@@ -486,9 +633,22 @@ class CookieParam(ChromeTypeBase):
         self.expires: Optional[TimeSinceEpoch] = expires
 
 
-class Cookie(ChromeTypeBase):
+class Cookie(ProtocolType):
     """Cookie object"""
-    def __init__(self, name: str, value: str, domain: str, path: str, expires: float, size: int, httpOnly: bool, secure: bool, session: bool, sameSite: Optional['CookieSameSite'] = None) -> None:
+
+    def __init__(
+        self,
+        name: str,
+        value: str,
+        domain: str,
+        path: str,
+        expires: float,
+        size: int,
+        httpOnly: bool,
+        secure: bool,
+        session: bool,
+        sameSite: Optional["CookieSameSite"] = None,
+    ) -> None:
         """
         :param name: Cookie name.
         :type name: str
@@ -524,9 +684,16 @@ class Cookie(ChromeTypeBase):
         self.sameSite: Optional[CookieSameSite] = sameSite
 
 
-class CachedResource(ChromeTypeBase):
+class CachedResource(ProtocolType):
     """Information about the cached resource."""
-    def __init__(self, url: str, type: 'Page.ResourceType', bodySize: float, response: Optional['Response'] = None) -> None:
+
+    def __init__(
+        self,
+        url: str,
+        type: "Page.ResourceType",
+        bodySize: float,
+        response: Optional["Response"] = None,
+    ) -> None:
         """
         :param url: Resource URL. This is the url of the original network request.
         :type url: str
@@ -544,9 +711,15 @@ class CachedResource(ChromeTypeBase):
         self.bodySize: float = bodySize
 
 
-class AuthChallengeResponse(ChromeTypeBase):
+class AuthChallengeResponse(ProtocolType):
     """Response to an AuthChallenge."""
-    def __init__(self, response: str, username: Optional[str] = None, password: Optional[str] = None) -> None:
+
+    def __init__(
+        self,
+        response: str,
+        username: Optional[str] = None,
+        password: Optional[str] = None,
+    ) -> None:
         """
         :param response: The decision on what to do in response to the authorization challenge.  Default means deferring to the default behavior of the net stack, which will likely either the Cancel authentication or display a popup dialog box.
         :type response: str
@@ -561,9 +734,12 @@ class AuthChallengeResponse(ChromeTypeBase):
         self.password: Optional[str] = password
 
 
-class AuthChallenge(ChromeTypeBase):
+class AuthChallenge(ProtocolType):
     """Authorization challenge for HTTP status code 401 or 407."""
-    def __init__(self, origin: str, scheme: str, realm: str, source: Optional[str] = None) -> None:
+
+    def __init__(
+        self, origin: str, scheme: str, realm: str, source: Optional[str] = None
+    ) -> None:
         """
         :param source: Source of the authentication challenge.
         :type source: str
@@ -581,3 +757,24 @@ class AuthChallenge(ChromeTypeBase):
         self.realm: str = realm
 
 
+OBJECT_LIST = {
+    "WebSocketResponse": WebSocketResponse,
+    "WebSocketRequest": WebSocketRequest,
+    "WebSocketFrame": WebSocketFrame,
+    "SignedExchangeSignature": SignedExchangeSignature,
+    "SignedExchangeInfo": SignedExchangeInfo,
+    "SignedExchangeHeader": SignedExchangeHeader,
+    "SignedCertificateTimestamp": SignedCertificateTimestamp,
+    "SecurityDetails": SecurityDetails,
+    "Response": Response,
+    "ResourceTiming": ResourceTiming,
+    "RequestPattern": RequestPattern,
+    "Request": Request,
+    "Initiator": Initiator,
+    "Headers": Headers,
+    "CookieParam": CookieParam,
+    "Cookie": Cookie,
+    "CachedResource": CachedResource,
+    "AuthChallengeResponse": AuthChallengeResponse,
+    "AuthChallenge": AuthChallenge,
+}

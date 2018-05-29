@@ -1,5 +1,5 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 
 AXValueType = TypeVar("AXValueType", str, str)
@@ -18,9 +18,21 @@ AXNodeId = TypeVar("AXNodeId", str, str)
 """Unique accessibility node identifier."""
 
 
-class AXValueSource(ChromeTypeBase):
+class AXValueSource(ProtocolType):
     """A single source for a computed AX property."""
-    def __init__(self, type: 'AXValueSourceType', value: Optional['AXValue'] = None, attribute: Optional[str] = None, attributeValue: Optional['AXValue'] = None, superseded: Optional[bool] = None, nativeSource: Optional['AXValueNativeSourceType'] = None, nativeSourceValue: Optional['AXValue'] = None, invalid: Optional[bool] = None, invalidReason: Optional[str] = None) -> None:
+
+    def __init__(
+        self,
+        type: "AXValueSourceType",
+        value: Optional["AXValue"] = None,
+        attribute: Optional[str] = None,
+        attributeValue: Optional["AXValue"] = None,
+        superseded: Optional[bool] = None,
+        nativeSource: Optional["AXValueNativeSourceType"] = None,
+        nativeSourceValue: Optional["AXValue"] = None,
+        invalid: Optional[bool] = None,
+        invalidReason: Optional[str] = None,
+    ) -> None:
         """
         :param type: What type of source this is.
         :type type: AXValueSourceType
@@ -53,9 +65,16 @@ class AXValueSource(ChromeTypeBase):
         self.invalidReason: Optional[str] = invalidReason
 
 
-class AXValue(ChromeTypeBase):
+class AXValue(ProtocolType):
     """A single computed AX property."""
-    def __init__(self, type: 'AXValueType', value: Optional[Any] = None, relatedNodes: Optional[List['AXRelatedNode']] = None, sources: Optional[List['AXValueSource']] = None) -> None:
+
+    def __init__(
+        self,
+        type: "AXValueType",
+        value: Optional[Any] = None,
+        relatedNodes: Optional[List[Union["AXRelatedNode", dict]]] = None,
+        sources: Optional[List[Union["AXValueSource", dict]]] = None,
+    ) -> None:
         """
         :param type: The type of this value.
         :type type: AXValueType
@@ -73,8 +92,14 @@ class AXValue(ChromeTypeBase):
         self.sources: Optional[List[AXValueSource]] = sources
 
 
-class AXRelatedNode(ChromeTypeBase):
-    def __init__(self, backendDOMNodeId: 'DOM.BackendNodeId', idref: Optional[str] = None, text: Optional[str] = None) -> None:
+class AXRelatedNode(ProtocolType):
+
+    def __init__(
+        self,
+        backendDOMNodeId: "DOM.BackendNodeId",
+        idref: Optional[str] = None,
+        text: Optional[str] = None,
+    ) -> None:
         """
         :param backendDOMNodeId: The BackendNodeId of the related DOM node.
         :type backendDOMNodeId: DOM.BackendNodeId
@@ -89,8 +114,9 @@ class AXRelatedNode(ChromeTypeBase):
         self.text: Optional[str] = text
 
 
-class AXProperty(ChromeTypeBase):
-    def __init__(self, name: 'AXPropertyName', value: 'AXValue') -> None:
+class AXProperty(ProtocolType):
+
+    def __init__(self, name: "AXPropertyName", value: "AXValue") -> None:
         """
         :param name: The name of this property.
         :type name: AXPropertyName
@@ -102,9 +128,22 @@ class AXProperty(ChromeTypeBase):
         self.value: AXValue = value
 
 
-class AXNode(ChromeTypeBase):
+class AXNode(ProtocolType):
     """A node in the accessibility tree."""
-    def __init__(self, nodeId: 'AXNodeId', ignored: bool, ignoredReasons: Optional[List['AXProperty']] = None, role: Optional['AXValue'] = None, name: Optional['AXValue'] = None, description: Optional['AXValue'] = None, value: Optional['AXValue'] = None, properties: Optional[List['AXProperty']] = None, childIds: Optional[List['AXNodeId']] = None, backendDOMNodeId: Optional['DOM.BackendNodeId'] = None) -> None:
+
+    def __init__(
+        self,
+        nodeId: "AXNodeId",
+        ignored: bool,
+        ignoredReasons: Optional[List[Union["AXProperty", dict]]] = None,
+        role: Optional["AXValue"] = None,
+        name: Optional["AXValue"] = None,
+        description: Optional["AXValue"] = None,
+        value: Optional["AXValue"] = None,
+        properties: Optional[List[Union["AXProperty", dict]]] = None,
+        childIds: Optional[List[AXNodeId]] = None,
+        backendDOMNodeId: Optional["DOM.BackendNodeId"] = None,
+    ) -> None:
         """
         :param nodeId: Unique identifier for this node.
         :type nodeId: AXNodeId
@@ -140,3 +179,10 @@ class AXNode(ChromeTypeBase):
         self.backendDOMNodeId: Optional[DOM.BackendNodeId] = backendDOMNodeId
 
 
+OBJECT_LIST = {
+    "AXValueSource": AXValueSource,
+    "AXValue": AXValue,
+    "AXRelatedNode": AXRelatedNode,
+    "AXProperty": AXProperty,
+    "AXNode": AXNode,
+}

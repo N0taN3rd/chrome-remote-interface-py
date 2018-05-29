@@ -1,5 +1,5 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 from cripy.protocol.page import types as Page
 
 ShadowRootType = TypeVar("ShadowRootType", str, str)
@@ -18,9 +18,12 @@ BackendNodeId = TypeVar("BackendNodeId", int, int)
 """Unique DOM node identifier used to reference a node that may not have been pushed to the front-end."""
 
 
-class ShapeOutsideInfo(ChromeTypeBase):
+class ShapeOutsideInfo(ProtocolType):
     """CSS Shape Outside details."""
-    def __init__(self, bounds: 'Quad', shape: List[Any], marginShape: List[Any]) -> None:
+
+    def __init__(
+        self, bounds: "Quad", shape: List[Any], marginShape: List[Any]
+    ) -> None:
         """
         :param bounds: Shape bounds
         :type bounds: Quad
@@ -35,8 +38,9 @@ class ShapeOutsideInfo(ChromeTypeBase):
         self.marginShape: List[Any] = marginShape
 
 
-class Rect(ChromeTypeBase):
+class Rect(ProtocolType):
     """Rectangle."""
+
     def __init__(self, x: float, y: float, width: float, height: float) -> None:
         """
         :param x: X coordinate
@@ -55,8 +59,9 @@ class Rect(ChromeTypeBase):
         self.height: float = height
 
 
-class RGBA(ChromeTypeBase):
+class RGBA(ProtocolType):
     """A structure holding an RGBA color."""
+
     def __init__(self, r: int, g: int, b: int, a: Optional[float] = None) -> None:
         """
         :param r: The red component, in the [0-255] range.
@@ -75,10 +80,41 @@ class RGBA(ChromeTypeBase):
         self.a: Optional[float] = a
 
 
-class Node(ChromeTypeBase):
+class Node(ProtocolType):
     """DOM interaction is implemented in terms of mirror objects that represent the actual DOM nodes.
 DOMNode is a base node mirror type."""
-    def __init__(self, nodeId: 'NodeId', backendNodeId: 'BackendNodeId', nodeType: int, nodeName: str, localName: str, nodeValue: str, parentId: Optional['NodeId'] = None, childNodeCount: Optional[int] = None, children: Optional[List['Node']] = None, attributes: Optional[List['str']] = None, documentURL: Optional[str] = None, baseURL: Optional[str] = None, publicId: Optional[str] = None, systemId: Optional[str] = None, internalSubset: Optional[str] = None, xmlVersion: Optional[str] = None, name: Optional[str] = None, value: Optional[str] = None, pseudoType: Optional['PseudoType'] = None, shadowRootType: Optional['ShadowRootType'] = None, frameId: Optional['Page.FrameId'] = None, contentDocument: Optional['Node'] = None, shadowRoots: Optional[List['Node']] = None, templateContent: Optional['Node'] = None, pseudoElements: Optional[List['Node']] = None, importedDocument: Optional['Node'] = None, distributedNodes: Optional[List['BackendNode']] = None, isSVG: Optional[bool] = None) -> None:
+
+    def __init__(
+        self,
+        nodeId: "NodeId",
+        backendNodeId: "BackendNodeId",
+        nodeType: int,
+        nodeName: str,
+        localName: str,
+        nodeValue: str,
+        parentId: Optional["NodeId"] = None,
+        childNodeCount: Optional[int] = None,
+        children: Optional[List[Union["Node", dict]]] = None,
+        attributes: Optional[List[str]] = None,
+        documentURL: Optional[str] = None,
+        baseURL: Optional[str] = None,
+        publicId: Optional[str] = None,
+        systemId: Optional[str] = None,
+        internalSubset: Optional[str] = None,
+        xmlVersion: Optional[str] = None,
+        name: Optional[str] = None,
+        value: Optional[str] = None,
+        pseudoType: Optional["PseudoType"] = None,
+        shadowRootType: Optional["ShadowRootType"] = None,
+        frameId: Optional["Page.FrameId"] = None,
+        contentDocument: Optional["Node"] = None,
+        shadowRoots: Optional[List[Union["Node", dict]]] = None,
+        templateContent: Optional["Node"] = None,
+        pseudoElements: Optional[List[Union["Node", dict]]] = None,
+        importedDocument: Optional["Node"] = None,
+        distributedNodes: Optional[List[Union["BackendNode", dict]]] = None,
+        isSVG: Optional[bool] = None,
+    ) -> None:
         """
         :param nodeId: Node identifier that is passed into the rest of the DOM messages as the `nodeId`. Backend will only push node with given `id` once. It is aware of all requested nodes and will only fire DOM events for nodes known to the client.
         :type nodeId: NodeId
@@ -168,9 +204,19 @@ DOMNode is a base node mirror type."""
         self.isSVG: Optional[bool] = isSVG
 
 
-class BoxModel(ChromeTypeBase):
+class BoxModel(ProtocolType):
     """Box model."""
-    def __init__(self, content: 'Quad', padding: 'Quad', border: 'Quad', margin: 'Quad', width: int, height: int, shapeOutside: Optional['ShapeOutsideInfo'] = None) -> None:
+
+    def __init__(
+        self,
+        content: "Quad",
+        padding: "Quad",
+        border: "Quad",
+        margin: "Quad",
+        width: int,
+        height: int,
+        shapeOutside: Optional["ShapeOutsideInfo"] = None,
+    ) -> None:
         """
         :param content: Content box
         :type content: Quad
@@ -197,9 +243,12 @@ class BoxModel(ChromeTypeBase):
         self.shapeOutside: Optional[ShapeOutsideInfo] = shapeOutside
 
 
-class BackendNode(ChromeTypeBase):
+class BackendNode(ProtocolType):
     """Backend node with a friendly name."""
-    def __init__(self, nodeType: int, nodeName: str, backendNodeId: 'BackendNodeId') -> None:
+
+    def __init__(
+        self, nodeType: int, nodeName: str, backendNodeId: "BackendNodeId"
+    ) -> None:
         """
         :param nodeType: `Node`'s nodeType.
         :type nodeType: int
@@ -214,3 +263,11 @@ class BackendNode(ChromeTypeBase):
         self.backendNodeId: BackendNodeId = backendNodeId
 
 
+OBJECT_LIST = {
+    "ShapeOutsideInfo": ShapeOutsideInfo,
+    "Rect": Rect,
+    "RGBA": RGBA,
+    "Node": Node,
+    "BoxModel": BoxModel,
+    "BackendNode": BackendNode,
+}

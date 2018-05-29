@@ -1,7 +1,7 @@
 from typing import Optional, List, Dict
 from collections import OrderedDict
 
-from .shared import FRefCollector, TYPE_COLLECTOR
+from .shared import FRefCollector, TYPER
 from .property import Property
 from .ptype import Type
 
@@ -15,11 +15,14 @@ class DomainType(FRefCollector):
         super().__init__()
         self.domain = domain
         self.id: str = dt["id"]
+        # print(self.domain, self.id)
         self.scoped_name: str = f"{self.domain}.{self.id}"
         self.description: Optional[str] = dt.get("description", None)
         self.type: Type = Type(dt)
         self.experimental: bool = dt.get("experimental", False)
         self.properties: Props = self._build_props(dt.get("properties", None))
+        TYPER.add_type(self.id, self.type)
+        TYPER.add_type(self.scoped_name, self.type)
 
     @property
     def code_description(self) -> str:

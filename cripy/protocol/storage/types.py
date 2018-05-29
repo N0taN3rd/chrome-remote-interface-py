@@ -1,13 +1,14 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 StorageType = TypeVar("StorageType", str, str)
 """Enum of possible storage types."""
 
 
-class UsageForType(ChromeTypeBase):
+class UsageForType(ProtocolType):
     """Usage for a storage type."""
-    def __init__(self, storageType: 'StorageType', usage: float) -> None:
+
+    def __init__(self, storageType: "StorageType", usage: float) -> None:
         """
         :param storageType: Name of storage type.
         :type storageType: StorageType
@@ -19,3 +20,4 @@ class UsageForType(ChromeTypeBase):
         self.usage: float = usage
 
 
+OBJECT_LIST = {"UsageForType": UsageForType}

@@ -1,12 +1,13 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 Item = TypeVar("Item", list, list)
 """DOM Storage item."""
 
 
-class StorageId(ChromeTypeBase):
+class StorageId(ProtocolType):
     """DOM Storage identifier."""
+
     def __init__(self, securityOrigin: str, isLocalStorage: bool) -> None:
         """
         :param securityOrigin: Security origin for the storage.
@@ -19,3 +20,4 @@ class StorageId(ChromeTypeBase):
         self.isLocalStorage: bool = isLocalStorage
 
 
+OBJECT_LIST = {"StorageId": StorageId}

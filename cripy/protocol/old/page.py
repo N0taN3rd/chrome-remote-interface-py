@@ -9,7 +9,7 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 from cripy.protocol import emulation as Emulation
@@ -25,7 +25,7 @@ ResourceType = str
 FrameId = str
 
 # Frame: Information about the Frame on the page.
-class Frame(ChromeTypeBase):
+class Frame(ProtocolType):
     def __init__(self,
                  id: Union['str'],
                  loaderId: Union['Network.LoaderId'],
@@ -48,7 +48,7 @@ class Frame(ChromeTypeBase):
 
 
 # FrameResource: Information about the Resource on the page.
-class FrameResource(ChromeTypeBase):
+class FrameResource(ProtocolType):
     def __init__(self,
                  url: Union['str'],
                  type: Union['ResourceType'],
@@ -69,7 +69,7 @@ class FrameResource(ChromeTypeBase):
 
 
 # FrameResourceTree: Information about the Frame hierarchy along with their cached resources.
-class FrameResourceTree(ChromeTypeBase):
+class FrameResourceTree(ProtocolType):
     def __init__(self,
                  frame: Union['Frame'],
                  resources: Union['[FrameResource]'],
@@ -82,7 +82,7 @@ class FrameResourceTree(ChromeTypeBase):
 
 
 # FrameTree: Information about the Frame hierarchy.
-class FrameTree(ChromeTypeBase):
+class FrameTree(ProtocolType):
     def __init__(self,
                  frame: Union['Frame'],
                  childFrames: Optional['[FrameTree]'] = None,
@@ -99,7 +99,7 @@ ScriptIdentifier = str
 TransitionType = str
 
 # NavigationEntry: Navigation history entry.
-class NavigationEntry(ChromeTypeBase):
+class NavigationEntry(ProtocolType):
     def __init__(self,
                  id: Union['int'],
                  url: Union['str'],
@@ -116,7 +116,7 @@ class NavigationEntry(ChromeTypeBase):
 
 
 # ScreencastFrameMetadata: Screencast frame metadata.
-class ScreencastFrameMetadata(ChromeTypeBase):
+class ScreencastFrameMetadata(ProtocolType):
     def __init__(self,
                  offsetTop: Union['float'],
                  pageScaleFactor: Union['float'],
@@ -140,7 +140,7 @@ class ScreencastFrameMetadata(ChromeTypeBase):
 DialogType = str
 
 # AppManifestError: Error while paring app manifest.
-class AppManifestError(ChromeTypeBase):
+class AppManifestError(ProtocolType):
     def __init__(self,
                  message: Union['str'],
                  critical: Union['int'],
@@ -155,7 +155,7 @@ class AppManifestError(ChromeTypeBase):
 
 
 # LayoutViewport: Layout viewport position and dimensions.
-class LayoutViewport(ChromeTypeBase):
+class LayoutViewport(ProtocolType):
     def __init__(self,
                  pageX: Union['int'],
                  pageY: Union['int'],
@@ -170,7 +170,7 @@ class LayoutViewport(ChromeTypeBase):
 
 
 # VisualViewport: Visual viewport position, dimensions, and scale.
-class VisualViewport(ChromeTypeBase):
+class VisualViewport(ProtocolType):
     def __init__(self,
                  offsetX: Union['float'],
                  offsetY: Union['float'],
@@ -191,7 +191,7 @@ class VisualViewport(ChromeTypeBase):
 
 
 # Viewport: Viewport for capturing screenshot.
-class Viewport(ChromeTypeBase):
+class Viewport(ProtocolType):
     def __init__(self,
                  x: Union['float'],
                  y: Union['float'],

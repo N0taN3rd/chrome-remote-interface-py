@@ -1,7 +1,7 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.page import types as Page
 from cripy.protocol.dom import types as DOM
+from cripy.protocol.page import types as Page
 
 
 class InspectNodeRequestedEvent(BaseEvent):
@@ -49,8 +49,7 @@ class ScreenshotRequestedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Overlay.inspectNodeRequested": InspectNodeRequestedEvent,
-   "Overlay.nodeHighlightRequested": NodeHighlightRequestedEvent,
-   "Overlay.screenshotRequested": ScreenshotRequestedEvent,
+    "Overlay.inspectNodeRequested": InspectNodeRequestedEvent,
+    "Overlay.nodeHighlightRequested": NodeHighlightRequestedEvent,
+    "Overlay.screenshotRequested": ScreenshotRequestedEvent,
 }
-

@@ -1,10 +1,17 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 
-class GPUInfo(ChromeTypeBase):
+class GPUInfo(ProtocolType):
     """Provides information about the GPU(s) on the system."""
-    def __init__(self, devices: List['GPUDevice'], driverBugWorkarounds: List['str'], auxAttributes: Optional[dict] = None, featureStatus: Optional[dict] = None) -> None:
+
+    def __init__(
+        self,
+        devices: List[Union["GPUDevice", dict]],
+        driverBugWorkarounds: List[str],
+        auxAttributes: Optional[dict] = None,
+        featureStatus: Optional[dict] = None,
+    ) -> None:
         """
         :param devices: The graphics devices on the system. Element 0 is the primary GPU.
         :type devices: array
@@ -22,9 +29,12 @@ class GPUInfo(ChromeTypeBase):
         self.driverBugWorkarounds: List[str] = driverBugWorkarounds
 
 
-class GPUDevice(ChromeTypeBase):
+class GPUDevice(ProtocolType):
     """Describes a single graphics processor (GPU)."""
-    def __init__(self, vendorId: float, deviceId: float, vendorString: str, deviceString: str) -> None:
+
+    def __init__(
+        self, vendorId: float, deviceId: float, vendorString: str, deviceString: str
+    ) -> None:
         """
         :param vendorId: PCI ID of the GPU vendor, if available; 0 otherwise.
         :type vendorId: float
@@ -42,3 +52,4 @@ class GPUDevice(ChromeTypeBase):
         self.deviceString: str = deviceString
 
 
+OBJECT_LIST = {"GPUInfo": GPUInfo, "GPUDevice": GPUDevice}

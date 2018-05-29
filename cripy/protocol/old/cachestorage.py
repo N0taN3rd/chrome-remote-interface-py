@@ -9,7 +9,7 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 CacheId = str
 
 # DataEntry: Data entry.
-class DataEntry(ChromeTypeBase):
+class DataEntry(ProtocolType):
 
     def __init__(
         self,
@@ -40,7 +40,7 @@ class DataEntry(ChromeTypeBase):
 
 
 # Cache: Cache identifier.
-class Cache(ChromeTypeBase):
+class Cache(ProtocolType):
 
     def __init__(
         self,
@@ -55,7 +55,7 @@ class Cache(ChromeTypeBase):
 
 
 # Header:
-class Header(ChromeTypeBase):
+class Header(ProtocolType):
 
     def __init__(self, name: Union["str"], value: Union["str"]):
 
@@ -64,7 +64,7 @@ class Header(ChromeTypeBase):
 
 
 # CachedResponse: Cached response
-class CachedResponse(ChromeTypeBase):
+class CachedResponse(ProtocolType):
 
     def __init__(self, body: Union["str"]):
 

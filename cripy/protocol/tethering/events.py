@@ -19,7 +19,4 @@ class AcceptedEvent(BaseEvent):
         self.connectionId: str = connectionId
 
 
-EVENT_TO_CLASS = {
-   "Tethering.accepted": AcceptedEvent,
-}
-
+EVENT_TO_CLASS = {"Tethering.accepted": AcceptedEvent}

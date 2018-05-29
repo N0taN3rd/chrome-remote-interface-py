@@ -1,10 +1,7 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.runtime import types as Runtime
-from cripy.protocol.debugger.types import (
-    Location,
-    BreakpointId,
-)
+from cripy.protocol.debugger.types import BreakpointId, Location
 
 
 class BreakpointResolvedEvent(BaseEvent):
@@ -29,7 +26,16 @@ class PausedEvent(BaseEvent):
 
     event: str = "Debugger.paused"
 
-    def __init__(self, callFrames: List[CallFrame], reason: str, data: Optional[dict] = None, hitBreakpoints: Optional[List[str]] = None, asyncStackTrace: Optional[Runtime.StackTrace] = None, asyncStackTraceId: Optional[Runtime.StackTraceId] = None, asyncCallStackTraceId: Optional[Runtime.StackTraceId] = None) -> None:
+    def __init__(
+        self,
+        callFrames: List[Union[CallFrame, dict]],
+        reason: str,
+        data: Optional[dict] = None,
+        hitBreakpoints: Optional[List[str]] = None,
+        asyncStackTrace: Optional[Runtime.StackTrace] = None,
+        asyncStackTraceId: Optional[Runtime.StackTraceId] = None,
+        asyncCallStackTraceId: Optional[Runtime.StackTraceId] = None,
+    ) -> None:
         """
         :param callFrames: Call stack the virtual machine stopped on.
         :type callFrames: array
@@ -53,7 +59,9 @@ class PausedEvent(BaseEvent):
         self.hitBreakpoints: Optional[List[str]] = hitBreakpoints
         self.asyncStackTrace: Optional[Runtime.StackTrace] = asyncStackTrace
         self.asyncStackTraceId: Optional[Runtime.StackTraceId] = asyncStackTraceId
-        self.asyncCallStackTraceId: Optional[Runtime.StackTraceId] = asyncCallStackTraceId
+        self.asyncCallStackTraceId: Optional[
+            Runtime.StackTraceId
+        ] = asyncCallStackTraceId
 
 
 class ResumedEvent(BaseEvent):
@@ -61,7 +69,7 @@ class ResumedEvent(BaseEvent):
 
     event: str = "Debugger.resumed"
 
-    def __init__(self, ) -> None:
+    def __init__(self,) -> None:
         super().__init__()
 
 
@@ -70,7 +78,23 @@ class ScriptFailedToParseEvent(BaseEvent):
 
     event: str = "Debugger.scriptFailedToParse"
 
-    def __init__(self, scriptId: Runtime.ScriptId, url: str, startLine: int, startColumn: int, endLine: int, endColumn: int, executionContextId: Runtime.ExecutionContextId, hash: str, executionContextAuxData: Optional[dict] = None, sourceMapURL: Optional[str] = None, hasSourceURL: Optional[bool] = None, isModule: Optional[bool] = None, length: Optional[int] = None, stackTrace: Optional[Runtime.StackTrace] = None) -> None:
+    def __init__(
+        self,
+        scriptId: Runtime.ScriptId,
+        url: str,
+        startLine: int,
+        startColumn: int,
+        endLine: int,
+        endColumn: int,
+        executionContextId: Runtime.ExecutionContextId,
+        hash: str,
+        executionContextAuxData: Optional[dict] = None,
+        sourceMapURL: Optional[str] = None,
+        hasSourceURL: Optional[bool] = None,
+        isModule: Optional[bool] = None,
+        length: Optional[int] = None,
+        stackTrace: Optional[Runtime.StackTrace] = None,
+    ) -> None:
         """
         :param scriptId: Identifier of the script parsed.
         :type scriptId: Runtime.ScriptId
@@ -124,7 +148,24 @@ class ScriptParsedEvent(BaseEvent):
 
     event: str = "Debugger.scriptParsed"
 
-    def __init__(self, scriptId: Runtime.ScriptId, url: str, startLine: int, startColumn: int, endLine: int, endColumn: int, executionContextId: Runtime.ExecutionContextId, hash: str, executionContextAuxData: Optional[dict] = None, isLiveEdit: Optional[bool] = None, sourceMapURL: Optional[str] = None, hasSourceURL: Optional[bool] = None, isModule: Optional[bool] = None, length: Optional[int] = None, stackTrace: Optional[Runtime.StackTrace] = None) -> None:
+    def __init__(
+        self,
+        scriptId: Runtime.ScriptId,
+        url: str,
+        startLine: int,
+        startColumn: int,
+        endLine: int,
+        endColumn: int,
+        executionContextId: Runtime.ExecutionContextId,
+        hash: str,
+        executionContextAuxData: Optional[dict] = None,
+        isLiveEdit: Optional[bool] = None,
+        sourceMapURL: Optional[str] = None,
+        hasSourceURL: Optional[bool] = None,
+        isModule: Optional[bool] = None,
+        length: Optional[int] = None,
+        stackTrace: Optional[Runtime.StackTrace] = None,
+    ) -> None:
         """
         :param scriptId: Identifier of the script parsed.
         :type scriptId: Runtime.ScriptId
@@ -176,10 +217,9 @@ class ScriptParsedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Debugger.breakpointResolved": BreakpointResolvedEvent,
-   "Debugger.paused": PausedEvent,
-   "Debugger.resumed": ResumedEvent,
-   "Debugger.scriptFailedToParse": ScriptFailedToParseEvent,
-   "Debugger.scriptParsed": ScriptParsedEvent,
+    "Debugger.breakpointResolved": BreakpointResolvedEvent,
+    "Debugger.paused": PausedEvent,
+    "Debugger.resumed": ResumedEvent,
+    "Debugger.scriptFailedToParse": ScriptFailedToParseEvent,
+    "Debugger.scriptParsed": ScriptParsedEvent,
 }
-

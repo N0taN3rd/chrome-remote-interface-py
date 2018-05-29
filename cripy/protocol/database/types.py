@@ -1,12 +1,13 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 DatabaseId = TypeVar("DatabaseId", str, str)
 """Unique identifier of Database object."""
 
 
-class Error(ChromeTypeBase):
+class Error(ProtocolType):
     """Database error."""
+
     def __init__(self, message: str, code: int) -> None:
         """
         :param message: Error message.
@@ -19,9 +20,10 @@ class Error(ChromeTypeBase):
         self.code: int = code
 
 
-class Database(ChromeTypeBase):
+class Database(ProtocolType):
     """Database object."""
-    def __init__(self, id: 'DatabaseId', domain: str, name: str, version: str) -> None:
+
+    def __init__(self, id: "DatabaseId", domain: str, name: str, version: str) -> None:
         """
         :param id: Database ID.
         :type id: DatabaseId
@@ -39,3 +41,4 @@ class Database(ChromeTypeBase):
         self.version: str = version
 
 
+OBJECT_LIST = {"Error": Error, "Database": Database}

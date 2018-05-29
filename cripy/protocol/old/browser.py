@@ -9,7 +9,7 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 from cripy.protocol import target as Target
@@ -21,7 +21,7 @@ WindowID = int
 WindowState = str
 
 # Bounds: Browser window bounds information
-class Bounds(ChromeTypeBase):
+class Bounds(ProtocolType):
 
     def __init__(
         self,
@@ -40,7 +40,7 @@ class Bounds(ChromeTypeBase):
 
 
 # Bucket: Chrome histogram bucket.
-class Bucket(ChromeTypeBase):
+class Bucket(ProtocolType):
 
     def __init__(self, low: Union["int"], high: Union["int"], count: Union["int"]):
 
@@ -50,7 +50,7 @@ class Bucket(ChromeTypeBase):
 
 
 # Histogram: Chrome histogram.
-class Histogram(ChromeTypeBase):
+class Histogram(ProtocolType):
 
     def __init__(
         self,

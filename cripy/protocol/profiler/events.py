@@ -1,16 +1,20 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.debugger import types as Debugger
-from cripy.protocol.profiler.types import (
-    Profile,
-)
+from cripy.protocol.profiler.types import Profile
 
 
 class ConsoleProfileFinishedEvent(BaseEvent):
 
     event: str = "Profiler.consoleProfileFinished"
 
-    def __init__(self, id: str, location: Debugger.Location, profile: Profile, title: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        id: str,
+        location: Debugger.Location,
+        profile: Profile,
+        title: Optional[str] = None,
+    ) -> None:
         """
         :param id: The id
         :type id: str
@@ -33,7 +37,9 @@ class ConsoleProfileStartedEvent(BaseEvent):
 
     event: str = "Profiler.consoleProfileStarted"
 
-    def __init__(self, id: str, location: Debugger.Location, title: Optional[str] = None) -> None:
+    def __init__(
+        self, id: str, location: Debugger.Location, title: Optional[str] = None
+    ) -> None:
         """
         :param id: The id
         :type id: str
@@ -49,7 +55,6 @@ class ConsoleProfileStartedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Profiler.consoleProfileFinished": ConsoleProfileFinishedEvent,
-   "Profiler.consoleProfileStarted": ConsoleProfileStartedEvent,
+    "Profiler.consoleProfileFinished": ConsoleProfileFinishedEvent,
+    "Profiler.consoleProfileStarted": ConsoleProfileStartedEvent,
 }
-

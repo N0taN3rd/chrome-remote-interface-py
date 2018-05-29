@@ -1,10 +1,6 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.css.types import (
-    CSSStyleSheetHeader,
-    FontFace,
-    StyleSheetId,
-)
+from cripy.protocol.css.types import StyleSheetId, FontFace, CSSStyleSheetHeader
 
 
 class FontsUpdatedEvent(BaseEvent):
@@ -27,7 +23,7 @@ class MediaQueryResultChangedEvent(BaseEvent):
 
     event: str = "CSS.mediaQueryResultChanged"
 
-    def __init__(self, ) -> None:
+    def __init__(self,) -> None:
         super().__init__()
 
 
@@ -74,10 +70,9 @@ class StyleSheetRemovedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "CSS.fontsUpdated": FontsUpdatedEvent,
-   "CSS.mediaQueryResultChanged": MediaQueryResultChangedEvent,
-   "CSS.styleSheetAdded": StyleSheetAddedEvent,
-   "CSS.styleSheetChanged": StyleSheetChangedEvent,
-   "CSS.styleSheetRemoved": StyleSheetRemovedEvent,
+    "CSS.fontsUpdated": FontsUpdatedEvent,
+    "CSS.mediaQueryResultChanged": MediaQueryResultChangedEvent,
+    "CSS.styleSheetAdded": StyleSheetAddedEvent,
+    "CSS.styleSheetChanged": StyleSheetChangedEvent,
+    "CSS.styleSheetRemoved": StyleSheetRemovedEvent,
 }
-

@@ -68,9 +68,8 @@ class IndexedDBListUpdatedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Storage.cacheStorageContentUpdated": CacheStorageContentUpdatedEvent,
-   "Storage.cacheStorageListUpdated": CacheStorageListUpdatedEvent,
-   "Storage.indexedDBContentUpdated": IndexedDBContentUpdatedEvent,
-   "Storage.indexedDBListUpdated": IndexedDBListUpdatedEvent,
+    "Storage.cacheStorageContentUpdated": CacheStorageContentUpdatedEvent,
+    "Storage.cacheStorageListUpdated": CacheStorageListUpdatedEvent,
+    "Storage.indexedDBContentUpdated": IndexedDBContentUpdatedEvent,
+    "Storage.indexedDBListUpdated": IndexedDBListUpdatedEvent,
 }
-

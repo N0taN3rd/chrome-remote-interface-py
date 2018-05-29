@@ -9,7 +9,7 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 from cripy.protocol import dom as DOM
@@ -21,7 +21,7 @@ LayerId = str
 SnapshotId = str
 
 # ScrollRect: Rectangle where scrolling happens on the main thread.
-class ScrollRect(ChromeTypeBase):
+class ScrollRect(ProtocolType):
 
     def __init__(self, rect: Union["DOM.Rect"], type: Union["str"]):
 
@@ -30,7 +30,7 @@ class ScrollRect(ChromeTypeBase):
 
 
 # StickyPositionConstraint: Sticky position constraints.
-class StickyPositionConstraint(ChromeTypeBase):
+class StickyPositionConstraint(ProtocolType):
 
     def __init__(
         self,
@@ -47,7 +47,7 @@ class StickyPositionConstraint(ChromeTypeBase):
 
 
 # PictureTile: Serialized fragment of layer picture along with its offset within the layer.
-class PictureTile(ChromeTypeBase):
+class PictureTile(ProtocolType):
 
     def __init__(self, x: Union["float"], y: Union["float"], picture: Union["str"]):
 
@@ -57,7 +57,7 @@ class PictureTile(ChromeTypeBase):
 
 
 # Layer: Information about a compositing layer.
-class Layer(ChromeTypeBase):
+class Layer(ProtocolType):
 
     def __init__(
         self,

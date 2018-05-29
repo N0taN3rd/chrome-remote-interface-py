@@ -1,6 +1,7 @@
 from typing import Iterable, Optional, Set, Union
+from enum import Enum
 
-from protogen.ptype import Type
+from cripy.protogen.ptype import Type
 
 ForeignRefs = Optional[Set[str]]
 
@@ -37,6 +38,15 @@ class FRefCollector(object):
             self.foreign_refs.update(ref)
 
 
+PY_PRIMATIVES = {"str", "int", "float", "bool", "dict"}
+
+
+class InferredType(Enum):
+    OBJECT = "object"
+    LIST = "list"
+    ANYP = "any or primative"
+
+
 class Typer(object):
 
     def __init__(self) -> None:
@@ -44,20 +54,46 @@ class Typer(object):
         self.primitives: Set[str] = set()
         self.lists: Set[str] = set()
 
-    def add_type(self, name: str, type: Type) -> None:
-        if type.is_object:
-            self.objects.add(name)
-        if type.is_array:
-            self.lists.add(name)
+    def you_are_in(self, what: Union[str, Type]) -> InferredType:
+        if self.is_object(what):
+            return InferredType.OBJECT
+        elif self.is_list(what):
+            return InferredType.LIST
+        else:
+            return InferredType.ANYP
 
-    def is_object(self, what: str) -> bool:
+    def add_type(self, name: str, _type: Type) -> None:
+        if _type.is_object:
+            self.objects.add(name)
+        elif _type.is_array:
+            self.lists.add(name)
+        else:
+            self.primitives.add(name)
+
+    def is_object(self, what: Union[str, Type]) -> bool:
+        if isinstance(what, Type):
+            return str(what) in self.objects
         return what in self.objects
 
-    def is_primitive(self, what: str) -> bool:
-        return what in self.primitives
+    def is_primitive(self, what: Union[str, Type]) -> bool:
+        if isinstance(what, Type):
+            t = str(what)
+            return t in self.primitives or t in PY_PRIMATIVES
+        return what in self.primitives or what in PY_PRIMATIVES
 
-    def is_list(self, what: str) -> bool:
+    def is_list(self, what: Union[str, Type]) -> bool:
+        if isinstance(what, Type):
+            return str(what) in self.lists
         return what in self.lists
+
+    def is_primitive_or_any(self, what: Union[str, Type]) -> bool:
+        if isinstance(what, Type):
+            t = str(what)
+        else:
+            t = what
+        if t == "Any":
+            return True
+        return self.is_primitive(t)
 
 
 TYPER = Typer()

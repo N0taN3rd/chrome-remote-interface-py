@@ -21,7 +21,7 @@ class VirtualTimeBudgetExpiredEvent(BaseEvent):
 
     event: str = "Emulation.virtualTimeBudgetExpired"
 
-    def __init__(self, ) -> None:
+    def __init__(self,) -> None:
         super().__init__()
 
 
@@ -40,8 +40,7 @@ class VirtualTimePausedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Emulation.virtualTimeAdvanced": VirtualTimeAdvancedEvent,
-   "Emulation.virtualTimeBudgetExpired": VirtualTimeBudgetExpiredEvent,
-   "Emulation.virtualTimePaused": VirtualTimePausedEvent,
+    "Emulation.virtualTimeAdvanced": VirtualTimeAdvancedEvent,
+    "Emulation.virtualTimeBudgetExpired": VirtualTimeBudgetExpiredEvent,
+    "Emulation.virtualTimePaused": VirtualTimePausedEvent,
 }
-

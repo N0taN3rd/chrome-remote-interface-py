@@ -1,8 +1,6 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.domstorage.types import (
-    StorageId,
-)
+from cripy.protocol.domstorage.types import StorageId
 
 
 class DomStorageItemAddedEvent(BaseEvent):
@@ -44,7 +42,9 @@ class DomStorageItemUpdatedEvent(BaseEvent):
 
     event: str = "DOMStorage.domStorageItemUpdated"
 
-    def __init__(self, storageId: StorageId, key: str, oldValue: str, newValue: str) -> None:
+    def __init__(
+        self, storageId: StorageId, key: str, oldValue: str, newValue: str
+    ) -> None:
         """
         :param storageId: The storageId
         :type storageId: StorageId
@@ -76,9 +76,8 @@ class DomStorageItemsClearedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "DOMStorage.domStorageItemAdded": DomStorageItemAddedEvent,
-   "DOMStorage.domStorageItemRemoved": DomStorageItemRemovedEvent,
-   "DOMStorage.domStorageItemUpdated": DomStorageItemUpdatedEvent,
-   "DOMStorage.domStorageItemsCleared": DomStorageItemsClearedEvent,
+    "DOMStorage.domStorageItemAdded": DomStorageItemAddedEvent,
+    "DOMStorage.domStorageItemRemoved": DomStorageItemRemovedEvent,
+    "DOMStorage.domStorageItemUpdated": DomStorageItemUpdatedEvent,
+    "DOMStorage.domStorageItemsCleared": DomStorageItemsClearedEvent,
 }
-

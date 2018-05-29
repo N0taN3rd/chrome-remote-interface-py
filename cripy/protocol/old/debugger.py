@@ -9,7 +9,7 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 from cripy.protocol import runtime as Runtime
@@ -21,7 +21,7 @@ BreakpointId = str
 CallFrameId = str
 
 # Location: Location in the source code.
-class Location(ChromeTypeBase):
+class Location(ProtocolType):
     def __init__(self,
                  scriptId: Union['Runtime.ScriptId'],
                  lineNumber: Union['int'],
@@ -34,7 +34,7 @@ class Location(ChromeTypeBase):
 
 
 # ScriptPosition: Location in the source code.
-class ScriptPosition(ChromeTypeBase):
+class ScriptPosition(ProtocolType):
     def __init__(self,
                  lineNumber: Union['int'],
                  columnNumber: Union['int'],
@@ -45,7 +45,7 @@ class ScriptPosition(ChromeTypeBase):
 
 
 # CallFrame: JavaScript call frame. Array of call frames form the call stack.
-class CallFrame(ChromeTypeBase):
+class CallFrame(ProtocolType):
     def __init__(self,
                  callFrameId: Union['CallFrameId'],
                  functionName: Union['str'],
@@ -68,7 +68,7 @@ class CallFrame(ChromeTypeBase):
 
 
 # Scope: Scope description.
-class Scope(ChromeTypeBase):
+class Scope(ProtocolType):
     def __init__(self,
                  type: Union['str'],
                  object: Union['Runtime.RemoteObject'],
@@ -85,7 +85,7 @@ class Scope(ChromeTypeBase):
 
 
 # SearchMatch: Search match for resource.
-class SearchMatch(ChromeTypeBase):
+class SearchMatch(ProtocolType):
     def __init__(self,
                  lineNumber: Union['float'],
                  lineContent: Union['str'],
@@ -96,7 +96,7 @@ class SearchMatch(ChromeTypeBase):
 
 
 # BreakLocation: 
-class BreakLocation(ChromeTypeBase):
+class BreakLocation(ProtocolType):
     def __init__(self,
                  scriptId: Union['Runtime.ScriptId'],
                  lineNumber: Union['int'],

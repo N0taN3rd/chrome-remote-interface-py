@@ -9,7 +9,7 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 from cripy.protocol import dom as DOM
@@ -28,7 +28,7 @@ AXValueSourceType = str
 AXValueNativeSourceType = str
 
 # AXValueSource: A single source for a computed AX property.
-class AXValueSource(ChromeTypeBase):
+class AXValueSource(ProtocolType):
 
     def __init__(
         self,
@@ -55,7 +55,7 @@ class AXValueSource(ChromeTypeBase):
 
 
 # AXRelatedNode:
-class AXRelatedNode(ChromeTypeBase):
+class AXRelatedNode(ProtocolType):
 
     def __init__(
         self,
@@ -70,7 +70,7 @@ class AXRelatedNode(ChromeTypeBase):
 
 
 # AXProperty:
-class AXProperty(ChromeTypeBase):
+class AXProperty(ProtocolType):
 
     def __init__(self, name: Union["AXPropertyName"], value: Union["AXValue"]):
 
@@ -79,7 +79,7 @@ class AXProperty(ChromeTypeBase):
 
 
 # AXValue: A single computed AX property.
-class AXValue(ChromeTypeBase):
+class AXValue(ProtocolType):
 
     def __init__(
         self,
@@ -99,7 +99,7 @@ class AXValue(ChromeTypeBase):
 AXPropertyName = str
 
 # AXNode: A node in the accessibility tree.
-class AXNode(ChromeTypeBase):
+class AXNode(ProtocolType):
 
     def __init__(
         self,

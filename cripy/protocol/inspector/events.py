@@ -22,7 +22,7 @@ class TargetCrashedEvent(BaseEvent):
 
     event: str = "Inspector.targetCrashed"
 
-    def __init__(self, ) -> None:
+    def __init__(self,) -> None:
         super().__init__()
 
 
@@ -31,13 +31,12 @@ class TargetReloadedAfterCrashEvent(BaseEvent):
 
     event: str = "Inspector.targetReloadedAfterCrash"
 
-    def __init__(self, ) -> None:
+    def __init__(self,) -> None:
         super().__init__()
 
 
 EVENT_TO_CLASS = {
-   "Inspector.detached": DetachedEvent,
-   "Inspector.targetCrashed": TargetCrashedEvent,
-   "Inspector.targetReloadedAfterCrash": TargetReloadedAfterCrashEvent,
+    "Inspector.detached": DetachedEvent,
+    "Inspector.targetCrashed": TargetCrashedEvent,
+    "Inspector.targetReloadedAfterCrash": TargetReloadedAfterCrashEvent,
 }
-

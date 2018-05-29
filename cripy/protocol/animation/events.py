@@ -1,8 +1,6 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.animation.types import (
-    Animation,
-)
+from cripy.protocol.animation.types import Animation
 
 
 class AnimationCanceledEvent(BaseEvent):
@@ -48,8 +46,7 @@ class AnimationStartedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Animation.animationCanceled": AnimationCanceledEvent,
-   "Animation.animationCreated": AnimationCreatedEvent,
-   "Animation.animationStarted": AnimationStartedEvent,
+    "Animation.animationCanceled": AnimationCanceledEvent,
+    "Animation.animationCreated": AnimationCreatedEvent,
+    "Animation.animationStarted": AnimationStartedEvent,
 }
-

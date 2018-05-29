@@ -2,23 +2,23 @@ from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.page import types as Page
 from cripy.protocol.network.types import (
-    RequestId,
-    ErrorReason,
-    Headers,
-    WebSocketFrame,
-    TimeSinceEpoch,
-    Response,
-    WebSocketRequest,
-    MonotonicTime,
-    SignedExchangeInfo,
-    WebSocketResponse,
-    LoaderId,
-    AuthChallenge,
-    Initiator,
-    InterceptionId,
-    Request,
-    ResourcePriority,
     BlockedReason,
+    LoaderId,
+    WebSocketFrame,
+    InterceptionId,
+    WebSocketRequest,
+    RequestId,
+    TimeSinceEpoch,
+    SignedExchangeInfo,
+    AuthChallenge,
+    MonotonicTime,
+    Request,
+    Initiator,
+    ErrorReason,
+    Response,
+    ResourcePriority,
+    Headers,
+    WebSocketResponse,
 )
 
 
@@ -27,7 +27,13 @@ class DataReceivedEvent(BaseEvent):
 
     event: str = "Network.dataReceived"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, dataLength: int, encodedDataLength: int) -> None:
+    def __init__(
+        self,
+        requestId: RequestId,
+        timestamp: MonotonicTime,
+        dataLength: int,
+        encodedDataLength: int,
+    ) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: RequestId
@@ -50,7 +56,14 @@ class EventSourceMessageReceivedEvent(BaseEvent):
 
     event: str = "Network.eventSourceMessageReceived"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, eventName: str, eventId: str, data: str) -> None:
+    def __init__(
+        self,
+        requestId: RequestId,
+        timestamp: MonotonicTime,
+        eventName: str,
+        eventId: str,
+        data: str,
+    ) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: RequestId
@@ -76,7 +89,15 @@ class LoadingFailedEvent(BaseEvent):
 
     event: str = "Network.loadingFailed"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, type: Page.ResourceType, errorText: str, canceled: Optional[bool] = None, blockedReason: Optional[BlockedReason] = None) -> None:
+    def __init__(
+        self,
+        requestId: RequestId,
+        timestamp: MonotonicTime,
+        type: Page.ResourceType,
+        errorText: str,
+        canceled: Optional[bool] = None,
+        blockedReason: Optional[BlockedReason] = None,
+    ) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: RequestId
@@ -105,7 +126,13 @@ class LoadingFinishedEvent(BaseEvent):
 
     event: str = "Network.loadingFinished"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, encodedDataLength: float, blockedCrossSiteDocument: Optional[bool] = None) -> None:
+    def __init__(
+        self,
+        requestId: RequestId,
+        timestamp: MonotonicTime,
+        encodedDataLength: float,
+        blockedCrossSiteDocument: Optional[bool] = None,
+    ) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: RequestId
@@ -128,7 +155,20 @@ class RequestInterceptedEvent(BaseEvent):
 
     event: str = "Network.requestIntercepted"
 
-    def __init__(self, interceptionId: InterceptionId, request: Request, frameId: Page.FrameId, resourceType: Page.ResourceType, isNavigationRequest: bool, isDownload: Optional[bool] = None, redirectUrl: Optional[str] = None, authChallenge: Optional[AuthChallenge] = None, responseErrorReason: Optional[ErrorReason] = None, responseStatusCode: Optional[int] = None, responseHeaders: Optional[Headers] = None) -> None:
+    def __init__(
+        self,
+        interceptionId: InterceptionId,
+        request: Request,
+        frameId: Page.FrameId,
+        resourceType: Page.ResourceType,
+        isNavigationRequest: bool,
+        isDownload: Optional[bool] = None,
+        redirectUrl: Optional[str] = None,
+        authChallenge: Optional[AuthChallenge] = None,
+        responseErrorReason: Optional[ErrorReason] = None,
+        responseStatusCode: Optional[int] = None,
+        responseHeaders: Optional[Headers] = None,
+    ) -> None:
         """
         :param interceptionId: Each request the page makes will have a unique id, however if any redirects are encountered while processing that fetch, they will be reported with the same id as the original fetch. Likewise if HTTP authentication is needed then the same fetch id will be used.
         :type interceptionId: InterceptionId
@@ -186,7 +226,20 @@ class RequestWillBeSentEvent(BaseEvent):
 
     event: str = "Network.requestWillBeSent"
 
-    def __init__(self, requestId: RequestId, loaderId: LoaderId, documentURL: str, request: Request, timestamp: MonotonicTime, wallTime: TimeSinceEpoch, initiator: Initiator, redirectResponse: Optional[Response] = None, type: Optional[Page.ResourceType] = None, frameId: Optional[Page.FrameId] = None, hasUserGesture: Optional[bool] = None) -> None:
+    def __init__(
+        self,
+        requestId: RequestId,
+        loaderId: LoaderId,
+        documentURL: str,
+        request: Request,
+        timestamp: MonotonicTime,
+        wallTime: TimeSinceEpoch,
+        initiator: Initiator,
+        redirectResponse: Optional[Response] = None,
+        type: Optional[Page.ResourceType] = None,
+        frameId: Optional[Page.FrameId] = None,
+        hasUserGesture: Optional[bool] = None,
+    ) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: RequestId
@@ -230,7 +283,12 @@ class ResourceChangedPriorityEvent(BaseEvent):
 
     event: str = "Network.resourceChangedPriority"
 
-    def __init__(self, requestId: RequestId, newPriority: ResourcePriority, timestamp: MonotonicTime) -> None:
+    def __init__(
+        self,
+        requestId: RequestId,
+        newPriority: ResourcePriority,
+        timestamp: MonotonicTime,
+    ) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: RequestId
@@ -267,7 +325,15 @@ class ResponseReceivedEvent(BaseEvent):
 
     event: str = "Network.responseReceived"
 
-    def __init__(self, requestId: RequestId, loaderId: LoaderId, timestamp: MonotonicTime, type: Page.ResourceType, response: Response, frameId: Optional[Page.FrameId] = None) -> None:
+    def __init__(
+        self,
+        requestId: RequestId,
+        loaderId: LoaderId,
+        timestamp: MonotonicTime,
+        type: Page.ResourceType,
+        response: Response,
+        frameId: Optional[Page.FrameId] = None,
+    ) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: RequestId
@@ -313,7 +379,9 @@ class WebSocketCreatedEvent(BaseEvent):
 
     event: str = "Network.webSocketCreated"
 
-    def __init__(self, requestId: RequestId, url: str, initiator: Optional[Initiator] = None) -> None:
+    def __init__(
+        self, requestId: RequestId, url: str, initiator: Optional[Initiator] = None
+    ) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: RequestId
@@ -333,7 +401,9 @@ class WebSocketFrameErrorEvent(BaseEvent):
 
     event: str = "Network.webSocketFrameError"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, errorMessage: str) -> None:
+    def __init__(
+        self, requestId: RequestId, timestamp: MonotonicTime, errorMessage: str
+    ) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: RequestId
@@ -353,7 +423,9 @@ class WebSocketFrameReceivedEvent(BaseEvent):
 
     event: str = "Network.webSocketFrameReceived"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, response: WebSocketFrame) -> None:
+    def __init__(
+        self, requestId: RequestId, timestamp: MonotonicTime, response: WebSocketFrame
+    ) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: RequestId
@@ -373,7 +445,9 @@ class WebSocketFrameSentEvent(BaseEvent):
 
     event: str = "Network.webSocketFrameSent"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, response: WebSocketFrame) -> None:
+    def __init__(
+        self, requestId: RequestId, timestamp: MonotonicTime, response: WebSocketFrame
+    ) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: RequestId
@@ -393,7 +467,12 @@ class WebSocketHandshakeResponseReceivedEvent(BaseEvent):
 
     event: str = "Network.webSocketHandshakeResponseReceived"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, response: WebSocketResponse) -> None:
+    def __init__(
+        self,
+        requestId: RequestId,
+        timestamp: MonotonicTime,
+        response: WebSocketResponse,
+    ) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: RequestId
@@ -413,7 +492,13 @@ class WebSocketWillSendHandshakeRequestEvent(BaseEvent):
 
     event: str = "Network.webSocketWillSendHandshakeRequest"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, wallTime: TimeSinceEpoch, request: WebSocketRequest) -> None:
+    def __init__(
+        self,
+        requestId: RequestId,
+        timestamp: MonotonicTime,
+        wallTime: TimeSinceEpoch,
+        request: WebSocketRequest,
+    ) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: RequestId
@@ -432,22 +517,21 @@ class WebSocketWillSendHandshakeRequestEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Network.dataReceived": DataReceivedEvent,
-   "Network.eventSourceMessageReceived": EventSourceMessageReceivedEvent,
-   "Network.loadingFailed": LoadingFailedEvent,
-   "Network.loadingFinished": LoadingFinishedEvent,
-   "Network.requestIntercepted": RequestInterceptedEvent,
-   "Network.requestServedFromCache": RequestServedFromCacheEvent,
-   "Network.requestWillBeSent": RequestWillBeSentEvent,
-   "Network.resourceChangedPriority": ResourceChangedPriorityEvent,
-   "Network.signedExchangeReceived": SignedExchangeReceivedEvent,
-   "Network.responseReceived": ResponseReceivedEvent,
-   "Network.webSocketClosed": WebSocketClosedEvent,
-   "Network.webSocketCreated": WebSocketCreatedEvent,
-   "Network.webSocketFrameError": WebSocketFrameErrorEvent,
-   "Network.webSocketFrameReceived": WebSocketFrameReceivedEvent,
-   "Network.webSocketFrameSent": WebSocketFrameSentEvent,
-   "Network.webSocketHandshakeResponseReceived": WebSocketHandshakeResponseReceivedEvent,
-   "Network.webSocketWillSendHandshakeRequest": WebSocketWillSendHandshakeRequestEvent,
+    "Network.dataReceived": DataReceivedEvent,
+    "Network.eventSourceMessageReceived": EventSourceMessageReceivedEvent,
+    "Network.loadingFailed": LoadingFailedEvent,
+    "Network.loadingFinished": LoadingFinishedEvent,
+    "Network.requestIntercepted": RequestInterceptedEvent,
+    "Network.requestServedFromCache": RequestServedFromCacheEvent,
+    "Network.requestWillBeSent": RequestWillBeSentEvent,
+    "Network.resourceChangedPriority": ResourceChangedPriorityEvent,
+    "Network.signedExchangeReceived": SignedExchangeReceivedEvent,
+    "Network.responseReceived": ResponseReceivedEvent,
+    "Network.webSocketClosed": WebSocketClosedEvent,
+    "Network.webSocketCreated": WebSocketCreatedEvent,
+    "Network.webSocketFrameError": WebSocketFrameErrorEvent,
+    "Network.webSocketFrameReceived": WebSocketFrameReceivedEvent,
+    "Network.webSocketFrameSent": WebSocketFrameSentEvent,
+    "Network.webSocketHandshakeResponseReceived": WebSocketHandshakeResponseReceivedEvent,
+    "Network.webSocketWillSendHandshakeRequest": WebSocketWillSendHandshakeRequestEvent,
 }
-

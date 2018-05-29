@@ -2,7 +2,7 @@ from typing import List, Optional, Set, Union
 
 import textwrap
 
-from .shared import FRefCollector
+from .shared import FRefCollector, TYPER
 from .ptype import Type
 
 Enum = Optional[List[str]]
@@ -12,7 +12,8 @@ Items = Optional[Union[List[Type], Type]]
 
 def cstring_mapper(t: Type) -> Union[str, Type]:
     if not t.is_pytype and not t.is_array:
-        return f"'{t}'"
+        print("sdkaljd")
+        return f"Union['{t}', dict]"
     return t
 
 
@@ -60,7 +61,7 @@ class Property(FRefCollector):
         return f"{self.name}: {ts}"
 
     @property
-    def construct_theyself(self) -> str:
+    def construct_thyself(self) -> str:
         if not self.type.is_pytype and not self.type.is_array:
             return f"self.{self.name} = {self.type}(**{self.name})"
 
@@ -69,8 +70,18 @@ class Property(FRefCollector):
         if self.is_array:
             if isinstance(self.items, list):
                 ars = ",".join(map(cstring_mapper, self.items))
+            elif TYPER.is_object(self.items):
+                ars = f"Union['{self.items}',dict]"
+            elif TYPER.is_primitive_or_any(self.items):
+                ars = f"{self.items}"
             else:
-                ars = f"'{self.items}'"
+                print(
+                    "wtf",
+                    self.name,
+                    self.type,
+                    self.items,
+                    TYPER.you_are_in(self.items),
+                )
             ts = self._wrap_if_optionalc(f"List[{ars}]")
         else:
             if not self.type.is_pytype and not self.type.is_array:

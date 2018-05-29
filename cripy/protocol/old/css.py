@@ -9,7 +9,7 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 from cripy.protocol import dom as DOM
@@ -22,7 +22,7 @@ StyleSheetId = str
 StyleSheetOrigin = str
 
 # PseudoElementMatches: CSS rule collection for a single pseudo style.
-class PseudoElementMatches(ChromeTypeBase):
+class PseudoElementMatches(ProtocolType):
 
     def __init__(
         self, pseudoType: Union["DOM.PseudoType"], matches: Union["[RuleMatch]"]
@@ -33,7 +33,7 @@ class PseudoElementMatches(ChromeTypeBase):
 
 
 # InheritedStyleEntry: Inherited CSS rule collection from ancestor node.
-class InheritedStyleEntry(ChromeTypeBase):
+class InheritedStyleEntry(ProtocolType):
 
     def __init__(
         self,
@@ -46,7 +46,7 @@ class InheritedStyleEntry(ChromeTypeBase):
 
 
 # RuleMatch: Match data for a CSS rule.
-class RuleMatch(ChromeTypeBase):
+class RuleMatch(ProtocolType):
 
     def __init__(self, rule: Union["CSSRule"], matchingSelectors: Union["[]"]):
 
@@ -55,7 +55,7 @@ class RuleMatch(ChromeTypeBase):
 
 
 # Value: Data for a simple selector (these are delimited by commas in a selector list).
-class Value(ChromeTypeBase):
+class Value(ProtocolType):
 
     def __init__(self, text: Union["str"], range: Optional["SourceRange"] = None):
 
@@ -64,7 +64,7 @@ class Value(ChromeTypeBase):
 
 
 # SelectorList: Selector list data.
-class SelectorList(ChromeTypeBase):
+class SelectorList(ProtocolType):
 
     def __init__(self, selectors: Union["[Value]"], text: Union["str"]):
 
@@ -73,7 +73,7 @@ class SelectorList(ChromeTypeBase):
 
 
 # CSSStyleSheetHeader: CSS stylesheet metainformation.
-class CSSStyleSheetHeader(ChromeTypeBase):
+class CSSStyleSheetHeader(ProtocolType):
 
     def __init__(
         self,
@@ -108,7 +108,7 @@ class CSSStyleSheetHeader(ChromeTypeBase):
 
 
 # CSSRule: CSS rule representation.
-class CSSRule(ChromeTypeBase):
+class CSSRule(ProtocolType):
 
     def __init__(
         self,
@@ -127,7 +127,7 @@ class CSSRule(ChromeTypeBase):
 
 
 # RuleUsage: CSS coverage information.
-class RuleUsage(ChromeTypeBase):
+class RuleUsage(ProtocolType):
 
     def __init__(
         self,
@@ -144,7 +144,7 @@ class RuleUsage(ChromeTypeBase):
 
 
 # SourceRange: Text range within a resource. All numbers are zero-based.
-class SourceRange(ChromeTypeBase):
+class SourceRange(ProtocolType):
 
     def __init__(
         self,
@@ -161,7 +161,7 @@ class SourceRange(ChromeTypeBase):
 
 
 # ShorthandEntry:
-class ShorthandEntry(ChromeTypeBase):
+class ShorthandEntry(ProtocolType):
 
     def __init__(
         self,
@@ -176,7 +176,7 @@ class ShorthandEntry(ChromeTypeBase):
 
 
 # CSSComputedStyleProperty:
-class CSSComputedStyleProperty(ChromeTypeBase):
+class CSSComputedStyleProperty(ProtocolType):
 
     def __init__(self, name: Union["str"], value: Union["str"]):
 
@@ -185,7 +185,7 @@ class CSSComputedStyleProperty(ChromeTypeBase):
 
 
 # CSSStyle: CSS style representation.
-class CSSStyle(ChromeTypeBase):
+class CSSStyle(ProtocolType):
 
     def __init__(
         self,
@@ -204,7 +204,7 @@ class CSSStyle(ChromeTypeBase):
 
 
 # CSSProperty: CSS property declaration data.
-class CSSProperty(ChromeTypeBase):
+class CSSProperty(ProtocolType):
 
     def __init__(
         self,
@@ -229,7 +229,7 @@ class CSSProperty(ChromeTypeBase):
 
 
 # CSSMedia: CSS media rule descriptor.
-class CSSMedia(ChromeTypeBase):
+class CSSMedia(ProtocolType):
 
     def __init__(
         self,
@@ -250,7 +250,7 @@ class CSSMedia(ChromeTypeBase):
 
 
 # MediaQuery: Media query descriptor.
-class MediaQuery(ChromeTypeBase):
+class MediaQuery(ProtocolType):
 
     def __init__(
         self, expressions: Union["[MediaQueryExpression]"], active: Union["bool"]
@@ -261,7 +261,7 @@ class MediaQuery(ChromeTypeBase):
 
 
 # MediaQueryExpression: Media query expression descriptor.
-class MediaQueryExpression(ChromeTypeBase):
+class MediaQueryExpression(ProtocolType):
 
     def __init__(
         self,
@@ -280,7 +280,7 @@ class MediaQueryExpression(ChromeTypeBase):
 
 
 # PlatformFontUsage: Information about amount of glyphs that were rendered with given font.
-class PlatformFontUsage(ChromeTypeBase):
+class PlatformFontUsage(ProtocolType):
 
     def __init__(
         self,
@@ -295,7 +295,7 @@ class PlatformFontUsage(ChromeTypeBase):
 
 
 # FontFace: Properties of a web font: https://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#font-descriptions
-class FontFace(ChromeTypeBase):
+class FontFace(ProtocolType):
 
     def __init__(
         self,
@@ -320,7 +320,7 @@ class FontFace(ChromeTypeBase):
 
 
 # CSSKeyframesRule: CSS keyframes rule representation.
-class CSSKeyframesRule(ChromeTypeBase):
+class CSSKeyframesRule(ProtocolType):
 
     def __init__(
         self, animationName: Union["Value"], keyframes: Union["[CSSKeyframeRule]"]
@@ -331,7 +331,7 @@ class CSSKeyframesRule(ChromeTypeBase):
 
 
 # CSSKeyframeRule: CSS keyframe rule representation.
-class CSSKeyframeRule(ChromeTypeBase):
+class CSSKeyframeRule(ProtocolType):
 
     def __init__(
         self,
@@ -348,7 +348,7 @@ class CSSKeyframeRule(ChromeTypeBase):
 
 
 # StyleDeclarationEdit: A descriptor of operation to mutate style declaration text.
-class StyleDeclarationEdit(ChromeTypeBase):
+class StyleDeclarationEdit(ProtocolType):
 
     def __init__(
         self,

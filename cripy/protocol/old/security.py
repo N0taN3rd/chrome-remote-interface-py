@@ -9,7 +9,7 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ MixedContentType = str
 SecurityState = str
 
 # SecurityStateExplanation: An explanation of an factor contributing to the security state.
-class SecurityStateExplanation(ChromeTypeBase):
+class SecurityStateExplanation(ProtocolType):
 
     def __init__(
         self,
@@ -44,7 +44,7 @@ class SecurityStateExplanation(ChromeTypeBase):
 
 
 # InsecureContentStatus: Information about insecure content on the page.
-class InsecureContentStatus(ChromeTypeBase):
+class InsecureContentStatus(ProtocolType):
 
     def __init__(
         self,

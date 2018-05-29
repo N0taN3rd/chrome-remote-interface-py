@@ -1,14 +1,30 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 
 InspectMode = TypeVar("InspectMode", str, str)
 """"""
 
 
-class HighlightConfig(ChromeTypeBase):
+class HighlightConfig(ProtocolType):
     """Configuration data for the highlighting of page elements."""
-    def __init__(self, showInfo: Optional[bool] = None, showRulers: Optional[bool] = None, showExtensionLines: Optional[bool] = None, displayAsMaterial: Optional[bool] = None, contentColor: Optional['DOM.RGBA'] = None, paddingColor: Optional['DOM.RGBA'] = None, borderColor: Optional['DOM.RGBA'] = None, marginColor: Optional['DOM.RGBA'] = None, eventTargetColor: Optional['DOM.RGBA'] = None, shapeColor: Optional['DOM.RGBA'] = None, shapeMarginColor: Optional['DOM.RGBA'] = None, selectorList: Optional[str] = None, cssGridColor: Optional['DOM.RGBA'] = None) -> None:
+
+    def __init__(
+        self,
+        showInfo: Optional[bool] = None,
+        showRulers: Optional[bool] = None,
+        showExtensionLines: Optional[bool] = None,
+        displayAsMaterial: Optional[bool] = None,
+        contentColor: Optional["DOM.RGBA"] = None,
+        paddingColor: Optional["DOM.RGBA"] = None,
+        borderColor: Optional["DOM.RGBA"] = None,
+        marginColor: Optional["DOM.RGBA"] = None,
+        eventTargetColor: Optional["DOM.RGBA"] = None,
+        shapeColor: Optional["DOM.RGBA"] = None,
+        shapeMarginColor: Optional["DOM.RGBA"] = None,
+        selectorList: Optional[str] = None,
+        cssGridColor: Optional["DOM.RGBA"] = None,
+    ) -> None:
         """
         :param showInfo: Whether the node info tooltip should be shown (default: false).
         :type showInfo: bool
@@ -53,3 +69,4 @@ class HighlightConfig(ChromeTypeBase):
         self.cssGridColor: Optional[DOM.RGBA] = cssGridColor
 
 
+OBJECT_LIST = {"HighlightConfig": HighlightConfig}

@@ -38,7 +38,7 @@ class PayloadMixin:
                     raise KeyError(
                         "name %s not in expected payload of %s" % (name, types)
                     )
-                if issubclass(expected_type_, ChromeTypeBase):
+                if issubclass(expected_type_, ProtocolType):
                     result[name] = expected_type_(**val)
                 elif re.match(r".*Id$", name) and isinstance(val, str):
                     result[name] = expected_type_(val)
@@ -113,7 +113,7 @@ def json_to_event(payload) -> Optional[BaseEvent]:
     return result
 
 
-class ChromeTypeBase:
+class ProtocolType:
 
     def to_dict(self):
         return self.__dict__
@@ -125,7 +125,7 @@ class CRIPYJSONEncoder(json.JSONEncoder):
         if isinstance(obj, BaseEvent):
             return {"method": obj.js_name, "params": obj.__dict__}
 
-        if isinstance(obj, ChromeTypeBase):
+        if isinstance(obj, ProtocolType):
             return obj.__dict__
 
         return json.JSONEncoder.default(self, obj)

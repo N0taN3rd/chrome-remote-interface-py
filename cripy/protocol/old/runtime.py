@@ -9,7 +9,7 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ RemoteObjectId = str
 UnserializableValue = str
 
 # RemoteObject: Mirror object referencing original JavaScript object.
-class RemoteObject(ChromeTypeBase):
+class RemoteObject(ProtocolType):
 
     def __init__(
         self,
@@ -50,7 +50,7 @@ class RemoteObject(ChromeTypeBase):
 
 
 # CustomPreview:
-class CustomPreview(ChromeTypeBase):
+class CustomPreview(ProtocolType):
 
     def __init__(
         self,
@@ -69,7 +69,7 @@ class CustomPreview(ChromeTypeBase):
 
 
 # ObjectPreview: Object containing abbreviated remote object value.
-class ObjectPreview(ChromeTypeBase):
+class ObjectPreview(ProtocolType):
 
     def __init__(
         self,
@@ -90,7 +90,7 @@ class ObjectPreview(ChromeTypeBase):
 
 
 # PropertyPreview:
-class PropertyPreview(ChromeTypeBase):
+class PropertyPreview(ProtocolType):
 
     def __init__(
         self,
@@ -109,7 +109,7 @@ class PropertyPreview(ChromeTypeBase):
 
 
 # EntryPreview:
-class EntryPreview(ChromeTypeBase):
+class EntryPreview(ProtocolType):
 
     def __init__(
         self, value: Union["ObjectPreview"], key: Optional["ObjectPreview"] = None
@@ -120,7 +120,7 @@ class EntryPreview(ChromeTypeBase):
 
 
 # PropertyDescriptor: Object property descriptor.
-class PropertyDescriptor(ChromeTypeBase):
+class PropertyDescriptor(ProtocolType):
 
     def __init__(
         self,
@@ -149,7 +149,7 @@ class PropertyDescriptor(ChromeTypeBase):
 
 
 # InternalPropertyDescriptor: Object internal property descriptor. This property isn't normally visible in JavaScript code.
-class InternalPropertyDescriptor(ChromeTypeBase):
+class InternalPropertyDescriptor(ProtocolType):
 
     def __init__(self, name: Union["str"], value: Optional["RemoteObject"] = None):
 
@@ -158,7 +158,7 @@ class InternalPropertyDescriptor(ChromeTypeBase):
 
 
 # CallArgument: Represents function call argument. Either remote object id `objectId`, primitive `value`,unserializable primitive value or neither of (for undefined) them should be specified.
-class CallArgument(ChromeTypeBase):
+class CallArgument(ProtocolType):
 
     def __init__(
         self,
@@ -176,7 +176,7 @@ class CallArgument(ChromeTypeBase):
 ExecutionContextId = int
 
 # ExecutionContextDescription: Description of an isolated world.
-class ExecutionContextDescription(ChromeTypeBase):
+class ExecutionContextDescription(ProtocolType):
 
     def __init__(
         self,
@@ -193,7 +193,7 @@ class ExecutionContextDescription(ChromeTypeBase):
 
 
 # ExceptionDetails: Detailed information about exception (or error) that was thrown during script compilation orexecution.
-class ExceptionDetails(ChromeTypeBase):
+class ExceptionDetails(ProtocolType):
 
     def __init__(
         self,
@@ -226,7 +226,7 @@ Timestamp = float
 TimeDelta = float
 
 # CallFrame: Stack entry for runtime errors and assertions.
-class CallFrame(ChromeTypeBase):
+class CallFrame(ProtocolType):
 
     def __init__(
         self,
@@ -245,7 +245,7 @@ class CallFrame(ChromeTypeBase):
 
 
 # StackTrace: Call frames for assertions or error messages.
-class StackTrace(ChromeTypeBase):
+class StackTrace(ProtocolType):
 
     def __init__(
         self,
@@ -265,7 +265,7 @@ class StackTrace(ChromeTypeBase):
 UniqueDebuggerId = str
 
 # StackTraceId: If `debuggerId` is set stack trace comes from another debugger and can be resolved there. Thisallows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.paused` for usages.
-class StackTraceId(ChromeTypeBase):
+class StackTraceId(ProtocolType):
 
     def __init__(
         self, id: Union["str"], debuggerId: Optional["UniqueDebuggerId"] = None

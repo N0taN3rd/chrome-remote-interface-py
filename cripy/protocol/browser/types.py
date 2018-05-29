@@ -1,5 +1,5 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 WindowState = TypeVar("WindowState", str, str)
 """The state of the browser window."""
@@ -8,9 +8,12 @@ WindowID = TypeVar("WindowID", int, int)
 """"""
 
 
-class Histogram(ChromeTypeBase):
+class Histogram(ProtocolType):
     """Chrome histogram."""
-    def __init__(self, name: str, sum: int, count: int, buckets: List['Bucket']) -> None:
+
+    def __init__(
+        self, name: str, sum: int, count: int, buckets: List[Union["Bucket", dict]]
+    ) -> None:
         """
         :param name: Name.
         :type name: str
@@ -28,8 +31,9 @@ class Histogram(ChromeTypeBase):
         self.buckets: List[Bucket] = buckets
 
 
-class Bucket(ChromeTypeBase):
+class Bucket(ProtocolType):
     """Chrome histogram bucket."""
+
     def __init__(self, low: int, high: int, count: int) -> None:
         """
         :param low: Minimum value (inclusive).
@@ -45,9 +49,17 @@ class Bucket(ChromeTypeBase):
         self.count: int = count
 
 
-class Bounds(ChromeTypeBase):
+class Bounds(ProtocolType):
     """Browser window bounds information"""
-    def __init__(self, left: Optional[int] = None, top: Optional[int] = None, width: Optional[int] = None, height: Optional[int] = None, windowState: Optional['WindowState'] = None) -> None:
+
+    def __init__(
+        self,
+        left: Optional[int] = None,
+        top: Optional[int] = None,
+        width: Optional[int] = None,
+        height: Optional[int] = None,
+        windowState: Optional["WindowState"] = None,
+    ) -> None:
         """
         :param left: The offset from the left edge of the screen to the window in pixels.
         :type left: int
@@ -68,3 +80,4 @@ class Bounds(ChromeTypeBase):
         self.windowState: Optional[WindowState] = windowState
 
 
+OBJECT_LIST = {"Histogram": Histogram, "Bucket": Bucket, "Bounds": Bounds}

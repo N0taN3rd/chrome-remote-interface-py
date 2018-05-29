@@ -1,17 +1,31 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 from cripy.protocol.target import types as Target
 
 ServiceWorkerVersionStatus = TypeVar("ServiceWorkerVersionStatus", str, str)
 """"""
 
-ServiceWorkerVersionRunningStatus = TypeVar("ServiceWorkerVersionRunningStatus", str, str)
+ServiceWorkerVersionRunningStatus = TypeVar(
+    "ServiceWorkerVersionRunningStatus", str, str
+)
 """"""
 
 
-class ServiceWorkerVersion(ChromeTypeBase):
+class ServiceWorkerVersion(ProtocolType):
     """ServiceWorker version."""
-    def __init__(self, versionId: str, registrationId: str, scriptURL: str, runningStatus: 'ServiceWorkerVersionRunningStatus', status: 'ServiceWorkerVersionStatus', scriptLastModified: Optional[float] = None, scriptResponseTime: Optional[float] = None, controlledClients: Optional[List['Target.TargetID']] = None, targetId: Optional['Target.TargetID'] = None) -> None:
+
+    def __init__(
+        self,
+        versionId: str,
+        registrationId: str,
+        scriptURL: str,
+        runningStatus: "ServiceWorkerVersionRunningStatus",
+        status: "ServiceWorkerVersionStatus",
+        scriptLastModified: Optional[float] = None,
+        scriptResponseTime: Optional[float] = None,
+        controlledClients: Optional[List[Target.TargetID]] = None,
+        targetId: Optional["Target.TargetID"] = None,
+    ) -> None:
         """
         :param versionId: The versionId
         :type versionId: str
@@ -44,8 +58,9 @@ class ServiceWorkerVersion(ChromeTypeBase):
         self.targetId: Optional[Target.TargetID] = targetId
 
 
-class ServiceWorkerRegistration(ChromeTypeBase):
+class ServiceWorkerRegistration(ProtocolType):
     """ServiceWorker registration."""
+
     def __init__(self, registrationId: str, scopeURL: str, isDeleted: bool) -> None:
         """
         :param registrationId: The registrationId
@@ -61,9 +76,18 @@ class ServiceWorkerRegistration(ChromeTypeBase):
         self.isDeleted: bool = isDeleted
 
 
-class ServiceWorkerErrorMessage(ChromeTypeBase):
+class ServiceWorkerErrorMessage(ProtocolType):
     """ServiceWorker error message."""
-    def __init__(self, errorMessage: str, registrationId: str, versionId: str, sourceURL: str, lineNumber: int, columnNumber: int) -> None:
+
+    def __init__(
+        self,
+        errorMessage: str,
+        registrationId: str,
+        versionId: str,
+        sourceURL: str,
+        lineNumber: int,
+        columnNumber: int,
+    ) -> None:
         """
         :param errorMessage: The errorMessage
         :type errorMessage: str
@@ -87,3 +111,8 @@ class ServiceWorkerErrorMessage(ChromeTypeBase):
         self.columnNumber: int = columnNumber
 
 
+OBJECT_LIST = {
+    "ServiceWorkerVersion": ServiceWorkerVersion,
+    "ServiceWorkerRegistration": ServiceWorkerRegistration,
+    "ServiceWorkerErrorMessage": ServiceWorkerErrorMessage,
+}

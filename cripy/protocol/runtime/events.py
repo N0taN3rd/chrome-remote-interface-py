@@ -1,12 +1,12 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.runtime.types import (
-    ExecutionContextId,
-    RemoteObject,
     ExceptionDetails,
+    RemoteObject,
+    ExecutionContextId,
     StackTrace,
-    Timestamp,
     ExecutionContextDescription,
+    Timestamp,
 )
 
 
@@ -15,7 +15,15 @@ class ConsoleAPICalledEvent(BaseEvent):
 
     event: str = "Runtime.consoleAPICalled"
 
-    def __init__(self, type: str, args: List[RemoteObject], executionContextId: ExecutionContextId, timestamp: Timestamp, stackTrace: Optional[StackTrace] = None, context: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        type: str,
+        args: List[Union[RemoteObject, dict]],
+        executionContextId: ExecutionContextId,
+        timestamp: Timestamp,
+        stackTrace: Optional[StackTrace] = None,
+        context: Optional[str] = None,
+    ) -> None:
         """
         :param type: Type of the call.
         :type type: str
@@ -61,7 +69,9 @@ class ExceptionThrownEvent(BaseEvent):
 
     event: str = "Runtime.exceptionThrown"
 
-    def __init__(self, timestamp: Timestamp, exceptionDetails: ExceptionDetails) -> None:
+    def __init__(
+        self, timestamp: Timestamp, exceptionDetails: ExceptionDetails
+    ) -> None:
         """
         :param timestamp: Timestamp of the exception.
         :type timestamp: Timestamp
@@ -106,7 +116,7 @@ class ExecutionContextsClearedEvent(BaseEvent):
 
     event: str = "Runtime.executionContextsCleared"
 
-    def __init__(self, ) -> None:
+    def __init__(self,) -> None:
         super().__init__()
 
 
@@ -128,12 +138,11 @@ class InspectRequestedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Runtime.consoleAPICalled": ConsoleAPICalledEvent,
-   "Runtime.exceptionRevoked": ExceptionRevokedEvent,
-   "Runtime.exceptionThrown": ExceptionThrownEvent,
-   "Runtime.executionContextCreated": ExecutionContextCreatedEvent,
-   "Runtime.executionContextDestroyed": ExecutionContextDestroyedEvent,
-   "Runtime.executionContextsCleared": ExecutionContextsClearedEvent,
-   "Runtime.inspectRequested": InspectRequestedEvent,
+    "Runtime.consoleAPICalled": ConsoleAPICalledEvent,
+    "Runtime.exceptionRevoked": ExceptionRevokedEvent,
+    "Runtime.exceptionThrown": ExceptionThrownEvent,
+    "Runtime.executionContextCreated": ExecutionContextCreatedEvent,
+    "Runtime.executionContextDestroyed": ExecutionContextDestroyedEvent,
+    "Runtime.executionContextsCleared": ExecutionContextsClearedEvent,
+    "Runtime.inspectRequested": InspectRequestedEvent,
 }
-

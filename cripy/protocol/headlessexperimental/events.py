@@ -17,6 +17,5 @@ class NeedsBeginFramesChangedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "HeadlessExperimental.needsBeginFramesChanged": NeedsBeginFramesChangedEvent,
+    "HeadlessExperimental.needsBeginFramesChanged": NeedsBeginFramesChangedEvent
 }
-

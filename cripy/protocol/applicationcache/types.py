@@ -1,11 +1,12 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 from cripy.protocol.page import types as Page
 
 
-class FrameWithManifest(ChromeTypeBase):
+class FrameWithManifest(ProtocolType):
     """Frame identifier - manifest URL pair."""
-    def __init__(self, frameId: 'Page.FrameId', manifestURL: str, status: int) -> None:
+
+    def __init__(self, frameId: "Page.FrameId", manifestURL: str, status: int) -> None:
         """
         :param frameId: Frame identifier.
         :type frameId: Page.FrameId
@@ -20,8 +21,9 @@ class FrameWithManifest(ChromeTypeBase):
         self.status: int = status
 
 
-class ApplicationCacheResource(ChromeTypeBase):
+class ApplicationCacheResource(ProtocolType):
     """Detailed application cache resource information."""
+
     def __init__(self, url: str, size: int, type: str) -> None:
         """
         :param url: Resource url.
@@ -37,9 +39,17 @@ class ApplicationCacheResource(ChromeTypeBase):
         self.type: str = type
 
 
-class ApplicationCache(ChromeTypeBase):
+class ApplicationCache(ProtocolType):
     """Detailed application cache information."""
-    def __init__(self, manifestURL: str, size: float, creationTime: float, updateTime: float, resources: List['ApplicationCacheResource']) -> None:
+
+    def __init__(
+        self,
+        manifestURL: str,
+        size: float,
+        creationTime: float,
+        updateTime: float,
+        resources: List[Union["ApplicationCacheResource", dict]],
+    ) -> None:
         """
         :param manifestURL: Manifest URL.
         :type manifestURL: str
@@ -60,3 +70,8 @@ class ApplicationCache(ChromeTypeBase):
         self.resources: List[ApplicationCacheResource] = resources
 
 
+OBJECT_LIST = {
+    "FrameWithManifest": FrameWithManifest,
+    "ApplicationCacheResource": ApplicationCacheResource,
+    "ApplicationCache": ApplicationCache,
+}

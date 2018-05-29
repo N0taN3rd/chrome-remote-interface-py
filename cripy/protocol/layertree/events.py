@@ -1,9 +1,7 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.dom import types as DOM
-from cripy.protocol.layertree.types import (
-    LayerId,
-)
+from cripy.protocol.layertree.types import LayerId
 
 
 class LayerPaintedEvent(BaseEvent):
@@ -26,7 +24,7 @@ class LayerTreeDidChangeEvent(BaseEvent):
 
     event: str = "LayerTree.layerTreeDidChange"
 
-    def __init__(self, layers: Optional[List[Layer]] = None) -> None:
+    def __init__(self, layers: Optional[List[Union[Layer, dict]]] = None) -> None:
         """
         :param layers: Layer tree, absent if not in the comspositing mode.
         :type layers: array
@@ -36,7 +34,6 @@ class LayerTreeDidChangeEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "LayerTree.layerPainted": LayerPaintedEvent,
-   "LayerTree.layerTreeDidChange": LayerTreeDidChangeEvent,
+    "LayerTree.layerPainted": LayerPaintedEvent,
+    "LayerTree.layerTreeDidChange": LayerTreeDidChangeEvent,
 }
-

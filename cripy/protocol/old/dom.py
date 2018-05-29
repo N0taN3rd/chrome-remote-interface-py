@@ -9,7 +9,7 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 from cripy.protocol import dom as DOM
@@ -23,7 +23,7 @@ NodeId = int
 BackendNodeId = int
 
 # BackendNode: Backend node with a friendly name.
-class BackendNode(ChromeTypeBase):
+class BackendNode(ProtocolType):
 
     def __init__(
         self,
@@ -44,7 +44,7 @@ PseudoType = str
 ShadowRootType = str
 
 # Node: DOM interaction is implemented in terms of mirror objects that represent the actual DOM nodes.DOMNode is a base node mirror type.
-class Node(ChromeTypeBase):
+class Node(ProtocolType):
 
     def __init__(
         self,
@@ -109,7 +109,7 @@ class Node(ChromeTypeBase):
 
 
 # RGBA: A structure holding an RGBA color.
-class RGBA(ChromeTypeBase):
+class RGBA(ProtocolType):
 
     def __init__(
         self,
@@ -129,7 +129,7 @@ class RGBA(ChromeTypeBase):
 Quad = [float]
 
 # BoxModel: Box model.
-class BoxModel(ChromeTypeBase):
+class BoxModel(ProtocolType):
 
     def __init__(
         self,
@@ -152,7 +152,7 @@ class BoxModel(ChromeTypeBase):
 
 
 # ShapeOutsideInfo: CSS Shape Outside details.
-class ShapeOutsideInfo(ChromeTypeBase):
+class ShapeOutsideInfo(ProtocolType):
 
     def __init__(
         self, bounds: Union["Quad"], shape: Union["[]"], marginShape: Union["[]"]
@@ -164,7 +164,7 @@ class ShapeOutsideInfo(ChromeTypeBase):
 
 
 # Rect: Rectangle.
-class Rect(ChromeTypeBase):
+class Rect(ProtocolType):
 
     def __init__(
         self,

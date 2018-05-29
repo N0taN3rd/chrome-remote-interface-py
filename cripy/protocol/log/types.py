@@ -1,11 +1,12 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
-from cripy.protocol.network import types as Network
+from cripy.helpers import ProtocolType
 from cripy.protocol.runtime import types as Runtime
+from cripy.protocol.network import types as Network
 
 
-class ViolationSetting(ChromeTypeBase):
+class ViolationSetting(ProtocolType):
     """Violation configuration setting."""
+
     def __init__(self, name: str, threshold: float) -> None:
         """
         :param name: Violation type.
@@ -18,9 +19,22 @@ class ViolationSetting(ChromeTypeBase):
         self.threshold: float = threshold
 
 
-class LogEntry(ChromeTypeBase):
+class LogEntry(ProtocolType):
     """Log entry."""
-    def __init__(self, source: str, level: str, text: str, timestamp: 'Runtime.Timestamp', url: Optional[str] = None, lineNumber: Optional[int] = None, stackTrace: Optional['Runtime.StackTrace'] = None, networkRequestId: Optional['Network.RequestId'] = None, workerId: Optional[str] = None, args: Optional[List['Runtime.RemoteObject']] = None) -> None:
+
+    def __init__(
+        self,
+        source: str,
+        level: str,
+        text: str,
+        timestamp: "Runtime.Timestamp",
+        url: Optional[str] = None,
+        lineNumber: Optional[int] = None,
+        stackTrace: Optional["Runtime.StackTrace"] = None,
+        networkRequestId: Optional["Network.RequestId"] = None,
+        workerId: Optional[str] = None,
+        args: Optional[List[Union["Runtime.RemoteObject", dict]]] = None,
+    ) -> None:
         """
         :param source: Log entry source.
         :type source: str
@@ -56,3 +70,4 @@ class LogEntry(ChromeTypeBase):
         self.args: Optional[List[Runtime.RemoteObject]] = args
 
 
+OBJECT_LIST = {"ViolationSetting": ViolationSetting, "LogEntry": LogEntry}

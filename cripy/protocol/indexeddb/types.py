@@ -1,11 +1,14 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 from cripy.protocol.runtime import types as Runtime
 
 
-class ObjectStoreIndex(ChromeTypeBase):
+class ObjectStoreIndex(ProtocolType):
     """Object store index."""
-    def __init__(self, name: str, keyPath: 'KeyPath', unique: bool, multiEntry: bool) -> None:
+
+    def __init__(
+        self, name: str, keyPath: "KeyPath", unique: bool, multiEntry: bool
+    ) -> None:
         """
         :param name: Index name.
         :type name: str
@@ -23,9 +26,16 @@ class ObjectStoreIndex(ChromeTypeBase):
         self.multiEntry: bool = multiEntry
 
 
-class ObjectStore(ChromeTypeBase):
+class ObjectStore(ProtocolType):
     """Object store."""
-    def __init__(self, name: str, keyPath: 'KeyPath', autoIncrement: bool, indexes: List['ObjectStoreIndex']) -> None:
+
+    def __init__(
+        self,
+        name: str,
+        keyPath: "KeyPath",
+        autoIncrement: bool,
+        indexes: List[Union["ObjectStoreIndex", dict]],
+    ) -> None:
         """
         :param name: Object store name.
         :type name: str
@@ -43,9 +53,16 @@ class ObjectStore(ChromeTypeBase):
         self.indexes: List[ObjectStoreIndex] = indexes
 
 
-class KeyRange(ChromeTypeBase):
+class KeyRange(ProtocolType):
     """Key range."""
-    def __init__(self, lowerOpen: bool, upperOpen: bool, lower: Optional['Key'] = None, upper: Optional['Key'] = None) -> None:
+
+    def __init__(
+        self,
+        lowerOpen: bool,
+        upperOpen: bool,
+        lower: Optional["Key"] = None,
+        upper: Optional["Key"] = None,
+    ) -> None:
         """
         :param lower: Lower bound.
         :type lower: Key
@@ -63,9 +80,12 @@ class KeyRange(ChromeTypeBase):
         self.upperOpen: bool = upperOpen
 
 
-class KeyPath(ChromeTypeBase):
+class KeyPath(ProtocolType):
     """Key path."""
-    def __init__(self, type: str, string: Optional[str] = None, array: Optional[List['str']] = None) -> None:
+
+    def __init__(
+        self, type: str, string: Optional[str] = None, array: Optional[List[str]] = None
+    ) -> None:
         """
         :param type: Key path type.
         :type type: str
@@ -80,9 +100,17 @@ class KeyPath(ChromeTypeBase):
         self.array: Optional[List[str]] = array
 
 
-class Key(ChromeTypeBase):
+class Key(ProtocolType):
     """Key."""
-    def __init__(self, type: str, number: Optional[float] = None, string: Optional[str] = None, date: Optional[float] = None, array: Optional[List['Key']] = None) -> None:
+
+    def __init__(
+        self,
+        type: str,
+        number: Optional[float] = None,
+        string: Optional[str] = None,
+        date: Optional[float] = None,
+        array: Optional[List[Union["Key", dict]]] = None,
+    ) -> None:
         """
         :param type: Key type.
         :type type: str
@@ -103,9 +131,12 @@ class Key(ChromeTypeBase):
         self.array: Optional[List[Key]] = array
 
 
-class DatabaseWithObjectStores(ChromeTypeBase):
+class DatabaseWithObjectStores(ProtocolType):
     """Database with an array of object stores."""
-    def __init__(self, name: str, version: int, objectStores: List['ObjectStore']) -> None:
+
+    def __init__(
+        self, name: str, version: int, objectStores: List[Union["ObjectStore", dict]]
+    ) -> None:
         """
         :param name: Database name.
         :type name: str
@@ -120,9 +151,15 @@ class DatabaseWithObjectStores(ChromeTypeBase):
         self.objectStores: List[ObjectStore] = objectStores
 
 
-class DataEntry(ChromeTypeBase):
+class DataEntry(ProtocolType):
     """Data entry."""
-    def __init__(self, key: 'Runtime.RemoteObject', primaryKey: 'Runtime.RemoteObject', value: 'Runtime.RemoteObject') -> None:
+
+    def __init__(
+        self,
+        key: "Runtime.RemoteObject",
+        primaryKey: "Runtime.RemoteObject",
+        value: "Runtime.RemoteObject",
+    ) -> None:
         """
         :param key: Key object.
         :type key: Runtime.RemoteObject
@@ -137,3 +174,12 @@ class DataEntry(ChromeTypeBase):
         self.value: Runtime.RemoteObject = value
 
 
+OBJECT_LIST = {
+    "ObjectStoreIndex": ObjectStoreIndex,
+    "ObjectStore": ObjectStore,
+    "KeyRange": KeyRange,
+    "KeyPath": KeyPath,
+    "Key": Key,
+    "DatabaseWithObjectStores": DatabaseWithObjectStores,
+    "DataEntry": DataEntry,
+}

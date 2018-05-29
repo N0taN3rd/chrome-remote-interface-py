@@ -1,9 +1,6 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.security.types import (
-    InsecureContentStatus,
-    SecurityState,
-)
+from cripy.protocol.security.types import SecurityState, InsecureContentStatus
 
 
 class CertificateErrorEvent(BaseEvent):
@@ -34,7 +31,14 @@ class SecurityStateChangedEvent(BaseEvent):
 
     event: str = "Security.securityStateChanged"
 
-    def __init__(self, securityState: SecurityState, schemeIsCryptographic: bool, explanations: List[SecurityStateExplanation], insecureContentStatus: InsecureContentStatus, summary: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        securityState: SecurityState,
+        schemeIsCryptographic: bool,
+        explanations: List[Union[SecurityStateExplanation, dict]],
+        insecureContentStatus: InsecureContentStatus,
+        summary: Optional[str] = None,
+    ) -> None:
         """
         :param securityState: Security state.
         :type securityState: SecurityState
@@ -56,7 +60,6 @@ class SecurityStateChangedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Security.certificateError": CertificateErrorEvent,
-   "Security.securityStateChanged": SecurityStateChangedEvent,
+    "Security.certificateError": CertificateErrorEvent,
+    "Security.securityStateChanged": SecurityStateChangedEvent,
 }
-

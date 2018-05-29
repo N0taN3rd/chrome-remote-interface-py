@@ -1,5 +1,5 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 TargetID = TypeVar("TargetID", str, str)
 """"""
@@ -11,8 +11,18 @@ BrowserContextID = TypeVar("BrowserContextID", str, str)
 """"""
 
 
-class TargetInfo(ChromeTypeBase):
-    def __init__(self, targetId: 'TargetID', type: str, title: str, url: str, attached: bool, openerId: Optional['TargetID'] = None, browserContextId: Optional['BrowserContextID'] = None) -> None:
+class TargetInfo(ProtocolType):
+
+    def __init__(
+        self,
+        targetId: "TargetID",
+        type: str,
+        title: str,
+        url: str,
+        attached: bool,
+        openerId: Optional["TargetID"] = None,
+        browserContextId: Optional["BrowserContextID"] = None,
+    ) -> None:
         """
         :param targetId: The targetId
         :type targetId: TargetID
@@ -39,7 +49,8 @@ class TargetInfo(ChromeTypeBase):
         self.browserContextId: Optional[BrowserContextID] = browserContextId
 
 
-class RemoteLocation(ChromeTypeBase):
+class RemoteLocation(ProtocolType):
+
     def __init__(self, host: str, port: int) -> None:
         """
         :param host: The host
@@ -52,3 +63,4 @@ class RemoteLocation(ChromeTypeBase):
         self.port: int = port
 
 
+OBJECT_LIST = {"TargetInfo": TargetInfo, "RemoteLocation": RemoteLocation}

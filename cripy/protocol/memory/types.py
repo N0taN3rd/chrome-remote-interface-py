@@ -1,13 +1,14 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 PressureLevel = TypeVar("PressureLevel", str, str)
 """Memory pressure level."""
 
 
-class SamplingProfileNode(ChromeTypeBase):
+class SamplingProfileNode(ProtocolType):
     """Heap profile sample."""
-    def __init__(self, size: float, total: float, stack: List['str']) -> None:
+
+    def __init__(self, size: float, total: float, stack: List[str]) -> None:
         """
         :param size: Size of the sampled allocation.
         :type size: float
@@ -22,9 +23,10 @@ class SamplingProfileNode(ChromeTypeBase):
         self.stack: List[str] = stack
 
 
-class SamplingProfile(ChromeTypeBase):
+class SamplingProfile(ProtocolType):
     """Array of heap profile samples."""
-    def __init__(self, samples: List['SamplingProfileNode']) -> None:
+
+    def __init__(self, samples: List[Union["SamplingProfileNode", dict]]) -> None:
         """
         :param samples: The samples
         :type samples: array
@@ -33,3 +35,7 @@ class SamplingProfile(ChromeTypeBase):
         self.samples: List[SamplingProfileNode] = samples
 
 
+OBJECT_LIST = {
+    "SamplingProfileNode": SamplingProfileNode,
+    "SamplingProfile": SamplingProfile,
+}

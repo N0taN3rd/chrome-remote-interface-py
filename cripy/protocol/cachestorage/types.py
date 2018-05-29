@@ -1,11 +1,12 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 CacheId = TypeVar("CacheId", str, str)
 """Unique identifier of the Cache object."""
 
 
-class Header(ChromeTypeBase):
+class Header(ProtocolType):
+
     def __init__(self, name: str, value: str) -> None:
         """
         :param name: The name
@@ -18,9 +19,19 @@ class Header(ChromeTypeBase):
         self.value: str = value
 
 
-class DataEntry(ChromeTypeBase):
+class DataEntry(ProtocolType):
     """Data entry."""
-    def __init__(self, requestURL: str, requestMethod: str, requestHeaders: List['Header'], responseTime: float, responseStatus: int, responseStatusText: str, responseHeaders: List['Header']) -> None:
+
+    def __init__(
+        self,
+        requestURL: str,
+        requestMethod: str,
+        requestHeaders: List[Union["Header", dict]],
+        responseTime: float,
+        responseStatus: int,
+        responseStatusText: str,
+        responseHeaders: List[Union["Header", dict]],
+    ) -> None:
         """
         :param requestURL: Request URL.
         :type requestURL: str
@@ -47,8 +58,9 @@ class DataEntry(ChromeTypeBase):
         self.responseHeaders: List[Header] = responseHeaders
 
 
-class CachedResponse(ChromeTypeBase):
+class CachedResponse(ProtocolType):
     """Cached response"""
+
     def __init__(self, body: str) -> None:
         """
         :param body: Entry content, base64-encoded.
@@ -58,9 +70,10 @@ class CachedResponse(ChromeTypeBase):
         self.body: str = body
 
 
-class Cache(ChromeTypeBase):
+class Cache(ProtocolType):
     """Cache identifier."""
-    def __init__(self, cacheId: 'CacheId', securityOrigin: str, cacheName: str) -> None:
+
+    def __init__(self, cacheId: "CacheId", securityOrigin: str, cacheName: str) -> None:
         """
         :param cacheId: An opaque unique id of the cache.
         :type cacheId: CacheId
@@ -75,3 +88,9 @@ class Cache(ChromeTypeBase):
         self.cacheName: str = cacheName
 
 
+OBJECT_LIST = {
+    "Header": Header,
+    "DataEntry": DataEntry,
+    "CachedResponse": CachedResponse,
+    "Cache": Cache,
+}

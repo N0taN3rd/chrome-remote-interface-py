@@ -1,9 +1,10 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 
-class Domain(ChromeTypeBase):
+class Domain(ProtocolType):
     """Description of the protocol domain."""
+
     def __init__(self, name: str, version: str) -> None:
         """
         :param name: Domain name.
@@ -16,3 +17,4 @@ class Domain(ChromeTypeBase):
         self.version: str = version
 
 
+OBJECT_LIST = {"Domain": Domain}

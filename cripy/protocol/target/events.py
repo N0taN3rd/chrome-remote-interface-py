@@ -1,10 +1,6 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.target.types import (
-    TargetInfo,
-    SessionID,
-    TargetID,
-)
+from cripy.protocol.target.types import TargetID, SessionID, TargetInfo
 
 
 class AttachedToTargetEvent(BaseEvent):
@@ -12,7 +8,9 @@ class AttachedToTargetEvent(BaseEvent):
 
     event: str = "Target.attachedToTarget"
 
-    def __init__(self, sessionId: SessionID, targetInfo: TargetInfo, waitingForDebugger: bool) -> None:
+    def __init__(
+        self, sessionId: SessionID, targetInfo: TargetInfo, waitingForDebugger: bool
+    ) -> None:
         """
         :param sessionId: Identifier assigned to the session used to send/receive messages.
         :type sessionId: SessionID
@@ -33,7 +31,9 @@ class DetachedFromTargetEvent(BaseEvent):
 
     event: str = "Target.detachedFromTarget"
 
-    def __init__(self, sessionId: SessionID, targetId: Optional[TargetID] = None) -> None:
+    def __init__(
+        self, sessionId: SessionID, targetId: Optional[TargetID] = None
+    ) -> None:
         """
         :param sessionId: Detached session identifier.
         :type sessionId: SessionID
@@ -50,7 +50,9 @@ class ReceivedMessageFromTargetEvent(BaseEvent):
 
     event: str = "Target.receivedMessageFromTarget"
 
-    def __init__(self, sessionId: SessionID, message: str, targetId: Optional[TargetID] = None) -> None:
+    def __init__(
+        self, sessionId: SessionID, message: str, targetId: Optional[TargetID] = None
+    ) -> None:
         """
         :param sessionId: Identifier of a session which sends a message.
         :type sessionId: SessionID
@@ -109,11 +111,10 @@ class TargetInfoChangedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Target.attachedToTarget": AttachedToTargetEvent,
-   "Target.detachedFromTarget": DetachedFromTargetEvent,
-   "Target.receivedMessageFromTarget": ReceivedMessageFromTargetEvent,
-   "Target.targetCreated": TargetCreatedEvent,
-   "Target.targetDestroyed": TargetDestroyedEvent,
-   "Target.targetInfoChanged": TargetInfoChangedEvent,
+    "Target.attachedToTarget": AttachedToTargetEvent,
+    "Target.detachedFromTarget": DetachedFromTargetEvent,
+    "Target.receivedMessageFromTarget": ReceivedMessageFromTargetEvent,
+    "Target.targetCreated": TargetCreatedEvent,
+    "Target.targetDestroyed": TargetDestroyedEvent,
+    "Target.targetInfoChanged": TargetInfoChangedEvent,
 }
-

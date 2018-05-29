@@ -9,13 +9,13 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 from cripy.protocol import page as Page
 
 # ApplicationCacheResource: Detailed application cache resource information.
-class ApplicationCacheResource(ChromeTypeBase):
+class ApplicationCacheResource(ProtocolType):
 
     def __init__(self, url: Union["str"], size: Union["int"], type: Union["str"]):
 
@@ -25,7 +25,7 @@ class ApplicationCacheResource(ChromeTypeBase):
 
 
 # ApplicationCache: Detailed application cache information.
-class ApplicationCache(ChromeTypeBase):
+class ApplicationCache(ProtocolType):
 
     def __init__(
         self,
@@ -44,7 +44,7 @@ class ApplicationCache(ChromeTypeBase):
 
 
 # FrameWithManifest: Frame identifier - manifest URL pair.
-class FrameWithManifest(ChromeTypeBase):
+class FrameWithManifest(ProtocolType):
 
     def __init__(
         self,

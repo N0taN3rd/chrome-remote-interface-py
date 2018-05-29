@@ -1,10 +1,19 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 
 
-class ConsoleMessage(ChromeTypeBase):
+class ConsoleMessage(ProtocolType):
     """Console message."""
-    def __init__(self, source: str, level: str, text: str, url: Optional[str] = None, line: Optional[int] = None, column: Optional[int] = None) -> None:
+
+    def __init__(
+        self,
+        source: str,
+        level: str,
+        text: str,
+        url: Optional[str] = None,
+        line: Optional[int] = None,
+        column: Optional[int] = None,
+    ) -> None:
         """
         :param source: Message source.
         :type source: str
@@ -28,3 +37,4 @@ class ConsoleMessage(ChromeTypeBase):
         self.column: Optional[int] = column
 
 
+OBJECT_LIST = {"ConsoleMessage": ConsoleMessage}

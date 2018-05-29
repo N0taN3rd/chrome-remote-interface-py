@@ -1,5 +1,5 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 {% for import in timports %}
 from cripy.protocol.{{ import | lower }} import types as {{ import }}
 {% endfor %}
@@ -14,9 +14,9 @@ from cripy.protocol.{{ import | lower }} import types as {{ import }}
 
 {%+ for dt in obj_types %}
 {% if dt.has_properties %}
-class {{ dt.id }}(ChromeTypeBase):
+class {{ dt.id }}(ProtocolType):
 {% else %}
-class {{ dt.id }}(ChromeTypeBase, dict):
+class {{ dt.id }}(ProtocolType, dict):
 {% endif %}
 {% if dt.description %}
     """{{ dt.description }}"""
@@ -46,3 +46,10 @@ class {{ dt.id }}(ChromeTypeBase, dict):
 
 
 {% endfor %}
+{% if obj_types | length > 0 %}
+OBJECT_LIST = {
+{% for dt in obj_types %}
+    "{{ dt.id }}": {{ dt.id }},
+{% endfor %}
+}
+{% endif %}

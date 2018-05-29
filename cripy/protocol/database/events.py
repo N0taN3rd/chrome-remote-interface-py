@@ -1,8 +1,6 @@
 from typing import Any, List, Optional, Set, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.database.types import (
-    Database,
-)
+from cripy.protocol.database.types import Database
 
 
 class AddDatabaseEvent(BaseEvent):
@@ -18,7 +16,4 @@ class AddDatabaseEvent(BaseEvent):
         self.database: Database = database
 
 
-EVENT_TO_CLASS = {
-   "Database.addDatabase": AddDatabaseEvent,
-}
-
+EVENT_TO_CLASS = {"Database.addDatabase": AddDatabaseEvent}

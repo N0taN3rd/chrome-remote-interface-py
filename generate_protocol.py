@@ -7,6 +7,7 @@ import sys
 from jinja2 import Template
 
 from cripy.protogen.domain import Domain
+from cripy.protogen.shared import TYPER
 
 # TODO: circular dependency below
 # PACKAGE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -283,12 +284,14 @@ if __name__ == "__main__":
     with open("templates/events.py.j2", "r") as iin:
         event_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
 
+    domains = []
     for which, fp in [js_json_fp, browser_json_fp]:
         data = read_json(fp)
         for domain in data["domains"]:
-            d = Domain(domain)
-            dp = Path(output_dir_fp, d.domain.lower())
-            if not dp.exists():
-                dp.mkdir()
-            generate_types(d, domain_template, dp)
-            generate_events(d, event_template, dp)
+            domains.append(Domain(domain))
+    for d in domains:
+        dp = Path(output_dir_fp, d.domain.lower())
+        if not dp.exists():
+            dp.mkdir()
+        generate_types(d, domain_template, dp)
+        generate_events(d, event_template, dp)

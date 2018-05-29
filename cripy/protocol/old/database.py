@@ -9,7 +9,7 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 DatabaseId = str
 
 # Database: Database object.
-class Database(ChromeTypeBase):
+class Database(ProtocolType):
 
     def __init__(
         self,
@@ -34,7 +34,7 @@ class Database(ChromeTypeBase):
 
 
 # Error: Database error.
-class Error(ChromeTypeBase):
+class Error(ProtocolType):
 
     def __init__(self, message: Union["str"], code: Union["int"]):
 

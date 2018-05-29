@@ -9,13 +9,13 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 from cripy.protocol import runtime as Runtime
 
 # DatabaseWithObjectStores: Database with an array of object stores.
-class DatabaseWithObjectStores(ChromeTypeBase):
+class DatabaseWithObjectStores(ProtocolType):
 
     def __init__(
         self,
@@ -30,7 +30,7 @@ class DatabaseWithObjectStores(ChromeTypeBase):
 
 
 # ObjectStore: Object store.
-class ObjectStore(ChromeTypeBase):
+class ObjectStore(ProtocolType):
 
     def __init__(
         self,
@@ -47,7 +47,7 @@ class ObjectStore(ChromeTypeBase):
 
 
 # ObjectStoreIndex: Object store index.
-class ObjectStoreIndex(ChromeTypeBase):
+class ObjectStoreIndex(ProtocolType):
 
     def __init__(
         self,
@@ -64,7 +64,7 @@ class ObjectStoreIndex(ChromeTypeBase):
 
 
 # Key: Key.
-class Key(ChromeTypeBase):
+class Key(ProtocolType):
 
     def __init__(
         self,
@@ -83,7 +83,7 @@ class Key(ChromeTypeBase):
 
 
 # KeyRange: Key range.
-class KeyRange(ChromeTypeBase):
+class KeyRange(ProtocolType):
 
     def __init__(
         self,
@@ -100,7 +100,7 @@ class KeyRange(ChromeTypeBase):
 
 
 # DataEntry: Data entry.
-class DataEntry(ChromeTypeBase):
+class DataEntry(ProtocolType):
 
     def __init__(
         self,
@@ -115,7 +115,7 @@ class DataEntry(ChromeTypeBase):
 
 
 # KeyPath: Key path.
-class KeyPath(ChromeTypeBase):
+class KeyPath(ProtocolType):
 
     def __init__(
         self,

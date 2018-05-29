@@ -1,12 +1,13 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
-from cripy.protocol.page import types as Page
+from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 from cripy.protocol.domdebugger import types as DOMDebugger
+from cripy.protocol.page import types as Page
 
 
-class NameValue(ChromeTypeBase):
+class NameValue(ProtocolType):
     """A name/value pair."""
+
     def __init__(self, name: str, value: str) -> None:
         """
         :param name: Attribute/property name.
@@ -19,9 +20,18 @@ class NameValue(ChromeTypeBase):
         self.value: str = value
 
 
-class LayoutTreeNode(ChromeTypeBase):
+class LayoutTreeNode(ProtocolType):
     """Details of an element in the DOM tree with a LayoutObject."""
-    def __init__(self, domNodeIndex: int, boundingBox: 'DOM.Rect', layoutText: Optional[str] = None, inlineTextNodes: Optional[List['InlineTextBox']] = None, styleIndex: Optional[int] = None, paintOrder: Optional[int] = None) -> None:
+
+    def __init__(
+        self,
+        domNodeIndex: int,
+        boundingBox: "DOM.Rect",
+        layoutText: Optional[str] = None,
+        inlineTextNodes: Optional[List[Union["InlineTextBox", dict]]] = None,
+        styleIndex: Optional[int] = None,
+        paintOrder: Optional[int] = None,
+    ) -> None:
         """
         :param domNodeIndex: The index of the related DOM node in the `domNodes` array returned by `getSnapshot`.
         :type domNodeIndex: int
@@ -45,10 +55,13 @@ class LayoutTreeNode(ChromeTypeBase):
         self.paintOrder: Optional[int] = paintOrder
 
 
-class InlineTextBox(ChromeTypeBase):
+class InlineTextBox(ProtocolType):
     """Details of post layout rendered text positions. The exact layout should not be regarded as
 stable and may change between versions."""
-    def __init__(self, boundingBox: 'DOM.Rect', startCharacterIndex: int, numCharacters: int) -> None:
+
+    def __init__(
+        self, boundingBox: "DOM.Rect", startCharacterIndex: int, numCharacters: int
+    ) -> None:
         """
         :param boundingBox: The absolute position bounding box.
         :type boundingBox: DOM.Rect
@@ -63,9 +76,40 @@ stable and may change between versions."""
         self.numCharacters: int = numCharacters
 
 
-class DOMNode(ChromeTypeBase):
+class DOMNode(ProtocolType):
     """A Node in the DOM tree."""
-    def __init__(self, nodeType: int, nodeName: str, nodeValue: str, backendNodeId: 'DOM.BackendNodeId', textValue: Optional[str] = None, inputValue: Optional[str] = None, inputChecked: Optional[bool] = None, optionSelected: Optional[bool] = None, childNodeIndexes: Optional[List['int']] = None, attributes: Optional[List['NameValue']] = None, pseudoElementIndexes: Optional[List['int']] = None, layoutNodeIndex: Optional[int] = None, documentURL: Optional[str] = None, baseURL: Optional[str] = None, contentLanguage: Optional[str] = None, documentEncoding: Optional[str] = None, publicId: Optional[str] = None, systemId: Optional[str] = None, frameId: Optional['Page.FrameId'] = None, contentDocumentIndex: Optional[int] = None, importedDocumentIndex: Optional[int] = None, templateContentIndex: Optional[int] = None, pseudoType: Optional['DOM.PseudoType'] = None, shadowRootType: Optional['DOM.ShadowRootType'] = None, isClickable: Optional[bool] = None, eventListeners: Optional[List['DOMDebugger.EventListener']] = None, currentSourceURL: Optional[str] = None, originURL: Optional[str] = None) -> None:
+
+    def __init__(
+        self,
+        nodeType: int,
+        nodeName: str,
+        nodeValue: str,
+        backendNodeId: "DOM.BackendNodeId",
+        textValue: Optional[str] = None,
+        inputValue: Optional[str] = None,
+        inputChecked: Optional[bool] = None,
+        optionSelected: Optional[bool] = None,
+        childNodeIndexes: Optional[List[int]] = None,
+        attributes: Optional[List[Union["NameValue", dict]]] = None,
+        pseudoElementIndexes: Optional[List[int]] = None,
+        layoutNodeIndex: Optional[int] = None,
+        documentURL: Optional[str] = None,
+        baseURL: Optional[str] = None,
+        contentLanguage: Optional[str] = None,
+        documentEncoding: Optional[str] = None,
+        publicId: Optional[str] = None,
+        systemId: Optional[str] = None,
+        frameId: Optional["Page.FrameId"] = None,
+        contentDocumentIndex: Optional[int] = None,
+        importedDocumentIndex: Optional[int] = None,
+        templateContentIndex: Optional[int] = None,
+        pseudoType: Optional["DOM.PseudoType"] = None,
+        shadowRootType: Optional["DOM.ShadowRootType"] = None,
+        isClickable: Optional[bool] = None,
+        eventListeners: Optional[List[Union["DOMDebugger.EventListener", dict]]] = None,
+        currentSourceURL: Optional[str] = None,
+        originURL: Optional[str] = None,
+    ) -> None:
         """
         :param nodeType: `Node`'s nodeType.
         :type nodeType: int
@@ -155,9 +199,10 @@ class DOMNode(ChromeTypeBase):
         self.originURL: Optional[str] = originURL
 
 
-class ComputedStyle(ChromeTypeBase):
+class ComputedStyle(ProtocolType):
     """A subset of the full ComputedStyle as defined by the request whitelist."""
-    def __init__(self, properties: List['NameValue']) -> None:
+
+    def __init__(self, properties: List[Union["NameValue", dict]]) -> None:
         """
         :param properties: Name/value pairs of computed style properties.
         :type properties: array
@@ -166,3 +211,10 @@ class ComputedStyle(ChromeTypeBase):
         self.properties: List[NameValue] = properties
 
 
+OBJECT_LIST = {
+    "NameValue": NameValue,
+    "LayoutTreeNode": LayoutTreeNode,
+    "InlineTextBox": InlineTextBox,
+    "DOMNode": DOMNode,
+    "ComputedStyle": ComputedStyle,
+}

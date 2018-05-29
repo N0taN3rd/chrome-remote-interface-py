@@ -9,14 +9,14 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 from cripy.protocol import runtime as Runtime
 from cripy.protocol import network as Network
 
 # LogEntry: Log entry.
-class LogEntry(ChromeTypeBase):
+class LogEntry(ProtocolType):
 
     def __init__(
         self,
@@ -45,7 +45,7 @@ class LogEntry(ChromeTypeBase):
 
 
 # ViolationSetting: Violation configuration setting.
-class ViolationSetting(ChromeTypeBase):
+class ViolationSetting(ProtocolType):
 
     def __init__(self, name: Union["str"], threshold: Union["float"]):
 

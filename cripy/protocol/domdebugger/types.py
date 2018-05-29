@@ -1,5 +1,5 @@
 from typing import Any, List, Optional, Set, Union, TypeVar
-from cripy.helpers import ChromeTypeBase
+from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 from cripy.protocol.runtime import types as Runtime
 
@@ -7,9 +7,22 @@ DOMBreakpointType = TypeVar("DOMBreakpointType", str, str)
 """DOM breakpoint type."""
 
 
-class EventListener(ChromeTypeBase):
+class EventListener(ProtocolType):
     """Object event listener."""
-    def __init__(self, type: str, useCapture: bool, passive: bool, once: bool, scriptId: 'Runtime.ScriptId', lineNumber: int, columnNumber: int, handler: Optional['Runtime.RemoteObject'] = None, originalHandler: Optional['Runtime.RemoteObject'] = None, backendNodeId: Optional['DOM.BackendNodeId'] = None) -> None:
+
+    def __init__(
+        self,
+        type: str,
+        useCapture: bool,
+        passive: bool,
+        once: bool,
+        scriptId: "Runtime.ScriptId",
+        lineNumber: int,
+        columnNumber: int,
+        handler: Optional["Runtime.RemoteObject"] = None,
+        originalHandler: Optional["Runtime.RemoteObject"] = None,
+        backendNodeId: Optional["DOM.BackendNodeId"] = None,
+    ) -> None:
         """
         :param type: `EventListener`'s type.
         :type type: str
@@ -45,3 +58,4 @@ class EventListener(ChromeTypeBase):
         self.backendNodeId: Optional[DOM.BackendNodeId] = backendNodeId
 
 
+OBJECT_LIST = {"EventListener": EventListener}

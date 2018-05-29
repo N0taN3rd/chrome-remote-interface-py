@@ -9,12 +9,12 @@ and `data/js_protocol.json` as inputs! Please do not modify this file.
 import logging
 from typing import Any, Optional, Union
 
-from cripy.helpers import PayloadMixin, BaseEvent, ChromeTypeBase
+from cripy.helpers import PayloadMixin, BaseEvent, ProtocolType
 
 log = logging.getLogger(__name__)
 
 # GPUDevice: Describes a single graphics processor (GPU).
-class GPUDevice(ChromeTypeBase):
+class GPUDevice(ProtocolType):
 
     def __init__(
         self,
@@ -31,7 +31,7 @@ class GPUDevice(ChromeTypeBase):
 
 
 # GPUInfo: Provides information about the GPU(s) on the system.
-class GPUInfo(ChromeTypeBase):
+class GPUInfo(ProtocolType):
 
     def __init__(
         self,
