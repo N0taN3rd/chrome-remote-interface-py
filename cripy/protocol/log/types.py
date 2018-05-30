@@ -1,11 +1,13 @@
-from typing import Any, List, Optional, Set, Union, TypeVar
+from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 from cripy.protocol.runtime import types as Runtime
 from cripy.protocol.network import types as Network
 
 
 class ViolationSetting(ProtocolType):
-    """Violation configuration setting."""
+    """
+    Violation configuration setting.
+    """
 
     def __init__(self, name: str, threshold: float) -> None:
         """
@@ -15,26 +17,33 @@ class ViolationSetting(ProtocolType):
         :type threshold: float
         """
         super().__init__()
-        self.name: str = name
-        self.threshold: float = threshold
+        self.name = name
+        self.threshold = threshold
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['ViolationSetting']:
+        if init is not None:
+            return ViolationSetting(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ViolationSetting']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(ViolationSetting(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class LogEntry(ProtocolType):
-    """Log entry."""
+    """
+    Log entry.
+    """
 
-    def __init__(
-        self,
-        source: str,
-        level: str,
-        text: str,
-        timestamp: "Runtime.Timestamp",
-        url: Optional[str] = None,
-        lineNumber: Optional[int] = None,
-        stackTrace: Optional["Runtime.StackTrace"] = None,
-        networkRequestId: Optional["Network.RequestId"] = None,
-        workerId: Optional[str] = None,
-        args: Optional[List[Union["Runtime.RemoteObject", dict]]] = None,
-    ) -> None:
+    def __init__(self, source: str, level: str, text: str, timestamp: Runtime.Timestamp, url: Optional[str] = None, lineNumber: Optional[int] = None, stackTrace: Optional[Union['Runtime.StackTrace', dict]] = None, networkRequestId: Optional[Network.RequestId] = None, workerId: Optional[str] = None, args: Optional[List[Union['Runtime.RemoteObject', dict]]] = None) -> None:
         """
         :param source: Log entry source.
         :type source: str
@@ -43,31 +52,51 @@ class LogEntry(ProtocolType):
         :param text: Logged text.
         :type text: str
         :param timestamp: Timestamp when this entry was added.
-        :type timestamp: Runtime.Timestamp
+        :type timestamp: float
         :param url: URL of the resource if known.
-        :type url: str
+        :type url: Optional[str]
         :param lineNumber: Line number in the resource.
-        :type lineNumber: int
+        :type lineNumber: Optional[int]
         :param stackTrace: JavaScript stack trace.
-        :type stackTrace: Runtime.StackTrace
+        :type stackTrace: Optional[dict]
         :param networkRequestId: Identifier of the network request associated with this entry.
-        :type networkRequestId: Network.RequestId
+        :type networkRequestId: Optional[str]
         :param workerId: Identifier of the worker associated with this entry.
-        :type workerId: str
+        :type workerId: Optional[str]
         :param args: Call arguments.
-        :type args: array
+        :type args: Optional[List[dict]]
         """
         super().__init__()
-        self.source: str = source
-        self.level: str = level
-        self.text: str = text
-        self.timestamp: Runtime.Timestamp = timestamp
-        self.url: Optional[str] = url
-        self.lineNumber: Optional[int] = lineNumber
-        self.stackTrace: Optional[Runtime.StackTrace] = stackTrace
-        self.networkRequestId: Optional[Network.RequestId] = networkRequestId
-        self.workerId: Optional[str] = workerId
-        self.args: Optional[List[Runtime.RemoteObject]] = args
+        self.source = source
+        self.level = level
+        self.text = text
+        self.timestamp = timestamp
+        self.url = url
+        self.lineNumber = lineNumber
+        self.stackTrace = Runtime.StackTrace.safe_create(stackTrace)
+        self.networkRequestId = networkRequestId
+        self.workerId = workerId
+        self.args = Runtime.RemoteObject.safe_create_from_list(args)
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['LogEntry']:
+        if init is not None:
+            return LogEntry(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['LogEntry']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(LogEntry(**it))
+            return list_of_self
+        else:
+            return init
 
 
-OBJECT_LIST = {"ViolationSetting": ViolationSetting, "LogEntry": LogEntry}
+TYPE_TO_OBJECT = {
+    "ViolationSetting": ViolationSetting,
+    "LogEntry": LogEntry,
+}

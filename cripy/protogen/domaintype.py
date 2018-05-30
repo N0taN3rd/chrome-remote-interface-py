@@ -1,4 +1,4 @@
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Union
 from collections import OrderedDict
 
 from .shared import FRefCollector, TYPER
@@ -21,6 +21,7 @@ class DomainType(FRefCollector):
         self.type: Type = Type(dt)
         self.experimental: bool = dt.get("experimental", False)
         self.properties: Props = self._build_props(dt.get("properties", None))
+        self.items: Optional[List[Type]] = self._build_items(dt.get("items", None))
         TYPER.add_type(self.id, self.type)
         TYPER.add_type(self.scoped_name, self.type)
 
@@ -66,8 +67,10 @@ class DomainType(FRefCollector):
                         )
                 return ", ".join(notoptional + optionals)
             else:
+                print(self.scoped_name, "is array", self.items)
                 return ""
         else:
+            print(self.scoped_name, "is array", self.items)
             return ""
 
     def _build_props(self, props_list: Optional[List[dict]]) -> Props:
@@ -98,3 +101,16 @@ class DomainType(FRefCollector):
 
     def __repr__(self) -> str:
         return self.__str__()
+
+    def _build_items(
+        self, items: Optional[Union[List[dict], dict]]
+    ) -> Optional[Union[List[Type], Type]]:
+        if items is None:
+            return items
+        if isinstance(items, list):
+            itms = []
+            for it in items:
+                itms.append(Type(it))
+            return itms
+        else:
+            return Type(items)

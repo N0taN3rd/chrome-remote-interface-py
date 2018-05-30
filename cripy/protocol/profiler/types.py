@@ -1,25 +1,46 @@
-from typing import Any, List, Optional, Set, Union, TypeVar
+from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 from cripy.protocol.runtime import types as Runtime
 
 
 class TypeProfileEntry(ProtocolType):
-    """Source offset and types for a parameter or return value."""
+    """
+    Source offset and types for a parameter or return value.
+    """
 
-    def __init__(self, offset: int, types: List[Union["TypeObject", dict]]) -> None:
+    def __init__(self, offset: int, types: List[Union['TypeObject', dict]]) -> None:
         """
         :param offset: Source offset of the parameter or end of function for return values.
         :type offset: int
         :param types: The types for this parameter or return value.
-        :type types: array
+        :type types: List[dict]
         """
         super().__init__()
-        self.offset: int = offset
-        self.types: List[TypeObject] = types
+        self.offset = offset
+        self.types = TypeObject.safe_create_from_list(types)
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['TypeProfileEntry']:
+        if init is not None:
+            return TypeProfileEntry(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['TypeProfileEntry']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(TypeProfileEntry(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class TypeObject(ProtocolType):
-    """Describes a type collected during runtime."""
+    """
+    Describes a type collected during runtime.
+    """
 
     def __init__(self, name: str) -> None:
         """
@@ -27,123 +48,193 @@ class TypeObject(ProtocolType):
         :type name: str
         """
         super().__init__()
-        self.name: str = name
+        self.name = name
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['TypeObject']:
+        if init is not None:
+            return TypeObject(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['TypeObject']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(TypeObject(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class ScriptTypeProfile(ProtocolType):
-    """Type profile data collected during runtime for a JavaScript script."""
+    """
+    Type profile data collected during runtime for a JavaScript script.
+    """
 
-    def __init__(
-        self,
-        scriptId: "Runtime.ScriptId",
-        url: str,
-        entries: List[Union["TypeProfileEntry", dict]],
-    ) -> None:
+    def __init__(self, scriptId: Runtime.ScriptId, url: str, entries: List[Union['TypeProfileEntry', dict]]) -> None:
         """
         :param scriptId: JavaScript script id.
-        :type scriptId: Runtime.ScriptId
+        :type scriptId: str
         :param url: JavaScript script name or url.
         :type url: str
         :param entries: Type profile entries for parameters and return values of the functions in the script.
-        :type entries: array
+        :type entries: List[dict]
         """
         super().__init__()
-        self.scriptId: Runtime.ScriptId = scriptId
-        self.url: str = url
-        self.entries: List[TypeProfileEntry] = entries
+        self.scriptId = scriptId
+        self.url = url
+        self.entries = TypeProfileEntry.safe_create_from_list(entries)
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['ScriptTypeProfile']:
+        if init is not None:
+            return ScriptTypeProfile(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ScriptTypeProfile']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(ScriptTypeProfile(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class ScriptCoverage(ProtocolType):
-    """Coverage data for a JavaScript script."""
+    """
+    Coverage data for a JavaScript script.
+    """
 
-    def __init__(
-        self,
-        scriptId: "Runtime.ScriptId",
-        url: str,
-        functions: List[Union["FunctionCoverage", dict]],
-    ) -> None:
+    def __init__(self, scriptId: Runtime.ScriptId, url: str, functions: List[Union['FunctionCoverage', dict]]) -> None:
         """
         :param scriptId: JavaScript script id.
-        :type scriptId: Runtime.ScriptId
+        :type scriptId: str
         :param url: JavaScript script name or url.
         :type url: str
         :param functions: Functions contained in the script that has coverage data.
-        :type functions: array
+        :type functions: List[dict]
         """
         super().__init__()
-        self.scriptId: Runtime.ScriptId = scriptId
-        self.url: str = url
-        self.functions: List[FunctionCoverage] = functions
+        self.scriptId = scriptId
+        self.url = url
+        self.functions = FunctionCoverage.safe_create_from_list(functions)
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['ScriptCoverage']:
+        if init is not None:
+            return ScriptCoverage(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ScriptCoverage']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(ScriptCoverage(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class ProfileNode(ProtocolType):
-    """Profile node. Holds callsite information, execution statistics and child nodes."""
+    """
+    Profile node. Holds callsite information, execution statistics and child nodes.
+    """
 
-    def __init__(
-        self,
-        id: int,
-        callFrame: "Runtime.CallFrame",
-        hitCount: Optional[int] = None,
-        children: Optional[List[int]] = None,
-        deoptReason: Optional[str] = None,
-        positionTicks: Optional[List[Union["PositionTickInfo", dict]]] = None,
-    ) -> None:
+    def __init__(self, id: int, callFrame: Union['Runtime.CallFrame', dict], hitCount: Optional[int] = None, children: Optional[List[int]] = None, deoptReason: Optional[str] = None, positionTicks: Optional[List[Union['PositionTickInfo', dict]]] = None) -> None:
         """
         :param id: Unique id of the node.
         :type id: int
         :param callFrame: Function location.
-        :type callFrame: Runtime.CallFrame
+        :type callFrame: dict
         :param hitCount: Number of samples where this node was on top of the call stack.
-        :type hitCount: int
+        :type hitCount: Optional[int]
         :param children: Child node ids.
-        :type children: array
+        :type children: Optional[List[int]]
         :param deoptReason: The reason of being not optimized. The function may be deoptimized or marked as don't optimize.
-        :type deoptReason: str
+        :type deoptReason: Optional[str]
         :param positionTicks: An array of source position ticks.
-        :type positionTicks: array
+        :type positionTicks: Optional[List[dict]]
         """
         super().__init__()
-        self.id: int = id
-        self.callFrame: Runtime.CallFrame = callFrame
-        self.hitCount: Optional[int] = hitCount
-        self.children: Optional[List[int]] = children
-        self.deoptReason: Optional[str] = deoptReason
-        self.positionTicks: Optional[List[PositionTickInfo]] = positionTicks
+        self.id = id
+        self.callFrame = Runtime.CallFrame.safe_create(callFrame)
+        self.hitCount = hitCount
+        self.children = children
+        self.deoptReason = deoptReason
+        self.positionTicks = PositionTickInfo.safe_create_from_list(positionTicks)
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['ProfileNode']:
+        if init is not None:
+            return ProfileNode(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ProfileNode']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(ProfileNode(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class Profile(ProtocolType):
-    """Profile."""
+    """
+    Profile.
+    """
 
-    def __init__(
-        self,
-        nodes: List[Union["ProfileNode", dict]],
-        startTime: float,
-        endTime: float,
-        samples: Optional[List[int]] = None,
-        timeDeltas: Optional[List[int]] = None,
-    ) -> None:
+    def __init__(self, nodes: List[Union['ProfileNode', dict]], startTime: float, endTime: float, samples: Optional[List[int]] = None, timeDeltas: Optional[List[int]] = None) -> None:
         """
         :param nodes: The list of profile nodes. First item is the root node.
-        :type nodes: array
+        :type nodes: List[dict]
         :param startTime: Profiling start timestamp in microseconds.
         :type startTime: float
         :param endTime: Profiling end timestamp in microseconds.
         :type endTime: float
         :param samples: Ids of samples top nodes.
-        :type samples: array
+        :type samples: Optional[List[int]]
         :param timeDeltas: Time intervals between adjacent samples in microseconds. The first delta is relative to the profile startTime.
-        :type timeDeltas: array
+        :type timeDeltas: Optional[List[int]]
         """
         super().__init__()
-        self.nodes: List[ProfileNode] = nodes
-        self.startTime: float = startTime
-        self.endTime: float = endTime
-        self.samples: Optional[List[int]] = samples
-        self.timeDeltas: Optional[List[int]] = timeDeltas
+        self.nodes = ProfileNode.safe_create_from_list(nodes)
+        self.startTime = startTime
+        self.endTime = endTime
+        self.samples = samples
+        self.timeDeltas = timeDeltas
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['Profile']:
+        if init is not None:
+            return Profile(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Profile']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(Profile(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class PositionTickInfo(ProtocolType):
-    """Specifies a number of samples attributed to a certain source position."""
+    """
+    Specifies a number of samples attributed to a certain source position.
+    """
 
     def __init__(self, line: int, ticks: int) -> None:
         """
@@ -153,35 +244,68 @@ class PositionTickInfo(ProtocolType):
         :type ticks: int
         """
         super().__init__()
-        self.line: int = line
-        self.ticks: int = ticks
+        self.line = line
+        self.ticks = ticks
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['PositionTickInfo']:
+        if init is not None:
+            return PositionTickInfo(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['PositionTickInfo']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(PositionTickInfo(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class FunctionCoverage(ProtocolType):
-    """Coverage data for a JavaScript function."""
+    """
+    Coverage data for a JavaScript function.
+    """
 
-    def __init__(
-        self,
-        functionName: str,
-        ranges: List[Union["CoverageRange", dict]],
-        isBlockCoverage: bool,
-    ) -> None:
+    def __init__(self, functionName: str, ranges: List[Union['CoverageRange', dict]], isBlockCoverage: bool) -> None:
         """
         :param functionName: JavaScript function name.
         :type functionName: str
         :param ranges: Source ranges inside the function with coverage data.
-        :type ranges: array
+        :type ranges: List[dict]
         :param isBlockCoverage: Whether coverage data for this function has block granularity.
         :type isBlockCoverage: bool
         """
         super().__init__()
-        self.functionName: str = functionName
-        self.ranges: List[CoverageRange] = ranges
-        self.isBlockCoverage: bool = isBlockCoverage
+        self.functionName = functionName
+        self.ranges = CoverageRange.safe_create_from_list(ranges)
+        self.isBlockCoverage = isBlockCoverage
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['FunctionCoverage']:
+        if init is not None:
+            return FunctionCoverage(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FunctionCoverage']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(FunctionCoverage(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class CoverageRange(ProtocolType):
-    """Coverage data for a source range."""
+    """
+    Coverage data for a source range.
+    """
 
     def __init__(self, startOffset: int, endOffset: int, count: int) -> None:
         """
@@ -193,12 +317,29 @@ class CoverageRange(ProtocolType):
         :type count: int
         """
         super().__init__()
-        self.startOffset: int = startOffset
-        self.endOffset: int = endOffset
-        self.count: int = count
+        self.startOffset = startOffset
+        self.endOffset = endOffset
+        self.count = count
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['CoverageRange']:
+        if init is not None:
+            return CoverageRange(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CoverageRange']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(CoverageRange(**it))
+            return list_of_self
+        else:
+            return init
 
 
-OBJECT_LIST = {
+TYPE_TO_OBJECT = {
     "TypeProfileEntry": TypeProfileEntry,
     "TypeObject": TypeObject,
     "ScriptTypeProfile": ScriptTypeProfile,

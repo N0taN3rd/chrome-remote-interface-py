@@ -1,72 +1,77 @@
-from typing import Any, List, Optional, Set, Union, TypeVar
+from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 
-InspectMode = TypeVar("InspectMode", str, str)
-""""""
+InspectMode = TypeVar("InspectMode", str, str) # 
 
 
 class HighlightConfig(ProtocolType):
-    """Configuration data for the highlighting of page elements."""
+    """
+    Configuration data for the highlighting of page elements.
+    """
 
-    def __init__(
-        self,
-        showInfo: Optional[bool] = None,
-        showRulers: Optional[bool] = None,
-        showExtensionLines: Optional[bool] = None,
-        displayAsMaterial: Optional[bool] = None,
-        contentColor: Optional["DOM.RGBA"] = None,
-        paddingColor: Optional["DOM.RGBA"] = None,
-        borderColor: Optional["DOM.RGBA"] = None,
-        marginColor: Optional["DOM.RGBA"] = None,
-        eventTargetColor: Optional["DOM.RGBA"] = None,
-        shapeColor: Optional["DOM.RGBA"] = None,
-        shapeMarginColor: Optional["DOM.RGBA"] = None,
-        selectorList: Optional[str] = None,
-        cssGridColor: Optional["DOM.RGBA"] = None,
-    ) -> None:
+    def __init__(self, showInfo: Optional[bool] = None, showRulers: Optional[bool] = None, showExtensionLines: Optional[bool] = None, displayAsMaterial: Optional[bool] = None, contentColor: Optional[Union['DOM.RGBA', dict]] = None, paddingColor: Optional[Union['DOM.RGBA', dict]] = None, borderColor: Optional[Union['DOM.RGBA', dict]] = None, marginColor: Optional[Union['DOM.RGBA', dict]] = None, eventTargetColor: Optional[Union['DOM.RGBA', dict]] = None, shapeColor: Optional[Union['DOM.RGBA', dict]] = None, shapeMarginColor: Optional[Union['DOM.RGBA', dict]] = None, selectorList: Optional[str] = None, cssGridColor: Optional[Union['DOM.RGBA', dict]] = None) -> None:
         """
         :param showInfo: Whether the node info tooltip should be shown (default: false).
-        :type showInfo: bool
+        :type showInfo: Optional[bool]
         :param showRulers: Whether the rulers should be shown (default: false).
-        :type showRulers: bool
+        :type showRulers: Optional[bool]
         :param showExtensionLines: Whether the extension lines from node to the rulers should be shown (default: false).
-        :type showExtensionLines: bool
+        :type showExtensionLines: Optional[bool]
         :param displayAsMaterial: The displayAsMaterial
-        :type displayAsMaterial: bool
+        :type displayAsMaterial: Optional[bool]
         :param contentColor: The content box highlight fill color (default: transparent).
-        :type contentColor: DOM.RGBA
+        :type contentColor: Optional[dict]
         :param paddingColor: The padding highlight fill color (default: transparent).
-        :type paddingColor: DOM.RGBA
+        :type paddingColor: Optional[dict]
         :param borderColor: The border highlight fill color (default: transparent).
-        :type borderColor: DOM.RGBA
+        :type borderColor: Optional[dict]
         :param marginColor: The margin highlight fill color (default: transparent).
-        :type marginColor: DOM.RGBA
+        :type marginColor: Optional[dict]
         :param eventTargetColor: The event target element highlight fill color (default: transparent).
-        :type eventTargetColor: DOM.RGBA
+        :type eventTargetColor: Optional[dict]
         :param shapeColor: The shape outside fill color (default: transparent).
-        :type shapeColor: DOM.RGBA
+        :type shapeColor: Optional[dict]
         :param shapeMarginColor: The shape margin fill color (default: transparent).
-        :type shapeMarginColor: DOM.RGBA
+        :type shapeMarginColor: Optional[dict]
         :param selectorList: Selectors to highlight relevant nodes.
-        :type selectorList: str
+        :type selectorList: Optional[str]
         :param cssGridColor: The grid layout color (default: transparent).
-        :type cssGridColor: DOM.RGBA
+        :type cssGridColor: Optional[dict]
         """
         super().__init__()
-        self.showInfo: Optional[bool] = showInfo
-        self.showRulers: Optional[bool] = showRulers
-        self.showExtensionLines: Optional[bool] = showExtensionLines
-        self.displayAsMaterial: Optional[bool] = displayAsMaterial
-        self.contentColor: Optional[DOM.RGBA] = contentColor
-        self.paddingColor: Optional[DOM.RGBA] = paddingColor
-        self.borderColor: Optional[DOM.RGBA] = borderColor
-        self.marginColor: Optional[DOM.RGBA] = marginColor
-        self.eventTargetColor: Optional[DOM.RGBA] = eventTargetColor
-        self.shapeColor: Optional[DOM.RGBA] = shapeColor
-        self.shapeMarginColor: Optional[DOM.RGBA] = shapeMarginColor
-        self.selectorList: Optional[str] = selectorList
-        self.cssGridColor: Optional[DOM.RGBA] = cssGridColor
+        self.showInfo = showInfo
+        self.showRulers = showRulers
+        self.showExtensionLines = showExtensionLines
+        self.displayAsMaterial = displayAsMaterial
+        self.contentColor = DOM.RGBA.safe_create(contentColor)
+        self.paddingColor = DOM.RGBA.safe_create(paddingColor)
+        self.borderColor = DOM.RGBA.safe_create(borderColor)
+        self.marginColor = DOM.RGBA.safe_create(marginColor)
+        self.eventTargetColor = DOM.RGBA.safe_create(eventTargetColor)
+        self.shapeColor = DOM.RGBA.safe_create(shapeColor)
+        self.shapeMarginColor = DOM.RGBA.safe_create(shapeMarginColor)
+        self.selectorList = selectorList
+        self.cssGridColor = DOM.RGBA.safe_create(cssGridColor)
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['HighlightConfig']:
+        if init is not None:
+            return HighlightConfig(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['HighlightConfig']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(HighlightConfig(**it))
+            return list_of_self
+        else:
+            return init
 
 
-OBJECT_LIST = {"HighlightConfig": HighlightConfig}
+TYPE_TO_OBJECT = {
+    "HighlightConfig": HighlightConfig,
+}

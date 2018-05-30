@@ -1,15 +1,20 @@
-from typing import Any, List, Optional, Set, Union
+from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.security.types import SecurityState, InsecureContentStatus
+from cripy.protocol.security.types import (
+    InsecureContentStatus,
+    SecurityState,
+)
 
 
 class CertificateErrorEvent(BaseEvent):
-    """There is a certificate error.
+    """
+    There is a certificate error.
 	If overriding certificate errors is enabled, then it should be handled with the `handleCertificateError` command.
 	Note: this event does not fire if the certificate error has been allowed internally.
-	Only one client per target should override certificate errors at the same time."""
+	Only one client per target should override certificate errors at the same time.
+    """
 
-    event: str = "Security.certificateError"
+    event = "Security.certificateError"
 
     def __init__(self, eventId: int, errorType: str, requestURL: str) -> None:
         """
@@ -21,45 +26,75 @@ class CertificateErrorEvent(BaseEvent):
         :type requestURL: str
         """
         super().__init__()
-        self.eventId: int = eventId
-        self.errorType: str = errorType
-        self.requestURL: str = requestURL
+        self.eventId = eventId
+        self.errorType = errorType
+        self.requestURL = requestURL
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['CertificateErrorEvent']:
+        if init is not None:
+            return CertificateErrorEvent(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CertificateErrorEvent']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(CertificateErrorEvent(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class SecurityStateChangedEvent(BaseEvent):
-    """The security state of the page changed."""
+    """
+    The security state of the page changed.
+    """
 
-    event: str = "Security.securityStateChanged"
+    event = "Security.securityStateChanged"
 
-    def __init__(
-        self,
-        securityState: SecurityState,
-        schemeIsCryptographic: bool,
-        explanations: List[Union[SecurityStateExplanation, dict]],
-        insecureContentStatus: InsecureContentStatus,
-        summary: Optional[str] = None,
-    ) -> None:
+    def __init__(self, securityState: SecurityState, schemeIsCryptographic: bool, explanations: List[Union[SecurityStateExplanation, dict]], insecureContentStatus: Union[InsecureContentStatus, dict], summary: Optional[str] = None) -> None:
         """
         :param securityState: Security state.
-        :type securityState: SecurityState
+        :type securityState: str
         :param schemeIsCryptographic: True if the page was loaded over cryptographic transport such as HTTPS.
         :type schemeIsCryptographic: bool
         :param explanations: List of explanations for the security state. If the overall security state is `insecure` or `warning`, at least one corresponding explanation should be included.
-        :type explanations: array
+        :type explanations: List[dict]
         :param insecureContentStatus: Information about insecure content on the page.
-        :type insecureContentStatus: InsecureContentStatus
+        :type insecureContentStatus: dict
         :param summary: Overrides user-visible description of the state.
-        :type summary: str
+        :type summary: Optional[str]
         """
         super().__init__()
-        self.securityState: SecurityState = securityState
-        self.schemeIsCryptographic: bool = schemeIsCryptographic
-        self.explanations: List[SecurityStateExplanation] = explanations
-        self.insecureContentStatus: InsecureContentStatus = insecureContentStatus
-        self.summary: Optional[str] = summary
+        self.securityState = securityState
+        self.schemeIsCryptographic = schemeIsCryptographic
+        self.explanations = SecurityStateExplanation.safe_create_from_list(explanations)
+        self.insecureContentStatus = InsecureContentStatus.safe_create(insecureContentStatus)
+        self.summary = summary
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['SecurityStateChangedEvent']:
+        if init is not None:
+            return SecurityStateChangedEvent(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['SecurityStateChangedEvent']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(SecurityStateChangedEvent(**it))
+            return list_of_self
+        else:
+            return init
 
 
 EVENT_TO_CLASS = {
-    "Security.certificateError": CertificateErrorEvent,
-    "Security.securityStateChanged": SecurityStateChangedEvent,
+   "Security.certificateError": CertificateErrorEvent,
+   "Security.securityStateChanged": SecurityStateChangedEvent,
 }
+

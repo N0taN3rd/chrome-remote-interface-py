@@ -1,13 +1,12 @@
-from typing import Any, List, Optional, Set, Union, TypeVar
+from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 {% for import in timports %}
 from cripy.protocol.{{ import | lower }} import types as {{ import }}
 {% endfor %}
 
 {%+ for dt in py_types %}
-{{ dt.id }} = TypeVar("{{ dt.id }}", {{ dt.type.safe_type }}, {{ dt.type.safe_type }})
 {% if dt.description is defined %}
-"""{{ dt.code_description }}"""
+{{ dt.id }} = TypeVar("{{ dt.id }}", {{ dt.type.safe_type }}, {{ dt.type.safe_type }}) # {{ dt.code_description }}
 {% endif %}
 
 {% endfor %}
@@ -19,11 +18,10 @@ class {{ dt.id }}(ProtocolType):
 class {{ dt.id }}(ProtocolType, dict):
 {% endif %}
 {% if dt.description %}
-    """{{ dt.description }}"""
-{% else %}
-    {% if not dt.has_properties %}
-    pass
-    {% endif %}
+    """
+    {{ dt.description }}
+    """
+
 {% endif %}
 {% if dt.has_properties %}
     def __init__(self, {{ dt.constructor_string }}) -> None:
@@ -34,20 +32,37 @@ class {{ dt.id }}(ProtocolType, dict):
         {% else %}
         :param {{ prop.name }}: The {{ prop.name }}
         {% endif %}
-        :type {{ prop.name }}: {{ prop.type }}
+        :type {{ prop.name }}: {{ prop.constructor_docstr }}
         {% endfor %}
         """
         super().__init__()
     {% for prop in dt.properties %}
-{#        {{ prop.construct_theyself }}#}
-        self.{{ prop.tinfo_str }} = {{ prop.name }}
+        {{ prop.construct_thyself }}
+{#        self.{{ prop.tinfo_str }} = {{ prop.name }}#}
     {% endfor %}
+
 {% endif %}
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['{{ dt.id }}']:
+        if init is not None:
+            return {{ dt.id }}(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['{{ dt.id }}']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append({{ dt.id }}(**it))
+            return list_of_self
+        else:
+            return init
 
 
 {% endfor %}
 {% if obj_types | length > 0 %}
-OBJECT_LIST = {
+TYPE_TO_OBJECT = {
 {% for dt in obj_types %}
     "{{ dt.id }}": {{ dt.id }},
 {% endfor %}

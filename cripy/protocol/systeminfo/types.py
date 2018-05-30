@@ -1,40 +1,53 @@
-from typing import Any, List, Optional, Set, Union, TypeVar
+from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
 
 class GPUInfo(ProtocolType):
-    """Provides information about the GPU(s) on the system."""
+    """
+    Provides information about the GPU(s) on the system.
+    """
 
-    def __init__(
-        self,
-        devices: List[Union["GPUDevice", dict]],
-        driverBugWorkarounds: List[str],
-        auxAttributes: Optional[dict] = None,
-        featureStatus: Optional[dict] = None,
-    ) -> None:
+    def __init__(self, devices: List[Union['GPUDevice', dict]], driverBugWorkarounds: List[str], auxAttributes: Optional[dict] = None, featureStatus: Optional[dict] = None) -> None:
         """
         :param devices: The graphics devices on the system. Element 0 is the primary GPU.
-        :type devices: array
+        :type devices: List[dict]
         :param auxAttributes: An optional dictionary of additional GPU related attributes.
-        :type auxAttributes: dict
+        :type auxAttributes: Optional[dict]
         :param featureStatus: An optional dictionary of graphics features and their status.
-        :type featureStatus: dict
+        :type featureStatus: Optional[dict]
         :param driverBugWorkarounds: An optional array of GPU driver bug workarounds.
-        :type driverBugWorkarounds: array
+        :type driverBugWorkarounds: List[str]
         """
         super().__init__()
-        self.devices: List[GPUDevice] = devices
-        self.auxAttributes: Optional[dict] = auxAttributes
-        self.featureStatus: Optional[dict] = featureStatus
-        self.driverBugWorkarounds: List[str] = driverBugWorkarounds
+        self.devices = GPUDevice.safe_create_from_list(devices)
+        self.auxAttributes = auxAttributes
+        self.featureStatus = featureStatus
+        self.driverBugWorkarounds = driverBugWorkarounds
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['GPUInfo']:
+        if init is not None:
+            return GPUInfo(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['GPUInfo']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(GPUInfo(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class GPUDevice(ProtocolType):
-    """Describes a single graphics processor (GPU)."""
+    """
+    Describes a single graphics processor (GPU).
+    """
 
-    def __init__(
-        self, vendorId: float, deviceId: float, vendorString: str, deviceString: str
-    ) -> None:
+    def __init__(self, vendorId: float, deviceId: float, vendorString: str, deviceString: str) -> None:
         """
         :param vendorId: PCI ID of the GPU vendor, if available; 0 otherwise.
         :type vendorId: float
@@ -46,10 +59,30 @@ class GPUDevice(ProtocolType):
         :type deviceString: str
         """
         super().__init__()
-        self.vendorId: float = vendorId
-        self.deviceId: float = deviceId
-        self.vendorString: str = vendorString
-        self.deviceString: str = deviceString
+        self.vendorId = vendorId
+        self.deviceId = deviceId
+        self.vendorString = vendorString
+        self.deviceString = deviceString
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['GPUDevice']:
+        if init is not None:
+            return GPUDevice(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['GPUDevice']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(GPUDevice(**it))
+            return list_of_self
+        else:
+            return init
 
 
-OBJECT_LIST = {"GPUInfo": GPUInfo, "GPUDevice": GPUDevice}
+TYPE_TO_OBJECT = {
+    "GPUInfo": GPUInfo,
+    "GPUDevice": GPUDevice,
+}

@@ -1,3 +1,4 @@
+from typing import Optional
 
 PT_PYT = dict(
     object="dict",
@@ -30,6 +31,10 @@ class Type(object):
     @property
     def pytype(self) -> str:
         return PT_PYT[self.type]
+
+    @property
+    def pytype_safe(self) -> Optional[str]:
+        return PT_PYT.get(self.type, None)
 
     @property
     def is_pytype(self) -> bool:

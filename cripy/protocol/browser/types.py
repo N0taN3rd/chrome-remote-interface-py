@@ -1,19 +1,17 @@
-from typing import Any, List, Optional, Set, Union, TypeVar
+from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
-WindowState = TypeVar("WindowState", str, str)
-"""The state of the browser window."""
+WindowState = TypeVar("WindowState", str, str) # The state of the browser window.
 
-WindowID = TypeVar("WindowID", int, int)
-""""""
+WindowID = TypeVar("WindowID", int, int) # 
 
 
 class Histogram(ProtocolType):
-    """Chrome histogram."""
+    """
+    Chrome histogram.
+    """
 
-    def __init__(
-        self, name: str, sum: int, count: int, buckets: List[Union["Bucket", dict]]
-    ) -> None:
+    def __init__(self, name: str, sum: int, count: int, buckets: List[Union['Bucket', dict]]) -> None:
         """
         :param name: Name.
         :type name: str
@@ -22,17 +20,36 @@ class Histogram(ProtocolType):
         :param count: Total number of samples.
         :type count: int
         :param buckets: Buckets.
-        :type buckets: array
+        :type buckets: List[dict]
         """
         super().__init__()
-        self.name: str = name
-        self.sum: int = sum
-        self.count: int = count
-        self.buckets: List[Bucket] = buckets
+        self.name = name
+        self.sum = sum
+        self.count = count
+        self.buckets = Bucket.safe_create_from_list(buckets)
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['Histogram']:
+        if init is not None:
+            return Histogram(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Histogram']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(Histogram(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class Bucket(ProtocolType):
-    """Chrome histogram bucket."""
+    """
+    Chrome histogram bucket.
+    """
 
     def __init__(self, low: int, high: int, count: int) -> None:
         """
@@ -44,40 +61,73 @@ class Bucket(ProtocolType):
         :type count: int
         """
         super().__init__()
-        self.low: int = low
-        self.high: int = high
-        self.count: int = count
+        self.low = low
+        self.high = high
+        self.count = count
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['Bucket']:
+        if init is not None:
+            return Bucket(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Bucket']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(Bucket(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class Bounds(ProtocolType):
-    """Browser window bounds information"""
+    """
+    Browser window bounds information
+    """
 
-    def __init__(
-        self,
-        left: Optional[int] = None,
-        top: Optional[int] = None,
-        width: Optional[int] = None,
-        height: Optional[int] = None,
-        windowState: Optional["WindowState"] = None,
-    ) -> None:
+    def __init__(self, left: Optional[int] = None, top: Optional[int] = None, width: Optional[int] = None, height: Optional[int] = None, windowState: Optional[WindowState] = None) -> None:
         """
         :param left: The offset from the left edge of the screen to the window in pixels.
-        :type left: int
+        :type left: Optional[int]
         :param top: The offset from the top edge of the screen to the window in pixels.
-        :type top: int
+        :type top: Optional[int]
         :param width: The window width in pixels.
-        :type width: int
+        :type width: Optional[int]
         :param height: The window height in pixels.
-        :type height: int
+        :type height: Optional[int]
         :param windowState: The window state. Default to normal.
-        :type windowState: WindowState
+        :type windowState: Optional[str]
         """
         super().__init__()
-        self.left: Optional[int] = left
-        self.top: Optional[int] = top
-        self.width: Optional[int] = width
-        self.height: Optional[int] = height
-        self.windowState: Optional[WindowState] = windowState
+        self.left = left
+        self.top = top
+        self.width = width
+        self.height = height
+        self.windowState = windowState
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['Bounds']:
+        if init is not None:
+            return Bounds(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Bounds']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(Bounds(**it))
+            return list_of_self
+        else:
+            return init
 
 
-OBJECT_LIST = {"Histogram": Histogram, "Bucket": Bucket, "Bounds": Bounds}
+TYPE_TO_OBJECT = {
+    "Histogram": Histogram,
+    "Bucket": Bucket,
+    "Bounds": Bounds,
+}

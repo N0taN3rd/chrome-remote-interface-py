@@ -1,31 +1,18 @@
-from typing import Any, List, Optional, Set, Union, TypeVar
+from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 from cripy.protocol.target import types as Target
 
-ServiceWorkerVersionStatus = TypeVar("ServiceWorkerVersionStatus", str, str)
-""""""
+ServiceWorkerVersionStatus = TypeVar("ServiceWorkerVersionStatus", str, str) # 
 
-ServiceWorkerVersionRunningStatus = TypeVar(
-    "ServiceWorkerVersionRunningStatus", str, str
-)
-""""""
+ServiceWorkerVersionRunningStatus = TypeVar("ServiceWorkerVersionRunningStatus", str, str) # 
 
 
 class ServiceWorkerVersion(ProtocolType):
-    """ServiceWorker version."""
+    """
+    ServiceWorker version.
+    """
 
-    def __init__(
-        self,
-        versionId: str,
-        registrationId: str,
-        scriptURL: str,
-        runningStatus: "ServiceWorkerVersionRunningStatus",
-        status: "ServiceWorkerVersionStatus",
-        scriptLastModified: Optional[float] = None,
-        scriptResponseTime: Optional[float] = None,
-        controlledClients: Optional[List[Target.TargetID]] = None,
-        targetId: Optional["Target.TargetID"] = None,
-    ) -> None:
+    def __init__(self, versionId: str, registrationId: str, scriptURL: str, runningStatus: ServiceWorkerVersionRunningStatus, status: ServiceWorkerVersionStatus, scriptLastModified: Optional[float] = None, scriptResponseTime: Optional[float] = None, controlledClients: Optional[List[Target.TargetID]] = None, targetId: Optional[Target.TargetID] = None) -> None:
         """
         :param versionId: The versionId
         :type versionId: str
@@ -34,32 +21,51 @@ class ServiceWorkerVersion(ProtocolType):
         :param scriptURL: The scriptURL
         :type scriptURL: str
         :param runningStatus: The runningStatus
-        :type runningStatus: ServiceWorkerVersionRunningStatus
+        :type runningStatus: str
         :param status: The status
-        :type status: ServiceWorkerVersionStatus
+        :type status: str
         :param scriptLastModified: The Last-Modified header value of the main script.
-        :type scriptLastModified: float
+        :type scriptLastModified: Optional[float]
         :param scriptResponseTime: The time at which the response headers of the main script were received from the server. For cached script it is the last time the cache entry was validated.
-        :type scriptResponseTime: float
+        :type scriptResponseTime: Optional[float]
         :param controlledClients: The controlledClients
-        :type controlledClients: array
+        :type controlledClients: Optional[List[str]]
         :param targetId: The targetId
-        :type targetId: Target.TargetID
+        :type targetId: Optional[str]
         """
         super().__init__()
-        self.versionId: str = versionId
-        self.registrationId: str = registrationId
-        self.scriptURL: str = scriptURL
-        self.runningStatus: ServiceWorkerVersionRunningStatus = runningStatus
-        self.status: ServiceWorkerVersionStatus = status
-        self.scriptLastModified: Optional[float] = scriptLastModified
-        self.scriptResponseTime: Optional[float] = scriptResponseTime
-        self.controlledClients: Optional[List[Target.TargetID]] = controlledClients
-        self.targetId: Optional[Target.TargetID] = targetId
+        self.versionId = versionId
+        self.registrationId = registrationId
+        self.scriptURL = scriptURL
+        self.runningStatus = runningStatus
+        self.status = status
+        self.scriptLastModified = scriptLastModified
+        self.scriptResponseTime = scriptResponseTime
+        self.controlledClients = controlledClients
+        self.targetId = targetId
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['ServiceWorkerVersion']:
+        if init is not None:
+            return ServiceWorkerVersion(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ServiceWorkerVersion']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(ServiceWorkerVersion(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class ServiceWorkerRegistration(ProtocolType):
-    """ServiceWorker registration."""
+    """
+    ServiceWorker registration.
+    """
 
     def __init__(self, registrationId: str, scopeURL: str, isDeleted: bool) -> None:
         """
@@ -71,23 +77,34 @@ class ServiceWorkerRegistration(ProtocolType):
         :type isDeleted: bool
         """
         super().__init__()
-        self.registrationId: str = registrationId
-        self.scopeURL: str = scopeURL
-        self.isDeleted: bool = isDeleted
+        self.registrationId = registrationId
+        self.scopeURL = scopeURL
+        self.isDeleted = isDeleted
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['ServiceWorkerRegistration']:
+        if init is not None:
+            return ServiceWorkerRegistration(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ServiceWorkerRegistration']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(ServiceWorkerRegistration(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class ServiceWorkerErrorMessage(ProtocolType):
-    """ServiceWorker error message."""
+    """
+    ServiceWorker error message.
+    """
 
-    def __init__(
-        self,
-        errorMessage: str,
-        registrationId: str,
-        versionId: str,
-        sourceURL: str,
-        lineNumber: int,
-        columnNumber: int,
-    ) -> None:
+    def __init__(self, errorMessage: str, registrationId: str, versionId: str, sourceURL: str, lineNumber: int, columnNumber: int) -> None:
         """
         :param errorMessage: The errorMessage
         :type errorMessage: str
@@ -103,15 +120,32 @@ class ServiceWorkerErrorMessage(ProtocolType):
         :type columnNumber: int
         """
         super().__init__()
-        self.errorMessage: str = errorMessage
-        self.registrationId: str = registrationId
-        self.versionId: str = versionId
-        self.sourceURL: str = sourceURL
-        self.lineNumber: int = lineNumber
-        self.columnNumber: int = columnNumber
+        self.errorMessage = errorMessage
+        self.registrationId = registrationId
+        self.versionId = versionId
+        self.sourceURL = sourceURL
+        self.lineNumber = lineNumber
+        self.columnNumber = columnNumber
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['ServiceWorkerErrorMessage']:
+        if init is not None:
+            return ServiceWorkerErrorMessage(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ServiceWorkerErrorMessage']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(ServiceWorkerErrorMessage(**it))
+            return list_of_self
+        else:
+            return init
 
 
-OBJECT_LIST = {
+TYPE_TO_OBJECT = {
     "ServiceWorkerVersion": ServiceWorkerVersion,
     "ServiceWorkerRegistration": ServiceWorkerRegistration,
     "ServiceWorkerErrorMessage": ServiceWorkerErrorMessage,

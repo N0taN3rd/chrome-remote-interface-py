@@ -1,11 +1,13 @@
-from typing import Any, List, Optional, Set, Union
+from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
 
 
 class NeedsBeginFramesChangedEvent(BaseEvent):
-    """Issued when the target starts or stops needing BeginFrames."""
+    """
+    Issued when the target starts or stops needing BeginFrames.
+    """
 
-    event: str = "HeadlessExperimental.needsBeginFramesChanged"
+    event = "HeadlessExperimental.needsBeginFramesChanged"
 
     def __init__(self, needsBeginFrames: bool) -> None:
         """
@@ -13,9 +15,27 @@ class NeedsBeginFramesChangedEvent(BaseEvent):
         :type needsBeginFrames: bool
         """
         super().__init__()
-        self.needsBeginFrames: bool = needsBeginFrames
+        self.needsBeginFrames = needsBeginFrames
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['NeedsBeginFramesChangedEvent']:
+        if init is not None:
+            return NeedsBeginFramesChangedEvent(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['NeedsBeginFramesChangedEvent']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(NeedsBeginFramesChangedEvent(**it))
+            return list_of_self
+        else:
+            return init
 
 
 EVENT_TO_CLASS = {
-    "HeadlessExperimental.needsBeginFramesChanged": NeedsBeginFramesChangedEvent
+   "HeadlessExperimental.needsBeginFramesChanged": NeedsBeginFramesChangedEvent,
 }
+

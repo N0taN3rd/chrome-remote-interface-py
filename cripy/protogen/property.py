@@ -62,21 +62,30 @@ class Property(FRefCollector):
 
     @property
     def construct_thyself(self) -> str:
-        if not self.type.is_pytype and not self.type.is_array:
-            return f"self.{self.name} = {self.type}(**{self.name})"
+        if TYPER.is_object(self.type):
+            return f"self.{self.name} = {self.type}.safe_create({self.name})"
+
+        if self.type.is_array:
+            if isinstance(self.items, list):
+                print("we have multiple item types")
+            else:
+                if TYPER.is_primitive_or_any(self.items):
+                    return f"self.{self.name} = {self.name}"
+                else:
+                    return (
+                        f"self.{self.name} = {self.items.type}.safe_create_from_list({self.name})"
+                    )
+            # got
+
+        return f"self.{self.name} = {self.name}"
 
     @property
     def constructor_string(self) -> str:
         if self.is_array:
-            if isinstance(self.items, list):
-                ars = ",".join(map(cstring_mapper, self.items))
-            elif TYPER.is_object(self.items):
-                ars = f"Union['{self.items}',dict]"
-            elif TYPER.is_primitive_or_any(self.items):
-                ars = f"{self.items}"
-            else:
+            ars = TYPER.constructor_sig(self.items)
+            if ars is None:
                 print(
-                    "wtf",
+                    "wtf is_array",
                     self.name,
                     self.type,
                     self.items,
@@ -84,12 +93,35 @@ class Property(FRefCollector):
                 )
             ts = self._wrap_if_optionalc(f"List[{ars}]")
         else:
-            if not self.type.is_pytype and not self.type.is_array:
-                ts_ = f"'{self.type}'"
-            else:
-                ts_ = self.type
-            ts = self._wrap_if_optionalc(ts_)
+            ars = TYPER.constructor_sig(self.type)
+            if ars is None:
+                print(
+                    "wtf",
+                    self.name,
+                    self.type,
+                    self.type.is_array,
+                    self.items,
+                    TYPER.you_are_in(self.items),
+                )
+            ts = self._wrap_if_optionalc(ars)
         return f"{self.name}: {ts}"
+
+    @property
+    def constructor_docstr(self) -> str:
+        if self.is_array:
+            ars = TYPER.constructor_docstr(self.items)
+            if ars is None:
+                print(
+                    "wtf constructor_docstr is_array",
+                    self.name,
+                    self.type,
+                    self.items,
+                    TYPER.you_are_in(self.items),
+                )
+            ts = self._wrap_if_optional(f"List[{ars}]")
+        else:
+            ts = self._wrap_if_optional(TYPER.constructor_docstr(self.type))
+        return ts
 
     @property
     def foreign_ref(self) -> str:

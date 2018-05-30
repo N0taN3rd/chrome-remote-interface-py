@@ -1,65 +1,92 @@
-from typing import Any, List, Optional, Set, Union, TypeVar
+from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 
-SnapshotId = TypeVar("SnapshotId", str, str)
-"""Unique snapshot identifier."""
+SnapshotId = TypeVar("SnapshotId", str, str) # Unique snapshot identifier.
 
-PaintProfile = TypeVar("PaintProfile", list, list)
-"""Array of timings, one per paint step."""
+PaintProfile = TypeVar("PaintProfile", list, list) # Array of timings, one per paint step.
 
-LayerId = TypeVar("LayerId", str, str)
-"""Unique Layer identifier."""
+LayerId = TypeVar("LayerId", str, str) # Unique Layer identifier.
 
 
 class StickyPositionConstraint(ProtocolType):
-    """Sticky position constraints."""
+    """
+    Sticky position constraints.
+    """
 
-    def __init__(
-        self,
-        stickyBoxRect: "DOM.Rect",
-        containingBlockRect: "DOM.Rect",
-        nearestLayerShiftingStickyBox: Optional["LayerId"] = None,
-        nearestLayerShiftingContainingBlock: Optional["LayerId"] = None,
-    ) -> None:
+    def __init__(self, stickyBoxRect: Union['DOM.Rect', dict], containingBlockRect: Union['DOM.Rect', dict], nearestLayerShiftingStickyBox: Optional[LayerId] = None, nearestLayerShiftingContainingBlock: Optional[LayerId] = None) -> None:
         """
         :param stickyBoxRect: Layout rectangle of the sticky element before being shifted
-        :type stickyBoxRect: DOM.Rect
+        :type stickyBoxRect: dict
         :param containingBlockRect: Layout rectangle of the containing block of the sticky element
-        :type containingBlockRect: DOM.Rect
+        :type containingBlockRect: dict
         :param nearestLayerShiftingStickyBox: The nearest sticky layer that shifts the sticky box
-        :type nearestLayerShiftingStickyBox: LayerId
+        :type nearestLayerShiftingStickyBox: Optional[str]
         :param nearestLayerShiftingContainingBlock: The nearest sticky layer that shifts the containing block
-        :type nearestLayerShiftingContainingBlock: LayerId
+        :type nearestLayerShiftingContainingBlock: Optional[str]
         """
         super().__init__()
-        self.stickyBoxRect: DOM.Rect = stickyBoxRect
-        self.containingBlockRect: DOM.Rect = containingBlockRect
-        self.nearestLayerShiftingStickyBox: Optional[
-            LayerId
-        ] = nearestLayerShiftingStickyBox
-        self.nearestLayerShiftingContainingBlock: Optional[
-            LayerId
-        ] = nearestLayerShiftingContainingBlock
+        self.stickyBoxRect = DOM.Rect.safe_create(stickyBoxRect)
+        self.containingBlockRect = DOM.Rect.safe_create(containingBlockRect)
+        self.nearestLayerShiftingStickyBox = nearestLayerShiftingStickyBox
+        self.nearestLayerShiftingContainingBlock = nearestLayerShiftingContainingBlock
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['StickyPositionConstraint']:
+        if init is not None:
+            return StickyPositionConstraint(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['StickyPositionConstraint']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(StickyPositionConstraint(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class ScrollRect(ProtocolType):
-    """Rectangle where scrolling happens on the main thread."""
+    """
+    Rectangle where scrolling happens on the main thread.
+    """
 
-    def __init__(self, rect: "DOM.Rect", type: str) -> None:
+    def __init__(self, rect: Union['DOM.Rect', dict], type: str) -> None:
         """
         :param rect: Rectangle itself.
-        :type rect: DOM.Rect
+        :type rect: dict
         :param type: Reason for rectangle to force scrolling on the main thread
         :type type: str
         """
         super().__init__()
-        self.rect: DOM.Rect = rect
-        self.type: str = type
+        self.rect = DOM.Rect.safe_create(rect)
+        self.type = type
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['ScrollRect']:
+        if init is not None:
+            return ScrollRect(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ScrollRect']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(ScrollRect(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class PictureTile(ProtocolType):
-    """Serialized fragment of layer picture along with its offset within the layer."""
+    """
+    Serialized fragment of layer picture along with its offset within the layer.
+    """
 
     def __init__(self, x: float, y: float, picture: str) -> None:
         """
@@ -71,40 +98,41 @@ class PictureTile(ProtocolType):
         :type picture: str
         """
         super().__init__()
-        self.x: float = x
-        self.y: float = y
-        self.picture: str = picture
+        self.x = x
+        self.y = y
+        self.picture = picture
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['PictureTile']:
+        if init is not None:
+            return PictureTile(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['PictureTile']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(PictureTile(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class Layer(ProtocolType):
-    """Information about a compositing layer."""
+    """
+    Information about a compositing layer.
+    """
 
-    def __init__(
-        self,
-        layerId: "LayerId",
-        offsetX: float,
-        offsetY: float,
-        width: float,
-        height: float,
-        paintCount: int,
-        drawsContent: bool,
-        parentLayerId: Optional["LayerId"] = None,
-        backendNodeId: Optional["DOM.BackendNodeId"] = None,
-        transform: Optional[List[float]] = None,
-        anchorX: Optional[float] = None,
-        anchorY: Optional[float] = None,
-        anchorZ: Optional[float] = None,
-        invisible: Optional[bool] = None,
-        scrollRects: Optional[List[Union["ScrollRect", dict]]] = None,
-        stickyPositionConstraint: Optional["StickyPositionConstraint"] = None,
-    ) -> None:
+    def __init__(self, layerId: LayerId, offsetX: float, offsetY: float, width: float, height: float, paintCount: int, drawsContent: bool, parentLayerId: Optional[LayerId] = None, backendNodeId: Optional[DOM.BackendNodeId] = None, transform: Optional[List[float]] = None, anchorX: Optional[float] = None, anchorY: Optional[float] = None, anchorZ: Optional[float] = None, invisible: Optional[bool] = None, scrollRects: Optional[List[Union['ScrollRect', dict]]] = None, stickyPositionConstraint: Optional[Union['StickyPositionConstraint', dict]] = None) -> None:
         """
         :param layerId: The unique id for this layer.
-        :type layerId: LayerId
+        :type layerId: str
         :param parentLayerId: The id of parent (not present for root).
-        :type parentLayerId: LayerId
+        :type parentLayerId: Optional[str]
         :param backendNodeId: The backend id for the node associated with this layer.
-        :type backendNodeId: DOM.BackendNodeId
+        :type backendNodeId: Optional[int]
         :param offsetX: Offset from parent layer, X coordinate.
         :type offsetX: float
         :param offsetY: Offset from parent layer, Y coordinate.
@@ -114,46 +142,61 @@ class Layer(ProtocolType):
         :param height: Layer height.
         :type height: float
         :param transform: Transformation matrix for layer, default is identity matrix
-        :type transform: array
+        :type transform: Optional[List[float]]
         :param anchorX: Transform anchor point X, absent if no transform specified
-        :type anchorX: float
+        :type anchorX: Optional[float]
         :param anchorY: Transform anchor point Y, absent if no transform specified
-        :type anchorY: float
+        :type anchorY: Optional[float]
         :param anchorZ: Transform anchor point Z, absent if no transform specified
-        :type anchorZ: float
+        :type anchorZ: Optional[float]
         :param paintCount: Indicates how many time this layer has painted.
         :type paintCount: int
         :param drawsContent: Indicates whether this layer hosts any content, rather than being used for transform/scrolling purposes only.
         :type drawsContent: bool
         :param invisible: Set if layer is not visible.
-        :type invisible: bool
+        :type invisible: Optional[bool]
         :param scrollRects: Rectangles scrolling on main thread only.
-        :type scrollRects: array
+        :type scrollRects: Optional[List[dict]]
         :param stickyPositionConstraint: Sticky position constraint information
-        :type stickyPositionConstraint: StickyPositionConstraint
+        :type stickyPositionConstraint: Optional[dict]
         """
         super().__init__()
-        self.layerId: LayerId = layerId
-        self.parentLayerId: Optional[LayerId] = parentLayerId
-        self.backendNodeId: Optional[DOM.BackendNodeId] = backendNodeId
-        self.offsetX: float = offsetX
-        self.offsetY: float = offsetY
-        self.width: float = width
-        self.height: float = height
-        self.transform: Optional[List[float]] = transform
-        self.anchorX: Optional[float] = anchorX
-        self.anchorY: Optional[float] = anchorY
-        self.anchorZ: Optional[float] = anchorZ
-        self.paintCount: int = paintCount
-        self.drawsContent: bool = drawsContent
-        self.invisible: Optional[bool] = invisible
-        self.scrollRects: Optional[List[ScrollRect]] = scrollRects
-        self.stickyPositionConstraint: Optional[
-            StickyPositionConstraint
-        ] = stickyPositionConstraint
+        self.layerId = layerId
+        self.parentLayerId = parentLayerId
+        self.backendNodeId = backendNodeId
+        self.offsetX = offsetX
+        self.offsetY = offsetY
+        self.width = width
+        self.height = height
+        self.transform = transform
+        self.anchorX = anchorX
+        self.anchorY = anchorY
+        self.anchorZ = anchorZ
+        self.paintCount = paintCount
+        self.drawsContent = drawsContent
+        self.invisible = invisible
+        self.scrollRects = ScrollRect.safe_create_from_list(scrollRects)
+        self.stickyPositionConstraint = StickyPositionConstraint.safe_create(stickyPositionConstraint)
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['Layer']:
+        if init is not None:
+            return Layer(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Layer']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(Layer(**it))
+            return list_of_self
+        else:
+            return init
 
 
-OBJECT_LIST = {
+TYPE_TO_OBJECT = {
     "StickyPositionConstraint": StickyPositionConstraint,
     "ScrollRect": ScrollRect,
     "PictureTile": PictureTile,

@@ -2,19 +2,21 @@ import asyncio
 import base64
 import json
 import logging
-from typing import Optional, List
+from urllib.parse import urljoin
+from typing import Optional, List, Dict
 
 import aiohttp
 import websockets
 import websockets.protocol
 
-from .protocol import ProtocolMixin
+DEFAULT_HOST: str = "localhost"
+DEFAULT_PORT: str = 9222
 
 
-class Chrome(ProtocolMixin):
+class Chrome(object):
 
     def __init__(
-        self, host: Optional[str] = "localhost", port: Optional[int] = 9222
+        self, host: Optional[str] = DEFAULT_HOST, port: Optional[int] = DEFAULT_PORT
     ) -> None:
         super().__init__()
         self._host: str = host
@@ -27,10 +29,7 @@ class Chrome(ProtocolMixin):
         """ Get all open browser tabs that are pages tabs
         """
         if not self.is_connected:
-            try:
-                await asyncio.wait_for(self.attempt_tab_fetch(), timeout=5)
-            except TimeoutError:
-                self._log.error("Unable to fetch tabs! Timeout")
+            await asyncio.wait_for(self.attempt_tab_fetch(), timeout=5)
 
     async def attempt_tab_fetch(self):
         async with aiohttp.ClientSession() as session:
@@ -49,3 +48,110 @@ class Chrome(ProtocolMixin):
                     "Connected to Chrome! Found {} tabs".format(len(self._tabs))
                 )
         self.is_connected = True
+
+    @property
+    def host(self):
+        return self._host
+
+    @property
+    def port(self):
+        return self._port
+
+    @property
+    def url(self):
+        return self._url
+
+    @property
+    def tabs(self):
+        if not len(self._tabs):
+            raise ValueError("Must call connect_s or connect first!")
+        return tuple(self._tabs)
+
+    async def create_tab(self):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(self._url + "/json/new") as resp:
+                data = await resp.json()
+                t = await ChromeTab.create_from_json(data, self._host, self._port)
+                self._tabs.append(t)
+        return t
+
+    async def close_tab(self, tab):
+        await tab.disconnect()
+        async with aiohttp.ClientSession() as session:
+            await session.get(self._url + f"/json/close/{tab.id_}")
+
+    @classmethod
+    async def Activate(
+        cls,
+        id: str,
+        url: Optional[str] = None,
+        host: Optional[str] = DEFAULT_HOST,
+        port: Optional[int] = DEFAULT_PORT,
+        secure: Optional[bool] = False,
+    ) -> Dict[str, str]:
+        async with aiohttp.ClientSession() as session:
+            if url is None:
+                url = f"{'https:' if secure else 'http:'}//{host}:{port}/json/activate"
+            data = await session.get(urljoin(url, id))
+            json_ = await data.json()
+            return json_
+
+    @classmethod
+    async def List(
+        cls,
+        url: Optional[str] = None,
+        host: Optional[str] = DEFAULT_HOST,
+        port: Optional[int] = DEFAULT_PORT,
+        secure: Optional[bool] = False,
+    ) -> Dict[str, str]:
+        async with aiohttp.ClientSession() as session:
+            if url is None:
+                url = f"{'https:' if secure else 'http:'}//{host}:{port}"
+            data = await session.get(urljoin(url, "json/list"))
+            json_ = await data.json()
+            return json_
+
+    @classmethod
+    async def New(
+        cls,
+        url: Optional[str] = None,
+        host: Optional[str] = DEFAULT_HOST,
+        port: Optional[int] = DEFAULT_PORT,
+        secure: Optional[bool] = False,
+    ) -> Dict[str, str]:
+        async with aiohttp.ClientSession() as session:
+            if url is None:
+                url = f"{'https:' if secure else 'http:'}//{host}:{port}"
+            data = await session.get(urljoin(url, "json/new"))
+            json_ = await data.json()
+            return json_
+
+    @classmethod
+    async def Protocol(
+        cls,
+        url: Optional[str] = None,
+        host: Optional[str] = DEFAULT_HOST,
+        port: Optional[int] = DEFAULT_PORT,
+        secure: Optional[bool] = False,
+    ) -> Dict[str, str]:
+        async with aiohttp.ClientSession() as session:
+            if url is None:
+                url = f"{'https:' if secure else 'http:'}//{host}:{port}"
+            data = await session.get(urljoin(url, "json/protocol"))
+            json_ = await data.json()
+            return json_
+
+    @classmethod
+    async def Version(
+        cls,
+        url: Optional[str] = None,
+        host: Optional[str] = DEFAULT_HOST,
+        port: Optional[int] = DEFAULT_PORT,
+        secure: Optional[bool] = False,
+    ) -> Dict[str, str]:
+        async with aiohttp.ClientSession() as session:
+            if url is None:
+                url = f"{'https:' if secure else 'http:'}//{host}:{port}"
+            data = await session.get(urljoin(url, "json/version"))
+            json_ = await data.json()
+            return json_

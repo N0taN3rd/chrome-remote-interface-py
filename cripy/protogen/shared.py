@@ -1,4 +1,4 @@
-from typing import Iterable, Optional, Set, Union
+from typing import Iterable, Dict, List, Optional, Set, Union
 from enum import Enum
 
 from cripy.protogen.ptype import Type
@@ -51,8 +51,34 @@ class Typer(object):
 
     def __init__(self) -> None:
         self.objects: Set[str] = set()
-        self.primitives: Set[str] = set()
+        self.primitives: Dict[str, str] = dict()
         self.lists: Set[str] = set()
+
+    def constructor_sig(self, t: Union[List[Type], Type]) -> str:
+        if isinstance(t, list):
+            sigs = map(lambda x: self.constructor_sig(x), t)
+            return ",".join(sigs)
+        elif self.is_object(t):
+            return f"Union['{t}', dict]"
+        elif self.is_list(t):
+            return f"{t}"
+        elif self.is_primitive_or_any(t):
+            return f"{t}"
+        print("wtf", t)
+
+    def constructor_docstr(self, t: Union[List[Type], Type]) -> str:
+        if isinstance(t, list):
+            sigs = map(lambda x: self.constructor_sig(x), t)
+            return ",".join(sigs)
+        elif self.is_object(t):
+            return "dict"
+        elif self.is_primitive(t):
+            ptype = t.pytype_safe
+            if ptype is None:
+                ptype = self.primitives.get(t.type, "Any")
+            return ptype
+        else:
+            return "Any"
 
     def you_are_in(self, what: Union[str, Type]) -> InferredType:
         if self.is_object(what):
@@ -68,7 +94,7 @@ class Typer(object):
         elif _type.is_array:
             self.lists.add(name)
         else:
-            self.primitives.add(name)
+            self.primitives[name] = _type.pytype
 
     def is_object(self, what: Union[str, Type]) -> bool:
         if isinstance(what, Type):
@@ -78,8 +104,8 @@ class Typer(object):
     def is_primitive(self, what: Union[str, Type]) -> bool:
         if isinstance(what, Type):
             t = str(what)
-            return t in self.primitives or t in PY_PRIMATIVES
-        return what in self.primitives or what in PY_PRIMATIVES
+            return self.primitives.get(t, None) is not None or t in PY_PRIMATIVES
+        return self.primitives.get(what, None) is not None or what in PY_PRIMATIVES
 
     def is_list(self, what: Union[str, Type]) -> bool:
         if isinstance(what, Type):

@@ -1,12 +1,13 @@
-from typing import Any, List, Optional, Set, Union, TypeVar
+from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
-Item = TypeVar("Item", list, list)
-"""DOM Storage item."""
+Item = TypeVar("Item", list, list) # DOM Storage item.
 
 
 class StorageId(ProtocolType):
-    """DOM Storage identifier."""
+    """
+    DOM Storage identifier.
+    """
 
     def __init__(self, securityOrigin: str, isLocalStorage: bool) -> None:
         """
@@ -16,8 +17,27 @@ class StorageId(ProtocolType):
         :type isLocalStorage: bool
         """
         super().__init__()
-        self.securityOrigin: str = securityOrigin
-        self.isLocalStorage: bool = isLocalStorage
+        self.securityOrigin = securityOrigin
+        self.isLocalStorage = isLocalStorage
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['StorageId']:
+        if init is not None:
+            return StorageId(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['StorageId']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(StorageId(**it))
+            return list_of_self
+        else:
+            return init
 
 
-OBJECT_LIST = {"StorageId": StorageId}
+TYPE_TO_OBJECT = {
+    "StorageId": StorageId,
+}

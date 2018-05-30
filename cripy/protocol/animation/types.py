@@ -1,27 +1,46 @@
-from typing import Any, List, Optional, Set, Union, TypeVar
+from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 
 
 class KeyframesRule(ProtocolType):
-    """Keyframes Rule"""
+    """
+    Keyframes Rule
+    """
 
-    def __init__(
-        self, keyframes: List[Union["KeyframeStyle", dict]], name: Optional[str] = None
-    ) -> None:
+    def __init__(self, keyframes: List[Union['KeyframeStyle', dict]], name: Optional[str] = None) -> None:
         """
         :param name: CSS keyframed animation's name.
-        :type name: str
+        :type name: Optional[str]
         :param keyframes: List of animation keyframes.
-        :type keyframes: array
+        :type keyframes: List[dict]
         """
         super().__init__()
-        self.name: Optional[str] = name
-        self.keyframes: List[KeyframeStyle] = keyframes
+        self.name = name
+        self.keyframes = KeyframeStyle.safe_create_from_list(keyframes)
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['KeyframesRule']:
+        if init is not None:
+            return KeyframesRule(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['KeyframesRule']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(KeyframesRule(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class KeyframeStyle(ProtocolType):
-    """Keyframe Style"""
+    """
+    Keyframe Style
+    """
 
     def __init__(self, offset: str, easing: str) -> None:
         """
@@ -31,26 +50,33 @@ class KeyframeStyle(ProtocolType):
         :type easing: str
         """
         super().__init__()
-        self.offset: str = offset
-        self.easing: str = easing
+        self.offset = offset
+        self.easing = easing
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['KeyframeStyle']:
+        if init is not None:
+            return KeyframeStyle(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['KeyframeStyle']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(KeyframeStyle(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class AnimationEffect(ProtocolType):
-    """AnimationEffect instance"""
+    """
+    AnimationEffect instance
+    """
 
-    def __init__(
-        self,
-        delay: float,
-        endDelay: float,
-        iterationStart: float,
-        iterations: float,
-        duration: float,
-        direction: str,
-        fill: str,
-        easing: str,
-        backendNodeId: Optional["DOM.BackendNodeId"] = None,
-        keyframesRule: Optional["KeyframesRule"] = None,
-    ) -> None:
+    def __init__(self, delay: float, endDelay: float, iterationStart: float, iterations: float, duration: float, direction: str, fill: str, easing: str, backendNodeId: Optional[DOM.BackendNodeId] = None, keyframesRule: Optional[Union['KeyframesRule', dict]] = None) -> None:
         """
         :param delay: `AnimationEffect`'s delay.
         :type delay: float
@@ -67,41 +93,48 @@ class AnimationEffect(ProtocolType):
         :param fill: `AnimationEffect`'s fill mode.
         :type fill: str
         :param backendNodeId: `AnimationEffect`'s target node.
-        :type backendNodeId: DOM.BackendNodeId
+        :type backendNodeId: Optional[int]
         :param keyframesRule: `AnimationEffect`'s keyframes.
-        :type keyframesRule: KeyframesRule
+        :type keyframesRule: Optional[dict]
         :param easing: `AnimationEffect`'s timing function.
         :type easing: str
         """
         super().__init__()
-        self.delay: float = delay
-        self.endDelay: float = endDelay
-        self.iterationStart: float = iterationStart
-        self.iterations: float = iterations
-        self.duration: float = duration
-        self.direction: str = direction
-        self.fill: str = fill
-        self.backendNodeId: Optional[DOM.BackendNodeId] = backendNodeId
-        self.keyframesRule: Optional[KeyframesRule] = keyframesRule
-        self.easing: str = easing
+        self.delay = delay
+        self.endDelay = endDelay
+        self.iterationStart = iterationStart
+        self.iterations = iterations
+        self.duration = duration
+        self.direction = direction
+        self.fill = fill
+        self.backendNodeId = backendNodeId
+        self.keyframesRule = KeyframesRule.safe_create(keyframesRule)
+        self.easing = easing
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['AnimationEffect']:
+        if init is not None:
+            return AnimationEffect(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AnimationEffect']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(AnimationEffect(**it))
+            return list_of_self
+        else:
+            return init
 
 
 class Animation(ProtocolType):
-    """Animation instance."""
+    """
+    Animation instance.
+    """
 
-    def __init__(
-        self,
-        id: str,
-        name: str,
-        pausedState: bool,
-        playState: str,
-        playbackRate: float,
-        startTime: float,
-        currentTime: float,
-        type: str,
-        source: Optional["AnimationEffect"] = None,
-        cssId: Optional[str] = None,
-    ) -> None:
+    def __init__(self, id: str, name: str, pausedState: bool, playState: str, playbackRate: float, startTime: float, currentTime: float, type: str, source: Optional[Union['AnimationEffect', dict]] = None, cssId: Optional[str] = None) -> None:
         """
         :param id: `Animation`'s id.
         :type id: str
@@ -120,24 +153,41 @@ class Animation(ProtocolType):
         :param type: Animation type of `Animation`.
         :type type: str
         :param source: `Animation`'s source animation node.
-        :type source: AnimationEffect
+        :type source: Optional[dict]
         :param cssId: A unique ID for `Animation` representing the sources that triggered this CSS animation/transition.
-        :type cssId: str
+        :type cssId: Optional[str]
         """
         super().__init__()
-        self.id: str = id
-        self.name: str = name
-        self.pausedState: bool = pausedState
-        self.playState: str = playState
-        self.playbackRate: float = playbackRate
-        self.startTime: float = startTime
-        self.currentTime: float = currentTime
-        self.type: str = type
-        self.source: Optional[AnimationEffect] = source
-        self.cssId: Optional[str] = cssId
+        self.id = id
+        self.name = name
+        self.pausedState = pausedState
+        self.playState = playState
+        self.playbackRate = playbackRate
+        self.startTime = startTime
+        self.currentTime = currentTime
+        self.type = type
+        self.source = AnimationEffect.safe_create(source)
+        self.cssId = cssId
+
+    @staticmethod
+    def safe_create(init: Optional[dict]) -> Optional['Animation']:
+        if init is not None:
+            return Animation(**init)
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Animation']]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(Animation(**it))
+            return list_of_self
+        else:
+            return init
 
 
-OBJECT_LIST = {
+TYPE_TO_OBJECT = {
     "KeyframesRule": KeyframesRule,
     "KeyframeStyle": KeyframeStyle,
     "AnimationEffect": AnimationEffect,
