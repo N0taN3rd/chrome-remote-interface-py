@@ -275,7 +275,36 @@ def generate_events(d: Domain, template, dp: Path) -> None:
                         if param.type.is_ref and not param.type.is_foreign_ref:
                             types.add(param.type)
                 event_to_clazz.append((e.scoped_name, e.class_name))
-            tout.write(template.render(events=d.events, domain=d.domain, event_to_clazz=event_to_clazz, timports=timports, types=types))
+            tout.write(
+                template.render(
+                    events=d.events,
+                    domain=d.domain,
+                    event_to_clazz=event_to_clazz,
+                    timports=timports,
+                    types=types,
+                )
+            )
+
+
+def generate_commands(d: Domain, template, dp: Path) -> None:
+    if d.has_commands:
+        eventsp = dp.joinpath("__init__.py")
+        with eventsp.open("w") as tout:
+            event_to_clazz = []
+            timports = set()
+            types = set()
+            for e in d.commands:
+                e.prune(set(e.domain))
+                if e.has_foreign_refs:
+                    timports.update(e.foreign_refs)
+                # if e.has_parameters:
+                #     print(f"{e.scoped_name}({e.param_string})", e.returns)
+                    # if param.type.is_ref and not param.type.is_foreign_ref:
+                    #     types.add(param.type)
+                # event_to_clazz.append((e.scoped_name, e.class_name))
+            tout.write(template.render(d=d, domain=d.domain, description=d.description, timports=timports, types=types))
+    else:
+        print(d)
 
 
 if __name__ == "__main__":
@@ -283,6 +312,8 @@ if __name__ == "__main__":
         domain_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
     with open("templates/events.py.j2", "r") as iin:
         event_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
+    with open("templates/commands.async.py.j2", "r") as iin:
+        command_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
 
     domains = []
     for which, fp in [js_json_fp, browser_json_fp]:
@@ -295,3 +326,4 @@ if __name__ == "__main__":
             dp.mkdir()
         generate_types(d, domain_template, dp)
         generate_events(d, event_template, dp)
+        generate_commands(d, command_template, dp)

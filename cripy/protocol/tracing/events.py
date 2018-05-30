@@ -1,9 +1,10 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.io import types as IO
-from cripy.protocol.tracing.types import (
-    StreamCompression,
-)
+try:
+    from cripy.protocol.tracing.types import *
+except ImportError:
+    pass
 
 
 class BufferUsageEvent(BaseEvent):

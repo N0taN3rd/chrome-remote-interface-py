@@ -18,6 +18,54 @@ class Command(FRefCollector):
         self.parameters: List[Property] = self._build_params(params)
         self.returns: Optional[Returns] = self._build_returns(command)
 
+    @property
+    def has_parameters(self) -> bool:
+        return len(self.parameters) > 0
+
+    @property
+    def returns_something(self) -> bool:
+        return self.returns is not None
+
+    @property
+    def returns_str(self) -> str:
+        if self.returns is not None:
+            return self.returns.returns_string
+        else:
+            return 'None'
+
+    @property
+    def param_string(self) -> str:
+        if self.has_parameters:
+            optionals = []
+            notoptional = []
+            for prop in self.parameters:
+                if prop.optional:
+                    optionals.append(prop.constructor_string.replace("'", ""))
+                else:
+                    notoptional.append(prop.constructor_string.replace("'", ""))
+            return ", ".join(notoptional + optionals)
+        else:
+            return ""
+
+    @property
+    def command_arg_string(self) -> str:
+        if self.has_parameters:
+            optionals = []
+            notoptional = []
+            for prop in self.parameters:
+                if prop.optional:
+                    optionals.append(prop.command_arg_string.replace("'", ""))
+                else:
+                    notoptional.append(prop.command_arg_string.replace("'", ""))
+            return ", ".join(notoptional + optionals)
+        else:
+            return ""
+
+
+    @property
+    def class_name(self) -> str:
+        return self.name
+
     def _build_params(self, param_list: List[dict]) -> List[Property]:
         params = []
         for param in param_list:
@@ -27,9 +75,10 @@ class Command(FRefCollector):
         return params
 
     def _build_returns(self, command) -> Optional[Returns]:
-        rt = command.get("returns")
+        rt = command.get("returns", None)
         if rt is not None:
-            self.returns = Returns(self.name, rt)
-            self._if_foreign_ref_add(rt)
+            returns = Returns(self.name, rt)
+            self._if_foreign_ref_add(returns)
+            return returns
         else:
             return rt

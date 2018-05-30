@@ -1,10 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.css.types import (
-    CSSStyleSheetHeader,
-    StyleSheetId,
-    FontFace,
-)
+try:
+    from cripy.protocol.css.types import *
+except ImportError:
+    pass
 
 
 class FontsUpdatedEvent(BaseEvent):
@@ -41,15 +40,15 @@ class FontsUpdatedEvent(BaseEvent):
             return init
 
 
-class MediaQueryResultChangedEvent(BaseEvent):
+class MediaQueryResultChangedEvent(BaseEvent, dict):
     """
     Fires whenever a MediaQuery result changes (for example, after a browser window has been resized.) The current implementation considers only viewport-dependent media features.
     """
 
     event = "CSS.mediaQueryResultChanged"
 
-    def __init__(self, ) -> None:
-        super().__init__()
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional['MediaQueryResultChangedEvent']:

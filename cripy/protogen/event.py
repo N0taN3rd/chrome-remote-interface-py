@@ -18,6 +18,7 @@ class Event(FRefCollector):
         self.parameters: PropertyList = self._build_parameters(
             event.get("parameters", None)
         )
+        self._event = event
 
     @property
     def constructor_string(self) -> str:

@@ -1,10 +1,10 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.runtime import types as Runtime
-from cripy.protocol.debugger.types import (
-    BreakpointId,
-    Location,
-)
+try:
+    from cripy.protocol.debugger.types import *
+except ImportError:
+    pass
 
 
 class BreakpointResolvedEvent(BaseEvent):
@@ -94,15 +94,15 @@ class PausedEvent(BaseEvent):
             return init
 
 
-class ResumedEvent(BaseEvent):
+class ResumedEvent(BaseEvent, dict):
     """
     Fired when the virtual machine resumed execution.
     """
 
     event = "Debugger.resumed"
 
-    def __init__(self, ) -> None:
-        super().__init__()
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional['ResumedEvent']:

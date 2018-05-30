@@ -1,8 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.console.types import (
-    ConsoleMessage,
-)
+try:
+    from cripy.protocol.console.types import *
+except ImportError:
+    pass
 
 
 class MessageAddedEvent(BaseEvent):

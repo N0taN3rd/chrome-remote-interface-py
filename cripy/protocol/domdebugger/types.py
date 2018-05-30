@@ -1,7 +1,7 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
-from cripy.protocol.runtime import types as Runtime
 from cripy.protocol.dom import types as DOM
+from cripy.protocol.runtime import types as Runtime
 
 DOMBreakpointType = TypeVar("DOMBreakpointType", str, str) # DOM breakpoint type.
 

@@ -3,17 +3,18 @@ from cripy.helpers import BaseEvent
 {% for import in timports %}
 from cripy.protocol.{{ import | lower }} import types as {{ import }}
 {% endfor %}
-{% if types is defined and types %}
-from cripy.protocol.{{ domain | lower }}.types import (
-{% for t in types %}
-    {{ t }},
-{% endfor %}
-)
-{% endif %}
+try:
+    from cripy.protocol.{{ domain | lower }}.types import *
+except ImportError:
+    pass
 
 
 {%+ for event in events %}
+{% if event.has_parameters %}
 class {{ event.class_name }}(BaseEvent):
+{% else %}
+class {{ event.class_name }}(BaseEvent, dict):
+{% endif %}
     {% if event.description %}
     """
     {{ event.description }}
@@ -22,6 +23,7 @@ class {{ event.class_name }}(BaseEvent):
 
     event = "{{ event.scoped_name }}"
 
+    {% if event.has_parameters %}
     def __init__(self, {{ event.constructor_string }}) -> None:
         {% if event.has_parameters %}
         """
@@ -41,6 +43,10 @@ class {{ event.class_name }}(BaseEvent):
         {{ prop.construct_thyself }}
         {% endfor %}
         {% endif %}
+    {% else %}
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
+    {% endif %}
 
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional['{{ event.class_name }}']:

@@ -1,10 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.target.types import (
-    TargetInfo,
-    SessionID,
-    TargetID,
-)
+try:
+    from cripy.protocol.target.types import *
+except ImportError:
+    pass
 
 
 class AttachedToTargetEvent(BaseEvent):

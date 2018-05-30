@@ -1,5 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
+try:
+    from cripy.protocol.performance.types import *
+except ImportError:
+    pass
 
 
 class MetricsEvent(BaseEvent):

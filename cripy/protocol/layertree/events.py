@@ -1,9 +1,10 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.dom import types as DOM
-from cripy.protocol.layertree.types import (
-    LayerId,
-)
+try:
+    from cripy.protocol.layertree.types import *
+except ImportError:
+    pass
 
 
 class LayerPaintedEvent(BaseEvent):

@@ -1,7 +1,7 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
-from cripy.protocol.page import types as Page
 from cripy.protocol.dom import types as DOM
+from cripy.protocol.page import types as Page
 from cripy.protocol.domdebugger import types as DOMDebugger
 
 

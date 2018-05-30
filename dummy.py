@@ -44,10 +44,10 @@ class Chrome(object):
             self._recv_task = asyncio.ensure_future(self.recv_handler())
         else:
             tabs = await self.List(url=self._url)
-            it = list(filter(lambda x: x['type'] == 'page', tabs))[0]
+            it: Dict[str, str] = list(filter(lambda x: x['type'] == 'page', tabs))[0]
             self._ws_url = it['webSocketDebuggerUrl']
             self._ws = await websockets.connect(
-                self._ws_url, max_size=None
+                self._ws_url, max_size=None, read_limit=2 ** 32
             )
             self._recv_task = asyncio.ensure_future(self.recv_handler())
 
@@ -56,14 +56,17 @@ class Chrome(object):
         if self._recv_task:
             self._recv_task.cancel()
             await self._recv_task
+        await self._ws.close()
 
     async def recv_handler(self):
         try:
             while True:
                 result = await self._ws.recv()
                 print(result)
-        except asyncio.CancelledError:
-            await self._ws.close()
+                print(ujson.loads(result))
+        except (websockets.ConnectionClosed, ConnectionResetError, asyncio.CancelledError):
+            await self.disconnect()
+
 
     async def _send(self, domain: str = None, what: dict = None):
         res = await self._ws.send(
@@ -191,8 +194,16 @@ async def go():
     await chrome._send()
 
 
-if __name__ == "__main__":
+def main():
     loop = asyncio.get_event_loop()  # event loop
     future = asyncio.ensure_future(go())  # tasks to do
     asyncio.async(future)
     loop.run_forever()
+
+if __name__ == "__main__":
+    class IT(dict):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+
+    it = IT(dict(a=2))
+    print(it)

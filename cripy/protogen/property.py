@@ -107,6 +107,33 @@ class Property(FRefCollector):
         return f"{self.name}: {ts}"
 
     @property
+    def command_arg_string(self) -> str:
+        if self.is_array:
+            ars = TYPER.command_sig(self.items)
+            if ars is None:
+                print(
+                    "wtf is_array",
+                    self.name,
+                    self.type,
+                    self.items,
+                    TYPER.you_are_in(self.items),
+                )
+            ts = self._wrap_if_optionalc(f"List[{ars}]")
+        else:
+            ars = TYPER.command_sig(self.type)
+            if ars is None:
+                print(
+                    "wtf",
+                    self.name,
+                    self.type,
+                    self.type.is_array,
+                    self.items,
+                    TYPER.you_are_in(self.items),
+                )
+            ts = self._wrap_if_optionalc(ars)
+        return f"{self.name}: {ts}"
+
+    @property
     def constructor_docstr(self) -> str:
         if self.is_array:
             ars = TYPER.constructor_docstr(self.items)

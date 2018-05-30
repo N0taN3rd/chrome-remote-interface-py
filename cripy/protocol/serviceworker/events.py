@@ -1,8 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.serviceworker.types import (
-    ServiceWorkerErrorMessage,
-)
+try:
+    from cripy.protocol.serviceworker.types import *
+except ImportError:
+    pass
 
 
 class WorkerErrorReportedEvent(BaseEvent):

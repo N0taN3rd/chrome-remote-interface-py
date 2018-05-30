@@ -2,12 +2,10 @@ from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.runtime import types as Runtime
 from cripy.protocol.network import types as Network
-from cripy.protocol.page.types import (
-    ScreencastFrameMetadata,
-    FrameId,
-    DialogType,
-    Frame,
-)
+try:
+    from cripy.protocol.page.types import *
+except ImportError:
+    pass
 
 
 class DomContentEventFiredEvent(BaseEvent):
@@ -179,12 +177,12 @@ class FrameNavigatedEvent(BaseEvent):
             return init
 
 
-class FrameResizedEvent(BaseEvent):
+class FrameResizedEvent(BaseEvent, dict):
 
     event = "Page.frameResized"
 
-    def __init__(self, ) -> None:
-        super().__init__()
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional['FrameResizedEvent']:
@@ -312,15 +310,15 @@ class FrameStoppedLoadingEvent(BaseEvent):
             return init
 
 
-class InterstitialHiddenEvent(BaseEvent):
+class InterstitialHiddenEvent(BaseEvent, dict):
     """
     Fired when interstitial page was hidden
     """
 
     event = "Page.interstitialHidden"
 
-    def __init__(self, ) -> None:
-        super().__init__()
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional['InterstitialHiddenEvent']:
@@ -340,15 +338,15 @@ class InterstitialHiddenEvent(BaseEvent):
             return init
 
 
-class InterstitialShownEvent(BaseEvent):
+class InterstitialShownEvent(BaseEvent, dict):
     """
     Fired when interstitial page was shown
     """
 
     event = "Page.interstitialShown"
 
-    def __init__(self, ) -> None:
-        super().__init__()
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional['InterstitialShownEvent']:

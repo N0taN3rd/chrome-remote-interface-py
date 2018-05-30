@@ -1,8 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.animation.types import (
-    Animation,
-)
+try:
+    from cripy.protocol.animation.types import *
+except ImportError:
+    pass
 
 
 class AnimationCanceledEvent(BaseEvent):

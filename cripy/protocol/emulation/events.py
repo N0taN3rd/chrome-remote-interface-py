@@ -1,5 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
+try:
+    from cripy.protocol.emulation.types import *
+except ImportError:
+    pass
 
 
 class VirtualTimeAdvancedEvent(BaseEvent):
@@ -35,15 +39,15 @@ class VirtualTimeAdvancedEvent(BaseEvent):
             return init
 
 
-class VirtualTimeBudgetExpiredEvent(BaseEvent):
+class VirtualTimeBudgetExpiredEvent(BaseEvent, dict):
     """
     Notification sent after the virtual time budget for the current VirtualTimePolicy has run out.
     """
 
     event = "Emulation.virtualTimeBudgetExpired"
 
-    def __init__(self, ) -> None:
-        super().__init__()
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional['VirtualTimeBudgetExpiredEvent']:

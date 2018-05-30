@@ -1,5 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
+try:
+    from cripy.protocol.inspector.types import *
+except ImportError:
+    pass
 
 
 class DetachedEvent(BaseEvent):
@@ -36,15 +40,15 @@ class DetachedEvent(BaseEvent):
             return init
 
 
-class TargetCrashedEvent(BaseEvent):
+class TargetCrashedEvent(BaseEvent, dict):
     """
     Fired when debugging target has crashed
     """
 
     event = "Inspector.targetCrashed"
 
-    def __init__(self, ) -> None:
-        super().__init__()
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional['TargetCrashedEvent']:
@@ -64,15 +68,15 @@ class TargetCrashedEvent(BaseEvent):
             return init
 
 
-class TargetReloadedAfterCrashEvent(BaseEvent):
+class TargetReloadedAfterCrashEvent(BaseEvent, dict):
     """
     Fired when debugging target has reloaded after crash
     """
 
     event = "Inspector.targetReloadedAfterCrash"
 
-    def __init__(self, ) -> None:
-        super().__init__()
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional['TargetReloadedAfterCrashEvent']:

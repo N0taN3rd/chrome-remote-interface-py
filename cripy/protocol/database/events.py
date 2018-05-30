@@ -1,8 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.database.types import (
-    Database,
-)
+try:
+    from cripy.protocol.database.types import *
+except ImportError:
+    pass
 
 
 class AddDatabaseEvent(BaseEvent):

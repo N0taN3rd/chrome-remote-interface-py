@@ -1,8 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.domstorage.types import (
-    StorageId,
-)
+try:
+    from cripy.protocol.domstorage.types import *
+except ImportError:
+    pass
 
 
 class DomStorageItemAddedEvent(BaseEvent):

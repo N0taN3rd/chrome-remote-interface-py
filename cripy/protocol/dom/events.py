@@ -1,9 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.dom.types import (
-    NodeId,
-    Node,
-)
+try:
+    from cripy.protocol.dom.types import *
+except ImportError:
+    pass
 
 
 class AttributeModifiedEvent(BaseEvent):
@@ -264,7 +264,7 @@ class DistributedNodesUpdatedEvent(BaseEvent):
             return init
 
 
-class DocumentUpdatedEvent(BaseEvent):
+class DocumentUpdatedEvent(BaseEvent, dict):
     """
     Fired when `Document` has been totally updated.
 	Node ids are no longer valid.
@@ -272,8 +272,8 @@ class DocumentUpdatedEvent(BaseEvent):
 
     event = "DOM.documentUpdated"
 
-    def __init__(self, ) -> None:
-        super().__init__()
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional['DocumentUpdatedEvent']:

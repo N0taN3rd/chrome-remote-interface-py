@@ -1,5 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
+try:
+    from cripy.protocol.heapprofiler.types import *
+except ImportError:
+    pass
 
 
 class AddHeapSnapshotChunkEvent(BaseEvent):
@@ -138,12 +142,12 @@ class ReportHeapSnapshotProgressEvent(BaseEvent):
             return init
 
 
-class ResetProfilesEvent(BaseEvent):
+class ResetProfilesEvent(BaseEvent, dict):
 
     event = "HeapProfiler.resetProfiles"
 
-    def __init__(self, ) -> None:
-        super().__init__()
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional['ResetProfilesEvent']:

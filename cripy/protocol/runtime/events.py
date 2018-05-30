@@ -1,13 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.runtime.types import (
-    RemoteObject,
-    ExceptionDetails,
-    ExecutionContextId,
-    Timestamp,
-    ExecutionContextDescription,
-    StackTrace,
-)
+try:
+    from cripy.protocol.runtime.types import *
+except ImportError:
+    pass
 
 
 class ConsoleAPICalledEvent(BaseEvent):
@@ -196,15 +192,15 @@ class ExecutionContextDestroyedEvent(BaseEvent):
             return init
 
 
-class ExecutionContextsClearedEvent(BaseEvent):
+class ExecutionContextsClearedEvent(BaseEvent, dict):
     """
     Issued when all executionContexts were cleared in browser
     """
 
     event = "Runtime.executionContextsCleared"
 
-    def __init__(self, ) -> None:
-        super().__init__()
+    def __init__(self, *args, **kwargs) -> None:
+        super().__init__(*args, **kwargs)
 
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional['ExecutionContextsClearedEvent']:

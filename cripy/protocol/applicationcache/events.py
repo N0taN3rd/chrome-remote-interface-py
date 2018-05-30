@@ -1,6 +1,10 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.page import types as Page
+try:
+    from cripy.protocol.applicationcache.types import *
+except ImportError:
+    pass
 
 
 class ApplicationCacheStatusUpdatedEvent(BaseEvent):

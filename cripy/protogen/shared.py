@@ -66,6 +66,21 @@ class Typer(object):
             return f"{t}"
         print("wtf", t)
 
+    def command_sig(self, t: Union[List[Type], Type]) -> str:
+        if isinstance(t, list):
+            sigs = map(lambda x: self.command_sig(x), t)
+            return ",".join(sigs)
+        elif self.is_object(t):
+            if not t.is_foreign_ref:
+                return f"Union['Types.{t}', dict]"
+            return f"Union['{t}', dict]"
+        elif self.is_list(t):
+            return f"{t}"
+        elif self.is_primitive_or_any(t):
+            if not t.is_pytype:
+                return f"Types.{t}"
+            return f"{t}"
+
     def constructor_docstr(self, t: Union[List[Type], Type]) -> str:
         if isinstance(t, list):
             sigs = map(lambda x: self.constructor_sig(x), t)

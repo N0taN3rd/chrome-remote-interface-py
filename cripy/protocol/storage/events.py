@@ -1,5 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
+try:
+    from cripy.protocol.storage.types import *
+except ImportError:
+    pass
 
 
 class CacheStorageContentUpdatedEvent(BaseEvent):

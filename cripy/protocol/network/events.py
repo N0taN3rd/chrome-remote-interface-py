@@ -1,25 +1,10 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.page import types as Page
-from cripy.protocol.network.types import (
-    InterceptionId,
-    Initiator,
-    Request,
-    AuthChallenge,
-    BlockedReason,
-    SignedExchangeInfo,
-    WebSocketFrame,
-    WebSocketResponse,
-    MonotonicTime,
-    WebSocketRequest,
-    Headers,
-    RequestId,
-    TimeSinceEpoch,
-    Response,
-    ErrorReason,
-    ResourcePriority,
-    LoaderId,
-)
+try:
+    from cripy.protocol.network.types import *
+except ImportError:
+    pass
 
 
 class DataReceivedEvent(BaseEvent):

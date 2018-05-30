@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from .command import Command
 from .domaintype import DomainType
@@ -15,7 +15,18 @@ class Domain(FRefCollector):
         self.commands: List[Command] = self._build_commands(domain)
         self.events: List[Event] = self._build_events(domain)
         self.dependencies: List[str] = domain.get("dependencies", [])
+        self.description: Optional[str] = domain.get("description", None)
         self.prune(self.dependencies)
+        self._domain = domain
+
+    @property
+    def has_deps(self) -> bool:
+        return len(self.dependencies) > 0
+
+    @property
+    def dep_list_str(self) -> str:
+        nice = map(lambda x: f"'{x}'", self.dependencies)
+        return f"dependencies = [{', '.join(nice)}]"
 
     @property
     def has_types(self) -> bool:
@@ -27,7 +38,7 @@ class Domain(FRefCollector):
 
     @property
     def has_commands(self) -> bool:
-        return len(self.types) > 0
+        return len(self.commands) > 0
 
     def _build_dtypes(self, domain: dict) -> List[DomainType]:
         domain_types: List[DomainType] = []

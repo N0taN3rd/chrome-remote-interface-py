@@ -1,8 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.log.types import (
-    LogEntry,
-)
+try:
+    from cripy.protocol.log.types import *
+except ImportError:
+    pass
 
 
 class EntryAddedEvent(BaseEvent):

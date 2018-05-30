@@ -1,0 +1,43 @@
+{% set dl = d.domain | lower %}
+from typing import Any, List, Optional, Union
+{% for import in timports %}
+from cripy.protocol.{{ import | lower }} import types as {{ import }}
+{% endfor %}
+{% if d.has_events %}
+from cripy.protocol.{{ dl }} import events as Events
+{% endif %}
+{% if d.has_types %}
+from cripy.protocol.{{ dl }} import types as Types
+{% endif %}
+
+class {{ d.domain }}:
+{% if d.description %}
+    """
+    {{ d.description }}
+    """
+
+{% endif %}
+{% if d.has_deps %}
+    {{ d.dep_list_str }}
+{% endif %}
+
+    def __init__(self, chrome):
+        self.chrome = chrome
+
+    {% for command in d.commands %}
+    {% if command.has_parameters %}
+    async def {{ command.name }}(self, {{ command.command_arg_string }}) -> Optional[dict]:
+    {% else %}
+    async def {{ command.name }}(self) -> Optional[dict]:
+    {% endif %}
+        raw_res = await self.chrome.send('{{ command.scoped_name }}', {{ command.stringify_thy_args }})
+        {% if command.returns %}
+        {% for trans in command.returns.yield_result_trans() %}
+        {{ trans }}
+        {% endfor %}
+        {% endif %}
+
+    {% endfor %}
+
+
+

@@ -1,9 +1,9 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.security.types import (
-    InsecureContentStatus,
-    SecurityState,
-)
+try:
+    from cripy.protocol.security.types import *
+except ImportError:
+    pass
 
 
 class CertificateErrorEvent(BaseEvent):

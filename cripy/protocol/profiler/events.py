@@ -1,9 +1,10 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
 from cripy.protocol.debugger import types as Debugger
-from cripy.protocol.profiler.types import (
-    Profile,
-)
+try:
+    from cripy.protocol.profiler.types import *
+except ImportError:
+    pass
 
 
 class ConsoleProfileFinishedEvent(BaseEvent):
