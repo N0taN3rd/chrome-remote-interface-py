@@ -3,10 +3,6 @@ from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 from cripy.protocol.page import types as Page
 
-StyleSheetOrigin = TypeVar("StyleSheetOrigin", str, str) # Stylesheet type: "injected" for stylesheets injected via extension, "user-agent" for user-agent stylesheets, "inspector" for stylesheets created by the inspector (i.e. those holding the "via inspector" rules), "regular" for regular stylesheets.
-
-StyleSheetId = TypeVar("StyleSheetId", str, str) # 
-
 
 class Value(ProtocolType):
     """
@@ -25,18 +21,22 @@ class Value(ProtocolType):
         self.range = SourceRange.safe_create(range)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Value']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Value', dict]]:
         if init is not None:
-            return Value(**init)
+             try:
+                ourselves = Value(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Value']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Value', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Value(**it))
+                list_of_self.append(Value.safe_create(it))
             return list_of_self
         else:
             return init
@@ -47,7 +47,7 @@ class StyleDeclarationEdit(ProtocolType):
     A descriptor of operation to mutate style declaration text.
     """
 
-    def __init__(self, styleSheetId: StyleSheetId, range: Union['SourceRange', dict], text: str) -> None:
+    def __init__(self, styleSheetId: str, range: Union['SourceRange', dict], text: str) -> None:
         """
         :param styleSheetId: The css style sheet identifier.
         :type styleSheetId: str
@@ -62,18 +62,22 @@ class StyleDeclarationEdit(ProtocolType):
         self.text = text
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['StyleDeclarationEdit']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['StyleDeclarationEdit', dict]]:
         if init is not None:
-            return StyleDeclarationEdit(**init)
+             try:
+                ourselves = StyleDeclarationEdit(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['StyleDeclarationEdit']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['StyleDeclarationEdit', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(StyleDeclarationEdit(**it))
+                list_of_self.append(StyleDeclarationEdit.safe_create(it))
             return list_of_self
         else:
             return init
@@ -102,18 +106,22 @@ class SourceRange(ProtocolType):
         self.endColumn = endColumn
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['SourceRange']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['SourceRange', dict]]:
         if init is not None:
-            return SourceRange(**init)
+             try:
+                ourselves = SourceRange(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['SourceRange']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SourceRange', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(SourceRange(**it))
+                list_of_self.append(SourceRange.safe_create(it))
             return list_of_self
         else:
             return init
@@ -135,18 +143,22 @@ class ShorthandEntry(ProtocolType):
         self.important = important
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ShorthandEntry']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ShorthandEntry', dict]]:
         if init is not None:
-            return ShorthandEntry(**init)
+             try:
+                ourselves = ShorthandEntry(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ShorthandEntry']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ShorthandEntry', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ShorthandEntry(**it))
+                list_of_self.append(ShorthandEntry.safe_create(it))
             return list_of_self
         else:
             return init
@@ -169,18 +181,22 @@ class SelectorList(ProtocolType):
         self.text = text
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['SelectorList']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['SelectorList', dict]]:
         if init is not None:
-            return SelectorList(**init)
+             try:
+                ourselves = SelectorList(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['SelectorList']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SelectorList', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(SelectorList(**it))
+                list_of_self.append(SelectorList.safe_create(it))
             return list_of_self
         else:
             return init
@@ -191,7 +207,7 @@ class RuleUsage(ProtocolType):
     CSS coverage information.
     """
 
-    def __init__(self, styleSheetId: StyleSheetId, startOffset: float, endOffset: float, used: bool) -> None:
+    def __init__(self, styleSheetId: str, startOffset: float, endOffset: float, used: bool) -> None:
         """
         :param styleSheetId: The css style sheet identifier (absent for user agent stylesheet and user-specified stylesheet rules) this rule came from.
         :type styleSheetId: str
@@ -209,18 +225,22 @@ class RuleUsage(ProtocolType):
         self.used = used
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['RuleUsage']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['RuleUsage', dict]]:
         if init is not None:
-            return RuleUsage(**init)
+             try:
+                ourselves = RuleUsage(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['RuleUsage']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['RuleUsage', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(RuleUsage(**it))
+                list_of_self.append(RuleUsage.safe_create(it))
             return list_of_self
         else:
             return init
@@ -243,18 +263,22 @@ class RuleMatch(ProtocolType):
         self.matchingSelectors = matchingSelectors
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['RuleMatch']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['RuleMatch', dict]]:
         if init is not None:
-            return RuleMatch(**init)
+             try:
+                ourselves = RuleMatch(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['RuleMatch']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['RuleMatch', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(RuleMatch(**it))
+                list_of_self.append(RuleMatch.safe_create(it))
             return list_of_self
         else:
             return init
@@ -265,7 +289,7 @@ class PseudoElementMatches(ProtocolType):
     CSS rule collection for a single pseudo style.
     """
 
-    def __init__(self, pseudoType: DOM.PseudoType, matches: List[Union['RuleMatch', dict]]) -> None:
+    def __init__(self, pseudoType: str, matches: List[Union['RuleMatch', dict]]) -> None:
         """
         :param pseudoType: Pseudo element type.
         :type pseudoType: str
@@ -277,18 +301,22 @@ class PseudoElementMatches(ProtocolType):
         self.matches = RuleMatch.safe_create_from_list(matches)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['PseudoElementMatches']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['PseudoElementMatches', dict]]:
         if init is not None:
-            return PseudoElementMatches(**init)
+             try:
+                ourselves = PseudoElementMatches(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['PseudoElementMatches']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['PseudoElementMatches', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(PseudoElementMatches(**it))
+                list_of_self.append(PseudoElementMatches.safe_create(it))
             return list_of_self
         else:
             return init
@@ -314,18 +342,22 @@ class PlatformFontUsage(ProtocolType):
         self.glyphCount = glyphCount
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['PlatformFontUsage']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['PlatformFontUsage', dict]]:
         if init is not None:
-            return PlatformFontUsage(**init)
+             try:
+                ourselves = PlatformFontUsage(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['PlatformFontUsage']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['PlatformFontUsage', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(PlatformFontUsage(**it))
+                list_of_self.append(PlatformFontUsage.safe_create(it))
             return list_of_self
         else:
             return init
@@ -357,18 +389,22 @@ class MediaQueryExpression(ProtocolType):
         self.computedLength = computedLength
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['MediaQueryExpression']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['MediaQueryExpression', dict]]:
         if init is not None:
-            return MediaQueryExpression(**init)
+             try:
+                ourselves = MediaQueryExpression(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['MediaQueryExpression']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['MediaQueryExpression', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(MediaQueryExpression(**it))
+                list_of_self.append(MediaQueryExpression.safe_create(it))
             return list_of_self
         else:
             return init
@@ -391,18 +427,22 @@ class MediaQuery(ProtocolType):
         self.active = active
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['MediaQuery']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['MediaQuery', dict]]:
         if init is not None:
-            return MediaQuery(**init)
+             try:
+                ourselves = MediaQuery(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['MediaQuery']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['MediaQuery', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(MediaQuery(**it))
+                list_of_self.append(MediaQuery.safe_create(it))
             return list_of_self
         else:
             return init
@@ -425,18 +465,22 @@ class InheritedStyleEntry(ProtocolType):
         self.matchedCSSRules = RuleMatch.safe_create_from_list(matchedCSSRules)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['InheritedStyleEntry']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['InheritedStyleEntry', dict]]:
         if init is not None:
-            return InheritedStyleEntry(**init)
+             try:
+                ourselves = InheritedStyleEntry(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['InheritedStyleEntry']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['InheritedStyleEntry', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(InheritedStyleEntry(**it))
+                list_of_self.append(InheritedStyleEntry.safe_create(it))
             return list_of_self
         else:
             return init
@@ -477,18 +521,22 @@ class FontFace(ProtocolType):
         self.platformFontFamily = platformFontFamily
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['FontFace']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FontFace', dict]]:
         if init is not None:
-            return FontFace(**init)
+             try:
+                ourselves = FontFace(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FontFace']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FontFace', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(FontFace(**it))
+                list_of_self.append(FontFace.safe_create(it))
             return list_of_self
         else:
             return init
@@ -499,7 +547,7 @@ class CSSStyleSheetHeader(ProtocolType):
     CSS stylesheet metainformation.
     """
 
-    def __init__(self, styleSheetId: StyleSheetId, frameId: Page.FrameId, sourceURL: str, origin: StyleSheetOrigin, title: str, disabled: bool, isInline: bool, startLine: float, startColumn: float, length: float, sourceMapURL: Optional[str] = None, ownerNode: Optional[DOM.BackendNodeId] = None, hasSourceURL: Optional[bool] = None) -> None:
+    def __init__(self, styleSheetId: str, frameId: str, sourceURL: str, origin: str, title: str, disabled: bool, isInline: bool, startLine: float, startColumn: float, length: float, sourceMapURL: Optional[str] = None, ownerNode: Optional[int] = None, hasSourceURL: Optional[bool] = None) -> None:
         """
         :param styleSheetId: The stylesheet identifier.
         :type styleSheetId: str
@@ -544,18 +592,22 @@ class CSSStyleSheetHeader(ProtocolType):
         self.length = length
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CSSStyleSheetHeader']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CSSStyleSheetHeader', dict]]:
         if init is not None:
-            return CSSStyleSheetHeader(**init)
+             try:
+                ourselves = CSSStyleSheetHeader(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CSSStyleSheetHeader']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CSSStyleSheetHeader', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CSSStyleSheetHeader(**it))
+                list_of_self.append(CSSStyleSheetHeader.safe_create(it))
             return list_of_self
         else:
             return init
@@ -566,7 +618,7 @@ class CSSStyle(ProtocolType):
     CSS style representation.
     """
 
-    def __init__(self, cssProperties: List[Union['CSSProperty', dict]], shorthandEntries: List[Union['ShorthandEntry', dict]], styleSheetId: Optional[StyleSheetId] = None, cssText: Optional[str] = None, range: Optional[Union['SourceRange', dict]] = None) -> None:
+    def __init__(self, cssProperties: List[Union['CSSProperty', dict]], shorthandEntries: List[Union['ShorthandEntry', dict]], styleSheetId: Optional[str] = None, cssText: Optional[str] = None, range: Optional[Union['SourceRange', dict]] = None) -> None:
         """
         :param styleSheetId: The css style sheet identifier (absent for user agent stylesheet and user-specified stylesheet rules) this rule came from.
         :type styleSheetId: Optional[str]
@@ -587,18 +639,22 @@ class CSSStyle(ProtocolType):
         self.range = SourceRange.safe_create(range)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CSSStyle']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CSSStyle', dict]]:
         if init is not None:
-            return CSSStyle(**init)
+             try:
+                ourselves = CSSStyle(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CSSStyle']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CSSStyle', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CSSStyle(**it))
+                list_of_self.append(CSSStyle.safe_create(it))
             return list_of_self
         else:
             return init
@@ -609,7 +665,7 @@ class CSSRule(ProtocolType):
     CSS rule representation.
     """
 
-    def __init__(self, selectorList: Union['SelectorList', dict], origin: StyleSheetOrigin, style: Union['CSSStyle', dict], styleSheetId: Optional[StyleSheetId] = None, media: Optional[List[Union['CSSMedia', dict]]] = None) -> None:
+    def __init__(self, selectorList: Union['SelectorList', dict], origin: str, style: Union['CSSStyle', dict], styleSheetId: Optional[str] = None, media: Optional[List[Union['CSSMedia', dict]]] = None) -> None:
         """
         :param styleSheetId: The css style sheet identifier (absent for user agent stylesheet and user-specified stylesheet rules) this rule came from.
         :type styleSheetId: Optional[str]
@@ -630,18 +686,22 @@ class CSSRule(ProtocolType):
         self.media = CSSMedia.safe_create_from_list(media)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CSSRule']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CSSRule', dict]]:
         if init is not None:
-            return CSSRule(**init)
+             try:
+                ourselves = CSSRule(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CSSRule']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CSSRule', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CSSRule(**it))
+                list_of_self.append(CSSRule.safe_create(it))
             return list_of_self
         else:
             return init
@@ -682,18 +742,22 @@ class CSSProperty(ProtocolType):
         self.range = SourceRange.safe_create(range)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CSSProperty']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CSSProperty', dict]]:
         if init is not None:
-            return CSSProperty(**init)
+             try:
+                ourselves = CSSProperty(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CSSProperty']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CSSProperty', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CSSProperty(**it))
+                list_of_self.append(CSSProperty.safe_create(it))
             return list_of_self
         else:
             return init
@@ -704,7 +768,7 @@ class CSSMedia(ProtocolType):
     CSS media rule descriptor.
     """
 
-    def __init__(self, text: str, source: str, sourceURL: Optional[str] = None, range: Optional[Union['SourceRange', dict]] = None, styleSheetId: Optional[StyleSheetId] = None, mediaList: Optional[List[Union['MediaQuery', dict]]] = None) -> None:
+    def __init__(self, text: str, source: str, sourceURL: Optional[str] = None, range: Optional[Union['SourceRange', dict]] = None, styleSheetId: Optional[str] = None, mediaList: Optional[List[Union['MediaQuery', dict]]] = None) -> None:
         """
         :param text: Media query text.
         :type text: str
@@ -728,18 +792,22 @@ class CSSMedia(ProtocolType):
         self.mediaList = MediaQuery.safe_create_from_list(mediaList)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CSSMedia']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CSSMedia', dict]]:
         if init is not None:
-            return CSSMedia(**init)
+             try:
+                ourselves = CSSMedia(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CSSMedia']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CSSMedia', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CSSMedia(**it))
+                list_of_self.append(CSSMedia.safe_create(it))
             return list_of_self
         else:
             return init
@@ -762,18 +830,22 @@ class CSSKeyframesRule(ProtocolType):
         self.keyframes = CSSKeyframeRule.safe_create_from_list(keyframes)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CSSKeyframesRule']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CSSKeyframesRule', dict]]:
         if init is not None:
-            return CSSKeyframesRule(**init)
+             try:
+                ourselves = CSSKeyframesRule(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CSSKeyframesRule']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CSSKeyframesRule', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CSSKeyframesRule(**it))
+                list_of_self.append(CSSKeyframesRule.safe_create(it))
             return list_of_self
         else:
             return init
@@ -784,7 +856,7 @@ class CSSKeyframeRule(ProtocolType):
     CSS keyframe rule representation.
     """
 
-    def __init__(self, origin: StyleSheetOrigin, keyText: Union['Value', dict], style: Union['CSSStyle', dict], styleSheetId: Optional[StyleSheetId] = None) -> None:
+    def __init__(self, origin: str, keyText: Union['Value', dict], style: Union['CSSStyle', dict], styleSheetId: Optional[str] = None) -> None:
         """
         :param styleSheetId: The css style sheet identifier (absent for user agent stylesheet and user-specified stylesheet rules) this rule came from.
         :type styleSheetId: Optional[str]
@@ -802,18 +874,22 @@ class CSSKeyframeRule(ProtocolType):
         self.style = CSSStyle.safe_create(style)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CSSKeyframeRule']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CSSKeyframeRule', dict]]:
         if init is not None:
-            return CSSKeyframeRule(**init)
+             try:
+                ourselves = CSSKeyframeRule(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CSSKeyframeRule']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CSSKeyframeRule', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CSSKeyframeRule(**it))
+                list_of_self.append(CSSKeyframeRule.safe_create(it))
             return list_of_self
         else:
             return init
@@ -832,18 +908,22 @@ class CSSComputedStyleProperty(ProtocolType):
         self.value = value
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CSSComputedStyleProperty']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CSSComputedStyleProperty', dict]]:
         if init is not None:
-            return CSSComputedStyleProperty(**init)
+             try:
+                ourselves = CSSComputedStyleProperty(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CSSComputedStyleProperty']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CSSComputedStyleProperty', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CSSComputedStyleProperty(**it))
+                list_of_self.append(CSSComputedStyleProperty.safe_create(it))
             return list_of_self
         else:
             return init

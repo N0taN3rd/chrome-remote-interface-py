@@ -1,10 +1,6 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
-TimeSinceEpoch = TypeVar("TimeSinceEpoch", float, float) # UTC time in seconds, counted from January 1, 1970.
-
-GestureSourceType = TypeVar("GestureSourceType", str, str) # 
-
 
 class TouchPoint(ProtocolType):
     def __init__(self, x: float, y: float, radiusX: Optional[float] = None, radiusY: Optional[float] = None, rotationAngle: Optional[float] = None, force: Optional[float] = None, id: Optional[float] = None) -> None:
@@ -34,18 +30,22 @@ class TouchPoint(ProtocolType):
         self.id = id
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['TouchPoint']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['TouchPoint', dict]]:
         if init is not None:
-            return TouchPoint(**init)
+             try:
+                ourselves = TouchPoint(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['TouchPoint']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TouchPoint', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(TouchPoint(**it))
+                list_of_self.append(TouchPoint.safe_create(it))
             return list_of_self
         else:
             return init

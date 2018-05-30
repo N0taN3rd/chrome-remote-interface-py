@@ -1,8 +1,6 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
-PressureLevel = TypeVar("PressureLevel", str, str) # Memory pressure level.
-
 
 class SamplingProfileNode(ProtocolType):
     """
@@ -24,18 +22,22 @@ class SamplingProfileNode(ProtocolType):
         self.stack = stack
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['SamplingProfileNode']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['SamplingProfileNode', dict]]:
         if init is not None:
-            return SamplingProfileNode(**init)
+             try:
+                ourselves = SamplingProfileNode(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['SamplingProfileNode']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SamplingProfileNode', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(SamplingProfileNode(**it))
+                list_of_self.append(SamplingProfileNode.safe_create(it))
             return list_of_self
         else:
             return init
@@ -55,18 +57,22 @@ class SamplingProfile(ProtocolType):
         self.samples = SamplingProfileNode.safe_create_from_list(samples)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['SamplingProfile']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['SamplingProfile', dict]]:
         if init is not None:
-            return SamplingProfile(**init)
+             try:
+                ourselves = SamplingProfile(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['SamplingProfile']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SamplingProfile', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(SamplingProfile(**it))
+                list_of_self.append(SamplingProfile.safe_create(it))
             return list_of_self
         else:
             return init

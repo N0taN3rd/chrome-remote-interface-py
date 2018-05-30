@@ -1,8 +1,8 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
+from cripy.protocol.domdebugger import types as DOMDebugger
 from cripy.protocol.dom import types as DOM
 from cripy.protocol.page import types as Page
-from cripy.protocol.domdebugger import types as DOMDebugger
 
 
 class NameValue(ProtocolType):
@@ -22,18 +22,22 @@ class NameValue(ProtocolType):
         self.value = value
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['NameValue']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['NameValue', dict]]:
         if init is not None:
-            return NameValue(**init)
+             try:
+                ourselves = NameValue(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['NameValue']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['NameValue', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(NameValue(**it))
+                list_of_self.append(NameValue.safe_create(it))
             return list_of_self
         else:
             return init
@@ -68,18 +72,22 @@ class LayoutTreeNode(ProtocolType):
         self.paintOrder = paintOrder
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['LayoutTreeNode']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['LayoutTreeNode', dict]]:
         if init is not None:
-            return LayoutTreeNode(**init)
+             try:
+                ourselves = LayoutTreeNode(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['LayoutTreeNode']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LayoutTreeNode', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(LayoutTreeNode(**it))
+                list_of_self.append(LayoutTreeNode.safe_create(it))
             return list_of_self
         else:
             return init
@@ -106,18 +114,22 @@ stable and may change between versions.
         self.numCharacters = numCharacters
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['InlineTextBox']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['InlineTextBox', dict]]:
         if init is not None:
-            return InlineTextBox(**init)
+             try:
+                ourselves = InlineTextBox(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['InlineTextBox']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['InlineTextBox', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(InlineTextBox(**it))
+                list_of_self.append(InlineTextBox.safe_create(it))
             return list_of_self
         else:
             return init
@@ -128,7 +140,7 @@ class DOMNode(ProtocolType):
     A Node in the DOM tree.
     """
 
-    def __init__(self, nodeType: int, nodeName: str, nodeValue: str, backendNodeId: DOM.BackendNodeId, textValue: Optional[str] = None, inputValue: Optional[str] = None, inputChecked: Optional[bool] = None, optionSelected: Optional[bool] = None, childNodeIndexes: Optional[List[int]] = None, attributes: Optional[List[Union['NameValue', dict]]] = None, pseudoElementIndexes: Optional[List[int]] = None, layoutNodeIndex: Optional[int] = None, documentURL: Optional[str] = None, baseURL: Optional[str] = None, contentLanguage: Optional[str] = None, documentEncoding: Optional[str] = None, publicId: Optional[str] = None, systemId: Optional[str] = None, frameId: Optional[Page.FrameId] = None, contentDocumentIndex: Optional[int] = None, importedDocumentIndex: Optional[int] = None, templateContentIndex: Optional[int] = None, pseudoType: Optional[DOM.PseudoType] = None, shadowRootType: Optional[DOM.ShadowRootType] = None, isClickable: Optional[bool] = None, eventListeners: Optional[List[Union['DOMDebugger.EventListener', dict]]] = None, currentSourceURL: Optional[str] = None, originURL: Optional[str] = None) -> None:
+    def __init__(self, nodeType: int, nodeName: str, nodeValue: str, backendNodeId: int, textValue: Optional[str] = None, inputValue: Optional[str] = None, inputChecked: Optional[bool] = None, optionSelected: Optional[bool] = None, childNodeIndexes: Optional[List[int]] = None, attributes: Optional[List[Union['NameValue', dict]]] = None, pseudoElementIndexes: Optional[List[int]] = None, layoutNodeIndex: Optional[int] = None, documentURL: Optional[str] = None, baseURL: Optional[str] = None, contentLanguage: Optional[str] = None, documentEncoding: Optional[str] = None, publicId: Optional[str] = None, systemId: Optional[str] = None, frameId: Optional[str] = None, contentDocumentIndex: Optional[int] = None, importedDocumentIndex: Optional[int] = None, templateContentIndex: Optional[int] = None, pseudoType: Optional[str] = None, shadowRootType: Optional[str] = None, isClickable: Optional[bool] = None, eventListeners: Optional[List[Union['DOMDebugger.EventListener', dict]]] = None, currentSourceURL: Optional[str] = None, originURL: Optional[str] = None) -> None:
         """
         :param nodeType: `Node`'s nodeType.
         :type nodeType: int
@@ -218,18 +230,22 @@ class DOMNode(ProtocolType):
         self.originURL = originURL
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['DOMNode']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DOMNode', dict]]:
         if init is not None:
-            return DOMNode(**init)
+             try:
+                ourselves = DOMNode(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['DOMNode']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DOMNode', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(DOMNode(**it))
+                list_of_self.append(DOMNode.safe_create(it))
             return list_of_self
         else:
             return init
@@ -249,18 +265,22 @@ class ComputedStyle(ProtocolType):
         self.properties = NameValue.safe_create_from_list(properties)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ComputedStyle']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ComputedStyle', dict]]:
         if init is not None:
-            return ComputedStyle(**init)
+             try:
+                ourselves = ComputedStyle(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ComputedStyle']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ComputedStyle', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ComputedStyle(**it))
+                list_of_self.append(ComputedStyle.safe_create(it))
             return list_of_self
         else:
             return init

@@ -22,18 +22,22 @@ class VirtualTimeAdvancedEvent(BaseEvent):
         self.virtualTimeElapsed = virtualTimeElapsed
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['VirtualTimeAdvancedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['VirtualTimeAdvancedEvent', dict]]:
         if init is not None:
-            return VirtualTimeAdvancedEvent(**init)
+            try:
+                ourselves = VirtualTimeAdvancedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['VirtualTimeAdvancedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['VirtualTimeAdvancedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(VirtualTimeAdvancedEvent(**it))
+                list_of_self.append(VirtualTimeAdvancedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -50,18 +54,22 @@ class VirtualTimeBudgetExpiredEvent(BaseEvent, dict):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['VirtualTimeBudgetExpiredEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['VirtualTimeBudgetExpiredEvent', dict]]:
         if init is not None:
-            return VirtualTimeBudgetExpiredEvent(**init)
+            try:
+                ourselves = VirtualTimeBudgetExpiredEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['VirtualTimeBudgetExpiredEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['VirtualTimeBudgetExpiredEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(VirtualTimeBudgetExpiredEvent(**it))
+                list_of_self.append(VirtualTimeBudgetExpiredEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -83,18 +91,22 @@ class VirtualTimePausedEvent(BaseEvent):
         self.virtualTimeElapsed = virtualTimeElapsed
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['VirtualTimePausedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['VirtualTimePausedEvent', dict]]:
         if init is not None:
-            return VirtualTimePausedEvent(**init)
+            try:
+                ourselves = VirtualTimePausedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['VirtualTimePausedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['VirtualTimePausedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(VirtualTimePausedEvent(**it))
+                list_of_self.append(VirtualTimePausedEvent.safe_create(it))
             return list_of_self
         else:
             return init

@@ -1,8 +1,6 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
-CacheId = TypeVar("CacheId", str, str) # Unique identifier of the Cache object.
-
 
 class Header(ProtocolType):
     def __init__(self, name: str, value: str) -> None:
@@ -17,18 +15,22 @@ class Header(ProtocolType):
         self.value = value
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Header']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Header', dict]]:
         if init is not None:
-            return Header(**init)
+             try:
+                ourselves = Header(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Header']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Header', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Header(**it))
+                list_of_self.append(Header.safe_create(it))
             return list_of_self
         else:
             return init
@@ -66,18 +68,22 @@ class DataEntry(ProtocolType):
         self.responseHeaders = Header.safe_create_from_list(responseHeaders)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['DataEntry']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DataEntry', dict]]:
         if init is not None:
-            return DataEntry(**init)
+             try:
+                ourselves = DataEntry(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['DataEntry']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DataEntry', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(DataEntry(**it))
+                list_of_self.append(DataEntry.safe_create(it))
             return list_of_self
         else:
             return init
@@ -97,18 +103,22 @@ class CachedResponse(ProtocolType):
         self.body = body
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CachedResponse']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CachedResponse', dict]]:
         if init is not None:
-            return CachedResponse(**init)
+             try:
+                ourselves = CachedResponse(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CachedResponse']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CachedResponse', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CachedResponse(**it))
+                list_of_self.append(CachedResponse.safe_create(it))
             return list_of_self
         else:
             return init
@@ -119,7 +129,7 @@ class Cache(ProtocolType):
     Cache identifier.
     """
 
-    def __init__(self, cacheId: CacheId, securityOrigin: str, cacheName: str) -> None:
+    def __init__(self, cacheId: str, securityOrigin: str, cacheName: str) -> None:
         """
         :param cacheId: An opaque unique id of the cache.
         :type cacheId: str
@@ -134,18 +144,22 @@ class Cache(ProtocolType):
         self.cacheName = cacheName
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Cache']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Cache', dict]]:
         if init is not None:
-            return Cache(**init)
+             try:
+                ourselves = Cache(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Cache']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Cache', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Cache(**it))
+                list_of_self.append(Cache.safe_create(it))
             return list_of_self
         else:
             return init

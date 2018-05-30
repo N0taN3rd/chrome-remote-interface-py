@@ -2,19 +2,13 @@ from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 
-SnapshotId = TypeVar("SnapshotId", str, str) # Unique snapshot identifier.
-
-PaintProfile = TypeVar("PaintProfile", list, list) # Array of timings, one per paint step.
-
-LayerId = TypeVar("LayerId", str, str) # Unique Layer identifier.
-
 
 class StickyPositionConstraint(ProtocolType):
     """
     Sticky position constraints.
     """
 
-    def __init__(self, stickyBoxRect: Union['DOM.Rect', dict], containingBlockRect: Union['DOM.Rect', dict], nearestLayerShiftingStickyBox: Optional[LayerId] = None, nearestLayerShiftingContainingBlock: Optional[LayerId] = None) -> None:
+    def __init__(self, stickyBoxRect: Union['DOM.Rect', dict], containingBlockRect: Union['DOM.Rect', dict], nearestLayerShiftingStickyBox: Optional[str] = None, nearestLayerShiftingContainingBlock: Optional[str] = None) -> None:
         """
         :param stickyBoxRect: Layout rectangle of the sticky element before being shifted
         :type stickyBoxRect: dict
@@ -32,18 +26,22 @@ class StickyPositionConstraint(ProtocolType):
         self.nearestLayerShiftingContainingBlock = nearestLayerShiftingContainingBlock
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['StickyPositionConstraint']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['StickyPositionConstraint', dict]]:
         if init is not None:
-            return StickyPositionConstraint(**init)
+             try:
+                ourselves = StickyPositionConstraint(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['StickyPositionConstraint']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['StickyPositionConstraint', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(StickyPositionConstraint(**it))
+                list_of_self.append(StickyPositionConstraint.safe_create(it))
             return list_of_self
         else:
             return init
@@ -66,18 +64,22 @@ class ScrollRect(ProtocolType):
         self.type = type
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ScrollRect']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ScrollRect', dict]]:
         if init is not None:
-            return ScrollRect(**init)
+             try:
+                ourselves = ScrollRect(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ScrollRect']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ScrollRect', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ScrollRect(**it))
+                list_of_self.append(ScrollRect.safe_create(it))
             return list_of_self
         else:
             return init
@@ -103,18 +105,22 @@ class PictureTile(ProtocolType):
         self.picture = picture
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['PictureTile']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['PictureTile', dict]]:
         if init is not None:
-            return PictureTile(**init)
+             try:
+                ourselves = PictureTile(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['PictureTile']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['PictureTile', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(PictureTile(**it))
+                list_of_self.append(PictureTile.safe_create(it))
             return list_of_self
         else:
             return init
@@ -125,7 +131,7 @@ class Layer(ProtocolType):
     Information about a compositing layer.
     """
 
-    def __init__(self, layerId: LayerId, offsetX: float, offsetY: float, width: float, height: float, paintCount: int, drawsContent: bool, parentLayerId: Optional[LayerId] = None, backendNodeId: Optional[DOM.BackendNodeId] = None, transform: Optional[List[float]] = None, anchorX: Optional[float] = None, anchorY: Optional[float] = None, anchorZ: Optional[float] = None, invisible: Optional[bool] = None, scrollRects: Optional[List[Union['ScrollRect', dict]]] = None, stickyPositionConstraint: Optional[Union['StickyPositionConstraint', dict]] = None) -> None:
+    def __init__(self, layerId: str, offsetX: float, offsetY: float, width: float, height: float, paintCount: int, drawsContent: bool, parentLayerId: Optional[str] = None, backendNodeId: Optional[int] = None, transform: Optional[List[float]] = None, anchorX: Optional[float] = None, anchorY: Optional[float] = None, anchorZ: Optional[float] = None, invisible: Optional[bool] = None, scrollRects: Optional[List[Union['ScrollRect', dict]]] = None, stickyPositionConstraint: Optional[Union['StickyPositionConstraint', dict]] = None) -> None:
         """
         :param layerId: The unique id for this layer.
         :type layerId: str
@@ -179,18 +185,22 @@ class Layer(ProtocolType):
         self.stickyPositionConstraint = StickyPositionConstraint.safe_create(stickyPositionConstraint)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Layer']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Layer', dict]]:
         if init is not None:
-            return Layer(**init)
+             try:
+                ourselves = Layer(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Layer']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Layer', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Layer(**it))
+                list_of_self.append(Layer.safe_create(it))
             return list_of_self
         else:
             return init

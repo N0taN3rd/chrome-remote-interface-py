@@ -2,52 +2,138 @@ import asyncio
 import base64
 import json
 import logging
+import ujson
 from urllib.parse import urljoin
-from typing import Optional, List, Dict
-
+from typing import Optional, List, Dict, Union
+from pyee import EventEmitter
 import aiohttp
 import websockets
 import websockets.protocol
 
+from cripy.protocol import ProtocolMixin
+
 DEFAULT_HOST: str = "localhost"
-DEFAULT_PORT: str = 9222
+DEFAULT_PORT: int = 9222
+TIMEOUT_S = 25
+MAX_PAYLOAD_SIZE_BYTES = 2 ** 30
+MAX_PAYLOAD_SIZE_MB = MAX_PAYLOAD_SIZE_BYTES / 1024 ** 2  # ~ 1GB
 
 
-class Chrome(object):
+class NetworkError(Exception):  # noqa: D204
+    """Network/Protocol related exception."""
+    pass
+
+
+class Chrome(ProtocolMixin, EventEmitter):
 
     def __init__(
-        self, host: Optional[str] = DEFAULT_HOST, port: Optional[int] = DEFAULT_PORT
-    ) -> None:
-        super().__init__()
-        self._host: str = host
-        self._port: int = port
-        self._url: str = "http://%s:%d" % (self.host, self.port)
-        self._tabs: List = []
-        self.is_connected: bool = False
+        self,
+        url: Optional[str] = None,
+        host: Optional[str] = DEFAULT_HOST,
+        port: Optional[int] = DEFAULT_PORT,
+        secure: Optional[bool] = False,
+        wsurl: Optional[str] = None,
+        *args,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+        self._host = host
+        self._port = port
+        self._url = self._make_url(url, secure)
+        self._tabs = []
+        self.is_connected = False
+        self._ws_url = wsurl
+        self._ws: Optional[websockets.WebSocketClientProtocol] = None
+        self._recv_task = None
+        self._message_id = 1
+        self._connected = False
+        self._callbacks: Dict[int, asyncio.Future] = dict()
+
+    async def disconnect(self):
+        if self._recv_task:
+            self._recv_task.cancel()
+            await self._recv_task
+        try:
+            await self._ws.close()
+        except Exception as e:
+            print(e)
+        self._connected = False
+        asyncio.get_event_loop().close()
 
     async def connect(self):
-        """ Get all open browser tabs that are pages tabs
-        """
-        if not self.is_connected:
-            await asyncio.wait_for(self.attempt_tab_fetch(), timeout=5)
+        if self._ws_url is not None:
+            self._ws = await websockets.connect(
+                self._ws_url, max_size=None, read_limit=2 ** 32
+            )
+            self._recv_task = asyncio.ensure_future(self._recv_loop())
+        else:
+            tabs = await self.List(url=self._url)
+            it: Dict[str, str] = list(filter(lambda x: x["type"] == "page", tabs))[0]
+            self._ws_url = it["webSocketDebuggerUrl"]
+            self._ws = await websockets.connect(
+                self._ws_url, max_size=None, read_limit=2 ** 32
+            )
+            self._recv_task = asyncio.ensure_future(self._recv_loop())
+        print("connect done")
 
-    async def attempt_tab_fetch(self):
-        async with aiohttp.ClientSession() as session:
-            async with session.get(self._url + "/json") as resp:
-                tabs = []
-                data = await resp.json()
-                if not len(data):
-                    self._log.warning(
-                        "Empty data, will attempt to reconnect until able to get pages."
-                    )
-                for tab in filter(lambda x: x["type"] == "page", data):
-                    t = await ChromeTab.create_from_json(tab, self._host, self._port)
-                    tabs.append(t)
-                self._tabs = tabs
-                self._log.debug(
-                    "Connected to Chrome! Found {} tabs".format(len(self._tabs))
-                )
-        self.is_connected = True
+    async def _recv_loop(self):
+        self._connected = True
+        while self._connected:
+            try:
+                resp = await self._ws.recv()
+                if resp:
+                    self._on_message(resp)
+                print(resp)
+            except (
+                websockets.ConnectionClosed,
+                ConnectionResetError,
+                asyncio.CancelledError,
+            ):
+                await self.disconnect()
+                break
+
+    def _on_message(self, message: str) -> None:
+        msg = ujson.loads(message)
+        if msg.get("id") in self._callbacks:
+            self._on_response(msg)
+        else:
+            self._on_query(msg)
+
+    def _on_response(self, msg: dict) -> None:
+        callback = self._callbacks.pop(msg.get("id", -1))
+        if "error" in msg:
+            error = msg["error"]
+            callback.set_exception(NetworkError(f"Protocol Error: {error}"))
+        else:
+            callback.set_result(msg.get("result"))
+
+    def _on_query(self, msg: dict) -> None:
+        params = msg.get("params", {})
+        method = msg.get("method", "")
+        if method in self.protocol_events:
+            params = self.protocol_events[method].safe_create(params)
+        try:
+            self.emit(method, params)
+        except Exception as e:
+            print("emit execption", e)
+
+    async def _send_async(self, msg: str) -> None:
+        while not self._connected:
+            print("while not connected")
+            await asyncio.sleep(0)
+        await self._ws.send(msg)
+
+    async def send(self, method: str = None, params: dict = None) -> None:
+        if params is None:
+            params = dict()
+        self._message_id += 1
+        _id = self._message_id
+        msg = ujson.dumps(dict(method=method, params=params, id=_id))
+        asyncio.ensure_future(self._send_async(msg))
+        callback = asyncio.get_event_loop().create_future()
+        self._callbacks[_id] = callback
+        callback.method = method  # type: ignore
+        return callback
 
     @property
     def host(self):
@@ -61,24 +147,25 @@ class Chrome(object):
     def url(self):
         return self._url
 
-    @property
-    def tabs(self):
-        if not len(self._tabs):
-            raise ValueError("Must call connect_s or connect first!")
-        return tuple(self._tabs)
-
-    async def create_tab(self):
+    @classmethod
+    async def JSON(
+        cls,
+        url: Optional[str] = None,
+        host: Optional[str] = DEFAULT_HOST,
+        port: Optional[int] = DEFAULT_PORT,
+        secure: Optional[bool] = False,
+    ):
         async with aiohttp.ClientSession() as session:
-            async with session.get(self._url + "/json/new") as resp:
-                data = await resp.json()
-                t = await ChromeTab.create_from_json(data, self._host, self._port)
-                self._tabs.append(t)
-        return t
+            if url is None:
+                url = f"{'https:' if secure else 'http:'}//{host}:{port}/json"
+            data = await session.get(url)
+            json_ = await data.json()
+        return json_
 
-    async def close_tab(self, tab):
-        await tab.disconnect()
-        async with aiohttp.ClientSession() as session:
-            await session.get(self._url + f"/json/close/{tab.id_}")
+    def _make_url(self, url: Optional[str] = None, secure: Optional[bool] = False):
+        if url is None:
+            return f"{'https:' if secure else 'http:'}//{self._host}:{self._port}"
+        return url
 
     @classmethod
     async def Activate(

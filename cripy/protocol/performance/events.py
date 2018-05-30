@@ -25,18 +25,22 @@ class MetricsEvent(BaseEvent):
         self.title = title
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['MetricsEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['MetricsEvent', dict]]:
         if init is not None:
-            return MetricsEvent(**init)
+            try:
+                ourselves = MetricsEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['MetricsEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['MetricsEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(MetricsEvent(**it))
+                list_of_self.append(MetricsEvent.safe_create(it))
             return list_of_self
         else:
             return init

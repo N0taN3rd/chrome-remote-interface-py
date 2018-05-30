@@ -2,8 +2,6 @@ from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 from cripy.protocol.runtime import types as Runtime
 
-HeapSnapshotObjectId = TypeVar("HeapSnapshotObjectId", str, str) # Heap snapshot object id.
-
 
 class SamplingHeapProfileNode(ProtocolType):
     """
@@ -25,18 +23,22 @@ class SamplingHeapProfileNode(ProtocolType):
         self.children = SamplingHeapProfileNode.safe_create_from_list(children)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['SamplingHeapProfileNode']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['SamplingHeapProfileNode', dict]]:
         if init is not None:
-            return SamplingHeapProfileNode(**init)
+             try:
+                ourselves = SamplingHeapProfileNode(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['SamplingHeapProfileNode']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SamplingHeapProfileNode', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(SamplingHeapProfileNode(**it))
+                list_of_self.append(SamplingHeapProfileNode.safe_create(it))
             return list_of_self
         else:
             return init
@@ -56,18 +58,22 @@ class SamplingHeapProfile(ProtocolType):
         self.head = SamplingHeapProfileNode.safe_create(head)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['SamplingHeapProfile']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['SamplingHeapProfile', dict]]:
         if init is not None:
-            return SamplingHeapProfile(**init)
+             try:
+                ourselves = SamplingHeapProfile(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['SamplingHeapProfile']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SamplingHeapProfile', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(SamplingHeapProfile(**it))
+                list_of_self.append(SamplingHeapProfile.safe_create(it))
             return list_of_self
         else:
             return init

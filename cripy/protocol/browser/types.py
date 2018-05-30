@@ -1,10 +1,6 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
-WindowState = TypeVar("WindowState", str, str) # The state of the browser window.
-
-WindowID = TypeVar("WindowID", int, int) # 
-
 
 class Histogram(ProtocolType):
     """
@@ -29,18 +25,22 @@ class Histogram(ProtocolType):
         self.buckets = Bucket.safe_create_from_list(buckets)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Histogram']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Histogram', dict]]:
         if init is not None:
-            return Histogram(**init)
+             try:
+                ourselves = Histogram(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Histogram']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Histogram', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Histogram(**it))
+                list_of_self.append(Histogram.safe_create(it))
             return list_of_self
         else:
             return init
@@ -66,18 +66,22 @@ class Bucket(ProtocolType):
         self.count = count
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Bucket']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Bucket', dict]]:
         if init is not None:
-            return Bucket(**init)
+             try:
+                ourselves = Bucket(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Bucket']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Bucket', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Bucket(**it))
+                list_of_self.append(Bucket.safe_create(it))
             return list_of_self
         else:
             return init
@@ -88,7 +92,7 @@ class Bounds(ProtocolType):
     Browser window bounds information
     """
 
-    def __init__(self, left: Optional[int] = None, top: Optional[int] = None, width: Optional[int] = None, height: Optional[int] = None, windowState: Optional[WindowState] = None) -> None:
+    def __init__(self, left: Optional[int] = None, top: Optional[int] = None, width: Optional[int] = None, height: Optional[int] = None, windowState: Optional[str] = None) -> None:
         """
         :param left: The offset from the left edge of the screen to the window in pixels.
         :type left: Optional[int]
@@ -109,18 +113,22 @@ class Bounds(ProtocolType):
         self.windowState = windowState
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Bounds']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Bounds', dict]]:
         if init is not None:
-            return Bounds(**init)
+             try:
+                ourselves = Bounds(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Bounds']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Bounds', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Bounds(**it))
+                list_of_self.append(Bounds.safe_create(it))
             return list_of_self
         else:
             return init

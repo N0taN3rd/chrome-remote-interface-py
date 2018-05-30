@@ -13,7 +13,7 @@ class ConsoleAPICalledEvent(BaseEvent):
 
     event = "Runtime.consoleAPICalled"
 
-    def __init__(self, type: str, args: List[Union[RemoteObject, dict]], executionContextId: ExecutionContextId, timestamp: Timestamp, stackTrace: Optional[Union[StackTrace, dict]] = None, context: Optional[str] = None) -> None:
+    def __init__(self, type: str, args: List[Union[RemoteObject, dict]], executionContextId: int, timestamp: float, stackTrace: Optional[Union[StackTrace, dict]] = None, context: Optional[str] = None) -> None:
         """
         :param type: Type of the call.
         :type type: str
@@ -37,18 +37,22 @@ class ConsoleAPICalledEvent(BaseEvent):
         self.context = context
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ConsoleAPICalledEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ConsoleAPICalledEvent', dict]]:
         if init is not None:
-            return ConsoleAPICalledEvent(**init)
+            try:
+                ourselves = ConsoleAPICalledEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ConsoleAPICalledEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ConsoleAPICalledEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ConsoleAPICalledEvent(**it))
+                list_of_self.append(ConsoleAPICalledEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -73,18 +77,22 @@ class ExceptionRevokedEvent(BaseEvent):
         self.exceptionId = exceptionId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ExceptionRevokedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ExceptionRevokedEvent', dict]]:
         if init is not None:
-            return ExceptionRevokedEvent(**init)
+            try:
+                ourselves = ExceptionRevokedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ExceptionRevokedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ExceptionRevokedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ExceptionRevokedEvent(**it))
+                list_of_self.append(ExceptionRevokedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -97,7 +105,7 @@ class ExceptionThrownEvent(BaseEvent):
 
     event = "Runtime.exceptionThrown"
 
-    def __init__(self, timestamp: Timestamp, exceptionDetails: Union[ExceptionDetails, dict]) -> None:
+    def __init__(self, timestamp: float, exceptionDetails: Union[ExceptionDetails, dict]) -> None:
         """
         :param timestamp: Timestamp of the exception.
         :type timestamp: float
@@ -109,18 +117,22 @@ class ExceptionThrownEvent(BaseEvent):
         self.exceptionDetails = ExceptionDetails.safe_create(exceptionDetails)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ExceptionThrownEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ExceptionThrownEvent', dict]]:
         if init is not None:
-            return ExceptionThrownEvent(**init)
+            try:
+                ourselves = ExceptionThrownEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ExceptionThrownEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ExceptionThrownEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ExceptionThrownEvent(**it))
+                list_of_self.append(ExceptionThrownEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -142,18 +154,22 @@ class ExecutionContextCreatedEvent(BaseEvent):
         self.context = ExecutionContextDescription.safe_create(context)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ExecutionContextCreatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ExecutionContextCreatedEvent', dict]]:
         if init is not None:
-            return ExecutionContextCreatedEvent(**init)
+            try:
+                ourselves = ExecutionContextCreatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ExecutionContextCreatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ExecutionContextCreatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ExecutionContextCreatedEvent(**it))
+                list_of_self.append(ExecutionContextCreatedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -166,7 +182,7 @@ class ExecutionContextDestroyedEvent(BaseEvent):
 
     event = "Runtime.executionContextDestroyed"
 
-    def __init__(self, executionContextId: ExecutionContextId) -> None:
+    def __init__(self, executionContextId: int) -> None:
         """
         :param executionContextId: Id of the destroyed context
         :type executionContextId: int
@@ -175,18 +191,22 @@ class ExecutionContextDestroyedEvent(BaseEvent):
         self.executionContextId = executionContextId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ExecutionContextDestroyedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ExecutionContextDestroyedEvent', dict]]:
         if init is not None:
-            return ExecutionContextDestroyedEvent(**init)
+            try:
+                ourselves = ExecutionContextDestroyedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ExecutionContextDestroyedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ExecutionContextDestroyedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ExecutionContextDestroyedEvent(**it))
+                list_of_self.append(ExecutionContextDestroyedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -203,18 +223,22 @@ class ExecutionContextsClearedEvent(BaseEvent, dict):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ExecutionContextsClearedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ExecutionContextsClearedEvent', dict]]:
         if init is not None:
-            return ExecutionContextsClearedEvent(**init)
+            try:
+                ourselves = ExecutionContextsClearedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ExecutionContextsClearedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ExecutionContextsClearedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ExecutionContextsClearedEvent(**it))
+                list_of_self.append(ExecutionContextsClearedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -239,18 +263,22 @@ class InspectRequestedEvent(BaseEvent):
         self.hints = hints
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['InspectRequestedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['InspectRequestedEvent', dict]]:
         if init is not None:
-            return InspectRequestedEvent(**init)
+            try:
+                ourselves = InspectRequestedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['InspectRequestedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['InspectRequestedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(InspectRequestedEvent(**it))
+                list_of_self.append(InspectRequestedEvent.safe_create(it))
             return list_of_self
         else:
             return init

@@ -26,18 +26,22 @@ class BufferUsageEvent(BaseEvent):
         self.value = value
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['BufferUsageEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['BufferUsageEvent', dict]]:
         if init is not None:
-            return BufferUsageEvent(**init)
+            try:
+                ourselves = BufferUsageEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['BufferUsageEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['BufferUsageEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(BufferUsageEvent(**it))
+                list_of_self.append(BufferUsageEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -60,18 +64,22 @@ class DataCollectedEvent(BaseEvent):
         self.value = value
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['DataCollectedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DataCollectedEvent', dict]]:
         if init is not None:
-            return DataCollectedEvent(**init)
+            try:
+                ourselves = DataCollectedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['DataCollectedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DataCollectedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(DataCollectedEvent(**it))
+                list_of_self.append(DataCollectedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -84,7 +92,7 @@ class TracingCompleteEvent(BaseEvent):
 
     event = "Tracing.tracingComplete"
 
-    def __init__(self, stream: Optional[IO.StreamHandle] = None, streamCompression: Optional[StreamCompression] = None) -> None:
+    def __init__(self, stream: Optional[str] = None, streamCompression: Optional[str] = None) -> None:
         """
         :param stream: A handle of the stream that holds resulting trace data.
         :type stream: Optional[str]
@@ -96,18 +104,22 @@ class TracingCompleteEvent(BaseEvent):
         self.streamCompression = streamCompression
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['TracingCompleteEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['TracingCompleteEvent', dict]]:
         if init is not None:
-            return TracingCompleteEvent(**init)
+            try:
+                ourselves = TracingCompleteEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['TracingCompleteEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TracingCompleteEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(TracingCompleteEvent(**it))
+                list_of_self.append(TracingCompleteEvent.safe_create(it))
             return list_of_self
         else:
             return init

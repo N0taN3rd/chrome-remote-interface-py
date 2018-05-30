@@ -11,7 +11,7 @@ class ApplicationCacheStatusUpdatedEvent(BaseEvent):
 
     event = "ApplicationCache.applicationCacheStatusUpdated"
 
-    def __init__(self, frameId: Page.FrameId, manifestURL: str, status: int) -> None:
+    def __init__(self, frameId: str, manifestURL: str, status: int) -> None:
         """
         :param frameId: Identifier of the frame containing document whose application cache updated status.
         :type frameId: str
@@ -26,18 +26,22 @@ class ApplicationCacheStatusUpdatedEvent(BaseEvent):
         self.status = status
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ApplicationCacheStatusUpdatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ApplicationCacheStatusUpdatedEvent', dict]]:
         if init is not None:
-            return ApplicationCacheStatusUpdatedEvent(**init)
+            try:
+                ourselves = ApplicationCacheStatusUpdatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ApplicationCacheStatusUpdatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ApplicationCacheStatusUpdatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ApplicationCacheStatusUpdatedEvent(**it))
+                list_of_self.append(ApplicationCacheStatusUpdatedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -56,18 +60,22 @@ class NetworkStateUpdatedEvent(BaseEvent):
         self.isNowOnline = isNowOnline
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['NetworkStateUpdatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['NetworkStateUpdatedEvent', dict]]:
         if init is not None:
-            return NetworkStateUpdatedEvent(**init)
+            try:
+                ourselves = NetworkStateUpdatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['NetworkStateUpdatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['NetworkStateUpdatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(NetworkStateUpdatedEvent(**it))
+                list_of_self.append(NetworkStateUpdatedEvent.safe_create(it))
             return list_of_self
         else:
             return init

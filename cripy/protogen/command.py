@@ -1,8 +1,9 @@
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Iterator
 
 from .shared import FRefCollector
 from .property import Property
 from .returns import Returns
+from .typer import TYPER
 
 
 class Command(FRefCollector):
@@ -18,6 +19,18 @@ class Command(FRefCollector):
         self.parameters: List[Property] = self._build_params(params)
         self.returns: Optional[Returns] = self._build_returns(command)
 
+    def _argstr(self, arg: Property) -> str:
+        return f"{arg.name}={arg.name}"
+
+    def stringify_thy_args(self) -> Iterator[str]:
+        for parm in self.parameters:
+            yield (f"if {arg.name} is not None")
+        if len(self.parameters) > 0:
+            dict_body = ", ".join(map(self._argstr, self.parameters))
+            return f", dict({dict_body})"
+        else:
+            return ""
+
     @property
     def has_parameters(self) -> bool:
         return len(self.parameters) > 0
@@ -31,7 +44,7 @@ class Command(FRefCollector):
         if self.returns is not None:
             return self.returns.returns_string
         else:
-            return 'None'
+            return "None"
 
     @property
     def param_string(self) -> str:
@@ -54,13 +67,12 @@ class Command(FRefCollector):
             notoptional = []
             for prop in self.parameters:
                 if prop.optional:
-                    optionals.append(prop.command_arg_string.replace("'", ""))
+                    optionals.append(prop.command_arg_string(self.domain))
                 else:
-                    notoptional.append(prop.command_arg_string.replace("'", ""))
+                    notoptional.append(prop.command_arg_string(self.domain))
             return ", ".join(notoptional + optionals)
         else:
             return ""
-
 
     @property
     def class_name(self) -> str:
@@ -77,7 +89,7 @@ class Command(FRefCollector):
     def _build_returns(self, command) -> Optional[Returns]:
         rt = command.get("returns", None)
         if rt is not None:
-            returns = Returns(self.name, rt)
+            returns = Returns(self.domain, self.name, rt)
             self._if_foreign_ref_add(returns)
             return returns
         else:

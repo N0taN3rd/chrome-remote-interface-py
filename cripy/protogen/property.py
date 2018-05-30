@@ -2,8 +2,10 @@ from typing import List, Optional, Set, Union
 
 import textwrap
 
-from .shared import FRefCollector, TYPER
+from .shared import FRefCollector
 from .ptype import Type
+from .typer import TYPER
+
 
 Enum = Optional[List[str]]
 
@@ -12,13 +14,11 @@ Items = Optional[Union[List[Type], Type]]
 
 def cstring_mapper(t: Type) -> Union[str, Type]:
     if not t.is_pytype and not t.is_array:
-        print("sdkaljd")
         return f"Union['{t}', dict]"
     return t
 
 
 def clean_string(s: str) -> str:
-    print(s)
     return s.rstrip(" ").lstrip(" ")
 
 
@@ -106,10 +106,9 @@ class Property(FRefCollector):
             ts = self._wrap_if_optionalc(ars)
         return f"{self.name}: {ts}"
 
-    @property
-    def command_arg_string(self) -> str:
+    def command_arg_string(self, domain) -> str:
         if self.is_array:
-            ars = TYPER.command_sig(self.items)
+            ars = TYPER.command_sig(self.items, domain)
             if ars is None:
                 print(
                     "wtf is_array",
@@ -120,7 +119,7 @@ class Property(FRefCollector):
                 )
             ts = self._wrap_if_optionalc(f"List[{ars}]")
         else:
-            ars = TYPER.command_sig(self.type)
+            ars = TYPER.command_sig(self.type, domain)
             if ars is None:
                 print(
                     "wtf",

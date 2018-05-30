@@ -19,18 +19,22 @@ class WorkerErrorReportedEvent(BaseEvent):
         self.errorMessage = ServiceWorkerErrorMessage.safe_create(errorMessage)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['WorkerErrorReportedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['WorkerErrorReportedEvent', dict]]:
         if init is not None:
-            return WorkerErrorReportedEvent(**init)
+            try:
+                ourselves = WorkerErrorReportedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['WorkerErrorReportedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['WorkerErrorReportedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(WorkerErrorReportedEvent(**it))
+                list_of_self.append(WorkerErrorReportedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -49,18 +53,22 @@ class WorkerRegistrationUpdatedEvent(BaseEvent):
         self.registrations = ServiceWorkerRegistration.safe_create_from_list(registrations)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['WorkerRegistrationUpdatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['WorkerRegistrationUpdatedEvent', dict]]:
         if init is not None:
-            return WorkerRegistrationUpdatedEvent(**init)
+            try:
+                ourselves = WorkerRegistrationUpdatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['WorkerRegistrationUpdatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['WorkerRegistrationUpdatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(WorkerRegistrationUpdatedEvent(**it))
+                list_of_self.append(WorkerRegistrationUpdatedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -79,18 +87,22 @@ class WorkerVersionUpdatedEvent(BaseEvent):
         self.versions = ServiceWorkerVersion.safe_create_from_list(versions)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['WorkerVersionUpdatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['WorkerVersionUpdatedEvent', dict]]:
         if init is not None:
-            return WorkerVersionUpdatedEvent(**init)
+            try:
+                ourselves = WorkerVersionUpdatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['WorkerVersionUpdatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['WorkerVersionUpdatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(WorkerVersionUpdatedEvent(**it))
+                list_of_self.append(WorkerVersionUpdatedEvent.safe_create(it))
             return list_of_self
         else:
             return init

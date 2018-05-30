@@ -1,0 +1,18 @@
+{% for import_from, imported in domains %}
+from .{{ import_from }} import {{ imported }}
+{% endfor %}
+
+
+class ProtocolMixin(object):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.protocol_events = dict()
+        {% for _, imported in domains %}
+        self.{{ imported }}: {{ imported }} = {{ imported }}(self)
+        self._update_protocol_events(self.{{ imported }}.get_event_classes())
+        {% endfor %}
+
+    def _update_protocol_events(self, events):
+        if events is not None:
+            self.protocol_events.update(events)
+

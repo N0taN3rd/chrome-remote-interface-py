@@ -22,18 +22,22 @@ class AnimationCanceledEvent(BaseEvent):
         self.id = id
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['AnimationCanceledEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AnimationCanceledEvent', dict]]:
         if init is not None:
-            return AnimationCanceledEvent(**init)
+            try:
+                ourselves = AnimationCanceledEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AnimationCanceledEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AnimationCanceledEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(AnimationCanceledEvent(**it))
+                list_of_self.append(AnimationCanceledEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -55,18 +59,22 @@ class AnimationCreatedEvent(BaseEvent):
         self.id = id
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['AnimationCreatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AnimationCreatedEvent', dict]]:
         if init is not None:
-            return AnimationCreatedEvent(**init)
+            try:
+                ourselves = AnimationCreatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AnimationCreatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AnimationCreatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(AnimationCreatedEvent(**it))
+                list_of_self.append(AnimationCreatedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -88,18 +96,22 @@ class AnimationStartedEvent(BaseEvent):
         self.animation = Animation.safe_create(animation)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['AnimationStartedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AnimationStartedEvent', dict]]:
         if init is not None:
-            return AnimationStartedEvent(**init)
+            try:
+                ourselves = AnimationStartedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AnimationStartedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AnimationStartedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(AnimationStartedEvent(**it))
+                list_of_self.append(AnimationStartedEvent.safe_create(it))
             return list_of_self
         else:
             return init

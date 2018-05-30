@@ -25,18 +25,22 @@ class CacheStorageContentUpdatedEvent(BaseEvent):
         self.cacheName = cacheName
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CacheStorageContentUpdatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CacheStorageContentUpdatedEvent', dict]]:
         if init is not None:
-            return CacheStorageContentUpdatedEvent(**init)
+            try:
+                ourselves = CacheStorageContentUpdatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CacheStorageContentUpdatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CacheStorageContentUpdatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CacheStorageContentUpdatedEvent(**it))
+                list_of_self.append(CacheStorageContentUpdatedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -58,18 +62,22 @@ class CacheStorageListUpdatedEvent(BaseEvent):
         self.origin = origin
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CacheStorageListUpdatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CacheStorageListUpdatedEvent', dict]]:
         if init is not None:
-            return CacheStorageListUpdatedEvent(**init)
+            try:
+                ourselves = CacheStorageListUpdatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CacheStorageListUpdatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CacheStorageListUpdatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CacheStorageListUpdatedEvent(**it))
+                list_of_self.append(CacheStorageListUpdatedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -97,18 +105,22 @@ class IndexedDBContentUpdatedEvent(BaseEvent):
         self.objectStoreName = objectStoreName
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['IndexedDBContentUpdatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['IndexedDBContentUpdatedEvent', dict]]:
         if init is not None:
-            return IndexedDBContentUpdatedEvent(**init)
+            try:
+                ourselves = IndexedDBContentUpdatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['IndexedDBContentUpdatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['IndexedDBContentUpdatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(IndexedDBContentUpdatedEvent(**it))
+                list_of_self.append(IndexedDBContentUpdatedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -130,18 +142,22 @@ class IndexedDBListUpdatedEvent(BaseEvent):
         self.origin = origin
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['IndexedDBListUpdatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['IndexedDBListUpdatedEvent', dict]]:
         if init is not None:
-            return IndexedDBListUpdatedEvent(**init)
+            try:
+                ourselves = IndexedDBListUpdatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['IndexedDBListUpdatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['IndexedDBListUpdatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(IndexedDBListUpdatedEvent(**it))
+                list_of_self.append(IndexedDBListUpdatedEvent.safe_create(it))
             return list_of_self
         else:
             return init

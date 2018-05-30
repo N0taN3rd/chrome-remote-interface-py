@@ -1,19 +1,18 @@
 from typing import List
 
-from .shared import FRefCollector, TYPER
+from .shared import FRefCollector
 from .property import Property
+from .typer import TYPER
 
 
 class Returns(FRefCollector):
 
-    def __init__(self, owner: str, rt: List[dict]) -> None:
+    def __init__(self, domain, owner: str, rt: List[dict]) -> None:
         super().__init__()
+        self.domain: str = domain
         self.owner: str = owner
         self.pytype: str = "dict"
         self.properties: List[Property] = self._build_properties(rt)
-        for p in self.properties:
-            if TYPER.is_object(p.type):
-                print(p.type)
 
     def _build_properties(self, rt: List[dict]) -> List[Property]:
         props = []
@@ -24,13 +23,50 @@ class Returns(FRefCollector):
         return props
 
     def yield_result_trans(self):
+        # print(f"yield_result_trans for {self.owner}")
         for p in self.properties:
             if TYPER.is_object(p.type):
                 if p.type.is_foreign_ref:
                     t = p.type
                 else:
                     t = f"Types.{p.type}"
-                yield f"raw_res['{p.name}'] = {t}.safe_create(raw_res['{p.name}'])"
+                yield f"res['{p.name}'] = {t}.safe_create(res['{p.name}'])"
+            else:
+                if p.type.is_array:
+                    itms = p.items
+                    scoped = f"{self.domain}.{itms.type}"
+                    dt = TYPER.domain_types.get(scoped, None)
+                    if dt is not None:
+                        if dt.type.is_object:
+                            yield (
+                                f"res['{p.name}'] = "
+                                f"{scoped.replace(self.domain,'Types')}.safe_create_from_list(res['{p.name}'])"
+                            )
+                    else:
+                        dt = TYPER.domain_types.get(itms.type)
+                        if dt is not None:
+                            if dt.type.is_object:
+                                yield (
+                                    f"res['{p.name}'] = "
+                                    f"{dt.scoped_name}.safe_create_from_list(res['{p.name}'])"
+                                )
+                else:
+                    scoped = f"{self.domain}.{p.type}"
+                    dt = TYPER.domain_types.get(scoped, None)
+                    if dt is not None:
+                        if dt.type.is_object:
+                            yield (
+                                f"res['{p.name}'] = "
+                                f"{scoped.replace(self.domain,'Types')}.safe_create_from_list(res['{p.name}'])"
+                            )
+                    else:
+                        dt = TYPER.domain_types.get(p.type)
+                        if dt is not None:
+                            if dt.type.is_object:
+                                yield (
+                                    f"res['{p.name}'] = "
+                                    f"{dt.scoped_name}.safe_create_from_list(res['{p.name}'])"
+                                )
 
     @property
     def returns_string(self) -> str:

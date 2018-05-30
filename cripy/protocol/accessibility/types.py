@@ -2,23 +2,13 @@ from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 
-AXValueType = TypeVar("AXValueType", str, str) # Enum of possible property types.
-
-AXValueSourceType = TypeVar("AXValueSourceType", str, str) # Enum of possible property sources.
-
-AXValueNativeSourceType = TypeVar("AXValueNativeSourceType", str, str) # Enum of possible native property sources (as a subtype of a particular AXValueSourceType).
-
-AXPropertyName = TypeVar("AXPropertyName", str, str) # Values of AXProperty name: from 'busy' to 'roledescription' - states which apply to every AX node, from 'live' to 'root' - attributes which apply to nodes in live regions, from 'autocomplete' to 'valuetext' - attributes which apply to widgets, from 'checked' to 'selected' - states which apply to widgets, from 'activedescendant' to 'owns' - relationships between elements other than parent/child/sibling.
-
-AXNodeId = TypeVar("AXNodeId", str, str) # Unique accessibility node identifier.
-
 
 class AXValueSource(ProtocolType):
     """
     A single source for a computed AX property.
     """
 
-    def __init__(self, type: AXValueSourceType, value: Optional[Union['AXValue', dict]] = None, attribute: Optional[str] = None, attributeValue: Optional[Union['AXValue', dict]] = None, superseded: Optional[bool] = None, nativeSource: Optional[AXValueNativeSourceType] = None, nativeSourceValue: Optional[Union['AXValue', dict]] = None, invalid: Optional[bool] = None, invalidReason: Optional[str] = None) -> None:
+    def __init__(self, type: str, value: Optional[Union['AXValue', dict]] = None, attribute: Optional[str] = None, attributeValue: Optional[Union['AXValue', dict]] = None, superseded: Optional[bool] = None, nativeSource: Optional[str] = None, nativeSourceValue: Optional[Union['AXValue', dict]] = None, invalid: Optional[bool] = None, invalidReason: Optional[str] = None) -> None:
         """
         :param type: What type of source this is.
         :type type: str
@@ -51,18 +41,22 @@ class AXValueSource(ProtocolType):
         self.invalidReason = invalidReason
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['AXValueSource']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AXValueSource', dict]]:
         if init is not None:
-            return AXValueSource(**init)
+             try:
+                ourselves = AXValueSource(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AXValueSource']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AXValueSource', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(AXValueSource(**it))
+                list_of_self.append(AXValueSource.safe_create(it))
             return list_of_self
         else:
             return init
@@ -73,7 +67,7 @@ class AXValue(ProtocolType):
     A single computed AX property.
     """
 
-    def __init__(self, type: AXValueType, value: Optional[Any] = None, relatedNodes: Optional[List[Union['AXRelatedNode', dict]]] = None, sources: Optional[List[Union['AXValueSource', dict]]] = None) -> None:
+    def __init__(self, type: str, value: Optional[Any] = None, relatedNodes: Optional[List[Union['AXRelatedNode', dict]]] = None, sources: Optional[List[Union['AXValueSource', dict]]] = None) -> None:
         """
         :param type: The type of this value.
         :type type: str
@@ -91,25 +85,29 @@ class AXValue(ProtocolType):
         self.sources = AXValueSource.safe_create_from_list(sources)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['AXValue']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AXValue', dict]]:
         if init is not None:
-            return AXValue(**init)
+             try:
+                ourselves = AXValue(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AXValue']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AXValue', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(AXValue(**it))
+                list_of_self.append(AXValue.safe_create(it))
             return list_of_self
         else:
             return init
 
 
 class AXRelatedNode(ProtocolType):
-    def __init__(self, backendDOMNodeId: DOM.BackendNodeId, idref: Optional[str] = None, text: Optional[str] = None) -> None:
+    def __init__(self, backendDOMNodeId: int, idref: Optional[str] = None, text: Optional[str] = None) -> None:
         """
         :param backendDOMNodeId: The BackendNodeId of the related DOM node.
         :type backendDOMNodeId: int
@@ -124,25 +122,29 @@ class AXRelatedNode(ProtocolType):
         self.text = text
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['AXRelatedNode']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AXRelatedNode', dict]]:
         if init is not None:
-            return AXRelatedNode(**init)
+             try:
+                ourselves = AXRelatedNode(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AXRelatedNode']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AXRelatedNode', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(AXRelatedNode(**it))
+                list_of_self.append(AXRelatedNode.safe_create(it))
             return list_of_self
         else:
             return init
 
 
 class AXProperty(ProtocolType):
-    def __init__(self, name: AXPropertyName, value: Union['AXValue', dict]) -> None:
+    def __init__(self, name: str, value: Union['AXValue', dict]) -> None:
         """
         :param name: The name of this property.
         :type name: str
@@ -154,18 +156,22 @@ class AXProperty(ProtocolType):
         self.value = AXValue.safe_create(value)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['AXProperty']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AXProperty', dict]]:
         if init is not None:
-            return AXProperty(**init)
+             try:
+                ourselves = AXProperty(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AXProperty']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AXProperty', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(AXProperty(**it))
+                list_of_self.append(AXProperty.safe_create(it))
             return list_of_self
         else:
             return init
@@ -176,7 +182,7 @@ class AXNode(ProtocolType):
     A node in the accessibility tree.
     """
 
-    def __init__(self, nodeId: AXNodeId, ignored: bool, ignoredReasons: Optional[List[Union['AXProperty', dict]]] = None, role: Optional[Union['AXValue', dict]] = None, name: Optional[Union['AXValue', dict]] = None, description: Optional[Union['AXValue', dict]] = None, value: Optional[Union['AXValue', dict]] = None, properties: Optional[List[Union['AXProperty', dict]]] = None, childIds: Optional[List[AXNodeId]] = None, backendDOMNodeId: Optional[DOM.BackendNodeId] = None) -> None:
+    def __init__(self, nodeId: str, ignored: bool, ignoredReasons: Optional[List[Union['AXProperty', dict]]] = None, role: Optional[Union['AXValue', dict]] = None, name: Optional[Union['AXValue', dict]] = None, description: Optional[Union['AXValue', dict]] = None, value: Optional[Union['AXValue', dict]] = None, properties: Optional[List[Union['AXProperty', dict]]] = None, childIds: Optional[List[str]] = None, backendDOMNodeId: Optional[int] = None) -> None:
         """
         :param nodeId: Unique identifier for this node.
         :type nodeId: str
@@ -212,18 +218,22 @@ class AXNode(ProtocolType):
         self.backendDOMNodeId = backendDOMNodeId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['AXNode']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AXNode', dict]]:
         if init is not None:
-            return AXNode(**init)
+             try:
+                ourselves = AXNode(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AXNode']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AXNode', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(AXNode(**it))
+                list_of_self.append(AXNode.safe_create(it))
             return list_of_self
         else:
             return init

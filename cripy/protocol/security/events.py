@@ -31,18 +31,22 @@ class CertificateErrorEvent(BaseEvent):
         self.requestURL = requestURL
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CertificateErrorEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CertificateErrorEvent', dict]]:
         if init is not None:
-            return CertificateErrorEvent(**init)
+            try:
+                ourselves = CertificateErrorEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CertificateErrorEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CertificateErrorEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CertificateErrorEvent(**it))
+                list_of_self.append(CertificateErrorEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -55,7 +59,7 @@ class SecurityStateChangedEvent(BaseEvent):
 
     event = "Security.securityStateChanged"
 
-    def __init__(self, securityState: SecurityState, schemeIsCryptographic: bool, explanations: List[Union[SecurityStateExplanation, dict]], insecureContentStatus: Union[InsecureContentStatus, dict], summary: Optional[str] = None) -> None:
+    def __init__(self, securityState: str, schemeIsCryptographic: bool, explanations: List[Union[SecurityStateExplanation, dict]], insecureContentStatus: Union[InsecureContentStatus, dict], summary: Optional[str] = None) -> None:
         """
         :param securityState: Security state.
         :type securityState: str
@@ -76,18 +80,22 @@ class SecurityStateChangedEvent(BaseEvent):
         self.summary = summary
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['SecurityStateChangedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['SecurityStateChangedEvent', dict]]:
         if init is not None:
-            return SecurityStateChangedEvent(**init)
+            try:
+                ourselves = SecurityStateChangedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['SecurityStateChangedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SecurityStateChangedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(SecurityStateChangedEvent(**it))
+                list_of_self.append(SecurityStateChangedEvent.safe_create(it))
             return list_of_self
         else:
             return init

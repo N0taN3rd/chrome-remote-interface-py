@@ -2,8 +2,6 @@ from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 
-InspectMode = TypeVar("InspectMode", str, str) # 
-
 
 class HighlightConfig(ProtocolType):
     """
@@ -55,18 +53,22 @@ class HighlightConfig(ProtocolType):
         self.cssGridColor = DOM.RGBA.safe_create(cssGridColor)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['HighlightConfig']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['HighlightConfig', dict]]:
         if init is not None:
-            return HighlightConfig(**init)
+             try:
+                ourselves = HighlightConfig(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['HighlightConfig']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['HighlightConfig', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(HighlightConfig(**it))
+                list_of_self.append(HighlightConfig.safe_create(it))
             return list_of_self
         else:
             return init

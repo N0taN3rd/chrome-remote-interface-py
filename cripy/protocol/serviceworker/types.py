@@ -2,17 +2,13 @@ from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 from cripy.protocol.target import types as Target
 
-ServiceWorkerVersionStatus = TypeVar("ServiceWorkerVersionStatus", str, str) # 
-
-ServiceWorkerVersionRunningStatus = TypeVar("ServiceWorkerVersionRunningStatus", str, str) # 
-
 
 class ServiceWorkerVersion(ProtocolType):
     """
     ServiceWorker version.
     """
 
-    def __init__(self, versionId: str, registrationId: str, scriptURL: str, runningStatus: ServiceWorkerVersionRunningStatus, status: ServiceWorkerVersionStatus, scriptLastModified: Optional[float] = None, scriptResponseTime: Optional[float] = None, controlledClients: Optional[List[Target.TargetID]] = None, targetId: Optional[Target.TargetID] = None) -> None:
+    def __init__(self, versionId: str, registrationId: str, scriptURL: str, runningStatus: str, status: str, scriptLastModified: Optional[float] = None, scriptResponseTime: Optional[float] = None, controlledClients: Optional[List[str]] = None, targetId: Optional[str] = None) -> None:
         """
         :param versionId: The versionId
         :type versionId: str
@@ -45,18 +41,22 @@ class ServiceWorkerVersion(ProtocolType):
         self.targetId = targetId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ServiceWorkerVersion']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ServiceWorkerVersion', dict]]:
         if init is not None:
-            return ServiceWorkerVersion(**init)
+             try:
+                ourselves = ServiceWorkerVersion(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ServiceWorkerVersion']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ServiceWorkerVersion', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ServiceWorkerVersion(**it))
+                list_of_self.append(ServiceWorkerVersion.safe_create(it))
             return list_of_self
         else:
             return init
@@ -82,18 +82,22 @@ class ServiceWorkerRegistration(ProtocolType):
         self.isDeleted = isDeleted
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ServiceWorkerRegistration']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ServiceWorkerRegistration', dict]]:
         if init is not None:
-            return ServiceWorkerRegistration(**init)
+             try:
+                ourselves = ServiceWorkerRegistration(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ServiceWorkerRegistration']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ServiceWorkerRegistration', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ServiceWorkerRegistration(**it))
+                list_of_self.append(ServiceWorkerRegistration.safe_create(it))
             return list_of_self
         else:
             return init
@@ -128,18 +132,22 @@ class ServiceWorkerErrorMessage(ProtocolType):
         self.columnNumber = columnNumber
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ServiceWorkerErrorMessage']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ServiceWorkerErrorMessage', dict]]:
         if init is not None:
-            return ServiceWorkerErrorMessage(**init)
+             try:
+                ourselves = ServiceWorkerErrorMessage(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ServiceWorkerErrorMessage']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ServiceWorkerErrorMessage', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ServiceWorkerErrorMessage(**it))
+                list_of_self.append(ServiceWorkerErrorMessage.safe_create(it))
             return list_of_self
         else:
             return init

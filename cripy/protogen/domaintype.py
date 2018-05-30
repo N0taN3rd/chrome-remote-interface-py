@@ -1,10 +1,10 @@
 from typing import Optional, List, Dict, Union
 from collections import OrderedDict
 
-from .shared import FRefCollector, TYPER
 from .property import Property
 from .ptype import Type
-
+from .shared import FRefCollector
+from .typer import TYPER
 
 Props = Optional[List[Property]]
 
@@ -24,6 +24,19 @@ class DomainType(FRefCollector):
         self.items: Optional[List[Type]] = self._build_items(dt.get("items", None))
         TYPER.add_type(self.id, self.type)
         TYPER.add_type(self.scoped_name, self.type)
+        TYPER.add_domain_type(self)
+
+    @property
+    def scope(self) -> str:
+        return self.domain
+
+    @property
+    def scope_name(self) -> str:
+        return self.scoped_name
+
+    @property
+    def entity_name(self) -> str:
+        return self.id
 
     @property
     def code_description(self) -> str:
@@ -85,7 +98,7 @@ class DomainType(FRefCollector):
 
     def __str__(self) -> str:
         if self.type.is_array:
-            return f"{self.id}[]"
+            return f"{self.scoped_name}[]"
         elif self.type.is_object:
             if self.has_properties:
                 ps = (
@@ -95,9 +108,9 @@ class DomainType(FRefCollector):
                 )
             else:
                 ps = ""
-            return f"{self.id}" + " {%s}" % ps
+            return f"{self.scoped_name}" + " {%s}" % ps
         else:
-            return f"{self.id}<{self.type}>"
+            return f"{self.scoped_name}<{self.type}>"
 
     def __repr__(self) -> str:
         return self.__str__()

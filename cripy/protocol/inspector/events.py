@@ -23,18 +23,22 @@ class DetachedEvent(BaseEvent):
         self.reason = reason
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['DetachedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DetachedEvent', dict]]:
         if init is not None:
-            return DetachedEvent(**init)
+            try:
+                ourselves = DetachedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['DetachedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DetachedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(DetachedEvent(**it))
+                list_of_self.append(DetachedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -51,18 +55,22 @@ class TargetCrashedEvent(BaseEvent, dict):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['TargetCrashedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['TargetCrashedEvent', dict]]:
         if init is not None:
-            return TargetCrashedEvent(**init)
+            try:
+                ourselves = TargetCrashedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['TargetCrashedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TargetCrashedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(TargetCrashedEvent(**it))
+                list_of_self.append(TargetCrashedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -79,18 +87,22 @@ class TargetReloadedAfterCrashEvent(BaseEvent, dict):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['TargetReloadedAfterCrashEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['TargetReloadedAfterCrashEvent', dict]]:
         if init is not None:
-            return TargetReloadedAfterCrashEvent(**init)
+            try:
+                ourselves = TargetReloadedAfterCrashEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['TargetReloadedAfterCrashEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TargetReloadedAfterCrashEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(TargetReloadedAfterCrashEvent(**it))
+                list_of_self.append(TargetReloadedAfterCrashEvent.safe_create(it))
             return list_of_self
         else:
             return init

@@ -22,18 +22,22 @@ class MessageAddedEvent(BaseEvent):
         self.message = ConsoleMessage.safe_create(message)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['MessageAddedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['MessageAddedEvent', dict]]:
         if init is not None:
-            return MessageAddedEvent(**init)
+            try:
+                ourselves = MessageAddedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['MessageAddedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['MessageAddedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(MessageAddedEvent(**it))
+                list_of_self.append(MessageAddedEvent.safe_create(it))
             return list_of_self
         else:
             return init

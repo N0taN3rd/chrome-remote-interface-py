@@ -1,9 +1,7 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
-from cripy.protocol.dom import types as DOM
 from cripy.protocol.runtime import types as Runtime
-
-DOMBreakpointType = TypeVar("DOMBreakpointType", str, str) # DOM breakpoint type.
+from cripy.protocol.dom import types as DOM
 
 
 class EventListener(ProtocolType):
@@ -11,7 +9,7 @@ class EventListener(ProtocolType):
     Object event listener.
     """
 
-    def __init__(self, type: str, useCapture: bool, passive: bool, once: bool, scriptId: Runtime.ScriptId, lineNumber: int, columnNumber: int, handler: Optional[Union['Runtime.RemoteObject', dict]] = None, originalHandler: Optional[Union['Runtime.RemoteObject', dict]] = None, backendNodeId: Optional[DOM.BackendNodeId] = None) -> None:
+    def __init__(self, type: str, useCapture: bool, passive: bool, once: bool, scriptId: str, lineNumber: int, columnNumber: int, handler: Optional[Union['Runtime.RemoteObject', dict]] = None, originalHandler: Optional[Union['Runtime.RemoteObject', dict]] = None, backendNodeId: Optional[int] = None) -> None:
         """
         :param type: `EventListener`'s type.
         :type type: str
@@ -47,18 +45,22 @@ class EventListener(ProtocolType):
         self.backendNodeId = backendNodeId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['EventListener']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['EventListener', dict]]:
         if init is not None:
-            return EventListener(**init)
+             try:
+                ourselves = EventListener(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['EventListener']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['EventListener', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(EventListener(**it))
+                list_of_self.append(EventListener.safe_create(it))
             return list_of_self
         else:
             return init

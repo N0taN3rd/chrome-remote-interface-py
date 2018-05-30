@@ -25,18 +25,22 @@ class GPUInfo(ProtocolType):
         self.driverBugWorkarounds = driverBugWorkarounds
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['GPUInfo']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['GPUInfo', dict]]:
         if init is not None:
-            return GPUInfo(**init)
+             try:
+                ourselves = GPUInfo(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['GPUInfo']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['GPUInfo', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(GPUInfo(**it))
+                list_of_self.append(GPUInfo.safe_create(it))
             return list_of_self
         else:
             return init
@@ -65,18 +69,22 @@ class GPUDevice(ProtocolType):
         self.deviceString = deviceString
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['GPUDevice']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['GPUDevice', dict]]:
         if init is not None:
-            return GPUDevice(**init)
+             try:
+                ourselves = GPUDevice(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['GPUDevice']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['GPUDevice', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(GPUDevice(**it))
+                list_of_self.append(GPUDevice.safe_create(it))
             return list_of_self
         else:
             return init

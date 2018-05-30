@@ -13,7 +13,7 @@ class AttachedToTargetEvent(BaseEvent):
 
     event = "Target.attachedToTarget"
 
-    def __init__(self, sessionId: SessionID, targetInfo: Union[TargetInfo, dict], waitingForDebugger: bool) -> None:
+    def __init__(self, sessionId: str, targetInfo: Union[TargetInfo, dict], waitingForDebugger: bool) -> None:
         """
         :param sessionId: Identifier assigned to the session used to send/receive messages.
         :type sessionId: str
@@ -28,18 +28,22 @@ class AttachedToTargetEvent(BaseEvent):
         self.waitingForDebugger = waitingForDebugger
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['AttachedToTargetEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AttachedToTargetEvent', dict]]:
         if init is not None:
-            return AttachedToTargetEvent(**init)
+            try:
+                ourselves = AttachedToTargetEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AttachedToTargetEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AttachedToTargetEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(AttachedToTargetEvent(**it))
+                list_of_self.append(AttachedToTargetEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -53,7 +57,7 @@ class DetachedFromTargetEvent(BaseEvent):
 
     event = "Target.detachedFromTarget"
 
-    def __init__(self, sessionId: SessionID, targetId: Optional[TargetID] = None) -> None:
+    def __init__(self, sessionId: str, targetId: Optional[str] = None) -> None:
         """
         :param sessionId: Detached session identifier.
         :type sessionId: str
@@ -65,18 +69,22 @@ class DetachedFromTargetEvent(BaseEvent):
         self.targetId = targetId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['DetachedFromTargetEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DetachedFromTargetEvent', dict]]:
         if init is not None:
-            return DetachedFromTargetEvent(**init)
+            try:
+                ourselves = DetachedFromTargetEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['DetachedFromTargetEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DetachedFromTargetEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(DetachedFromTargetEvent(**it))
+                list_of_self.append(DetachedFromTargetEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -89,7 +97,7 @@ class ReceivedMessageFromTargetEvent(BaseEvent):
 
     event = "Target.receivedMessageFromTarget"
 
-    def __init__(self, sessionId: SessionID, message: str, targetId: Optional[TargetID] = None) -> None:
+    def __init__(self, sessionId: str, message: str, targetId: Optional[str] = None) -> None:
         """
         :param sessionId: Identifier of a session which sends a message.
         :type sessionId: str
@@ -104,18 +112,22 @@ class ReceivedMessageFromTargetEvent(BaseEvent):
         self.targetId = targetId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ReceivedMessageFromTargetEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ReceivedMessageFromTargetEvent', dict]]:
         if init is not None:
-            return ReceivedMessageFromTargetEvent(**init)
+            try:
+                ourselves = ReceivedMessageFromTargetEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ReceivedMessageFromTargetEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ReceivedMessageFromTargetEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ReceivedMessageFromTargetEvent(**it))
+                list_of_self.append(ReceivedMessageFromTargetEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -137,18 +149,22 @@ class TargetCreatedEvent(BaseEvent):
         self.targetInfo = TargetInfo.safe_create(targetInfo)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['TargetCreatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['TargetCreatedEvent', dict]]:
         if init is not None:
-            return TargetCreatedEvent(**init)
+            try:
+                ourselves = TargetCreatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['TargetCreatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TargetCreatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(TargetCreatedEvent(**it))
+                list_of_self.append(TargetCreatedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -161,7 +177,7 @@ class TargetDestroyedEvent(BaseEvent):
 
     event = "Target.targetDestroyed"
 
-    def __init__(self, targetId: TargetID) -> None:
+    def __init__(self, targetId: str) -> None:
         """
         :param targetId: The targetId
         :type targetId: str
@@ -170,18 +186,22 @@ class TargetDestroyedEvent(BaseEvent):
         self.targetId = targetId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['TargetDestroyedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['TargetDestroyedEvent', dict]]:
         if init is not None:
-            return TargetDestroyedEvent(**init)
+            try:
+                ourselves = TargetDestroyedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['TargetDestroyedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TargetDestroyedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(TargetDestroyedEvent(**it))
+                list_of_self.append(TargetDestroyedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -204,18 +224,22 @@ class TargetInfoChangedEvent(BaseEvent):
         self.targetInfo = TargetInfo.safe_create(targetInfo)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['TargetInfoChangedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['TargetInfoChangedEvent', dict]]:
         if init is not None:
-            return TargetInfoChangedEvent(**init)
+            try:
+                ourselves = TargetInfoChangedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['TargetInfoChangedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TargetInfoChangedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(TargetInfoChangedEvent(**it))
+                list_of_self.append(TargetInfoChangedEvent.safe_create(it))
             return list_of_self
         else:
             return init

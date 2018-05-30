@@ -2,16 +2,6 @@ from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 from cripy.protocol.network import types as Network
 
-TransitionType = TypeVar("TransitionType", str, str) # Transition type.
-
-ScriptIdentifier = TypeVar("ScriptIdentifier", str, str) # Unique script identifier.
-
-ResourceType = TypeVar("ResourceType", str, str) # Resource type as it was perceived by the rendering engine.
-
-FrameId = TypeVar("FrameId", str, str) # Unique frame identifier.
-
-DialogType = TypeVar("DialogType", str, str) # Javascript dialog type.
-
 
 class VisualViewport(ProtocolType):
     """
@@ -45,18 +35,22 @@ class VisualViewport(ProtocolType):
         self.scale = scale
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['VisualViewport']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['VisualViewport', dict]]:
         if init is not None:
-            return VisualViewport(**init)
+             try:
+                ourselves = VisualViewport(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['VisualViewport']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['VisualViewport', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(VisualViewport(**it))
+                list_of_self.append(VisualViewport.safe_create(it))
             return list_of_self
         else:
             return init
@@ -88,18 +82,22 @@ class Viewport(ProtocolType):
         self.scale = scale
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Viewport']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Viewport', dict]]:
         if init is not None:
-            return Viewport(**init)
+             try:
+                ourselves = Viewport(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Viewport']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Viewport', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Viewport(**it))
+                list_of_self.append(Viewport.safe_create(it))
             return list_of_self
         else:
             return init
@@ -110,7 +108,7 @@ class ScreencastFrameMetadata(ProtocolType):
     Screencast frame metadata.
     """
 
-    def __init__(self, offsetTop: float, pageScaleFactor: float, deviceWidth: float, deviceHeight: float, scrollOffsetX: float, scrollOffsetY: float, timestamp: Optional[Network.TimeSinceEpoch] = None) -> None:
+    def __init__(self, offsetTop: float, pageScaleFactor: float, deviceWidth: float, deviceHeight: float, scrollOffsetX: float, scrollOffsetY: float, timestamp: Optional[float] = None) -> None:
         """
         :param offsetTop: Top offset in DIP.
         :type offsetTop: float
@@ -137,18 +135,22 @@ class ScreencastFrameMetadata(ProtocolType):
         self.timestamp = timestamp
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ScreencastFrameMetadata']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ScreencastFrameMetadata', dict]]:
         if init is not None:
-            return ScreencastFrameMetadata(**init)
+             try:
+                ourselves = ScreencastFrameMetadata(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ScreencastFrameMetadata']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ScreencastFrameMetadata', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ScreencastFrameMetadata(**it))
+                list_of_self.append(ScreencastFrameMetadata.safe_create(it))
             return list_of_self
         else:
             return init
@@ -159,7 +161,7 @@ class NavigationEntry(ProtocolType):
     Navigation history entry.
     """
 
-    def __init__(self, id: int, url: str, userTypedURL: str, title: str, transitionType: TransitionType) -> None:
+    def __init__(self, id: int, url: str, userTypedURL: str, title: str, transitionType: str) -> None:
         """
         :param id: Unique id of the navigation history entry.
         :type id: int
@@ -180,18 +182,22 @@ class NavigationEntry(ProtocolType):
         self.transitionType = transitionType
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['NavigationEntry']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['NavigationEntry', dict]]:
         if init is not None:
-            return NavigationEntry(**init)
+             try:
+                ourselves = NavigationEntry(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['NavigationEntry']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['NavigationEntry', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(NavigationEntry(**it))
+                list_of_self.append(NavigationEntry.safe_create(it))
             return list_of_self
         else:
             return init
@@ -220,18 +226,22 @@ class LayoutViewport(ProtocolType):
         self.clientHeight = clientHeight
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['LayoutViewport']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['LayoutViewport', dict]]:
         if init is not None:
-            return LayoutViewport(**init)
+             try:
+                ourselves = LayoutViewport(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['LayoutViewport']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LayoutViewport', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(LayoutViewport(**it))
+                list_of_self.append(LayoutViewport.safe_create(it))
             return list_of_self
         else:
             return init
@@ -254,18 +264,22 @@ class FrameTree(ProtocolType):
         self.childFrames = FrameTree.safe_create_from_list(childFrames)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['FrameTree']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FrameTree', dict]]:
         if init is not None:
-            return FrameTree(**init)
+             try:
+                ourselves = FrameTree(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FrameTree']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameTree', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(FrameTree(**it))
+                list_of_self.append(FrameTree.safe_create(it))
             return list_of_self
         else:
             return init
@@ -291,18 +305,22 @@ class FrameResourceTree(ProtocolType):
         self.resources = FrameResource.safe_create_from_list(resources)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['FrameResourceTree']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FrameResourceTree', dict]]:
         if init is not None:
-            return FrameResourceTree(**init)
+             try:
+                ourselves = FrameResourceTree(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FrameResourceTree']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameResourceTree', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(FrameResourceTree(**it))
+                list_of_self.append(FrameResourceTree.safe_create(it))
             return list_of_self
         else:
             return init
@@ -313,7 +331,7 @@ class FrameResource(ProtocolType):
     Information about the Resource on the page.
     """
 
-    def __init__(self, url: str, type: ResourceType, mimeType: str, lastModified: Optional[Network.TimeSinceEpoch] = None, contentSize: Optional[float] = None, failed: Optional[bool] = None, canceled: Optional[bool] = None) -> None:
+    def __init__(self, url: str, type: str, mimeType: str, lastModified: Optional[float] = None, contentSize: Optional[float] = None, failed: Optional[bool] = None, canceled: Optional[bool] = None) -> None:
         """
         :param url: Resource URL.
         :type url: str
@@ -340,18 +358,22 @@ class FrameResource(ProtocolType):
         self.canceled = canceled
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['FrameResource']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FrameResource', dict]]:
         if init is not None:
-            return FrameResource(**init)
+             try:
+                ourselves = FrameResource(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FrameResource']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameResource', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(FrameResource(**it))
+                list_of_self.append(FrameResource.safe_create(it))
             return list_of_self
         else:
             return init
@@ -362,7 +384,7 @@ class Frame(ProtocolType):
     Information about the Frame on the page.
     """
 
-    def __init__(self, id: str, loaderId: Network.LoaderId, url: str, securityOrigin: str, mimeType: str, parentId: Optional[str] = None, name: Optional[str] = None, unreachableUrl: Optional[str] = None) -> None:
+    def __init__(self, id: str, loaderId: str, url: str, securityOrigin: str, mimeType: str, parentId: Optional[str] = None, name: Optional[str] = None, unreachableUrl: Optional[str] = None) -> None:
         """
         :param id: Frame unique identifier.
         :type id: str
@@ -392,18 +414,22 @@ class Frame(ProtocolType):
         self.unreachableUrl = unreachableUrl
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Frame']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Frame', dict]]:
         if init is not None:
-            return Frame(**init)
+             try:
+                ourselves = Frame(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Frame']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Frame', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Frame(**it))
+                list_of_self.append(Frame.safe_create(it))
             return list_of_self
         else:
             return init
@@ -432,18 +458,22 @@ class AppManifestError(ProtocolType):
         self.column = column
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['AppManifestError']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AppManifestError', dict]]:
         if init is not None:
-            return AppManifestError(**init)
+             try:
+                ourselves = AppManifestError(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AppManifestError']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AppManifestError', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(AppManifestError(**it))
+                list_of_self.append(AppManifestError.safe_create(it))
             return list_of_self
         else:
             return init

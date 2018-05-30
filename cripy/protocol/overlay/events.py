@@ -16,7 +16,7 @@ class InspectNodeRequestedEvent(BaseEvent):
 
     event = "Overlay.inspectNodeRequested"
 
-    def __init__(self, backendNodeId: DOM.BackendNodeId) -> None:
+    def __init__(self, backendNodeId: int) -> None:
         """
         :param backendNodeId: Id of the node to inspect.
         :type backendNodeId: int
@@ -25,18 +25,22 @@ class InspectNodeRequestedEvent(BaseEvent):
         self.backendNodeId = backendNodeId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['InspectNodeRequestedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['InspectNodeRequestedEvent', dict]]:
         if init is not None:
-            return InspectNodeRequestedEvent(**init)
+            try:
+                ourselves = InspectNodeRequestedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['InspectNodeRequestedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['InspectNodeRequestedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(InspectNodeRequestedEvent(**it))
+                list_of_self.append(InspectNodeRequestedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -50,7 +54,7 @@ class NodeHighlightRequestedEvent(BaseEvent):
 
     event = "Overlay.nodeHighlightRequested"
 
-    def __init__(self, nodeId: DOM.NodeId) -> None:
+    def __init__(self, nodeId: int) -> None:
         """
         :param nodeId: The nodeId
         :type nodeId: int
@@ -59,18 +63,22 @@ class NodeHighlightRequestedEvent(BaseEvent):
         self.nodeId = nodeId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['NodeHighlightRequestedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['NodeHighlightRequestedEvent', dict]]:
         if init is not None:
-            return NodeHighlightRequestedEvent(**init)
+            try:
+                ourselves = NodeHighlightRequestedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['NodeHighlightRequestedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['NodeHighlightRequestedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(NodeHighlightRequestedEvent(**it))
+                list_of_self.append(NodeHighlightRequestedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -92,18 +100,22 @@ class ScreenshotRequestedEvent(BaseEvent):
         self.viewport = Page.Viewport.safe_create(viewport)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ScreenshotRequestedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ScreenshotRequestedEvent', dict]]:
         if init is not None:
-            return ScreenshotRequestedEvent(**init)
+            try:
+                ourselves = ScreenshotRequestedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ScreenshotRequestedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ScreenshotRequestedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ScreenshotRequestedEvent(**it))
+                list_of_self.append(ScreenshotRequestedEvent.safe_create(it))
             return list_of_self
         else:
             return init

@@ -1,7 +1,7 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
-from cripy.protocol.runtime import types as Runtime
 from cripy.protocol.network import types as Network
+from cripy.protocol.runtime import types as Runtime
 
 
 class ViolationSetting(ProtocolType):
@@ -21,18 +21,22 @@ class ViolationSetting(ProtocolType):
         self.threshold = threshold
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ViolationSetting']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ViolationSetting', dict]]:
         if init is not None:
-            return ViolationSetting(**init)
+             try:
+                ourselves = ViolationSetting(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ViolationSetting']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ViolationSetting', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ViolationSetting(**it))
+                list_of_self.append(ViolationSetting.safe_create(it))
             return list_of_self
         else:
             return init
@@ -43,7 +47,7 @@ class LogEntry(ProtocolType):
     Log entry.
     """
 
-    def __init__(self, source: str, level: str, text: str, timestamp: Runtime.Timestamp, url: Optional[str] = None, lineNumber: Optional[int] = None, stackTrace: Optional[Union['Runtime.StackTrace', dict]] = None, networkRequestId: Optional[Network.RequestId] = None, workerId: Optional[str] = None, args: Optional[List[Union['Runtime.RemoteObject', dict]]] = None) -> None:
+    def __init__(self, source: str, level: str, text: str, timestamp: float, url: Optional[str] = None, lineNumber: Optional[int] = None, stackTrace: Optional[Union['Runtime.StackTrace', dict]] = None, networkRequestId: Optional[str] = None, workerId: Optional[str] = None, args: Optional[List[Union['Runtime.RemoteObject', dict]]] = None) -> None:
         """
         :param source: Log entry source.
         :type source: str
@@ -79,18 +83,22 @@ class LogEntry(ProtocolType):
         self.args = Runtime.RemoteObject.safe_create_from_list(args)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['LogEntry']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['LogEntry', dict]]:
         if init is not None:
-            return LogEntry(**init)
+             try:
+                ourselves = LogEntry(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['LogEntry']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LogEntry', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(LogEntry(**it))
+                list_of_self.append(LogEntry.safe_create(it))
             return list_of_self
         else:
             return init

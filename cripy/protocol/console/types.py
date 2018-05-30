@@ -31,18 +31,22 @@ class ConsoleMessage(ProtocolType):
         self.column = column
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ConsoleMessage']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ConsoleMessage', dict]]:
         if init is not None:
-            return ConsoleMessage(**init)
+             try:
+                ourselves = ConsoleMessage(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ConsoleMessage']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ConsoleMessage', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ConsoleMessage(**it))
+                list_of_self.append(ConsoleMessage.safe_create(it))
             return list_of_self
         else:
             return init

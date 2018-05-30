@@ -10,7 +10,8 @@ from cripy.protocol.{{ dl }} import events as Events
 from cripy.protocol.{{ dl }} import types as Types
 {% endif %}
 
-class {{ d.domain }}:
+
+class {{ d.domain }}(object):
 {% if d.description %}
     """
     {{ d.description }}
@@ -30,14 +31,44 @@ class {{ d.domain }}:
     {% else %}
     async def {{ command.name }}(self) -> Optional[dict]:
     {% endif %}
-        raw_res = await self.chrome.send('{{ command.scoped_name }}', {{ command.stringify_thy_args }})
+        {% if command.has_parameters %}
+        """
+        {% for prop in command.parameters %}
+        {% if prop.description %}
+        :param {{ prop.name }}: {{ prop.nice_description }}
+        {% else %}
+        :param {{ prop.name }}: The {{ prop.name }}
+        {% endif %}
+        :type {{ prop.name }}: {{ prop.constructor_docstr }}
+        {% endfor %}
+        """
+        {% endif %}
+        {% if command.has_parameters %}
+        msg_dict = dict()
+        {% for param in command.parameters %}
+        if {{ param.name }} is not None:
+            msg_dict['{{ param.name }}'] = {{ param.name }}
+        {% endfor %}
+        res = await self.chrome.send('{{ command.scoped_name }}', msg_dict)
+        {% else %}
+        res = await self.chrome.send('{{ command.scoped_name }}')
+        {% endif %}
         {% if command.returns %}
         {% for trans in command.returns.yield_result_trans() %}
         {{ trans }}
         {% endfor %}
+        return res
+        {% else %}
+        return res
         {% endif %}
 
     {% endfor %}
-
+    @staticmethod
+    def get_event_classes() -> Optional[dict]:
+        {% if d.has_events %}
+        return Events.EVENT_TO_CLASS
+        {% else %}
+        return None
+        {% endif %}
 
 

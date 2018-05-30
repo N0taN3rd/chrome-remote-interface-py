@@ -1,8 +1,6 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
-StreamCompression = TypeVar("StreamCompression", str, str) # Compression type to use for traces returned via streams.
-
 
 class TraceConfig(ProtocolType):
     def __init__(self, recordMode: Optional[str] = None, enableSampling: Optional[bool] = None, enableSystrace: Optional[bool] = None, enableArgumentFilter: Optional[bool] = None, includedCategories: Optional[List[str]] = None, excludedCategories: Optional[List[str]] = None, syntheticDelays: Optional[List[str]] = None, memoryDumpConfig: Optional[Union['MemoryDumpConfig', dict]] = None) -> None:
@@ -35,18 +33,22 @@ class TraceConfig(ProtocolType):
         self.memoryDumpConfig = MemoryDumpConfig.safe_create(memoryDumpConfig)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['TraceConfig']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['TraceConfig', dict]]:
         if init is not None:
-            return TraceConfig(**init)
+             try:
+                ourselves = TraceConfig(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['TraceConfig']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TraceConfig', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(TraceConfig(**it))
+                list_of_self.append(TraceConfig.safe_create(it))
             return list_of_self
         else:
             return init
@@ -58,18 +60,22 @@ class MemoryDumpConfig(ProtocolType, dict):
     """
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['MemoryDumpConfig']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['MemoryDumpConfig', dict]]:
         if init is not None:
-            return MemoryDumpConfig(**init)
+             try:
+                ourselves = MemoryDumpConfig(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['MemoryDumpConfig']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['MemoryDumpConfig', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(MemoryDumpConfig(**it))
+                list_of_self.append(MemoryDumpConfig.safe_create(it))
             return list_of_self
         else:
             return init

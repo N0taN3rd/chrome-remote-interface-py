@@ -26,18 +26,22 @@ class ObjectStoreIndex(ProtocolType):
         self.multiEntry = multiEntry
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ObjectStoreIndex']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ObjectStoreIndex', dict]]:
         if init is not None:
-            return ObjectStoreIndex(**init)
+             try:
+                ourselves = ObjectStoreIndex(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ObjectStoreIndex']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ObjectStoreIndex', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ObjectStoreIndex(**it))
+                list_of_self.append(ObjectStoreIndex.safe_create(it))
             return list_of_self
         else:
             return init
@@ -66,18 +70,22 @@ class ObjectStore(ProtocolType):
         self.indexes = ObjectStoreIndex.safe_create_from_list(indexes)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ObjectStore']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ObjectStore', dict]]:
         if init is not None:
-            return ObjectStore(**init)
+             try:
+                ourselves = ObjectStore(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ObjectStore']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ObjectStore', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ObjectStore(**it))
+                list_of_self.append(ObjectStore.safe_create(it))
             return list_of_self
         else:
             return init
@@ -106,18 +114,22 @@ class KeyRange(ProtocolType):
         self.upperOpen = upperOpen
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['KeyRange']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['KeyRange', dict]]:
         if init is not None:
-            return KeyRange(**init)
+             try:
+                ourselves = KeyRange(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['KeyRange']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['KeyRange', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(KeyRange(**it))
+                list_of_self.append(KeyRange.safe_create(it))
             return list_of_self
         else:
             return init
@@ -143,18 +155,22 @@ class KeyPath(ProtocolType):
         self.array = array
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['KeyPath']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['KeyPath', dict]]:
         if init is not None:
-            return KeyPath(**init)
+             try:
+                ourselves = KeyPath(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['KeyPath']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['KeyPath', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(KeyPath(**it))
+                list_of_self.append(KeyPath.safe_create(it))
             return list_of_self
         else:
             return init
@@ -186,18 +202,22 @@ class Key(ProtocolType):
         self.array = Key.safe_create_from_list(array)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Key']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Key', dict]]:
         if init is not None:
-            return Key(**init)
+             try:
+                ourselves = Key(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Key']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Key', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Key(**it))
+                list_of_self.append(Key.safe_create(it))
             return list_of_self
         else:
             return init
@@ -223,18 +243,22 @@ class DatabaseWithObjectStores(ProtocolType):
         self.objectStores = ObjectStore.safe_create_from_list(objectStores)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['DatabaseWithObjectStores']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DatabaseWithObjectStores', dict]]:
         if init is not None:
-            return DatabaseWithObjectStores(**init)
+             try:
+                ourselves = DatabaseWithObjectStores(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['DatabaseWithObjectStores']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DatabaseWithObjectStores', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(DatabaseWithObjectStores(**it))
+                list_of_self.append(DatabaseWithObjectStores.safe_create(it))
             return list_of_self
         else:
             return init
@@ -260,18 +284,22 @@ class DataEntry(ProtocolType):
         self.value = Runtime.RemoteObject.safe_create(value)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['DataEntry']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DataEntry', dict]]:
         if init is not None:
-            return DataEntry(**init)
+             try:
+                ourselves = DataEntry(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['DataEntry']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DataEntry', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(DataEntry(**it))
+                list_of_self.append(DataEntry.safe_create(it))
             return list_of_self
         else:
             return init

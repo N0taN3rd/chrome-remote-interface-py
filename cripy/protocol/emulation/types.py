@@ -1,8 +1,6 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
-VirtualTimePolicy = TypeVar("VirtualTimePolicy", str, str) # advance: If the scheduler runs out of immediate work, the virtual time base may fast forward to allow the next delayed task (if any) to run; pause: The virtual time base may not advance; pauseIfNetworkFetchesPending: The virtual time base may not advance if there are any pending resource fetches.
-
 
 class ScreenOrientation(ProtocolType):
     """
@@ -21,18 +19,22 @@ class ScreenOrientation(ProtocolType):
         self.angle = angle
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ScreenOrientation']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ScreenOrientation', dict]]:
         if init is not None:
-            return ScreenOrientation(**init)
+             try:
+                ourselves = ScreenOrientation(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ScreenOrientation']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ScreenOrientation', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ScreenOrientation(**it))
+                list_of_self.append(ScreenOrientation.safe_create(it))
             return list_of_self
         else:
             return init

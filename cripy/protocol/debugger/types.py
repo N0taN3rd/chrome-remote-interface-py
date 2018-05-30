@@ -2,10 +2,6 @@ from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 from cripy.protocol.runtime import types as Runtime
 
-CallFrameId = TypeVar("CallFrameId", str, str) # Call frame identifier.
-
-BreakpointId = TypeVar("BreakpointId", str, str) # Breakpoint identifier.
-
 
 class SearchMatch(ProtocolType):
     """
@@ -24,18 +20,22 @@ class SearchMatch(ProtocolType):
         self.lineContent = lineContent
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['SearchMatch']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['SearchMatch', dict]]:
         if init is not None:
-            return SearchMatch(**init)
+             try:
+                ourselves = SearchMatch(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['SearchMatch']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SearchMatch', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(SearchMatch(**it))
+                list_of_self.append(SearchMatch.safe_create(it))
             return list_of_self
         else:
             return init
@@ -58,18 +58,22 @@ class ScriptPosition(ProtocolType):
         self.columnNumber = columnNumber
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ScriptPosition']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ScriptPosition', dict]]:
         if init is not None:
-            return ScriptPosition(**init)
+             try:
+                ourselves = ScriptPosition(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ScriptPosition']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ScriptPosition', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ScriptPosition(**it))
+                list_of_self.append(ScriptPosition.safe_create(it))
             return list_of_self
         else:
             return init
@@ -101,18 +105,22 @@ class Scope(ProtocolType):
         self.endLocation = Location.safe_create(endLocation)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Scope']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Scope', dict]]:
         if init is not None:
-            return Scope(**init)
+             try:
+                ourselves = Scope(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Scope']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Scope', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Scope(**it))
+                list_of_self.append(Scope.safe_create(it))
             return list_of_self
         else:
             return init
@@ -123,7 +131,7 @@ class Location(ProtocolType):
     Location in the source code.
     """
 
-    def __init__(self, scriptId: Runtime.ScriptId, lineNumber: int, columnNumber: Optional[int] = None) -> None:
+    def __init__(self, scriptId: str, lineNumber: int, columnNumber: Optional[int] = None) -> None:
         """
         :param scriptId: Script identifier as reported in the `Debugger.scriptParsed`.
         :type scriptId: str
@@ -138,18 +146,22 @@ class Location(ProtocolType):
         self.columnNumber = columnNumber
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Location']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Location', dict]]:
         if init is not None:
-            return Location(**init)
+             try:
+                ourselves = Location(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Location']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Location', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Location(**it))
+                list_of_self.append(Location.safe_create(it))
             return list_of_self
         else:
             return init
@@ -160,7 +172,7 @@ class CallFrame(ProtocolType):
     JavaScript call frame. Array of call frames form the call stack.
     """
 
-    def __init__(self, callFrameId: CallFrameId, functionName: str, location: Union['Location', dict], url: str, scopeChain: List[Union['Scope', dict]], this: Union['Runtime.RemoteObject', dict], functionLocation: Optional[Union['Location', dict]] = None, returnValue: Optional[Union['Runtime.RemoteObject', dict]] = None) -> None:
+    def __init__(self, callFrameId: str, functionName: str, location: Union['Location', dict], url: str, scopeChain: List[Union['Scope', dict]], this: Union['Runtime.RemoteObject', dict], functionLocation: Optional[Union['Location', dict]] = None, returnValue: Optional[Union['Runtime.RemoteObject', dict]] = None) -> None:
         """
         :param callFrameId: Call frame identifier. This identifier is only valid while the virtual machine is paused.
         :type callFrameId: str
@@ -190,25 +202,29 @@ class CallFrame(ProtocolType):
         self.returnValue = Runtime.RemoteObject.safe_create(returnValue)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CallFrame']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CallFrame', dict]]:
         if init is not None:
-            return CallFrame(**init)
+             try:
+                ourselves = CallFrame(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CallFrame']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CallFrame', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CallFrame(**it))
+                list_of_self.append(CallFrame.safe_create(it))
             return list_of_self
         else:
             return init
 
 
 class BreakLocation(ProtocolType):
-    def __init__(self, scriptId: Runtime.ScriptId, lineNumber: int, columnNumber: Optional[int] = None, type: Optional[str] = None) -> None:
+    def __init__(self, scriptId: str, lineNumber: int, columnNumber: Optional[int] = None, type: Optional[str] = None) -> None:
         """
         :param scriptId: Script identifier as reported in the `Debugger.scriptParsed`.
         :type scriptId: str
@@ -226,18 +242,22 @@ class BreakLocation(ProtocolType):
         self.type = type
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['BreakLocation']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['BreakLocation', dict]]:
         if init is not None:
-            return BreakLocation(**init)
+             try:
+                ourselves = BreakLocation(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['BreakLocation']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['BreakLocation', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(BreakLocation(**it))
+                list_of_self.append(BreakLocation.safe_create(it))
             return list_of_self
         else:
             return init

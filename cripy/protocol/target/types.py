@@ -1,15 +1,9 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
-TargetID = TypeVar("TargetID", str, str) # 
-
-SessionID = TypeVar("SessionID", str, str) # Unique identifier of attached debugging session.
-
-BrowserContextID = TypeVar("BrowserContextID", str, str) # 
-
 
 class TargetInfo(ProtocolType):
-    def __init__(self, targetId: TargetID, type: str, title: str, url: str, attached: bool, openerId: Optional[TargetID] = None, browserContextId: Optional[BrowserContextID] = None) -> None:
+    def __init__(self, targetId: str, type: str, title: str, url: str, attached: bool, openerId: Optional[str] = None, browserContextId: Optional[str] = None) -> None:
         """
         :param targetId: The targetId
         :type targetId: str
@@ -36,18 +30,22 @@ class TargetInfo(ProtocolType):
         self.browserContextId = browserContextId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['TargetInfo']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['TargetInfo', dict]]:
         if init is not None:
-            return TargetInfo(**init)
+             try:
+                ourselves = TargetInfo(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['TargetInfo']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TargetInfo', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(TargetInfo(**it))
+                list_of_self.append(TargetInfo.safe_create(it))
             return list_of_self
         else:
             return init
@@ -66,18 +64,22 @@ class RemoteLocation(ProtocolType):
         self.port = port
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['RemoteLocation']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['RemoteLocation', dict]]:
         if init is not None:
-            return RemoteLocation(**init)
+             try:
+                ourselves = RemoteLocation(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['RemoteLocation']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['RemoteLocation', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(RemoteLocation(**it))
+                list_of_self.append(RemoteLocation.safe_create(it))
             return list_of_self
         else:
             return init

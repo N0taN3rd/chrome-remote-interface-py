@@ -1,7 +1,7 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.runtime import types as Runtime
 from cripy.protocol.network import types as Network
+from cripy.protocol.runtime import types as Runtime
 try:
     from cripy.protocol.page.types import *
 except ImportError:
@@ -12,7 +12,7 @@ class DomContentEventFiredEvent(BaseEvent):
 
     event = "Page.domContentEventFired"
 
-    def __init__(self, timestamp: Network.MonotonicTime) -> None:
+    def __init__(self, timestamp: float) -> None:
         """
         :param timestamp: The timestamp
         :type timestamp: float
@@ -21,18 +21,22 @@ class DomContentEventFiredEvent(BaseEvent):
         self.timestamp = timestamp
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['DomContentEventFiredEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DomContentEventFiredEvent', dict]]:
         if init is not None:
-            return DomContentEventFiredEvent(**init)
+            try:
+                ourselves = DomContentEventFiredEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['DomContentEventFiredEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DomContentEventFiredEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(DomContentEventFiredEvent(**it))
+                list_of_self.append(DomContentEventFiredEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -45,7 +49,7 @@ class FrameAttachedEvent(BaseEvent):
 
     event = "Page.frameAttached"
 
-    def __init__(self, frameId: FrameId, parentFrameId: FrameId, stack: Optional[Union[Runtime.StackTrace, dict]] = None) -> None:
+    def __init__(self, frameId: str, parentFrameId: str, stack: Optional[Union[Runtime.StackTrace, dict]] = None) -> None:
         """
         :param frameId: Id of the frame that has been attached.
         :type frameId: str
@@ -60,18 +64,22 @@ class FrameAttachedEvent(BaseEvent):
         self.stack = Runtime.StackTrace.safe_create(stack)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['FrameAttachedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FrameAttachedEvent', dict]]:
         if init is not None:
-            return FrameAttachedEvent(**init)
+            try:
+                ourselves = FrameAttachedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FrameAttachedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameAttachedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(FrameAttachedEvent(**it))
+                list_of_self.append(FrameAttachedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -84,7 +92,7 @@ class FrameClearedScheduledNavigationEvent(BaseEvent):
 
     event = "Page.frameClearedScheduledNavigation"
 
-    def __init__(self, frameId: FrameId) -> None:
+    def __init__(self, frameId: str) -> None:
         """
         :param frameId: Id of the frame that has cleared its scheduled navigation.
         :type frameId: str
@@ -93,18 +101,22 @@ class FrameClearedScheduledNavigationEvent(BaseEvent):
         self.frameId = frameId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['FrameClearedScheduledNavigationEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FrameClearedScheduledNavigationEvent', dict]]:
         if init is not None:
-            return FrameClearedScheduledNavigationEvent(**init)
+            try:
+                ourselves = FrameClearedScheduledNavigationEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FrameClearedScheduledNavigationEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameClearedScheduledNavigationEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(FrameClearedScheduledNavigationEvent(**it))
+                list_of_self.append(FrameClearedScheduledNavigationEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -117,7 +129,7 @@ class FrameDetachedEvent(BaseEvent):
 
     event = "Page.frameDetached"
 
-    def __init__(self, frameId: FrameId) -> None:
+    def __init__(self, frameId: str) -> None:
         """
         :param frameId: Id of the frame that has been detached.
         :type frameId: str
@@ -126,18 +138,22 @@ class FrameDetachedEvent(BaseEvent):
         self.frameId = frameId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['FrameDetachedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FrameDetachedEvent', dict]]:
         if init is not None:
-            return FrameDetachedEvent(**init)
+            try:
+                ourselves = FrameDetachedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FrameDetachedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameDetachedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(FrameDetachedEvent(**it))
+                list_of_self.append(FrameDetachedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -160,18 +176,22 @@ class FrameNavigatedEvent(BaseEvent):
         self.frame = Frame.safe_create(frame)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['FrameNavigatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FrameNavigatedEvent', dict]]:
         if init is not None:
-            return FrameNavigatedEvent(**init)
+            try:
+                ourselves = FrameNavigatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FrameNavigatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameNavigatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(FrameNavigatedEvent(**it))
+                list_of_self.append(FrameNavigatedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -185,18 +205,22 @@ class FrameResizedEvent(BaseEvent, dict):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['FrameResizedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FrameResizedEvent', dict]]:
         if init is not None:
-            return FrameResizedEvent(**init)
+            try:
+                ourselves = FrameResizedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FrameResizedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameResizedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(FrameResizedEvent(**it))
+                list_of_self.append(FrameResizedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -209,7 +233,7 @@ class FrameScheduledNavigationEvent(BaseEvent):
 
     event = "Page.frameScheduledNavigation"
 
-    def __init__(self, frameId: FrameId, delay: float, reason: str, url: str) -> None:
+    def __init__(self, frameId: str, delay: float, reason: str, url: str) -> None:
         """
         :param frameId: Id of the frame that has scheduled a navigation.
         :type frameId: str
@@ -227,18 +251,22 @@ class FrameScheduledNavigationEvent(BaseEvent):
         self.url = url
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['FrameScheduledNavigationEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FrameScheduledNavigationEvent', dict]]:
         if init is not None:
-            return FrameScheduledNavigationEvent(**init)
+            try:
+                ourselves = FrameScheduledNavigationEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FrameScheduledNavigationEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameScheduledNavigationEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(FrameScheduledNavigationEvent(**it))
+                list_of_self.append(FrameScheduledNavigationEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -251,7 +279,7 @@ class FrameStartedLoadingEvent(BaseEvent):
 
     event = "Page.frameStartedLoading"
 
-    def __init__(self, frameId: FrameId) -> None:
+    def __init__(self, frameId: str) -> None:
         """
         :param frameId: Id of the frame that has started loading.
         :type frameId: str
@@ -260,18 +288,22 @@ class FrameStartedLoadingEvent(BaseEvent):
         self.frameId = frameId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['FrameStartedLoadingEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FrameStartedLoadingEvent', dict]]:
         if init is not None:
-            return FrameStartedLoadingEvent(**init)
+            try:
+                ourselves = FrameStartedLoadingEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FrameStartedLoadingEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameStartedLoadingEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(FrameStartedLoadingEvent(**it))
+                list_of_self.append(FrameStartedLoadingEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -284,7 +316,7 @@ class FrameStoppedLoadingEvent(BaseEvent):
 
     event = "Page.frameStoppedLoading"
 
-    def __init__(self, frameId: FrameId) -> None:
+    def __init__(self, frameId: str) -> None:
         """
         :param frameId: Id of the frame that has stopped loading.
         :type frameId: str
@@ -293,18 +325,22 @@ class FrameStoppedLoadingEvent(BaseEvent):
         self.frameId = frameId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['FrameStoppedLoadingEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FrameStoppedLoadingEvent', dict]]:
         if init is not None:
-            return FrameStoppedLoadingEvent(**init)
+            try:
+                ourselves = FrameStoppedLoadingEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FrameStoppedLoadingEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameStoppedLoadingEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(FrameStoppedLoadingEvent(**it))
+                list_of_self.append(FrameStoppedLoadingEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -321,18 +357,22 @@ class InterstitialHiddenEvent(BaseEvent, dict):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['InterstitialHiddenEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['InterstitialHiddenEvent', dict]]:
         if init is not None:
-            return InterstitialHiddenEvent(**init)
+            try:
+                ourselves = InterstitialHiddenEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['InterstitialHiddenEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['InterstitialHiddenEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(InterstitialHiddenEvent(**it))
+                list_of_self.append(InterstitialHiddenEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -349,18 +389,22 @@ class InterstitialShownEvent(BaseEvent, dict):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['InterstitialShownEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['InterstitialShownEvent', dict]]:
         if init is not None:
-            return InterstitialShownEvent(**init)
+            try:
+                ourselves = InterstitialShownEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['InterstitialShownEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['InterstitialShownEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(InterstitialShownEvent(**it))
+                list_of_self.append(InterstitialShownEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -385,18 +429,22 @@ class JavascriptDialogClosedEvent(BaseEvent):
         self.userInput = userInput
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['JavascriptDialogClosedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['JavascriptDialogClosedEvent', dict]]:
         if init is not None:
-            return JavascriptDialogClosedEvent(**init)
+            try:
+                ourselves = JavascriptDialogClosedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['JavascriptDialogClosedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['JavascriptDialogClosedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(JavascriptDialogClosedEvent(**it))
+                list_of_self.append(JavascriptDialogClosedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -409,7 +457,7 @@ class JavascriptDialogOpeningEvent(BaseEvent):
 
     event = "Page.javascriptDialogOpening"
 
-    def __init__(self, url: str, message: str, type: DialogType, hasBrowserHandler: bool, defaultPrompt: Optional[str] = None) -> None:
+    def __init__(self, url: str, message: str, type: str, hasBrowserHandler: bool, defaultPrompt: Optional[str] = None) -> None:
         """
         :param url: Frame url.
         :type url: str
@@ -430,18 +478,22 @@ class JavascriptDialogOpeningEvent(BaseEvent):
         self.defaultPrompt = defaultPrompt
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['JavascriptDialogOpeningEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['JavascriptDialogOpeningEvent', dict]]:
         if init is not None:
-            return JavascriptDialogOpeningEvent(**init)
+            try:
+                ourselves = JavascriptDialogOpeningEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['JavascriptDialogOpeningEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['JavascriptDialogOpeningEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(JavascriptDialogOpeningEvent(**it))
+                list_of_self.append(JavascriptDialogOpeningEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -454,7 +506,7 @@ class LifecycleEventEvent(BaseEvent):
 
     event = "Page.lifecycleEvent"
 
-    def __init__(self, frameId: FrameId, loaderId: Network.LoaderId, name: str, timestamp: Network.MonotonicTime) -> None:
+    def __init__(self, frameId: str, loaderId: str, name: str, timestamp: float) -> None:
         """
         :param frameId: Id of the frame.
         :type frameId: str
@@ -472,18 +524,22 @@ class LifecycleEventEvent(BaseEvent):
         self.timestamp = timestamp
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['LifecycleEventEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['LifecycleEventEvent', dict]]:
         if init is not None:
-            return LifecycleEventEvent(**init)
+            try:
+                ourselves = LifecycleEventEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['LifecycleEventEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LifecycleEventEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(LifecycleEventEvent(**it))
+                list_of_self.append(LifecycleEventEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -493,7 +549,7 @@ class LoadEventFiredEvent(BaseEvent):
 
     event = "Page.loadEventFired"
 
-    def __init__(self, timestamp: Network.MonotonicTime) -> None:
+    def __init__(self, timestamp: float) -> None:
         """
         :param timestamp: The timestamp
         :type timestamp: float
@@ -502,18 +558,22 @@ class LoadEventFiredEvent(BaseEvent):
         self.timestamp = timestamp
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['LoadEventFiredEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['LoadEventFiredEvent', dict]]:
         if init is not None:
-            return LoadEventFiredEvent(**init)
+            try:
+                ourselves = LoadEventFiredEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['LoadEventFiredEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LoadEventFiredEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(LoadEventFiredEvent(**it))
+                list_of_self.append(LoadEventFiredEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -527,7 +587,7 @@ class NavigatedWithinDocumentEvent(BaseEvent):
 
     event = "Page.navigatedWithinDocument"
 
-    def __init__(self, frameId: FrameId, url: str) -> None:
+    def __init__(self, frameId: str, url: str) -> None:
         """
         :param frameId: Id of the frame.
         :type frameId: str
@@ -539,18 +599,22 @@ class NavigatedWithinDocumentEvent(BaseEvent):
         self.url = url
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['NavigatedWithinDocumentEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['NavigatedWithinDocumentEvent', dict]]:
         if init is not None:
-            return NavigatedWithinDocumentEvent(**init)
+            try:
+                ourselves = NavigatedWithinDocumentEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['NavigatedWithinDocumentEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['NavigatedWithinDocumentEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(NavigatedWithinDocumentEvent(**it))
+                list_of_self.append(NavigatedWithinDocumentEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -578,18 +642,22 @@ class ScreencastFrameEvent(BaseEvent):
         self.sessionId = sessionId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ScreencastFrameEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ScreencastFrameEvent', dict]]:
         if init is not None:
-            return ScreencastFrameEvent(**init)
+            try:
+                ourselves = ScreencastFrameEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ScreencastFrameEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ScreencastFrameEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ScreencastFrameEvent(**it))
+                list_of_self.append(ScreencastFrameEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -611,18 +679,22 @@ class ScreencastVisibilityChangedEvent(BaseEvent):
         self.visible = visible
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ScreencastVisibilityChangedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ScreencastVisibilityChangedEvent', dict]]:
         if init is not None:
-            return ScreencastVisibilityChangedEvent(**init)
+            try:
+                ourselves = ScreencastVisibilityChangedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ScreencastVisibilityChangedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ScreencastVisibilityChangedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ScreencastVisibilityChangedEvent(**it))
+                list_of_self.append(ScreencastVisibilityChangedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -653,18 +725,22 @@ class WindowOpenEvent(BaseEvent):
         self.userGesture = userGesture
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['WindowOpenEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['WindowOpenEvent', dict]]:
         if init is not None:
-            return WindowOpenEvent(**init)
+            try:
+                ourselves = WindowOpenEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['WindowOpenEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['WindowOpenEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(WindowOpenEvent(**it))
+                list_of_self.append(WindowOpenEvent.safe_create(it))
             return list_of_self
         else:
             return init

@@ -22,18 +22,22 @@ class EntryAddedEvent(BaseEvent):
         self.entry = LogEntry.safe_create(entry)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['EntryAddedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['EntryAddedEvent', dict]]:
         if init is not None:
-            return EntryAddedEvent(**init)
+            try:
+                ourselves = EntryAddedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['EntryAddedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['EntryAddedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(EntryAddedEvent(**it))
+                list_of_self.append(EntryAddedEvent.safe_create(it))
             return list_of_self
         else:
             return init

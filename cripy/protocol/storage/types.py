@@ -1,15 +1,13 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
-StorageType = TypeVar("StorageType", str, str) # Enum of possible storage types.
-
 
 class UsageForType(ProtocolType):
     """
     Usage for a storage type.
     """
 
-    def __init__(self, storageType: StorageType, usage: float) -> None:
+    def __init__(self, storageType: str, usage: float) -> None:
         """
         :param storageType: Name of storage type.
         :type storageType: str
@@ -21,18 +19,22 @@ class UsageForType(ProtocolType):
         self.usage = usage
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['UsageForType']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['UsageForType', dict]]:
         if init is not None:
-            return UsageForType(**init)
+             try:
+                ourselves = UsageForType(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['UsageForType']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['UsageForType', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(UsageForType(**it))
+                list_of_self.append(UsageForType.safe_create(it))
             return list_of_self
         else:
             return init

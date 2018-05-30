@@ -20,18 +20,22 @@ class KeyframesRule(ProtocolType):
         self.keyframes = KeyframeStyle.safe_create_from_list(keyframes)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['KeyframesRule']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['KeyframesRule', dict]]:
         if init is not None:
-            return KeyframesRule(**init)
+             try:
+                ourselves = KeyframesRule(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['KeyframesRule']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['KeyframesRule', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(KeyframesRule(**it))
+                list_of_self.append(KeyframesRule.safe_create(it))
             return list_of_self
         else:
             return init
@@ -54,18 +58,22 @@ class KeyframeStyle(ProtocolType):
         self.easing = easing
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['KeyframeStyle']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['KeyframeStyle', dict]]:
         if init is not None:
-            return KeyframeStyle(**init)
+             try:
+                ourselves = KeyframeStyle(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['KeyframeStyle']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['KeyframeStyle', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(KeyframeStyle(**it))
+                list_of_self.append(KeyframeStyle.safe_create(it))
             return list_of_self
         else:
             return init
@@ -76,7 +84,7 @@ class AnimationEffect(ProtocolType):
     AnimationEffect instance
     """
 
-    def __init__(self, delay: float, endDelay: float, iterationStart: float, iterations: float, duration: float, direction: str, fill: str, easing: str, backendNodeId: Optional[DOM.BackendNodeId] = None, keyframesRule: Optional[Union['KeyframesRule', dict]] = None) -> None:
+    def __init__(self, delay: float, endDelay: float, iterationStart: float, iterations: float, duration: float, direction: str, fill: str, easing: str, backendNodeId: Optional[int] = None, keyframesRule: Optional[Union['KeyframesRule', dict]] = None) -> None:
         """
         :param delay: `AnimationEffect`'s delay.
         :type delay: float
@@ -112,18 +120,22 @@ class AnimationEffect(ProtocolType):
         self.easing = easing
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['AnimationEffect']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AnimationEffect', dict]]:
         if init is not None:
-            return AnimationEffect(**init)
+             try:
+                ourselves = AnimationEffect(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AnimationEffect']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AnimationEffect', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(AnimationEffect(**it))
+                list_of_self.append(AnimationEffect.safe_create(it))
             return list_of_self
         else:
             return init
@@ -170,18 +182,22 @@ class Animation(ProtocolType):
         self.cssId = cssId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Animation']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Animation', dict]]:
         if init is not None:
-            return Animation(**init)
+             try:
+                ourselves = Animation(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Animation']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Animation', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Animation(**it))
+                list_of_self.append(Animation.safe_create(it))
             return list_of_self
         else:
             return init

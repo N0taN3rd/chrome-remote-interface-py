@@ -25,18 +25,22 @@ class DomStorageItemAddedEvent(BaseEvent):
         self.newValue = newValue
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['DomStorageItemAddedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DomStorageItemAddedEvent', dict]]:
         if init is not None:
-            return DomStorageItemAddedEvent(**init)
+            try:
+                ourselves = DomStorageItemAddedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['DomStorageItemAddedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DomStorageItemAddedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(DomStorageItemAddedEvent(**it))
+                list_of_self.append(DomStorageItemAddedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -58,18 +62,22 @@ class DomStorageItemRemovedEvent(BaseEvent):
         self.key = key
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['DomStorageItemRemovedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DomStorageItemRemovedEvent', dict]]:
         if init is not None:
-            return DomStorageItemRemovedEvent(**init)
+            try:
+                ourselves = DomStorageItemRemovedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['DomStorageItemRemovedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DomStorageItemRemovedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(DomStorageItemRemovedEvent(**it))
+                list_of_self.append(DomStorageItemRemovedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -97,18 +105,22 @@ class DomStorageItemUpdatedEvent(BaseEvent):
         self.newValue = newValue
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['DomStorageItemUpdatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DomStorageItemUpdatedEvent', dict]]:
         if init is not None:
-            return DomStorageItemUpdatedEvent(**init)
+            try:
+                ourselves = DomStorageItemUpdatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['DomStorageItemUpdatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DomStorageItemUpdatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(DomStorageItemUpdatedEvent(**it))
+                list_of_self.append(DomStorageItemUpdatedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -127,18 +139,22 @@ class DomStorageItemsClearedEvent(BaseEvent):
         self.storageId = StorageId.safe_create(storageId)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['DomStorageItemsClearedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DomStorageItemsClearedEvent', dict]]:
         if init is not None:
-            return DomStorageItemsClearedEvent(**init)
+            try:
+                ourselves = DomStorageItemsClearedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['DomStorageItemsClearedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DomStorageItemsClearedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(DomStorageItemsClearedEvent(**it))
+                list_of_self.append(DomStorageItemsClearedEvent.safe_create(it))
             return list_of_self
         else:
             return init

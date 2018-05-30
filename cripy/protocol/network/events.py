@@ -14,7 +14,7 @@ class DataReceivedEvent(BaseEvent):
 
     event = "Network.dataReceived"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, dataLength: int, encodedDataLength: int) -> None:
+    def __init__(self, requestId: str, timestamp: float, dataLength: int, encodedDataLength: int) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -32,18 +32,22 @@ class DataReceivedEvent(BaseEvent):
         self.encodedDataLength = encodedDataLength
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['DataReceivedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DataReceivedEvent', dict]]:
         if init is not None:
-            return DataReceivedEvent(**init)
+            try:
+                ourselves = DataReceivedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['DataReceivedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DataReceivedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(DataReceivedEvent(**it))
+                list_of_self.append(DataReceivedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -56,7 +60,7 @@ class EventSourceMessageReceivedEvent(BaseEvent):
 
     event = "Network.eventSourceMessageReceived"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, eventName: str, eventId: str, data: str) -> None:
+    def __init__(self, requestId: str, timestamp: float, eventName: str, eventId: str, data: str) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -77,18 +81,22 @@ class EventSourceMessageReceivedEvent(BaseEvent):
         self.data = data
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['EventSourceMessageReceivedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['EventSourceMessageReceivedEvent', dict]]:
         if init is not None:
-            return EventSourceMessageReceivedEvent(**init)
+            try:
+                ourselves = EventSourceMessageReceivedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['EventSourceMessageReceivedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['EventSourceMessageReceivedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(EventSourceMessageReceivedEvent(**it))
+                list_of_self.append(EventSourceMessageReceivedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -101,7 +109,7 @@ class LoadingFailedEvent(BaseEvent):
 
     event = "Network.loadingFailed"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, type: Page.ResourceType, errorText: str, canceled: Optional[bool] = None, blockedReason: Optional[BlockedReason] = None) -> None:
+    def __init__(self, requestId: str, timestamp: float, type: str, errorText: str, canceled: Optional[bool] = None, blockedReason: Optional[str] = None) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -125,18 +133,22 @@ class LoadingFailedEvent(BaseEvent):
         self.blockedReason = blockedReason
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['LoadingFailedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['LoadingFailedEvent', dict]]:
         if init is not None:
-            return LoadingFailedEvent(**init)
+            try:
+                ourselves = LoadingFailedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['LoadingFailedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LoadingFailedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(LoadingFailedEvent(**it))
+                list_of_self.append(LoadingFailedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -149,7 +161,7 @@ class LoadingFinishedEvent(BaseEvent):
 
     event = "Network.loadingFinished"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, encodedDataLength: float, blockedCrossSiteDocument: Optional[bool] = None) -> None:
+    def __init__(self, requestId: str, timestamp: float, encodedDataLength: float, blockedCrossSiteDocument: Optional[bool] = None) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -167,18 +179,22 @@ class LoadingFinishedEvent(BaseEvent):
         self.blockedCrossSiteDocument = blockedCrossSiteDocument
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['LoadingFinishedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['LoadingFinishedEvent', dict]]:
         if init is not None:
-            return LoadingFinishedEvent(**init)
+            try:
+                ourselves = LoadingFinishedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['LoadingFinishedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LoadingFinishedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(LoadingFinishedEvent(**it))
+                list_of_self.append(LoadingFinishedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -191,7 +207,7 @@ class RequestInterceptedEvent(BaseEvent):
 
     event = "Network.requestIntercepted"
 
-    def __init__(self, interceptionId: InterceptionId, request: Union[Request, dict], frameId: Page.FrameId, resourceType: Page.ResourceType, isNavigationRequest: bool, isDownload: Optional[bool] = None, redirectUrl: Optional[str] = None, authChallenge: Optional[Union[AuthChallenge, dict]] = None, responseErrorReason: Optional[ErrorReason] = None, responseStatusCode: Optional[int] = None, responseHeaders: Optional[Union[Headers, dict]] = None) -> None:
+    def __init__(self, interceptionId: str, request: Union[Request, dict], frameId: str, resourceType: str, isNavigationRequest: bool, isDownload: Optional[bool] = None, redirectUrl: Optional[str] = None, authChallenge: Optional[Union[AuthChallenge, dict]] = None, responseErrorReason: Optional[str] = None, responseStatusCode: Optional[int] = None, responseHeaders: Optional[Union[Headers, dict]] = None) -> None:
         """
         :param interceptionId: Each request the page makes will have a unique id, however if any redirects are encountered while processing that fetch, they will be reported with the same id as the original fetch. Likewise if HTTP authentication is needed then the same fetch id will be used.
         :type interceptionId: str
@@ -230,18 +246,22 @@ class RequestInterceptedEvent(BaseEvent):
         self.responseHeaders = Headers.safe_create(responseHeaders)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['RequestInterceptedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['RequestInterceptedEvent', dict]]:
         if init is not None:
-            return RequestInterceptedEvent(**init)
+            try:
+                ourselves = RequestInterceptedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['RequestInterceptedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['RequestInterceptedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(RequestInterceptedEvent(**it))
+                list_of_self.append(RequestInterceptedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -254,7 +274,7 @@ class RequestServedFromCacheEvent(BaseEvent):
 
     event = "Network.requestServedFromCache"
 
-    def __init__(self, requestId: RequestId) -> None:
+    def __init__(self, requestId: str) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -263,18 +283,22 @@ class RequestServedFromCacheEvent(BaseEvent):
         self.requestId = requestId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['RequestServedFromCacheEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['RequestServedFromCacheEvent', dict]]:
         if init is not None:
-            return RequestServedFromCacheEvent(**init)
+            try:
+                ourselves = RequestServedFromCacheEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['RequestServedFromCacheEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['RequestServedFromCacheEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(RequestServedFromCacheEvent(**it))
+                list_of_self.append(RequestServedFromCacheEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -287,7 +311,7 @@ class RequestWillBeSentEvent(BaseEvent):
 
     event = "Network.requestWillBeSent"
 
-    def __init__(self, requestId: RequestId, loaderId: LoaderId, documentURL: str, request: Union[Request, dict], timestamp: MonotonicTime, wallTime: TimeSinceEpoch, initiator: Union[Initiator, dict], redirectResponse: Optional[Union[Response, dict]] = None, type: Optional[Page.ResourceType] = None, frameId: Optional[Page.FrameId] = None, hasUserGesture: Optional[bool] = None) -> None:
+    def __init__(self, requestId: str, loaderId: str, documentURL: str, request: Union[Request, dict], timestamp: float, wallTime: float, initiator: Union[Initiator, dict], redirectResponse: Optional[Union[Response, dict]] = None, type: Optional[str] = None, frameId: Optional[str] = None, hasUserGesture: Optional[bool] = None) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -326,18 +350,22 @@ class RequestWillBeSentEvent(BaseEvent):
         self.hasUserGesture = hasUserGesture
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['RequestWillBeSentEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['RequestWillBeSentEvent', dict]]:
         if init is not None:
-            return RequestWillBeSentEvent(**init)
+            try:
+                ourselves = RequestWillBeSentEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['RequestWillBeSentEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['RequestWillBeSentEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(RequestWillBeSentEvent(**it))
+                list_of_self.append(RequestWillBeSentEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -350,7 +378,7 @@ class ResourceChangedPriorityEvent(BaseEvent):
 
     event = "Network.resourceChangedPriority"
 
-    def __init__(self, requestId: RequestId, newPriority: ResourcePriority, timestamp: MonotonicTime) -> None:
+    def __init__(self, requestId: str, newPriority: str, timestamp: float) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -365,18 +393,22 @@ class ResourceChangedPriorityEvent(BaseEvent):
         self.timestamp = timestamp
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ResourceChangedPriorityEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ResourceChangedPriorityEvent', dict]]:
         if init is not None:
-            return ResourceChangedPriorityEvent(**init)
+            try:
+                ourselves = ResourceChangedPriorityEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ResourceChangedPriorityEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ResourceChangedPriorityEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ResourceChangedPriorityEvent(**it))
+                list_of_self.append(ResourceChangedPriorityEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -389,7 +421,7 @@ class SignedExchangeReceivedEvent(BaseEvent):
 
     event = "Network.signedExchangeReceived"
 
-    def __init__(self, requestId: RequestId, info: Union[SignedExchangeInfo, dict]) -> None:
+    def __init__(self, requestId: str, info: Union[SignedExchangeInfo, dict]) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -401,18 +433,22 @@ class SignedExchangeReceivedEvent(BaseEvent):
         self.info = SignedExchangeInfo.safe_create(info)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['SignedExchangeReceivedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['SignedExchangeReceivedEvent', dict]]:
         if init is not None:
-            return SignedExchangeReceivedEvent(**init)
+            try:
+                ourselves = SignedExchangeReceivedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['SignedExchangeReceivedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SignedExchangeReceivedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(SignedExchangeReceivedEvent(**it))
+                list_of_self.append(SignedExchangeReceivedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -425,7 +461,7 @@ class ResponseReceivedEvent(BaseEvent):
 
     event = "Network.responseReceived"
 
-    def __init__(self, requestId: RequestId, loaderId: LoaderId, timestamp: MonotonicTime, type: Page.ResourceType, response: Union[Response, dict], frameId: Optional[Page.FrameId] = None) -> None:
+    def __init__(self, requestId: str, loaderId: str, timestamp: float, type: str, response: Union[Response, dict], frameId: Optional[str] = None) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -449,18 +485,22 @@ class ResponseReceivedEvent(BaseEvent):
         self.frameId = frameId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ResponseReceivedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ResponseReceivedEvent', dict]]:
         if init is not None:
-            return ResponseReceivedEvent(**init)
+            try:
+                ourselves = ResponseReceivedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ResponseReceivedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ResponseReceivedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ResponseReceivedEvent(**it))
+                list_of_self.append(ResponseReceivedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -473,7 +513,7 @@ class WebSocketClosedEvent(BaseEvent):
 
     event = "Network.webSocketClosed"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime) -> None:
+    def __init__(self, requestId: str, timestamp: float) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -485,18 +525,22 @@ class WebSocketClosedEvent(BaseEvent):
         self.timestamp = timestamp
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['WebSocketClosedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['WebSocketClosedEvent', dict]]:
         if init is not None:
-            return WebSocketClosedEvent(**init)
+            try:
+                ourselves = WebSocketClosedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['WebSocketClosedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['WebSocketClosedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(WebSocketClosedEvent(**it))
+                list_of_self.append(WebSocketClosedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -509,7 +553,7 @@ class WebSocketCreatedEvent(BaseEvent):
 
     event = "Network.webSocketCreated"
 
-    def __init__(self, requestId: RequestId, url: str, initiator: Optional[Union[Initiator, dict]] = None) -> None:
+    def __init__(self, requestId: str, url: str, initiator: Optional[Union[Initiator, dict]] = None) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -524,18 +568,22 @@ class WebSocketCreatedEvent(BaseEvent):
         self.initiator = Initiator.safe_create(initiator)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['WebSocketCreatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['WebSocketCreatedEvent', dict]]:
         if init is not None:
-            return WebSocketCreatedEvent(**init)
+            try:
+                ourselves = WebSocketCreatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['WebSocketCreatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['WebSocketCreatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(WebSocketCreatedEvent(**it))
+                list_of_self.append(WebSocketCreatedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -548,7 +596,7 @@ class WebSocketFrameErrorEvent(BaseEvent):
 
     event = "Network.webSocketFrameError"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, errorMessage: str) -> None:
+    def __init__(self, requestId: str, timestamp: float, errorMessage: str) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -563,18 +611,22 @@ class WebSocketFrameErrorEvent(BaseEvent):
         self.errorMessage = errorMessage
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['WebSocketFrameErrorEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['WebSocketFrameErrorEvent', dict]]:
         if init is not None:
-            return WebSocketFrameErrorEvent(**init)
+            try:
+                ourselves = WebSocketFrameErrorEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['WebSocketFrameErrorEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['WebSocketFrameErrorEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(WebSocketFrameErrorEvent(**it))
+                list_of_self.append(WebSocketFrameErrorEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -587,7 +639,7 @@ class WebSocketFrameReceivedEvent(BaseEvent):
 
     event = "Network.webSocketFrameReceived"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, response: Union[WebSocketFrame, dict]) -> None:
+    def __init__(self, requestId: str, timestamp: float, response: Union[WebSocketFrame, dict]) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -602,18 +654,22 @@ class WebSocketFrameReceivedEvent(BaseEvent):
         self.response = WebSocketFrame.safe_create(response)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['WebSocketFrameReceivedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['WebSocketFrameReceivedEvent', dict]]:
         if init is not None:
-            return WebSocketFrameReceivedEvent(**init)
+            try:
+                ourselves = WebSocketFrameReceivedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['WebSocketFrameReceivedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['WebSocketFrameReceivedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(WebSocketFrameReceivedEvent(**it))
+                list_of_self.append(WebSocketFrameReceivedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -626,7 +682,7 @@ class WebSocketFrameSentEvent(BaseEvent):
 
     event = "Network.webSocketFrameSent"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, response: Union[WebSocketFrame, dict]) -> None:
+    def __init__(self, requestId: str, timestamp: float, response: Union[WebSocketFrame, dict]) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -641,18 +697,22 @@ class WebSocketFrameSentEvent(BaseEvent):
         self.response = WebSocketFrame.safe_create(response)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['WebSocketFrameSentEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['WebSocketFrameSentEvent', dict]]:
         if init is not None:
-            return WebSocketFrameSentEvent(**init)
+            try:
+                ourselves = WebSocketFrameSentEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['WebSocketFrameSentEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['WebSocketFrameSentEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(WebSocketFrameSentEvent(**it))
+                list_of_self.append(WebSocketFrameSentEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -665,7 +725,7 @@ class WebSocketHandshakeResponseReceivedEvent(BaseEvent):
 
     event = "Network.webSocketHandshakeResponseReceived"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, response: Union[WebSocketResponse, dict]) -> None:
+    def __init__(self, requestId: str, timestamp: float, response: Union[WebSocketResponse, dict]) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -680,18 +740,22 @@ class WebSocketHandshakeResponseReceivedEvent(BaseEvent):
         self.response = WebSocketResponse.safe_create(response)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['WebSocketHandshakeResponseReceivedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['WebSocketHandshakeResponseReceivedEvent', dict]]:
         if init is not None:
-            return WebSocketHandshakeResponseReceivedEvent(**init)
+            try:
+                ourselves = WebSocketHandshakeResponseReceivedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['WebSocketHandshakeResponseReceivedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['WebSocketHandshakeResponseReceivedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(WebSocketHandshakeResponseReceivedEvent(**it))
+                list_of_self.append(WebSocketHandshakeResponseReceivedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -704,7 +768,7 @@ class WebSocketWillSendHandshakeRequestEvent(BaseEvent):
 
     event = "Network.webSocketWillSendHandshakeRequest"
 
-    def __init__(self, requestId: RequestId, timestamp: MonotonicTime, wallTime: TimeSinceEpoch, request: Union[WebSocketRequest, dict]) -> None:
+    def __init__(self, requestId: str, timestamp: float, wallTime: float, request: Union[WebSocketRequest, dict]) -> None:
         """
         :param requestId: Request identifier.
         :type requestId: str
@@ -722,18 +786,22 @@ class WebSocketWillSendHandshakeRequestEvent(BaseEvent):
         self.request = WebSocketRequest.safe_create(request)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['WebSocketWillSendHandshakeRequestEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['WebSocketWillSendHandshakeRequestEvent', dict]]:
         if init is not None:
-            return WebSocketWillSendHandshakeRequestEvent(**init)
+            try:
+                ourselves = WebSocketWillSendHandshakeRequestEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['WebSocketWillSendHandshakeRequestEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['WebSocketWillSendHandshakeRequestEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(WebSocketWillSendHandshakeRequestEvent(**it))
+                list_of_self.append(WebSocketWillSendHandshakeRequestEvent.safe_create(it))
             return list_of_self
         else:
             return init

@@ -11,7 +11,7 @@ class LayerPaintedEvent(BaseEvent):
 
     event = "LayerTree.layerPainted"
 
-    def __init__(self, layerId: LayerId, clip: Union[DOM.Rect, dict]) -> None:
+    def __init__(self, layerId: str, clip: Union[DOM.Rect, dict]) -> None:
         """
         :param layerId: The id of the painted layer.
         :type layerId: str
@@ -23,18 +23,22 @@ class LayerPaintedEvent(BaseEvent):
         self.clip = DOM.Rect.safe_create(clip)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['LayerPaintedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['LayerPaintedEvent', dict]]:
         if init is not None:
-            return LayerPaintedEvent(**init)
+            try:
+                ourselves = LayerPaintedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['LayerPaintedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LayerPaintedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(LayerPaintedEvent(**it))
+                list_of_self.append(LayerPaintedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -53,18 +57,22 @@ class LayerTreeDidChangeEvent(BaseEvent):
         self.layers = Layer.safe_create_from_list(layers)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['LayerTreeDidChangeEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['LayerTreeDidChangeEvent', dict]]:
         if init is not None:
-            return LayerTreeDidChangeEvent(**init)
+            try:
+                ourselves = LayerTreeDidChangeEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['LayerTreeDidChangeEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LayerTreeDidChangeEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(LayerTreeDidChangeEvent(**it))
+                list_of_self.append(LayerTreeDidChangeEvent.safe_create(it))
             return list_of_self
         else:
             return init

@@ -25,18 +25,22 @@ class AcceptedEvent(BaseEvent):
         self.connectionId = connectionId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['AcceptedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AcceptedEvent', dict]]:
         if init is not None:
-            return AcceptedEvent(**init)
+            try:
+                ourselves = AcceptedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AcceptedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AcceptedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(AcceptedEvent(**it))
+                list_of_self.append(AcceptedEvent.safe_create(it))
             return list_of_self
         else:
             return init

@@ -1,20 +1,6 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
-UnserializableValue = TypeVar("UnserializableValue", str, str) # Primitive value which cannot be JSON-stringified. Includes values `-0`, `NaN`, `Infinity`, `-Infinity`, and bigint literals.
-
-UniqueDebuggerId = TypeVar("UniqueDebuggerId", str, str) # Unique identifier of current debugger.
-
-Timestamp = TypeVar("Timestamp", float, float) # Number of milliseconds since epoch.
-
-TimeDelta = TypeVar("TimeDelta", float, float) # Number of milliseconds.
-
-ScriptId = TypeVar("ScriptId", str, str) # Unique script identifier.
-
-RemoteObjectId = TypeVar("RemoteObjectId", str, str) # Unique object identifier.
-
-ExecutionContextId = TypeVar("ExecutionContextId", int, int) # Id of an execution context.
-
 
 class StackTraceId(ProtocolType):
     """
@@ -22,7 +8,7 @@ class StackTraceId(ProtocolType):
 allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.paused` for usages.
     """
 
-    def __init__(self, id: str, debuggerId: Optional[UniqueDebuggerId] = None) -> None:
+    def __init__(self, id: str, debuggerId: Optional[str] = None) -> None:
         """
         :param id: The id
         :type id: str
@@ -34,18 +20,22 @@ allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.pau
         self.debuggerId = debuggerId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['StackTraceId']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['StackTraceId', dict]]:
         if init is not None:
-            return StackTraceId(**init)
+             try:
+                ourselves = StackTraceId(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['StackTraceId']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['StackTraceId', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(StackTraceId(**it))
+                list_of_self.append(StackTraceId.safe_create(it))
             return list_of_self
         else:
             return init
@@ -74,18 +64,22 @@ class StackTrace(ProtocolType):
         self.parentId = StackTraceId.safe_create(parentId)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['StackTrace']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['StackTrace', dict]]:
         if init is not None:
-            return StackTrace(**init)
+             try:
+                ourselves = StackTrace(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['StackTrace']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['StackTrace', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(StackTrace(**it))
+                list_of_self.append(StackTrace.safe_create(it))
             return list_of_self
         else:
             return init
@@ -96,7 +90,7 @@ class RemoteObject(ProtocolType):
     Mirror object referencing original JavaScript object.
     """
 
-    def __init__(self, type: str, subtype: Optional[str] = None, className: Optional[str] = None, value: Optional[Any] = None, unserializableValue: Optional[UnserializableValue] = None, description: Optional[str] = None, objectId: Optional[RemoteObjectId] = None, preview: Optional[Union['ObjectPreview', dict]] = None, customPreview: Optional[Union['CustomPreview', dict]] = None) -> None:
+    def __init__(self, type: str, subtype: Optional[str] = None, className: Optional[str] = None, value: Optional[Any] = None, unserializableValue: Optional[str] = None, description: Optional[str] = None, objectId: Optional[str] = None, preview: Optional[Union['ObjectPreview', dict]] = None, customPreview: Optional[Union['CustomPreview', dict]] = None) -> None:
         """
         :param type: Object type.
         :type type: str
@@ -129,18 +123,22 @@ class RemoteObject(ProtocolType):
         self.customPreview = CustomPreview.safe_create(customPreview)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['RemoteObject']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['RemoteObject', dict]]:
         if init is not None:
-            return RemoteObject(**init)
+             try:
+                ourselves = RemoteObject(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['RemoteObject']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['RemoteObject', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(RemoteObject(**it))
+                list_of_self.append(RemoteObject.safe_create(it))
             return list_of_self
         else:
             return init
@@ -168,18 +166,22 @@ class PropertyPreview(ProtocolType):
         self.subtype = subtype
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['PropertyPreview']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['PropertyPreview', dict]]:
         if init is not None:
-            return PropertyPreview(**init)
+             try:
+                ourselves = PropertyPreview(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['PropertyPreview']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['PropertyPreview', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(PropertyPreview(**it))
+                list_of_self.append(PropertyPreview.safe_create(it))
             return list_of_self
         else:
             return init
@@ -226,18 +228,22 @@ class PropertyDescriptor(ProtocolType):
         self.symbol = RemoteObject.safe_create(symbol)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['PropertyDescriptor']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['PropertyDescriptor', dict]]:
         if init is not None:
-            return PropertyDescriptor(**init)
+             try:
+                ourselves = PropertyDescriptor(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['PropertyDescriptor']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['PropertyDescriptor', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(PropertyDescriptor(**it))
+                list_of_self.append(PropertyDescriptor.safe_create(it))
             return list_of_self
         else:
             return init
@@ -272,18 +278,22 @@ class ObjectPreview(ProtocolType):
         self.entries = EntryPreview.safe_create_from_list(entries)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ObjectPreview']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ObjectPreview', dict]]:
         if init is not None:
-            return ObjectPreview(**init)
+             try:
+                ourselves = ObjectPreview(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ObjectPreview']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ObjectPreview', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ObjectPreview(**it))
+                list_of_self.append(ObjectPreview.safe_create(it))
             return list_of_self
         else:
             return init
@@ -306,18 +316,22 @@ class InternalPropertyDescriptor(ProtocolType):
         self.value = RemoteObject.safe_create(value)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['InternalPropertyDescriptor']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['InternalPropertyDescriptor', dict]]:
         if init is not None:
-            return InternalPropertyDescriptor(**init)
+             try:
+                ourselves = InternalPropertyDescriptor(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['InternalPropertyDescriptor']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['InternalPropertyDescriptor', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(InternalPropertyDescriptor(**it))
+                list_of_self.append(InternalPropertyDescriptor.safe_create(it))
             return list_of_self
         else:
             return init
@@ -328,7 +342,7 @@ class ExecutionContextDescription(ProtocolType):
     Description of an isolated world.
     """
 
-    def __init__(self, id: ExecutionContextId, origin: str, name: str, auxData: Optional[dict] = None) -> None:
+    def __init__(self, id: int, origin: str, name: str, auxData: Optional[dict] = None) -> None:
         """
         :param id: Unique id of the execution context. It can be used to specify in which execution context script evaluation should be performed.
         :type id: int
@@ -346,18 +360,22 @@ class ExecutionContextDescription(ProtocolType):
         self.auxData = auxData
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ExecutionContextDescription']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ExecutionContextDescription', dict]]:
         if init is not None:
-            return ExecutionContextDescription(**init)
+             try:
+                ourselves = ExecutionContextDescription(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ExecutionContextDescription']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ExecutionContextDescription', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ExecutionContextDescription(**it))
+                list_of_self.append(ExecutionContextDescription.safe_create(it))
             return list_of_self
         else:
             return init
@@ -369,7 +387,7 @@ class ExceptionDetails(ProtocolType):
 execution.
     """
 
-    def __init__(self, exceptionId: int, text: str, lineNumber: int, columnNumber: int, scriptId: Optional[ScriptId] = None, url: Optional[str] = None, stackTrace: Optional[Union['StackTrace', dict]] = None, exception: Optional[Union['RemoteObject', dict]] = None, executionContextId: Optional[ExecutionContextId] = None) -> None:
+    def __init__(self, exceptionId: int, text: str, lineNumber: int, columnNumber: int, scriptId: Optional[str] = None, url: Optional[str] = None, stackTrace: Optional[Union['StackTrace', dict]] = None, exception: Optional[Union['RemoteObject', dict]] = None, executionContextId: Optional[int] = None) -> None:
         """
         :param exceptionId: Exception id.
         :type exceptionId: int
@@ -402,18 +420,22 @@ execution.
         self.executionContextId = executionContextId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ExceptionDetails']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ExceptionDetails', dict]]:
         if init is not None:
-            return ExceptionDetails(**init)
+             try:
+                ourselves = ExceptionDetails(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ExceptionDetails']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ExceptionDetails', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ExceptionDetails(**it))
+                list_of_self.append(ExceptionDetails.safe_create(it))
             return list_of_self
         else:
             return init
@@ -432,25 +454,29 @@ class EntryPreview(ProtocolType):
         self.value = ObjectPreview.safe_create(value)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['EntryPreview']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['EntryPreview', dict]]:
         if init is not None:
-            return EntryPreview(**init)
+             try:
+                ourselves = EntryPreview(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['EntryPreview']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['EntryPreview', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(EntryPreview(**it))
+                list_of_self.append(EntryPreview.safe_create(it))
             return list_of_self
         else:
             return init
 
 
 class CustomPreview(ProtocolType):
-    def __init__(self, header: str, hasBody: bool, formatterObjectId: RemoteObjectId, bindRemoteObjectFunctionId: RemoteObjectId, configObjectId: Optional[RemoteObjectId] = None) -> None:
+    def __init__(self, header: str, hasBody: bool, formatterObjectId: str, bindRemoteObjectFunctionId: str, configObjectId: Optional[str] = None) -> None:
         """
         :param header: The header
         :type header: str
@@ -471,18 +497,22 @@ class CustomPreview(ProtocolType):
         self.configObjectId = configObjectId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CustomPreview']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CustomPreview', dict]]:
         if init is not None:
-            return CustomPreview(**init)
+             try:
+                ourselves = CustomPreview(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CustomPreview']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CustomPreview', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CustomPreview(**it))
+                list_of_self.append(CustomPreview.safe_create(it))
             return list_of_self
         else:
             return init
@@ -493,7 +523,7 @@ class CallFrame(ProtocolType):
     Stack entry for runtime errors and assertions.
     """
 
-    def __init__(self, functionName: str, scriptId: ScriptId, url: str, lineNumber: int, columnNumber: int) -> None:
+    def __init__(self, functionName: str, scriptId: str, url: str, lineNumber: int, columnNumber: int) -> None:
         """
         :param functionName: JavaScript function name.
         :type functionName: str
@@ -514,18 +544,22 @@ class CallFrame(ProtocolType):
         self.columnNumber = columnNumber
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CallFrame']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CallFrame', dict]]:
         if init is not None:
-            return CallFrame(**init)
+             try:
+                ourselves = CallFrame(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CallFrame']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CallFrame', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CallFrame(**it))
+                list_of_self.append(CallFrame.safe_create(it))
             return list_of_self
         else:
             return init
@@ -537,7 +571,7 @@ class CallArgument(ProtocolType):
 unserializable primitive value or neither of (for undefined) them should be specified.
     """
 
-    def __init__(self, value: Optional[Any] = None, unserializableValue: Optional[UnserializableValue] = None, objectId: Optional[RemoteObjectId] = None) -> None:
+    def __init__(self, value: Optional[Any] = None, unserializableValue: Optional[str] = None, objectId: Optional[str] = None) -> None:
         """
         :param value: Primitive value or serializable javascript object.
         :type value: Optional[Any]
@@ -552,18 +586,22 @@ unserializable primitive value or neither of (for undefined) them should be spec
         self.objectId = objectId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['CallArgument']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CallArgument', dict]]:
         if init is not None:
-            return CallArgument(**init)
+             try:
+                ourselves = CallArgument(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['CallArgument']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CallArgument', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(CallArgument(**it))
+                list_of_self.append(CallArgument.safe_create(it))
             return list_of_self
         else:
             return init

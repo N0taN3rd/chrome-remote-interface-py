@@ -23,18 +23,22 @@ class FontsUpdatedEvent(BaseEvent):
         self.font = FontFace.safe_create(font)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['FontsUpdatedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FontsUpdatedEvent', dict]]:
         if init is not None:
-            return FontsUpdatedEvent(**init)
+            try:
+                ourselves = FontsUpdatedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FontsUpdatedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FontsUpdatedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(FontsUpdatedEvent(**it))
+                list_of_self.append(FontsUpdatedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -51,18 +55,22 @@ class MediaQueryResultChangedEvent(BaseEvent, dict):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['MediaQueryResultChangedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['MediaQueryResultChangedEvent', dict]]:
         if init is not None:
-            return MediaQueryResultChangedEvent(**init)
+            try:
+                ourselves = MediaQueryResultChangedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['MediaQueryResultChangedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['MediaQueryResultChangedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(MediaQueryResultChangedEvent(**it))
+                list_of_self.append(MediaQueryResultChangedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -84,18 +92,22 @@ class StyleSheetAddedEvent(BaseEvent):
         self.header = CSSStyleSheetHeader.safe_create(header)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['StyleSheetAddedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['StyleSheetAddedEvent', dict]]:
         if init is not None:
-            return StyleSheetAddedEvent(**init)
+            try:
+                ourselves = StyleSheetAddedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['StyleSheetAddedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['StyleSheetAddedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(StyleSheetAddedEvent(**it))
+                list_of_self.append(StyleSheetAddedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -108,7 +120,7 @@ class StyleSheetChangedEvent(BaseEvent):
 
     event = "CSS.styleSheetChanged"
 
-    def __init__(self, styleSheetId: StyleSheetId) -> None:
+    def __init__(self, styleSheetId: str) -> None:
         """
         :param styleSheetId: The styleSheetId
         :type styleSheetId: str
@@ -117,18 +129,22 @@ class StyleSheetChangedEvent(BaseEvent):
         self.styleSheetId = styleSheetId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['StyleSheetChangedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['StyleSheetChangedEvent', dict]]:
         if init is not None:
-            return StyleSheetChangedEvent(**init)
+            try:
+                ourselves = StyleSheetChangedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['StyleSheetChangedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['StyleSheetChangedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(StyleSheetChangedEvent(**it))
+                list_of_self.append(StyleSheetChangedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -141,7 +157,7 @@ class StyleSheetRemovedEvent(BaseEvent):
 
     event = "CSS.styleSheetRemoved"
 
-    def __init__(self, styleSheetId: StyleSheetId) -> None:
+    def __init__(self, styleSheetId: str) -> None:
         """
         :param styleSheetId: Identifier of the removed stylesheet.
         :type styleSheetId: str
@@ -150,18 +166,22 @@ class StyleSheetRemovedEvent(BaseEvent):
         self.styleSheetId = styleSheetId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['StyleSheetRemovedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['StyleSheetRemovedEvent', dict]]:
         if init is not None:
-            return StyleSheetRemovedEvent(**init)
+            try:
+                ourselves = StyleSheetRemovedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['StyleSheetRemovedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['StyleSheetRemovedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(StyleSheetRemovedEvent(**it))
+                list_of_self.append(StyleSheetRemovedEvent.safe_create(it))
             return list_of_self
         else:
             return init

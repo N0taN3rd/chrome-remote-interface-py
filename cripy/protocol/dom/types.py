@@ -2,23 +2,13 @@ from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 from cripy.protocol.page import types as Page
 
-ShadowRootType = TypeVar("ShadowRootType", str, str) # Shadow root type.
-
-Quad = TypeVar("Quad", list, list) # An array of quad vertices, x immediately followed by y for each point, points clock-wise.
-
-PseudoType = TypeVar("PseudoType", str, str) # Pseudo element type.
-
-NodeId = TypeVar("NodeId", int, int) # Unique DOM node identifier.
-
-BackendNodeId = TypeVar("BackendNodeId", int, int) # Unique DOM node identifier used to reference a node that may not have been pushed to the front-end.
-
 
 class ShapeOutsideInfo(ProtocolType):
     """
     CSS Shape Outside details.
     """
 
-    def __init__(self, bounds: Quad, shape: List[Any], marginShape: List[Any]) -> None:
+    def __init__(self, bounds: list, shape: List[Any], marginShape: List[Any]) -> None:
         """
         :param bounds: Shape bounds
         :type bounds: Any
@@ -33,18 +23,22 @@ class ShapeOutsideInfo(ProtocolType):
         self.marginShape = marginShape
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ShapeOutsideInfo']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ShapeOutsideInfo', dict]]:
         if init is not None:
-            return ShapeOutsideInfo(**init)
+             try:
+                ourselves = ShapeOutsideInfo(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ShapeOutsideInfo']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ShapeOutsideInfo', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ShapeOutsideInfo(**it))
+                list_of_self.append(ShapeOutsideInfo.safe_create(it))
             return list_of_self
         else:
             return init
@@ -73,18 +67,22 @@ class Rect(ProtocolType):
         self.height = height
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Rect']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Rect', dict]]:
         if init is not None:
-            return Rect(**init)
+             try:
+                ourselves = Rect(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Rect']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Rect', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Rect(**it))
+                list_of_self.append(Rect.safe_create(it))
             return list_of_self
         else:
             return init
@@ -113,18 +111,22 @@ class RGBA(ProtocolType):
         self.a = a
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['RGBA']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['RGBA', dict]]:
         if init is not None:
-            return RGBA(**init)
+             try:
+                ourselves = RGBA(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['RGBA']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['RGBA', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(RGBA(**it))
+                list_of_self.append(RGBA.safe_create(it))
             return list_of_self
         else:
             return init
@@ -136,7 +138,7 @@ class Node(ProtocolType):
 DOMNode is a base node mirror type.
     """
 
-    def __init__(self, nodeId: NodeId, backendNodeId: BackendNodeId, nodeType: int, nodeName: str, localName: str, nodeValue: str, parentId: Optional[NodeId] = None, childNodeCount: Optional[int] = None, children: Optional[List[Union['Node', dict]]] = None, attributes: Optional[List[str]] = None, documentURL: Optional[str] = None, baseURL: Optional[str] = None, publicId: Optional[str] = None, systemId: Optional[str] = None, internalSubset: Optional[str] = None, xmlVersion: Optional[str] = None, name: Optional[str] = None, value: Optional[str] = None, pseudoType: Optional[PseudoType] = None, shadowRootType: Optional[ShadowRootType] = None, frameId: Optional[Page.FrameId] = None, contentDocument: Optional[Union['Node', dict]] = None, shadowRoots: Optional[List[Union['Node', dict]]] = None, templateContent: Optional[Union['Node', dict]] = None, pseudoElements: Optional[List[Union['Node', dict]]] = None, importedDocument: Optional[Union['Node', dict]] = None, distributedNodes: Optional[List[Union['BackendNode', dict]]] = None, isSVG: Optional[bool] = None) -> None:
+    def __init__(self, nodeId: int, backendNodeId: int, nodeType: int, nodeName: str, localName: str, nodeValue: str, parentId: Optional[int] = None, childNodeCount: Optional[int] = None, children: Optional[List[Union['Node', dict]]] = None, attributes: Optional[List[str]] = None, documentURL: Optional[str] = None, baseURL: Optional[str] = None, publicId: Optional[str] = None, systemId: Optional[str] = None, internalSubset: Optional[str] = None, xmlVersion: Optional[str] = None, name: Optional[str] = None, value: Optional[str] = None, pseudoType: Optional[str] = None, shadowRootType: Optional[str] = None, frameId: Optional[str] = None, contentDocument: Optional[Union['Node', dict]] = None, shadowRoots: Optional[List[Union['Node', dict]]] = None, templateContent: Optional[Union['Node', dict]] = None, pseudoElements: Optional[List[Union['Node', dict]]] = None, importedDocument: Optional[Union['Node', dict]] = None, distributedNodes: Optional[List[Union['BackendNode', dict]]] = None, isSVG: Optional[bool] = None) -> None:
         """
         :param nodeId: Node identifier that is passed into the rest of the DOM messages as the `nodeId`. Backend will only push node with given `id` once. It is aware of all requested nodes and will only fire DOM events for nodes known to the client.
         :type nodeId: int
@@ -226,18 +228,22 @@ DOMNode is a base node mirror type.
         self.isSVG = isSVG
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['Node']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Node', dict]]:
         if init is not None:
-            return Node(**init)
+             try:
+                ourselves = Node(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['Node']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Node', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Node(**it))
+                list_of_self.append(Node.safe_create(it))
             return list_of_self
         else:
             return init
@@ -248,7 +254,7 @@ class BoxModel(ProtocolType):
     Box model.
     """
 
-    def __init__(self, content: Quad, padding: Quad, border: Quad, margin: Quad, width: int, height: int, shapeOutside: Optional[Union['ShapeOutsideInfo', dict]] = None) -> None:
+    def __init__(self, content: list, padding: list, border: list, margin: list, width: int, height: int, shapeOutside: Optional[Union['ShapeOutsideInfo', dict]] = None) -> None:
         """
         :param content: Content box
         :type content: Any
@@ -275,18 +281,22 @@ class BoxModel(ProtocolType):
         self.shapeOutside = ShapeOutsideInfo.safe_create(shapeOutside)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['BoxModel']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['BoxModel', dict]]:
         if init is not None:
-            return BoxModel(**init)
+             try:
+                ourselves = BoxModel(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['BoxModel']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['BoxModel', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(BoxModel(**it))
+                list_of_self.append(BoxModel.safe_create(it))
             return list_of_self
         else:
             return init
@@ -297,7 +307,7 @@ class BackendNode(ProtocolType):
     Backend node with a friendly name.
     """
 
-    def __init__(self, nodeType: int, nodeName: str, backendNodeId: BackendNodeId) -> None:
+    def __init__(self, nodeType: int, nodeName: str, backendNodeId: int) -> None:
         """
         :param nodeType: `Node`'s nodeType.
         :type nodeType: int
@@ -312,18 +322,22 @@ class BackendNode(ProtocolType):
         self.backendNodeId = backendNodeId
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['BackendNode']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['BackendNode', dict]]:
         if init is not None:
-            return BackendNode(**init)
+             try:
+                ourselves = BackendNode(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['BackendNode']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['BackendNode', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(BackendNode(**it))
+                list_of_self.append(BackendNode.safe_create(it))
             return list_of_self
         else:
             return init

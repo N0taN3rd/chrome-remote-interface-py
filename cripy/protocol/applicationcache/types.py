@@ -8,7 +8,7 @@ class FrameWithManifest(ProtocolType):
     Frame identifier - manifest URL pair.
     """
 
-    def __init__(self, frameId: Page.FrameId, manifestURL: str, status: int) -> None:
+    def __init__(self, frameId: str, manifestURL: str, status: int) -> None:
         """
         :param frameId: Frame identifier.
         :type frameId: str
@@ -23,18 +23,22 @@ class FrameWithManifest(ProtocolType):
         self.status = status
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['FrameWithManifest']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FrameWithManifest', dict]]:
         if init is not None:
-            return FrameWithManifest(**init)
+             try:
+                ourselves = FrameWithManifest(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['FrameWithManifest']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameWithManifest', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(FrameWithManifest(**it))
+                list_of_self.append(FrameWithManifest.safe_create(it))
             return list_of_self
         else:
             return init
@@ -60,18 +64,22 @@ class ApplicationCacheResource(ProtocolType):
         self.type = type
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ApplicationCacheResource']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ApplicationCacheResource', dict]]:
         if init is not None:
-            return ApplicationCacheResource(**init)
+             try:
+                ourselves = ApplicationCacheResource(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ApplicationCacheResource']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ApplicationCacheResource', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ApplicationCacheResource(**it))
+                list_of_self.append(ApplicationCacheResource.safe_create(it))
             return list_of_self
         else:
             return init
@@ -103,18 +111,22 @@ class ApplicationCache(ProtocolType):
         self.resources = ApplicationCacheResource.safe_create_from_list(resources)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ApplicationCache']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ApplicationCache', dict]]:
         if init is not None:
-            return ApplicationCache(**init)
+             try:
+                ourselves = ApplicationCache(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ApplicationCache']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ApplicationCache', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ApplicationCache(**it))
+                list_of_self.append(ApplicationCache.safe_create(it))
             return list_of_self
         else:
             return init

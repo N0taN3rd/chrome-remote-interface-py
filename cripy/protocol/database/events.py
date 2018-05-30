@@ -19,18 +19,22 @@ class AddDatabaseEvent(BaseEvent):
         self.database = Database.safe_create(database)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['AddDatabaseEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AddDatabaseEvent', dict]]:
         if init is not None:
-            return AddDatabaseEvent(**init)
+            try:
+                ourselves = AddDatabaseEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AddDatabaseEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AddDatabaseEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(AddDatabaseEvent(**it))
+                list_of_self.append(AddDatabaseEvent.safe_create(it))
             return list_of_self
         else:
             return init

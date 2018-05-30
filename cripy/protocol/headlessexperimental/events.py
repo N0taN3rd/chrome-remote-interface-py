@@ -22,18 +22,22 @@ class NeedsBeginFramesChangedEvent(BaseEvent):
         self.needsBeginFrames = needsBeginFrames
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['NeedsBeginFramesChangedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['NeedsBeginFramesChangedEvent', dict]]:
         if init is not None:
-            return NeedsBeginFramesChangedEvent(**init)
+            try:
+                ourselves = NeedsBeginFramesChangedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['NeedsBeginFramesChangedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['NeedsBeginFramesChangedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(NeedsBeginFramesChangedEvent(**it))
+                list_of_self.append(NeedsBeginFramesChangedEvent.safe_create(it))
             return list_of_self
         else:
             return init

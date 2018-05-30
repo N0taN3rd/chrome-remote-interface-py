@@ -29,18 +29,22 @@ class ConsoleProfileFinishedEvent(BaseEvent):
         self.title = title
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ConsoleProfileFinishedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ConsoleProfileFinishedEvent', dict]]:
         if init is not None:
-            return ConsoleProfileFinishedEvent(**init)
+            try:
+                ourselves = ConsoleProfileFinishedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ConsoleProfileFinishedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ConsoleProfileFinishedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ConsoleProfileFinishedEvent(**it))
+                list_of_self.append(ConsoleProfileFinishedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -68,18 +72,22 @@ class ConsoleProfileStartedEvent(BaseEvent):
         self.title = title
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ConsoleProfileStartedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ConsoleProfileStartedEvent', dict]]:
         if init is not None:
-            return ConsoleProfileStartedEvent(**init)
+            try:
+                ourselves = ConsoleProfileStartedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ConsoleProfileStartedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ConsoleProfileStartedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ConsoleProfileStartedEvent(**it))
+                list_of_self.append(ConsoleProfileStartedEvent.safe_create(it))
             return list_of_self
         else:
             return init

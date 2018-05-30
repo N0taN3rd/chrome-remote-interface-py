@@ -14,7 +14,7 @@ class BreakpointResolvedEvent(BaseEvent):
 
     event = "Debugger.breakpointResolved"
 
-    def __init__(self, breakpointId: BreakpointId, location: Union[Location, dict]) -> None:
+    def __init__(self, breakpointId: str, location: Union[Location, dict]) -> None:
         """
         :param breakpointId: Breakpoint unique identifier.
         :type breakpointId: str
@@ -26,18 +26,22 @@ class BreakpointResolvedEvent(BaseEvent):
         self.location = Location.safe_create(location)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['BreakpointResolvedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['BreakpointResolvedEvent', dict]]:
         if init is not None:
-            return BreakpointResolvedEvent(**init)
+            try:
+                ourselves = BreakpointResolvedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['BreakpointResolvedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['BreakpointResolvedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(BreakpointResolvedEvent(**it))
+                list_of_self.append(BreakpointResolvedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -77,18 +81,22 @@ class PausedEvent(BaseEvent):
         self.asyncCallStackTraceId = Runtime.StackTraceId.safe_create(asyncCallStackTraceId)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['PausedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['PausedEvent', dict]]:
         if init is not None:
-            return PausedEvent(**init)
+            try:
+                ourselves = PausedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['PausedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['PausedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(PausedEvent(**it))
+                list_of_self.append(PausedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -105,18 +113,22 @@ class ResumedEvent(BaseEvent, dict):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ResumedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ResumedEvent', dict]]:
         if init is not None:
-            return ResumedEvent(**init)
+            try:
+                ourselves = ResumedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ResumedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ResumedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ResumedEvent(**it))
+                list_of_self.append(ResumedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -129,7 +141,7 @@ class ScriptFailedToParseEvent(BaseEvent):
 
     event = "Debugger.scriptFailedToParse"
 
-    def __init__(self, scriptId: Runtime.ScriptId, url: str, startLine: int, startColumn: int, endLine: int, endColumn: int, executionContextId: Runtime.ExecutionContextId, hash: str, executionContextAuxData: Optional[dict] = None, sourceMapURL: Optional[str] = None, hasSourceURL: Optional[bool] = None, isModule: Optional[bool] = None, length: Optional[int] = None, stackTrace: Optional[Union[Runtime.StackTrace, dict]] = None) -> None:
+    def __init__(self, scriptId: str, url: str, startLine: int, startColumn: int, endLine: int, endColumn: int, executionContextId: int, hash: str, executionContextAuxData: Optional[dict] = None, sourceMapURL: Optional[str] = None, hasSourceURL: Optional[bool] = None, isModule: Optional[bool] = None, length: Optional[int] = None, stackTrace: Optional[Union[Runtime.StackTrace, dict]] = None) -> None:
         """
         :param scriptId: Identifier of the script parsed.
         :type scriptId: str
@@ -177,18 +189,22 @@ class ScriptFailedToParseEvent(BaseEvent):
         self.stackTrace = Runtime.StackTrace.safe_create(stackTrace)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ScriptFailedToParseEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ScriptFailedToParseEvent', dict]]:
         if init is not None:
-            return ScriptFailedToParseEvent(**init)
+            try:
+                ourselves = ScriptFailedToParseEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ScriptFailedToParseEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ScriptFailedToParseEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ScriptFailedToParseEvent(**it))
+                list_of_self.append(ScriptFailedToParseEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -202,7 +218,7 @@ class ScriptParsedEvent(BaseEvent):
 
     event = "Debugger.scriptParsed"
 
-    def __init__(self, scriptId: Runtime.ScriptId, url: str, startLine: int, startColumn: int, endLine: int, endColumn: int, executionContextId: Runtime.ExecutionContextId, hash: str, executionContextAuxData: Optional[dict] = None, isLiveEdit: Optional[bool] = None, sourceMapURL: Optional[str] = None, hasSourceURL: Optional[bool] = None, isModule: Optional[bool] = None, length: Optional[int] = None, stackTrace: Optional[Union[Runtime.StackTrace, dict]] = None) -> None:
+    def __init__(self, scriptId: str, url: str, startLine: int, startColumn: int, endLine: int, endColumn: int, executionContextId: int, hash: str, executionContextAuxData: Optional[dict] = None, isLiveEdit: Optional[bool] = None, sourceMapURL: Optional[str] = None, hasSourceURL: Optional[bool] = None, isModule: Optional[bool] = None, length: Optional[int] = None, stackTrace: Optional[Union[Runtime.StackTrace, dict]] = None) -> None:
         """
         :param scriptId: Identifier of the script parsed.
         :type scriptId: str
@@ -253,18 +269,22 @@ class ScriptParsedEvent(BaseEvent):
         self.stackTrace = Runtime.StackTrace.safe_create(stackTrace)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ScriptParsedEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ScriptParsedEvent', dict]]:
         if init is not None:
-            return ScriptParsedEvent(**init)
+            try:
+                ourselves = ScriptParsedEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ScriptParsedEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ScriptParsedEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ScriptParsedEvent(**it))
+                list_of_self.append(ScriptParsedEvent.safe_create(it))
             return list_of_self
         else:
             return init

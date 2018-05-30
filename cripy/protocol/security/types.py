@@ -1,21 +1,13 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
-SecurityState = TypeVar("SecurityState", str, str) # The security level of a page or resource.
-
-MixedContentType = TypeVar("MixedContentType", str, str) # A description of mixed content (HTTP resources on HTTPS pages), as defined by https://www.w3.org/TR/mixed-content/#categories
-
-CertificateId = TypeVar("CertificateId", int, int) # An internal certificate ID value.
-
-CertificateErrorAction = TypeVar("CertificateErrorAction", str, str) # The action to take when a certificate error occurs. continue will continue processing the request and cancel will cancel the request.
-
 
 class SecurityStateExplanation(ProtocolType):
     """
     An explanation of an factor contributing to the security state.
     """
 
-    def __init__(self, securityState: SecurityState, title: str, summary: str, description: str, mixedContentType: MixedContentType, certificate: List[str]) -> None:
+    def __init__(self, securityState: str, title: str, summary: str, description: str, mixedContentType: str, certificate: List[str]) -> None:
         """
         :param securityState: Security state representing the severity of the factor being explained.
         :type securityState: str
@@ -39,18 +31,22 @@ class SecurityStateExplanation(ProtocolType):
         self.certificate = certificate
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['SecurityStateExplanation']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['SecurityStateExplanation', dict]]:
         if init is not None:
-            return SecurityStateExplanation(**init)
+             try:
+                ourselves = SecurityStateExplanation(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['SecurityStateExplanation']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SecurityStateExplanation', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(SecurityStateExplanation(**it))
+                list_of_self.append(SecurityStateExplanation.safe_create(it))
             return list_of_self
         else:
             return init
@@ -61,7 +57,7 @@ class InsecureContentStatus(ProtocolType):
     Information about insecure content on the page.
     """
 
-    def __init__(self, ranMixedContent: bool, displayedMixedContent: bool, containedMixedForm: bool, ranContentWithCertErrors: bool, displayedContentWithCertErrors: bool, ranInsecureContentStyle: SecurityState, displayedInsecureContentStyle: SecurityState) -> None:
+    def __init__(self, ranMixedContent: bool, displayedMixedContent: bool, containedMixedForm: bool, ranContentWithCertErrors: bool, displayedContentWithCertErrors: bool, ranInsecureContentStyle: str, displayedInsecureContentStyle: str) -> None:
         """
         :param ranMixedContent: True if the page was loaded over HTTPS and ran mixed (HTTP) content such as scripts.
         :type ranMixedContent: bool
@@ -88,18 +84,22 @@ class InsecureContentStatus(ProtocolType):
         self.displayedInsecureContentStyle = displayedInsecureContentStyle
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['InsecureContentStatus']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['InsecureContentStatus', dict]]:
         if init is not None:
-            return InsecureContentStatus(**init)
+             try:
+                ourselves = InsecureContentStatus(**init)
+                return ourselves
+             except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['InsecureContentStatus']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['InsecureContentStatus', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(InsecureContentStatus(**it))
+                list_of_self.append(InsecureContentStatus.safe_create(it))
             return list_of_self
         else:
             return init

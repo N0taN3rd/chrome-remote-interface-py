@@ -19,18 +19,22 @@ class AddHeapSnapshotChunkEvent(BaseEvent):
         self.chunk = chunk
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['AddHeapSnapshotChunkEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AddHeapSnapshotChunkEvent', dict]]:
         if init is not None:
-            return AddHeapSnapshotChunkEvent(**init)
+            try:
+                ourselves = AddHeapSnapshotChunkEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['AddHeapSnapshotChunkEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AddHeapSnapshotChunkEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(AddHeapSnapshotChunkEvent(**it))
+                list_of_self.append(AddHeapSnapshotChunkEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -52,18 +56,22 @@ class HeapStatsUpdateEvent(BaseEvent):
         self.statsUpdate = statsUpdate
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['HeapStatsUpdateEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['HeapStatsUpdateEvent', dict]]:
         if init is not None:
-            return HeapStatsUpdateEvent(**init)
+            try:
+                ourselves = HeapStatsUpdateEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['HeapStatsUpdateEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['HeapStatsUpdateEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(HeapStatsUpdateEvent(**it))
+                list_of_self.append(HeapStatsUpdateEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -89,18 +97,22 @@ class LastSeenObjectIdEvent(BaseEvent):
         self.timestamp = timestamp
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['LastSeenObjectIdEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['LastSeenObjectIdEvent', dict]]:
         if init is not None:
-            return LastSeenObjectIdEvent(**init)
+            try:
+                ourselves = LastSeenObjectIdEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['LastSeenObjectIdEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LastSeenObjectIdEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(LastSeenObjectIdEvent(**it))
+                list_of_self.append(LastSeenObjectIdEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -125,18 +137,22 @@ class ReportHeapSnapshotProgressEvent(BaseEvent):
         self.finished = finished
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ReportHeapSnapshotProgressEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ReportHeapSnapshotProgressEvent', dict]]:
         if init is not None:
-            return ReportHeapSnapshotProgressEvent(**init)
+            try:
+                ourselves = ReportHeapSnapshotProgressEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ReportHeapSnapshotProgressEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ReportHeapSnapshotProgressEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ReportHeapSnapshotProgressEvent(**it))
+                list_of_self.append(ReportHeapSnapshotProgressEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -150,18 +166,22 @@ class ResetProfilesEvent(BaseEvent, dict):
         super().__init__(*args, **kwargs)
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional['ResetProfilesEvent']:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ResetProfilesEvent', dict]]:
         if init is not None:
-            return ResetProfilesEvent(**init)
+            try:
+                ourselves = ResetProfilesEvent(**init)
+                return ourselves
+            except Exception:
+                return init
         else:
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List['ResetProfilesEvent']]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ResetProfilesEvent', dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ResetProfilesEvent(**it))
+                list_of_self.append(ResetProfilesEvent.safe_create(it))
             return list_of_self
         else:
             return init
