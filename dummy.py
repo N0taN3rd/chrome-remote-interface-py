@@ -13,7 +13,7 @@ DEFAULT_HOST: str = "localhost"
 DEFAULT_PORT: int = 9222
 TIMEOUT_S = 25
 MAX_PAYLOAD_SIZE_BYTES = 2 ** 30
-MAX_PAYLOAD_SIZE_MB = MAX_PAYLOAD_SIZE_BYTES / 1024 ** 2
+MAX_PAYLOAD_SIZE_MB = MAX_PAYLOAD_SIZE_BYTES / 1024 ** 2 # ~ 1GB
 
 
 class Chrome(object):
@@ -39,11 +39,18 @@ class Chrome(object):
     async def connect(self):
         if self._ws_url is not None:
             self._ws = await websockets.connect(
-                self._ws_url, max_size=MAX_PAYLOAD_SIZE_BYTES
-            )  # ~ 1GB
+                self._ws_url, max_size=None, read_limit=2 ** 32
+            )
             self._recv_task = asyncio.ensure_future(self.recv_handler())
         else:
-            tabs = self.JSON(url=self._url)
+            tabs = await self.List(url=self._url)
+            it = list(filter(lambda x: x['type'] == 'page', tabs))[0]
+            self._ws_url = it['webSocketDebuggerUrl']
+            self._ws = await websockets.connect(
+                self._ws_url, max_size=None
+            )
+            self._recv_task = asyncio.ensure_future(self.recv_handler())
+
 
     async def disconnect(self):
         if self._recv_task:
@@ -72,6 +79,11 @@ class Chrome(object):
                     "id": self._message_id,
                 }
             )
+        )
+        self._message_id += 1
+        print(res)
+        res = await self._ws.send(
+            ujson.dumps({"method": "Network.enable", "params": {}, "id": self._message_id})
         )
         self._message_id += 1
         print(res)
@@ -174,9 +186,7 @@ class Chrome(object):
 
 
 async def go():
-    chrome = Chrome(
-        wsurl="ws://localhost:9222/devtools/page/C7AAFB95D4FC54F29F24EBB60FA92192"
-    )
+    chrome = Chrome()
     await chrome.connect()
     await chrome._send()
 
