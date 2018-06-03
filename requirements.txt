@@ -4,5 +4,8 @@ black
 pyee
 websockets
 aiohttp
+aiojobs
 async-timeout
+cchardet
+aiodns
 stringcase

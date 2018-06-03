@@ -47,10 +47,10 @@ class EventListener(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['EventListener', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = EventListener(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

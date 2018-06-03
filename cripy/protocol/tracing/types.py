@@ -35,10 +35,10 @@ class TraceConfig(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['TraceConfig', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = TraceConfig(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -62,10 +62,10 @@ class MemoryDumpConfig(ProtocolType, dict):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['MemoryDumpConfig', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = MemoryDumpConfig(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

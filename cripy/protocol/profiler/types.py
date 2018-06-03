@@ -22,10 +22,10 @@ class TypeProfileEntry(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['TypeProfileEntry', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = TypeProfileEntry(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -57,10 +57,10 @@ class TypeObject(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['TypeObject', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = TypeObject(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -98,10 +98,10 @@ class ScriptTypeProfile(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ScriptTypeProfile', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ScriptTypeProfile(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -139,10 +139,10 @@ class ScriptCoverage(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ScriptCoverage', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ScriptCoverage(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -189,10 +189,10 @@ class ProfileNode(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ProfileNode', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ProfileNode(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -236,10 +236,10 @@ class Profile(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Profile', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Profile(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -274,10 +274,10 @@ class PositionTickInfo(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['PositionTickInfo', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = PositionTickInfo(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -315,10 +315,10 @@ class FunctionCoverage(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['FunctionCoverage', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = FunctionCoverage(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -356,10 +356,10 @@ class CoverageRange(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CoverageRange', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CoverageRange(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

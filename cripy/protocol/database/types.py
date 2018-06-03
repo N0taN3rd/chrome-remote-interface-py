@@ -21,10 +21,10 @@ class Error(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Error', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Error(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -65,10 +65,10 @@ class Database(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Database', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Database(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

@@ -1,8 +1,8 @@
 from typing import Any, List, Optional, Union
-from cripy.protocol.network import types as Network
 from cripy.protocol.runtime import types as Runtime
 from cripy.protocol.dom import types as DOM
 from cripy.protocol.debugger import types as Debugger
+from cripy.protocol.network import types as Network
 from cripy.protocol.emulation import types as Emulation
 from cripy.protocol.page import events as Events
 from cripy.protocol.page import types as Types

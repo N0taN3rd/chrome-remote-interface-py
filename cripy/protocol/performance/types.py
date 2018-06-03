@@ -21,10 +21,10 @@ class Metric(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Metric', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Metric(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

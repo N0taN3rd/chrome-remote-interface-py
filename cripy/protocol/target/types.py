@@ -32,10 +32,10 @@ class TargetInfo(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['TargetInfo', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = TargetInfo(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -66,10 +66,10 @@ class RemoteLocation(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['RemoteLocation', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = RemoteLocation(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

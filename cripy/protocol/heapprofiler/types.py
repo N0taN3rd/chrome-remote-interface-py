@@ -25,10 +25,10 @@ class SamplingHeapProfileNode(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['SamplingHeapProfileNode', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = SamplingHeapProfileNode(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -60,10 +60,10 @@ class SamplingHeapProfile(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['SamplingHeapProfile', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = SamplingHeapProfile(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

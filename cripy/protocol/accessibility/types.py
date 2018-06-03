@@ -43,10 +43,10 @@ class AXValueSource(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['AXValueSource', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = AXValueSource(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -87,10 +87,10 @@ class AXValue(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['AXValue', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = AXValue(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -124,10 +124,10 @@ class AXRelatedNode(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['AXRelatedNode', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = AXRelatedNode(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -158,10 +158,10 @@ class AXProperty(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['AXProperty', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = AXProperty(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -220,10 +220,10 @@ class AXNode(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['AXNode', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = AXNode(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

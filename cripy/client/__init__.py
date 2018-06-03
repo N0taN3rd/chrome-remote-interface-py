@@ -7,6 +7,7 @@ from urllib.parse import urljoin
 from typing import Optional, List, Dict, Union
 from pyee import EventEmitter
 import aiohttp
+import aiojobs
 import websockets
 import websockets.protocol
 
@@ -24,7 +25,7 @@ class NetworkError(Exception):  # noqa: D204
     pass
 
 
-class Chrome(ProtocolMixin, EventEmitter):
+class RemoteClient(ProtocolMixin, EventEmitter):
 
     def __init__(
         self,
@@ -135,6 +136,14 @@ class Chrome(ProtocolMixin, EventEmitter):
         callback.method = method  # type: ignore
         return callback
 
+    async def close(self):
+        await self.Browser.close()
+
+
+    @property
+    def connected(self):
+        return self._connected
+
     @property
     def host(self):
         return self._host
@@ -158,6 +167,8 @@ class Chrome(ProtocolMixin, EventEmitter):
         async with aiohttp.ClientSession() as session:
             if url is None:
                 url = f"{'https:' if secure else 'http:'}//{host}:{port}/json"
+            if not url.endswith('/json'):
+                url = urljoin(url, 'json')
             data = await session.get(url)
             json_ = await data.json()
         return json_

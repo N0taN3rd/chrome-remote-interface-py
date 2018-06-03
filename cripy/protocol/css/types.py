@@ -23,10 +23,10 @@ class Value(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Value', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Value(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -64,10 +64,10 @@ class StyleDeclarationEdit(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['StyleDeclarationEdit', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = StyleDeclarationEdit(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -108,10 +108,10 @@ class SourceRange(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['SourceRange', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = SourceRange(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -145,10 +145,10 @@ class ShorthandEntry(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ShorthandEntry', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ShorthandEntry(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -183,10 +183,10 @@ class SelectorList(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['SelectorList', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = SelectorList(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -227,10 +227,10 @@ class RuleUsage(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['RuleUsage', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = RuleUsage(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -265,10 +265,10 @@ class RuleMatch(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['RuleMatch', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = RuleMatch(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -303,10 +303,10 @@ class PseudoElementMatches(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['PseudoElementMatches', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = PseudoElementMatches(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -344,10 +344,10 @@ class PlatformFontUsage(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['PlatformFontUsage', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = PlatformFontUsage(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -391,10 +391,10 @@ class MediaQueryExpression(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['MediaQueryExpression', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = MediaQueryExpression(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -429,10 +429,10 @@ class MediaQuery(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['MediaQuery', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = MediaQuery(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -467,10 +467,10 @@ class InheritedStyleEntry(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['InheritedStyleEntry', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = InheritedStyleEntry(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -523,10 +523,10 @@ class FontFace(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['FontFace', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = FontFace(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -594,10 +594,10 @@ class CSSStyleSheetHeader(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CSSStyleSheetHeader', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CSSStyleSheetHeader(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -641,10 +641,10 @@ class CSSStyle(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CSSStyle', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CSSStyle(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -688,10 +688,10 @@ class CSSRule(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CSSRule', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CSSRule(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -744,10 +744,10 @@ class CSSProperty(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CSSProperty', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CSSProperty(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -794,10 +794,10 @@ class CSSMedia(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CSSMedia', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CSSMedia(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -832,10 +832,10 @@ class CSSKeyframesRule(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CSSKeyframesRule', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CSSKeyframesRule(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -876,10 +876,10 @@ class CSSKeyframeRule(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CSSKeyframeRule', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CSSKeyframeRule(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -910,10 +910,10 @@ class CSSComputedStyleProperty(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CSSComputedStyleProperty', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CSSComputedStyleProperty(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

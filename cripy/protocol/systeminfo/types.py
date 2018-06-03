@@ -27,10 +27,10 @@ class GPUInfo(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['GPUInfo', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = GPUInfo(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -71,10 +71,10 @@ class GPUDevice(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['GPUDevice', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = GPUDevice(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

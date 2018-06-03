@@ -1,6 +1,6 @@
 from typing import Any, List, Optional, Union
-from cripy.protocol.dom import types as DOM
 from cripy.protocol.runtime import types as Runtime
+from cripy.protocol.dom import types as DOM
 from cripy.protocol.accessibility import types as Types
 
 

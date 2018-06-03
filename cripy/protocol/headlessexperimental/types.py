@@ -21,10 +21,10 @@ class ScreenshotParams(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ScreenshotParams', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ScreenshotParams(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

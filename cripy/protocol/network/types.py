@@ -1,8 +1,8 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
-from cripy.protocol.security import types as Security
-from cripy.protocol.page import types as Page
 from cripy.protocol.runtime import types as Runtime
+from cripy.protocol.page import types as Page
+from cripy.protocol.security import types as Security
 
 
 class WebSocketResponse(ProtocolType):
@@ -36,10 +36,10 @@ class WebSocketResponse(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['WebSocketResponse', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = WebSocketResponse(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -71,10 +71,10 @@ class WebSocketRequest(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['WebSocketRequest', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = WebSocketRequest(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -112,10 +112,10 @@ class WebSocketFrame(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['WebSocketFrame', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = WebSocketFrame(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -172,10 +172,10 @@ https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['SignedExchangeSignature', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = SignedExchangeSignature(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -216,10 +216,10 @@ class SignedExchangeInfo(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['SignedExchangeInfo', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = SignedExchangeInfo(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -264,10 +264,10 @@ https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['SignedExchangeHeader', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = SignedExchangeHeader(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -320,10 +320,10 @@ class SignedCertificateTimestamp(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['SignedCertificateTimestamp', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = SignedCertificateTimestamp(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -391,10 +391,10 @@ class SecurityDetails(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['SecurityDetails', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = SecurityDetails(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -480,10 +480,10 @@ class Response(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Response', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Response(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -560,10 +560,10 @@ class ResourceTiming(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ResourceTiming', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ResourceTiming(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -601,10 +601,10 @@ class RequestPattern(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['RequestPattern', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = RequestPattern(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -660,10 +660,10 @@ class Request(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Request', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Request(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -704,10 +704,10 @@ class Initiator(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Initiator', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Initiator(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -731,10 +731,10 @@ class Headers(ProtocolType, dict):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Headers', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Headers(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -790,10 +790,10 @@ class CookieParam(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CookieParam', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CookieParam(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -852,10 +852,10 @@ class Cookie(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Cookie', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Cookie(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -896,10 +896,10 @@ class CachedResource(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CachedResource', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CachedResource(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -937,10 +937,10 @@ class AuthChallengeResponse(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['AuthChallengeResponse', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = AuthChallengeResponse(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -981,10 +981,10 @@ class AuthChallenge(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['AuthChallenge', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = AuthChallenge(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

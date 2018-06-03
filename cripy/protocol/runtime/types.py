@@ -22,10 +22,10 @@ allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.pau
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['StackTraceId', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = StackTraceId(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -66,10 +66,10 @@ class StackTrace(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['StackTrace', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = StackTrace(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -125,10 +125,10 @@ class RemoteObject(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['RemoteObject', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = RemoteObject(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -168,10 +168,10 @@ class PropertyPreview(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['PropertyPreview', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = PropertyPreview(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -230,10 +230,10 @@ class PropertyDescriptor(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['PropertyDescriptor', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = PropertyDescriptor(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -280,10 +280,10 @@ class ObjectPreview(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ObjectPreview', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ObjectPreview(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -318,10 +318,10 @@ class InternalPropertyDescriptor(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['InternalPropertyDescriptor', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = InternalPropertyDescriptor(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -362,10 +362,10 @@ class ExecutionContextDescription(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ExecutionContextDescription', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ExecutionContextDescription(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -422,10 +422,10 @@ execution.
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ExceptionDetails', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ExceptionDetails(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -456,10 +456,10 @@ class EntryPreview(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['EntryPreview', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = EntryPreview(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -499,10 +499,10 @@ class CustomPreview(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CustomPreview', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CustomPreview(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -546,10 +546,10 @@ class CallFrame(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CallFrame', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CallFrame(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -588,10 +588,10 @@ unserializable primitive value or neither of (for undefined) them should be spec
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CallArgument', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CallArgument(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

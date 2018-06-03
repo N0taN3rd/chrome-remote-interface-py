@@ -43,10 +43,10 @@ class ServiceWorkerVersion(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ServiceWorkerVersion', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ServiceWorkerVersion(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -84,10 +84,10 @@ class ServiceWorkerRegistration(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ServiceWorkerRegistration', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ServiceWorkerRegistration(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -134,10 +134,10 @@ class ServiceWorkerErrorMessage(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ServiceWorkerErrorMessage', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ServiceWorkerErrorMessage(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

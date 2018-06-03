@@ -27,10 +27,10 @@ class Histogram(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Histogram', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Histogram(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -68,10 +68,10 @@ class Bucket(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Bucket', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Bucket(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -115,10 +115,10 @@ class Bounds(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Bounds', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Bounds(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

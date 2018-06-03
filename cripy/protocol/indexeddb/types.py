@@ -28,10 +28,10 @@ class ObjectStoreIndex(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ObjectStoreIndex', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ObjectStoreIndex(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -72,10 +72,10 @@ class ObjectStore(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ObjectStore', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ObjectStore(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -116,10 +116,10 @@ class KeyRange(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['KeyRange', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = KeyRange(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -157,10 +157,10 @@ class KeyPath(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['KeyPath', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = KeyPath(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -204,10 +204,10 @@ class Key(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Key', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Key(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -245,10 +245,10 @@ class DatabaseWithObjectStores(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['DatabaseWithObjectStores', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = DatabaseWithObjectStores(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -286,10 +286,10 @@ class DataEntry(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['DataEntry', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = DataEntry(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

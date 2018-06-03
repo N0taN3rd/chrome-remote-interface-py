@@ -28,10 +28,10 @@ class StickyPositionConstraint(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['StickyPositionConstraint', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = StickyPositionConstraint(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -66,10 +66,10 @@ class ScrollRect(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ScrollRect', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ScrollRect(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -107,10 +107,10 @@ class PictureTile(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['PictureTile', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = PictureTile(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -187,10 +187,10 @@ class Layer(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Layer', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Layer(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

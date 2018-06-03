@@ -37,10 +37,10 @@ class VisualViewport(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['VisualViewport', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = VisualViewport(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -84,10 +84,10 @@ class Viewport(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Viewport', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Viewport(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -137,10 +137,10 @@ class ScreencastFrameMetadata(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ScreencastFrameMetadata', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ScreencastFrameMetadata(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -184,10 +184,10 @@ class NavigationEntry(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['NavigationEntry', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = NavigationEntry(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -228,10 +228,10 @@ class LayoutViewport(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['LayoutViewport', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = LayoutViewport(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -266,10 +266,10 @@ class FrameTree(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['FrameTree', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = FrameTree(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -307,10 +307,10 @@ class FrameResourceTree(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['FrameResourceTree', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = FrameResourceTree(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -360,10 +360,10 @@ class FrameResource(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['FrameResource', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = FrameResource(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -416,10 +416,10 @@ class Frame(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Frame', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Frame(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -460,10 +460,10 @@ class AppManifestError(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['AppManifestError', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = AppManifestError(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

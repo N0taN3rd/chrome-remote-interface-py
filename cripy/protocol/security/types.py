@@ -33,10 +33,10 @@ class SecurityStateExplanation(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['SecurityStateExplanation', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = SecurityStateExplanation(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -86,10 +86,10 @@ class InsecureContentStatus(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['InsecureContentStatus', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = InsecureContentStatus(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

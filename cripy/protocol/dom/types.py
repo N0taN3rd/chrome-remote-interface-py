@@ -25,10 +25,10 @@ class ShapeOutsideInfo(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ShapeOutsideInfo', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ShapeOutsideInfo(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -69,10 +69,10 @@ class Rect(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Rect', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Rect(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -113,10 +113,10 @@ class RGBA(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['RGBA', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = RGBA(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -230,10 +230,10 @@ DOMNode is a base node mirror type.
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Node', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Node(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -283,10 +283,10 @@ class BoxModel(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['BoxModel', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = BoxModel(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -324,10 +324,10 @@ class BackendNode(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['BackendNode', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = BackendNode(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

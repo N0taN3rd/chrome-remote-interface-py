@@ -1,7 +1,7 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
-from cripy.protocol.network import types as Network
 from cripy.protocol.runtime import types as Runtime
+from cripy.protocol.network import types as Network
 
 
 class ViolationSetting(ProtocolType):
@@ -23,10 +23,10 @@ class ViolationSetting(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ViolationSetting', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ViolationSetting(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -85,10 +85,10 @@ class LogEntry(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['LogEntry', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = LogEntry(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

@@ -1,7 +1,7 @@
 from typing import Any, List, Optional, Union
 from cripy.helpers import BaseEvent
-from cripy.protocol.network import types as Network
 from cripy.protocol.runtime import types as Runtime
+from cripy.protocol.network import types as Network
 try:
     from cripy.protocol.page.types import *
 except ImportError:

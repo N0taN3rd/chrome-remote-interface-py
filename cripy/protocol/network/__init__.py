@@ -1,6 +1,6 @@
 from typing import Any, List, Optional, Union
-from cripy.protocol.io import types as IO
 from cripy.protocol.debugger import types as Debugger
+from cripy.protocol.io import types as IO
 from cripy.protocol.network import events as Events
 from cripy.protocol.network import types as Types
 

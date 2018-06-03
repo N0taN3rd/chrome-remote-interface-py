@@ -22,10 +22,10 @@ class KeyframesRule(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['KeyframesRule', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = KeyframesRule(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -60,10 +60,10 @@ class KeyframeStyle(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['KeyframeStyle', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = KeyframeStyle(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -122,10 +122,10 @@ class AnimationEffect(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['AnimationEffect', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = AnimationEffect(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -184,10 +184,10 @@ class Animation(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Animation', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Animation(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

@@ -17,10 +17,10 @@ class Header(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Header', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Header(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -70,10 +70,10 @@ class DataEntry(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['DataEntry', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = DataEntry(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -105,10 +105,10 @@ class CachedResponse(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CachedResponse', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CachedResponse(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -146,10 +146,10 @@ class Cache(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Cache', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Cache(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

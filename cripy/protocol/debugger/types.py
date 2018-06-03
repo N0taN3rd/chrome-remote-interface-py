@@ -22,10 +22,10 @@ class SearchMatch(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['SearchMatch', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = SearchMatch(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -60,10 +60,10 @@ class ScriptPosition(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ScriptPosition', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ScriptPosition(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -107,10 +107,10 @@ class Scope(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Scope', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Scope(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -148,10 +148,10 @@ class Location(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['Location', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = Location(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -204,10 +204,10 @@ class CallFrame(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['CallFrame', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = CallFrame(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -244,10 +244,10 @@ class BreakLocation(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['BreakLocation', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = BreakLocation(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

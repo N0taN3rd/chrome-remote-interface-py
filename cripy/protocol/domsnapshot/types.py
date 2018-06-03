@@ -1,8 +1,8 @@
 from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
-from cripy.protocol.domdebugger import types as DOMDebugger
 from cripy.protocol.dom import types as DOM
 from cripy.protocol.page import types as Page
+from cripy.protocol.domdebugger import types as DOMDebugger
 
 
 class NameValue(ProtocolType):
@@ -24,10 +24,10 @@ class NameValue(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['NameValue', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = NameValue(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -74,10 +74,10 @@ class LayoutTreeNode(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['LayoutTreeNode', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = LayoutTreeNode(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -116,10 +116,10 @@ stable and may change between versions.
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['InlineTextBox', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = InlineTextBox(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -232,10 +232,10 @@ class DOMNode(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['DOMNode', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = DOMNode(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -267,10 +267,10 @@ class ComputedStyle(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ComputedStyle', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ComputedStyle(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

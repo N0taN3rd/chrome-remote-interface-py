@@ -24,10 +24,10 @@ class SamplingProfileNode(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['SamplingProfileNode', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = SamplingProfileNode(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -59,10 +59,10 @@ class SamplingProfile(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['SamplingProfile', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = SamplingProfile(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init

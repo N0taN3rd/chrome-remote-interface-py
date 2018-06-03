@@ -25,10 +25,10 @@ class FrameWithManifest(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['FrameWithManifest', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = FrameWithManifest(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -66,10 +66,10 @@ class ApplicationCacheResource(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ApplicationCacheResource', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ApplicationCacheResource(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
@@ -113,10 +113,10 @@ class ApplicationCache(ProtocolType):
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['ApplicationCache', dict]]:
         if init is not None:
-             try:
+            try:
                 ourselves = ApplicationCache(**init)
                 return ourselves
-             except Exception:
+            except Exception:
                 return init
         else:
             return init
