@@ -1,8 +1,7 @@
 import asyncio
 import base64
-import json
+import ujson as json
 import logging
-import ujson
 from urllib.parse import urljoin
 from typing import Optional, List, Dict, Union, Callable, Any
 from pyee import EventEmitter
@@ -35,7 +34,7 @@ class Connection(ProtocolMixin, EventEmitter):
         """
         super().__init__(*args, **kwargs)
         self._url = url
-        self._lastId = 0
+        self._message_id = 0
         self._callbacks: Dict[int, asyncio.Future] = dict()
         self._delay = delay
         self._sessions: Dict[str, TargetConnection] = dict()
@@ -51,6 +50,18 @@ class Connection(ProtocolMixin, EventEmitter):
     def url(self) -> str:
         """Get connected WebSocket url."""
         return self._url
+
+    async def send(self, method: str = None, params: dict = None) -> None:
+        if params is None:
+            params = dict()
+        self._message_id += 1
+        _id = self._message_id
+        msg = json.dumps(dict(method=method, params=params, id=_id))
+        asyncio.ensure_future(self._send_async(msg))
+        callback = asyncio.get_event_loop().create_future()
+        self._callbacks[_id] = callback
+        callback.method = method  # type: ignore
+        return callback
 
     async def dispose(self) -> None:
         """Close all connection."""
