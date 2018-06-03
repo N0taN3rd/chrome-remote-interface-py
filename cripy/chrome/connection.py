@@ -95,7 +95,7 @@ class Connection(ProtocolMixin, EventEmitter):
                 break
 
     def _on_message(self, message: str) -> None:
-        msg = ujson.loads(message)
+        msg = json.loads(message)
         if msg.get("id") in self._callbacks:
             self._on_response(msg)
         else:
@@ -199,8 +199,8 @@ class TargetConnection(EventEmitter):
         self._sessions[sessionId] = sesh
         return sesh
 
-    def _on_message(self, msg: str) -> None:
-        msg = json.loads(msg)
+    def _on_message(self, message: str) -> None:
+        msg = json.loads(message)
         _id = msg.get("id")
         if _id and _id in self._callbacks:
             callback = self._callbacks.pop(_id)
