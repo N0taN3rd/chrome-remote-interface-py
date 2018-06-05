@@ -1,12 +1,13 @@
 from typing import Any, List, Optional, Union
-from cripy.helpers import BaseEvent
+from types import SimpleNamespace
+
 try:
     from cripy.protocol.emulation.types import *
 except ImportError:
     pass
 
 
-class VirtualTimeAdvancedEvent(BaseEvent):
+class VirtualTimeAdvancedEvent(object):
     """
     Notification sent after the virtual time has advanced.
     """
@@ -21,8 +22,25 @@ class VirtualTimeAdvancedEvent(BaseEvent):
         super().__init__()
         self.virtualTimeElapsed = virtualTimeElapsed
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.virtualTimeElapsed is not None:
+            repr_args.append("virtualTimeElapsed={!r}".format(self.virtualTimeElapsed))
+        return "VirtualTimeAdvancedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['VirtualTimeAdvancedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["VirtualTimeAdvancedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = VirtualTimeAdvancedEvent(**init)
@@ -33,7 +51,9 @@ class VirtualTimeAdvancedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['VirtualTimeAdvancedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["VirtualTimeAdvancedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -43,7 +63,7 @@ class VirtualTimeAdvancedEvent(BaseEvent):
             return init
 
 
-class VirtualTimeBudgetExpiredEvent(BaseEvent, dict):
+class VirtualTimeBudgetExpiredEvent(dict):
     """
     Notification sent after the virtual time budget for the current VirtualTimePolicy has run out.
     """
@@ -53,8 +73,13 @@ class VirtualTimeBudgetExpiredEvent(BaseEvent, dict):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
+    def __repr__(self) -> str:
+        return "VirtualTimeBudgetExpiredEvent(dict)"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['VirtualTimeBudgetExpiredEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["VirtualTimeBudgetExpiredEvent", dict]]:
         if init is not None:
             try:
                 ourselves = VirtualTimeBudgetExpiredEvent(**init)
@@ -65,7 +90,9 @@ class VirtualTimeBudgetExpiredEvent(BaseEvent, dict):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['VirtualTimeBudgetExpiredEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["VirtualTimeBudgetExpiredEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -75,7 +102,7 @@ class VirtualTimeBudgetExpiredEvent(BaseEvent, dict):
             return init
 
 
-class VirtualTimePausedEvent(BaseEvent):
+class VirtualTimePausedEvent(object):
     """
     Notification sent after the virtual time has paused.
     """
@@ -90,8 +117,25 @@ class VirtualTimePausedEvent(BaseEvent):
         super().__init__()
         self.virtualTimeElapsed = virtualTimeElapsed
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.virtualTimeElapsed is not None:
+            repr_args.append("virtualTimeElapsed={!r}".format(self.virtualTimeElapsed))
+        return "VirtualTimePausedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['VirtualTimePausedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["VirtualTimePausedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = VirtualTimePausedEvent(**init)
@@ -102,7 +146,9 @@ class VirtualTimePausedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['VirtualTimePausedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["VirtualTimePausedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -113,8 +159,13 @@ class VirtualTimePausedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Emulation.virtualTimeAdvanced": VirtualTimeAdvancedEvent,
-   "Emulation.virtualTimeBudgetExpired": VirtualTimeBudgetExpiredEvent,
-   "Emulation.virtualTimePaused": VirtualTimePausedEvent,
+    "Emulation.virtualTimeAdvanced": VirtualTimeAdvancedEvent,
+    "Emulation.virtualTimeBudgetExpired": VirtualTimeBudgetExpiredEvent,
+    "Emulation.virtualTimePaused": VirtualTimePausedEvent,
 }
 
+EVENT_NS = SimpleNamespace(
+    VirtualTimeAdvanced="Emulation.virtualTimeAdvanced",
+    VirtualTimeBudgetExpired="Emulation.virtualTimeBudgetExpired",
+    VirtualTimePaused="Emulation.virtualTimePaused",
+)

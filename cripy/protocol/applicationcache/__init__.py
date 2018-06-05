@@ -10,8 +10,8 @@ class ApplicationCache(object):
         self.chrome = chrome
 
     async def enable(self) -> Optional[dict]:
-        res = await self.chrome.send('ApplicationCache.enable')
-        return res
+        mayberes = await self.chrome.send("ApplicationCache.enable")
+        return mayberes
 
     async def getApplicationCacheForFrame(self, frameId: str) -> Optional[dict]:
         """
@@ -20,14 +20,20 @@ class ApplicationCache(object):
         """
         msg_dict = dict()
         if frameId is not None:
-            msg_dict['frameId'] = frameId
-        res = await self.chrome.send('ApplicationCache.getApplicationCacheForFrame', msg_dict)
-        res['applicationCache'] = Types.ApplicationCache.safe_create(res['applicationCache'])
+            msg_dict["frameId"] = frameId
+        mayberes = await self.chrome.send(
+            "ApplicationCache.getApplicationCacheForFrame", msg_dict
+        )
+        res = await mayberes
+        res["applicationCache"] = Types.ApplicationCache.safe_create(
+            res["applicationCache"]
+        )
         return res
 
     async def getFramesWithManifests(self) -> Optional[dict]:
-        res = await self.chrome.send('ApplicationCache.getFramesWithManifests')
-        res['frameIds'] = Types.FrameWithManifest.safe_create_from_list(res['frameIds'])
+        mayberes = await self.chrome.send("ApplicationCache.getFramesWithManifests")
+        res = await mayberes
+        res["frameIds"] = Types.FrameWithManifest.safe_create_from_list(res["frameIds"])
         return res
 
     async def getManifestForFrame(self, frameId: str) -> Optional[dict]:
@@ -37,11 +43,13 @@ class ApplicationCache(object):
         """
         msg_dict = dict()
         if frameId is not None:
-            msg_dict['frameId'] = frameId
-        res = await self.chrome.send('ApplicationCache.getManifestForFrame', msg_dict)
+            msg_dict["frameId"] = frameId
+        mayberes = await self.chrome.send(
+            "ApplicationCache.getManifestForFrame", msg_dict
+        )
+        res = await mayberes
         return res
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

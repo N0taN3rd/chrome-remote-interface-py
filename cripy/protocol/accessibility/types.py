@@ -3,12 +3,23 @@ from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 
 
-class AXValueSource(ProtocolType):
+class AXValueSource(object):
     """
     A single source for a computed AX property.
     """
 
-    def __init__(self, type: str, value: Optional[Union['AXValue', dict]] = None, attribute: Optional[str] = None, attributeValue: Optional[Union['AXValue', dict]] = None, superseded: Optional[bool] = None, nativeSource: Optional[str] = None, nativeSourceValue: Optional[Union['AXValue', dict]] = None, invalid: Optional[bool] = None, invalidReason: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        type: str,
+        value: Optional[Union["AXValue", dict]] = None,
+        attribute: Optional[str] = None,
+        attributeValue: Optional[Union["AXValue", dict]] = None,
+        superseded: Optional[bool] = None,
+        nativeSource: Optional[str] = None,
+        nativeSourceValue: Optional[Union["AXValue", dict]] = None,
+        invalid: Optional[bool] = None,
+        invalidReason: Optional[str] = None,
+    ) -> None:
         """
         :param type: What type of source this is.
         :type type: str
@@ -40,8 +51,39 @@ class AXValueSource(ProtocolType):
         self.invalid = invalid
         self.invalidReason = invalidReason
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.type is not None:
+            repr_args.append("type={!r}".format(self.type))
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        if self.attribute is not None:
+            repr_args.append("attribute={!r}".format(self.attribute))
+        if self.attributeValue is not None:
+            repr_args.append("attributeValue={!r}".format(self.attributeValue))
+        if self.superseded is not None:
+            repr_args.append("superseded={!r}".format(self.superseded))
+        if self.nativeSource is not None:
+            repr_args.append("nativeSource={!r}".format(self.nativeSource))
+        if self.nativeSourceValue is not None:
+            repr_args.append("nativeSourceValue={!r}".format(self.nativeSourceValue))
+        if self.invalid is not None:
+            repr_args.append("invalid={!r}".format(self.invalid))
+        if self.invalidReason is not None:
+            repr_args.append("invalidReason={!r}".format(self.invalidReason))
+        return "AXValueSource(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['AXValueSource', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["AXValueSource", dict]]:
         if init is not None:
             try:
                 ourselves = AXValueSource(**init)
@@ -52,7 +94,9 @@ class AXValueSource(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AXValueSource', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["AXValueSource", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -62,12 +106,18 @@ class AXValueSource(ProtocolType):
             return init
 
 
-class AXValue(ProtocolType):
+class AXValue(object):
     """
     A single computed AX property.
     """
 
-    def __init__(self, type: str, value: Optional[Any] = None, relatedNodes: Optional[List[Union['AXRelatedNode', dict]]] = None, sources: Optional[List[Union['AXValueSource', dict]]] = None) -> None:
+    def __init__(
+        self,
+        type: str,
+        value: Optional[Any] = None,
+        relatedNodes: Optional[List[Union["AXRelatedNode", dict]]] = None,
+        sources: Optional[List[Union["AXValueSource", dict]]] = None,
+    ) -> None:
         """
         :param type: The type of this value.
         :type type: str
@@ -84,8 +134,29 @@ class AXValue(ProtocolType):
         self.relatedNodes = AXRelatedNode.safe_create_from_list(relatedNodes)
         self.sources = AXValueSource.safe_create_from_list(sources)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.type is not None:
+            repr_args.append("type={!r}".format(self.type))
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        if self.relatedNodes is not None:
+            repr_args.append("relatedNodes={!r}".format(self.relatedNodes))
+        if self.sources is not None:
+            repr_args.append("sources={!r}".format(self.sources))
+        return "AXValue(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['AXValue', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["AXValue", dict]]:
         if init is not None:
             try:
                 ourselves = AXValue(**init)
@@ -96,7 +167,9 @@ class AXValue(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AXValue', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["AXValue", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -106,8 +179,14 @@ class AXValue(ProtocolType):
             return init
 
 
-class AXRelatedNode(ProtocolType):
-    def __init__(self, backendDOMNodeId: int, idref: Optional[str] = None, text: Optional[str] = None) -> None:
+class AXRelatedNode(object):
+
+    def __init__(
+        self,
+        backendDOMNodeId: int,
+        idref: Optional[str] = None,
+        text: Optional[str] = None,
+    ) -> None:
         """
         :param backendDOMNodeId: The BackendNodeId of the related DOM node.
         :type backendDOMNodeId: int
@@ -121,8 +200,27 @@ class AXRelatedNode(ProtocolType):
         self.idref = idref
         self.text = text
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.backendDOMNodeId is not None:
+            repr_args.append("backendDOMNodeId={!r}".format(self.backendDOMNodeId))
+        if self.idref is not None:
+            repr_args.append("idref={!r}".format(self.idref))
+        if self.text is not None:
+            repr_args.append("text={!r}".format(self.text))
+        return "AXRelatedNode(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['AXRelatedNode', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["AXRelatedNode", dict]]:
         if init is not None:
             try:
                 ourselves = AXRelatedNode(**init)
@@ -133,7 +231,9 @@ class AXRelatedNode(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AXRelatedNode', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["AXRelatedNode", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -143,8 +243,9 @@ class AXRelatedNode(ProtocolType):
             return init
 
 
-class AXProperty(ProtocolType):
-    def __init__(self, name: str, value: Union['AXValue', dict]) -> None:
+class AXProperty(object):
+
+    def __init__(self, name: str, value: Union["AXValue", dict]) -> None:
         """
         :param name: The name of this property.
         :type name: str
@@ -155,8 +256,25 @@ class AXProperty(ProtocolType):
         self.name = name
         self.value = AXValue.safe_create(value)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        return "AXProperty(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['AXProperty', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["AXProperty", dict]]:
         if init is not None:
             try:
                 ourselves = AXProperty(**init)
@@ -167,7 +285,9 @@ class AXProperty(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AXProperty', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["AXProperty", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -177,12 +297,24 @@ class AXProperty(ProtocolType):
             return init
 
 
-class AXNode(ProtocolType):
+class AXNode(object):
     """
     A node in the accessibility tree.
     """
 
-    def __init__(self, nodeId: str, ignored: bool, ignoredReasons: Optional[List[Union['AXProperty', dict]]] = None, role: Optional[Union['AXValue', dict]] = None, name: Optional[Union['AXValue', dict]] = None, description: Optional[Union['AXValue', dict]] = None, value: Optional[Union['AXValue', dict]] = None, properties: Optional[List[Union['AXProperty', dict]]] = None, childIds: Optional[List[str]] = None, backendDOMNodeId: Optional[int] = None) -> None:
+    def __init__(
+        self,
+        nodeId: str,
+        ignored: bool,
+        ignoredReasons: Optional[List[Union["AXProperty", dict]]] = None,
+        role: Optional[Union["AXValue", dict]] = None,
+        name: Optional[Union["AXValue", dict]] = None,
+        description: Optional[Union["AXValue", dict]] = None,
+        value: Optional[Union["AXValue", dict]] = None,
+        properties: Optional[List[Union["AXProperty", dict]]] = None,
+        childIds: Optional[List[str]] = None,
+        backendDOMNodeId: Optional[int] = None,
+    ) -> None:
         """
         :param nodeId: Unique identifier for this node.
         :type nodeId: str
@@ -217,8 +349,41 @@ class AXNode(ProtocolType):
         self.childIds = childIds
         self.backendDOMNodeId = backendDOMNodeId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.nodeId is not None:
+            repr_args.append("nodeId={!r}".format(self.nodeId))
+        if self.ignored is not None:
+            repr_args.append("ignored={!r}".format(self.ignored))
+        if self.ignoredReasons is not None:
+            repr_args.append("ignoredReasons={!r}".format(self.ignoredReasons))
+        if self.role is not None:
+            repr_args.append("role={!r}".format(self.role))
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.description is not None:
+            repr_args.append("description={!r}".format(self.description))
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        if self.properties is not None:
+            repr_args.append("properties={!r}".format(self.properties))
+        if self.childIds is not None:
+            repr_args.append("childIds={!r}".format(self.childIds))
+        if self.backendDOMNodeId is not None:
+            repr_args.append("backendDOMNodeId={!r}".format(self.backendDOMNodeId))
+        return "AXNode(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['AXNode', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["AXNode", dict]]:
         if init is not None:
             try:
                 ourselves = AXNode(**init)
@@ -229,7 +394,9 @@ class AXNode(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AXNode', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["AXNode", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:

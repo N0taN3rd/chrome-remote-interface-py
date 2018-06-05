@@ -3,12 +3,23 @@ from cripy.helpers import ProtocolType
 from cripy.protocol.target import types as Target
 
 
-class ServiceWorkerVersion(ProtocolType):
+class ServiceWorkerVersion(object):
     """
     ServiceWorker version.
     """
 
-    def __init__(self, versionId: str, registrationId: str, scriptURL: str, runningStatus: str, status: str, scriptLastModified: Optional[float] = None, scriptResponseTime: Optional[float] = None, controlledClients: Optional[List[str]] = None, targetId: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        versionId: str,
+        registrationId: str,
+        scriptURL: str,
+        runningStatus: str,
+        status: str,
+        scriptLastModified: Optional[float] = None,
+        scriptResponseTime: Optional[float] = None,
+        controlledClients: Optional[List[str]] = None,
+        targetId: Optional[str] = None,
+    ) -> None:
         """
         :param versionId: The versionId
         :type versionId: str
@@ -40,8 +51,41 @@ class ServiceWorkerVersion(ProtocolType):
         self.controlledClients = controlledClients
         self.targetId = targetId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.versionId is not None:
+            repr_args.append("versionId={!r}".format(self.versionId))
+        if self.registrationId is not None:
+            repr_args.append("registrationId={!r}".format(self.registrationId))
+        if self.scriptURL is not None:
+            repr_args.append("scriptURL={!r}".format(self.scriptURL))
+        if self.runningStatus is not None:
+            repr_args.append("runningStatus={!r}".format(self.runningStatus))
+        if self.status is not None:
+            repr_args.append("status={!r}".format(self.status))
+        if self.scriptLastModified is not None:
+            repr_args.append("scriptLastModified={!r}".format(self.scriptLastModified))
+        if self.scriptResponseTime is not None:
+            repr_args.append("scriptResponseTime={!r}".format(self.scriptResponseTime))
+        if self.controlledClients is not None:
+            repr_args.append("controlledClients={!r}".format(self.controlledClients))
+        if self.targetId is not None:
+            repr_args.append("targetId={!r}".format(self.targetId))
+        return "ServiceWorkerVersion(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ServiceWorkerVersion', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ServiceWorkerVersion", dict]]:
         if init is not None:
             try:
                 ourselves = ServiceWorkerVersion(**init)
@@ -52,7 +96,9 @@ class ServiceWorkerVersion(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ServiceWorkerVersion', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ServiceWorkerVersion", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -62,7 +108,7 @@ class ServiceWorkerVersion(ProtocolType):
             return init
 
 
-class ServiceWorkerRegistration(ProtocolType):
+class ServiceWorkerRegistration(object):
     """
     ServiceWorker registration.
     """
@@ -81,8 +127,29 @@ class ServiceWorkerRegistration(ProtocolType):
         self.scopeURL = scopeURL
         self.isDeleted = isDeleted
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.registrationId is not None:
+            repr_args.append("registrationId={!r}".format(self.registrationId))
+        if self.scopeURL is not None:
+            repr_args.append("scopeURL={!r}".format(self.scopeURL))
+        if self.isDeleted is not None:
+            repr_args.append("isDeleted={!r}".format(self.isDeleted))
+        return "ServiceWorkerRegistration(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ServiceWorkerRegistration', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ServiceWorkerRegistration", dict]]:
         if init is not None:
             try:
                 ourselves = ServiceWorkerRegistration(**init)
@@ -93,7 +160,9 @@ class ServiceWorkerRegistration(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ServiceWorkerRegistration', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ServiceWorkerRegistration", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -103,12 +172,20 @@ class ServiceWorkerRegistration(ProtocolType):
             return init
 
 
-class ServiceWorkerErrorMessage(ProtocolType):
+class ServiceWorkerErrorMessage(object):
     """
     ServiceWorker error message.
     """
 
-    def __init__(self, errorMessage: str, registrationId: str, versionId: str, sourceURL: str, lineNumber: int, columnNumber: int) -> None:
+    def __init__(
+        self,
+        errorMessage: str,
+        registrationId: str,
+        versionId: str,
+        sourceURL: str,
+        lineNumber: int,
+        columnNumber: int,
+    ) -> None:
         """
         :param errorMessage: The errorMessage
         :type errorMessage: str
@@ -131,8 +208,35 @@ class ServiceWorkerErrorMessage(ProtocolType):
         self.lineNumber = lineNumber
         self.columnNumber = columnNumber
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.errorMessage is not None:
+            repr_args.append("errorMessage={!r}".format(self.errorMessage))
+        if self.registrationId is not None:
+            repr_args.append("registrationId={!r}".format(self.registrationId))
+        if self.versionId is not None:
+            repr_args.append("versionId={!r}".format(self.versionId))
+        if self.sourceURL is not None:
+            repr_args.append("sourceURL={!r}".format(self.sourceURL))
+        if self.lineNumber is not None:
+            repr_args.append("lineNumber={!r}".format(self.lineNumber))
+        if self.columnNumber is not None:
+            repr_args.append("columnNumber={!r}".format(self.columnNumber))
+        return "ServiceWorkerErrorMessage(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ServiceWorkerErrorMessage', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ServiceWorkerErrorMessage", dict]]:
         if init is not None:
             try:
                 ourselves = ServiceWorkerErrorMessage(**init)
@@ -143,7 +247,9 @@ class ServiceWorkerErrorMessage(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ServiceWorkerErrorMessage', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ServiceWorkerErrorMessage", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:

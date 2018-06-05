@@ -3,7 +3,7 @@ from cripy.helpers import ProtocolType
 from cripy.protocol.page import types as Page
 
 
-class FrameWithManifest(ProtocolType):
+class FrameWithManifest(object):
     """
     Frame identifier - manifest URL pair.
     """
@@ -22,8 +22,27 @@ class FrameWithManifest(ProtocolType):
         self.manifestURL = manifestURL
         self.status = status
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.frameId is not None:
+            repr_args.append("frameId={!r}".format(self.frameId))
+        if self.manifestURL is not None:
+            repr_args.append("manifestURL={!r}".format(self.manifestURL))
+        if self.status is not None:
+            repr_args.append("status={!r}".format(self.status))
+        return "FrameWithManifest(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['FrameWithManifest', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["FrameWithManifest", dict]]:
         if init is not None:
             try:
                 ourselves = FrameWithManifest(**init)
@@ -34,7 +53,9 @@ class FrameWithManifest(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameWithManifest', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["FrameWithManifest", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -44,7 +65,7 @@ class FrameWithManifest(ProtocolType):
             return init
 
 
-class ApplicationCacheResource(ProtocolType):
+class ApplicationCacheResource(object):
     """
     Detailed application cache resource information.
     """
@@ -63,8 +84,29 @@ class ApplicationCacheResource(ProtocolType):
         self.size = size
         self.type = type
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.url is not None:
+            repr_args.append("url={!r}".format(self.url))
+        if self.size is not None:
+            repr_args.append("size={!r}".format(self.size))
+        if self.type is not None:
+            repr_args.append("type={!r}".format(self.type))
+        return "ApplicationCacheResource(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ApplicationCacheResource', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ApplicationCacheResource", dict]]:
         if init is not None:
             try:
                 ourselves = ApplicationCacheResource(**init)
@@ -75,7 +117,9 @@ class ApplicationCacheResource(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ApplicationCacheResource', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ApplicationCacheResource", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -85,12 +129,19 @@ class ApplicationCacheResource(ProtocolType):
             return init
 
 
-class ApplicationCache(ProtocolType):
+class ApplicationCache(object):
     """
     Detailed application cache information.
     """
 
-    def __init__(self, manifestURL: str, size: float, creationTime: float, updateTime: float, resources: List[Union['ApplicationCacheResource', dict]]) -> None:
+    def __init__(
+        self,
+        manifestURL: str,
+        size: float,
+        creationTime: float,
+        updateTime: float,
+        resources: List[Union["ApplicationCacheResource", dict]],
+    ) -> None:
         """
         :param manifestURL: Manifest URL.
         :type manifestURL: str
@@ -110,8 +161,31 @@ class ApplicationCache(ProtocolType):
         self.updateTime = updateTime
         self.resources = ApplicationCacheResource.safe_create_from_list(resources)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.manifestURL is not None:
+            repr_args.append("manifestURL={!r}".format(self.manifestURL))
+        if self.size is not None:
+            repr_args.append("size={!r}".format(self.size))
+        if self.creationTime is not None:
+            repr_args.append("creationTime={!r}".format(self.creationTime))
+        if self.updateTime is not None:
+            repr_args.append("updateTime={!r}".format(self.updateTime))
+        if self.resources is not None:
+            repr_args.append("resources={!r}".format(self.resources))
+        return "ApplicationCache(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ApplicationCache', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["ApplicationCache", dict]]:
         if init is not None:
             try:
                 ourselves = ApplicationCache(**init)
@@ -122,7 +196,9 @@ class ApplicationCache(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ApplicationCache', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ApplicationCache", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:

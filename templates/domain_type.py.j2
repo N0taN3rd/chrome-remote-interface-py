@@ -13,9 +13,9 @@ from cripy.protocol.{{ import | lower }} import types as {{ import }}
 
 {%+ for dt in obj_types %}
 {% if dt.has_properties %}
-class {{ dt.id }}(ProtocolType):
+class {{ dt.id }}(object):
 {% else %}
-class {{ dt.id }}(ProtocolType, dict):
+class {{ dt.id }}(dict):
 {% endif %}
 {% if dt.description %}
     """
@@ -42,6 +42,29 @@ class {{ dt.id }}(ProtocolType, dict):
     {% endfor %}
 
 {% endif %}
+    {% if dt.has_properties %}
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+    {% endif %}
+
+    def __repr__(self) -> str:
+        {% if dt.has_properties %}
+        repr_args = []
+        {% for prop in dt.properties %}
+        if self.{{ prop.name }} is not None:
+            repr_args.append("{{ prop.name }}={!r}".format(self.{{ prop.name }}))
+        {% endfor %}
+        return "{{ dt.id }}(" + ', '.join(repr_args)+")"
+        {% else %}
+        return "{{ dt.id }}(dict)"
+        {% endif %}
+
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['{{ dt.id }}', dict]]:
         if init is not None:

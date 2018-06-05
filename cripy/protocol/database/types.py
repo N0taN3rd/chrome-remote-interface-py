@@ -2,7 +2,7 @@ from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
 
-class Error(ProtocolType):
+class Error(object):
     """
     Database error.
     """
@@ -18,8 +18,25 @@ class Error(ProtocolType):
         self.message = message
         self.code = code
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.message is not None:
+            repr_args.append("message={!r}".format(self.message))
+        if self.code is not None:
+            repr_args.append("code={!r}".format(self.code))
+        return "Error(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['Error', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["Error", dict]]:
         if init is not None:
             try:
                 ourselves = Error(**init)
@@ -30,7 +47,9 @@ class Error(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Error', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["Error", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -40,7 +59,7 @@ class Error(ProtocolType):
             return init
 
 
-class Database(ProtocolType):
+class Database(object):
     """
     Database object.
     """
@@ -62,8 +81,29 @@ class Database(ProtocolType):
         self.name = name
         self.version = version
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.id is not None:
+            repr_args.append("id={!r}".format(self.id))
+        if self.domain is not None:
+            repr_args.append("domain={!r}".format(self.domain))
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.version is not None:
+            repr_args.append("version={!r}".format(self.version))
+        return "Database(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['Database', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["Database", dict]]:
         if init is not None:
             try:
                 ourselves = Database(**init)
@@ -74,7 +114,9 @@ class Database(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Database', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["Database", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -84,7 +126,4 @@ class Database(ProtocolType):
             return init
 
 
-TYPE_TO_OBJECT = {
-    "Error": Error,
-    "Database": Database,
-}
+TYPE_TO_OBJECT = {"Error": Error, "Database": Database}

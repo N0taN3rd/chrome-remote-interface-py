@@ -8,7 +8,6 @@ class IO(object):
     Input/Output operations for streams produced by DevTools.
     """
 
-
     def __init__(self, chrome):
         self.chrome = chrome
 
@@ -19,11 +18,13 @@ class IO(object):
         """
         msg_dict = dict()
         if handle is not None:
-            msg_dict['handle'] = handle
-        res = await self.chrome.send('IO.close', msg_dict)
-        return res
+            msg_dict["handle"] = handle
+        mayberes = await self.chrome.send("IO.close", msg_dict)
+        return mayberes
 
-    async def read(self, handle: str, offset: Optional[int] = None, size: Optional[int] = None) -> Optional[dict]:
+    async def read(
+        self, handle: str, offset: Optional[int] = None, size: Optional[int] = None
+    ) -> Optional[dict]:
         """
         :param handle: Handle of the stream to read.
         :type handle: str
@@ -34,12 +35,13 @@ class IO(object):
         """
         msg_dict = dict()
         if handle is not None:
-            msg_dict['handle'] = handle
+            msg_dict["handle"] = handle
         if offset is not None:
-            msg_dict['offset'] = offset
+            msg_dict["offset"] = offset
         if size is not None:
-            msg_dict['size'] = size
-        res = await self.chrome.send('IO.read', msg_dict)
+            msg_dict["size"] = size
+        mayberes = await self.chrome.send("IO.read", msg_dict)
+        res = await mayberes
         return res
 
     async def resolveBlob(self, objectId: str) -> Optional[dict]:
@@ -49,11 +51,11 @@ class IO(object):
         """
         msg_dict = dict()
         if objectId is not None:
-            msg_dict['objectId'] = objectId
-        res = await self.chrome.send('IO.resolveBlob', msg_dict)
+            msg_dict["objectId"] = objectId
+        mayberes = await self.chrome.send("IO.resolveBlob", msg_dict)
+        res = await mayberes
         return res
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return None
-

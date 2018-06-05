@@ -5,7 +5,7 @@ from cripy.protocol.layertree import types as Types
 
 
 class LayerTree(object):
-    dependencies = ['DOM']
+    dependencies = ["DOM"]
 
     def __init__(self, chrome):
         self.chrome = chrome
@@ -17,17 +17,18 @@ class LayerTree(object):
         """
         msg_dict = dict()
         if layerId is not None:
-            msg_dict['layerId'] = layerId
-        res = await self.chrome.send('LayerTree.compositingReasons', msg_dict)
+            msg_dict["layerId"] = layerId
+        mayberes = await self.chrome.send("LayerTree.compositingReasons", msg_dict)
+        res = await mayberes
         return res
 
     async def disable(self) -> Optional[dict]:
-        res = await self.chrome.send('LayerTree.disable')
-        return res
+        mayberes = await self.chrome.send("LayerTree.disable")
+        return mayberes
 
     async def enable(self) -> Optional[dict]:
-        res = await self.chrome.send('LayerTree.enable')
-        return res
+        mayberes = await self.chrome.send("LayerTree.enable")
+        return mayberes
 
     async def loadSnapshot(self, tiles: List[dict]) -> Optional[dict]:
         """
@@ -36,8 +37,9 @@ class LayerTree(object):
         """
         msg_dict = dict()
         if tiles is not None:
-            msg_dict['tiles'] = tiles
-        res = await self.chrome.send('LayerTree.loadSnapshot', msg_dict)
+            msg_dict["tiles"] = tiles
+        mayberes = await self.chrome.send("LayerTree.loadSnapshot", msg_dict)
+        res = await mayberes
         return res
 
     async def makeSnapshot(self, layerId: str) -> Optional[dict]:
@@ -47,11 +49,18 @@ class LayerTree(object):
         """
         msg_dict = dict()
         if layerId is not None:
-            msg_dict['layerId'] = layerId
-        res = await self.chrome.send('LayerTree.makeSnapshot', msg_dict)
+            msg_dict["layerId"] = layerId
+        mayberes = await self.chrome.send("LayerTree.makeSnapshot", msg_dict)
+        res = await mayberes
         return res
 
-    async def profileSnapshot(self, snapshotId: str, minRepeatCount: Optional[int] = None, minDuration: Optional[float] = None, clipRect: Optional[dict] = None) -> Optional[dict]:
+    async def profileSnapshot(
+        self,
+        snapshotId: str,
+        minRepeatCount: Optional[int] = None,
+        minDuration: Optional[float] = None,
+        clipRect: Optional[dict] = None,
+    ) -> Optional[dict]:
         """
         :param snapshotId: The id of the layer snapshot.
         :type snapshotId: str
@@ -64,14 +73,15 @@ class LayerTree(object):
         """
         msg_dict = dict()
         if snapshotId is not None:
-            msg_dict['snapshotId'] = snapshotId
+            msg_dict["snapshotId"] = snapshotId
         if minRepeatCount is not None:
-            msg_dict['minRepeatCount'] = minRepeatCount
+            msg_dict["minRepeatCount"] = minRepeatCount
         if minDuration is not None:
-            msg_dict['minDuration'] = minDuration
+            msg_dict["minDuration"] = minDuration
         if clipRect is not None:
-            msg_dict['clipRect'] = clipRect
-        res = await self.chrome.send('LayerTree.profileSnapshot', msg_dict)
+            msg_dict["clipRect"] = clipRect
+        mayberes = await self.chrome.send("LayerTree.profileSnapshot", msg_dict)
+        res = await mayberes
         return res
 
     async def releaseSnapshot(self, snapshotId: str) -> Optional[dict]:
@@ -81,11 +91,17 @@ class LayerTree(object):
         """
         msg_dict = dict()
         if snapshotId is not None:
-            msg_dict['snapshotId'] = snapshotId
-        res = await self.chrome.send('LayerTree.releaseSnapshot', msg_dict)
-        return res
+            msg_dict["snapshotId"] = snapshotId
+        mayberes = await self.chrome.send("LayerTree.releaseSnapshot", msg_dict)
+        return mayberes
 
-    async def replaySnapshot(self, snapshotId: str, fromStep: Optional[int] = None, toStep: Optional[int] = None, scale: Optional[float] = None) -> Optional[dict]:
+    async def replaySnapshot(
+        self,
+        snapshotId: str,
+        fromStep: Optional[int] = None,
+        toStep: Optional[int] = None,
+        scale: Optional[float] = None,
+    ) -> Optional[dict]:
         """
         :param snapshotId: The id of the layer snapshot.
         :type snapshotId: str
@@ -98,14 +114,15 @@ class LayerTree(object):
         """
         msg_dict = dict()
         if snapshotId is not None:
-            msg_dict['snapshotId'] = snapshotId
+            msg_dict["snapshotId"] = snapshotId
         if fromStep is not None:
-            msg_dict['fromStep'] = fromStep
+            msg_dict["fromStep"] = fromStep
         if toStep is not None:
-            msg_dict['toStep'] = toStep
+            msg_dict["toStep"] = toStep
         if scale is not None:
-            msg_dict['scale'] = scale
-        res = await self.chrome.send('LayerTree.replaySnapshot', msg_dict)
+            msg_dict["scale"] = scale
+        mayberes = await self.chrome.send("LayerTree.replaySnapshot", msg_dict)
+        res = await mayberes
         return res
 
     async def snapshotCommandLog(self, snapshotId: str) -> Optional[dict]:
@@ -115,11 +132,11 @@ class LayerTree(object):
         """
         msg_dict = dict()
         if snapshotId is not None:
-            msg_dict['snapshotId'] = snapshotId
-        res = await self.chrome.send('LayerTree.snapshotCommandLog', msg_dict)
+            msg_dict["snapshotId"] = snapshotId
+        mayberes = await self.chrome.send("LayerTree.snapshotCommandLog", msg_dict)
+        res = await mayberes
         return res
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

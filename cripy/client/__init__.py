@@ -25,7 +25,7 @@ class NetworkError(Exception):  # noqa: D204
     pass
 
 
-class RemoteClient(ProtocolMixin, EventEmitter):
+class Client(ProtocolMixin, EventEmitter):
 
     def __init__(
         self,
@@ -64,7 +64,7 @@ class RemoteClient(ProtocolMixin, EventEmitter):
     async def connect(self):
         if self._ws_url is not None:
             self._ws = await websockets.connect(
-                self._ws_url, max_size=None, read_limit=2 ** 32
+                self._ws_url, compression=None, max_queue=0, timeout=20
             )
             self._recv_task = asyncio.ensure_future(self._recv_loop())
         else:
@@ -72,7 +72,7 @@ class RemoteClient(ProtocolMixin, EventEmitter):
             it: Dict[str, str] = list(filter(lambda x: x["type"] == "page", tabs))[0]
             self._ws_url = it["webSocketDebuggerUrl"]
             self._ws = await websockets.connect(
-                self._ws_url, max_size=None, read_limit=2 ** 32
+                self._ws_url, compression=None, max_queue=0, timeout=20
             )
             self._recv_task = asyncio.ensure_future(self._recv_loop())
         print("connect done")
@@ -139,7 +139,6 @@ class RemoteClient(ProtocolMixin, EventEmitter):
     async def close(self):
         await self.Browser.close()
 
-
     @property
     def connected(self):
         return self._connected
@@ -167,8 +166,8 @@ class RemoteClient(ProtocolMixin, EventEmitter):
         async with aiohttp.ClientSession() as session:
             if url is None:
                 url = f"{'https:' if secure else 'http:'}//{host}:{port}/json"
-            if not url.endswith('/json'):
-                url = urljoin(url, 'json')
+            if not url.endswith("/json"):
+                url = urljoin(url, "json")
             data = await session.get(url)
             json_ = await data.json()
         return json_

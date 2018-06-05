@@ -17,7 +17,7 @@ from urllib.error import URLError
 from urllib.request import urlopen
 
 from cripy.util import merge_dict, get_free_port
-from cripy.client import RemoteClient
+from cripy.client import Client
 
 # https://peter.sh/experiments/chromium-command-line-switches/
 # https://cs.chromium.org/chromium/src/chrome/common/chrome_switches.cc
@@ -35,6 +35,7 @@ DEFAULT_ARGS = [
     "--no-first-run",
     "--safebrowsing-disable-auto-update",
     "--password-store=basic",
+    "--disable-features=site-per-process",
     "--use-mock-keychain",
     "--mute-audio",
     "--window-size=1920,1080",
@@ -59,14 +60,32 @@ class Launcher(object):
         self.headless: bool = self.options.get("headless", False)
         self._tmp_user_data_dir: Optional[str] = None
         self.args: List[str] = []
+        self.chrome: Optional[Client] = None
+        self.proc: Optional[subprocess.Popen] = None
         self._args_setup()
-        self.chrome: Optional[RemoteClient] = None
-        self.proc: Optional = None
         self.cmd = [self.exec] + self.args
+
+    def _check_supplied_userdd(self) -> bool:
+        args = self.options.get("args")
+        if not isinstance(args, list):
+            return False
+        for arg in args:
+            if arg.startswith("--user-data-dir"):
+                return True
+        return False
+
+    def _check_starting_page(self) -> bool:
+        args = self.options.get("args")
+        if not isinstance(args, list):
+            return False
+        for arg in args:
+            if not arg.startswith("-"):
+                return True
+        return False
 
     def _args_setup(self) -> None:
         if "port" not in self.options:
-            self.port = get_free_port()
+            self.port = 9222
         else:
             self.port = self.options.get("port")
         if "url" not in self.options:
@@ -88,9 +107,7 @@ class Launcher(object):
         if "headless" not in self.options or self.options.get("headless"):
             self.args.extend(["--headless"])
 
-        if not isinstance(self.options.get("args"), list) or not any(
-            opt for opt in self.options["args"] if opt.startswith("--user-data-dir")
-        ):
+        if not self._check_supplied_userdd():
             if "userDataDir" not in self.options:
                 if not TEMP_PROFILE.exists():
                     TEMP_PROFILE.mkdir(parents=True)
@@ -100,12 +117,14 @@ class Launcher(object):
                     self.options.get("userDataDir", self._tmp_user_data_dir)
                 )
             )
+        if not self._check_starting_page():
+            self.args.append("about:blank")
 
     async def _get_ws_endpoint(self) -> str:
         for i in range(100):
             await asyncio.sleep(0.1)
             try:
-                data = await RemoteClient.JSON(url=self.url)
+                data = await Client.JSON(url=self.url)
                 break
             except ClientConnectorError as e:
                 print(e)
@@ -113,9 +132,12 @@ class Launcher(object):
         else:
             # cannot connet to browser for 10 seconds
             raise LauncherError(f"Failed to connect to browser port: {self.url}")
-        return data[0]["webSocketDebuggerUrl"]
+        for d in data:
+            if d["type"] == "page":
+                return d["webSocketDebuggerUrl"]
+        raise LauncherError("Could not find a page to connect to")
 
-    async def launch(self) -> RemoteClient:
+    async def launch(self) -> Client:
         env = self.options.get("env")
         self.chrome_dead = False
         self.proc = subprocess.Popen(
@@ -138,7 +160,7 @@ class Launcher(object):
                 signal.signal(signal.SIGHUP, _close_process)
 
         wsurl = await self._get_ws_endpoint()
-        self.chrome = RemoteClient(wsurl=wsurl)
+        self.chrome = Client(wsurl=wsurl)
         await self.chrome.connect()
 
         return self.chrome
@@ -173,5 +195,5 @@ class Launcher(object):
             raise IOError("Unable to remove Temporary User Data")
 
 
-async def launch(options: dict = None, **kwargs) -> RemoteClient:
+async def launch(options: dict = None, **kwargs) -> Client:
     return await Launcher(options, **kwargs).launch()

@@ -10,12 +10,14 @@ class DOMDebugger(object):
 execution will stop on these operations as if there was a regular breakpoint set.
     """
 
-    dependencies = ['DOM', 'Debugger']
+    dependencies = ["DOM", "Debugger"]
 
     def __init__(self, chrome):
         self.chrome = chrome
 
-    async def getEventListeners(self, objectId: str, depth: Optional[int] = None, pierce: Optional[bool] = None) -> Optional[dict]:
+    async def getEventListeners(
+        self, objectId: str, depth: Optional[int] = None, pierce: Optional[bool] = None
+    ) -> Optional[dict]:
         """
         :param objectId: Identifier of the object to return listeners for.
         :type objectId: str
@@ -26,13 +28,14 @@ execution will stop on these operations as if there was a regular breakpoint set
         """
         msg_dict = dict()
         if objectId is not None:
-            msg_dict['objectId'] = objectId
+            msg_dict["objectId"] = objectId
         if depth is not None:
-            msg_dict['depth'] = depth
+            msg_dict["depth"] = depth
         if pierce is not None:
-            msg_dict['pierce'] = pierce
-        res = await self.chrome.send('DOMDebugger.getEventListeners', msg_dict)
-        res['listeners'] = Types.EventListener.safe_create_from_list(res['listeners'])
+            msg_dict["pierce"] = pierce
+        mayberes = await self.chrome.send("DOMDebugger.getEventListeners", msg_dict)
+        res = await mayberes
+        res["listeners"] = Types.EventListener.safe_create_from_list(res["listeners"])
         return res
 
     async def removeDOMBreakpoint(self, nodeId: int, type: str) -> Optional[dict]:
@@ -44,13 +47,15 @@ execution will stop on these operations as if there was a regular breakpoint set
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if type is not None:
-            msg_dict['type'] = type
-        res = await self.chrome.send('DOMDebugger.removeDOMBreakpoint', msg_dict)
-        return res
+            msg_dict["type"] = type
+        mayberes = await self.chrome.send("DOMDebugger.removeDOMBreakpoint", msg_dict)
+        return mayberes
 
-    async def removeEventListenerBreakpoint(self, eventName: str, targetName: Optional[str] = None) -> Optional[dict]:
+    async def removeEventListenerBreakpoint(
+        self, eventName: str, targetName: Optional[str] = None
+    ) -> Optional[dict]:
         """
         :param eventName: Event name.
         :type eventName: str
@@ -59,11 +64,13 @@ execution will stop on these operations as if there was a regular breakpoint set
         """
         msg_dict = dict()
         if eventName is not None:
-            msg_dict['eventName'] = eventName
+            msg_dict["eventName"] = eventName
         if targetName is not None:
-            msg_dict['targetName'] = targetName
-        res = await self.chrome.send('DOMDebugger.removeEventListenerBreakpoint', msg_dict)
-        return res
+            msg_dict["targetName"] = targetName
+        mayberes = await self.chrome.send(
+            "DOMDebugger.removeEventListenerBreakpoint", msg_dict
+        )
+        return mayberes
 
     async def removeInstrumentationBreakpoint(self, eventName: str) -> Optional[dict]:
         """
@@ -72,9 +79,11 @@ execution will stop on these operations as if there was a regular breakpoint set
         """
         msg_dict = dict()
         if eventName is not None:
-            msg_dict['eventName'] = eventName
-        res = await self.chrome.send('DOMDebugger.removeInstrumentationBreakpoint', msg_dict)
-        return res
+            msg_dict["eventName"] = eventName
+        mayberes = await self.chrome.send(
+            "DOMDebugger.removeInstrumentationBreakpoint", msg_dict
+        )
+        return mayberes
 
     async def removeXHRBreakpoint(self, url: str) -> Optional[dict]:
         """
@@ -83,9 +92,9 @@ execution will stop on these operations as if there was a regular breakpoint set
         """
         msg_dict = dict()
         if url is not None:
-            msg_dict['url'] = url
-        res = await self.chrome.send('DOMDebugger.removeXHRBreakpoint', msg_dict)
-        return res
+            msg_dict["url"] = url
+        mayberes = await self.chrome.send("DOMDebugger.removeXHRBreakpoint", msg_dict)
+        return mayberes
 
     async def setDOMBreakpoint(self, nodeId: int, type: str) -> Optional[dict]:
         """
@@ -96,13 +105,15 @@ execution will stop on these operations as if there was a regular breakpoint set
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if type is not None:
-            msg_dict['type'] = type
-        res = await self.chrome.send('DOMDebugger.setDOMBreakpoint', msg_dict)
-        return res
+            msg_dict["type"] = type
+        mayberes = await self.chrome.send("DOMDebugger.setDOMBreakpoint", msg_dict)
+        return mayberes
 
-    async def setEventListenerBreakpoint(self, eventName: str, targetName: Optional[str] = None) -> Optional[dict]:
+    async def setEventListenerBreakpoint(
+        self, eventName: str, targetName: Optional[str] = None
+    ) -> Optional[dict]:
         """
         :param eventName: DOM Event name to stop on (any DOM event will do).
         :type eventName: str
@@ -111,11 +122,13 @@ execution will stop on these operations as if there was a regular breakpoint set
         """
         msg_dict = dict()
         if eventName is not None:
-            msg_dict['eventName'] = eventName
+            msg_dict["eventName"] = eventName
         if targetName is not None:
-            msg_dict['targetName'] = targetName
-        res = await self.chrome.send('DOMDebugger.setEventListenerBreakpoint', msg_dict)
-        return res
+            msg_dict["targetName"] = targetName
+        mayberes = await self.chrome.send(
+            "DOMDebugger.setEventListenerBreakpoint", msg_dict
+        )
+        return mayberes
 
     async def setInstrumentationBreakpoint(self, eventName: str) -> Optional[dict]:
         """
@@ -124,9 +137,11 @@ execution will stop on these operations as if there was a regular breakpoint set
         """
         msg_dict = dict()
         if eventName is not None:
-            msg_dict['eventName'] = eventName
-        res = await self.chrome.send('DOMDebugger.setInstrumentationBreakpoint', msg_dict)
-        return res
+            msg_dict["eventName"] = eventName
+        mayberes = await self.chrome.send(
+            "DOMDebugger.setInstrumentationBreakpoint", msg_dict
+        )
+        return mayberes
 
     async def setXHRBreakpoint(self, url: str) -> Optional[dict]:
         """
@@ -135,11 +150,10 @@ execution will stop on these operations as if there was a regular breakpoint set
         """
         msg_dict = dict()
         if url is not None:
-            msg_dict['url'] = url
-        res = await self.chrome.send('DOMDebugger.setXHRBreakpoint', msg_dict)
-        return res
+            msg_dict["url"] = url
+        mayberes = await self.chrome.send("DOMDebugger.setXHRBreakpoint", msg_dict)
+        return mayberes
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return None
-

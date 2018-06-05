@@ -8,14 +8,13 @@ class Inspector(object):
         self.chrome = chrome
 
     async def disable(self) -> Optional[dict]:
-        res = await self.chrome.send('Inspector.disable')
-        return res
+        mayberes = await self.chrome.send("Inspector.disable")
+        return mayberes
 
     async def enable(self) -> Optional[dict]:
-        res = await self.chrome.send('Inspector.enable')
-        return res
+        mayberes = await self.chrome.send("Inspector.enable")
+        return mayberes
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

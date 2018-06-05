@@ -1,12 +1,13 @@
 from typing import Any, List, Optional, Union
-from cripy.helpers import BaseEvent
+from types import SimpleNamespace
+
 try:
     from cripy.protocol.animation.types import *
 except ImportError:
     pass
 
 
-class AnimationCanceledEvent(BaseEvent):
+class AnimationCanceledEvent(object):
     """
     Event for when an animation has been cancelled.
     """
@@ -21,8 +22,25 @@ class AnimationCanceledEvent(BaseEvent):
         super().__init__()
         self.id = id
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.id is not None:
+            repr_args.append("id={!r}".format(self.id))
+        return "AnimationCanceledEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['AnimationCanceledEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["AnimationCanceledEvent", dict]]:
         if init is not None:
             try:
                 ourselves = AnimationCanceledEvent(**init)
@@ -33,7 +51,9 @@ class AnimationCanceledEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AnimationCanceledEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["AnimationCanceledEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -43,7 +63,7 @@ class AnimationCanceledEvent(BaseEvent):
             return init
 
 
-class AnimationCreatedEvent(BaseEvent):
+class AnimationCreatedEvent(object):
     """
     Event for each animation that has been created.
     """
@@ -58,8 +78,25 @@ class AnimationCreatedEvent(BaseEvent):
         super().__init__()
         self.id = id
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.id is not None:
+            repr_args.append("id={!r}".format(self.id))
+        return "AnimationCreatedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['AnimationCreatedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["AnimationCreatedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = AnimationCreatedEvent(**init)
@@ -70,7 +107,9 @@ class AnimationCreatedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AnimationCreatedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["AnimationCreatedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -80,7 +119,7 @@ class AnimationCreatedEvent(BaseEvent):
             return init
 
 
-class AnimationStartedEvent(BaseEvent):
+class AnimationStartedEvent(object):
     """
     Event for animation that has been started.
     """
@@ -95,8 +134,25 @@ class AnimationStartedEvent(BaseEvent):
         super().__init__()
         self.animation = Animation.safe_create(animation)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.animation is not None:
+            repr_args.append("animation={!r}".format(self.animation))
+        return "AnimationStartedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['AnimationStartedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["AnimationStartedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = AnimationStartedEvent(**init)
@@ -107,7 +163,9 @@ class AnimationStartedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AnimationStartedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["AnimationStartedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -118,8 +176,13 @@ class AnimationStartedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Animation.animationCanceled": AnimationCanceledEvent,
-   "Animation.animationCreated": AnimationCreatedEvent,
-   "Animation.animationStarted": AnimationStartedEvent,
+    "Animation.animationCanceled": AnimationCanceledEvent,
+    "Animation.animationCreated": AnimationCreatedEvent,
+    "Animation.animationStarted": AnimationStartedEvent,
 }
 
+EVENT_NS = SimpleNamespace(
+    AnimationCanceled="Animation.animationCanceled",
+    AnimationCreated="Animation.animationCreated",
+    AnimationStarted="Animation.animationStarted",
+)

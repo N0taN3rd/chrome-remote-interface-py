@@ -49,17 +49,18 @@ class {{ d.domain }}(object):
         if {{ param.name }} is not None:
             msg_dict['{{ param.name }}'] = {{ param.name }}
         {% endfor %}
-        res = await self.chrome.send('{{ command.scoped_name }}', msg_dict)
+        mayberes = await self.chrome.send('{{ command.scoped_name }}', msg_dict)
         {% else %}
-        res = await self.chrome.send('{{ command.scoped_name }}')
+        mayberes = await self.chrome.send('{{ command.scoped_name }}')
         {% endif %}
         {% if command.returns %}
+        res = await mayberes
         {% for trans in command.returns.yield_result_trans() %}
         {{ trans }}
         {% endfor %}
         return res
         {% else %}
-        return res
+        return mayberes
         {% endif %}
 
     {% endfor %}

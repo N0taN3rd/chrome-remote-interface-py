@@ -7,7 +7,23 @@ class Input(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    async def dispatchKeyEvent(self, type: str, modifiers: Optional[int] = None, timestamp: Optional[float] = None, text: Optional[str] = None, unmodifiedText: Optional[str] = None, keyIdentifier: Optional[str] = None, code: Optional[str] = None, key: Optional[str] = None, windowsVirtualKeyCode: Optional[int] = None, nativeVirtualKeyCode: Optional[int] = None, autoRepeat: Optional[bool] = None, isKeypad: Optional[bool] = None, isSystemKey: Optional[bool] = None, location: Optional[int] = None) -> Optional[dict]:
+    async def dispatchKeyEvent(
+        self,
+        type: str,
+        modifiers: Optional[int] = None,
+        timestamp: Optional[float] = None,
+        text: Optional[str] = None,
+        unmodifiedText: Optional[str] = None,
+        keyIdentifier: Optional[str] = None,
+        code: Optional[str] = None,
+        key: Optional[str] = None,
+        windowsVirtualKeyCode: Optional[int] = None,
+        nativeVirtualKeyCode: Optional[int] = None,
+        autoRepeat: Optional[bool] = None,
+        isKeypad: Optional[bool] = None,
+        isSystemKey: Optional[bool] = None,
+        location: Optional[int] = None,
+    ) -> Optional[dict]:
         """
         :param type: Type of the key event.
         :type type: str
@@ -40,37 +56,48 @@ class Input(object):
         """
         msg_dict = dict()
         if type is not None:
-            msg_dict['type'] = type
+            msg_dict["type"] = type
         if modifiers is not None:
-            msg_dict['modifiers'] = modifiers
+            msg_dict["modifiers"] = modifiers
         if timestamp is not None:
-            msg_dict['timestamp'] = timestamp
+            msg_dict["timestamp"] = timestamp
         if text is not None:
-            msg_dict['text'] = text
+            msg_dict["text"] = text
         if unmodifiedText is not None:
-            msg_dict['unmodifiedText'] = unmodifiedText
+            msg_dict["unmodifiedText"] = unmodifiedText
         if keyIdentifier is not None:
-            msg_dict['keyIdentifier'] = keyIdentifier
+            msg_dict["keyIdentifier"] = keyIdentifier
         if code is not None:
-            msg_dict['code'] = code
+            msg_dict["code"] = code
         if key is not None:
-            msg_dict['key'] = key
+            msg_dict["key"] = key
         if windowsVirtualKeyCode is not None:
-            msg_dict['windowsVirtualKeyCode'] = windowsVirtualKeyCode
+            msg_dict["windowsVirtualKeyCode"] = windowsVirtualKeyCode
         if nativeVirtualKeyCode is not None:
-            msg_dict['nativeVirtualKeyCode'] = nativeVirtualKeyCode
+            msg_dict["nativeVirtualKeyCode"] = nativeVirtualKeyCode
         if autoRepeat is not None:
-            msg_dict['autoRepeat'] = autoRepeat
+            msg_dict["autoRepeat"] = autoRepeat
         if isKeypad is not None:
-            msg_dict['isKeypad'] = isKeypad
+            msg_dict["isKeypad"] = isKeypad
         if isSystemKey is not None:
-            msg_dict['isSystemKey'] = isSystemKey
+            msg_dict["isSystemKey"] = isSystemKey
         if location is not None:
-            msg_dict['location'] = location
-        res = await self.chrome.send('Input.dispatchKeyEvent', msg_dict)
-        return res
+            msg_dict["location"] = location
+        mayberes = await self.chrome.send("Input.dispatchKeyEvent", msg_dict)
+        return mayberes
 
-    async def dispatchMouseEvent(self, type: str, x: float, y: float, modifiers: Optional[int] = None, timestamp: Optional[float] = None, button: Optional[str] = None, clickCount: Optional[int] = None, deltaX: Optional[float] = None, deltaY: Optional[float] = None) -> Optional[dict]:
+    async def dispatchMouseEvent(
+        self,
+        type: str,
+        x: float,
+        y: float,
+        modifiers: Optional[int] = None,
+        timestamp: Optional[float] = None,
+        button: Optional[str] = None,
+        clickCount: Optional[int] = None,
+        deltaX: Optional[float] = None,
+        deltaY: Optional[float] = None,
+    ) -> Optional[dict]:
         """
         :param type: Type of the mouse event.
         :type type: str
@@ -93,27 +120,33 @@ class Input(object):
         """
         msg_dict = dict()
         if type is not None:
-            msg_dict['type'] = type
+            msg_dict["type"] = type
         if x is not None:
-            msg_dict['x'] = x
+            msg_dict["x"] = x
         if y is not None:
-            msg_dict['y'] = y
+            msg_dict["y"] = y
         if modifiers is not None:
-            msg_dict['modifiers'] = modifiers
+            msg_dict["modifiers"] = modifiers
         if timestamp is not None:
-            msg_dict['timestamp'] = timestamp
+            msg_dict["timestamp"] = timestamp
         if button is not None:
-            msg_dict['button'] = button
+            msg_dict["button"] = button
         if clickCount is not None:
-            msg_dict['clickCount'] = clickCount
+            msg_dict["clickCount"] = clickCount
         if deltaX is not None:
-            msg_dict['deltaX'] = deltaX
+            msg_dict["deltaX"] = deltaX
         if deltaY is not None:
-            msg_dict['deltaY'] = deltaY
-        res = await self.chrome.send('Input.dispatchMouseEvent', msg_dict)
-        return res
+            msg_dict["deltaY"] = deltaY
+        mayberes = await self.chrome.send("Input.dispatchMouseEvent", msg_dict)
+        return mayberes
 
-    async def dispatchTouchEvent(self, type: str, touchPoints: List[dict], modifiers: Optional[int] = None, timestamp: Optional[float] = None) -> Optional[dict]:
+    async def dispatchTouchEvent(
+        self,
+        type: str,
+        touchPoints: List[dict],
+        modifiers: Optional[int] = None,
+        timestamp: Optional[float] = None,
+    ) -> Optional[dict]:
         """
         :param type: Type of the touch event. TouchEnd and TouchCancel must not contain any touch points, while TouchStart and TouchMove must contains at least one.
         :type type: str
@@ -126,17 +159,28 @@ class Input(object):
         """
         msg_dict = dict()
         if type is not None:
-            msg_dict['type'] = type
+            msg_dict["type"] = type
         if touchPoints is not None:
-            msg_dict['touchPoints'] = touchPoints
+            msg_dict["touchPoints"] = touchPoints
         if modifiers is not None:
-            msg_dict['modifiers'] = modifiers
+            msg_dict["modifiers"] = modifiers
         if timestamp is not None:
-            msg_dict['timestamp'] = timestamp
-        res = await self.chrome.send('Input.dispatchTouchEvent', msg_dict)
-        return res
+            msg_dict["timestamp"] = timestamp
+        mayberes = await self.chrome.send("Input.dispatchTouchEvent", msg_dict)
+        return mayberes
 
-    async def emulateTouchFromMouseEvent(self, type: str, x: int, y: int, button: str, timestamp: Optional[float] = None, deltaX: Optional[float] = None, deltaY: Optional[float] = None, modifiers: Optional[int] = None, clickCount: Optional[int] = None) -> Optional[dict]:
+    async def emulateTouchFromMouseEvent(
+        self,
+        type: str,
+        x: int,
+        y: int,
+        button: str,
+        timestamp: Optional[float] = None,
+        deltaX: Optional[float] = None,
+        deltaY: Optional[float] = None,
+        modifiers: Optional[int] = None,
+        clickCount: Optional[int] = None,
+    ) -> Optional[dict]:
         """
         :param type: Type of the mouse event.
         :type type: str
@@ -159,25 +203,25 @@ class Input(object):
         """
         msg_dict = dict()
         if type is not None:
-            msg_dict['type'] = type
+            msg_dict["type"] = type
         if x is not None:
-            msg_dict['x'] = x
+            msg_dict["x"] = x
         if y is not None:
-            msg_dict['y'] = y
+            msg_dict["y"] = y
         if button is not None:
-            msg_dict['button'] = button
+            msg_dict["button"] = button
         if timestamp is not None:
-            msg_dict['timestamp'] = timestamp
+            msg_dict["timestamp"] = timestamp
         if deltaX is not None:
-            msg_dict['deltaX'] = deltaX
+            msg_dict["deltaX"] = deltaX
         if deltaY is not None:
-            msg_dict['deltaY'] = deltaY
+            msg_dict["deltaY"] = deltaY
         if modifiers is not None:
-            msg_dict['modifiers'] = modifiers
+            msg_dict["modifiers"] = modifiers
         if clickCount is not None:
-            msg_dict['clickCount'] = clickCount
-        res = await self.chrome.send('Input.emulateTouchFromMouseEvent', msg_dict)
-        return res
+            msg_dict["clickCount"] = clickCount
+        mayberes = await self.chrome.send("Input.emulateTouchFromMouseEvent", msg_dict)
+        return mayberes
 
     async def setIgnoreInputEvents(self, ignore: bool) -> Optional[dict]:
         """
@@ -186,11 +230,18 @@ class Input(object):
         """
         msg_dict = dict()
         if ignore is not None:
-            msg_dict['ignore'] = ignore
-        res = await self.chrome.send('Input.setIgnoreInputEvents', msg_dict)
-        return res
+            msg_dict["ignore"] = ignore
+        mayberes = await self.chrome.send("Input.setIgnoreInputEvents", msg_dict)
+        return mayberes
 
-    async def synthesizePinchGesture(self, x: float, y: float, scaleFactor: float, relativeSpeed: Optional[int] = None, gestureSourceType: Optional[str] = None) -> Optional[dict]:
+    async def synthesizePinchGesture(
+        self,
+        x: float,
+        y: float,
+        scaleFactor: float,
+        relativeSpeed: Optional[int] = None,
+        gestureSourceType: Optional[str] = None,
+    ) -> Optional[dict]:
         """
         :param x: X coordinate of the start of the gesture in CSS pixels.
         :type x: float
@@ -205,19 +256,33 @@ class Input(object):
         """
         msg_dict = dict()
         if x is not None:
-            msg_dict['x'] = x
+            msg_dict["x"] = x
         if y is not None:
-            msg_dict['y'] = y
+            msg_dict["y"] = y
         if scaleFactor is not None:
-            msg_dict['scaleFactor'] = scaleFactor
+            msg_dict["scaleFactor"] = scaleFactor
         if relativeSpeed is not None:
-            msg_dict['relativeSpeed'] = relativeSpeed
+            msg_dict["relativeSpeed"] = relativeSpeed
         if gestureSourceType is not None:
-            msg_dict['gestureSourceType'] = gestureSourceType
-        res = await self.chrome.send('Input.synthesizePinchGesture', msg_dict)
-        return res
+            msg_dict["gestureSourceType"] = gestureSourceType
+        mayberes = await self.chrome.send("Input.synthesizePinchGesture", msg_dict)
+        return mayberes
 
-    async def synthesizeScrollGesture(self, x: float, y: float, xDistance: Optional[float] = None, yDistance: Optional[float] = None, xOverscroll: Optional[float] = None, yOverscroll: Optional[float] = None, preventFling: Optional[bool] = None, speed: Optional[int] = None, gestureSourceType: Optional[str] = None, repeatCount: Optional[int] = None, repeatDelayMs: Optional[int] = None, interactionMarkerName: Optional[str] = None) -> Optional[dict]:
+    async def synthesizeScrollGesture(
+        self,
+        x: float,
+        y: float,
+        xDistance: Optional[float] = None,
+        yDistance: Optional[float] = None,
+        xOverscroll: Optional[float] = None,
+        yOverscroll: Optional[float] = None,
+        preventFling: Optional[bool] = None,
+        speed: Optional[int] = None,
+        gestureSourceType: Optional[str] = None,
+        repeatCount: Optional[int] = None,
+        repeatDelayMs: Optional[int] = None,
+        interactionMarkerName: Optional[str] = None,
+    ) -> Optional[dict]:
         """
         :param x: X coordinate of the start of the gesture in CSS pixels.
         :type x: float
@@ -246,33 +311,40 @@ class Input(object):
         """
         msg_dict = dict()
         if x is not None:
-            msg_dict['x'] = x
+            msg_dict["x"] = x
         if y is not None:
-            msg_dict['y'] = y
+            msg_dict["y"] = y
         if xDistance is not None:
-            msg_dict['xDistance'] = xDistance
+            msg_dict["xDistance"] = xDistance
         if yDistance is not None:
-            msg_dict['yDistance'] = yDistance
+            msg_dict["yDistance"] = yDistance
         if xOverscroll is not None:
-            msg_dict['xOverscroll'] = xOverscroll
+            msg_dict["xOverscroll"] = xOverscroll
         if yOverscroll is not None:
-            msg_dict['yOverscroll'] = yOverscroll
+            msg_dict["yOverscroll"] = yOverscroll
         if preventFling is not None:
-            msg_dict['preventFling'] = preventFling
+            msg_dict["preventFling"] = preventFling
         if speed is not None:
-            msg_dict['speed'] = speed
+            msg_dict["speed"] = speed
         if gestureSourceType is not None:
-            msg_dict['gestureSourceType'] = gestureSourceType
+            msg_dict["gestureSourceType"] = gestureSourceType
         if repeatCount is not None:
-            msg_dict['repeatCount'] = repeatCount
+            msg_dict["repeatCount"] = repeatCount
         if repeatDelayMs is not None:
-            msg_dict['repeatDelayMs'] = repeatDelayMs
+            msg_dict["repeatDelayMs"] = repeatDelayMs
         if interactionMarkerName is not None:
-            msg_dict['interactionMarkerName'] = interactionMarkerName
-        res = await self.chrome.send('Input.synthesizeScrollGesture', msg_dict)
-        return res
+            msg_dict["interactionMarkerName"] = interactionMarkerName
+        mayberes = await self.chrome.send("Input.synthesizeScrollGesture", msg_dict)
+        return mayberes
 
-    async def synthesizeTapGesture(self, x: float, y: float, duration: Optional[int] = None, tapCount: Optional[int] = None, gestureSourceType: Optional[str] = None) -> Optional[dict]:
+    async def synthesizeTapGesture(
+        self,
+        x: float,
+        y: float,
+        duration: Optional[int] = None,
+        tapCount: Optional[int] = None,
+        gestureSourceType: Optional[str] = None,
+    ) -> Optional[dict]:
         """
         :param x: X coordinate of the start of the gesture in CSS pixels.
         :type x: float
@@ -287,19 +359,18 @@ class Input(object):
         """
         msg_dict = dict()
         if x is not None:
-            msg_dict['x'] = x
+            msg_dict["x"] = x
         if y is not None:
-            msg_dict['y'] = y
+            msg_dict["y"] = y
         if duration is not None:
-            msg_dict['duration'] = duration
+            msg_dict["duration"] = duration
         if tapCount is not None:
-            msg_dict['tapCount'] = tapCount
+            msg_dict["tapCount"] = tapCount
         if gestureSourceType is not None:
-            msg_dict['gestureSourceType'] = gestureSourceType
-        res = await self.chrome.send('Input.synthesizeTapGesture', msg_dict)
-        return res
+            msg_dict["gestureSourceType"] = gestureSourceType
+        mayberes = await self.chrome.send("Input.synthesizeTapGesture", msg_dict)
+        return mayberes
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return None
-

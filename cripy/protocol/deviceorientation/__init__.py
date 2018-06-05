@@ -7,10 +7,14 @@ class DeviceOrientation(object):
         self.chrome = chrome
 
     async def clearDeviceOrientationOverride(self) -> Optional[dict]:
-        res = await self.chrome.send('DeviceOrientation.clearDeviceOrientationOverride')
-        return res
+        mayberes = await self.chrome.send(
+            "DeviceOrientation.clearDeviceOrientationOverride"
+        )
+        return mayberes
 
-    async def setDeviceOrientationOverride(self, alpha: float, beta: float, gamma: float) -> Optional[dict]:
+    async def setDeviceOrientationOverride(
+        self, alpha: float, beta: float, gamma: float
+    ) -> Optional[dict]:
         """
         :param alpha: Mock alpha
         :type alpha: float
@@ -21,15 +25,16 @@ class DeviceOrientation(object):
         """
         msg_dict = dict()
         if alpha is not None:
-            msg_dict['alpha'] = alpha
+            msg_dict["alpha"] = alpha
         if beta is not None:
-            msg_dict['beta'] = beta
+            msg_dict["beta"] = beta
         if gamma is not None:
-            msg_dict['gamma'] = gamma
-        res = await self.chrome.send('DeviceOrientation.setDeviceOrientationOverride', msg_dict)
-        return res
+            msg_dict["gamma"] = gamma
+        mayberes = await self.chrome.send(
+            "DeviceOrientation.setDeviceOrientationOverride", msg_dict
+        )
+        return mayberes
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return None
-

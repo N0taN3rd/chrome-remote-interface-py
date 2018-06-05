@@ -1,12 +1,13 @@
 from typing import Any, List, Optional, Union
-from cripy.helpers import BaseEvent
+from types import SimpleNamespace
+
 try:
     from cripy.protocol.dom.types import *
 except ImportError:
     pass
 
 
-class AttributeModifiedEvent(BaseEvent):
+class AttributeModifiedEvent(object):
     """
     Fired when `Element`'s attribute is modified.
     """
@@ -27,8 +28,29 @@ class AttributeModifiedEvent(BaseEvent):
         self.name = name
         self.value = value
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.nodeId is not None:
+            repr_args.append("nodeId={!r}".format(self.nodeId))
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        return "AttributeModifiedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['AttributeModifiedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["AttributeModifiedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = AttributeModifiedEvent(**init)
@@ -39,7 +61,9 @@ class AttributeModifiedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AttributeModifiedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["AttributeModifiedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -49,7 +73,7 @@ class AttributeModifiedEvent(BaseEvent):
             return init
 
 
-class AttributeRemovedEvent(BaseEvent):
+class AttributeRemovedEvent(object):
     """
     Fired when `Element`'s attribute is removed.
     """
@@ -67,8 +91,27 @@ class AttributeRemovedEvent(BaseEvent):
         self.nodeId = nodeId
         self.name = name
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.nodeId is not None:
+            repr_args.append("nodeId={!r}".format(self.nodeId))
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        return "AttributeRemovedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['AttributeRemovedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["AttributeRemovedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = AttributeRemovedEvent(**init)
@@ -79,7 +122,9 @@ class AttributeRemovedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AttributeRemovedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["AttributeRemovedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -89,7 +134,7 @@ class AttributeRemovedEvent(BaseEvent):
             return init
 
 
-class CharacterDataModifiedEvent(BaseEvent):
+class CharacterDataModifiedEvent(object):
     """
     Mirrors `DOMCharacterDataModified` event.
     """
@@ -107,8 +152,27 @@ class CharacterDataModifiedEvent(BaseEvent):
         self.nodeId = nodeId
         self.characterData = characterData
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.nodeId is not None:
+            repr_args.append("nodeId={!r}".format(self.nodeId))
+        if self.characterData is not None:
+            repr_args.append("characterData={!r}".format(self.characterData))
+        return "CharacterDataModifiedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['CharacterDataModifiedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["CharacterDataModifiedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = CharacterDataModifiedEvent(**init)
@@ -119,7 +183,9 @@ class CharacterDataModifiedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CharacterDataModifiedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["CharacterDataModifiedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -129,7 +195,7 @@ class CharacterDataModifiedEvent(BaseEvent):
             return init
 
 
-class ChildNodeCountUpdatedEvent(BaseEvent):
+class ChildNodeCountUpdatedEvent(object):
     """
     Fired when `Container`'s child node count has changed.
     """
@@ -147,8 +213,27 @@ class ChildNodeCountUpdatedEvent(BaseEvent):
         self.nodeId = nodeId
         self.childNodeCount = childNodeCount
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.nodeId is not None:
+            repr_args.append("nodeId={!r}".format(self.nodeId))
+        if self.childNodeCount is not None:
+            repr_args.append("childNodeCount={!r}".format(self.childNodeCount))
+        return "ChildNodeCountUpdatedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ChildNodeCountUpdatedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ChildNodeCountUpdatedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ChildNodeCountUpdatedEvent(**init)
@@ -159,7 +244,9 @@ class ChildNodeCountUpdatedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ChildNodeCountUpdatedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ChildNodeCountUpdatedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -169,14 +256,16 @@ class ChildNodeCountUpdatedEvent(BaseEvent):
             return init
 
 
-class ChildNodeInsertedEvent(BaseEvent):
+class ChildNodeInsertedEvent(object):
     """
     Mirrors `DOMNodeInserted` event.
     """
 
     event = "DOM.childNodeInserted"
 
-    def __init__(self, parentNodeId: int, previousNodeId: int, node: Union[Node, dict]) -> None:
+    def __init__(
+        self, parentNodeId: int, previousNodeId: int, node: Union[Node, dict]
+    ) -> None:
         """
         :param parentNodeId: Id of the node that has changed.
         :type parentNodeId: int
@@ -190,8 +279,29 @@ class ChildNodeInsertedEvent(BaseEvent):
         self.previousNodeId = previousNodeId
         self.node = Node.safe_create(node)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.parentNodeId is not None:
+            repr_args.append("parentNodeId={!r}".format(self.parentNodeId))
+        if self.previousNodeId is not None:
+            repr_args.append("previousNodeId={!r}".format(self.previousNodeId))
+        if self.node is not None:
+            repr_args.append("node={!r}".format(self.node))
+        return "ChildNodeInsertedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ChildNodeInsertedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ChildNodeInsertedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ChildNodeInsertedEvent(**init)
@@ -202,7 +312,9 @@ class ChildNodeInsertedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ChildNodeInsertedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ChildNodeInsertedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -212,7 +324,7 @@ class ChildNodeInsertedEvent(BaseEvent):
             return init
 
 
-class ChildNodeRemovedEvent(BaseEvent):
+class ChildNodeRemovedEvent(object):
     """
     Mirrors `DOMNodeRemoved` event.
     """
@@ -230,8 +342,27 @@ class ChildNodeRemovedEvent(BaseEvent):
         self.parentNodeId = parentNodeId
         self.nodeId = nodeId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.parentNodeId is not None:
+            repr_args.append("parentNodeId={!r}".format(self.parentNodeId))
+        if self.nodeId is not None:
+            repr_args.append("nodeId={!r}".format(self.nodeId))
+        return "ChildNodeRemovedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ChildNodeRemovedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ChildNodeRemovedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ChildNodeRemovedEvent(**init)
@@ -242,7 +373,9 @@ class ChildNodeRemovedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ChildNodeRemovedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ChildNodeRemovedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -252,14 +385,16 @@ class ChildNodeRemovedEvent(BaseEvent):
             return init
 
 
-class DistributedNodesUpdatedEvent(BaseEvent):
+class DistributedNodesUpdatedEvent(object):
     """
     Called when distrubution is changed.
     """
 
     event = "DOM.distributedNodesUpdated"
 
-    def __init__(self, insertionPointId: int, distributedNodes: List[Union[BackendNode, dict]]) -> None:
+    def __init__(
+        self, insertionPointId: int, distributedNodes: List[Union[BackendNode, dict]]
+    ) -> None:
         """
         :param insertionPointId: Insertion point where distrubuted nodes were updated.
         :type insertionPointId: int
@@ -270,8 +405,27 @@ class DistributedNodesUpdatedEvent(BaseEvent):
         self.insertionPointId = insertionPointId
         self.distributedNodes = BackendNode.safe_create_from_list(distributedNodes)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.insertionPointId is not None:
+            repr_args.append("insertionPointId={!r}".format(self.insertionPointId))
+        if self.distributedNodes is not None:
+            repr_args.append("distributedNodes={!r}".format(self.distributedNodes))
+        return "DistributedNodesUpdatedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['DistributedNodesUpdatedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["DistributedNodesUpdatedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = DistributedNodesUpdatedEvent(**init)
@@ -282,7 +436,9 @@ class DistributedNodesUpdatedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DistributedNodesUpdatedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["DistributedNodesUpdatedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -292,7 +448,7 @@ class DistributedNodesUpdatedEvent(BaseEvent):
             return init
 
 
-class DocumentUpdatedEvent(BaseEvent, dict):
+class DocumentUpdatedEvent(dict):
     """
     Fired when `Document` has been totally updated.
 	Node ids are no longer valid.
@@ -303,8 +459,13 @@ class DocumentUpdatedEvent(BaseEvent, dict):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
+    def __repr__(self) -> str:
+        return "DocumentUpdatedEvent(dict)"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['DocumentUpdatedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["DocumentUpdatedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = DocumentUpdatedEvent(**init)
@@ -315,7 +476,9 @@ class DocumentUpdatedEvent(BaseEvent, dict):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DocumentUpdatedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["DocumentUpdatedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -325,7 +488,7 @@ class DocumentUpdatedEvent(BaseEvent, dict):
             return init
 
 
-class InlineStyleInvalidatedEvent(BaseEvent):
+class InlineStyleInvalidatedEvent(object):
     """
     Fired when `Element`'s inline style is modified via a CSS property modification.
     """
@@ -340,8 +503,25 @@ class InlineStyleInvalidatedEvent(BaseEvent):
         super().__init__()
         self.nodeIds = nodeIds
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.nodeIds is not None:
+            repr_args.append("nodeIds={!r}".format(self.nodeIds))
+        return "InlineStyleInvalidatedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['InlineStyleInvalidatedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["InlineStyleInvalidatedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = InlineStyleInvalidatedEvent(**init)
@@ -352,7 +532,9 @@ class InlineStyleInvalidatedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['InlineStyleInvalidatedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["InlineStyleInvalidatedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -362,7 +544,7 @@ class InlineStyleInvalidatedEvent(BaseEvent):
             return init
 
 
-class PseudoElementAddedEvent(BaseEvent):
+class PseudoElementAddedEvent(object):
     """
     Called when a pseudo element is added to an element.
     """
@@ -380,8 +562,27 @@ class PseudoElementAddedEvent(BaseEvent):
         self.parentId = parentId
         self.pseudoElement = Node.safe_create(pseudoElement)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.parentId is not None:
+            repr_args.append("parentId={!r}".format(self.parentId))
+        if self.pseudoElement is not None:
+            repr_args.append("pseudoElement={!r}".format(self.pseudoElement))
+        return "PseudoElementAddedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['PseudoElementAddedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["PseudoElementAddedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = PseudoElementAddedEvent(**init)
@@ -392,7 +593,9 @@ class PseudoElementAddedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['PseudoElementAddedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["PseudoElementAddedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -402,7 +605,7 @@ class PseudoElementAddedEvent(BaseEvent):
             return init
 
 
-class PseudoElementRemovedEvent(BaseEvent):
+class PseudoElementRemovedEvent(object):
     """
     Called when a pseudo element is removed from an element.
     """
@@ -420,8 +623,27 @@ class PseudoElementRemovedEvent(BaseEvent):
         self.parentId = parentId
         self.pseudoElementId = pseudoElementId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.parentId is not None:
+            repr_args.append("parentId={!r}".format(self.parentId))
+        if self.pseudoElementId is not None:
+            repr_args.append("pseudoElementId={!r}".format(self.pseudoElementId))
+        return "PseudoElementRemovedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['PseudoElementRemovedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["PseudoElementRemovedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = PseudoElementRemovedEvent(**init)
@@ -432,7 +654,9 @@ class PseudoElementRemovedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['PseudoElementRemovedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["PseudoElementRemovedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -442,7 +666,7 @@ class PseudoElementRemovedEvent(BaseEvent):
             return init
 
 
-class SetChildNodesEvent(BaseEvent):
+class SetChildNodesEvent(object):
     """
     Fired when backend wants to provide client with the missing DOM structure.
 	This happens upon most of the calls requesting node ids.
@@ -461,8 +685,27 @@ class SetChildNodesEvent(BaseEvent):
         self.parentId = parentId
         self.nodes = Node.safe_create_from_list(nodes)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.parentId is not None:
+            repr_args.append("parentId={!r}".format(self.parentId))
+        if self.nodes is not None:
+            repr_args.append("nodes={!r}".format(self.nodes))
+        return "SetChildNodesEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['SetChildNodesEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["SetChildNodesEvent", dict]]:
         if init is not None:
             try:
                 ourselves = SetChildNodesEvent(**init)
@@ -473,7 +716,9 @@ class SetChildNodesEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SetChildNodesEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["SetChildNodesEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -483,7 +728,7 @@ class SetChildNodesEvent(BaseEvent):
             return init
 
 
-class ShadowRootPoppedEvent(BaseEvent):
+class ShadowRootPoppedEvent(object):
     """
     Called when shadow root is popped from the element.
     """
@@ -501,8 +746,27 @@ class ShadowRootPoppedEvent(BaseEvent):
         self.hostId = hostId
         self.rootId = rootId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.hostId is not None:
+            repr_args.append("hostId={!r}".format(self.hostId))
+        if self.rootId is not None:
+            repr_args.append("rootId={!r}".format(self.rootId))
+        return "ShadowRootPoppedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ShadowRootPoppedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ShadowRootPoppedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ShadowRootPoppedEvent(**init)
@@ -513,7 +777,9 @@ class ShadowRootPoppedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ShadowRootPoppedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ShadowRootPoppedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -523,7 +789,7 @@ class ShadowRootPoppedEvent(BaseEvent):
             return init
 
 
-class ShadowRootPushedEvent(BaseEvent):
+class ShadowRootPushedEvent(object):
     """
     Called when shadow root is pushed into the element.
     """
@@ -541,8 +807,27 @@ class ShadowRootPushedEvent(BaseEvent):
         self.hostId = hostId
         self.root = Node.safe_create(root)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.hostId is not None:
+            repr_args.append("hostId={!r}".format(self.hostId))
+        if self.root is not None:
+            repr_args.append("root={!r}".format(self.root))
+        return "ShadowRootPushedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ShadowRootPushedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ShadowRootPushedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ShadowRootPushedEvent(**init)
@@ -553,7 +838,9 @@ class ShadowRootPushedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ShadowRootPushedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ShadowRootPushedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -564,19 +851,35 @@ class ShadowRootPushedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "DOM.attributeModified": AttributeModifiedEvent,
-   "DOM.attributeRemoved": AttributeRemovedEvent,
-   "DOM.characterDataModified": CharacterDataModifiedEvent,
-   "DOM.childNodeCountUpdated": ChildNodeCountUpdatedEvent,
-   "DOM.childNodeInserted": ChildNodeInsertedEvent,
-   "DOM.childNodeRemoved": ChildNodeRemovedEvent,
-   "DOM.distributedNodesUpdated": DistributedNodesUpdatedEvent,
-   "DOM.documentUpdated": DocumentUpdatedEvent,
-   "DOM.inlineStyleInvalidated": InlineStyleInvalidatedEvent,
-   "DOM.pseudoElementAdded": PseudoElementAddedEvent,
-   "DOM.pseudoElementRemoved": PseudoElementRemovedEvent,
-   "DOM.setChildNodes": SetChildNodesEvent,
-   "DOM.shadowRootPopped": ShadowRootPoppedEvent,
-   "DOM.shadowRootPushed": ShadowRootPushedEvent,
+    "DOM.attributeModified": AttributeModifiedEvent,
+    "DOM.attributeRemoved": AttributeRemovedEvent,
+    "DOM.characterDataModified": CharacterDataModifiedEvent,
+    "DOM.childNodeCountUpdated": ChildNodeCountUpdatedEvent,
+    "DOM.childNodeInserted": ChildNodeInsertedEvent,
+    "DOM.childNodeRemoved": ChildNodeRemovedEvent,
+    "DOM.distributedNodesUpdated": DistributedNodesUpdatedEvent,
+    "DOM.documentUpdated": DocumentUpdatedEvent,
+    "DOM.inlineStyleInvalidated": InlineStyleInvalidatedEvent,
+    "DOM.pseudoElementAdded": PseudoElementAddedEvent,
+    "DOM.pseudoElementRemoved": PseudoElementRemovedEvent,
+    "DOM.setChildNodes": SetChildNodesEvent,
+    "DOM.shadowRootPopped": ShadowRootPoppedEvent,
+    "DOM.shadowRootPushed": ShadowRootPushedEvent,
 }
 
+EVENT_NS = SimpleNamespace(
+    AttributeModified="DOM.attributeModified",
+    AttributeRemoved="DOM.attributeRemoved",
+    CharacterDataModified="DOM.characterDataModified",
+    ChildNodeCountUpdated="DOM.childNodeCountUpdated",
+    ChildNodeInserted="DOM.childNodeInserted",
+    ChildNodeRemoved="DOM.childNodeRemoved",
+    DistributedNodesUpdated="DOM.distributedNodesUpdated",
+    DocumentUpdated="DOM.documentUpdated",
+    InlineStyleInvalidated="DOM.inlineStyleInvalidated",
+    PseudoElementAdded="DOM.pseudoElementAdded",
+    PseudoElementRemoved="DOM.pseudoElementRemoved",
+    SetChildNodes="DOM.setChildNodes",
+    ShadowRootPopped="DOM.shadowRootPopped",
+    ShadowRootPushed="DOM.shadowRootPushed",
+)

@@ -1,13 +1,14 @@
 from typing import Any, List, Optional, Union
-from cripy.helpers import BaseEvent
+from types import SimpleNamespace
 from cripy.protocol.runtime import types as Runtime
+
 try:
     from cripy.protocol.debugger.types import *
 except ImportError:
     pass
 
 
-class BreakpointResolvedEvent(BaseEvent):
+class BreakpointResolvedEvent(object):
     """
     Fired when breakpoint is resolved to an actual script and location.
     """
@@ -25,8 +26,27 @@ class BreakpointResolvedEvent(BaseEvent):
         self.breakpointId = breakpointId
         self.location = Location.safe_create(location)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.breakpointId is not None:
+            repr_args.append("breakpointId={!r}".format(self.breakpointId))
+        if self.location is not None:
+            repr_args.append("location={!r}".format(self.location))
+        return "BreakpointResolvedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['BreakpointResolvedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["BreakpointResolvedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = BreakpointResolvedEvent(**init)
@@ -37,7 +57,9 @@ class BreakpointResolvedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['BreakpointResolvedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["BreakpointResolvedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -47,14 +69,23 @@ class BreakpointResolvedEvent(BaseEvent):
             return init
 
 
-class PausedEvent(BaseEvent):
+class PausedEvent(object):
     """
     Fired when the virtual machine stopped on breakpoint or exception or any other stop criteria.
     """
 
     event = "Debugger.paused"
 
-    def __init__(self, callFrames: List[Union[CallFrame, dict]], reason: str, data: Optional[dict] = None, hitBreakpoints: Optional[List[str]] = None, asyncStackTrace: Optional[Union[Runtime.StackTrace, dict]] = None, asyncStackTraceId: Optional[Union[Runtime.StackTraceId, dict]] = None, asyncCallStackTraceId: Optional[Union[Runtime.StackTraceId, dict]] = None) -> None:
+    def __init__(
+        self,
+        callFrames: List[Union[CallFrame, dict]],
+        reason: str,
+        data: Optional[dict] = None,
+        hitBreakpoints: Optional[List[str]] = None,
+        asyncStackTrace: Optional[Union[Runtime.StackTrace, dict]] = None,
+        asyncStackTraceId: Optional[Union[Runtime.StackTraceId, dict]] = None,
+        asyncCallStackTraceId: Optional[Union[Runtime.StackTraceId, dict]] = None,
+    ) -> None:
         """
         :param callFrames: Call stack the virtual machine stopped on.
         :type callFrames: List[dict]
@@ -78,10 +109,41 @@ class PausedEvent(BaseEvent):
         self.hitBreakpoints = hitBreakpoints
         self.asyncStackTrace = Runtime.StackTrace.safe_create(asyncStackTrace)
         self.asyncStackTraceId = Runtime.StackTraceId.safe_create(asyncStackTraceId)
-        self.asyncCallStackTraceId = Runtime.StackTraceId.safe_create(asyncCallStackTraceId)
+        self.asyncCallStackTraceId = Runtime.StackTraceId.safe_create(
+            asyncCallStackTraceId
+        )
+
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.callFrames is not None:
+            repr_args.append("callFrames={!r}".format(self.callFrames))
+        if self.reason is not None:
+            repr_args.append("reason={!r}".format(self.reason))
+        if self.data is not None:
+            repr_args.append("data={!r}".format(self.data))
+        if self.hitBreakpoints is not None:
+            repr_args.append("hitBreakpoints={!r}".format(self.hitBreakpoints))
+        if self.asyncStackTrace is not None:
+            repr_args.append("asyncStackTrace={!r}".format(self.asyncStackTrace))
+        if self.asyncStackTraceId is not None:
+            repr_args.append("asyncStackTraceId={!r}".format(self.asyncStackTraceId))
+        if self.asyncCallStackTraceId is not None:
+            repr_args.append(
+                "asyncCallStackTraceId={!r}".format(self.asyncCallStackTraceId)
+            )
+        return "PausedEvent(" + ", ".join(repr_args) + ")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['PausedEvent', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["PausedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = PausedEvent(**init)
@@ -92,7 +154,9 @@ class PausedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['PausedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["PausedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -102,7 +166,7 @@ class PausedEvent(BaseEvent):
             return init
 
 
-class ResumedEvent(BaseEvent, dict):
+class ResumedEvent(dict):
     """
     Fired when the virtual machine resumed execution.
     """
@@ -112,8 +176,11 @@ class ResumedEvent(BaseEvent, dict):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
+    def __repr__(self) -> str:
+        return "ResumedEvent(dict)"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ResumedEvent', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["ResumedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ResumedEvent(**init)
@@ -124,7 +191,9 @@ class ResumedEvent(BaseEvent, dict):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ResumedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ResumedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -134,14 +203,30 @@ class ResumedEvent(BaseEvent, dict):
             return init
 
 
-class ScriptFailedToParseEvent(BaseEvent):
+class ScriptFailedToParseEvent(object):
     """
     Fired when virtual machine fails to parse the script.
     """
 
     event = "Debugger.scriptFailedToParse"
 
-    def __init__(self, scriptId: str, url: str, startLine: int, startColumn: int, endLine: int, endColumn: int, executionContextId: int, hash: str, executionContextAuxData: Optional[dict] = None, sourceMapURL: Optional[str] = None, hasSourceURL: Optional[bool] = None, isModule: Optional[bool] = None, length: Optional[int] = None, stackTrace: Optional[Union[Runtime.StackTrace, dict]] = None) -> None:
+    def __init__(
+        self,
+        scriptId: str,
+        url: str,
+        startLine: int,
+        startColumn: int,
+        endLine: int,
+        endColumn: int,
+        executionContextId: int,
+        hash: str,
+        executionContextAuxData: Optional[dict] = None,
+        sourceMapURL: Optional[str] = None,
+        hasSourceURL: Optional[bool] = None,
+        isModule: Optional[bool] = None,
+        length: Optional[int] = None,
+        stackTrace: Optional[Union[Runtime.StackTrace, dict]] = None,
+    ) -> None:
         """
         :param scriptId: Identifier of the script parsed.
         :type scriptId: str
@@ -188,8 +273,53 @@ class ScriptFailedToParseEvent(BaseEvent):
         self.length = length
         self.stackTrace = Runtime.StackTrace.safe_create(stackTrace)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.scriptId is not None:
+            repr_args.append("scriptId={!r}".format(self.scriptId))
+        if self.url is not None:
+            repr_args.append("url={!r}".format(self.url))
+        if self.startLine is not None:
+            repr_args.append("startLine={!r}".format(self.startLine))
+        if self.startColumn is not None:
+            repr_args.append("startColumn={!r}".format(self.startColumn))
+        if self.endLine is not None:
+            repr_args.append("endLine={!r}".format(self.endLine))
+        if self.endColumn is not None:
+            repr_args.append("endColumn={!r}".format(self.endColumn))
+        if self.executionContextId is not None:
+            repr_args.append("executionContextId={!r}".format(self.executionContextId))
+        if self.hash is not None:
+            repr_args.append("hash={!r}".format(self.hash))
+        if self.executionContextAuxData is not None:
+            repr_args.append(
+                "executionContextAuxData={!r}".format(self.executionContextAuxData)
+            )
+        if self.sourceMapURL is not None:
+            repr_args.append("sourceMapURL={!r}".format(self.sourceMapURL))
+        if self.hasSourceURL is not None:
+            repr_args.append("hasSourceURL={!r}".format(self.hasSourceURL))
+        if self.isModule is not None:
+            repr_args.append("isModule={!r}".format(self.isModule))
+        if self.length is not None:
+            repr_args.append("length={!r}".format(self.length))
+        if self.stackTrace is not None:
+            repr_args.append("stackTrace={!r}".format(self.stackTrace))
+        return "ScriptFailedToParseEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ScriptFailedToParseEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ScriptFailedToParseEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ScriptFailedToParseEvent(**init)
@@ -200,7 +330,9 @@ class ScriptFailedToParseEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ScriptFailedToParseEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ScriptFailedToParseEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -210,7 +342,7 @@ class ScriptFailedToParseEvent(BaseEvent):
             return init
 
 
-class ScriptParsedEvent(BaseEvent):
+class ScriptParsedEvent(object):
     """
     Fired when virtual machine parses script.
 	This event is also fired for all known and uncollected scripts upon enabling debugger.
@@ -218,7 +350,24 @@ class ScriptParsedEvent(BaseEvent):
 
     event = "Debugger.scriptParsed"
 
-    def __init__(self, scriptId: str, url: str, startLine: int, startColumn: int, endLine: int, endColumn: int, executionContextId: int, hash: str, executionContextAuxData: Optional[dict] = None, isLiveEdit: Optional[bool] = None, sourceMapURL: Optional[str] = None, hasSourceURL: Optional[bool] = None, isModule: Optional[bool] = None, length: Optional[int] = None, stackTrace: Optional[Union[Runtime.StackTrace, dict]] = None) -> None:
+    def __init__(
+        self,
+        scriptId: str,
+        url: str,
+        startLine: int,
+        startColumn: int,
+        endLine: int,
+        endColumn: int,
+        executionContextId: int,
+        hash: str,
+        executionContextAuxData: Optional[dict] = None,
+        isLiveEdit: Optional[bool] = None,
+        sourceMapURL: Optional[str] = None,
+        hasSourceURL: Optional[bool] = None,
+        isModule: Optional[bool] = None,
+        length: Optional[int] = None,
+        stackTrace: Optional[Union[Runtime.StackTrace, dict]] = None,
+    ) -> None:
         """
         :param scriptId: Identifier of the script parsed.
         :type scriptId: str
@@ -268,8 +417,53 @@ class ScriptParsedEvent(BaseEvent):
         self.length = length
         self.stackTrace = Runtime.StackTrace.safe_create(stackTrace)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.scriptId is not None:
+            repr_args.append("scriptId={!r}".format(self.scriptId))
+        if self.url is not None:
+            repr_args.append("url={!r}".format(self.url))
+        if self.startLine is not None:
+            repr_args.append("startLine={!r}".format(self.startLine))
+        if self.startColumn is not None:
+            repr_args.append("startColumn={!r}".format(self.startColumn))
+        if self.endLine is not None:
+            repr_args.append("endLine={!r}".format(self.endLine))
+        if self.endColumn is not None:
+            repr_args.append("endColumn={!r}".format(self.endColumn))
+        if self.executionContextId is not None:
+            repr_args.append("executionContextId={!r}".format(self.executionContextId))
+        if self.hash is not None:
+            repr_args.append("hash={!r}".format(self.hash))
+        if self.executionContextAuxData is not None:
+            repr_args.append(
+                "executionContextAuxData={!r}".format(self.executionContextAuxData)
+            )
+        if self.isLiveEdit is not None:
+            repr_args.append("isLiveEdit={!r}".format(self.isLiveEdit))
+        if self.sourceMapURL is not None:
+            repr_args.append("sourceMapURL={!r}".format(self.sourceMapURL))
+        if self.hasSourceURL is not None:
+            repr_args.append("hasSourceURL={!r}".format(self.hasSourceURL))
+        if self.isModule is not None:
+            repr_args.append("isModule={!r}".format(self.isModule))
+        if self.length is not None:
+            repr_args.append("length={!r}".format(self.length))
+        if self.stackTrace is not None:
+            repr_args.append("stackTrace={!r}".format(self.stackTrace))
+        return "ScriptParsedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ScriptParsedEvent', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["ScriptParsedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ScriptParsedEvent(**init)
@@ -280,7 +474,9 @@ class ScriptParsedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ScriptParsedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ScriptParsedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -291,10 +487,17 @@ class ScriptParsedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Debugger.breakpointResolved": BreakpointResolvedEvent,
-   "Debugger.paused": PausedEvent,
-   "Debugger.resumed": ResumedEvent,
-   "Debugger.scriptFailedToParse": ScriptFailedToParseEvent,
-   "Debugger.scriptParsed": ScriptParsedEvent,
+    "Debugger.breakpointResolved": BreakpointResolvedEvent,
+    "Debugger.paused": PausedEvent,
+    "Debugger.resumed": ResumedEvent,
+    "Debugger.scriptFailedToParse": ScriptFailedToParseEvent,
+    "Debugger.scriptParsed": ScriptParsedEvent,
 }
 
+EVENT_NS = SimpleNamespace(
+    BreakpointResolved="Debugger.breakpointResolved",
+    Paused="Debugger.paused",
+    Resumed="Debugger.resumed",
+    ScriptFailedToParse="Debugger.scriptFailedToParse",
+    ScriptParsed="Debugger.scriptParsed",
+)

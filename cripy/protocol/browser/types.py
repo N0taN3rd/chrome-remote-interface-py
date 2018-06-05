@@ -2,12 +2,14 @@ from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
 
-class Histogram(ProtocolType):
+class Histogram(object):
     """
     Chrome histogram.
     """
 
-    def __init__(self, name: str, sum: int, count: int, buckets: List[Union['Bucket', dict]]) -> None:
+    def __init__(
+        self, name: str, sum: int, count: int, buckets: List[Union["Bucket", dict]]
+    ) -> None:
         """
         :param name: Name.
         :type name: str
@@ -24,8 +26,29 @@ class Histogram(ProtocolType):
         self.count = count
         self.buckets = Bucket.safe_create_from_list(buckets)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.sum is not None:
+            repr_args.append("sum={!r}".format(self.sum))
+        if self.count is not None:
+            repr_args.append("count={!r}".format(self.count))
+        if self.buckets is not None:
+            repr_args.append("buckets={!r}".format(self.buckets))
+        return "Histogram(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['Histogram', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["Histogram", dict]]:
         if init is not None:
             try:
                 ourselves = Histogram(**init)
@@ -36,7 +59,9 @@ class Histogram(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Histogram', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["Histogram", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -46,7 +71,7 @@ class Histogram(ProtocolType):
             return init
 
 
-class Bucket(ProtocolType):
+class Bucket(object):
     """
     Chrome histogram bucket.
     """
@@ -65,8 +90,27 @@ class Bucket(ProtocolType):
         self.high = high
         self.count = count
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.low is not None:
+            repr_args.append("low={!r}".format(self.low))
+        if self.high is not None:
+            repr_args.append("high={!r}".format(self.high))
+        if self.count is not None:
+            repr_args.append("count={!r}".format(self.count))
+        return "Bucket(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['Bucket', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["Bucket", dict]]:
         if init is not None:
             try:
                 ourselves = Bucket(**init)
@@ -77,7 +121,9 @@ class Bucket(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Bucket', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["Bucket", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -87,12 +133,19 @@ class Bucket(ProtocolType):
             return init
 
 
-class Bounds(ProtocolType):
+class Bounds(object):
     """
     Browser window bounds information
     """
 
-    def __init__(self, left: Optional[int] = None, top: Optional[int] = None, width: Optional[int] = None, height: Optional[int] = None, windowState: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        left: Optional[int] = None,
+        top: Optional[int] = None,
+        width: Optional[int] = None,
+        height: Optional[int] = None,
+        windowState: Optional[str] = None,
+    ) -> None:
         """
         :param left: The offset from the left edge of the screen to the window in pixels.
         :type left: Optional[int]
@@ -112,8 +165,31 @@ class Bounds(ProtocolType):
         self.height = height
         self.windowState = windowState
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.left is not None:
+            repr_args.append("left={!r}".format(self.left))
+        if self.top is not None:
+            repr_args.append("top={!r}".format(self.top))
+        if self.width is not None:
+            repr_args.append("width={!r}".format(self.width))
+        if self.height is not None:
+            repr_args.append("height={!r}".format(self.height))
+        if self.windowState is not None:
+            repr_args.append("windowState={!r}".format(self.windowState))
+        return "Bounds(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['Bounds', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["Bounds", dict]]:
         if init is not None:
             try:
                 ourselves = Bounds(**init)
@@ -124,7 +200,9 @@ class Bounds(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Bounds', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["Bounds", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -134,8 +212,4 @@ class Bounds(ProtocolType):
             return init
 
 
-TYPE_TO_OBJECT = {
-    "Histogram": Histogram,
-    "Bucket": Bucket,
-    "Bounds": Bounds,
-}
+TYPE_TO_OBJECT = {"Histogram": Histogram, "Bucket": Bucket, "Bounds": Bounds}

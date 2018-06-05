@@ -9,12 +9,12 @@ class Database(object):
         self.chrome = chrome
 
     async def disable(self) -> Optional[dict]:
-        res = await self.chrome.send('Database.disable')
-        return res
+        mayberes = await self.chrome.send("Database.disable")
+        return mayberes
 
     async def enable(self) -> Optional[dict]:
-        res = await self.chrome.send('Database.enable')
-        return res
+        mayberes = await self.chrome.send("Database.enable")
+        return mayberes
 
     async def executeSQL(self, databaseId: str, query: str) -> Optional[dict]:
         """
@@ -25,11 +25,12 @@ class Database(object):
         """
         msg_dict = dict()
         if databaseId is not None:
-            msg_dict['databaseId'] = databaseId
+            msg_dict["databaseId"] = databaseId
         if query is not None:
-            msg_dict['query'] = query
-        res = await self.chrome.send('Database.executeSQL', msg_dict)
-        res['sqlError'] = Types.Error.safe_create(res['sqlError'])
+            msg_dict["query"] = query
+        mayberes = await self.chrome.send("Database.executeSQL", msg_dict)
+        res = await mayberes
+        res["sqlError"] = Types.Error.safe_create(res["sqlError"])
         return res
 
     async def getDatabaseTableNames(self, databaseId: str) -> Optional[dict]:
@@ -39,11 +40,11 @@ class Database(object):
         """
         msg_dict = dict()
         if databaseId is not None:
-            msg_dict['databaseId'] = databaseId
-        res = await self.chrome.send('Database.getDatabaseTableNames', msg_dict)
+            msg_dict["databaseId"] = databaseId
+        mayberes = await self.chrome.send("Database.getDatabaseTableNames", msg_dict)
+        res = await mayberes
         return res
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

@@ -1,13 +1,14 @@
 from typing import Any, List, Optional, Union
-from cripy.helpers import BaseEvent
+from types import SimpleNamespace
 from cripy.protocol.dom import types as DOM
+
 try:
     from cripy.protocol.layertree.types import *
 except ImportError:
     pass
 
 
-class LayerPaintedEvent(BaseEvent):
+class LayerPaintedEvent(object):
 
     event = "LayerTree.layerPainted"
 
@@ -22,8 +23,25 @@ class LayerPaintedEvent(BaseEvent):
         self.layerId = layerId
         self.clip = DOM.Rect.safe_create(clip)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.layerId is not None:
+            repr_args.append("layerId={!r}".format(self.layerId))
+        if self.clip is not None:
+            repr_args.append("clip={!r}".format(self.clip))
+        return "LayerPaintedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['LayerPaintedEvent', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["LayerPaintedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = LayerPaintedEvent(**init)
@@ -34,7 +52,9 @@ class LayerPaintedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LayerPaintedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["LayerPaintedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -44,7 +64,7 @@ class LayerPaintedEvent(BaseEvent):
             return init
 
 
-class LayerTreeDidChangeEvent(BaseEvent):
+class LayerTreeDidChangeEvent(object):
 
     event = "LayerTree.layerTreeDidChange"
 
@@ -56,8 +76,25 @@ class LayerTreeDidChangeEvent(BaseEvent):
         super().__init__()
         self.layers = Layer.safe_create_from_list(layers)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.layers is not None:
+            repr_args.append("layers={!r}".format(self.layers))
+        return "LayerTreeDidChangeEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['LayerTreeDidChangeEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["LayerTreeDidChangeEvent", dict]]:
         if init is not None:
             try:
                 ourselves = LayerTreeDidChangeEvent(**init)
@@ -68,7 +105,9 @@ class LayerTreeDidChangeEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LayerTreeDidChangeEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["LayerTreeDidChangeEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -79,7 +118,11 @@ class LayerTreeDidChangeEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "LayerTree.layerPainted": LayerPaintedEvent,
-   "LayerTree.layerTreeDidChange": LayerTreeDidChangeEvent,
+    "LayerTree.layerPainted": LayerPaintedEvent,
+    "LayerTree.layerTreeDidChange": LayerTreeDidChangeEvent,
 }
 
+EVENT_NS = SimpleNamespace(
+    LayerPainted="LayerTree.layerPainted",
+    LayerTreeDidChange="LayerTree.layerTreeDidChange",
+)

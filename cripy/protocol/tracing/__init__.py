@@ -4,17 +4,18 @@ from cripy.protocol.tracing import types as Types
 
 
 class Tracing(object):
-    dependencies = ['IO']
+    dependencies = ["IO"]
 
     def __init__(self, chrome):
         self.chrome = chrome
 
     async def end(self) -> Optional[dict]:
-        res = await self.chrome.send('Tracing.end')
-        return res
+        mayberes = await self.chrome.send("Tracing.end")
+        return mayberes
 
     async def getCategories(self) -> Optional[dict]:
-        res = await self.chrome.send('Tracing.getCategories')
+        mayberes = await self.chrome.send("Tracing.getCategories")
+        res = await mayberes
         return res
 
     async def recordClockSyncMarker(self, syncId: str) -> Optional[dict]:
@@ -24,15 +25,24 @@ class Tracing(object):
         """
         msg_dict = dict()
         if syncId is not None:
-            msg_dict['syncId'] = syncId
-        res = await self.chrome.send('Tracing.recordClockSyncMarker', msg_dict)
-        return res
+            msg_dict["syncId"] = syncId
+        mayberes = await self.chrome.send("Tracing.recordClockSyncMarker", msg_dict)
+        return mayberes
 
     async def requestMemoryDump(self) -> Optional[dict]:
-        res = await self.chrome.send('Tracing.requestMemoryDump')
+        mayberes = await self.chrome.send("Tracing.requestMemoryDump")
+        res = await mayberes
         return res
 
-    async def start(self, categories: Optional[str] = None, options: Optional[str] = None, bufferUsageReportingInterval: Optional[float] = None, transferMode: Optional[str] = None, streamCompression: Optional[str] = None, traceConfig: Optional[dict] = None) -> Optional[dict]:
+    async def start(
+        self,
+        categories: Optional[str] = None,
+        options: Optional[str] = None,
+        bufferUsageReportingInterval: Optional[float] = None,
+        transferMode: Optional[str] = None,
+        streamCompression: Optional[str] = None,
+        traceConfig: Optional[dict] = None,
+    ) -> Optional[dict]:
         """
         :param categories: Category/tag filter
         :type categories: Optional[str]
@@ -49,21 +59,20 @@ class Tracing(object):
         """
         msg_dict = dict()
         if categories is not None:
-            msg_dict['categories'] = categories
+            msg_dict["categories"] = categories
         if options is not None:
-            msg_dict['options'] = options
+            msg_dict["options"] = options
         if bufferUsageReportingInterval is not None:
-            msg_dict['bufferUsageReportingInterval'] = bufferUsageReportingInterval
+            msg_dict["bufferUsageReportingInterval"] = bufferUsageReportingInterval
         if transferMode is not None:
-            msg_dict['transferMode'] = transferMode
+            msg_dict["transferMode"] = transferMode
         if streamCompression is not None:
-            msg_dict['streamCompression'] = streamCompression
+            msg_dict["streamCompression"] = streamCompression
         if traceConfig is not None:
-            msg_dict['traceConfig'] = traceConfig
-        res = await self.chrome.send('Tracing.start', msg_dict)
-        return res
+            msg_dict["traceConfig"] = traceConfig
+        mayberes = await self.chrome.send("Tracing.start", msg_dict)
+        return mayberes
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

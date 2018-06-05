@@ -3,9 +3,8 @@ import os.path
 from pathlib import Path
 
 from jinja2 import Template
-
 from cripy.protogen.domain import Domain
-
+from stringcase import pascalcase
 
 protocol_template = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "data/protocol.py.j2")
@@ -85,6 +84,7 @@ def generate_events(d: Domain, template, dp: Path) -> None:
                 event_to_clazz.append((e.scoped_name, e.class_name))
             tout.write(
                 template.render(
+                    pascalcase=pascalcase,
                     events=d.events,
                     domain=d.domain,
                     event_to_clazz=event_to_clazz,
@@ -133,7 +133,7 @@ def gen() -> None:
     for which, fp in [js_json_fp, browser_json_fp]:
         data = read_json(fp)
         for domain in data["domains"]:
-            mixin_imports.append((domain['domain'].lower(), domain['domain']))
+            mixin_imports.append((domain["domain"].lower(), domain["domain"]))
             domains.append(Domain(domain))
     for d in domains:
         dp = Path(output_dir_fp, d.domain.lower())
@@ -142,13 +142,16 @@ def gen() -> None:
         generate_types(d, domain_template, dp)
         generate_events(d, event_template, dp)
         generate_commands(d, command_template, dp)
-    init = Path(output_dir_fp, '__init__.py')
-    with init.open('w') as out:
+    init = Path(output_dir_fp, "__init__.py")
+    with init.open("w") as out:
         out.write(pinit.render(domains=mixin_imports))
     from cripy.protocol import ProtocolMixin
+
     class IT(ProtocolMixin):
         pass
+
     print(IT().protocol_events)
+
 
 if __name__ == "__main__":
     gen()

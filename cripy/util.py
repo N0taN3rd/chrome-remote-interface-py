@@ -3,7 +3,7 @@
 import gc
 import socket
 
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 
 __all__ = ["get_free_port", "merge_dict"]
 

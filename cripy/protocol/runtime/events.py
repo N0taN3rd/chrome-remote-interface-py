@@ -1,19 +1,94 @@
 from typing import Any, List, Optional, Union
-from cripy.helpers import BaseEvent
+from types import SimpleNamespace
+
 try:
     from cripy.protocol.runtime.types import *
 except ImportError:
     pass
 
 
-class ConsoleAPICalledEvent(BaseEvent):
+class BindingCalledEvent(object):
+    """
+    Notification is issued every time when binding is called.
+    """
+
+    event = "Runtime.bindingCalled"
+
+    def __init__(self, name: str, payload: str, executionContextId: int) -> None:
+        """
+        :param name: The name
+        :type name: str
+        :param payload: The payload
+        :type payload: str
+        :param executionContextId: Identifier of the context where the call was made.
+        :type executionContextId: int
+        """
+        super().__init__()
+        self.name = name
+        self.payload = payload
+        self.executionContextId = executionContextId
+
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.payload is not None:
+            repr_args.append("payload={!r}".format(self.payload))
+        if self.executionContextId is not None:
+            repr_args.append("executionContextId={!r}".format(self.executionContextId))
+        return "BindingCalledEvent(" + ", ".join(repr_args) + ")"
+
+    @staticmethod
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["BindingCalledEvent", dict]]:
+        if init is not None:
+            try:
+                ourselves = BindingCalledEvent(**init)
+                return ourselves
+            except Exception:
+                return init
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["BindingCalledEvent", dict]]]:
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append(BindingCalledEvent.safe_create(it))
+            return list_of_self
+        else:
+            return init
+
+
+class ConsoleAPICalledEvent(object):
     """
     Issued when console API was called.
     """
 
     event = "Runtime.consoleAPICalled"
 
-    def __init__(self, type: str, args: List[Union[RemoteObject, dict]], executionContextId: int, timestamp: float, stackTrace: Optional[Union[StackTrace, dict]] = None, context: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        type: str,
+        args: List[Union[RemoteObject, dict]],
+        executionContextId: int,
+        timestamp: float,
+        stackTrace: Optional[Union[StackTrace, dict]] = None,
+        context: Optional[str] = None,
+    ) -> None:
         """
         :param type: Type of the call.
         :type type: str
@@ -36,8 +111,35 @@ class ConsoleAPICalledEvent(BaseEvent):
         self.stackTrace = StackTrace.safe_create(stackTrace)
         self.context = context
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.type is not None:
+            repr_args.append("type={!r}".format(self.type))
+        if self.args is not None:
+            repr_args.append("args={!r}".format(self.args))
+        if self.executionContextId is not None:
+            repr_args.append("executionContextId={!r}".format(self.executionContextId))
+        if self.timestamp is not None:
+            repr_args.append("timestamp={!r}".format(self.timestamp))
+        if self.stackTrace is not None:
+            repr_args.append("stackTrace={!r}".format(self.stackTrace))
+        if self.context is not None:
+            repr_args.append("context={!r}".format(self.context))
+        return "ConsoleAPICalledEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ConsoleAPICalledEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ConsoleAPICalledEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ConsoleAPICalledEvent(**init)
@@ -48,7 +150,9 @@ class ConsoleAPICalledEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ConsoleAPICalledEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ConsoleAPICalledEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -58,7 +162,7 @@ class ConsoleAPICalledEvent(BaseEvent):
             return init
 
 
-class ExceptionRevokedEvent(BaseEvent):
+class ExceptionRevokedEvent(object):
     """
     Issued when unhandled exception was revoked.
     """
@@ -76,8 +180,27 @@ class ExceptionRevokedEvent(BaseEvent):
         self.reason = reason
         self.exceptionId = exceptionId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.reason is not None:
+            repr_args.append("reason={!r}".format(self.reason))
+        if self.exceptionId is not None:
+            repr_args.append("exceptionId={!r}".format(self.exceptionId))
+        return "ExceptionRevokedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ExceptionRevokedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ExceptionRevokedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ExceptionRevokedEvent(**init)
@@ -88,7 +211,9 @@ class ExceptionRevokedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ExceptionRevokedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ExceptionRevokedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -98,14 +223,16 @@ class ExceptionRevokedEvent(BaseEvent):
             return init
 
 
-class ExceptionThrownEvent(BaseEvent):
+class ExceptionThrownEvent(object):
     """
     Issued when exception was thrown and unhandled.
     """
 
     event = "Runtime.exceptionThrown"
 
-    def __init__(self, timestamp: float, exceptionDetails: Union[ExceptionDetails, dict]) -> None:
+    def __init__(
+        self, timestamp: float, exceptionDetails: Union[ExceptionDetails, dict]
+    ) -> None:
         """
         :param timestamp: Timestamp of the exception.
         :type timestamp: float
@@ -116,8 +243,27 @@ class ExceptionThrownEvent(BaseEvent):
         self.timestamp = timestamp
         self.exceptionDetails = ExceptionDetails.safe_create(exceptionDetails)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.timestamp is not None:
+            repr_args.append("timestamp={!r}".format(self.timestamp))
+        if self.exceptionDetails is not None:
+            repr_args.append("exceptionDetails={!r}".format(self.exceptionDetails))
+        return "ExceptionThrownEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ExceptionThrownEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ExceptionThrownEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ExceptionThrownEvent(**init)
@@ -128,7 +274,9 @@ class ExceptionThrownEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ExceptionThrownEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ExceptionThrownEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -138,7 +286,7 @@ class ExceptionThrownEvent(BaseEvent):
             return init
 
 
-class ExecutionContextCreatedEvent(BaseEvent):
+class ExecutionContextCreatedEvent(object):
     """
     Issued when new execution context is created.
     """
@@ -153,8 +301,25 @@ class ExecutionContextCreatedEvent(BaseEvent):
         super().__init__()
         self.context = ExecutionContextDescription.safe_create(context)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.context is not None:
+            repr_args.append("context={!r}".format(self.context))
+        return "ExecutionContextCreatedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ExecutionContextCreatedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ExecutionContextCreatedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ExecutionContextCreatedEvent(**init)
@@ -165,7 +330,9 @@ class ExecutionContextCreatedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ExecutionContextCreatedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ExecutionContextCreatedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -175,7 +342,7 @@ class ExecutionContextCreatedEvent(BaseEvent):
             return init
 
 
-class ExecutionContextDestroyedEvent(BaseEvent):
+class ExecutionContextDestroyedEvent(object):
     """
     Issued when execution context is destroyed.
     """
@@ -190,8 +357,25 @@ class ExecutionContextDestroyedEvent(BaseEvent):
         super().__init__()
         self.executionContextId = executionContextId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.executionContextId is not None:
+            repr_args.append("executionContextId={!r}".format(self.executionContextId))
+        return "ExecutionContextDestroyedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ExecutionContextDestroyedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ExecutionContextDestroyedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ExecutionContextDestroyedEvent(**init)
@@ -202,7 +386,9 @@ class ExecutionContextDestroyedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ExecutionContextDestroyedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ExecutionContextDestroyedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -212,7 +398,7 @@ class ExecutionContextDestroyedEvent(BaseEvent):
             return init
 
 
-class ExecutionContextsClearedEvent(BaseEvent, dict):
+class ExecutionContextsClearedEvent(dict):
     """
     Issued when all executionContexts were cleared in browser
     """
@@ -222,8 +408,13 @@ class ExecutionContextsClearedEvent(BaseEvent, dict):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
+    def __repr__(self) -> str:
+        return "ExecutionContextsClearedEvent(dict)"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ExecutionContextsClearedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ExecutionContextsClearedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ExecutionContextsClearedEvent(**init)
@@ -234,7 +425,9 @@ class ExecutionContextsClearedEvent(BaseEvent, dict):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ExecutionContextsClearedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ExecutionContextsClearedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -244,7 +437,7 @@ class ExecutionContextsClearedEvent(BaseEvent, dict):
             return init
 
 
-class InspectRequestedEvent(BaseEvent):
+class InspectRequestedEvent(object):
     """
     Issued when object should be inspected (for example, as a result of inspect() command line API call).
     """
@@ -262,8 +455,27 @@ class InspectRequestedEvent(BaseEvent):
         self.object = RemoteObject.safe_create(object)
         self.hints = hints
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.object is not None:
+            repr_args.append("object={!r}".format(self.object))
+        if self.hints is not None:
+            repr_args.append("hints={!r}".format(self.hints))
+        return "InspectRequestedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['InspectRequestedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["InspectRequestedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = InspectRequestedEvent(**init)
@@ -274,7 +486,9 @@ class InspectRequestedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['InspectRequestedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["InspectRequestedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -285,12 +499,23 @@ class InspectRequestedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Runtime.consoleAPICalled": ConsoleAPICalledEvent,
-   "Runtime.exceptionRevoked": ExceptionRevokedEvent,
-   "Runtime.exceptionThrown": ExceptionThrownEvent,
-   "Runtime.executionContextCreated": ExecutionContextCreatedEvent,
-   "Runtime.executionContextDestroyed": ExecutionContextDestroyedEvent,
-   "Runtime.executionContextsCleared": ExecutionContextsClearedEvent,
-   "Runtime.inspectRequested": InspectRequestedEvent,
+    "Runtime.bindingCalled": BindingCalledEvent,
+    "Runtime.consoleAPICalled": ConsoleAPICalledEvent,
+    "Runtime.exceptionRevoked": ExceptionRevokedEvent,
+    "Runtime.exceptionThrown": ExceptionThrownEvent,
+    "Runtime.executionContextCreated": ExecutionContextCreatedEvent,
+    "Runtime.executionContextDestroyed": ExecutionContextDestroyedEvent,
+    "Runtime.executionContextsCleared": ExecutionContextsClearedEvent,
+    "Runtime.inspectRequested": InspectRequestedEvent,
 }
 
+EVENT_NS = SimpleNamespace(
+    BindingCalled="Runtime.bindingCalled",
+    ConsoleAPICalled="Runtime.consoleAPICalled",
+    ExceptionRevoked="Runtime.exceptionRevoked",
+    ExceptionThrown="Runtime.exceptionThrown",
+    ExecutionContextCreated="Runtime.executionContextCreated",
+    ExecutionContextDestroyed="Runtime.executionContextDestroyed",
+    ExecutionContextsCleared="Runtime.executionContextsCleared",
+    InspectRequested="Runtime.inspectRequested",
+)

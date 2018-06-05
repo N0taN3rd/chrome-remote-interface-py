@@ -40,6 +40,7 @@ from .tracing import Tracing
 
 
 class ProtocolMixin(object):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.protocol_events = dict()

@@ -30,6 +30,8 @@ class Returns(FRefCollector):
                     t = p.type
                 else:
                     t = f"Types.{p.type}"
+                if p.name == "cssKeyframesRules":
+                    print(p, p.type, t)
                 yield f"res['{p.name}'] = {t}.safe_create(res['{p.name}'])"
             else:
                 if p.type.is_array:
@@ -37,10 +39,15 @@ class Returns(FRefCollector):
                     scoped = f"{self.domain}.{itms.type}"
                     dt = TYPER.domain_types.get(scoped, None)
                     if dt is not None:
+                        ts = f"{itms.type}"
+                        if self.domain in ts:
+                            scoped = f"Types.{ts}"
+                        else:
+                            scoped = scoped.replace(self.domain, "Types")
                         if dt.type.is_object:
                             yield (
                                 f"res['{p.name}'] = "
-                                f"{scoped.replace(self.domain,'Types')}.safe_create_from_list(res['{p.name}'])"
+                                f"{scoped}.safe_create_from_list(res['{p.name}'])"
                             )
                     else:
                         dt = TYPER.domain_types.get(itms.type)
@@ -55,6 +62,7 @@ class Returns(FRefCollector):
                     dt = TYPER.domain_types.get(scoped, None)
                     if dt is not None:
                         if dt.type.is_object:
+                            print(scoped.replace(self.domain, "Types"))
                             yield (
                                 f"res['{p.name}'] = "
                                 f"{scoped.replace(self.domain,'Types')}.safe_create_from_list(res['{p.name}'])"

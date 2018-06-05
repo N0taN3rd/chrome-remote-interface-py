@@ -1,17 +1,23 @@
 from typing import Any, List, Optional, Union
-from cripy.helpers import BaseEvent
+from types import SimpleNamespace
 from cripy.protocol.io import types as IO
+
 try:
     from cripy.protocol.tracing.types import *
 except ImportError:
     pass
 
 
-class BufferUsageEvent(BaseEvent):
+class BufferUsageEvent(object):
 
     event = "Tracing.bufferUsage"
 
-    def __init__(self, percentFull: Optional[float] = None, eventCount: Optional[float] = None, value: Optional[float] = None) -> None:
+    def __init__(
+        self,
+        percentFull: Optional[float] = None,
+        eventCount: Optional[float] = None,
+        value: Optional[float] = None,
+    ) -> None:
         """
         :param percentFull: A number in range [0..1] that indicates the used size of event buffer as a fraction of its total size.
         :type percentFull: Optional[float]
@@ -25,8 +31,27 @@ class BufferUsageEvent(BaseEvent):
         self.eventCount = eventCount
         self.value = value
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.percentFull is not None:
+            repr_args.append("percentFull={!r}".format(self.percentFull))
+        if self.eventCount is not None:
+            repr_args.append("eventCount={!r}".format(self.eventCount))
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        return "BufferUsageEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['BufferUsageEvent', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["BufferUsageEvent", dict]]:
         if init is not None:
             try:
                 ourselves = BufferUsageEvent(**init)
@@ -37,7 +62,9 @@ class BufferUsageEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['BufferUsageEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["BufferUsageEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -47,7 +74,7 @@ class BufferUsageEvent(BaseEvent):
             return init
 
 
-class DataCollectedEvent(BaseEvent):
+class DataCollectedEvent(object):
     """
     Contains an bucket of collected trace events.
 	When tracing is stopped collected events will be send as a sequence of dataCollected events followed by tracingComplete event.
@@ -63,8 +90,25 @@ class DataCollectedEvent(BaseEvent):
         super().__init__()
         self.value = value
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        return "DataCollectedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['DataCollectedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["DataCollectedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = DataCollectedEvent(**init)
@@ -75,7 +119,9 @@ class DataCollectedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DataCollectedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["DataCollectedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -85,14 +131,16 @@ class DataCollectedEvent(BaseEvent):
             return init
 
 
-class TracingCompleteEvent(BaseEvent):
+class TracingCompleteEvent(object):
     """
     Signals that tracing is stopped and there is no trace buffers pending flush, all data were delivered via dataCollected events.
     """
 
     event = "Tracing.tracingComplete"
 
-    def __init__(self, stream: Optional[str] = None, streamCompression: Optional[str] = None) -> None:
+    def __init__(
+        self, stream: Optional[str] = None, streamCompression: Optional[str] = None
+    ) -> None:
         """
         :param stream: A handle of the stream that holds resulting trace data.
         :type stream: Optional[str]
@@ -103,8 +151,27 @@ class TracingCompleteEvent(BaseEvent):
         self.stream = stream
         self.streamCompression = streamCompression
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.stream is not None:
+            repr_args.append("stream={!r}".format(self.stream))
+        if self.streamCompression is not None:
+            repr_args.append("streamCompression={!r}".format(self.streamCompression))
+        return "TracingCompleteEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['TracingCompleteEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["TracingCompleteEvent", dict]]:
         if init is not None:
             try:
                 ourselves = TracingCompleteEvent(**init)
@@ -115,7 +182,9 @@ class TracingCompleteEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TracingCompleteEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["TracingCompleteEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -126,8 +195,13 @@ class TracingCompleteEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Tracing.bufferUsage": BufferUsageEvent,
-   "Tracing.dataCollected": DataCollectedEvent,
-   "Tracing.tracingComplete": TracingCompleteEvent,
+    "Tracing.bufferUsage": BufferUsageEvent,
+    "Tracing.dataCollected": DataCollectedEvent,
+    "Tracing.tracingComplete": TracingCompleteEvent,
 }
 
+EVENT_NS = SimpleNamespace(
+    BufferUsage="Tracing.bufferUsage",
+    DataCollected="Tracing.dataCollected",
+    TracingComplete="Tracing.tracingComplete",
+)

@@ -3,12 +3,21 @@ from cripy.helpers import ProtocolType
 from cripy.protocol.network import types as Network
 
 
-class VisualViewport(ProtocolType):
+class VisualViewport(object):
     """
     Visual viewport position, dimensions, and scale.
     """
 
-    def __init__(self, offsetX: float, offsetY: float, pageX: float, pageY: float, clientWidth: float, clientHeight: float, scale: float) -> None:
+    def __init__(
+        self,
+        offsetX: float,
+        offsetY: float,
+        pageX: float,
+        pageY: float,
+        clientWidth: float,
+        clientHeight: float,
+        scale: float,
+    ) -> None:
         """
         :param offsetX: Horizontal offset relative to the layout viewport (CSS pixels).
         :type offsetX: float
@@ -34,8 +43,35 @@ class VisualViewport(ProtocolType):
         self.clientHeight = clientHeight
         self.scale = scale
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.offsetX is not None:
+            repr_args.append("offsetX={!r}".format(self.offsetX))
+        if self.offsetY is not None:
+            repr_args.append("offsetY={!r}".format(self.offsetY))
+        if self.pageX is not None:
+            repr_args.append("pageX={!r}".format(self.pageX))
+        if self.pageY is not None:
+            repr_args.append("pageY={!r}".format(self.pageY))
+        if self.clientWidth is not None:
+            repr_args.append("clientWidth={!r}".format(self.clientWidth))
+        if self.clientHeight is not None:
+            repr_args.append("clientHeight={!r}".format(self.clientHeight))
+        if self.scale is not None:
+            repr_args.append("scale={!r}".format(self.scale))
+        return "VisualViewport(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['VisualViewport', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["VisualViewport", dict]]:
         if init is not None:
             try:
                 ourselves = VisualViewport(**init)
@@ -46,7 +82,9 @@ class VisualViewport(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['VisualViewport', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["VisualViewport", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -56,12 +94,14 @@ class VisualViewport(ProtocolType):
             return init
 
 
-class Viewport(ProtocolType):
+class Viewport(object):
     """
     Viewport for capturing screenshot.
     """
 
-    def __init__(self, x: float, y: float, width: float, height: float, scale: float) -> None:
+    def __init__(
+        self, x: float, y: float, width: float, height: float, scale: float
+    ) -> None:
         """
         :param x: X offset in CSS pixels.
         :type x: float
@@ -81,8 +121,31 @@ class Viewport(ProtocolType):
         self.height = height
         self.scale = scale
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.x is not None:
+            repr_args.append("x={!r}".format(self.x))
+        if self.y is not None:
+            repr_args.append("y={!r}".format(self.y))
+        if self.width is not None:
+            repr_args.append("width={!r}".format(self.width))
+        if self.height is not None:
+            repr_args.append("height={!r}".format(self.height))
+        if self.scale is not None:
+            repr_args.append("scale={!r}".format(self.scale))
+        return "Viewport(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['Viewport', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["Viewport", dict]]:
         if init is not None:
             try:
                 ourselves = Viewport(**init)
@@ -93,7 +156,9 @@ class Viewport(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Viewport', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["Viewport", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -103,12 +168,21 @@ class Viewport(ProtocolType):
             return init
 
 
-class ScreencastFrameMetadata(ProtocolType):
+class ScreencastFrameMetadata(object):
     """
     Screencast frame metadata.
     """
 
-    def __init__(self, offsetTop: float, pageScaleFactor: float, deviceWidth: float, deviceHeight: float, scrollOffsetX: float, scrollOffsetY: float, timestamp: Optional[float] = None) -> None:
+    def __init__(
+        self,
+        offsetTop: float,
+        pageScaleFactor: float,
+        deviceWidth: float,
+        deviceHeight: float,
+        scrollOffsetX: float,
+        scrollOffsetY: float,
+        timestamp: Optional[float] = None,
+    ) -> None:
         """
         :param offsetTop: Top offset in DIP.
         :type offsetTop: float
@@ -134,8 +208,37 @@ class ScreencastFrameMetadata(ProtocolType):
         self.scrollOffsetY = scrollOffsetY
         self.timestamp = timestamp
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.offsetTop is not None:
+            repr_args.append("offsetTop={!r}".format(self.offsetTop))
+        if self.pageScaleFactor is not None:
+            repr_args.append("pageScaleFactor={!r}".format(self.pageScaleFactor))
+        if self.deviceWidth is not None:
+            repr_args.append("deviceWidth={!r}".format(self.deviceWidth))
+        if self.deviceHeight is not None:
+            repr_args.append("deviceHeight={!r}".format(self.deviceHeight))
+        if self.scrollOffsetX is not None:
+            repr_args.append("scrollOffsetX={!r}".format(self.scrollOffsetX))
+        if self.scrollOffsetY is not None:
+            repr_args.append("scrollOffsetY={!r}".format(self.scrollOffsetY))
+        if self.timestamp is not None:
+            repr_args.append("timestamp={!r}".format(self.timestamp))
+        return "ScreencastFrameMetadata(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ScreencastFrameMetadata', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ScreencastFrameMetadata", dict]]:
         if init is not None:
             try:
                 ourselves = ScreencastFrameMetadata(**init)
@@ -146,7 +249,9 @@ class ScreencastFrameMetadata(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ScreencastFrameMetadata', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ScreencastFrameMetadata", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -156,12 +261,14 @@ class ScreencastFrameMetadata(ProtocolType):
             return init
 
 
-class NavigationEntry(ProtocolType):
+class NavigationEntry(object):
     """
     Navigation history entry.
     """
 
-    def __init__(self, id: int, url: str, userTypedURL: str, title: str, transitionType: str) -> None:
+    def __init__(
+        self, id: int, url: str, userTypedURL: str, title: str, transitionType: str
+    ) -> None:
         """
         :param id: Unique id of the navigation history entry.
         :type id: int
@@ -181,8 +288,31 @@ class NavigationEntry(ProtocolType):
         self.title = title
         self.transitionType = transitionType
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.id is not None:
+            repr_args.append("id={!r}".format(self.id))
+        if self.url is not None:
+            repr_args.append("url={!r}".format(self.url))
+        if self.userTypedURL is not None:
+            repr_args.append("userTypedURL={!r}".format(self.userTypedURL))
+        if self.title is not None:
+            repr_args.append("title={!r}".format(self.title))
+        if self.transitionType is not None:
+            repr_args.append("transitionType={!r}".format(self.transitionType))
+        return "NavigationEntry(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['NavigationEntry', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["NavigationEntry", dict]]:
         if init is not None:
             try:
                 ourselves = NavigationEntry(**init)
@@ -193,7 +323,9 @@ class NavigationEntry(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['NavigationEntry', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["NavigationEntry", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -203,12 +335,14 @@ class NavigationEntry(ProtocolType):
             return init
 
 
-class LayoutViewport(ProtocolType):
+class LayoutViewport(object):
     """
     Layout viewport position and dimensions.
     """
 
-    def __init__(self, pageX: int, pageY: int, clientWidth: int, clientHeight: int) -> None:
+    def __init__(
+        self, pageX: int, pageY: int, clientWidth: int, clientHeight: int
+    ) -> None:
         """
         :param pageX: Horizontal offset relative to the document (CSS pixels).
         :type pageX: int
@@ -225,8 +359,29 @@ class LayoutViewport(ProtocolType):
         self.clientWidth = clientWidth
         self.clientHeight = clientHeight
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.pageX is not None:
+            repr_args.append("pageX={!r}".format(self.pageX))
+        if self.pageY is not None:
+            repr_args.append("pageY={!r}".format(self.pageY))
+        if self.clientWidth is not None:
+            repr_args.append("clientWidth={!r}".format(self.clientWidth))
+        if self.clientHeight is not None:
+            repr_args.append("clientHeight={!r}".format(self.clientHeight))
+        return "LayoutViewport(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['LayoutViewport', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["LayoutViewport", dict]]:
         if init is not None:
             try:
                 ourselves = LayoutViewport(**init)
@@ -237,7 +392,9 @@ class LayoutViewport(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LayoutViewport', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["LayoutViewport", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -247,12 +404,16 @@ class LayoutViewport(ProtocolType):
             return init
 
 
-class FrameTree(ProtocolType):
+class FrameTree(object):
     """
     Information about the Frame hierarchy.
     """
 
-    def __init__(self, frame: Union['Frame', dict], childFrames: Optional[List[Union['FrameTree', dict]]] = None) -> None:
+    def __init__(
+        self,
+        frame: Union["Frame", dict],
+        childFrames: Optional[List[Union["FrameTree", dict]]] = None,
+    ) -> None:
         """
         :param frame: Frame information for this tree item.
         :type frame: dict
@@ -263,8 +424,25 @@ class FrameTree(ProtocolType):
         self.frame = Frame.safe_create(frame)
         self.childFrames = FrameTree.safe_create_from_list(childFrames)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.frame is not None:
+            repr_args.append("frame={!r}".format(self.frame))
+        if self.childFrames is not None:
+            repr_args.append("childFrames={!r}".format(self.childFrames))
+        return "FrameTree(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['FrameTree', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["FrameTree", dict]]:
         if init is not None:
             try:
                 ourselves = FrameTree(**init)
@@ -275,7 +453,9 @@ class FrameTree(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameTree', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["FrameTree", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -285,12 +465,17 @@ class FrameTree(ProtocolType):
             return init
 
 
-class FrameResourceTree(ProtocolType):
+class FrameResourceTree(object):
     """
     Information about the Frame hierarchy along with their cached resources.
     """
 
-    def __init__(self, frame: Union['Frame', dict], resources: List[Union['FrameResource', dict]], childFrames: Optional[List[Union['FrameResourceTree', dict]]] = None) -> None:
+    def __init__(
+        self,
+        frame: Union["Frame", dict],
+        resources: List[Union["FrameResource", dict]],
+        childFrames: Optional[List[Union["FrameResourceTree", dict]]] = None,
+    ) -> None:
         """
         :param frame: Frame information for this tree item.
         :type frame: dict
@@ -304,8 +489,27 @@ class FrameResourceTree(ProtocolType):
         self.childFrames = FrameResourceTree.safe_create_from_list(childFrames)
         self.resources = FrameResource.safe_create_from_list(resources)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.frame is not None:
+            repr_args.append("frame={!r}".format(self.frame))
+        if self.childFrames is not None:
+            repr_args.append("childFrames={!r}".format(self.childFrames))
+        if self.resources is not None:
+            repr_args.append("resources={!r}".format(self.resources))
+        return "FrameResourceTree(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['FrameResourceTree', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["FrameResourceTree", dict]]:
         if init is not None:
             try:
                 ourselves = FrameResourceTree(**init)
@@ -316,7 +520,9 @@ class FrameResourceTree(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameResourceTree', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["FrameResourceTree", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -326,12 +532,21 @@ class FrameResourceTree(ProtocolType):
             return init
 
 
-class FrameResource(ProtocolType):
+class FrameResource(object):
     """
     Information about the Resource on the page.
     """
 
-    def __init__(self, url: str, type: str, mimeType: str, lastModified: Optional[float] = None, contentSize: Optional[float] = None, failed: Optional[bool] = None, canceled: Optional[bool] = None) -> None:
+    def __init__(
+        self,
+        url: str,
+        type: str,
+        mimeType: str,
+        lastModified: Optional[float] = None,
+        contentSize: Optional[float] = None,
+        failed: Optional[bool] = None,
+        canceled: Optional[bool] = None,
+    ) -> None:
         """
         :param url: Resource URL.
         :type url: str
@@ -357,8 +572,35 @@ class FrameResource(ProtocolType):
         self.failed = failed
         self.canceled = canceled
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.url is not None:
+            repr_args.append("url={!r}".format(self.url))
+        if self.type is not None:
+            repr_args.append("type={!r}".format(self.type))
+        if self.mimeType is not None:
+            repr_args.append("mimeType={!r}".format(self.mimeType))
+        if self.lastModified is not None:
+            repr_args.append("lastModified={!r}".format(self.lastModified))
+        if self.contentSize is not None:
+            repr_args.append("contentSize={!r}".format(self.contentSize))
+        if self.failed is not None:
+            repr_args.append("failed={!r}".format(self.failed))
+        if self.canceled is not None:
+            repr_args.append("canceled={!r}".format(self.canceled))
+        return "FrameResource(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['FrameResource', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["FrameResource", dict]]:
         if init is not None:
             try:
                 ourselves = FrameResource(**init)
@@ -369,7 +611,9 @@ class FrameResource(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameResource', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["FrameResource", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -379,12 +623,22 @@ class FrameResource(ProtocolType):
             return init
 
 
-class Frame(ProtocolType):
+class Frame(object):
     """
     Information about the Frame on the page.
     """
 
-    def __init__(self, id: str, loaderId: str, url: str, securityOrigin: str, mimeType: str, parentId: Optional[str] = None, name: Optional[str] = None, unreachableUrl: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        id: str,
+        loaderId: str,
+        url: str,
+        securityOrigin: str,
+        mimeType: str,
+        parentId: Optional[str] = None,
+        name: Optional[str] = None,
+        unreachableUrl: Optional[str] = None,
+    ) -> None:
         """
         :param id: Frame unique identifier.
         :type id: str
@@ -413,8 +667,37 @@ class Frame(ProtocolType):
         self.mimeType = mimeType
         self.unreachableUrl = unreachableUrl
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.id is not None:
+            repr_args.append("id={!r}".format(self.id))
+        if self.parentId is not None:
+            repr_args.append("parentId={!r}".format(self.parentId))
+        if self.loaderId is not None:
+            repr_args.append("loaderId={!r}".format(self.loaderId))
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.url is not None:
+            repr_args.append("url={!r}".format(self.url))
+        if self.securityOrigin is not None:
+            repr_args.append("securityOrigin={!r}".format(self.securityOrigin))
+        if self.mimeType is not None:
+            repr_args.append("mimeType={!r}".format(self.mimeType))
+        if self.unreachableUrl is not None:
+            repr_args.append("unreachableUrl={!r}".format(self.unreachableUrl))
+        return "Frame(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['Frame', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["Frame", dict]]:
         if init is not None:
             try:
                 ourselves = Frame(**init)
@@ -425,7 +708,9 @@ class Frame(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Frame', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["Frame", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -435,7 +720,7 @@ class Frame(ProtocolType):
             return init
 
 
-class AppManifestError(ProtocolType):
+class AppManifestError(object):
     """
     Error while paring app manifest.
     """
@@ -457,8 +742,29 @@ class AppManifestError(ProtocolType):
         self.line = line
         self.column = column
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.message is not None:
+            repr_args.append("message={!r}".format(self.message))
+        if self.critical is not None:
+            repr_args.append("critical={!r}".format(self.critical))
+        if self.line is not None:
+            repr_args.append("line={!r}".format(self.line))
+        if self.column is not None:
+            repr_args.append("column={!r}".format(self.column))
+        return "AppManifestError(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['AppManifestError', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["AppManifestError", dict]]:
         if init is not None:
             try:
                 ourselves = AppManifestError(**init)
@@ -469,7 +775,9 @@ class AppManifestError(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AppManifestError', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["AppManifestError", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:

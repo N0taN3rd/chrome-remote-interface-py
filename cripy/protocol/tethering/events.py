@@ -1,12 +1,13 @@
 from typing import Any, List, Optional, Union
-from cripy.helpers import BaseEvent
+from types import SimpleNamespace
+
 try:
     from cripy.protocol.tethering.types import *
 except ImportError:
     pass
 
 
-class AcceptedEvent(BaseEvent):
+class AcceptedEvent(object):
     """
     Informs that port was successfully bound and got a specified connection id.
     """
@@ -24,8 +25,25 @@ class AcceptedEvent(BaseEvent):
         self.port = port
         self.connectionId = connectionId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.port is not None:
+            repr_args.append("port={!r}".format(self.port))
+        if self.connectionId is not None:
+            repr_args.append("connectionId={!r}".format(self.connectionId))
+        return "AcceptedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['AcceptedEvent', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["AcceptedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = AcceptedEvent(**init)
@@ -36,7 +54,9 @@ class AcceptedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AcceptedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["AcceptedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -46,7 +66,6 @@ class AcceptedEvent(BaseEvent):
             return init
 
 
-EVENT_TO_CLASS = {
-   "Tethering.accepted": AcceptedEvent,
-}
+EVENT_TO_CLASS = {"Tethering.accepted": AcceptedEvent}
 
+EVENT_NS = SimpleNamespace(Accepted="Tethering.accepted")

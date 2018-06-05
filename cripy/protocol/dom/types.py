@@ -3,7 +3,7 @@ from cripy.helpers import ProtocolType
 from cripy.protocol.page import types as Page
 
 
-class ShapeOutsideInfo(ProtocolType):
+class ShapeOutsideInfo(object):
     """
     CSS Shape Outside details.
     """
@@ -22,8 +22,27 @@ class ShapeOutsideInfo(ProtocolType):
         self.shape = shape
         self.marginShape = marginShape
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.bounds is not None:
+            repr_args.append("bounds={!r}".format(self.bounds))
+        if self.shape is not None:
+            repr_args.append("shape={!r}".format(self.shape))
+        if self.marginShape is not None:
+            repr_args.append("marginShape={!r}".format(self.marginShape))
+        return "ShapeOutsideInfo(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ShapeOutsideInfo', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["ShapeOutsideInfo", dict]]:
         if init is not None:
             try:
                 ourselves = ShapeOutsideInfo(**init)
@@ -34,7 +53,9 @@ class ShapeOutsideInfo(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ShapeOutsideInfo', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ShapeOutsideInfo", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -44,7 +65,7 @@ class ShapeOutsideInfo(ProtocolType):
             return init
 
 
-class Rect(ProtocolType):
+class Rect(object):
     """
     Rectangle.
     """
@@ -66,8 +87,29 @@ class Rect(ProtocolType):
         self.width = width
         self.height = height
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.x is not None:
+            repr_args.append("x={!r}".format(self.x))
+        if self.y is not None:
+            repr_args.append("y={!r}".format(self.y))
+        if self.width is not None:
+            repr_args.append("width={!r}".format(self.width))
+        if self.height is not None:
+            repr_args.append("height={!r}".format(self.height))
+        return "Rect(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['Rect', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["Rect", dict]]:
         if init is not None:
             try:
                 ourselves = Rect(**init)
@@ -78,7 +120,9 @@ class Rect(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Rect', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["Rect", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -88,7 +132,7 @@ class Rect(ProtocolType):
             return init
 
 
-class RGBA(ProtocolType):
+class RGBA(object):
     """
     A structure holding an RGBA color.
     """
@@ -110,8 +154,29 @@ class RGBA(ProtocolType):
         self.b = b
         self.a = a
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.r is not None:
+            repr_args.append("r={!r}".format(self.r))
+        if self.g is not None:
+            repr_args.append("g={!r}".format(self.g))
+        if self.b is not None:
+            repr_args.append("b={!r}".format(self.b))
+        if self.a is not None:
+            repr_args.append("a={!r}".format(self.a))
+        return "RGBA(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['RGBA', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["RGBA", dict]]:
         if init is not None:
             try:
                 ourselves = RGBA(**init)
@@ -122,7 +187,9 @@ class RGBA(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['RGBA', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["RGBA", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -132,13 +199,43 @@ class RGBA(ProtocolType):
             return init
 
 
-class Node(ProtocolType):
+class Node(object):
     """
     DOM interaction is implemented in terms of mirror objects that represent the actual DOM nodes.
 DOMNode is a base node mirror type.
     """
 
-    def __init__(self, nodeId: int, backendNodeId: int, nodeType: int, nodeName: str, localName: str, nodeValue: str, parentId: Optional[int] = None, childNodeCount: Optional[int] = None, children: Optional[List[Union['Node', dict]]] = None, attributes: Optional[List[str]] = None, documentURL: Optional[str] = None, baseURL: Optional[str] = None, publicId: Optional[str] = None, systemId: Optional[str] = None, internalSubset: Optional[str] = None, xmlVersion: Optional[str] = None, name: Optional[str] = None, value: Optional[str] = None, pseudoType: Optional[str] = None, shadowRootType: Optional[str] = None, frameId: Optional[str] = None, contentDocument: Optional[Union['Node', dict]] = None, shadowRoots: Optional[List[Union['Node', dict]]] = None, templateContent: Optional[Union['Node', dict]] = None, pseudoElements: Optional[List[Union['Node', dict]]] = None, importedDocument: Optional[Union['Node', dict]] = None, distributedNodes: Optional[List[Union['BackendNode', dict]]] = None, isSVG: Optional[bool] = None) -> None:
+    def __init__(
+        self,
+        nodeId: int,
+        backendNodeId: int,
+        nodeType: int,
+        nodeName: str,
+        localName: str,
+        nodeValue: str,
+        parentId: Optional[int] = None,
+        childNodeCount: Optional[int] = None,
+        children: Optional[List[Union["Node", dict]]] = None,
+        attributes: Optional[List[str]] = None,
+        documentURL: Optional[str] = None,
+        baseURL: Optional[str] = None,
+        publicId: Optional[str] = None,
+        systemId: Optional[str] = None,
+        internalSubset: Optional[str] = None,
+        xmlVersion: Optional[str] = None,
+        name: Optional[str] = None,
+        value: Optional[str] = None,
+        pseudoType: Optional[str] = None,
+        shadowRootType: Optional[str] = None,
+        frameId: Optional[str] = None,
+        contentDocument: Optional[Union["Node", dict]] = None,
+        shadowRoots: Optional[List[Union["Node", dict]]] = None,
+        templateContent: Optional[Union["Node", dict]] = None,
+        pseudoElements: Optional[List[Union["Node", dict]]] = None,
+        importedDocument: Optional[Union["Node", dict]] = None,
+        distributedNodes: Optional[List[Union["BackendNode", dict]]] = None,
+        isSVG: Optional[bool] = None,
+    ) -> None:
         """
         :param nodeId: Node identifier that is passed into the rest of the DOM messages as the `nodeId`. Backend will only push node with given `id` once. It is aware of all requested nodes and will only fire DOM events for nodes known to the client.
         :type nodeId: int
@@ -227,8 +324,77 @@ DOMNode is a base node mirror type.
         self.distributedNodes = BackendNode.safe_create_from_list(distributedNodes)
         self.isSVG = isSVG
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.nodeId is not None:
+            repr_args.append("nodeId={!r}".format(self.nodeId))
+        if self.parentId is not None:
+            repr_args.append("parentId={!r}".format(self.parentId))
+        if self.backendNodeId is not None:
+            repr_args.append("backendNodeId={!r}".format(self.backendNodeId))
+        if self.nodeType is not None:
+            repr_args.append("nodeType={!r}".format(self.nodeType))
+        if self.nodeName is not None:
+            repr_args.append("nodeName={!r}".format(self.nodeName))
+        if self.localName is not None:
+            repr_args.append("localName={!r}".format(self.localName))
+        if self.nodeValue is not None:
+            repr_args.append("nodeValue={!r}".format(self.nodeValue))
+        if self.childNodeCount is not None:
+            repr_args.append("childNodeCount={!r}".format(self.childNodeCount))
+        if self.children is not None:
+            repr_args.append("children={!r}".format(self.children))
+        if self.attributes is not None:
+            repr_args.append("attributes={!r}".format(self.attributes))
+        if self.documentURL is not None:
+            repr_args.append("documentURL={!r}".format(self.documentURL))
+        if self.baseURL is not None:
+            repr_args.append("baseURL={!r}".format(self.baseURL))
+        if self.publicId is not None:
+            repr_args.append("publicId={!r}".format(self.publicId))
+        if self.systemId is not None:
+            repr_args.append("systemId={!r}".format(self.systemId))
+        if self.internalSubset is not None:
+            repr_args.append("internalSubset={!r}".format(self.internalSubset))
+        if self.xmlVersion is not None:
+            repr_args.append("xmlVersion={!r}".format(self.xmlVersion))
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        if self.pseudoType is not None:
+            repr_args.append("pseudoType={!r}".format(self.pseudoType))
+        if self.shadowRootType is not None:
+            repr_args.append("shadowRootType={!r}".format(self.shadowRootType))
+        if self.frameId is not None:
+            repr_args.append("frameId={!r}".format(self.frameId))
+        if self.contentDocument is not None:
+            repr_args.append("contentDocument={!r}".format(self.contentDocument))
+        if self.shadowRoots is not None:
+            repr_args.append("shadowRoots={!r}".format(self.shadowRoots))
+        if self.templateContent is not None:
+            repr_args.append("templateContent={!r}".format(self.templateContent))
+        if self.pseudoElements is not None:
+            repr_args.append("pseudoElements={!r}".format(self.pseudoElements))
+        if self.importedDocument is not None:
+            repr_args.append("importedDocument={!r}".format(self.importedDocument))
+        if self.distributedNodes is not None:
+            repr_args.append("distributedNodes={!r}".format(self.distributedNodes))
+        if self.isSVG is not None:
+            repr_args.append("isSVG={!r}".format(self.isSVG))
+        return "Node(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['Node', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["Node", dict]]:
         if init is not None:
             try:
                 ourselves = Node(**init)
@@ -239,7 +405,9 @@ DOMNode is a base node mirror type.
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Node', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["Node", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -249,12 +417,21 @@ DOMNode is a base node mirror type.
             return init
 
 
-class BoxModel(ProtocolType):
+class BoxModel(object):
     """
     Box model.
     """
 
-    def __init__(self, content: list, padding: list, border: list, margin: list, width: int, height: int, shapeOutside: Optional[Union['ShapeOutsideInfo', dict]] = None) -> None:
+    def __init__(
+        self,
+        content: list,
+        padding: list,
+        border: list,
+        margin: list,
+        width: int,
+        height: int,
+        shapeOutside: Optional[Union["ShapeOutsideInfo", dict]] = None,
+    ) -> None:
         """
         :param content: Content box
         :type content: Any
@@ -280,8 +457,35 @@ class BoxModel(ProtocolType):
         self.height = height
         self.shapeOutside = ShapeOutsideInfo.safe_create(shapeOutside)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.content is not None:
+            repr_args.append("content={!r}".format(self.content))
+        if self.padding is not None:
+            repr_args.append("padding={!r}".format(self.padding))
+        if self.border is not None:
+            repr_args.append("border={!r}".format(self.border))
+        if self.margin is not None:
+            repr_args.append("margin={!r}".format(self.margin))
+        if self.width is not None:
+            repr_args.append("width={!r}".format(self.width))
+        if self.height is not None:
+            repr_args.append("height={!r}".format(self.height))
+        if self.shapeOutside is not None:
+            repr_args.append("shapeOutside={!r}".format(self.shapeOutside))
+        return "BoxModel(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['BoxModel', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["BoxModel", dict]]:
         if init is not None:
             try:
                 ourselves = BoxModel(**init)
@@ -292,7 +496,9 @@ class BoxModel(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['BoxModel', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["BoxModel", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -302,7 +508,7 @@ class BoxModel(ProtocolType):
             return init
 
 
-class BackendNode(ProtocolType):
+class BackendNode(object):
     """
     Backend node with a friendly name.
     """
@@ -321,8 +527,27 @@ class BackendNode(ProtocolType):
         self.nodeName = nodeName
         self.backendNodeId = backendNodeId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.nodeType is not None:
+            repr_args.append("nodeType={!r}".format(self.nodeType))
+        if self.nodeName is not None:
+            repr_args.append("nodeName={!r}".format(self.nodeName))
+        if self.backendNodeId is not None:
+            repr_args.append("backendNodeId={!r}".format(self.backendNodeId))
+        return "BackendNode(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['BackendNode', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["BackendNode", dict]]:
         if init is not None:
             try:
                 ourselves = BackendNode(**init)
@@ -333,7 +558,9 @@ class BackendNode(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['BackendNode', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["BackendNode", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:

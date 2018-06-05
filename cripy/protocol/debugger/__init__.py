@@ -10,12 +10,14 @@ class Debugger(object):
 breakpoints, stepping through execution, exploring stack traces, etc.
     """
 
-    dependencies = ['Runtime']
+    dependencies = ["Runtime"]
 
     def __init__(self, chrome):
         self.chrome = chrome
 
-    async def continueToLocation(self, location: dict, targetCallFrames: Optional[str] = None) -> Optional[dict]:
+    async def continueToLocation(
+        self, location: dict, targetCallFrames: Optional[str] = None
+    ) -> Optional[dict]:
         """
         :param location: Location to continue to.
         :type location: dict
@@ -24,21 +26,33 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if location is not None:
-            msg_dict['location'] = location
+            msg_dict["location"] = location
         if targetCallFrames is not None:
-            msg_dict['targetCallFrames'] = targetCallFrames
-        res = await self.chrome.send('Debugger.continueToLocation', msg_dict)
-        return res
+            msg_dict["targetCallFrames"] = targetCallFrames
+        mayberes = await self.chrome.send("Debugger.continueToLocation", msg_dict)
+        return mayberes
 
     async def disable(self) -> Optional[dict]:
-        res = await self.chrome.send('Debugger.disable')
-        return res
+        mayberes = await self.chrome.send("Debugger.disable")
+        return mayberes
 
     async def enable(self) -> Optional[dict]:
-        res = await self.chrome.send('Debugger.enable')
+        mayberes = await self.chrome.send("Debugger.enable")
+        res = await mayberes
         return res
 
-    async def evaluateOnCallFrame(self, callFrameId: str, expression: str, objectGroup: Optional[str] = None, includeCommandLineAPI: Optional[bool] = None, silent: Optional[bool] = None, returnByValue: Optional[bool] = None, generatePreview: Optional[bool] = None, throwOnSideEffect: Optional[bool] = None, timeout: Optional[float] = None) -> Optional[dict]:
+    async def evaluateOnCallFrame(
+        self,
+        callFrameId: str,
+        expression: str,
+        objectGroup: Optional[str] = None,
+        includeCommandLineAPI: Optional[bool] = None,
+        silent: Optional[bool] = None,
+        returnByValue: Optional[bool] = None,
+        generatePreview: Optional[bool] = None,
+        throwOnSideEffect: Optional[bool] = None,
+        timeout: Optional[float] = None,
+    ) -> Optional[dict]:
         """
         :param callFrameId: Call frame identifier to evaluate on.
         :type callFrameId: str
@@ -61,29 +75,37 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if callFrameId is not None:
-            msg_dict['callFrameId'] = callFrameId
+            msg_dict["callFrameId"] = callFrameId
         if expression is not None:
-            msg_dict['expression'] = expression
+            msg_dict["expression"] = expression
         if objectGroup is not None:
-            msg_dict['objectGroup'] = objectGroup
+            msg_dict["objectGroup"] = objectGroup
         if includeCommandLineAPI is not None:
-            msg_dict['includeCommandLineAPI'] = includeCommandLineAPI
+            msg_dict["includeCommandLineAPI"] = includeCommandLineAPI
         if silent is not None:
-            msg_dict['silent'] = silent
+            msg_dict["silent"] = silent
         if returnByValue is not None:
-            msg_dict['returnByValue'] = returnByValue
+            msg_dict["returnByValue"] = returnByValue
         if generatePreview is not None:
-            msg_dict['generatePreview'] = generatePreview
+            msg_dict["generatePreview"] = generatePreview
         if throwOnSideEffect is not None:
-            msg_dict['throwOnSideEffect'] = throwOnSideEffect
+            msg_dict["throwOnSideEffect"] = throwOnSideEffect
         if timeout is not None:
-            msg_dict['timeout'] = timeout
-        res = await self.chrome.send('Debugger.evaluateOnCallFrame', msg_dict)
-        res['result'] = Runtime.RemoteObject.safe_create(res['result'])
-        res['exceptionDetails'] = Runtime.ExceptionDetails.safe_create(res['exceptionDetails'])
+            msg_dict["timeout"] = timeout
+        mayberes = await self.chrome.send("Debugger.evaluateOnCallFrame", msg_dict)
+        res = await mayberes
+        res["result"] = Runtime.RemoteObject.safe_create(res["result"])
+        res["exceptionDetails"] = Runtime.ExceptionDetails.safe_create(
+            res["exceptionDetails"]
+        )
         return res
 
-    async def getPossibleBreakpoints(self, start: dict, end: Optional[dict] = None, restrictToFunction: Optional[bool] = None) -> Optional[dict]:
+    async def getPossibleBreakpoints(
+        self,
+        start: dict,
+        end: Optional[dict] = None,
+        restrictToFunction: Optional[bool] = None,
+    ) -> Optional[dict]:
         """
         :param start: Start of range to search possible breakpoint locations in.
         :type start: dict
@@ -94,13 +116,14 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if start is not None:
-            msg_dict['start'] = start
+            msg_dict["start"] = start
         if end is not None:
-            msg_dict['end'] = end
+            msg_dict["end"] = end
         if restrictToFunction is not None:
-            msg_dict['restrictToFunction'] = restrictToFunction
-        res = await self.chrome.send('Debugger.getPossibleBreakpoints', msg_dict)
-        res['locations'] = Types.BreakLocation.safe_create_from_list(res['locations'])
+            msg_dict["restrictToFunction"] = restrictToFunction
+        mayberes = await self.chrome.send("Debugger.getPossibleBreakpoints", msg_dict)
+        res = await mayberes
+        res["locations"] = Types.BreakLocation.safe_create_from_list(res["locations"])
         return res
 
     async def getScriptSource(self, scriptId: str) -> Optional[dict]:
@@ -110,8 +133,9 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if scriptId is not None:
-            msg_dict['scriptId'] = scriptId
-        res = await self.chrome.send('Debugger.getScriptSource', msg_dict)
+            msg_dict["scriptId"] = scriptId
+        mayberes = await self.chrome.send("Debugger.getScriptSource", msg_dict)
+        res = await mayberes
         return res
 
     async def getStackTrace(self, stackTraceId: dict) -> Optional[dict]:
@@ -121,14 +145,15 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if stackTraceId is not None:
-            msg_dict['stackTraceId'] = stackTraceId
-        res = await self.chrome.send('Debugger.getStackTrace', msg_dict)
-        res['stackTrace'] = Runtime.StackTrace.safe_create(res['stackTrace'])
+            msg_dict["stackTraceId"] = stackTraceId
+        mayberes = await self.chrome.send("Debugger.getStackTrace", msg_dict)
+        res = await mayberes
+        res["stackTrace"] = Runtime.StackTrace.safe_create(res["stackTrace"])
         return res
 
     async def pause(self) -> Optional[dict]:
-        res = await self.chrome.send('Debugger.pause')
-        return res
+        mayberes = await self.chrome.send("Debugger.pause")
+        return mayberes
 
     async def pauseOnAsyncCall(self, parentStackTraceId: dict) -> Optional[dict]:
         """
@@ -137,9 +162,9 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if parentStackTraceId is not None:
-            msg_dict['parentStackTraceId'] = parentStackTraceId
-        res = await self.chrome.send('Debugger.pauseOnAsyncCall', msg_dict)
-        return res
+            msg_dict["parentStackTraceId"] = parentStackTraceId
+        mayberes = await self.chrome.send("Debugger.pauseOnAsyncCall", msg_dict)
+        return mayberes
 
     async def removeBreakpoint(self, breakpointId: str) -> Optional[dict]:
         """
@@ -148,9 +173,9 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if breakpointId is not None:
-            msg_dict['breakpointId'] = breakpointId
-        res = await self.chrome.send('Debugger.removeBreakpoint', msg_dict)
-        return res
+            msg_dict["breakpointId"] = breakpointId
+        mayberes = await self.chrome.send("Debugger.removeBreakpoint", msg_dict)
+        return mayberes
 
     async def restartFrame(self, callFrameId: str) -> Optional[dict]:
         """
@@ -159,22 +184,31 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if callFrameId is not None:
-            msg_dict['callFrameId'] = callFrameId
-        res = await self.chrome.send('Debugger.restartFrame', msg_dict)
-        res['callFrames'] = Types.CallFrame.safe_create_from_list(res['callFrames'])
-        res['asyncStackTrace'] = Runtime.StackTrace.safe_create(res['asyncStackTrace'])
-        res['asyncStackTraceId'] = Runtime.StackTraceId.safe_create(res['asyncStackTraceId'])
+            msg_dict["callFrameId"] = callFrameId
+        mayberes = await self.chrome.send("Debugger.restartFrame", msg_dict)
+        res = await mayberes
+        res["callFrames"] = Types.CallFrame.safe_create_from_list(res["callFrames"])
+        res["asyncStackTrace"] = Runtime.StackTrace.safe_create(res["asyncStackTrace"])
+        res["asyncStackTraceId"] = Runtime.StackTraceId.safe_create(
+            res["asyncStackTraceId"]
+        )
         return res
 
     async def resume(self) -> Optional[dict]:
-        res = await self.chrome.send('Debugger.resume')
-        return res
+        mayberes = await self.chrome.send("Debugger.resume")
+        return mayberes
 
     async def scheduleStepIntoAsync(self) -> Optional[dict]:
-        res = await self.chrome.send('Debugger.scheduleStepIntoAsync')
-        return res
+        mayberes = await self.chrome.send("Debugger.scheduleStepIntoAsync")
+        return mayberes
 
-    async def searchInContent(self, scriptId: str, query: str, caseSensitive: Optional[bool] = None, isRegex: Optional[bool] = None) -> Optional[dict]:
+    async def searchInContent(
+        self,
+        scriptId: str,
+        query: str,
+        caseSensitive: Optional[bool] = None,
+        isRegex: Optional[bool] = None,
+    ) -> Optional[dict]:
         """
         :param scriptId: Id of the script to search in.
         :type scriptId: str
@@ -187,15 +221,16 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if scriptId is not None:
-            msg_dict['scriptId'] = scriptId
+            msg_dict["scriptId"] = scriptId
         if query is not None:
-            msg_dict['query'] = query
+            msg_dict["query"] = query
         if caseSensitive is not None:
-            msg_dict['caseSensitive'] = caseSensitive
+            msg_dict["caseSensitive"] = caseSensitive
         if isRegex is not None:
-            msg_dict['isRegex'] = isRegex
-        res = await self.chrome.send('Debugger.searchInContent', msg_dict)
-        res['result'] = Types.SearchMatch.safe_create_from_list(res['result'])
+            msg_dict["isRegex"] = isRegex
+        mayberes = await self.chrome.send("Debugger.searchInContent", msg_dict)
+        res = await mayberes
+        res["result"] = Types.SearchMatch.safe_create_from_list(res["result"])
         return res
 
     async def setAsyncCallStackDepth(self, maxDepth: int) -> Optional[dict]:
@@ -205,9 +240,9 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if maxDepth is not None:
-            msg_dict['maxDepth'] = maxDepth
-        res = await self.chrome.send('Debugger.setAsyncCallStackDepth', msg_dict)
-        return res
+            msg_dict["maxDepth"] = maxDepth
+        mayberes = await self.chrome.send("Debugger.setAsyncCallStackDepth", msg_dict)
+        return mayberes
 
     async def setBlackboxPatterns(self, patterns: List[str]) -> Optional[dict]:
         """
@@ -216,11 +251,13 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if patterns is not None:
-            msg_dict['patterns'] = patterns
-        res = await self.chrome.send('Debugger.setBlackboxPatterns', msg_dict)
-        return res
+            msg_dict["patterns"] = patterns
+        mayberes = await self.chrome.send("Debugger.setBlackboxPatterns", msg_dict)
+        return mayberes
 
-    async def setBlackboxedRanges(self, scriptId: str, positions: List[dict]) -> Optional[dict]:
+    async def setBlackboxedRanges(
+        self, scriptId: str, positions: List[dict]
+    ) -> Optional[dict]:
         """
         :param scriptId: Id of the script.
         :type scriptId: str
@@ -229,13 +266,15 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if scriptId is not None:
-            msg_dict['scriptId'] = scriptId
+            msg_dict["scriptId"] = scriptId
         if positions is not None:
-            msg_dict['positions'] = positions
-        res = await self.chrome.send('Debugger.setBlackboxedRanges', msg_dict)
-        return res
+            msg_dict["positions"] = positions
+        mayberes = await self.chrome.send("Debugger.setBlackboxedRanges", msg_dict)
+        return mayberes
 
-    async def setBreakpoint(self, location: dict, condition: Optional[str] = None) -> Optional[dict]:
+    async def setBreakpoint(
+        self, location: dict, condition: Optional[str] = None
+    ) -> Optional[dict]:
         """
         :param location: Location to set breakpoint in.
         :type location: dict
@@ -244,14 +283,23 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if location is not None:
-            msg_dict['location'] = location
+            msg_dict["location"] = location
         if condition is not None:
-            msg_dict['condition'] = condition
-        res = await self.chrome.send('Debugger.setBreakpoint', msg_dict)
-        res['actualLocation'] = Types.Location.safe_create(res['actualLocation'])
+            msg_dict["condition"] = condition
+        mayberes = await self.chrome.send("Debugger.setBreakpoint", msg_dict)
+        res = await mayberes
+        res["actualLocation"] = Types.Location.safe_create(res["actualLocation"])
         return res
 
-    async def setBreakpointByUrl(self, lineNumber: int, url: Optional[str] = None, urlRegex: Optional[str] = None, scriptHash: Optional[str] = None, columnNumber: Optional[int] = None, condition: Optional[str] = None) -> Optional[dict]:
+    async def setBreakpointByUrl(
+        self,
+        lineNumber: int,
+        url: Optional[str] = None,
+        urlRegex: Optional[str] = None,
+        scriptHash: Optional[str] = None,
+        columnNumber: Optional[int] = None,
+        condition: Optional[str] = None,
+    ) -> Optional[dict]:
         """
         :param lineNumber: Line number to set breakpoint at.
         :type lineNumber: int
@@ -268,22 +316,25 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if lineNumber is not None:
-            msg_dict['lineNumber'] = lineNumber
+            msg_dict["lineNumber"] = lineNumber
         if url is not None:
-            msg_dict['url'] = url
+            msg_dict["url"] = url
         if urlRegex is not None:
-            msg_dict['urlRegex'] = urlRegex
+            msg_dict["urlRegex"] = urlRegex
         if scriptHash is not None:
-            msg_dict['scriptHash'] = scriptHash
+            msg_dict["scriptHash"] = scriptHash
         if columnNumber is not None:
-            msg_dict['columnNumber'] = columnNumber
+            msg_dict["columnNumber"] = columnNumber
         if condition is not None:
-            msg_dict['condition'] = condition
-        res = await self.chrome.send('Debugger.setBreakpointByUrl', msg_dict)
-        res['locations'] = Types.Location.safe_create_from_list(res['locations'])
+            msg_dict["condition"] = condition
+        mayberes = await self.chrome.send("Debugger.setBreakpointByUrl", msg_dict)
+        res = await mayberes
+        res["locations"] = Types.Location.safe_create_from_list(res["locations"])
         return res
 
-    async def setBreakpointOnFunctionCall(self, objectId: str, condition: Optional[str] = None) -> Optional[dict]:
+    async def setBreakpointOnFunctionCall(
+        self, objectId: str, condition: Optional[str] = None
+    ) -> Optional[dict]:
         """
         :param objectId: Function object id.
         :type objectId: str
@@ -292,10 +343,13 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if objectId is not None:
-            msg_dict['objectId'] = objectId
+            msg_dict["objectId"] = objectId
         if condition is not None:
-            msg_dict['condition'] = condition
-        res = await self.chrome.send('Debugger.setBreakpointOnFunctionCall', msg_dict)
+            msg_dict["condition"] = condition
+        mayberes = await self.chrome.send(
+            "Debugger.setBreakpointOnFunctionCall", msg_dict
+        )
+        res = await mayberes
         return res
 
     async def setBreakpointsActive(self, active: bool) -> Optional[dict]:
@@ -305,9 +359,9 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if active is not None:
-            msg_dict['active'] = active
-        res = await self.chrome.send('Debugger.setBreakpointsActive', msg_dict)
-        return res
+            msg_dict["active"] = active
+        mayberes = await self.chrome.send("Debugger.setBreakpointsActive", msg_dict)
+        return mayberes
 
     async def setPauseOnExceptions(self, state: str) -> Optional[dict]:
         """
@@ -316,9 +370,9 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if state is not None:
-            msg_dict['state'] = state
-        res = await self.chrome.send('Debugger.setPauseOnExceptions', msg_dict)
-        return res
+            msg_dict["state"] = state
+        mayberes = await self.chrome.send("Debugger.setPauseOnExceptions", msg_dict)
+        return mayberes
 
     async def setReturnValue(self, newValue: dict) -> Optional[dict]:
         """
@@ -327,11 +381,13 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if newValue is not None:
-            msg_dict['newValue'] = newValue
-        res = await self.chrome.send('Debugger.setReturnValue', msg_dict)
-        return res
+            msg_dict["newValue"] = newValue
+        mayberes = await self.chrome.send("Debugger.setReturnValue", msg_dict)
+        return mayberes
 
-    async def setScriptSource(self, scriptId: str, scriptSource: str, dryRun: Optional[bool] = None) -> Optional[dict]:
+    async def setScriptSource(
+        self, scriptId: str, scriptSource: str, dryRun: Optional[bool] = None
+    ) -> Optional[dict]:
         """
         :param scriptId: Id of the script to edit.
         :type scriptId: str
@@ -342,16 +398,21 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if scriptId is not None:
-            msg_dict['scriptId'] = scriptId
+            msg_dict["scriptId"] = scriptId
         if scriptSource is not None:
-            msg_dict['scriptSource'] = scriptSource
+            msg_dict["scriptSource"] = scriptSource
         if dryRun is not None:
-            msg_dict['dryRun'] = dryRun
-        res = await self.chrome.send('Debugger.setScriptSource', msg_dict)
-        res['callFrames'] = Types.CallFrame.safe_create_from_list(res['callFrames'])
-        res['asyncStackTrace'] = Runtime.StackTrace.safe_create(res['asyncStackTrace'])
-        res['asyncStackTraceId'] = Runtime.StackTraceId.safe_create(res['asyncStackTraceId'])
-        res['exceptionDetails'] = Runtime.ExceptionDetails.safe_create(res['exceptionDetails'])
+            msg_dict["dryRun"] = dryRun
+        mayberes = await self.chrome.send("Debugger.setScriptSource", msg_dict)
+        res = await mayberes
+        res["callFrames"] = Types.CallFrame.safe_create_from_list(res["callFrames"])
+        res["asyncStackTrace"] = Runtime.StackTrace.safe_create(res["asyncStackTrace"])
+        res["asyncStackTraceId"] = Runtime.StackTraceId.safe_create(
+            res["asyncStackTraceId"]
+        )
+        res["exceptionDetails"] = Runtime.ExceptionDetails.safe_create(
+            res["exceptionDetails"]
+        )
         return res
 
     async def setSkipAllPauses(self, skip: bool) -> Optional[dict]:
@@ -361,11 +422,13 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if skip is not None:
-            msg_dict['skip'] = skip
-        res = await self.chrome.send('Debugger.setSkipAllPauses', msg_dict)
-        return res
+            msg_dict["skip"] = skip
+        mayberes = await self.chrome.send("Debugger.setSkipAllPauses", msg_dict)
+        return mayberes
 
-    async def setVariableValue(self, scopeNumber: int, variableName: str, newValue: dict, callFrameId: str) -> Optional[dict]:
+    async def setVariableValue(
+        self, scopeNumber: int, variableName: str, newValue: dict, callFrameId: str
+    ) -> Optional[dict]:
         """
         :param scopeNumber: 0-based number of scope as was listed in scope chain. Only 'local', 'closure' and 'catch' scope types are allowed. Other scopes could be manipulated manually.
         :type scopeNumber: int
@@ -378,15 +441,15 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if scopeNumber is not None:
-            msg_dict['scopeNumber'] = scopeNumber
+            msg_dict["scopeNumber"] = scopeNumber
         if variableName is not None:
-            msg_dict['variableName'] = variableName
+            msg_dict["variableName"] = variableName
         if newValue is not None:
-            msg_dict['newValue'] = newValue
+            msg_dict["newValue"] = newValue
         if callFrameId is not None:
-            msg_dict['callFrameId'] = callFrameId
-        res = await self.chrome.send('Debugger.setVariableValue', msg_dict)
-        return res
+            msg_dict["callFrameId"] = callFrameId
+        mayberes = await self.chrome.send("Debugger.setVariableValue", msg_dict)
+        return mayberes
 
     async def stepInto(self, breakOnAsyncCall: Optional[bool] = None) -> Optional[dict]:
         """
@@ -395,19 +458,18 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         """
         msg_dict = dict()
         if breakOnAsyncCall is not None:
-            msg_dict['breakOnAsyncCall'] = breakOnAsyncCall
-        res = await self.chrome.send('Debugger.stepInto', msg_dict)
-        return res
+            msg_dict["breakOnAsyncCall"] = breakOnAsyncCall
+        mayberes = await self.chrome.send("Debugger.stepInto", msg_dict)
+        return mayberes
 
     async def stepOut(self) -> Optional[dict]:
-        res = await self.chrome.send('Debugger.stepOut')
-        return res
+        mayberes = await self.chrome.send("Debugger.stepOut")
+        return mayberes
 
     async def stepOver(self) -> Optional[dict]:
-        res = await self.chrome.send('Debugger.stepOver')
-        return res
+        mayberes = await self.chrome.send("Debugger.stepOver")
+        return mayberes
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

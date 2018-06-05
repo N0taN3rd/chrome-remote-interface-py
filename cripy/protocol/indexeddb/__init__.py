@@ -3,12 +3,14 @@ from cripy.protocol.indexeddb import types as Types
 
 
 class IndexedDB(object):
-    dependencies = ['Runtime']
+    dependencies = ["Runtime"]
 
     def __init__(self, chrome):
         self.chrome = chrome
 
-    async def clearObjectStore(self, securityOrigin: str, databaseName: str, objectStoreName: str) -> Optional[dict]:
+    async def clearObjectStore(
+        self, securityOrigin: str, databaseName: str, objectStoreName: str
+    ) -> Optional[dict]:
         """
         :param securityOrigin: Security origin.
         :type securityOrigin: str
@@ -19,15 +21,17 @@ class IndexedDB(object):
         """
         msg_dict = dict()
         if securityOrigin is not None:
-            msg_dict['securityOrigin'] = securityOrigin
+            msg_dict["securityOrigin"] = securityOrigin
         if databaseName is not None:
-            msg_dict['databaseName'] = databaseName
+            msg_dict["databaseName"] = databaseName
         if objectStoreName is not None:
-            msg_dict['objectStoreName'] = objectStoreName
-        res = await self.chrome.send('IndexedDB.clearObjectStore', msg_dict)
-        return res
+            msg_dict["objectStoreName"] = objectStoreName
+        mayberes = await self.chrome.send("IndexedDB.clearObjectStore", msg_dict)
+        return mayberes
 
-    async def deleteDatabase(self, securityOrigin: str, databaseName: str) -> Optional[dict]:
+    async def deleteDatabase(
+        self, securityOrigin: str, databaseName: str
+    ) -> Optional[dict]:
         """
         :param securityOrigin: Security origin.
         :type securityOrigin: str
@@ -36,13 +40,19 @@ class IndexedDB(object):
         """
         msg_dict = dict()
         if securityOrigin is not None:
-            msg_dict['securityOrigin'] = securityOrigin
+            msg_dict["securityOrigin"] = securityOrigin
         if databaseName is not None:
-            msg_dict['databaseName'] = databaseName
-        res = await self.chrome.send('IndexedDB.deleteDatabase', msg_dict)
-        return res
+            msg_dict["databaseName"] = databaseName
+        mayberes = await self.chrome.send("IndexedDB.deleteDatabase", msg_dict)
+        return mayberes
 
-    async def deleteObjectStoreEntries(self, securityOrigin: str, databaseName: str, objectStoreName: str, keyRange: dict) -> Optional[dict]:
+    async def deleteObjectStoreEntries(
+        self,
+        securityOrigin: str,
+        databaseName: str,
+        objectStoreName: str,
+        keyRange: dict,
+    ) -> Optional[dict]:
         """
         :param securityOrigin: The securityOrigin
         :type securityOrigin: str
@@ -55,25 +65,36 @@ class IndexedDB(object):
         """
         msg_dict = dict()
         if securityOrigin is not None:
-            msg_dict['securityOrigin'] = securityOrigin
+            msg_dict["securityOrigin"] = securityOrigin
         if databaseName is not None:
-            msg_dict['databaseName'] = databaseName
+            msg_dict["databaseName"] = databaseName
         if objectStoreName is not None:
-            msg_dict['objectStoreName'] = objectStoreName
+            msg_dict["objectStoreName"] = objectStoreName
         if keyRange is not None:
-            msg_dict['keyRange'] = keyRange
-        res = await self.chrome.send('IndexedDB.deleteObjectStoreEntries', msg_dict)
-        return res
+            msg_dict["keyRange"] = keyRange
+        mayberes = await self.chrome.send(
+            "IndexedDB.deleteObjectStoreEntries", msg_dict
+        )
+        return mayberes
 
     async def disable(self) -> Optional[dict]:
-        res = await self.chrome.send('IndexedDB.disable')
-        return res
+        mayberes = await self.chrome.send("IndexedDB.disable")
+        return mayberes
 
     async def enable(self) -> Optional[dict]:
-        res = await self.chrome.send('IndexedDB.enable')
-        return res
+        mayberes = await self.chrome.send("IndexedDB.enable")
+        return mayberes
 
-    async def requestData(self, securityOrigin: str, databaseName: str, objectStoreName: str, indexName: str, skipCount: int, pageSize: int, keyRange: Optional[dict] = None) -> Optional[dict]:
+    async def requestData(
+        self,
+        securityOrigin: str,
+        databaseName: str,
+        objectStoreName: str,
+        indexName: str,
+        skipCount: int,
+        pageSize: int,
+        keyRange: Optional[dict] = None,
+    ) -> Optional[dict]:
         """
         :param securityOrigin: Security origin.
         :type securityOrigin: str
@@ -92,24 +113,29 @@ class IndexedDB(object):
         """
         msg_dict = dict()
         if securityOrigin is not None:
-            msg_dict['securityOrigin'] = securityOrigin
+            msg_dict["securityOrigin"] = securityOrigin
         if databaseName is not None:
-            msg_dict['databaseName'] = databaseName
+            msg_dict["databaseName"] = databaseName
         if objectStoreName is not None:
-            msg_dict['objectStoreName'] = objectStoreName
+            msg_dict["objectStoreName"] = objectStoreName
         if indexName is not None:
-            msg_dict['indexName'] = indexName
+            msg_dict["indexName"] = indexName
         if skipCount is not None:
-            msg_dict['skipCount'] = skipCount
+            msg_dict["skipCount"] = skipCount
         if pageSize is not None:
-            msg_dict['pageSize'] = pageSize
+            msg_dict["pageSize"] = pageSize
         if keyRange is not None:
-            msg_dict['keyRange'] = keyRange
-        res = await self.chrome.send('IndexedDB.requestData', msg_dict)
-        res['objectStoreDataEntries'] = Types.DataEntry.safe_create_from_list(res['objectStoreDataEntries'])
+            msg_dict["keyRange"] = keyRange
+        mayberes = await self.chrome.send("IndexedDB.requestData", msg_dict)
+        res = await mayberes
+        res["objectStoreDataEntries"] = Types.DataEntry.safe_create_from_list(
+            res["objectStoreDataEntries"]
+        )
         return res
 
-    async def requestDatabase(self, securityOrigin: str, databaseName: str) -> Optional[dict]:
+    async def requestDatabase(
+        self, securityOrigin: str, databaseName: str
+    ) -> Optional[dict]:
         """
         :param securityOrigin: Security origin.
         :type securityOrigin: str
@@ -118,11 +144,14 @@ class IndexedDB(object):
         """
         msg_dict = dict()
         if securityOrigin is not None:
-            msg_dict['securityOrigin'] = securityOrigin
+            msg_dict["securityOrigin"] = securityOrigin
         if databaseName is not None:
-            msg_dict['databaseName'] = databaseName
-        res = await self.chrome.send('IndexedDB.requestDatabase', msg_dict)
-        res['databaseWithObjectStores'] = Types.DatabaseWithObjectStores.safe_create(res['databaseWithObjectStores'])
+            msg_dict["databaseName"] = databaseName
+        mayberes = await self.chrome.send("IndexedDB.requestDatabase", msg_dict)
+        res = await mayberes
+        res["databaseWithObjectStores"] = Types.DatabaseWithObjectStores.safe_create(
+            res["databaseWithObjectStores"]
+        )
         return res
 
     async def requestDatabaseNames(self, securityOrigin: str) -> Optional[dict]:
@@ -132,11 +161,11 @@ class IndexedDB(object):
         """
         msg_dict = dict()
         if securityOrigin is not None:
-            msg_dict['securityOrigin'] = securityOrigin
-        res = await self.chrome.send('IndexedDB.requestDatabaseNames', msg_dict)
+            msg_dict["securityOrigin"] = securityOrigin
+        mayberes = await self.chrome.send("IndexedDB.requestDatabaseNames", msg_dict)
+        res = await mayberes
         return res
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return None
-

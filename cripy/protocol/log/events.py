@@ -1,12 +1,13 @@
 from typing import Any, List, Optional, Union
-from cripy.helpers import BaseEvent
+from types import SimpleNamespace
+
 try:
     from cripy.protocol.log.types import *
 except ImportError:
     pass
 
 
-class EntryAddedEvent(BaseEvent):
+class EntryAddedEvent(object):
     """
     Issued when new message was logged.
     """
@@ -21,8 +22,23 @@ class EntryAddedEvent(BaseEvent):
         super().__init__()
         self.entry = LogEntry.safe_create(entry)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.entry is not None:
+            repr_args.append("entry={!r}".format(self.entry))
+        return "EntryAddedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['EntryAddedEvent', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["EntryAddedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = EntryAddedEvent(**init)
@@ -33,7 +49,9 @@ class EntryAddedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['EntryAddedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["EntryAddedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -43,7 +61,6 @@ class EntryAddedEvent(BaseEvent):
             return init
 
 
-EVENT_TO_CLASS = {
-   "Log.entryAdded": EntryAddedEvent,
-}
+EVENT_TO_CLASS = {"Log.entryAdded": EntryAddedEvent}
 
+EVENT_NS = SimpleNamespace(EntryAdded="Log.entryAdded")

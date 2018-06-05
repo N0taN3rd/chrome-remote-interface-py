@@ -1,12 +1,13 @@
 from typing import Any, List, Optional, Union
-from cripy.helpers import BaseEvent
+from types import SimpleNamespace
+
 try:
     from cripy.protocol.database.types import *
 except ImportError:
     pass
 
 
-class AddDatabaseEvent(BaseEvent):
+class AddDatabaseEvent(object):
 
     event = "Database.addDatabase"
 
@@ -18,8 +19,23 @@ class AddDatabaseEvent(BaseEvent):
         super().__init__()
         self.database = Database.safe_create(database)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.database is not None:
+            repr_args.append("database={!r}".format(self.database))
+        return "AddDatabaseEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['AddDatabaseEvent', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["AddDatabaseEvent", dict]]:
         if init is not None:
             try:
                 ourselves = AddDatabaseEvent(**init)
@@ -30,7 +46,9 @@ class AddDatabaseEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AddDatabaseEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["AddDatabaseEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -40,7 +58,6 @@ class AddDatabaseEvent(BaseEvent):
             return init
 
 
-EVENT_TO_CLASS = {
-   "Database.addDatabase": AddDatabaseEvent,
-}
+EVENT_TO_CLASS = {"Database.addDatabase": AddDatabaseEvent}
 
+EVENT_NS = SimpleNamespace(AddDatabase="Database.addDatabase")

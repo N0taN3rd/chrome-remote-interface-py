@@ -8,17 +8,16 @@ class Security(object):
     Security
     """
 
-
     def __init__(self, chrome):
         self.chrome = chrome
 
     async def disable(self) -> Optional[dict]:
-        res = await self.chrome.send('Security.disable')
-        return res
+        mayberes = await self.chrome.send("Security.disable")
+        return mayberes
 
     async def enable(self) -> Optional[dict]:
-        res = await self.chrome.send('Security.enable')
-        return res
+        mayberes = await self.chrome.send("Security.enable")
+        return mayberes
 
     async def setIgnoreCertificateErrors(self, ignore: bool) -> Optional[dict]:
         """
@@ -27,9 +26,11 @@ class Security(object):
         """
         msg_dict = dict()
         if ignore is not None:
-            msg_dict['ignore'] = ignore
-        res = await self.chrome.send('Security.setIgnoreCertificateErrors', msg_dict)
-        return res
+            msg_dict["ignore"] = ignore
+        mayberes = await self.chrome.send(
+            "Security.setIgnoreCertificateErrors", msg_dict
+        )
+        return mayberes
 
     async def handleCertificateError(self, eventId: int, action: str) -> Optional[dict]:
         """
@@ -40,11 +41,11 @@ class Security(object):
         """
         msg_dict = dict()
         if eventId is not None:
-            msg_dict['eventId'] = eventId
+            msg_dict["eventId"] = eventId
         if action is not None:
-            msg_dict['action'] = action
-        res = await self.chrome.send('Security.handleCertificateError', msg_dict)
-        return res
+            msg_dict["action"] = action
+        mayberes = await self.chrome.send("Security.handleCertificateError", msg_dict)
+        return mayberes
 
     async def setOverrideCertificateErrors(self, override: bool) -> Optional[dict]:
         """
@@ -53,11 +54,12 @@ class Security(object):
         """
         msg_dict = dict()
         if override is not None:
-            msg_dict['override'] = override
-        res = await self.chrome.send('Security.setOverrideCertificateErrors', msg_dict)
-        return res
+            msg_dict["override"] = override
+        mayberes = await self.chrome.send(
+            "Security.setOverrideCertificateErrors", msg_dict
+        )
+        return mayberes
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

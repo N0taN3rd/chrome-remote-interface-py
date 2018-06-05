@@ -1,6 +1,6 @@
 from typing import Any, List, Optional, Union
-from cripy.protocol.debugger import types as Debugger
 from cripy.protocol.io import types as IO
+from cripy.protocol.debugger import types as Debugger
 from cripy.protocol.network import events as Events
 from cripy.protocol.network import types as Types
 
@@ -11,32 +11,45 @@ class Network(object):
 file, data and other requests and responses, their headers, bodies, timing, etc.
     """
 
-    dependencies = ['Debugger', 'Runtime', 'Security']
+    dependencies = ["Debugger", "Runtime", "Security"]
 
     def __init__(self, chrome):
         self.chrome = chrome
 
     async def canClearBrowserCache(self) -> Optional[dict]:
-        res = await self.chrome.send('Network.canClearBrowserCache')
+        mayberes = await self.chrome.send("Network.canClearBrowserCache")
+        res = await mayberes
         return res
 
     async def canClearBrowserCookies(self) -> Optional[dict]:
-        res = await self.chrome.send('Network.canClearBrowserCookies')
+        mayberes = await self.chrome.send("Network.canClearBrowserCookies")
+        res = await mayberes
         return res
 
     async def canEmulateNetworkConditions(self) -> Optional[dict]:
-        res = await self.chrome.send('Network.canEmulateNetworkConditions')
+        mayberes = await self.chrome.send("Network.canEmulateNetworkConditions")
+        res = await mayberes
         return res
 
     async def clearBrowserCache(self) -> Optional[dict]:
-        res = await self.chrome.send('Network.clearBrowserCache')
-        return res
+        mayberes = await self.chrome.send("Network.clearBrowserCache")
+        return mayberes
 
     async def clearBrowserCookies(self) -> Optional[dict]:
-        res = await self.chrome.send('Network.clearBrowserCookies')
-        return res
+        mayberes = await self.chrome.send("Network.clearBrowserCookies")
+        return mayberes
 
-    async def continueInterceptedRequest(self, interceptionId: str, errorReason: Optional[str] = None, rawResponse: Optional[str] = None, url: Optional[str] = None, method: Optional[str] = None, postData: Optional[str] = None, headers: Optional[dict] = None, authChallengeResponse: Optional[dict] = None) -> Optional[dict]:
+    async def continueInterceptedRequest(
+        self,
+        interceptionId: str,
+        errorReason: Optional[str] = None,
+        rawResponse: Optional[str] = None,
+        url: Optional[str] = None,
+        method: Optional[str] = None,
+        postData: Optional[str] = None,
+        headers: Optional[dict] = None,
+        authChallengeResponse: Optional[dict] = None,
+    ) -> Optional[dict]:
         """
         :param interceptionId: The interceptionId
         :type interceptionId: str
@@ -57,25 +70,33 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if interceptionId is not None:
-            msg_dict['interceptionId'] = interceptionId
+            msg_dict["interceptionId"] = interceptionId
         if errorReason is not None:
-            msg_dict['errorReason'] = errorReason
+            msg_dict["errorReason"] = errorReason
         if rawResponse is not None:
-            msg_dict['rawResponse'] = rawResponse
+            msg_dict["rawResponse"] = rawResponse
         if url is not None:
-            msg_dict['url'] = url
+            msg_dict["url"] = url
         if method is not None:
-            msg_dict['method'] = method
+            msg_dict["method"] = method
         if postData is not None:
-            msg_dict['postData'] = postData
+            msg_dict["postData"] = postData
         if headers is not None:
-            msg_dict['headers'] = headers
+            msg_dict["headers"] = headers
         if authChallengeResponse is not None:
-            msg_dict['authChallengeResponse'] = authChallengeResponse
-        res = await self.chrome.send('Network.continueInterceptedRequest', msg_dict)
-        return res
+            msg_dict["authChallengeResponse"] = authChallengeResponse
+        mayberes = await self.chrome.send(
+            "Network.continueInterceptedRequest", msg_dict
+        )
+        return mayberes
 
-    async def deleteCookies(self, name: str, url: Optional[str] = None, domain: Optional[str] = None, path: Optional[str] = None) -> Optional[dict]:
+    async def deleteCookies(
+        self,
+        name: str,
+        url: Optional[str] = None,
+        domain: Optional[str] = None,
+        path: Optional[str] = None,
+    ) -> Optional[dict]:
         """
         :param name: Name of the cookies to remove.
         :type name: str
@@ -88,21 +109,28 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if name is not None:
-            msg_dict['name'] = name
+            msg_dict["name"] = name
         if url is not None:
-            msg_dict['url'] = url
+            msg_dict["url"] = url
         if domain is not None:
-            msg_dict['domain'] = domain
+            msg_dict["domain"] = domain
         if path is not None:
-            msg_dict['path'] = path
-        res = await self.chrome.send('Network.deleteCookies', msg_dict)
-        return res
+            msg_dict["path"] = path
+        mayberes = await self.chrome.send("Network.deleteCookies", msg_dict)
+        return mayberes
 
     async def disable(self) -> Optional[dict]:
-        res = await self.chrome.send('Network.disable')
-        return res
+        mayberes = await self.chrome.send("Network.disable")
+        return mayberes
 
-    async def emulateNetworkConditions(self, offline: bool, latency: float, downloadThroughput: float, uploadThroughput: float, connectionType: Optional[str] = None) -> Optional[dict]:
+    async def emulateNetworkConditions(
+        self,
+        offline: bool,
+        latency: float,
+        downloadThroughput: float,
+        uploadThroughput: float,
+        connectionType: Optional[str] = None,
+    ) -> Optional[dict]:
         """
         :param offline: True to emulate internet disconnection.
         :type offline: bool
@@ -117,19 +145,24 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if offline is not None:
-            msg_dict['offline'] = offline
+            msg_dict["offline"] = offline
         if latency is not None:
-            msg_dict['latency'] = latency
+            msg_dict["latency"] = latency
         if downloadThroughput is not None:
-            msg_dict['downloadThroughput'] = downloadThroughput
+            msg_dict["downloadThroughput"] = downloadThroughput
         if uploadThroughput is not None:
-            msg_dict['uploadThroughput'] = uploadThroughput
+            msg_dict["uploadThroughput"] = uploadThroughput
         if connectionType is not None:
-            msg_dict['connectionType'] = connectionType
-        res = await self.chrome.send('Network.emulateNetworkConditions', msg_dict)
-        return res
+            msg_dict["connectionType"] = connectionType
+        mayberes = await self.chrome.send("Network.emulateNetworkConditions", msg_dict)
+        return mayberes
 
-    async def enable(self, maxTotalBufferSize: Optional[int] = None, maxResourceBufferSize: Optional[int] = None, maxPostDataSize: Optional[int] = None) -> Optional[dict]:
+    async def enable(
+        self,
+        maxTotalBufferSize: Optional[int] = None,
+        maxResourceBufferSize: Optional[int] = None,
+        maxPostDataSize: Optional[int] = None,
+    ) -> Optional[dict]:
         """
         :param maxTotalBufferSize: Buffer size in bytes to use when preserving network payloads (XHRs, etc).
         :type maxTotalBufferSize: Optional[int]
@@ -140,17 +173,18 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if maxTotalBufferSize is not None:
-            msg_dict['maxTotalBufferSize'] = maxTotalBufferSize
+            msg_dict["maxTotalBufferSize"] = maxTotalBufferSize
         if maxResourceBufferSize is not None:
-            msg_dict['maxResourceBufferSize'] = maxResourceBufferSize
+            msg_dict["maxResourceBufferSize"] = maxResourceBufferSize
         if maxPostDataSize is not None:
-            msg_dict['maxPostDataSize'] = maxPostDataSize
-        res = await self.chrome.send('Network.enable', msg_dict)
-        return res
+            msg_dict["maxPostDataSize"] = maxPostDataSize
+        mayberes = await self.chrome.send("Network.enable", msg_dict)
+        return mayberes
 
     async def getAllCookies(self) -> Optional[dict]:
-        res = await self.chrome.send('Network.getAllCookies')
-        res['cookies'] = Types.Cookie.safe_create_from_list(res['cookies'])
+        mayberes = await self.chrome.send("Network.getAllCookies")
+        res = await mayberes
+        res["cookies"] = Types.Cookie.safe_create_from_list(res["cookies"])
         return res
 
     async def getCertificate(self, origin: str) -> Optional[dict]:
@@ -160,8 +194,9 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if origin is not None:
-            msg_dict['origin'] = origin
-        res = await self.chrome.send('Network.getCertificate', msg_dict)
+            msg_dict["origin"] = origin
+        mayberes = await self.chrome.send("Network.getCertificate", msg_dict)
+        res = await mayberes
         return res
 
     async def getCookies(self, urls: Optional[List[str]] = None) -> Optional[dict]:
@@ -171,9 +206,10 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if urls is not None:
-            msg_dict['urls'] = urls
-        res = await self.chrome.send('Network.getCookies', msg_dict)
-        res['cookies'] = Types.Cookie.safe_create_from_list(res['cookies'])
+            msg_dict["urls"] = urls
+        mayberes = await self.chrome.send("Network.getCookies", msg_dict)
+        res = await mayberes
+        res["cookies"] = Types.Cookie.safe_create_from_list(res["cookies"])
         return res
 
     async def getResponseBody(self, requestId: str) -> Optional[dict]:
@@ -183,8 +219,9 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if requestId is not None:
-            msg_dict['requestId'] = requestId
-        res = await self.chrome.send('Network.getResponseBody', msg_dict)
+            msg_dict["requestId"] = requestId
+        mayberes = await self.chrome.send("Network.getResponseBody", msg_dict)
+        res = await mayberes
         return res
 
     async def getRequestPostData(self, requestId: str) -> Optional[dict]:
@@ -194,30 +231,41 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if requestId is not None:
-            msg_dict['requestId'] = requestId
-        res = await self.chrome.send('Network.getRequestPostData', msg_dict)
+            msg_dict["requestId"] = requestId
+        mayberes = await self.chrome.send("Network.getRequestPostData", msg_dict)
+        res = await mayberes
         return res
 
-    async def getResponseBodyForInterception(self, interceptionId: str) -> Optional[dict]:
+    async def getResponseBodyForInterception(
+        self, interceptionId: str
+    ) -> Optional[dict]:
         """
         :param interceptionId: Identifier for the intercepted request to get body for.
         :type interceptionId: str
         """
         msg_dict = dict()
         if interceptionId is not None:
-            msg_dict['interceptionId'] = interceptionId
-        res = await self.chrome.send('Network.getResponseBodyForInterception', msg_dict)
+            msg_dict["interceptionId"] = interceptionId
+        mayberes = await self.chrome.send(
+            "Network.getResponseBodyForInterception", msg_dict
+        )
+        res = await mayberes
         return res
 
-    async def takeResponseBodyForInterceptionAsStream(self, interceptionId: str) -> Optional[dict]:
+    async def takeResponseBodyForInterceptionAsStream(
+        self, interceptionId: str
+    ) -> Optional[dict]:
         """
         :param interceptionId: The interceptionId
         :type interceptionId: str
         """
         msg_dict = dict()
         if interceptionId is not None:
-            msg_dict['interceptionId'] = interceptionId
-        res = await self.chrome.send('Network.takeResponseBodyForInterceptionAsStream', msg_dict)
+            msg_dict["interceptionId"] = interceptionId
+        mayberes = await self.chrome.send(
+            "Network.takeResponseBodyForInterceptionAsStream", msg_dict
+        )
+        res = await mayberes
         return res
 
     async def replayXHR(self, requestId: str) -> Optional[dict]:
@@ -227,11 +275,17 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if requestId is not None:
-            msg_dict['requestId'] = requestId
-        res = await self.chrome.send('Network.replayXHR', msg_dict)
-        return res
+            msg_dict["requestId"] = requestId
+        mayberes = await self.chrome.send("Network.replayXHR", msg_dict)
+        return mayberes
 
-    async def searchInResponseBody(self, requestId: str, query: str, caseSensitive: Optional[bool] = None, isRegex: Optional[bool] = None) -> Optional[dict]:
+    async def searchInResponseBody(
+        self,
+        requestId: str,
+        query: str,
+        caseSensitive: Optional[bool] = None,
+        isRegex: Optional[bool] = None,
+    ) -> Optional[dict]:
         """
         :param requestId: Identifier of the network response to search.
         :type requestId: str
@@ -244,15 +298,16 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if requestId is not None:
-            msg_dict['requestId'] = requestId
+            msg_dict["requestId"] = requestId
         if query is not None:
-            msg_dict['query'] = query
+            msg_dict["query"] = query
         if caseSensitive is not None:
-            msg_dict['caseSensitive'] = caseSensitive
+            msg_dict["caseSensitive"] = caseSensitive
         if isRegex is not None:
-            msg_dict['isRegex'] = isRegex
-        res = await self.chrome.send('Network.searchInResponseBody', msg_dict)
-        res['result'] = Debugger.SearchMatch.safe_create_from_list(res['result'])
+            msg_dict["isRegex"] = isRegex
+        mayberes = await self.chrome.send("Network.searchInResponseBody", msg_dict)
+        res = await mayberes
+        res["result"] = Debugger.SearchMatch.safe_create_from_list(res["result"])
         return res
 
     async def setBlockedURLs(self, urls: List[str]) -> Optional[dict]:
@@ -262,9 +317,9 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if urls is not None:
-            msg_dict['urls'] = urls
-        res = await self.chrome.send('Network.setBlockedURLs', msg_dict)
-        return res
+            msg_dict["urls"] = urls
+        mayberes = await self.chrome.send("Network.setBlockedURLs", msg_dict)
+        return mayberes
 
     async def setBypassServiceWorker(self, bypass: bool) -> Optional[dict]:
         """
@@ -273,9 +328,9 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if bypass is not None:
-            msg_dict['bypass'] = bypass
-        res = await self.chrome.send('Network.setBypassServiceWorker', msg_dict)
-        return res
+            msg_dict["bypass"] = bypass
+        mayberes = await self.chrome.send("Network.setBypassServiceWorker", msg_dict)
+        return mayberes
 
     async def setCacheDisabled(self, cacheDisabled: bool) -> Optional[dict]:
         """
@@ -284,11 +339,22 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if cacheDisabled is not None:
-            msg_dict['cacheDisabled'] = cacheDisabled
-        res = await self.chrome.send('Network.setCacheDisabled', msg_dict)
-        return res
+            msg_dict["cacheDisabled"] = cacheDisabled
+        mayberes = await self.chrome.send("Network.setCacheDisabled", msg_dict)
+        return mayberes
 
-    async def setCookie(self, name: str, value: str, url: Optional[str] = None, domain: Optional[str] = None, path: Optional[str] = None, secure: Optional[bool] = None, httpOnly: Optional[bool] = None, sameSite: Optional[str] = None, expires: Optional[float] = None) -> Optional[dict]:
+    async def setCookie(
+        self,
+        name: str,
+        value: str,
+        url: Optional[str] = None,
+        domain: Optional[str] = None,
+        path: Optional[str] = None,
+        secure: Optional[bool] = None,
+        httpOnly: Optional[bool] = None,
+        sameSite: Optional[str] = None,
+        expires: Optional[float] = None,
+    ) -> Optional[dict]:
         """
         :param name: Cookie name.
         :type name: str
@@ -311,24 +377,25 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if name is not None:
-            msg_dict['name'] = name
+            msg_dict["name"] = name
         if value is not None:
-            msg_dict['value'] = value
+            msg_dict["value"] = value
         if url is not None:
-            msg_dict['url'] = url
+            msg_dict["url"] = url
         if domain is not None:
-            msg_dict['domain'] = domain
+            msg_dict["domain"] = domain
         if path is not None:
-            msg_dict['path'] = path
+            msg_dict["path"] = path
         if secure is not None:
-            msg_dict['secure'] = secure
+            msg_dict["secure"] = secure
         if httpOnly is not None:
-            msg_dict['httpOnly'] = httpOnly
+            msg_dict["httpOnly"] = httpOnly
         if sameSite is not None:
-            msg_dict['sameSite'] = sameSite
+            msg_dict["sameSite"] = sameSite
         if expires is not None:
-            msg_dict['expires'] = expires
-        res = await self.chrome.send('Network.setCookie', msg_dict)
+            msg_dict["expires"] = expires
+        mayberes = await self.chrome.send("Network.setCookie", msg_dict)
+        res = await mayberes
         return res
 
     async def setCookies(self, cookies: List[dict]) -> Optional[dict]:
@@ -338,11 +405,13 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if cookies is not None:
-            msg_dict['cookies'] = cookies
-        res = await self.chrome.send('Network.setCookies', msg_dict)
-        return res
+            msg_dict["cookies"] = cookies
+        mayberes = await self.chrome.send("Network.setCookies", msg_dict)
+        return mayberes
 
-    async def setDataSizeLimitsForTest(self, maxTotalSize: int, maxResourceSize: int) -> Optional[dict]:
+    async def setDataSizeLimitsForTest(
+        self, maxTotalSize: int, maxResourceSize: int
+    ) -> Optional[dict]:
         """
         :param maxTotalSize: Maximum total buffer size.
         :type maxTotalSize: int
@@ -351,11 +420,11 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if maxTotalSize is not None:
-            msg_dict['maxTotalSize'] = maxTotalSize
+            msg_dict["maxTotalSize"] = maxTotalSize
         if maxResourceSize is not None:
-            msg_dict['maxResourceSize'] = maxResourceSize
-        res = await self.chrome.send('Network.setDataSizeLimitsForTest', msg_dict)
-        return res
+            msg_dict["maxResourceSize"] = maxResourceSize
+        mayberes = await self.chrome.send("Network.setDataSizeLimitsForTest", msg_dict)
+        return mayberes
 
     async def setExtraHTTPHeaders(self, headers: dict) -> Optional[dict]:
         """
@@ -364,9 +433,9 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if headers is not None:
-            msg_dict['headers'] = headers
-        res = await self.chrome.send('Network.setExtraHTTPHeaders', msg_dict)
-        return res
+            msg_dict["headers"] = headers
+        mayberes = await self.chrome.send("Network.setExtraHTTPHeaders", msg_dict)
+        return mayberes
 
     async def setRequestInterception(self, patterns: List[dict]) -> Optional[dict]:
         """
@@ -375,11 +444,16 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if patterns is not None:
-            msg_dict['patterns'] = patterns
-        res = await self.chrome.send('Network.setRequestInterception', msg_dict)
-        return res
+            msg_dict["patterns"] = patterns
+        mayberes = await self.chrome.send("Network.setRequestInterception", msg_dict)
+        return mayberes
 
-    async def setUserAgentOverride(self, userAgent: str, acceptLanguage: Optional[str] = None, platform: Optional[str] = None) -> Optional[dict]:
+    async def setUserAgentOverride(
+        self,
+        userAgent: str,
+        acceptLanguage: Optional[str] = None,
+        platform: Optional[str] = None,
+    ) -> Optional[dict]:
         """
         :param userAgent: User agent to use.
         :type userAgent: str
@@ -390,15 +464,14 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         """
         msg_dict = dict()
         if userAgent is not None:
-            msg_dict['userAgent'] = userAgent
+            msg_dict["userAgent"] = userAgent
         if acceptLanguage is not None:
-            msg_dict['acceptLanguage'] = acceptLanguage
+            msg_dict["acceptLanguage"] = acceptLanguage
         if platform is not None:
-            msg_dict['platform'] = platform
-        res = await self.chrome.send('Network.setUserAgentOverride', msg_dict)
-        return res
+            msg_dict["platform"] = platform
+        mayberes = await self.chrome.send("Network.setUserAgentOverride", msg_dict)
+        return mayberes
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

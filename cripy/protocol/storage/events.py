@@ -1,12 +1,13 @@
 from typing import Any, List, Optional, Union
-from cripy.helpers import BaseEvent
+from types import SimpleNamespace
+
 try:
     from cripy.protocol.storage.types import *
 except ImportError:
     pass
 
 
-class CacheStorageContentUpdatedEvent(BaseEvent):
+class CacheStorageContentUpdatedEvent(object):
     """
     A cache's contents have been modified.
     """
@@ -24,8 +25,27 @@ class CacheStorageContentUpdatedEvent(BaseEvent):
         self.origin = origin
         self.cacheName = cacheName
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.origin is not None:
+            repr_args.append("origin={!r}".format(self.origin))
+        if self.cacheName is not None:
+            repr_args.append("cacheName={!r}".format(self.cacheName))
+        return "CacheStorageContentUpdatedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['CacheStorageContentUpdatedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["CacheStorageContentUpdatedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = CacheStorageContentUpdatedEvent(**init)
@@ -36,7 +56,9 @@ class CacheStorageContentUpdatedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CacheStorageContentUpdatedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["CacheStorageContentUpdatedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -46,7 +68,7 @@ class CacheStorageContentUpdatedEvent(BaseEvent):
             return init
 
 
-class CacheStorageListUpdatedEvent(BaseEvent):
+class CacheStorageListUpdatedEvent(object):
     """
     A cache has been added/deleted.
     """
@@ -61,8 +83,25 @@ class CacheStorageListUpdatedEvent(BaseEvent):
         super().__init__()
         self.origin = origin
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.origin is not None:
+            repr_args.append("origin={!r}".format(self.origin))
+        return "CacheStorageListUpdatedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['CacheStorageListUpdatedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["CacheStorageListUpdatedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = CacheStorageListUpdatedEvent(**init)
@@ -73,7 +112,9 @@ class CacheStorageListUpdatedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CacheStorageListUpdatedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["CacheStorageListUpdatedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -83,7 +124,7 @@ class CacheStorageListUpdatedEvent(BaseEvent):
             return init
 
 
-class IndexedDBContentUpdatedEvent(BaseEvent):
+class IndexedDBContentUpdatedEvent(object):
     """
     The origin's IndexedDB object store has been modified.
     """
@@ -104,8 +145,29 @@ class IndexedDBContentUpdatedEvent(BaseEvent):
         self.databaseName = databaseName
         self.objectStoreName = objectStoreName
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.origin is not None:
+            repr_args.append("origin={!r}".format(self.origin))
+        if self.databaseName is not None:
+            repr_args.append("databaseName={!r}".format(self.databaseName))
+        if self.objectStoreName is not None:
+            repr_args.append("objectStoreName={!r}".format(self.objectStoreName))
+        return "IndexedDBContentUpdatedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['IndexedDBContentUpdatedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["IndexedDBContentUpdatedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = IndexedDBContentUpdatedEvent(**init)
@@ -116,7 +178,9 @@ class IndexedDBContentUpdatedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['IndexedDBContentUpdatedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["IndexedDBContentUpdatedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -126,7 +190,7 @@ class IndexedDBContentUpdatedEvent(BaseEvent):
             return init
 
 
-class IndexedDBListUpdatedEvent(BaseEvent):
+class IndexedDBListUpdatedEvent(object):
     """
     The origin's IndexedDB database list has been modified.
     """
@@ -141,8 +205,25 @@ class IndexedDBListUpdatedEvent(BaseEvent):
         super().__init__()
         self.origin = origin
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.origin is not None:
+            repr_args.append("origin={!r}".format(self.origin))
+        return "IndexedDBListUpdatedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['IndexedDBListUpdatedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["IndexedDBListUpdatedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = IndexedDBListUpdatedEvent(**init)
@@ -153,7 +234,9 @@ class IndexedDBListUpdatedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['IndexedDBListUpdatedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["IndexedDBListUpdatedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -164,9 +247,15 @@ class IndexedDBListUpdatedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Storage.cacheStorageContentUpdated": CacheStorageContentUpdatedEvent,
-   "Storage.cacheStorageListUpdated": CacheStorageListUpdatedEvent,
-   "Storage.indexedDBContentUpdated": IndexedDBContentUpdatedEvent,
-   "Storage.indexedDBListUpdated": IndexedDBListUpdatedEvent,
+    "Storage.cacheStorageContentUpdated": CacheStorageContentUpdatedEvent,
+    "Storage.cacheStorageListUpdated": CacheStorageListUpdatedEvent,
+    "Storage.indexedDBContentUpdated": IndexedDBContentUpdatedEvent,
+    "Storage.indexedDBListUpdated": IndexedDBListUpdatedEvent,
 }
 
+EVENT_NS = SimpleNamespace(
+    CacheStorageContentUpdated="Storage.cacheStorageContentUpdated",
+    CacheStorageListUpdated="Storage.cacheStorageListUpdated",
+    IndexedDBContentUpdated="Storage.indexedDBContentUpdated",
+    IndexedDBListUpdated="Storage.indexedDBListUpdated",
+)

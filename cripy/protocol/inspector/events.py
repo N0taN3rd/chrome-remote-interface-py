@@ -1,12 +1,13 @@
 from typing import Any, List, Optional, Union
-from cripy.helpers import BaseEvent
+from types import SimpleNamespace
+
 try:
     from cripy.protocol.inspector.types import *
 except ImportError:
     pass
 
 
-class DetachedEvent(BaseEvent):
+class DetachedEvent(object):
     """
     Fired when remote debugging connection is about to be terminated.
 	Contains detach reason.
@@ -22,8 +23,23 @@ class DetachedEvent(BaseEvent):
         super().__init__()
         self.reason = reason
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.reason is not None:
+            repr_args.append("reason={!r}".format(self.reason))
+        return "DetachedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['DetachedEvent', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["DetachedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = DetachedEvent(**init)
@@ -34,7 +50,9 @@ class DetachedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DetachedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["DetachedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -44,7 +62,7 @@ class DetachedEvent(BaseEvent):
             return init
 
 
-class TargetCrashedEvent(BaseEvent, dict):
+class TargetCrashedEvent(dict):
     """
     Fired when debugging target has crashed
     """
@@ -54,8 +72,13 @@ class TargetCrashedEvent(BaseEvent, dict):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
+    def __repr__(self) -> str:
+        return "TargetCrashedEvent(dict)"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['TargetCrashedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["TargetCrashedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = TargetCrashedEvent(**init)
@@ -66,7 +89,9 @@ class TargetCrashedEvent(BaseEvent, dict):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TargetCrashedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["TargetCrashedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -76,7 +101,7 @@ class TargetCrashedEvent(BaseEvent, dict):
             return init
 
 
-class TargetReloadedAfterCrashEvent(BaseEvent, dict):
+class TargetReloadedAfterCrashEvent(dict):
     """
     Fired when debugging target has reloaded after crash
     """
@@ -86,8 +111,13 @@ class TargetReloadedAfterCrashEvent(BaseEvent, dict):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
 
+    def __repr__(self) -> str:
+        return "TargetReloadedAfterCrashEvent(dict)"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['TargetReloadedAfterCrashEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["TargetReloadedAfterCrashEvent", dict]]:
         if init is not None:
             try:
                 ourselves = TargetReloadedAfterCrashEvent(**init)
@@ -98,7 +128,9 @@ class TargetReloadedAfterCrashEvent(BaseEvent, dict):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TargetReloadedAfterCrashEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["TargetReloadedAfterCrashEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -109,8 +141,13 @@ class TargetReloadedAfterCrashEvent(BaseEvent, dict):
 
 
 EVENT_TO_CLASS = {
-   "Inspector.detached": DetachedEvent,
-   "Inspector.targetCrashed": TargetCrashedEvent,
-   "Inspector.targetReloadedAfterCrash": TargetReloadedAfterCrashEvent,
+    "Inspector.detached": DetachedEvent,
+    "Inspector.targetCrashed": TargetCrashedEvent,
+    "Inspector.targetReloadedAfterCrash": TargetReloadedAfterCrashEvent,
 }
 
+EVENT_NS = SimpleNamespace(
+    Detached="Inspector.detached",
+    TargetCrashed="Inspector.targetCrashed",
+    TargetReloadedAfterCrash="Inspector.targetReloadedAfterCrash",
+)

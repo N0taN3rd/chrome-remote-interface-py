@@ -3,12 +3,14 @@ from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 
 
-class KeyframesRule(ProtocolType):
+class KeyframesRule(object):
     """
     Keyframes Rule
     """
 
-    def __init__(self, keyframes: List[Union['KeyframeStyle', dict]], name: Optional[str] = None) -> None:
+    def __init__(
+        self, keyframes: List[Union["KeyframeStyle", dict]], name: Optional[str] = None
+    ) -> None:
         """
         :param name: CSS keyframed animation's name.
         :type name: Optional[str]
@@ -19,8 +21,25 @@ class KeyframesRule(ProtocolType):
         self.name = name
         self.keyframes = KeyframeStyle.safe_create_from_list(keyframes)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.keyframes is not None:
+            repr_args.append("keyframes={!r}".format(self.keyframes))
+        return "KeyframesRule(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['KeyframesRule', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["KeyframesRule", dict]]:
         if init is not None:
             try:
                 ourselves = KeyframesRule(**init)
@@ -31,7 +50,9 @@ class KeyframesRule(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['KeyframesRule', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["KeyframesRule", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -41,7 +62,7 @@ class KeyframesRule(ProtocolType):
             return init
 
 
-class KeyframeStyle(ProtocolType):
+class KeyframeStyle(object):
     """
     Keyframe Style
     """
@@ -57,8 +78,25 @@ class KeyframeStyle(ProtocolType):
         self.offset = offset
         self.easing = easing
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.offset is not None:
+            repr_args.append("offset={!r}".format(self.offset))
+        if self.easing is not None:
+            repr_args.append("easing={!r}".format(self.easing))
+        return "KeyframeStyle(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['KeyframeStyle', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["KeyframeStyle", dict]]:
         if init is not None:
             try:
                 ourselves = KeyframeStyle(**init)
@@ -69,7 +107,9 @@ class KeyframeStyle(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['KeyframeStyle', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["KeyframeStyle", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -79,12 +119,24 @@ class KeyframeStyle(ProtocolType):
             return init
 
 
-class AnimationEffect(ProtocolType):
+class AnimationEffect(object):
     """
     AnimationEffect instance
     """
 
-    def __init__(self, delay: float, endDelay: float, iterationStart: float, iterations: float, duration: float, direction: str, fill: str, easing: str, backendNodeId: Optional[int] = None, keyframesRule: Optional[Union['KeyframesRule', dict]] = None) -> None:
+    def __init__(
+        self,
+        delay: float,
+        endDelay: float,
+        iterationStart: float,
+        iterations: float,
+        duration: float,
+        direction: str,
+        fill: str,
+        easing: str,
+        backendNodeId: Optional[int] = None,
+        keyframesRule: Optional[Union["KeyframesRule", dict]] = None,
+    ) -> None:
         """
         :param delay: `AnimationEffect`'s delay.
         :type delay: float
@@ -119,8 +171,41 @@ class AnimationEffect(ProtocolType):
         self.keyframesRule = KeyframesRule.safe_create(keyframesRule)
         self.easing = easing
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.delay is not None:
+            repr_args.append("delay={!r}".format(self.delay))
+        if self.endDelay is not None:
+            repr_args.append("endDelay={!r}".format(self.endDelay))
+        if self.iterationStart is not None:
+            repr_args.append("iterationStart={!r}".format(self.iterationStart))
+        if self.iterations is not None:
+            repr_args.append("iterations={!r}".format(self.iterations))
+        if self.duration is not None:
+            repr_args.append("duration={!r}".format(self.duration))
+        if self.direction is not None:
+            repr_args.append("direction={!r}".format(self.direction))
+        if self.fill is not None:
+            repr_args.append("fill={!r}".format(self.fill))
+        if self.backendNodeId is not None:
+            repr_args.append("backendNodeId={!r}".format(self.backendNodeId))
+        if self.keyframesRule is not None:
+            repr_args.append("keyframesRule={!r}".format(self.keyframesRule))
+        if self.easing is not None:
+            repr_args.append("easing={!r}".format(self.easing))
+        return "AnimationEffect(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['AnimationEffect', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["AnimationEffect", dict]]:
         if init is not None:
             try:
                 ourselves = AnimationEffect(**init)
@@ -131,7 +216,9 @@ class AnimationEffect(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AnimationEffect', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["AnimationEffect", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -141,12 +228,24 @@ class AnimationEffect(ProtocolType):
             return init
 
 
-class Animation(ProtocolType):
+class Animation(object):
     """
     Animation instance.
     """
 
-    def __init__(self, id: str, name: str, pausedState: bool, playState: str, playbackRate: float, startTime: float, currentTime: float, type: str, source: Optional[Union['AnimationEffect', dict]] = None, cssId: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        id: str,
+        name: str,
+        pausedState: bool,
+        playState: str,
+        playbackRate: float,
+        startTime: float,
+        currentTime: float,
+        type: str,
+        source: Optional[Union["AnimationEffect", dict]] = None,
+        cssId: Optional[str] = None,
+    ) -> None:
         """
         :param id: `Animation`'s id.
         :type id: str
@@ -181,8 +280,41 @@ class Animation(ProtocolType):
         self.source = AnimationEffect.safe_create(source)
         self.cssId = cssId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.id is not None:
+            repr_args.append("id={!r}".format(self.id))
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.pausedState is not None:
+            repr_args.append("pausedState={!r}".format(self.pausedState))
+        if self.playState is not None:
+            repr_args.append("playState={!r}".format(self.playState))
+        if self.playbackRate is not None:
+            repr_args.append("playbackRate={!r}".format(self.playbackRate))
+        if self.startTime is not None:
+            repr_args.append("startTime={!r}".format(self.startTime))
+        if self.currentTime is not None:
+            repr_args.append("currentTime={!r}".format(self.currentTime))
+        if self.type is not None:
+            repr_args.append("type={!r}".format(self.type))
+        if self.source is not None:
+            repr_args.append("source={!r}".format(self.source))
+        if self.cssId is not None:
+            repr_args.append("cssId={!r}".format(self.cssId))
+        return "Animation(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['Animation', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["Animation", dict]]:
         if init is not None:
             try:
                 ourselves = Animation(**init)
@@ -193,7 +325,9 @@ class Animation(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Animation', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["Animation", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:

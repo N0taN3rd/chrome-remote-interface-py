@@ -12,11 +12,15 @@ maintained in memory unless they are either explicitly released or are released 
 other objects in their object group.
     """
 
-
     def __init__(self, chrome):
         self.chrome = chrome
 
-    async def awaitPromise(self, promiseObjectId: str, returnByValue: Optional[bool] = None, generatePreview: Optional[bool] = None) -> Optional[dict]:
+    async def awaitPromise(
+        self,
+        promiseObjectId: str,
+        returnByValue: Optional[bool] = None,
+        generatePreview: Optional[bool] = None,
+    ) -> Optional[dict]:
         """
         :param promiseObjectId: Identifier of the promise.
         :type promiseObjectId: str
@@ -27,17 +31,32 @@ other objects in their object group.
         """
         msg_dict = dict()
         if promiseObjectId is not None:
-            msg_dict['promiseObjectId'] = promiseObjectId
+            msg_dict["promiseObjectId"] = promiseObjectId
         if returnByValue is not None:
-            msg_dict['returnByValue'] = returnByValue
+            msg_dict["returnByValue"] = returnByValue
         if generatePreview is not None:
-            msg_dict['generatePreview'] = generatePreview
-        res = await self.chrome.send('Runtime.awaitPromise', msg_dict)
-        res['result'] = Types.RemoteObject.safe_create(res['result'])
-        res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
+            msg_dict["generatePreview"] = generatePreview
+        mayberes = await self.chrome.send("Runtime.awaitPromise", msg_dict)
+        res = await mayberes
+        res["result"] = Types.RemoteObject.safe_create(res["result"])
+        res["exceptionDetails"] = Types.ExceptionDetails.safe_create(
+            res["exceptionDetails"]
+        )
         return res
 
-    async def callFunctionOn(self, functionDeclaration: str, objectId: Optional[str] = None, arguments: Optional[List[dict]] = None, silent: Optional[bool] = None, returnByValue: Optional[bool] = None, generatePreview: Optional[bool] = None, userGesture: Optional[bool] = None, awaitPromise: Optional[bool] = None, executionContextId: Optional[int] = None, objectGroup: Optional[str] = None) -> Optional[dict]:
+    async def callFunctionOn(
+        self,
+        functionDeclaration: str,
+        objectId: Optional[str] = None,
+        arguments: Optional[List[dict]] = None,
+        silent: Optional[bool] = None,
+        returnByValue: Optional[bool] = None,
+        generatePreview: Optional[bool] = None,
+        userGesture: Optional[bool] = None,
+        awaitPromise: Optional[bool] = None,
+        executionContextId: Optional[int] = None,
+        objectGroup: Optional[str] = None,
+    ) -> Optional[dict]:
         """
         :param functionDeclaration: Declaration of the function to call.
         :type functionDeclaration: str
@@ -62,31 +81,40 @@ other objects in their object group.
         """
         msg_dict = dict()
         if functionDeclaration is not None:
-            msg_dict['functionDeclaration'] = functionDeclaration
+            msg_dict["functionDeclaration"] = functionDeclaration
         if objectId is not None:
-            msg_dict['objectId'] = objectId
+            msg_dict["objectId"] = objectId
         if arguments is not None:
-            msg_dict['arguments'] = arguments
+            msg_dict["arguments"] = arguments
         if silent is not None:
-            msg_dict['silent'] = silent
+            msg_dict["silent"] = silent
         if returnByValue is not None:
-            msg_dict['returnByValue'] = returnByValue
+            msg_dict["returnByValue"] = returnByValue
         if generatePreview is not None:
-            msg_dict['generatePreview'] = generatePreview
+            msg_dict["generatePreview"] = generatePreview
         if userGesture is not None:
-            msg_dict['userGesture'] = userGesture
+            msg_dict["userGesture"] = userGesture
         if awaitPromise is not None:
-            msg_dict['awaitPromise'] = awaitPromise
+            msg_dict["awaitPromise"] = awaitPromise
         if executionContextId is not None:
-            msg_dict['executionContextId'] = executionContextId
+            msg_dict["executionContextId"] = executionContextId
         if objectGroup is not None:
-            msg_dict['objectGroup'] = objectGroup
-        res = await self.chrome.send('Runtime.callFunctionOn', msg_dict)
-        res['result'] = Types.RemoteObject.safe_create(res['result'])
-        res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
+            msg_dict["objectGroup"] = objectGroup
+        mayberes = await self.chrome.send("Runtime.callFunctionOn", msg_dict)
+        res = await mayberes
+        res["result"] = Types.RemoteObject.safe_create(res["result"])
+        res["exceptionDetails"] = Types.ExceptionDetails.safe_create(
+            res["exceptionDetails"]
+        )
         return res
 
-    async def compileScript(self, expression: str, sourceURL: str, persistScript: bool, executionContextId: Optional[int] = None) -> Optional[dict]:
+    async def compileScript(
+        self,
+        expression: str,
+        sourceURL: str,
+        persistScript: bool,
+        executionContextId: Optional[int] = None,
+    ) -> Optional[dict]:
         """
         :param expression: Expression to compile.
         :type expression: str
@@ -99,30 +127,46 @@ other objects in their object group.
         """
         msg_dict = dict()
         if expression is not None:
-            msg_dict['expression'] = expression
+            msg_dict["expression"] = expression
         if sourceURL is not None:
-            msg_dict['sourceURL'] = sourceURL
+            msg_dict["sourceURL"] = sourceURL
         if persistScript is not None:
-            msg_dict['persistScript'] = persistScript
+            msg_dict["persistScript"] = persistScript
         if executionContextId is not None:
-            msg_dict['executionContextId'] = executionContextId
-        res = await self.chrome.send('Runtime.compileScript', msg_dict)
-        res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
+            msg_dict["executionContextId"] = executionContextId
+        mayberes = await self.chrome.send("Runtime.compileScript", msg_dict)
+        res = await mayberes
+        res["exceptionDetails"] = Types.ExceptionDetails.safe_create(
+            res["exceptionDetails"]
+        )
         return res
 
     async def disable(self) -> Optional[dict]:
-        res = await self.chrome.send('Runtime.disable')
-        return res
+        mayberes = await self.chrome.send("Runtime.disable")
+        return mayberes
 
     async def discardConsoleEntries(self) -> Optional[dict]:
-        res = await self.chrome.send('Runtime.discardConsoleEntries')
-        return res
+        mayberes = await self.chrome.send("Runtime.discardConsoleEntries")
+        return mayberes
 
     async def enable(self) -> Optional[dict]:
-        res = await self.chrome.send('Runtime.enable')
-        return res
+        mayberes = await self.chrome.send("Runtime.enable")
+        return mayberes
 
-    async def evaluate(self, expression: str, objectGroup: Optional[str] = None, includeCommandLineAPI: Optional[bool] = None, silent: Optional[bool] = None, contextId: Optional[int] = None, returnByValue: Optional[bool] = None, generatePreview: Optional[bool] = None, userGesture: Optional[bool] = None, awaitPromise: Optional[bool] = None, throwOnSideEffect: Optional[bool] = None, timeout: Optional[float] = None) -> Optional[dict]:
+    async def evaluate(
+        self,
+        expression: str,
+        objectGroup: Optional[str] = None,
+        includeCommandLineAPI: Optional[bool] = None,
+        silent: Optional[bool] = None,
+        contextId: Optional[int] = None,
+        returnByValue: Optional[bool] = None,
+        generatePreview: Optional[bool] = None,
+        userGesture: Optional[bool] = None,
+        awaitPromise: Optional[bool] = None,
+        throwOnSideEffect: Optional[bool] = None,
+        timeout: Optional[float] = None,
+    ) -> Optional[dict]:
         """
         :param expression: Expression to evaluate.
         :type expression: str
@@ -149,41 +193,52 @@ other objects in their object group.
         """
         msg_dict = dict()
         if expression is not None:
-            msg_dict['expression'] = expression
+            msg_dict["expression"] = expression
         if objectGroup is not None:
-            msg_dict['objectGroup'] = objectGroup
+            msg_dict["objectGroup"] = objectGroup
         if includeCommandLineAPI is not None:
-            msg_dict['includeCommandLineAPI'] = includeCommandLineAPI
+            msg_dict["includeCommandLineAPI"] = includeCommandLineAPI
         if silent is not None:
-            msg_dict['silent'] = silent
+            msg_dict["silent"] = silent
         if contextId is not None:
-            msg_dict['contextId'] = contextId
+            msg_dict["contextId"] = contextId
         if returnByValue is not None:
-            msg_dict['returnByValue'] = returnByValue
+            msg_dict["returnByValue"] = returnByValue
         if generatePreview is not None:
-            msg_dict['generatePreview'] = generatePreview
+            msg_dict["generatePreview"] = generatePreview
         if userGesture is not None:
-            msg_dict['userGesture'] = userGesture
+            msg_dict["userGesture"] = userGesture
         if awaitPromise is not None:
-            msg_dict['awaitPromise'] = awaitPromise
+            msg_dict["awaitPromise"] = awaitPromise
         if throwOnSideEffect is not None:
-            msg_dict['throwOnSideEffect'] = throwOnSideEffect
+            msg_dict["throwOnSideEffect"] = throwOnSideEffect
         if timeout is not None:
-            msg_dict['timeout'] = timeout
-        res = await self.chrome.send('Runtime.evaluate', msg_dict)
-        res['result'] = Types.RemoteObject.safe_create(res['result'])
-        res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
+            msg_dict["timeout"] = timeout
+        mayberes = await self.chrome.send("Runtime.evaluate", msg_dict)
+        res = await mayberes
+        res["result"] = Types.RemoteObject.safe_create(res["result"])
+        res["exceptionDetails"] = Types.ExceptionDetails.safe_create(
+            res["exceptionDetails"]
+        )
         return res
 
     async def getIsolateId(self) -> Optional[dict]:
-        res = await self.chrome.send('Runtime.getIsolateId')
+        mayberes = await self.chrome.send("Runtime.getIsolateId")
+        res = await mayberes
         return res
 
     async def getHeapUsage(self) -> Optional[dict]:
-        res = await self.chrome.send('Runtime.getHeapUsage')
+        mayberes = await self.chrome.send("Runtime.getHeapUsage")
+        res = await mayberes
         return res
 
-    async def getProperties(self, objectId: str, ownProperties: Optional[bool] = None, accessorPropertiesOnly: Optional[bool] = None, generatePreview: Optional[bool] = None) -> Optional[dict]:
+    async def getProperties(
+        self,
+        objectId: str,
+        ownProperties: Optional[bool] = None,
+        accessorPropertiesOnly: Optional[bool] = None,
+        generatePreview: Optional[bool] = None,
+    ) -> Optional[dict]:
         """
         :param objectId: Identifier of the object to return properties for.
         :type objectId: str
@@ -196,31 +251,43 @@ other objects in their object group.
         """
         msg_dict = dict()
         if objectId is not None:
-            msg_dict['objectId'] = objectId
+            msg_dict["objectId"] = objectId
         if ownProperties is not None:
-            msg_dict['ownProperties'] = ownProperties
+            msg_dict["ownProperties"] = ownProperties
         if accessorPropertiesOnly is not None:
-            msg_dict['accessorPropertiesOnly'] = accessorPropertiesOnly
+            msg_dict["accessorPropertiesOnly"] = accessorPropertiesOnly
         if generatePreview is not None:
-            msg_dict['generatePreview'] = generatePreview
-        res = await self.chrome.send('Runtime.getProperties', msg_dict)
-        res['result'] = Types.PropertyDescriptor.safe_create_from_list(res['result'])
-        res['internalProperties'] = Types.InternalPropertyDescriptor.safe_create_from_list(res['internalProperties'])
-        res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
+            msg_dict["generatePreview"] = generatePreview
+        mayberes = await self.chrome.send("Runtime.getProperties", msg_dict)
+        res = await mayberes
+        res["result"] = Types.PropertyDescriptor.safe_create_from_list(res["result"])
+        res[
+            "internalProperties"
+        ] = Types.InternalPropertyDescriptor.safe_create_from_list(
+            res["internalProperties"]
+        )
+        res["exceptionDetails"] = Types.ExceptionDetails.safe_create(
+            res["exceptionDetails"]
+        )
         return res
 
-    async def globalLexicalScopeNames(self, executionContextId: Optional[int] = None) -> Optional[dict]:
+    async def globalLexicalScopeNames(
+        self, executionContextId: Optional[int] = None
+    ) -> Optional[dict]:
         """
         :param executionContextId: Specifies in which execution context to lookup global scope variables.
         :type executionContextId: Optional[int]
         """
         msg_dict = dict()
         if executionContextId is not None:
-            msg_dict['executionContextId'] = executionContextId
-        res = await self.chrome.send('Runtime.globalLexicalScopeNames', msg_dict)
+            msg_dict["executionContextId"] = executionContextId
+        mayberes = await self.chrome.send("Runtime.globalLexicalScopeNames", msg_dict)
+        res = await mayberes
         return res
 
-    async def queryObjects(self, prototypeObjectId: str, objectGroup: Optional[str] = None) -> Optional[dict]:
+    async def queryObjects(
+        self, prototypeObjectId: str, objectGroup: Optional[str] = None
+    ) -> Optional[dict]:
         """
         :param prototypeObjectId: Identifier of the prototype to return objects for.
         :type prototypeObjectId: str
@@ -229,11 +296,12 @@ other objects in their object group.
         """
         msg_dict = dict()
         if prototypeObjectId is not None:
-            msg_dict['prototypeObjectId'] = prototypeObjectId
+            msg_dict["prototypeObjectId"] = prototypeObjectId
         if objectGroup is not None:
-            msg_dict['objectGroup'] = objectGroup
-        res = await self.chrome.send('Runtime.queryObjects', msg_dict)
-        res['objects'] = Types.RemoteObject.safe_create(res['objects'])
+            msg_dict["objectGroup"] = objectGroup
+        mayberes = await self.chrome.send("Runtime.queryObjects", msg_dict)
+        res = await mayberes
+        res["objects"] = Types.RemoteObject.safe_create(res["objects"])
         return res
 
     async def releaseObject(self, objectId: str) -> Optional[dict]:
@@ -243,9 +311,9 @@ other objects in their object group.
         """
         msg_dict = dict()
         if objectId is not None:
-            msg_dict['objectId'] = objectId
-        res = await self.chrome.send('Runtime.releaseObject', msg_dict)
-        return res
+            msg_dict["objectId"] = objectId
+        mayberes = await self.chrome.send("Runtime.releaseObject", msg_dict)
+        return mayberes
 
     async def releaseObjectGroup(self, objectGroup: str) -> Optional[dict]:
         """
@@ -254,15 +322,25 @@ other objects in their object group.
         """
         msg_dict = dict()
         if objectGroup is not None:
-            msg_dict['objectGroup'] = objectGroup
-        res = await self.chrome.send('Runtime.releaseObjectGroup', msg_dict)
-        return res
+            msg_dict["objectGroup"] = objectGroup
+        mayberes = await self.chrome.send("Runtime.releaseObjectGroup", msg_dict)
+        return mayberes
 
     async def runIfWaitingForDebugger(self) -> Optional[dict]:
-        res = await self.chrome.send('Runtime.runIfWaitingForDebugger')
-        return res
+        mayberes = await self.chrome.send("Runtime.runIfWaitingForDebugger")
+        return mayberes
 
-    async def runScript(self, scriptId: str, executionContextId: Optional[int] = None, objectGroup: Optional[str] = None, silent: Optional[bool] = None, includeCommandLineAPI: Optional[bool] = None, returnByValue: Optional[bool] = None, generatePreview: Optional[bool] = None, awaitPromise: Optional[bool] = None) -> Optional[dict]:
+    async def runScript(
+        self,
+        scriptId: str,
+        executionContextId: Optional[int] = None,
+        objectGroup: Optional[str] = None,
+        silent: Optional[bool] = None,
+        includeCommandLineAPI: Optional[bool] = None,
+        returnByValue: Optional[bool] = None,
+        generatePreview: Optional[bool] = None,
+        awaitPromise: Optional[bool] = None,
+    ) -> Optional[dict]:
         """
         :param scriptId: Id of the script to run.
         :type scriptId: str
@@ -283,25 +361,39 @@ other objects in their object group.
         """
         msg_dict = dict()
         if scriptId is not None:
-            msg_dict['scriptId'] = scriptId
+            msg_dict["scriptId"] = scriptId
         if executionContextId is not None:
-            msg_dict['executionContextId'] = executionContextId
+            msg_dict["executionContextId"] = executionContextId
         if objectGroup is not None:
-            msg_dict['objectGroup'] = objectGroup
+            msg_dict["objectGroup"] = objectGroup
         if silent is not None:
-            msg_dict['silent'] = silent
+            msg_dict["silent"] = silent
         if includeCommandLineAPI is not None:
-            msg_dict['includeCommandLineAPI'] = includeCommandLineAPI
+            msg_dict["includeCommandLineAPI"] = includeCommandLineAPI
         if returnByValue is not None:
-            msg_dict['returnByValue'] = returnByValue
+            msg_dict["returnByValue"] = returnByValue
         if generatePreview is not None:
-            msg_dict['generatePreview'] = generatePreview
+            msg_dict["generatePreview"] = generatePreview
         if awaitPromise is not None:
-            msg_dict['awaitPromise'] = awaitPromise
-        res = await self.chrome.send('Runtime.runScript', msg_dict)
-        res['result'] = Types.RemoteObject.safe_create(res['result'])
-        res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
+            msg_dict["awaitPromise"] = awaitPromise
+        mayberes = await self.chrome.send("Runtime.runScript", msg_dict)
+        res = await mayberes
+        res["result"] = Types.RemoteObject.safe_create(res["result"])
+        res["exceptionDetails"] = Types.ExceptionDetails.safe_create(
+            res["exceptionDetails"]
+        )
         return res
+
+    async def setAsyncCallStackDepth(self, maxDepth: int) -> Optional[dict]:
+        """
+        :param maxDepth: Maximum depth of async call stacks. Setting to `0` will effectively disable collecting async call stacks (default).
+        :type maxDepth: int
+        """
+        msg_dict = dict()
+        if maxDepth is not None:
+            msg_dict["maxDepth"] = maxDepth
+        mayberes = await self.chrome.send("Runtime.setAsyncCallStackDepth", msg_dict)
+        return mayberes
 
     async def setCustomObjectFormatterEnabled(self, enabled: bool) -> Optional[dict]:
         """
@@ -310,15 +402,38 @@ other objects in their object group.
         """
         msg_dict = dict()
         if enabled is not None:
-            msg_dict['enabled'] = enabled
-        res = await self.chrome.send('Runtime.setCustomObjectFormatterEnabled', msg_dict)
-        return res
+            msg_dict["enabled"] = enabled
+        mayberes = await self.chrome.send(
+            "Runtime.setCustomObjectFormatterEnabled", msg_dict
+        )
+        return mayberes
 
     async def terminateExecution(self) -> Optional[dict]:
-        res = await self.chrome.send('Runtime.terminateExecution')
-        return res
+        mayberes = await self.chrome.send("Runtime.terminateExecution")
+        return mayberes
+
+    async def addBinding(self, name: str) -> Optional[dict]:
+        """
+        :param name: The name
+        :type name: str
+        """
+        msg_dict = dict()
+        if name is not None:
+            msg_dict["name"] = name
+        mayberes = await self.chrome.send("Runtime.addBinding", msg_dict)
+        return mayberes
+
+    async def removeBinding(self, name: str) -> Optional[dict]:
+        """
+        :param name: The name
+        :type name: str
+        """
+        msg_dict = dict()
+        if name is not None:
+            msg_dict["name"] = name
+        mayberes = await self.chrome.send("Runtime.removeBinding", msg_dict)
+        return mayberes
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

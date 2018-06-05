@@ -1,5 +1,5 @@
 from typing import Any, List, Optional, Union
-from cripy.helpers import BaseEvent
+from types import SimpleNamespace
 {% for import in timports %}
 from cripy.protocol.{{ import | lower }} import types as {{ import }}
 {% endfor %}
@@ -11,9 +11,9 @@ except ImportError:
 
 {%+ for event in events %}
 {% if event.has_parameters %}
-class {{ event.class_name }}(BaseEvent):
+class {{ event.class_name }}(object):
 {% else %}
-class {{ event.class_name }}(BaseEvent, dict):
+class {{ event.class_name }}(dict):
 {% endif %}
     {% if event.description %}
     """
@@ -48,6 +48,29 @@ class {{ event.class_name }}(BaseEvent, dict):
         super().__init__(*args, **kwargs)
     {% endif %}
 
+    {% if event.has_parameters %}
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+    {% endif %}
+
+    def __repr__(self) -> str:
+        {% if event.has_parameters %}
+        repr_args = []
+        {% for prop in event.parameters %}
+        if self.{{ prop.name }} is not None:
+            repr_args.append("{{ prop.name }}={!r}".format(self.{{ prop.name }}))
+        {% endfor %}
+        return "{{ event.class_name }}(" + ', '.join(repr_args)+")"
+        {% else %}
+        return "{{ event.class_name }}(dict)"
+        {% endif %}
+
     @staticmethod
     def safe_create(init: Optional[dict]) -> Optional[Union['{{ event.class_name }}', dict]]:
         if init is not None:
@@ -77,4 +100,9 @@ EVENT_TO_CLASS = {
 {% endfor %}
 }
 
+EVENT_NS = SimpleNamespace(
+{% for ename, clazz in event_to_clazz %}
+  {{ pascalcase(ename.split('.')[1]) }}="{{ ename }}",
+{% endfor %}
+)
 

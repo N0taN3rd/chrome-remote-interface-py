@@ -16,7 +16,7 @@ the nodes that were sent to the client.<p>Note that `iframe` owner elements will
 corresponding document elements as their child nodes.</p>
     """
 
-    dependencies = ['Runtime']
+    dependencies = ["Runtime"]
 
     def __init__(self, chrome):
         self.chrome = chrome
@@ -28,11 +28,14 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
-        res = await self.chrome.send('DOM.collectClassNamesFromSubtree', msg_dict)
+            msg_dict["nodeId"] = nodeId
+        mayberes = await self.chrome.send("DOM.collectClassNamesFromSubtree", msg_dict)
+        res = await mayberes
         return res
 
-    async def copyTo(self, nodeId: int, targetNodeId: int, insertBeforeNodeId: Optional[int] = None) -> Optional[dict]:
+    async def copyTo(
+        self, nodeId: int, targetNodeId: int, insertBeforeNodeId: Optional[int] = None
+    ) -> Optional[dict]:
         """
         :param nodeId: Id of the node to copy.
         :type nodeId: int
@@ -43,15 +46,23 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if targetNodeId is not None:
-            msg_dict['targetNodeId'] = targetNodeId
+            msg_dict["targetNodeId"] = targetNodeId
         if insertBeforeNodeId is not None:
-            msg_dict['insertBeforeNodeId'] = insertBeforeNodeId
-        res = await self.chrome.send('DOM.copyTo', msg_dict)
+            msg_dict["insertBeforeNodeId"] = insertBeforeNodeId
+        mayberes = await self.chrome.send("DOM.copyTo", msg_dict)
+        res = await mayberes
         return res
 
-    async def describeNode(self, nodeId: Optional[int] = None, backendNodeId: Optional[int] = None, objectId: Optional[str] = None, depth: Optional[int] = None, pierce: Optional[bool] = None) -> Optional[dict]:
+    async def describeNode(
+        self,
+        nodeId: Optional[int] = None,
+        backendNodeId: Optional[int] = None,
+        objectId: Optional[str] = None,
+        depth: Optional[int] = None,
+        pierce: Optional[bool] = None,
+    ) -> Optional[dict]:
         """
         :param nodeId: Identifier of the node.
         :type nodeId: Optional[int]
@@ -66,22 +77,23 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if backendNodeId is not None:
-            msg_dict['backendNodeId'] = backendNodeId
+            msg_dict["backendNodeId"] = backendNodeId
         if objectId is not None:
-            msg_dict['objectId'] = objectId
+            msg_dict["objectId"] = objectId
         if depth is not None:
-            msg_dict['depth'] = depth
+            msg_dict["depth"] = depth
         if pierce is not None:
-            msg_dict['pierce'] = pierce
-        res = await self.chrome.send('DOM.describeNode', msg_dict)
-        res['node'] = Types.Node.safe_create(res['node'])
+            msg_dict["pierce"] = pierce
+        mayberes = await self.chrome.send("DOM.describeNode", msg_dict)
+        res = await mayberes
+        res["node"] = Types.Node.safe_create(res["node"])
         return res
 
     async def disable(self) -> Optional[dict]:
-        res = await self.chrome.send('DOM.disable')
-        return res
+        mayberes = await self.chrome.send("DOM.disable")
+        return mayberes
 
     async def discardSearchResults(self, searchId: str) -> Optional[dict]:
         """
@@ -90,15 +102,20 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if searchId is not None:
-            msg_dict['searchId'] = searchId
-        res = await self.chrome.send('DOM.discardSearchResults', msg_dict)
-        return res
+            msg_dict["searchId"] = searchId
+        mayberes = await self.chrome.send("DOM.discardSearchResults", msg_dict)
+        return mayberes
 
     async def enable(self) -> Optional[dict]:
-        res = await self.chrome.send('DOM.enable')
-        return res
+        mayberes = await self.chrome.send("DOM.enable")
+        return mayberes
 
-    async def focus(self, nodeId: Optional[int] = None, backendNodeId: Optional[int] = None, objectId: Optional[str] = None) -> Optional[dict]:
+    async def focus(
+        self,
+        nodeId: Optional[int] = None,
+        backendNodeId: Optional[int] = None,
+        objectId: Optional[str] = None,
+    ) -> Optional[dict]:
         """
         :param nodeId: Identifier of the node.
         :type nodeId: Optional[int]
@@ -109,13 +126,13 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if backendNodeId is not None:
-            msg_dict['backendNodeId'] = backendNodeId
+            msg_dict["backendNodeId"] = backendNodeId
         if objectId is not None:
-            msg_dict['objectId'] = objectId
-        res = await self.chrome.send('DOM.focus', msg_dict)
-        return res
+            msg_dict["objectId"] = objectId
+        mayberes = await self.chrome.send("DOM.focus", msg_dict)
+        return mayberes
 
     async def getAttributes(self, nodeId: int) -> Optional[dict]:
         """
@@ -124,11 +141,17 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
-        res = await self.chrome.send('DOM.getAttributes', msg_dict)
+            msg_dict["nodeId"] = nodeId
+        mayberes = await self.chrome.send("DOM.getAttributes", msg_dict)
+        res = await mayberes
         return res
 
-    async def getBoxModel(self, nodeId: Optional[int] = None, backendNodeId: Optional[int] = None, objectId: Optional[str] = None) -> Optional[dict]:
+    async def getBoxModel(
+        self,
+        nodeId: Optional[int] = None,
+        backendNodeId: Optional[int] = None,
+        objectId: Optional[str] = None,
+    ) -> Optional[dict]:
         """
         :param nodeId: Identifier of the node.
         :type nodeId: Optional[int]
@@ -139,16 +162,19 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if backendNodeId is not None:
-            msg_dict['backendNodeId'] = backendNodeId
+            msg_dict["backendNodeId"] = backendNodeId
         if objectId is not None:
-            msg_dict['objectId'] = objectId
-        res = await self.chrome.send('DOM.getBoxModel', msg_dict)
-        res['model'] = Types.BoxModel.safe_create(res['model'])
+            msg_dict["objectId"] = objectId
+        mayberes = await self.chrome.send("DOM.getBoxModel", msg_dict)
+        res = await mayberes
+        res["model"] = Types.BoxModel.safe_create(res["model"])
         return res
 
-    async def getDocument(self, depth: Optional[int] = None, pierce: Optional[bool] = None) -> Optional[dict]:
+    async def getDocument(
+        self, depth: Optional[int] = None, pierce: Optional[bool] = None
+    ) -> Optional[dict]:
         """
         :param depth: The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the entire subtree or provide an integer larger than 0.
         :type depth: Optional[int]
@@ -157,14 +183,17 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if depth is not None:
-            msg_dict['depth'] = depth
+            msg_dict["depth"] = depth
         if pierce is not None:
-            msg_dict['pierce'] = pierce
-        res = await self.chrome.send('DOM.getDocument', msg_dict)
-        res['root'] = Types.Node.safe_create(res['root'])
+            msg_dict["pierce"] = pierce
+        mayberes = await self.chrome.send("DOM.getDocument", msg_dict)
+        res = await mayberes
+        res["root"] = Types.Node.safe_create(res["root"])
         return res
 
-    async def getFlattenedDocument(self, depth: Optional[int] = None, pierce: Optional[bool] = None) -> Optional[dict]:
+    async def getFlattenedDocument(
+        self, depth: Optional[int] = None, pierce: Optional[bool] = None
+    ) -> Optional[dict]:
         """
         :param depth: The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the entire subtree or provide an integer larger than 0.
         :type depth: Optional[int]
@@ -173,14 +202,17 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if depth is not None:
-            msg_dict['depth'] = depth
+            msg_dict["depth"] = depth
         if pierce is not None:
-            msg_dict['pierce'] = pierce
-        res = await self.chrome.send('DOM.getFlattenedDocument', msg_dict)
-        res['nodes'] = Types.Node.safe_create_from_list(res['nodes'])
+            msg_dict["pierce"] = pierce
+        mayberes = await self.chrome.send("DOM.getFlattenedDocument", msg_dict)
+        res = await mayberes
+        res["nodes"] = Types.Node.safe_create_from_list(res["nodes"])
         return res
 
-    async def getNodeForLocation(self, x: int, y: int, includeUserAgentShadowDOM: Optional[bool] = None) -> Optional[dict]:
+    async def getNodeForLocation(
+        self, x: int, y: int, includeUserAgentShadowDOM: Optional[bool] = None
+    ) -> Optional[dict]:
         """
         :param x: X coordinate.
         :type x: int
@@ -191,15 +223,21 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if x is not None:
-            msg_dict['x'] = x
+            msg_dict["x"] = x
         if y is not None:
-            msg_dict['y'] = y
+            msg_dict["y"] = y
         if includeUserAgentShadowDOM is not None:
-            msg_dict['includeUserAgentShadowDOM'] = includeUserAgentShadowDOM
-        res = await self.chrome.send('DOM.getNodeForLocation', msg_dict)
+            msg_dict["includeUserAgentShadowDOM"] = includeUserAgentShadowDOM
+        mayberes = await self.chrome.send("DOM.getNodeForLocation", msg_dict)
+        res = await mayberes
         return res
 
-    async def getOuterHTML(self, nodeId: Optional[int] = None, backendNodeId: Optional[int] = None, objectId: Optional[str] = None) -> Optional[dict]:
+    async def getOuterHTML(
+        self,
+        nodeId: Optional[int] = None,
+        backendNodeId: Optional[int] = None,
+        objectId: Optional[str] = None,
+    ) -> Optional[dict]:
         """
         :param nodeId: Identifier of the node.
         :type nodeId: Optional[int]
@@ -210,12 +248,13 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if backendNodeId is not None:
-            msg_dict['backendNodeId'] = backendNodeId
+            msg_dict["backendNodeId"] = backendNodeId
         if objectId is not None:
-            msg_dict['objectId'] = objectId
-        res = await self.chrome.send('DOM.getOuterHTML', msg_dict)
+            msg_dict["objectId"] = objectId
+        mayberes = await self.chrome.send("DOM.getOuterHTML", msg_dict)
+        res = await mayberes
         return res
 
     async def getRelayoutBoundary(self, nodeId: int) -> Optional[dict]:
@@ -225,11 +264,14 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
-        res = await self.chrome.send('DOM.getRelayoutBoundary', msg_dict)
+            msg_dict["nodeId"] = nodeId
+        mayberes = await self.chrome.send("DOM.getRelayoutBoundary", msg_dict)
+        res = await mayberes
         return res
 
-    async def getSearchResults(self, searchId: str, fromIndex: int, toIndex: int) -> Optional[dict]:
+    async def getSearchResults(
+        self, searchId: str, fromIndex: int, toIndex: int
+    ) -> Optional[dict]:
         """
         :param searchId: Unique search session identifier.
         :type searchId: str
@@ -240,31 +282,34 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if searchId is not None:
-            msg_dict['searchId'] = searchId
+            msg_dict["searchId"] = searchId
         if fromIndex is not None:
-            msg_dict['fromIndex'] = fromIndex
+            msg_dict["fromIndex"] = fromIndex
         if toIndex is not None:
-            msg_dict['toIndex'] = toIndex
-        res = await self.chrome.send('DOM.getSearchResults', msg_dict)
+            msg_dict["toIndex"] = toIndex
+        mayberes = await self.chrome.send("DOM.getSearchResults", msg_dict)
+        res = await mayberes
         return res
 
     async def hideHighlight(self) -> Optional[dict]:
-        res = await self.chrome.send('DOM.hideHighlight')
-        return res
+        mayberes = await self.chrome.send("DOM.hideHighlight")
+        return mayberes
 
     async def highlightNode(self) -> Optional[dict]:
-        res = await self.chrome.send('DOM.highlightNode')
-        return res
+        mayberes = await self.chrome.send("DOM.highlightNode")
+        return mayberes
 
     async def highlightRect(self) -> Optional[dict]:
-        res = await self.chrome.send('DOM.highlightRect')
-        return res
+        mayberes = await self.chrome.send("DOM.highlightRect")
+        return mayberes
 
     async def markUndoableState(self) -> Optional[dict]:
-        res = await self.chrome.send('DOM.markUndoableState')
-        return res
+        mayberes = await self.chrome.send("DOM.markUndoableState")
+        return mayberes
 
-    async def moveTo(self, nodeId: int, targetNodeId: int, insertBeforeNodeId: Optional[int] = None) -> Optional[dict]:
+    async def moveTo(
+        self, nodeId: int, targetNodeId: int, insertBeforeNodeId: Optional[int] = None
+    ) -> Optional[dict]:
         """
         :param nodeId: Id of the node to move.
         :type nodeId: int
@@ -275,15 +320,18 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if targetNodeId is not None:
-            msg_dict['targetNodeId'] = targetNodeId
+            msg_dict["targetNodeId"] = targetNodeId
         if insertBeforeNodeId is not None:
-            msg_dict['insertBeforeNodeId'] = insertBeforeNodeId
-        res = await self.chrome.send('DOM.moveTo', msg_dict)
+            msg_dict["insertBeforeNodeId"] = insertBeforeNodeId
+        mayberes = await self.chrome.send("DOM.moveTo", msg_dict)
+        res = await mayberes
         return res
 
-    async def performSearch(self, query: str, includeUserAgentShadowDOM: Optional[bool] = None) -> Optional[dict]:
+    async def performSearch(
+        self, query: str, includeUserAgentShadowDOM: Optional[bool] = None
+    ) -> Optional[dict]:
         """
         :param query: Plain text or query selector or XPath search query.
         :type query: str
@@ -292,10 +340,11 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if query is not None:
-            msg_dict['query'] = query
+            msg_dict["query"] = query
         if includeUserAgentShadowDOM is not None:
-            msg_dict['includeUserAgentShadowDOM'] = includeUserAgentShadowDOM
-        res = await self.chrome.send('DOM.performSearch', msg_dict)
+            msg_dict["includeUserAgentShadowDOM"] = includeUserAgentShadowDOM
+        mayberes = await self.chrome.send("DOM.performSearch", msg_dict)
+        res = await mayberes
         return res
 
     async def pushNodeByPathToFrontend(self, path: str) -> Optional[dict]:
@@ -305,19 +354,25 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if path is not None:
-            msg_dict['path'] = path
-        res = await self.chrome.send('DOM.pushNodeByPathToFrontend', msg_dict)
+            msg_dict["path"] = path
+        mayberes = await self.chrome.send("DOM.pushNodeByPathToFrontend", msg_dict)
+        res = await mayberes
         return res
 
-    async def pushNodesByBackendIdsToFrontend(self, backendNodeIds: List[int]) -> Optional[dict]:
+    async def pushNodesByBackendIdsToFrontend(
+        self, backendNodeIds: List[int]
+    ) -> Optional[dict]:
         """
         :param backendNodeIds: The array of backend node ids.
         :type backendNodeIds: List[int]
         """
         msg_dict = dict()
         if backendNodeIds is not None:
-            msg_dict['backendNodeIds'] = backendNodeIds
-        res = await self.chrome.send('DOM.pushNodesByBackendIdsToFrontend', msg_dict)
+            msg_dict["backendNodeIds"] = backendNodeIds
+        mayberes = await self.chrome.send(
+            "DOM.pushNodesByBackendIdsToFrontend", msg_dict
+        )
+        res = await mayberes
         return res
 
     async def querySelector(self, nodeId: int, selector: str) -> Optional[dict]:
@@ -329,10 +384,11 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if selector is not None:
-            msg_dict['selector'] = selector
-        res = await self.chrome.send('DOM.querySelector', msg_dict)
+            msg_dict["selector"] = selector
+        mayberes = await self.chrome.send("DOM.querySelector", msg_dict)
+        res = await mayberes
         return res
 
     async def querySelectorAll(self, nodeId: int, selector: str) -> Optional[dict]:
@@ -344,15 +400,16 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if selector is not None:
-            msg_dict['selector'] = selector
-        res = await self.chrome.send('DOM.querySelectorAll', msg_dict)
+            msg_dict["selector"] = selector
+        mayberes = await self.chrome.send("DOM.querySelectorAll", msg_dict)
+        res = await mayberes
         return res
 
     async def redo(self) -> Optional[dict]:
-        res = await self.chrome.send('DOM.redo')
-        return res
+        mayberes = await self.chrome.send("DOM.redo")
+        return mayberes
 
     async def removeAttribute(self, nodeId: int, name: str) -> Optional[dict]:
         """
@@ -363,11 +420,11 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if name is not None:
-            msg_dict['name'] = name
-        res = await self.chrome.send('DOM.removeAttribute', msg_dict)
-        return res
+            msg_dict["name"] = name
+        mayberes = await self.chrome.send("DOM.removeAttribute", msg_dict)
+        return mayberes
 
     async def removeNode(self, nodeId: int) -> Optional[dict]:
         """
@@ -376,11 +433,13 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
-        res = await self.chrome.send('DOM.removeNode', msg_dict)
-        return res
+            msg_dict["nodeId"] = nodeId
+        mayberes = await self.chrome.send("DOM.removeNode", msg_dict)
+        return mayberes
 
-    async def requestChildNodes(self, nodeId: int, depth: Optional[int] = None, pierce: Optional[bool] = None) -> Optional[dict]:
+    async def requestChildNodes(
+        self, nodeId: int, depth: Optional[int] = None, pierce: Optional[bool] = None
+    ) -> Optional[dict]:
         """
         :param nodeId: Id of the node to get children for.
         :type nodeId: int
@@ -391,13 +450,13 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if depth is not None:
-            msg_dict['depth'] = depth
+            msg_dict["depth"] = depth
         if pierce is not None:
-            msg_dict['pierce'] = pierce
-        res = await self.chrome.send('DOM.requestChildNodes', msg_dict)
-        return res
+            msg_dict["pierce"] = pierce
+        mayberes = await self.chrome.send("DOM.requestChildNodes", msg_dict)
+        return mayberes
 
     async def requestNode(self, objectId: str) -> Optional[dict]:
         """
@@ -406,11 +465,17 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if objectId is not None:
-            msg_dict['objectId'] = objectId
-        res = await self.chrome.send('DOM.requestNode', msg_dict)
+            msg_dict["objectId"] = objectId
+        mayberes = await self.chrome.send("DOM.requestNode", msg_dict)
+        res = await mayberes
         return res
 
-    async def resolveNode(self, nodeId: Optional[int] = None, backendNodeId: Optional[int] = None, objectGroup: Optional[str] = None) -> Optional[dict]:
+    async def resolveNode(
+        self,
+        nodeId: Optional[int] = None,
+        backendNodeId: Optional[int] = None,
+        objectGroup: Optional[str] = None,
+    ) -> Optional[dict]:
         """
         :param nodeId: Id of the node to resolve.
         :type nodeId: Optional[int]
@@ -421,16 +486,19 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if backendNodeId is not None:
-            msg_dict['backendNodeId'] = backendNodeId
+            msg_dict["backendNodeId"] = backendNodeId
         if objectGroup is not None:
-            msg_dict['objectGroup'] = objectGroup
-        res = await self.chrome.send('DOM.resolveNode', msg_dict)
-        res['object'] = Runtime.RemoteObject.safe_create(res['object'])
+            msg_dict["objectGroup"] = objectGroup
+        mayberes = await self.chrome.send("DOM.resolveNode", msg_dict)
+        res = await mayberes
+        res["object"] = Runtime.RemoteObject.safe_create(res["object"])
         return res
 
-    async def setAttributeValue(self, nodeId: int, name: str, value: str) -> Optional[dict]:
+    async def setAttributeValue(
+        self, nodeId: int, name: str, value: str
+    ) -> Optional[dict]:
         """
         :param nodeId: Id of the element to set attribute for.
         :type nodeId: int
@@ -441,15 +509,17 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if name is not None:
-            msg_dict['name'] = name
+            msg_dict["name"] = name
         if value is not None:
-            msg_dict['value'] = value
-        res = await self.chrome.send('DOM.setAttributeValue', msg_dict)
-        return res
+            msg_dict["value"] = value
+        mayberes = await self.chrome.send("DOM.setAttributeValue", msg_dict)
+        return mayberes
 
-    async def setAttributesAsText(self, nodeId: int, text: str, name: Optional[str] = None) -> Optional[dict]:
+    async def setAttributesAsText(
+        self, nodeId: int, text: str, name: Optional[str] = None
+    ) -> Optional[dict]:
         """
         :param nodeId: Id of the element to set attributes for.
         :type nodeId: int
@@ -460,15 +530,21 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if text is not None:
-            msg_dict['text'] = text
+            msg_dict["text"] = text
         if name is not None:
-            msg_dict['name'] = name
-        res = await self.chrome.send('DOM.setAttributesAsText', msg_dict)
-        return res
+            msg_dict["name"] = name
+        mayberes = await self.chrome.send("DOM.setAttributesAsText", msg_dict)
+        return mayberes
 
-    async def setFileInputFiles(self, files: List[str], nodeId: Optional[int] = None, backendNodeId: Optional[int] = None, objectId: Optional[str] = None) -> Optional[dict]:
+    async def setFileInputFiles(
+        self,
+        files: List[str],
+        nodeId: Optional[int] = None,
+        backendNodeId: Optional[int] = None,
+        objectId: Optional[str] = None,
+    ) -> Optional[dict]:
         """
         :param files: Array of file paths to set.
         :type files: List[str]
@@ -481,15 +557,15 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if files is not None:
-            msg_dict['files'] = files
+            msg_dict["files"] = files
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if backendNodeId is not None:
-            msg_dict['backendNodeId'] = backendNodeId
+            msg_dict["backendNodeId"] = backendNodeId
         if objectId is not None:
-            msg_dict['objectId'] = objectId
-        res = await self.chrome.send('DOM.setFileInputFiles', msg_dict)
-        return res
+            msg_dict["objectId"] = objectId
+        mayberes = await self.chrome.send("DOM.setFileInputFiles", msg_dict)
+        return mayberes
 
     async def setInspectedNode(self, nodeId: int) -> Optional[dict]:
         """
@@ -498,9 +574,9 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
-        res = await self.chrome.send('DOM.setInspectedNode', msg_dict)
-        return res
+            msg_dict["nodeId"] = nodeId
+        mayberes = await self.chrome.send("DOM.setInspectedNode", msg_dict)
+        return mayberes
 
     async def setNodeName(self, nodeId: int, name: str) -> Optional[dict]:
         """
@@ -511,10 +587,11 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if name is not None:
-            msg_dict['name'] = name
-        res = await self.chrome.send('DOM.setNodeName', msg_dict)
+            msg_dict["name"] = name
+        mayberes = await self.chrome.send("DOM.setNodeName", msg_dict)
+        res = await mayberes
         return res
 
     async def setNodeValue(self, nodeId: int, value: str) -> Optional[dict]:
@@ -526,11 +603,11 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if value is not None:
-            msg_dict['value'] = value
-        res = await self.chrome.send('DOM.setNodeValue', msg_dict)
-        return res
+            msg_dict["value"] = value
+        mayberes = await self.chrome.send("DOM.setNodeValue", msg_dict)
+        return mayberes
 
     async def setOuterHTML(self, nodeId: int, outerHTML: str) -> Optional[dict]:
         """
@@ -541,15 +618,15 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if nodeId is not None:
-            msg_dict['nodeId'] = nodeId
+            msg_dict["nodeId"] = nodeId
         if outerHTML is not None:
-            msg_dict['outerHTML'] = outerHTML
-        res = await self.chrome.send('DOM.setOuterHTML', msg_dict)
-        return res
+            msg_dict["outerHTML"] = outerHTML
+        mayberes = await self.chrome.send("DOM.setOuterHTML", msg_dict)
+        return mayberes
 
     async def undo(self) -> Optional[dict]:
-        res = await self.chrome.send('DOM.undo')
-        return res
+        mayberes = await self.chrome.send("DOM.undo")
+        return mayberes
 
     async def getFrameOwner(self, frameId: str) -> Optional[dict]:
         """
@@ -558,11 +635,11 @@ corresponding document elements as their child nodes.</p>
         """
         msg_dict = dict()
         if frameId is not None:
-            msg_dict['frameId'] = frameId
-        res = await self.chrome.send('DOM.getFrameOwner', msg_dict)
+            msg_dict["frameId"] = frameId
+        mayberes = await self.chrome.send("DOM.getFrameOwner", msg_dict)
+        res = await mayberes
         return res
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

@@ -8,12 +8,18 @@ class HeadlessExperimental(object):
     This domain provides experimental commands only supported in headless mode.
     """
 
-    dependencies = ['Page', 'Runtime']
+    dependencies = ["Page", "Runtime"]
 
     def __init__(self, chrome):
         self.chrome = chrome
 
-    async def beginFrame(self, frameTimeTicks: Optional[float] = None, interval: Optional[float] = None, noDisplayUpdates: Optional[bool] = None, screenshot: Optional[dict] = None) -> Optional[dict]:
+    async def beginFrame(
+        self,
+        frameTimeTicks: Optional[float] = None,
+        interval: Optional[float] = None,
+        noDisplayUpdates: Optional[bool] = None,
+        screenshot: Optional[dict] = None,
+    ) -> Optional[dict]:
         """
         :param frameTimeTicks: Timestamp of this BeginFrame in Renderer TimeTicks (milliseconds of uptime). If not set, the current time will be used.
         :type frameTimeTicks: Optional[float]
@@ -26,25 +32,25 @@ class HeadlessExperimental(object):
         """
         msg_dict = dict()
         if frameTimeTicks is not None:
-            msg_dict['frameTimeTicks'] = frameTimeTicks
+            msg_dict["frameTimeTicks"] = frameTimeTicks
         if interval is not None:
-            msg_dict['interval'] = interval
+            msg_dict["interval"] = interval
         if noDisplayUpdates is not None:
-            msg_dict['noDisplayUpdates'] = noDisplayUpdates
+            msg_dict["noDisplayUpdates"] = noDisplayUpdates
         if screenshot is not None:
-            msg_dict['screenshot'] = screenshot
-        res = await self.chrome.send('HeadlessExperimental.beginFrame', msg_dict)
+            msg_dict["screenshot"] = screenshot
+        mayberes = await self.chrome.send("HeadlessExperimental.beginFrame", msg_dict)
+        res = await mayberes
         return res
 
     async def disable(self) -> Optional[dict]:
-        res = await self.chrome.send('HeadlessExperimental.disable')
-        return res
+        mayberes = await self.chrome.send("HeadlessExperimental.disable")
+        return mayberes
 
     async def enable(self) -> Optional[dict]:
-        res = await self.chrome.send('HeadlessExperimental.enable')
-        return res
+        mayberes = await self.chrome.send("HeadlessExperimental.enable")
+        return mayberes
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

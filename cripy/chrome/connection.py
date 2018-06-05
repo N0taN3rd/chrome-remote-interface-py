@@ -1,16 +1,14 @@
 import asyncio
-import base64
 import ujson as json
 import logging
-from urllib.parse import urljoin
 from typing import Optional, List, Dict, Union, Callable, Any
 from pyee import EventEmitter
-import aiohttp
-import aiojobs
 import websockets
 import websockets.protocol
 
 from cripy.protocol import ProtocolMixin
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_HOST: str = "localhost"
 DEFAULT_PORT: int = 9222
@@ -21,30 +19,35 @@ MAX_PAYLOAD_SIZE_MB = MAX_PAYLOAD_SIZE_BYTES / 1024 ** 2  # ~ 1GB
 
 class NetworkError(Exception):  # noqa: D204
     """Network/Protocol related exception."""
+
     pass
 
 
 class Connection(ProtocolMixin, EventEmitter):
 
     def __init__(self, url: str, delay: int = 0, *args, **kwargs) -> None:
-        """
-        Raw websocket connection.
-        :arg str url: WebSocket url to connect devtool.
-        :arg int delay: delay to wait until send messages.
-        """
         super().__init__(*args, **kwargs)
         self._url = url
         self._message_id = 0
         self._callbacks: Dict[int, asyncio.Future] = dict()
         self._delay = delay
-        self._sessions: Dict[str, TargetConnection] = dict()
-        self._connected = False
-        self._ws = websockets.client.connect(
-            self._url, max_size=None, read_limit=2 ** 32
+        self._sessions: Dict[str, CDPSession] = dict()
+        self.connected = False
+        self._ws = None
+        self._recv_fut = None
+        self._closeCallback: Optional[Callable[[], None]] = None
+
+    @staticmethod
+    async def createForWebSocket(url: str, delay: int = 0) -> "Connection":
+        con = Connection(url, delay)
+        await con.connect()
+        return con
+
+    async def connect(self):
+        self._ws = await websockets.client.connect(
+            self._url, compression=None, max_queue=0, timeout=20
         )
         self._recv_fut = asyncio.ensure_future(self._recv_loop())
-        self._closeCallback: Optional[Callable[[], None]] = None
-        self.parent_emitter: Optional[EventEmitter] = None
 
     @property
     def url(self) -> str:
@@ -65,14 +68,14 @@ class Connection(ProtocolMixin, EventEmitter):
 
     async def dispose(self) -> None:
         """Close all connection."""
-        self._connected = False
+        self.connected = False
         await self._on_close()
 
-    async def create_session(self, targetId: str) -> "TargetConnection":
+    async def createSession(self, targetId: str) -> "CDPSession":
         """Create new session."""
         resp = await self.Target.attachToTarget(targetId)
         sessionId = resp.get("sessionId")
-        session = TargetConnection(self, targetId, sessionId)
+        session = CDPSession(self, targetId, sessionId)
         self._sessions[sessionId] = session
         return session
 
@@ -81,18 +84,18 @@ class Connection(ProtocolMixin, EventEmitter):
         self._closeCallback = callback
 
     async def _recv_loop(self):
-        self._connected = True
-        while self._connected:
+        self.connected = True
+        while self.connected:
             try:
                 resp = await self._ws.recv()
+                # print(resp)
                 if resp:
                     self._on_message(resp)
-            except (
-                websockets.ConnectionClosed,
-                ConnectionResetError,
-                asyncio.CancelledError,
-            ):
+            except (websockets.ConnectionClosed, ConnectionResetError) as e:
+                print("websocket dead", e)
+                logger.info("connection closed")
                 break
+        print("disposing")
 
     def _on_message(self, message: str) -> None:
         msg = json.loads(message)
@@ -114,22 +117,24 @@ class Connection(ProtocolMixin, EventEmitter):
         method = msg.get("method", "")
         if method in self.protocol_events:
             params = self.protocol_events[method].safe_create(params)
-
-        if method == "Target.receivedMessageFromTarget":
-            session = self._sessions.get(params.sesionId)
-            if session:
-                session._on_message(params.message)
-        elif method == "Target.detachedFromTarget":
-            session = self._sessions.get(params.sesionId)
-            if session:
-                session._on_closed()
-                del self._sessions[params.sesionId]
-        else:
-            self.emit(method, params)
+        try:
+            if method == "Target.receivedMessageFromTarget":
+                session = self._sessions.get(params.sessionId)
+                if session:
+                    session.on_message(params.message)
+            elif method == "Target.detachedFromTarget":
+                session = self._sessions.get(params.sessionId)
+                if session:
+                    session.on_closed()
+                    del self._sessions[params.sessionId]
+            else:
+                self.emit(method, params)
+        except Exception as e:
+            print(e)
+            print(params)
 
     async def _send_async(self, msg: str) -> None:
-        while not self._connected:
-            print("while not connected")
+        while not self.connected:
             await asyncio.sleep(0)
         await self._ws.send(msg)
 
@@ -143,27 +148,29 @@ class Connection(ProtocolMixin, EventEmitter):
         self._callbacks.clear()
 
         for session in self._sessions.values():
-            session._on_closed()
+            session.on_closed()
         self._sessions.clear()
 
         # close connection
         if not self._recv_fut.done():
-            if hasattr(self, "connection"):  # may not have connection
-                await self.connection.close()
             self._recv_fut.cancel()
+        if not self._ws.closed:
+            await self._ws.close()
 
 
-class TargetConnection(EventEmitter):
+class CDPSession(ProtocolMixin, EventEmitter):
 
-    def __init__(self, connection: Connection, targetId: str, sessionId: str) -> None:
+    def __init__(
+        self, connection: Connection, targetId: str, sessionId: str, *args, **kwargs
+    ) -> None:
         """Make new session."""
-        super().__init__()
+        super().__init__(*args, **kwargs)
         self._lastId = 0
         self._callbacks: Dict[int, asyncio.Future] = {}
         self._connection: Optional[Connection] = connection
         self._targetId = targetId
         self._sessionId = sessionId
-        self._sessions: Dict[str, TargetConnection] = dict()
+        self._sessions: Dict[str, CDPSession] = dict()
 
     async def send(self, method: str, params: dict = None) -> Any:
         """Send message to the connected session.
@@ -194,12 +201,13 @@ class TargetConnection(EventEmitter):
             raise NetworkError("Connection already closed.")
         await self._connection.Target.detachFromTarget(self._sessionId)
 
-    def _create_session(self, targetId: str, sessionId: str) -> "TargetConnection":
-        sesh = TargetConnection(self._connection, targetId, sessionId)
+    def create_session(self, targetId: str, sessionId: str) -> "CDPSession":
+        sesh = CDPSession(self._connection, targetId, sessionId)
         self._sessions[sessionId] = sesh
         return sesh
 
-    def _on_message(self, message: str) -> None:
+    def on_message(self, message: str) -> None:
+        # print('CDPSession.on_message', message)
         msg = json.loads(message)
         _id = msg.get("id")
         if _id and _id in self._callbacks:
@@ -215,22 +223,21 @@ class TargetConnection(EventEmitter):
         else:
             method = msg.get("method")
             params = msg.get("params")
-            if method in self._connection.protocol_events:
-                params = self._connection.protocol_events[method].safe_create(params)
-
+            if method in self.protocol_events:
+                params = self.protocol_events[method].safe_create(params)
             if method == "Target.receivedMessageFromTarget":
                 session = self._sessions.get(params.sesionId)
                 if session:
-                    session._on_message(params.message)
+                    session.on_message(params.message)
             elif method == "Target.detachedFromTarget":
                 session = self._sessions.get(params.sesionId)
                 if session:
-                    session._on_closed()
+                    session.on_closed()
                     del self._sessions[params.sesionId]
             else:
                 self.emit(method, params)
 
-    def _on_closed(self) -> None:
+    def on_closed(self) -> None:
         for cb in self._callbacks.values():
             cb.cancel()
         self._callbacks.clear()

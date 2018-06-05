@@ -2,12 +2,18 @@ from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
 
-class GPUInfo(ProtocolType):
+class GPUInfo(object):
     """
     Provides information about the GPU(s) on the system.
     """
 
-    def __init__(self, devices: List[Union['GPUDevice', dict]], driverBugWorkarounds: List[str], auxAttributes: Optional[dict] = None, featureStatus: Optional[dict] = None) -> None:
+    def __init__(
+        self,
+        devices: List[Union["GPUDevice", dict]],
+        driverBugWorkarounds: List[str],
+        auxAttributes: Optional[dict] = None,
+        featureStatus: Optional[dict] = None,
+    ) -> None:
         """
         :param devices: The graphics devices on the system. Element 0 is the primary GPU.
         :type devices: List[dict]
@@ -24,8 +30,31 @@ class GPUInfo(ProtocolType):
         self.featureStatus = featureStatus
         self.driverBugWorkarounds = driverBugWorkarounds
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.devices is not None:
+            repr_args.append("devices={!r}".format(self.devices))
+        if self.auxAttributes is not None:
+            repr_args.append("auxAttributes={!r}".format(self.auxAttributes))
+        if self.featureStatus is not None:
+            repr_args.append("featureStatus={!r}".format(self.featureStatus))
+        if self.driverBugWorkarounds is not None:
+            repr_args.append(
+                "driverBugWorkarounds={!r}".format(self.driverBugWorkarounds)
+            )
+        return "GPUInfo(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['GPUInfo', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["GPUInfo", dict]]:
         if init is not None:
             try:
                 ourselves = GPUInfo(**init)
@@ -36,7 +65,9 @@ class GPUInfo(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['GPUInfo', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["GPUInfo", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -46,12 +77,14 @@ class GPUInfo(ProtocolType):
             return init
 
 
-class GPUDevice(ProtocolType):
+class GPUDevice(object):
     """
     Describes a single graphics processor (GPU).
     """
 
-    def __init__(self, vendorId: float, deviceId: float, vendorString: str, deviceString: str) -> None:
+    def __init__(
+        self, vendorId: float, deviceId: float, vendorString: str, deviceString: str
+    ) -> None:
         """
         :param vendorId: PCI ID of the GPU vendor, if available; 0 otherwise.
         :type vendorId: float
@@ -68,8 +101,29 @@ class GPUDevice(ProtocolType):
         self.vendorString = vendorString
         self.deviceString = deviceString
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.vendorId is not None:
+            repr_args.append("vendorId={!r}".format(self.vendorId))
+        if self.deviceId is not None:
+            repr_args.append("deviceId={!r}".format(self.deviceId))
+        if self.vendorString is not None:
+            repr_args.append("vendorString={!r}".format(self.vendorString))
+        if self.deviceString is not None:
+            repr_args.append("deviceString={!r}".format(self.deviceString))
+        return "GPUDevice(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['GPUDevice', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["GPUDevice", dict]]:
         if init is not None:
             try:
                 ourselves = GPUDevice(**init)
@@ -80,7 +134,9 @@ class GPUDevice(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['GPUDevice', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["GPUDevice", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -90,7 +146,4 @@ class GPUDevice(ProtocolType):
             return init
 
 
-TYPE_TO_OBJECT = {
-    "GPUInfo": GPUInfo,
-    "GPUDevice": GPUDevice,
-}
+TYPE_TO_OBJECT = {"GPUInfo": GPUInfo, "GPUDevice": GPUDevice}

@@ -7,7 +7,6 @@ class Tethering(object):
     The Tethering domain defines methods and events for browser port binding.
     """
 
-
     def __init__(self, chrome):
         self.chrome = chrome
 
@@ -18,9 +17,9 @@ class Tethering(object):
         """
         msg_dict = dict()
         if port is not None:
-            msg_dict['port'] = port
-        res = await self.chrome.send('Tethering.bind', msg_dict)
-        return res
+            msg_dict["port"] = port
+        mayberes = await self.chrome.send("Tethering.bind", msg_dict)
+        return mayberes
 
     async def unbind(self, port: int) -> Optional[dict]:
         """
@@ -29,11 +28,10 @@ class Tethering(object):
         """
         msg_dict = dict()
         if port is not None:
-            msg_dict['port'] = port
-        res = await self.chrome.send('Tethering.unbind', msg_dict)
-        return res
+            msg_dict["port"] = port
+        mayberes = await self.chrome.send("Tethering.unbind", msg_dict)
+        return mayberes
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

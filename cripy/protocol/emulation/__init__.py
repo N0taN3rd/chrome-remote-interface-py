@@ -11,26 +11,27 @@ class Emulation(object):
     This domain emulates different environments for the page.
     """
 
-    dependencies = ['DOM', 'Page', 'Runtime']
+    dependencies = ["DOM", "Page", "Runtime"]
 
     def __init__(self, chrome):
         self.chrome = chrome
 
     async def canEmulate(self) -> Optional[dict]:
-        res = await self.chrome.send('Emulation.canEmulate')
+        mayberes = await self.chrome.send("Emulation.canEmulate")
+        res = await mayberes
         return res
 
     async def clearDeviceMetricsOverride(self) -> Optional[dict]:
-        res = await self.chrome.send('Emulation.clearDeviceMetricsOverride')
-        return res
+        mayberes = await self.chrome.send("Emulation.clearDeviceMetricsOverride")
+        return mayberes
 
     async def clearGeolocationOverride(self) -> Optional[dict]:
-        res = await self.chrome.send('Emulation.clearGeolocationOverride')
-        return res
+        mayberes = await self.chrome.send("Emulation.clearGeolocationOverride")
+        return mayberes
 
     async def resetPageScaleFactor(self) -> Optional[dict]:
-        res = await self.chrome.send('Emulation.resetPageScaleFactor')
-        return res
+        mayberes = await self.chrome.send("Emulation.resetPageScaleFactor")
+        return mayberes
 
     async def setCPUThrottlingRate(self, rate: float) -> Optional[dict]:
         """
@@ -39,22 +40,40 @@ class Emulation(object):
         """
         msg_dict = dict()
         if rate is not None:
-            msg_dict['rate'] = rate
-        res = await self.chrome.send('Emulation.setCPUThrottlingRate', msg_dict)
-        return res
+            msg_dict["rate"] = rate
+        mayberes = await self.chrome.send("Emulation.setCPUThrottlingRate", msg_dict)
+        return mayberes
 
-    async def setDefaultBackgroundColorOverride(self, color: Optional[dict] = None) -> Optional[dict]:
+    async def setDefaultBackgroundColorOverride(
+        self, color: Optional[dict] = None
+    ) -> Optional[dict]:
         """
         :param color: RGBA of the default background color. If not specified, any existing override will be cleared.
         :type color: Optional[dict]
         """
         msg_dict = dict()
         if color is not None:
-            msg_dict['color'] = color
-        res = await self.chrome.send('Emulation.setDefaultBackgroundColorOverride', msg_dict)
-        return res
+            msg_dict["color"] = color
+        mayberes = await self.chrome.send(
+            "Emulation.setDefaultBackgroundColorOverride", msg_dict
+        )
+        return mayberes
 
-    async def setDeviceMetricsOverride(self, width: int, height: int, deviceScaleFactor: float, mobile: bool, scale: Optional[float] = None, screenWidth: Optional[int] = None, screenHeight: Optional[int] = None, positionX: Optional[int] = None, positionY: Optional[int] = None, dontSetVisibleSize: Optional[bool] = None, screenOrientation: Optional[dict] = None, viewport: Optional[dict] = None) -> Optional[dict]:
+    async def setDeviceMetricsOverride(
+        self,
+        width: int,
+        height: int,
+        deviceScaleFactor: float,
+        mobile: bool,
+        scale: Optional[float] = None,
+        screenWidth: Optional[int] = None,
+        screenHeight: Optional[int] = None,
+        positionX: Optional[int] = None,
+        positionY: Optional[int] = None,
+        dontSetVisibleSize: Optional[bool] = None,
+        screenOrientation: Optional[dict] = None,
+        viewport: Optional[dict] = None,
+    ) -> Optional[dict]:
         """
         :param width: Overriding width value in pixels (minimum 0, maximum 10000000). 0 disables the override.
         :type width: int
@@ -83,33 +102,48 @@ class Emulation(object):
         """
         msg_dict = dict()
         if width is not None:
-            msg_dict['width'] = width
+            msg_dict["width"] = width
         if height is not None:
-            msg_dict['height'] = height
+            msg_dict["height"] = height
         if deviceScaleFactor is not None:
-            msg_dict['deviceScaleFactor'] = deviceScaleFactor
+            msg_dict["deviceScaleFactor"] = deviceScaleFactor
         if mobile is not None:
-            msg_dict['mobile'] = mobile
+            msg_dict["mobile"] = mobile
         if scale is not None:
-            msg_dict['scale'] = scale
+            msg_dict["scale"] = scale
         if screenWidth is not None:
-            msg_dict['screenWidth'] = screenWidth
+            msg_dict["screenWidth"] = screenWidth
         if screenHeight is not None:
-            msg_dict['screenHeight'] = screenHeight
+            msg_dict["screenHeight"] = screenHeight
         if positionX is not None:
-            msg_dict['positionX'] = positionX
+            msg_dict["positionX"] = positionX
         if positionY is not None:
-            msg_dict['positionY'] = positionY
+            msg_dict["positionY"] = positionY
         if dontSetVisibleSize is not None:
-            msg_dict['dontSetVisibleSize'] = dontSetVisibleSize
+            msg_dict["dontSetVisibleSize"] = dontSetVisibleSize
         if screenOrientation is not None:
-            msg_dict['screenOrientation'] = screenOrientation
+            msg_dict["screenOrientation"] = screenOrientation
         if viewport is not None:
-            msg_dict['viewport'] = viewport
-        res = await self.chrome.send('Emulation.setDeviceMetricsOverride', msg_dict)
-        return res
+            msg_dict["viewport"] = viewport
+        mayberes = await self.chrome.send(
+            "Emulation.setDeviceMetricsOverride", msg_dict
+        )
+        return mayberes
 
-    async def setEmitTouchEventsForMouse(self, enabled: bool, configuration: Optional[str] = None) -> Optional[dict]:
+    async def setScrollbarsHidden(self, hidden: bool) -> Optional[dict]:
+        """
+        :param hidden: Whether scrollbars should be always hidden.
+        :type hidden: bool
+        """
+        msg_dict = dict()
+        if hidden is not None:
+            msg_dict["hidden"] = hidden
+        mayberes = await self.chrome.send("Emulation.setScrollbarsHidden", msg_dict)
+        return mayberes
+
+    async def setEmitTouchEventsForMouse(
+        self, enabled: bool, configuration: Optional[str] = None
+    ) -> Optional[dict]:
         """
         :param enabled: Whether touch emulation based on mouse input should be enabled.
         :type enabled: bool
@@ -118,11 +152,13 @@ class Emulation(object):
         """
         msg_dict = dict()
         if enabled is not None:
-            msg_dict['enabled'] = enabled
+            msg_dict["enabled"] = enabled
         if configuration is not None:
-            msg_dict['configuration'] = configuration
-        res = await self.chrome.send('Emulation.setEmitTouchEventsForMouse', msg_dict)
-        return res
+            msg_dict["configuration"] = configuration
+        mayberes = await self.chrome.send(
+            "Emulation.setEmitTouchEventsForMouse", msg_dict
+        )
+        return mayberes
 
     async def setEmulatedMedia(self, media: str) -> Optional[dict]:
         """
@@ -131,11 +167,16 @@ class Emulation(object):
         """
         msg_dict = dict()
         if media is not None:
-            msg_dict['media'] = media
-        res = await self.chrome.send('Emulation.setEmulatedMedia', msg_dict)
-        return res
+            msg_dict["media"] = media
+        mayberes = await self.chrome.send("Emulation.setEmulatedMedia", msg_dict)
+        return mayberes
 
-    async def setGeolocationOverride(self, latitude: Optional[float] = None, longitude: Optional[float] = None, accuracy: Optional[float] = None) -> Optional[dict]:
+    async def setGeolocationOverride(
+        self,
+        latitude: Optional[float] = None,
+        longitude: Optional[float] = None,
+        accuracy: Optional[float] = None,
+    ) -> Optional[dict]:
         """
         :param latitude: Mock latitude
         :type latitude: Optional[float]
@@ -146,13 +187,13 @@ class Emulation(object):
         """
         msg_dict = dict()
         if latitude is not None:
-            msg_dict['latitude'] = latitude
+            msg_dict["latitude"] = latitude
         if longitude is not None:
-            msg_dict['longitude'] = longitude
+            msg_dict["longitude"] = longitude
         if accuracy is not None:
-            msg_dict['accuracy'] = accuracy
-        res = await self.chrome.send('Emulation.setGeolocationOverride', msg_dict)
-        return res
+            msg_dict["accuracy"] = accuracy
+        mayberes = await self.chrome.send("Emulation.setGeolocationOverride", msg_dict)
+        return mayberes
 
     async def setNavigatorOverrides(self, platform: str) -> Optional[dict]:
         """
@@ -161,9 +202,9 @@ class Emulation(object):
         """
         msg_dict = dict()
         if platform is not None:
-            msg_dict['platform'] = platform
-        res = await self.chrome.send('Emulation.setNavigatorOverrides', msg_dict)
-        return res
+            msg_dict["platform"] = platform
+        mayberes = await self.chrome.send("Emulation.setNavigatorOverrides", msg_dict)
+        return mayberes
 
     async def setPageScaleFactor(self, pageScaleFactor: float) -> Optional[dict]:
         """
@@ -172,9 +213,9 @@ class Emulation(object):
         """
         msg_dict = dict()
         if pageScaleFactor is not None:
-            msg_dict['pageScaleFactor'] = pageScaleFactor
-        res = await self.chrome.send('Emulation.setPageScaleFactor', msg_dict)
-        return res
+            msg_dict["pageScaleFactor"] = pageScaleFactor
+        mayberes = await self.chrome.send("Emulation.setPageScaleFactor", msg_dict)
+        return mayberes
 
     async def setScriptExecutionDisabled(self, value: bool) -> Optional[dict]:
         """
@@ -183,11 +224,15 @@ class Emulation(object):
         """
         msg_dict = dict()
         if value is not None:
-            msg_dict['value'] = value
-        res = await self.chrome.send('Emulation.setScriptExecutionDisabled', msg_dict)
-        return res
+            msg_dict["value"] = value
+        mayberes = await self.chrome.send(
+            "Emulation.setScriptExecutionDisabled", msg_dict
+        )
+        return mayberes
 
-    async def setTouchEmulationEnabled(self, enabled: bool, maxTouchPoints: Optional[int] = None) -> Optional[dict]:
+    async def setTouchEmulationEnabled(
+        self, enabled: bool, maxTouchPoints: Optional[int] = None
+    ) -> Optional[dict]:
         """
         :param enabled: Whether the touch event emulation should be enabled.
         :type enabled: bool
@@ -196,13 +241,22 @@ class Emulation(object):
         """
         msg_dict = dict()
         if enabled is not None:
-            msg_dict['enabled'] = enabled
+            msg_dict["enabled"] = enabled
         if maxTouchPoints is not None:
-            msg_dict['maxTouchPoints'] = maxTouchPoints
-        res = await self.chrome.send('Emulation.setTouchEmulationEnabled', msg_dict)
-        return res
+            msg_dict["maxTouchPoints"] = maxTouchPoints
+        mayberes = await self.chrome.send(
+            "Emulation.setTouchEmulationEnabled", msg_dict
+        )
+        return mayberes
 
-    async def setVirtualTimePolicy(self, policy: str, budget: Optional[float] = None, maxVirtualTimeTaskStarvationCount: Optional[int] = None, waitForNavigation: Optional[bool] = None, initialVirtualTime: Optional[float] = None) -> Optional[dict]:
+    async def setVirtualTimePolicy(
+        self,
+        policy: str,
+        budget: Optional[float] = None,
+        maxVirtualTimeTaskStarvationCount: Optional[int] = None,
+        waitForNavigation: Optional[bool] = None,
+        initialVirtualTime: Optional[float] = None,
+    ) -> Optional[dict]:
         """
         :param policy: The policy
         :type policy: str
@@ -217,16 +271,19 @@ class Emulation(object):
         """
         msg_dict = dict()
         if policy is not None:
-            msg_dict['policy'] = policy
+            msg_dict["policy"] = policy
         if budget is not None:
-            msg_dict['budget'] = budget
+            msg_dict["budget"] = budget
         if maxVirtualTimeTaskStarvationCount is not None:
-            msg_dict['maxVirtualTimeTaskStarvationCount'] = maxVirtualTimeTaskStarvationCount
+            msg_dict[
+                "maxVirtualTimeTaskStarvationCount"
+            ] = maxVirtualTimeTaskStarvationCount
         if waitForNavigation is not None:
-            msg_dict['waitForNavigation'] = waitForNavigation
+            msg_dict["waitForNavigation"] = waitForNavigation
         if initialVirtualTime is not None:
-            msg_dict['initialVirtualTime'] = initialVirtualTime
-        res = await self.chrome.send('Emulation.setVirtualTimePolicy', msg_dict)
+            msg_dict["initialVirtualTime"] = initialVirtualTime
+        mayberes = await self.chrome.send("Emulation.setVirtualTimePolicy", msg_dict)
+        res = await mayberes
         return res
 
     async def setVisibleSize(self, width: int, height: int) -> Optional[dict]:
@@ -238,13 +295,18 @@ class Emulation(object):
         """
         msg_dict = dict()
         if width is not None:
-            msg_dict['width'] = width
+            msg_dict["width"] = width
         if height is not None:
-            msg_dict['height'] = height
-        res = await self.chrome.send('Emulation.setVisibleSize', msg_dict)
-        return res
+            msg_dict["height"] = height
+        mayberes = await self.chrome.send("Emulation.setVisibleSize", msg_dict)
+        return mayberes
 
-    async def setUserAgentOverride(self, userAgent: str, acceptLanguage: Optional[str] = None, platform: Optional[str] = None) -> Optional[dict]:
+    async def setUserAgentOverride(
+        self,
+        userAgent: str,
+        acceptLanguage: Optional[str] = None,
+        platform: Optional[str] = None,
+    ) -> Optional[dict]:
         """
         :param userAgent: User agent to use.
         :type userAgent: str
@@ -255,15 +317,14 @@ class Emulation(object):
         """
         msg_dict = dict()
         if userAgent is not None:
-            msg_dict['userAgent'] = userAgent
+            msg_dict["userAgent"] = userAgent
         if acceptLanguage is not None:
-            msg_dict['acceptLanguage'] = acceptLanguage
+            msg_dict["acceptLanguage"] = acceptLanguage
         if platform is not None:
-            msg_dict['platform'] = platform
-        res = await self.chrome.send('Emulation.setUserAgentOverride', msg_dict)
-        return res
+            msg_dict["platform"] = platform
+        mayberes = await self.chrome.send("Emulation.setUserAgentOverride", msg_dict)
+        return mayberes
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

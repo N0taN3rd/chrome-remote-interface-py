@@ -2,7 +2,7 @@ from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
 
-class SamplingProfileNode(ProtocolType):
+class SamplingProfileNode(object):
     """
     Heap profile sample.
     """
@@ -21,8 +21,29 @@ class SamplingProfileNode(ProtocolType):
         self.total = total
         self.stack = stack
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.size is not None:
+            repr_args.append("size={!r}".format(self.size))
+        if self.total is not None:
+            repr_args.append("total={!r}".format(self.total))
+        if self.stack is not None:
+            repr_args.append("stack={!r}".format(self.stack))
+        return "SamplingProfileNode(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['SamplingProfileNode', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["SamplingProfileNode", dict]]:
         if init is not None:
             try:
                 ourselves = SamplingProfileNode(**init)
@@ -33,7 +54,9 @@ class SamplingProfileNode(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SamplingProfileNode', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["SamplingProfileNode", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -43,12 +66,12 @@ class SamplingProfileNode(ProtocolType):
             return init
 
 
-class SamplingProfile(ProtocolType):
+class SamplingProfile(object):
     """
     Array of heap profile samples.
     """
 
-    def __init__(self, samples: List[Union['SamplingProfileNode', dict]]) -> None:
+    def __init__(self, samples: List[Union["SamplingProfileNode", dict]]) -> None:
         """
         :param samples: The samples
         :type samples: List[dict]
@@ -56,8 +79,23 @@ class SamplingProfile(ProtocolType):
         super().__init__()
         self.samples = SamplingProfileNode.safe_create_from_list(samples)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.samples is not None:
+            repr_args.append("samples={!r}".format(self.samples))
+        return "SamplingProfile(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['SamplingProfile', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["SamplingProfile", dict]]:
         if init is not None:
             try:
                 ourselves = SamplingProfile(**init)
@@ -68,7 +106,9 @@ class SamplingProfile(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SamplingProfile', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["SamplingProfile", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:

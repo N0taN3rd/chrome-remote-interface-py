@@ -8,22 +8,22 @@ class Log(object):
     Provides access to log entries.
     """
 
-    dependencies = ['Runtime', 'Network']
+    dependencies = ["Runtime", "Network"]
 
     def __init__(self, chrome):
         self.chrome = chrome
 
     async def clear(self) -> Optional[dict]:
-        res = await self.chrome.send('Log.clear')
-        return res
+        mayberes = await self.chrome.send("Log.clear")
+        return mayberes
 
     async def disable(self) -> Optional[dict]:
-        res = await self.chrome.send('Log.disable')
-        return res
+        mayberes = await self.chrome.send("Log.disable")
+        return mayberes
 
     async def enable(self) -> Optional[dict]:
-        res = await self.chrome.send('Log.enable')
-        return res
+        mayberes = await self.chrome.send("Log.enable")
+        return mayberes
 
     async def startViolationsReport(self, config: List[dict]) -> Optional[dict]:
         """
@@ -32,15 +32,14 @@ class Log(object):
         """
         msg_dict = dict()
         if config is not None:
-            msg_dict['config'] = config
-        res = await self.chrome.send('Log.startViolationsReport', msg_dict)
-        return res
+            msg_dict["config"] = config
+        mayberes = await self.chrome.send("Log.startViolationsReport", msg_dict)
+        return mayberes
 
     async def stopViolationsReport(self) -> Optional[dict]:
-        res = await self.chrome.send('Log.stopViolationsReport')
-        return res
+        mayberes = await self.chrome.send("Log.stopViolationsReport")
+        return mayberes
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

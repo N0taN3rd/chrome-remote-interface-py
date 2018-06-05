@@ -1,14 +1,15 @@
 from typing import Any, List, Optional, Union
-from cripy.helpers import BaseEvent
+from types import SimpleNamespace
 from cripy.protocol.dom import types as DOM
 from cripy.protocol.page import types as Page
+
 try:
     from cripy.protocol.overlay.types import *
 except ImportError:
     pass
 
 
-class InspectNodeRequestedEvent(BaseEvent):
+class InspectNodeRequestedEvent(object):
     """
     Fired when the node should be inspected.
 	This happens after call to `setInspectMode` or when user manually inspects an element.
@@ -24,8 +25,25 @@ class InspectNodeRequestedEvent(BaseEvent):
         super().__init__()
         self.backendNodeId = backendNodeId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.backendNodeId is not None:
+            repr_args.append("backendNodeId={!r}".format(self.backendNodeId))
+        return "InspectNodeRequestedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['InspectNodeRequestedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["InspectNodeRequestedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = InspectNodeRequestedEvent(**init)
@@ -36,7 +54,9 @@ class InspectNodeRequestedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['InspectNodeRequestedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["InspectNodeRequestedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -46,7 +66,7 @@ class InspectNodeRequestedEvent(BaseEvent):
             return init
 
 
-class NodeHighlightRequestedEvent(BaseEvent):
+class NodeHighlightRequestedEvent(object):
     """
     Fired when the node should be highlighted.
 	This happens after call to `setInspectMode`.
@@ -62,8 +82,25 @@ class NodeHighlightRequestedEvent(BaseEvent):
         super().__init__()
         self.nodeId = nodeId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.nodeId is not None:
+            repr_args.append("nodeId={!r}".format(self.nodeId))
+        return "NodeHighlightRequestedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['NodeHighlightRequestedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["NodeHighlightRequestedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = NodeHighlightRequestedEvent(**init)
@@ -74,7 +111,9 @@ class NodeHighlightRequestedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['NodeHighlightRequestedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["NodeHighlightRequestedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -84,7 +123,7 @@ class NodeHighlightRequestedEvent(BaseEvent):
             return init
 
 
-class ScreenshotRequestedEvent(BaseEvent):
+class ScreenshotRequestedEvent(object):
     """
     Fired when user asks to capture screenshot of some area on the page.
     """
@@ -99,8 +138,25 @@ class ScreenshotRequestedEvent(BaseEvent):
         super().__init__()
         self.viewport = Page.Viewport.safe_create(viewport)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.viewport is not None:
+            repr_args.append("viewport={!r}".format(self.viewport))
+        return "ScreenshotRequestedEvent(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ScreenshotRequestedEvent', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ScreenshotRequestedEvent", dict]]:
         if init is not None:
             try:
                 ourselves = ScreenshotRequestedEvent(**init)
@@ -111,7 +167,9 @@ class ScreenshotRequestedEvent(BaseEvent):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ScreenshotRequestedEvent', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ScreenshotRequestedEvent", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -122,8 +180,13 @@ class ScreenshotRequestedEvent(BaseEvent):
 
 
 EVENT_TO_CLASS = {
-   "Overlay.inspectNodeRequested": InspectNodeRequestedEvent,
-   "Overlay.nodeHighlightRequested": NodeHighlightRequestedEvent,
-   "Overlay.screenshotRequested": ScreenshotRequestedEvent,
+    "Overlay.inspectNodeRequested": InspectNodeRequestedEvent,
+    "Overlay.nodeHighlightRequested": NodeHighlightRequestedEvent,
+    "Overlay.screenshotRequested": ScreenshotRequestedEvent,
 }
 
+EVENT_NS = SimpleNamespace(
+    InspectNodeRequested="Overlay.inspectNodeRequested",
+    NodeHighlightRequested="Overlay.nodeHighlightRequested",
+    ScreenshotRequested="Overlay.screenshotRequested",
+)

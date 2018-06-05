@@ -9,19 +9,19 @@ class Performance(object):
         self.chrome = chrome
 
     async def disable(self) -> Optional[dict]:
-        res = await self.chrome.send('Performance.disable')
-        return res
+        mayberes = await self.chrome.send("Performance.disable")
+        return mayberes
 
     async def enable(self) -> Optional[dict]:
-        res = await self.chrome.send('Performance.enable')
-        return res
+        mayberes = await self.chrome.send("Performance.enable")
+        return mayberes
 
     async def getMetrics(self) -> Optional[dict]:
-        res = await self.chrome.send('Performance.getMetrics')
-        res['metrics'] = Types.Metric.safe_create_from_list(res['metrics'])
+        mayberes = await self.chrome.send("Performance.getMetrics")
+        res = await mayberes
+        res["metrics"] = Types.Metric.safe_create_from_list(res["metrics"])
         return res
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

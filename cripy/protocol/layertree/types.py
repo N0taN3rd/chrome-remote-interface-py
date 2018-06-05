@@ -3,12 +3,18 @@ from cripy.helpers import ProtocolType
 from cripy.protocol.dom import types as DOM
 
 
-class StickyPositionConstraint(ProtocolType):
+class StickyPositionConstraint(object):
     """
     Sticky position constraints.
     """
 
-    def __init__(self, stickyBoxRect: Union['DOM.Rect', dict], containingBlockRect: Union['DOM.Rect', dict], nearestLayerShiftingStickyBox: Optional[str] = None, nearestLayerShiftingContainingBlock: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        stickyBoxRect: Union["DOM.Rect", dict],
+        containingBlockRect: Union["DOM.Rect", dict],
+        nearestLayerShiftingStickyBox: Optional[str] = None,
+        nearestLayerShiftingContainingBlock: Optional[str] = None,
+    ) -> None:
         """
         :param stickyBoxRect: Layout rectangle of the sticky element before being shifted
         :type stickyBoxRect: dict
@@ -25,8 +31,41 @@ class StickyPositionConstraint(ProtocolType):
         self.nearestLayerShiftingStickyBox = nearestLayerShiftingStickyBox
         self.nearestLayerShiftingContainingBlock = nearestLayerShiftingContainingBlock
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.stickyBoxRect is not None:
+            repr_args.append("stickyBoxRect={!r}".format(self.stickyBoxRect))
+        if self.containingBlockRect is not None:
+            repr_args.append(
+                "containingBlockRect={!r}".format(self.containingBlockRect)
+            )
+        if self.nearestLayerShiftingStickyBox is not None:
+            repr_args.append(
+                "nearestLayerShiftingStickyBox={!r}".format(
+                    self.nearestLayerShiftingStickyBox
+                )
+            )
+        if self.nearestLayerShiftingContainingBlock is not None:
+            repr_args.append(
+                "nearestLayerShiftingContainingBlock={!r}".format(
+                    self.nearestLayerShiftingContainingBlock
+                )
+            )
+        return "StickyPositionConstraint(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['StickyPositionConstraint', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["StickyPositionConstraint", dict]]:
         if init is not None:
             try:
                 ourselves = StickyPositionConstraint(**init)
@@ -37,7 +76,9 @@ class StickyPositionConstraint(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['StickyPositionConstraint', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["StickyPositionConstraint", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -47,12 +88,12 @@ class StickyPositionConstraint(ProtocolType):
             return init
 
 
-class ScrollRect(ProtocolType):
+class ScrollRect(object):
     """
     Rectangle where scrolling happens on the main thread.
     """
 
-    def __init__(self, rect: Union['DOM.Rect', dict], type: str) -> None:
+    def __init__(self, rect: Union["DOM.Rect", dict], type: str) -> None:
         """
         :param rect: Rectangle itself.
         :type rect: dict
@@ -63,8 +104,25 @@ class ScrollRect(ProtocolType):
         self.rect = DOM.Rect.safe_create(rect)
         self.type = type
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.rect is not None:
+            repr_args.append("rect={!r}".format(self.rect))
+        if self.type is not None:
+            repr_args.append("type={!r}".format(self.type))
+        return "ScrollRect(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ScrollRect', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["ScrollRect", dict]]:
         if init is not None:
             try:
                 ourselves = ScrollRect(**init)
@@ -75,7 +133,9 @@ class ScrollRect(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ScrollRect', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ScrollRect", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -85,7 +145,7 @@ class ScrollRect(ProtocolType):
             return init
 
 
-class PictureTile(ProtocolType):
+class PictureTile(object):
     """
     Serialized fragment of layer picture along with its offset within the layer.
     """
@@ -104,8 +164,27 @@ class PictureTile(ProtocolType):
         self.y = y
         self.picture = picture
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.x is not None:
+            repr_args.append("x={!r}".format(self.x))
+        if self.y is not None:
+            repr_args.append("y={!r}".format(self.y))
+        if self.picture is not None:
+            repr_args.append("picture={!r}".format(self.picture))
+        return "PictureTile(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['PictureTile', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["PictureTile", dict]]:
         if init is not None:
             try:
                 ourselves = PictureTile(**init)
@@ -116,7 +195,9 @@ class PictureTile(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['PictureTile', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["PictureTile", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -126,12 +207,32 @@ class PictureTile(ProtocolType):
             return init
 
 
-class Layer(ProtocolType):
+class Layer(object):
     """
     Information about a compositing layer.
     """
 
-    def __init__(self, layerId: str, offsetX: float, offsetY: float, width: float, height: float, paintCount: int, drawsContent: bool, parentLayerId: Optional[str] = None, backendNodeId: Optional[int] = None, transform: Optional[List[float]] = None, anchorX: Optional[float] = None, anchorY: Optional[float] = None, anchorZ: Optional[float] = None, invisible: Optional[bool] = None, scrollRects: Optional[List[Union['ScrollRect', dict]]] = None, stickyPositionConstraint: Optional[Union['StickyPositionConstraint', dict]] = None) -> None:
+    def __init__(
+        self,
+        layerId: str,
+        offsetX: float,
+        offsetY: float,
+        width: float,
+        height: float,
+        paintCount: int,
+        drawsContent: bool,
+        parentLayerId: Optional[str] = None,
+        backendNodeId: Optional[int] = None,
+        transform: Optional[List[float]] = None,
+        anchorX: Optional[float] = None,
+        anchorY: Optional[float] = None,
+        anchorZ: Optional[float] = None,
+        invisible: Optional[bool] = None,
+        scrollRects: Optional[List[Union["ScrollRect", dict]]] = None,
+        stickyPositionConstraint: Optional[
+            Union["StickyPositionConstraint", dict]
+        ] = None,
+    ) -> None:
         """
         :param layerId: The unique id for this layer.
         :type layerId: str
@@ -182,10 +283,59 @@ class Layer(ProtocolType):
         self.drawsContent = drawsContent
         self.invisible = invisible
         self.scrollRects = ScrollRect.safe_create_from_list(scrollRects)
-        self.stickyPositionConstraint = StickyPositionConstraint.safe_create(stickyPositionConstraint)
+        self.stickyPositionConstraint = StickyPositionConstraint.safe_create(
+            stickyPositionConstraint
+        )
+
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.layerId is not None:
+            repr_args.append("layerId={!r}".format(self.layerId))
+        if self.parentLayerId is not None:
+            repr_args.append("parentLayerId={!r}".format(self.parentLayerId))
+        if self.backendNodeId is not None:
+            repr_args.append("backendNodeId={!r}".format(self.backendNodeId))
+        if self.offsetX is not None:
+            repr_args.append("offsetX={!r}".format(self.offsetX))
+        if self.offsetY is not None:
+            repr_args.append("offsetY={!r}".format(self.offsetY))
+        if self.width is not None:
+            repr_args.append("width={!r}".format(self.width))
+        if self.height is not None:
+            repr_args.append("height={!r}".format(self.height))
+        if self.transform is not None:
+            repr_args.append("transform={!r}".format(self.transform))
+        if self.anchorX is not None:
+            repr_args.append("anchorX={!r}".format(self.anchorX))
+        if self.anchorY is not None:
+            repr_args.append("anchorY={!r}".format(self.anchorY))
+        if self.anchorZ is not None:
+            repr_args.append("anchorZ={!r}".format(self.anchorZ))
+        if self.paintCount is not None:
+            repr_args.append("paintCount={!r}".format(self.paintCount))
+        if self.drawsContent is not None:
+            repr_args.append("drawsContent={!r}".format(self.drawsContent))
+        if self.invisible is not None:
+            repr_args.append("invisible={!r}".format(self.invisible))
+        if self.scrollRects is not None:
+            repr_args.append("scrollRects={!r}".format(self.scrollRects))
+        if self.stickyPositionConstraint is not None:
+            repr_args.append(
+                "stickyPositionConstraint={!r}".format(self.stickyPositionConstraint)
+            )
+        return "Layer(" + ", ".join(repr_args) + ")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['Layer', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["Layer", dict]]:
         if init is not None:
             try:
                 ourselves = Layer(**init)
@@ -196,7 +346,9 @@ class Layer(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Layer', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["Layer", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:

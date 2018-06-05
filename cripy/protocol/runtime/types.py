@@ -2,7 +2,7 @@ from typing import Any, List, Optional, Union, TypeVar
 from cripy.helpers import ProtocolType
 
 
-class StackTraceId(ProtocolType):
+class StackTraceId(object):
     """
     If `debuggerId` is set stack trace comes from another debugger and can be resolved there. This
 allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.paused` for usages.
@@ -19,8 +19,25 @@ allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.pau
         self.id = id
         self.debuggerId = debuggerId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.id is not None:
+            repr_args.append("id={!r}".format(self.id))
+        if self.debuggerId is not None:
+            repr_args.append("debuggerId={!r}".format(self.debuggerId))
+        return "StackTraceId(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['StackTraceId', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["StackTraceId", dict]]:
         if init is not None:
             try:
                 ourselves = StackTraceId(**init)
@@ -31,7 +48,9 @@ allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.pau
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['StackTraceId', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["StackTraceId", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -41,12 +60,18 @@ allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.pau
             return init
 
 
-class StackTrace(ProtocolType):
+class StackTrace(object):
     """
     Call frames for assertions or error messages.
     """
 
-    def __init__(self, callFrames: List[Union['CallFrame', dict]], description: Optional[str] = None, parent: Optional[Union['StackTrace', dict]] = None, parentId: Optional[Union['StackTraceId', dict]] = None) -> None:
+    def __init__(
+        self,
+        callFrames: List[Union["CallFrame", dict]],
+        description: Optional[str] = None,
+        parent: Optional[Union["StackTrace", dict]] = None,
+        parentId: Optional[Union["StackTraceId", dict]] = None,
+    ) -> None:
         """
         :param description: String label of this stack trace. For async traces this may be a name of the function that initiated the async call.
         :type description: Optional[str]
@@ -63,8 +88,29 @@ class StackTrace(ProtocolType):
         self.parent = StackTrace.safe_create(parent)
         self.parentId = StackTraceId.safe_create(parentId)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.description is not None:
+            repr_args.append("description={!r}".format(self.description))
+        if self.callFrames is not None:
+            repr_args.append("callFrames={!r}".format(self.callFrames))
+        if self.parent is not None:
+            repr_args.append("parent={!r}".format(self.parent))
+        if self.parentId is not None:
+            repr_args.append("parentId={!r}".format(self.parentId))
+        return "StackTrace(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['StackTrace', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["StackTrace", dict]]:
         if init is not None:
             try:
                 ourselves = StackTrace(**init)
@@ -75,7 +121,9 @@ class StackTrace(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['StackTrace', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["StackTrace", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -85,12 +133,23 @@ class StackTrace(ProtocolType):
             return init
 
 
-class RemoteObject(ProtocolType):
+class RemoteObject(object):
     """
     Mirror object referencing original JavaScript object.
     """
 
-    def __init__(self, type: str, subtype: Optional[str] = None, className: Optional[str] = None, value: Optional[Any] = None, unserializableValue: Optional[str] = None, description: Optional[str] = None, objectId: Optional[str] = None, preview: Optional[Union['ObjectPreview', dict]] = None, customPreview: Optional[Union['CustomPreview', dict]] = None) -> None:
+    def __init__(
+        self,
+        type: str,
+        subtype: Optional[str] = None,
+        className: Optional[str] = None,
+        value: Optional[Any] = None,
+        unserializableValue: Optional[str] = None,
+        description: Optional[str] = None,
+        objectId: Optional[str] = None,
+        preview: Optional[Union["ObjectPreview", dict]] = None,
+        customPreview: Optional[Union["CustomPreview", dict]] = None,
+    ) -> None:
         """
         :param type: Object type.
         :type type: str
@@ -122,8 +181,41 @@ class RemoteObject(ProtocolType):
         self.preview = ObjectPreview.safe_create(preview)
         self.customPreview = CustomPreview.safe_create(customPreview)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.type is not None:
+            repr_args.append("type={!r}".format(self.type))
+        if self.subtype is not None:
+            repr_args.append("subtype={!r}".format(self.subtype))
+        if self.className is not None:
+            repr_args.append("className={!r}".format(self.className))
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        if self.unserializableValue is not None:
+            repr_args.append(
+                "unserializableValue={!r}".format(self.unserializableValue)
+            )
+        if self.description is not None:
+            repr_args.append("description={!r}".format(self.description))
+        if self.objectId is not None:
+            repr_args.append("objectId={!r}".format(self.objectId))
+        if self.preview is not None:
+            repr_args.append("preview={!r}".format(self.preview))
+        if self.customPreview is not None:
+            repr_args.append("customPreview={!r}".format(self.customPreview))
+        return "RemoteObject(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['RemoteObject', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["RemoteObject", dict]]:
         if init is not None:
             try:
                 ourselves = RemoteObject(**init)
@@ -134,7 +226,9 @@ class RemoteObject(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['RemoteObject', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["RemoteObject", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -144,8 +238,16 @@ class RemoteObject(ProtocolType):
             return init
 
 
-class PropertyPreview(ProtocolType):
-    def __init__(self, name: str, type: str, value: Optional[str] = None, valuePreview: Optional[Union['ObjectPreview', dict]] = None, subtype: Optional[str] = None) -> None:
+class PropertyPreview(object):
+
+    def __init__(
+        self,
+        name: str,
+        type: str,
+        value: Optional[str] = None,
+        valuePreview: Optional[Union["ObjectPreview", dict]] = None,
+        subtype: Optional[str] = None,
+    ) -> None:
         """
         :param name: Property name.
         :type name: str
@@ -165,8 +267,31 @@ class PropertyPreview(ProtocolType):
         self.valuePreview = ObjectPreview.safe_create(valuePreview)
         self.subtype = subtype
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.type is not None:
+            repr_args.append("type={!r}".format(self.type))
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        if self.valuePreview is not None:
+            repr_args.append("valuePreview={!r}".format(self.valuePreview))
+        if self.subtype is not None:
+            repr_args.append("subtype={!r}".format(self.subtype))
+        return "PropertyPreview(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['PropertyPreview', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["PropertyPreview", dict]]:
         if init is not None:
             try:
                 ourselves = PropertyPreview(**init)
@@ -177,7 +302,9 @@ class PropertyPreview(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['PropertyPreview', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["PropertyPreview", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -187,12 +314,24 @@ class PropertyPreview(ProtocolType):
             return init
 
 
-class PropertyDescriptor(ProtocolType):
+class PropertyDescriptor(object):
     """
     Object property descriptor.
     """
 
-    def __init__(self, name: str, configurable: bool, enumerable: bool, value: Optional[Union['RemoteObject', dict]] = None, writable: Optional[bool] = None, get: Optional[Union['RemoteObject', dict]] = None, set: Optional[Union['RemoteObject', dict]] = None, wasThrown: Optional[bool] = None, isOwn: Optional[bool] = None, symbol: Optional[Union['RemoteObject', dict]] = None) -> None:
+    def __init__(
+        self,
+        name: str,
+        configurable: bool,
+        enumerable: bool,
+        value: Optional[Union["RemoteObject", dict]] = None,
+        writable: Optional[bool] = None,
+        get: Optional[Union["RemoteObject", dict]] = None,
+        set: Optional[Union["RemoteObject", dict]] = None,
+        wasThrown: Optional[bool] = None,
+        isOwn: Optional[bool] = None,
+        symbol: Optional[Union["RemoteObject", dict]] = None,
+    ) -> None:
         """
         :param name: Property name or symbol description.
         :type name: str
@@ -227,8 +366,43 @@ class PropertyDescriptor(ProtocolType):
         self.isOwn = isOwn
         self.symbol = RemoteObject.safe_create(symbol)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        if self.writable is not None:
+            repr_args.append("writable={!r}".format(self.writable))
+        if self.get is not None:
+            repr_args.append("get={!r}".format(self.get))
+        if self.set is not None:
+            repr_args.append("set={!r}".format(self.set))
+        if self.configurable is not None:
+            repr_args.append("configurable={!r}".format(self.configurable))
+        if self.enumerable is not None:
+            repr_args.append("enumerable={!r}".format(self.enumerable))
+        if self.wasThrown is not None:
+            repr_args.append("wasThrown={!r}".format(self.wasThrown))
+        if self.isOwn is not None:
+            repr_args.append("isOwn={!r}".format(self.isOwn))
+        if self.symbol is not None:
+            repr_args.append("symbol={!r}".format(self.symbol))
+        return "PropertyDescriptor(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['PropertyDescriptor', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["PropertyDescriptor", dict]]:
         if init is not None:
             try:
                 ourselves = PropertyDescriptor(**init)
@@ -239,7 +413,9 @@ class PropertyDescriptor(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['PropertyDescriptor', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["PropertyDescriptor", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -249,12 +425,20 @@ class PropertyDescriptor(ProtocolType):
             return init
 
 
-class ObjectPreview(ProtocolType):
+class ObjectPreview(object):
     """
     Object containing abbreviated remote object value.
     """
 
-    def __init__(self, type: str, overflow: bool, properties: List[Union['PropertyPreview', dict]], subtype: Optional[str] = None, description: Optional[str] = None, entries: Optional[List[Union['EntryPreview', dict]]] = None) -> None:
+    def __init__(
+        self,
+        type: str,
+        overflow: bool,
+        properties: List[Union["PropertyPreview", dict]],
+        subtype: Optional[str] = None,
+        description: Optional[str] = None,
+        entries: Optional[List[Union["EntryPreview", dict]]] = None,
+    ) -> None:
         """
         :param type: Object type.
         :type type: str
@@ -277,8 +461,33 @@ class ObjectPreview(ProtocolType):
         self.properties = PropertyPreview.safe_create_from_list(properties)
         self.entries = EntryPreview.safe_create_from_list(entries)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.type is not None:
+            repr_args.append("type={!r}".format(self.type))
+        if self.subtype is not None:
+            repr_args.append("subtype={!r}".format(self.subtype))
+        if self.description is not None:
+            repr_args.append("description={!r}".format(self.description))
+        if self.overflow is not None:
+            repr_args.append("overflow={!r}".format(self.overflow))
+        if self.properties is not None:
+            repr_args.append("properties={!r}".format(self.properties))
+        if self.entries is not None:
+            repr_args.append("entries={!r}".format(self.entries))
+        return "ObjectPreview(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ObjectPreview', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["ObjectPreview", dict]]:
         if init is not None:
             try:
                 ourselves = ObjectPreview(**init)
@@ -289,7 +498,9 @@ class ObjectPreview(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ObjectPreview', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ObjectPreview", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -299,12 +510,14 @@ class ObjectPreview(ProtocolType):
             return init
 
 
-class InternalPropertyDescriptor(ProtocolType):
+class InternalPropertyDescriptor(object):
     """
     Object internal property descriptor. This property isn't normally visible in JavaScript code.
     """
 
-    def __init__(self, name: str, value: Optional[Union['RemoteObject', dict]] = None) -> None:
+    def __init__(
+        self, name: str, value: Optional[Union["RemoteObject", dict]] = None
+    ) -> None:
         """
         :param name: Conventional property name.
         :type name: str
@@ -315,8 +528,27 @@ class InternalPropertyDescriptor(ProtocolType):
         self.name = name
         self.value = RemoteObject.safe_create(value)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        return "InternalPropertyDescriptor(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['InternalPropertyDescriptor', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["InternalPropertyDescriptor", dict]]:
         if init is not None:
             try:
                 ourselves = InternalPropertyDescriptor(**init)
@@ -327,7 +559,9 @@ class InternalPropertyDescriptor(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['InternalPropertyDescriptor', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["InternalPropertyDescriptor", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -337,12 +571,14 @@ class InternalPropertyDescriptor(ProtocolType):
             return init
 
 
-class ExecutionContextDescription(ProtocolType):
+class ExecutionContextDescription(object):
     """
     Description of an isolated world.
     """
 
-    def __init__(self, id: int, origin: str, name: str, auxData: Optional[dict] = None) -> None:
+    def __init__(
+        self, id: int, origin: str, name: str, auxData: Optional[dict] = None
+    ) -> None:
         """
         :param id: Unique id of the execution context. It can be used to specify in which execution context script evaluation should be performed.
         :type id: int
@@ -359,8 +595,31 @@ class ExecutionContextDescription(ProtocolType):
         self.name = name
         self.auxData = auxData
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.id is not None:
+            repr_args.append("id={!r}".format(self.id))
+        if self.origin is not None:
+            repr_args.append("origin={!r}".format(self.origin))
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.auxData is not None:
+            repr_args.append("auxData={!r}".format(self.auxData))
+        return "ExecutionContextDescription(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ExecutionContextDescription', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["ExecutionContextDescription", dict]]:
         if init is not None:
             try:
                 ourselves = ExecutionContextDescription(**init)
@@ -371,7 +630,9 @@ class ExecutionContextDescription(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ExecutionContextDescription', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ExecutionContextDescription", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -381,13 +642,24 @@ class ExecutionContextDescription(ProtocolType):
             return init
 
 
-class ExceptionDetails(ProtocolType):
+class ExceptionDetails(object):
     """
     Detailed information about exception (or error) that was thrown during script compilation or
 execution.
     """
 
-    def __init__(self, exceptionId: int, text: str, lineNumber: int, columnNumber: int, scriptId: Optional[str] = None, url: Optional[str] = None, stackTrace: Optional[Union['StackTrace', dict]] = None, exception: Optional[Union['RemoteObject', dict]] = None, executionContextId: Optional[int] = None) -> None:
+    def __init__(
+        self,
+        exceptionId: int,
+        text: str,
+        lineNumber: int,
+        columnNumber: int,
+        scriptId: Optional[str] = None,
+        url: Optional[str] = None,
+        stackTrace: Optional[Union["StackTrace", dict]] = None,
+        exception: Optional[Union["RemoteObject", dict]] = None,
+        executionContextId: Optional[int] = None,
+    ) -> None:
         """
         :param exceptionId: Exception id.
         :type exceptionId: int
@@ -419,8 +691,39 @@ execution.
         self.exception = RemoteObject.safe_create(exception)
         self.executionContextId = executionContextId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.exceptionId is not None:
+            repr_args.append("exceptionId={!r}".format(self.exceptionId))
+        if self.text is not None:
+            repr_args.append("text={!r}".format(self.text))
+        if self.lineNumber is not None:
+            repr_args.append("lineNumber={!r}".format(self.lineNumber))
+        if self.columnNumber is not None:
+            repr_args.append("columnNumber={!r}".format(self.columnNumber))
+        if self.scriptId is not None:
+            repr_args.append("scriptId={!r}".format(self.scriptId))
+        if self.url is not None:
+            repr_args.append("url={!r}".format(self.url))
+        if self.stackTrace is not None:
+            repr_args.append("stackTrace={!r}".format(self.stackTrace))
+        if self.exception is not None:
+            repr_args.append("exception={!r}".format(self.exception))
+        if self.executionContextId is not None:
+            repr_args.append("executionContextId={!r}".format(self.executionContextId))
+        return "ExceptionDetails(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ExceptionDetails', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["ExceptionDetails", dict]]:
         if init is not None:
             try:
                 ourselves = ExceptionDetails(**init)
@@ -431,7 +734,9 @@ execution.
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ExceptionDetails', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ExceptionDetails", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -441,8 +746,13 @@ execution.
             return init
 
 
-class EntryPreview(ProtocolType):
-    def __init__(self, value: Union['ObjectPreview', dict], key: Optional[Union['ObjectPreview', dict]] = None) -> None:
+class EntryPreview(object):
+
+    def __init__(
+        self,
+        value: Union["ObjectPreview", dict],
+        key: Optional[Union["ObjectPreview", dict]] = None,
+    ) -> None:
         """
         :param key: Preview of the key. Specified for map-like collection entries.
         :type key: Optional[dict]
@@ -453,8 +763,25 @@ class EntryPreview(ProtocolType):
         self.key = ObjectPreview.safe_create(key)
         self.value = ObjectPreview.safe_create(value)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.key is not None:
+            repr_args.append("key={!r}".format(self.key))
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        return "EntryPreview(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['EntryPreview', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["EntryPreview", dict]]:
         if init is not None:
             try:
                 ourselves = EntryPreview(**init)
@@ -465,7 +792,9 @@ class EntryPreview(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['EntryPreview', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["EntryPreview", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -475,8 +804,16 @@ class EntryPreview(ProtocolType):
             return init
 
 
-class CustomPreview(ProtocolType):
-    def __init__(self, header: str, hasBody: bool, formatterObjectId: str, bindRemoteObjectFunctionId: str, configObjectId: Optional[str] = None) -> None:
+class CustomPreview(object):
+
+    def __init__(
+        self,
+        header: str,
+        hasBody: bool,
+        formatterObjectId: str,
+        bindRemoteObjectFunctionId: str,
+        configObjectId: Optional[str] = None,
+    ) -> None:
         """
         :param header: The header
         :type header: str
@@ -496,8 +833,35 @@ class CustomPreview(ProtocolType):
         self.bindRemoteObjectFunctionId = bindRemoteObjectFunctionId
         self.configObjectId = configObjectId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.header is not None:
+            repr_args.append("header={!r}".format(self.header))
+        if self.hasBody is not None:
+            repr_args.append("hasBody={!r}".format(self.hasBody))
+        if self.formatterObjectId is not None:
+            repr_args.append("formatterObjectId={!r}".format(self.formatterObjectId))
+        if self.bindRemoteObjectFunctionId is not None:
+            repr_args.append(
+                "bindRemoteObjectFunctionId={!r}".format(
+                    self.bindRemoteObjectFunctionId
+                )
+            )
+        if self.configObjectId is not None:
+            repr_args.append("configObjectId={!r}".format(self.configObjectId))
+        return "CustomPreview(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['CustomPreview', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["CustomPreview", dict]]:
         if init is not None:
             try:
                 ourselves = CustomPreview(**init)
@@ -508,7 +872,9 @@ class CustomPreview(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CustomPreview', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["CustomPreview", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -518,12 +884,19 @@ class CustomPreview(ProtocolType):
             return init
 
 
-class CallFrame(ProtocolType):
+class CallFrame(object):
     """
     Stack entry for runtime errors and assertions.
     """
 
-    def __init__(self, functionName: str, scriptId: str, url: str, lineNumber: int, columnNumber: int) -> None:
+    def __init__(
+        self,
+        functionName: str,
+        scriptId: str,
+        url: str,
+        lineNumber: int,
+        columnNumber: int,
+    ) -> None:
         """
         :param functionName: JavaScript function name.
         :type functionName: str
@@ -543,8 +916,31 @@ class CallFrame(ProtocolType):
         self.lineNumber = lineNumber
         self.columnNumber = columnNumber
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.functionName is not None:
+            repr_args.append("functionName={!r}".format(self.functionName))
+        if self.scriptId is not None:
+            repr_args.append("scriptId={!r}".format(self.scriptId))
+        if self.url is not None:
+            repr_args.append("url={!r}".format(self.url))
+        if self.lineNumber is not None:
+            repr_args.append("lineNumber={!r}".format(self.lineNumber))
+        if self.columnNumber is not None:
+            repr_args.append("columnNumber={!r}".format(self.columnNumber))
+        return "CallFrame(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['CallFrame', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["CallFrame", dict]]:
         if init is not None:
             try:
                 ourselves = CallFrame(**init)
@@ -555,7 +951,9 @@ class CallFrame(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CallFrame', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["CallFrame", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -565,13 +963,18 @@ class CallFrame(ProtocolType):
             return init
 
 
-class CallArgument(ProtocolType):
+class CallArgument(object):
     """
     Represents function call argument. Either remote object id `objectId`, primitive `value`,
 unserializable primitive value or neither of (for undefined) them should be specified.
     """
 
-    def __init__(self, value: Optional[Any] = None, unserializableValue: Optional[str] = None, objectId: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        value: Optional[Any] = None,
+        unserializableValue: Optional[str] = None,
+        objectId: Optional[str] = None,
+    ) -> None:
         """
         :param value: Primitive value or serializable javascript object.
         :type value: Optional[Any]
@@ -585,8 +988,29 @@ unserializable primitive value or neither of (for undefined) them should be spec
         self.unserializableValue = unserializableValue
         self.objectId = objectId
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        if self.unserializableValue is not None:
+            repr_args.append(
+                "unserializableValue={!r}".format(self.unserializableValue)
+            )
+        if self.objectId is not None:
+            repr_args.append("objectId={!r}".format(self.objectId))
+        return "CallArgument(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['CallArgument', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["CallArgument", dict]]:
         if init is not None:
             try:
                 ourselves = CallArgument(**init)
@@ -597,7 +1021,9 @@ unserializable primitive value or neither of (for undefined) them should be spec
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CallArgument', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["CallArgument", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:

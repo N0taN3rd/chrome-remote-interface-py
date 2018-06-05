@@ -5,18 +5,18 @@ from cripy.protocol.animation import types as Types
 
 
 class Animation(object):
-    dependencies = ['Runtime', 'DOM']
+    dependencies = ["Runtime", "DOM"]
 
     def __init__(self, chrome):
         self.chrome = chrome
 
     async def disable(self) -> Optional[dict]:
-        res = await self.chrome.send('Animation.disable')
-        return res
+        mayberes = await self.chrome.send("Animation.disable")
+        return mayberes
 
     async def enable(self) -> Optional[dict]:
-        res = await self.chrome.send('Animation.enable')
-        return res
+        mayberes = await self.chrome.send("Animation.enable")
+        return mayberes
 
     async def getCurrentTime(self, id: str) -> Optional[dict]:
         """
@@ -25,12 +25,14 @@ class Animation(object):
         """
         msg_dict = dict()
         if id is not None:
-            msg_dict['id'] = id
-        res = await self.chrome.send('Animation.getCurrentTime', msg_dict)
+            msg_dict["id"] = id
+        mayberes = await self.chrome.send("Animation.getCurrentTime", msg_dict)
+        res = await mayberes
         return res
 
     async def getPlaybackRate(self) -> Optional[dict]:
-        res = await self.chrome.send('Animation.getPlaybackRate')
+        mayberes = await self.chrome.send("Animation.getPlaybackRate")
+        res = await mayberes
         return res
 
     async def releaseAnimations(self, animations: List[str]) -> Optional[dict]:
@@ -40,9 +42,9 @@ class Animation(object):
         """
         msg_dict = dict()
         if animations is not None:
-            msg_dict['animations'] = animations
-        res = await self.chrome.send('Animation.releaseAnimations', msg_dict)
-        return res
+            msg_dict["animations"] = animations
+        mayberes = await self.chrome.send("Animation.releaseAnimations", msg_dict)
+        return mayberes
 
     async def resolveAnimation(self, animationId: str) -> Optional[dict]:
         """
@@ -51,12 +53,15 @@ class Animation(object):
         """
         msg_dict = dict()
         if animationId is not None:
-            msg_dict['animationId'] = animationId
-        res = await self.chrome.send('Animation.resolveAnimation', msg_dict)
-        res['remoteObject'] = Runtime.RemoteObject.safe_create(res['remoteObject'])
+            msg_dict["animationId"] = animationId
+        mayberes = await self.chrome.send("Animation.resolveAnimation", msg_dict)
+        res = await mayberes
+        res["remoteObject"] = Runtime.RemoteObject.safe_create(res["remoteObject"])
         return res
 
-    async def seekAnimations(self, animations: List[str], currentTime: float) -> Optional[dict]:
+    async def seekAnimations(
+        self, animations: List[str], currentTime: float
+    ) -> Optional[dict]:
         """
         :param animations: List of animation ids to seek.
         :type animations: List[str]
@@ -65,11 +70,11 @@ class Animation(object):
         """
         msg_dict = dict()
         if animations is not None:
-            msg_dict['animations'] = animations
+            msg_dict["animations"] = animations
         if currentTime is not None:
-            msg_dict['currentTime'] = currentTime
-        res = await self.chrome.send('Animation.seekAnimations', msg_dict)
-        return res
+            msg_dict["currentTime"] = currentTime
+        mayberes = await self.chrome.send("Animation.seekAnimations", msg_dict)
+        return mayberes
 
     async def setPaused(self, animations: List[str], paused: bool) -> Optional[dict]:
         """
@@ -80,11 +85,11 @@ class Animation(object):
         """
         msg_dict = dict()
         if animations is not None:
-            msg_dict['animations'] = animations
+            msg_dict["animations"] = animations
         if paused is not None:
-            msg_dict['paused'] = paused
-        res = await self.chrome.send('Animation.setPaused', msg_dict)
-        return res
+            msg_dict["paused"] = paused
+        mayberes = await self.chrome.send("Animation.setPaused", msg_dict)
+        return mayberes
 
     async def setPlaybackRate(self, playbackRate: float) -> Optional[dict]:
         """
@@ -93,11 +98,13 @@ class Animation(object):
         """
         msg_dict = dict()
         if playbackRate is not None:
-            msg_dict['playbackRate'] = playbackRate
-        res = await self.chrome.send('Animation.setPlaybackRate', msg_dict)
-        return res
+            msg_dict["playbackRate"] = playbackRate
+        mayberes = await self.chrome.send("Animation.setPlaybackRate", msg_dict)
+        return mayberes
 
-    async def setTiming(self, animationId: str, duration: float, delay: float) -> Optional[dict]:
+    async def setTiming(
+        self, animationId: str, duration: float, delay: float
+    ) -> Optional[dict]:
         """
         :param animationId: Animation id.
         :type animationId: str
@@ -108,15 +115,14 @@ class Animation(object):
         """
         msg_dict = dict()
         if animationId is not None:
-            msg_dict['animationId'] = animationId
+            msg_dict["animationId"] = animationId
         if duration is not None:
-            msg_dict['duration'] = duration
+            msg_dict["duration"] = duration
         if delay is not None:
-            msg_dict['delay'] = delay
-        res = await self.chrome.send('Animation.setTiming', msg_dict)
-        return res
+            msg_dict["delay"] = delay
+        mayberes = await self.chrome.send("Animation.setTiming", msg_dict)
+        return mayberes
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         return Events.EVENT_TO_CLASS
-

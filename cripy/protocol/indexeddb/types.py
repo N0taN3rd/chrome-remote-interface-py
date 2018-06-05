@@ -3,12 +3,14 @@ from cripy.helpers import ProtocolType
 from cripy.protocol.runtime import types as Runtime
 
 
-class ObjectStoreIndex(ProtocolType):
+class ObjectStoreIndex(object):
     """
     Object store index.
     """
 
-    def __init__(self, name: str, keyPath: Union['KeyPath', dict], unique: bool, multiEntry: bool) -> None:
+    def __init__(
+        self, name: str, keyPath: Union["KeyPath", dict], unique: bool, multiEntry: bool
+    ) -> None:
         """
         :param name: Index name.
         :type name: str
@@ -25,8 +27,29 @@ class ObjectStoreIndex(ProtocolType):
         self.unique = unique
         self.multiEntry = multiEntry
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.keyPath is not None:
+            repr_args.append("keyPath={!r}".format(self.keyPath))
+        if self.unique is not None:
+            repr_args.append("unique={!r}".format(self.unique))
+        if self.multiEntry is not None:
+            repr_args.append("multiEntry={!r}".format(self.multiEntry))
+        return "ObjectStoreIndex(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ObjectStoreIndex', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["ObjectStoreIndex", dict]]:
         if init is not None:
             try:
                 ourselves = ObjectStoreIndex(**init)
@@ -37,7 +60,9 @@ class ObjectStoreIndex(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ObjectStoreIndex', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ObjectStoreIndex", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -47,12 +72,18 @@ class ObjectStoreIndex(ProtocolType):
             return init
 
 
-class ObjectStore(ProtocolType):
+class ObjectStore(object):
     """
     Object store.
     """
 
-    def __init__(self, name: str, keyPath: Union['KeyPath', dict], autoIncrement: bool, indexes: List[Union['ObjectStoreIndex', dict]]) -> None:
+    def __init__(
+        self,
+        name: str,
+        keyPath: Union["KeyPath", dict],
+        autoIncrement: bool,
+        indexes: List[Union["ObjectStoreIndex", dict]],
+    ) -> None:
         """
         :param name: Object store name.
         :type name: str
@@ -69,8 +100,29 @@ class ObjectStore(ProtocolType):
         self.autoIncrement = autoIncrement
         self.indexes = ObjectStoreIndex.safe_create_from_list(indexes)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.keyPath is not None:
+            repr_args.append("keyPath={!r}".format(self.keyPath))
+        if self.autoIncrement is not None:
+            repr_args.append("autoIncrement={!r}".format(self.autoIncrement))
+        if self.indexes is not None:
+            repr_args.append("indexes={!r}".format(self.indexes))
+        return "ObjectStore(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['ObjectStore', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["ObjectStore", dict]]:
         if init is not None:
             try:
                 ourselves = ObjectStore(**init)
@@ -81,7 +133,9 @@ class ObjectStore(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ObjectStore', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["ObjectStore", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -91,12 +145,18 @@ class ObjectStore(ProtocolType):
             return init
 
 
-class KeyRange(ProtocolType):
+class KeyRange(object):
     """
     Key range.
     """
 
-    def __init__(self, lowerOpen: bool, upperOpen: bool, lower: Optional[Union['Key', dict]] = None, upper: Optional[Union['Key', dict]] = None) -> None:
+    def __init__(
+        self,
+        lowerOpen: bool,
+        upperOpen: bool,
+        lower: Optional[Union["Key", dict]] = None,
+        upper: Optional[Union["Key", dict]] = None,
+    ) -> None:
         """
         :param lower: Lower bound.
         :type lower: Optional[dict]
@@ -113,8 +173,29 @@ class KeyRange(ProtocolType):
         self.lowerOpen = lowerOpen
         self.upperOpen = upperOpen
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.lower is not None:
+            repr_args.append("lower={!r}".format(self.lower))
+        if self.upper is not None:
+            repr_args.append("upper={!r}".format(self.upper))
+        if self.lowerOpen is not None:
+            repr_args.append("lowerOpen={!r}".format(self.lowerOpen))
+        if self.upperOpen is not None:
+            repr_args.append("upperOpen={!r}".format(self.upperOpen))
+        return "KeyRange(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['KeyRange', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["KeyRange", dict]]:
         if init is not None:
             try:
                 ourselves = KeyRange(**init)
@@ -125,7 +206,9 @@ class KeyRange(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['KeyRange', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["KeyRange", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -135,12 +218,14 @@ class KeyRange(ProtocolType):
             return init
 
 
-class KeyPath(ProtocolType):
+class KeyPath(object):
     """
     Key path.
     """
 
-    def __init__(self, type: str, string: Optional[str] = None, array: Optional[List[str]] = None) -> None:
+    def __init__(
+        self, type: str, string: Optional[str] = None, array: Optional[List[str]] = None
+    ) -> None:
         """
         :param type: Key path type.
         :type type: str
@@ -154,8 +239,27 @@ class KeyPath(ProtocolType):
         self.string = string
         self.array = array
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.type is not None:
+            repr_args.append("type={!r}".format(self.type))
+        if self.string is not None:
+            repr_args.append("string={!r}".format(self.string))
+        if self.array is not None:
+            repr_args.append("array={!r}".format(self.array))
+        return "KeyPath(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['KeyPath', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["KeyPath", dict]]:
         if init is not None:
             try:
                 ourselves = KeyPath(**init)
@@ -166,7 +270,9 @@ class KeyPath(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['KeyPath', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["KeyPath", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -176,12 +282,19 @@ class KeyPath(ProtocolType):
             return init
 
 
-class Key(ProtocolType):
+class Key(object):
     """
     Key.
     """
 
-    def __init__(self, type: str, number: Optional[float] = None, string: Optional[str] = None, date: Optional[float] = None, array: Optional[List[Union['Key', dict]]] = None) -> None:
+    def __init__(
+        self,
+        type: str,
+        number: Optional[float] = None,
+        string: Optional[str] = None,
+        date: Optional[float] = None,
+        array: Optional[List[Union["Key", dict]]] = None,
+    ) -> None:
         """
         :param type: Key type.
         :type type: str
@@ -201,8 +314,31 @@ class Key(ProtocolType):
         self.date = date
         self.array = Key.safe_create_from_list(array)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.type is not None:
+            repr_args.append("type={!r}".format(self.type))
+        if self.number is not None:
+            repr_args.append("number={!r}".format(self.number))
+        if self.string is not None:
+            repr_args.append("string={!r}".format(self.string))
+        if self.date is not None:
+            repr_args.append("date={!r}".format(self.date))
+        if self.array is not None:
+            repr_args.append("array={!r}".format(self.array))
+        return "Key(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['Key', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["Key", dict]]:
         if init is not None:
             try:
                 ourselves = Key(**init)
@@ -213,7 +349,9 @@ class Key(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Key', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["Key", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -223,12 +361,14 @@ class Key(ProtocolType):
             return init
 
 
-class DatabaseWithObjectStores(ProtocolType):
+class DatabaseWithObjectStores(object):
     """
     Database with an array of object stores.
     """
 
-    def __init__(self, name: str, version: int, objectStores: List[Union['ObjectStore', dict]]) -> None:
+    def __init__(
+        self, name: str, version: int, objectStores: List[Union["ObjectStore", dict]]
+    ) -> None:
         """
         :param name: Database name.
         :type name: str
@@ -242,8 +382,29 @@ class DatabaseWithObjectStores(ProtocolType):
         self.version = version
         self.objectStores = ObjectStore.safe_create_from_list(objectStores)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.name is not None:
+            repr_args.append("name={!r}".format(self.name))
+        if self.version is not None:
+            repr_args.append("version={!r}".format(self.version))
+        if self.objectStores is not None:
+            repr_args.append("objectStores={!r}".format(self.objectStores))
+        return "DatabaseWithObjectStores(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['DatabaseWithObjectStores', dict]]:
+    def safe_create(
+        init: Optional[dict]
+    ) -> Optional[Union["DatabaseWithObjectStores", dict]]:
         if init is not None:
             try:
                 ourselves = DatabaseWithObjectStores(**init)
@@ -254,7 +415,9 @@ class DatabaseWithObjectStores(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DatabaseWithObjectStores', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["DatabaseWithObjectStores", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
@@ -264,12 +427,17 @@ class DatabaseWithObjectStores(ProtocolType):
             return init
 
 
-class DataEntry(ProtocolType):
+class DataEntry(object):
     """
     Data entry.
     """
 
-    def __init__(self, key: Union['Runtime.RemoteObject', dict], primaryKey: Union['Runtime.RemoteObject', dict], value: Union['Runtime.RemoteObject', dict]) -> None:
+    def __init__(
+        self,
+        key: Union["Runtime.RemoteObject", dict],
+        primaryKey: Union["Runtime.RemoteObject", dict],
+        value: Union["Runtime.RemoteObject", dict],
+    ) -> None:
         """
         :param key: Key object.
         :type key: dict
@@ -283,8 +451,27 @@ class DataEntry(ProtocolType):
         self.primaryKey = Runtime.RemoteObject.safe_create(primaryKey)
         self.value = Runtime.RemoteObject.safe_create(value)
 
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k) -> Any:
+        return self.__dict__[k]
+
+    def get(self, what, default=None) -> Any:
+        return self.__dict__.get(what, default)
+
+    def __repr__(self) -> str:
+        repr_args = []
+        if self.key is not None:
+            repr_args.append("key={!r}".format(self.key))
+        if self.primaryKey is not None:
+            repr_args.append("primaryKey={!r}".format(self.primaryKey))
+        if self.value is not None:
+            repr_args.append("value={!r}".format(self.value))
+        return "DataEntry(" + ", ".join(repr_args) + ")"
+
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union['DataEntry', dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union["DataEntry", dict]]:
         if init is not None:
             try:
                 ourselves = DataEntry(**init)
@@ -295,7 +482,9 @@ class DataEntry(ProtocolType):
             return init
 
     @staticmethod
-    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DataEntry', dict]]]:
+    def safe_create_from_list(
+        init: Optional[List[dict]]
+    ) -> Optional[List[Union["DataEntry", dict]]]:
         if init is not None:
             list_of_self = []
             for it in init:
