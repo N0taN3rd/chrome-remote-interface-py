@@ -14,15 +14,15 @@ class Console(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def clearMessages(self):
+    def clearMessages(self, cb=None):
         self.chrome.send('Console.clearMessages')
 
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('Console.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('Console.enable')
 
 

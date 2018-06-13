@@ -13,7 +13,7 @@ class IO(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def close(self, handle):
+    def close(self, handle, cb=None):
         """
         :param handle: Handle of the stream to close.
         :type handle: str
@@ -24,7 +24,7 @@ class IO(object):
         self.chrome.send('IO.close', params=msg_dict)
 
 
-    def read(self, handle, offset, size):
+    def read(self, handle, offset, size, cb=None):
         """
         :param handle: Handle of the stream to read.
         :type handle: str
@@ -33,8 +33,8 @@ class IO(object):
         :param size: Maximum number of bytes to read (left upon the agent discretion if not specified).
         :type size: Optional[int]
         """
-        def cb(res):
-            self.chrome.emit('IO.read', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if handle is not None:
             msg_dict['handle'] = handle
@@ -42,20 +42,20 @@ class IO(object):
             msg_dict['offset'] = offset
         if size is not None:
             msg_dict['size'] = size
-        self.chrome.send('IO.read', params=msg_dict, cb=cb)
+        self.chrome.send('IO.read', params=msg_dict, cb=cb_wrapper)
 
 
-    def resolveBlob(self, objectId):
+    def resolveBlob(self, objectId, cb=None):
         """
         :param objectId: Object id of a Blob object wrapper.
         :type objectId: str
         """
-        def cb(res):
-            self.chrome.emit('IO.resolveBlob', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if objectId is not None:
             msg_dict['objectId'] = objectId
-        self.chrome.send('IO.resolveBlob', params=msg_dict, cb=cb)
+        self.chrome.send('IO.resolveBlob', params=msg_dict, cb=cb_wrapper)
 
 
     @staticmethod

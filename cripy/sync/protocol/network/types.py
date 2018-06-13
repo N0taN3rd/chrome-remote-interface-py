@@ -1,5 +1,5 @@
-from cripy.sync.protocol.runtime import types as Runtime
 from cripy.sync.protocol.security import types as Security
+from cripy.sync.protocol.runtime import types as Runtime
 from cripy.sync.protocol.page import types as Page
 
 __all__ = [

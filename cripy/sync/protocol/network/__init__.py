@@ -1,5 +1,5 @@
-from cripy.sync.protocol.io import types as IO
 from cripy.sync.protocol.debugger import types as Debugger
+from cripy.sync.protocol.io import types as IO
 from cripy.sync.protocol.network import events as Events
 from cripy.sync.protocol.network import types as Types
 
@@ -17,33 +17,33 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def canClearBrowserCache(self):
-        def cb(res):
-            self.chrome.emit('Network.canClearBrowserCache', res)
-        self.chrome.send('Network.canClearBrowserCache', cb=cb)
+    def canClearBrowserCache(self, cb=None):
+        def cb_wrapper(res):
+            cb(res)
+        self.chrome.send('Network.canClearBrowserCache', cb=cb_wrapper)
 
 
-    def canClearBrowserCookies(self):
-        def cb(res):
-            self.chrome.emit('Network.canClearBrowserCookies', res)
-        self.chrome.send('Network.canClearBrowserCookies', cb=cb)
+    def canClearBrowserCookies(self, cb=None):
+        def cb_wrapper(res):
+            cb(res)
+        self.chrome.send('Network.canClearBrowserCookies', cb=cb_wrapper)
 
 
-    def canEmulateNetworkConditions(self):
-        def cb(res):
-            self.chrome.emit('Network.canEmulateNetworkConditions', res)
-        self.chrome.send('Network.canEmulateNetworkConditions', cb=cb)
+    def canEmulateNetworkConditions(self, cb=None):
+        def cb_wrapper(res):
+            cb(res)
+        self.chrome.send('Network.canEmulateNetworkConditions', cb=cb_wrapper)
 
 
-    def clearBrowserCache(self):
+    def clearBrowserCache(self, cb=None):
         self.chrome.send('Network.clearBrowserCache')
 
 
-    def clearBrowserCookies(self):
+    def clearBrowserCookies(self, cb=None):
         self.chrome.send('Network.clearBrowserCookies')
 
 
-    def continueInterceptedRequest(self, interceptionId, errorReason, rawResponse, url, method, postData, headers, authChallengeResponse):
+    def continueInterceptedRequest(self, interceptionId, errorReason, rawResponse, url, method, postData, headers, authChallengeResponse, cb=None):
         """
         :param interceptionId: The interceptionId
         :type interceptionId: str
@@ -82,7 +82,7 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         self.chrome.send('Network.continueInterceptedRequest', params=msg_dict)
 
 
-    def deleteCookies(self, name, url, domain, path):
+    def deleteCookies(self, name, url, domain, path, cb=None):
         """
         :param name: Name of the cookies to remove.
         :type name: str
@@ -105,11 +105,11 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         self.chrome.send('Network.deleteCookies', params=msg_dict)
 
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('Network.disable')
 
 
-    def emulateNetworkConditions(self, offline, latency, downloadThroughput, uploadThroughput, connectionType):
+    def emulateNetworkConditions(self, offline, latency, downloadThroughput, uploadThroughput, connectionType, cb=None):
         """
         :param offline: True to emulate internet disconnection.
         :type offline: bool
@@ -136,7 +136,7 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         self.chrome.send('Network.emulateNetworkConditions', params=msg_dict)
 
 
-    def enable(self, maxTotalBufferSize, maxResourceBufferSize, maxPostDataSize):
+    def enable(self, maxTotalBufferSize, maxResourceBufferSize, maxPostDataSize, cb=None):
         """
         :param maxTotalBufferSize: Buffer size in bytes to use when preserving network payloads (XHRs, etc).
         :type maxTotalBufferSize: Optional[int]
@@ -155,93 +155,93 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         self.chrome.send('Network.enable', params=msg_dict)
 
 
-    def getAllCookies(self):
-        def cb(res):
+    def getAllCookies(self, cb=None):
+        def cb_wrapper(res):
             res['cookies'] = Types.Cookie.safe_create_from_list(res['cookies'])
-            self.chrome.emit('Network.getAllCookies', res)
-        self.chrome.send('Network.getAllCookies', cb=cb)
+            cb(res)
+        self.chrome.send('Network.getAllCookies', cb=cb_wrapper)
 
 
-    def getCertificate(self, origin):
+    def getCertificate(self, origin, cb=None):
         """
         :param origin: Origin to get certificate for.
         :type origin: str
         """
-        def cb(res):
-            self.chrome.emit('Network.getCertificate', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if origin is not None:
             msg_dict['origin'] = origin
-        self.chrome.send('Network.getCertificate', params=msg_dict, cb=cb)
+        self.chrome.send('Network.getCertificate', params=msg_dict, cb=cb_wrapper)
 
 
-    def getCookies(self, urls):
+    def getCookies(self, urls, cb=None):
         """
         :param urls: The list of URLs for which applicable cookies will be fetched
         :type urls: Optional[List[str]]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['cookies'] = Types.Cookie.safe_create_from_list(res['cookies'])
-            self.chrome.emit('Network.getCookies', res)
+            cb(res)
         msg_dict = dict()
         if urls is not None:
             msg_dict['urls'] = urls
-        self.chrome.send('Network.getCookies', params=msg_dict, cb=cb)
+        self.chrome.send('Network.getCookies', params=msg_dict, cb=cb_wrapper)
 
 
-    def getResponseBody(self, requestId):
+    def getResponseBody(self, requestId, cb=None):
         """
         :param requestId: Identifier of the network request to get content for.
         :type requestId: str
         """
-        def cb(res):
-            self.chrome.emit('Network.getResponseBody', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if requestId is not None:
             msg_dict['requestId'] = requestId
-        self.chrome.send('Network.getResponseBody', params=msg_dict, cb=cb)
+        self.chrome.send('Network.getResponseBody', params=msg_dict, cb=cb_wrapper)
 
 
-    def getRequestPostData(self, requestId):
+    def getRequestPostData(self, requestId, cb=None):
         """
         :param requestId: Identifier of the network request to get content for.
         :type requestId: str
         """
-        def cb(res):
-            self.chrome.emit('Network.getRequestPostData', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if requestId is not None:
             msg_dict['requestId'] = requestId
-        self.chrome.send('Network.getRequestPostData', params=msg_dict, cb=cb)
+        self.chrome.send('Network.getRequestPostData', params=msg_dict, cb=cb_wrapper)
 
 
-    def getResponseBodyForInterception(self, interceptionId):
+    def getResponseBodyForInterception(self, interceptionId, cb=None):
         """
         :param interceptionId: Identifier for the intercepted request to get body for.
         :type interceptionId: str
         """
-        def cb(res):
-            self.chrome.emit('Network.getResponseBodyForInterception', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if interceptionId is not None:
             msg_dict['interceptionId'] = interceptionId
-        self.chrome.send('Network.getResponseBodyForInterception', params=msg_dict, cb=cb)
+        self.chrome.send('Network.getResponseBodyForInterception', params=msg_dict, cb=cb_wrapper)
 
 
-    def takeResponseBodyForInterceptionAsStream(self, interceptionId):
+    def takeResponseBodyForInterceptionAsStream(self, interceptionId, cb=None):
         """
         :param interceptionId: The interceptionId
         :type interceptionId: str
         """
-        def cb(res):
-            self.chrome.emit('Network.takeResponseBodyForInterceptionAsStream', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if interceptionId is not None:
             msg_dict['interceptionId'] = interceptionId
-        self.chrome.send('Network.takeResponseBodyForInterceptionAsStream', params=msg_dict, cb=cb)
+        self.chrome.send('Network.takeResponseBodyForInterceptionAsStream', params=msg_dict, cb=cb_wrapper)
 
 
-    def replayXHR(self, requestId):
+    def replayXHR(self, requestId, cb=None):
         """
         :param requestId: Identifier of XHR to replay.
         :type requestId: str
@@ -252,7 +252,7 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         self.chrome.send('Network.replayXHR', params=msg_dict)
 
 
-    def searchInResponseBody(self, requestId, query, caseSensitive, isRegex):
+    def searchInResponseBody(self, requestId, query, caseSensitive, isRegex, cb=None):
         """
         :param requestId: Identifier of the network response to search.
         :type requestId: str
@@ -263,9 +263,9 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         :param isRegex: If true, treats string parameter as regex.
         :type isRegex: Optional[bool]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['result'] = Debugger.SearchMatch.safe_create_from_list(res['result'])
-            self.chrome.emit('Network.searchInResponseBody', res)
+            cb(res)
         msg_dict = dict()
         if requestId is not None:
             msg_dict['requestId'] = requestId
@@ -275,10 +275,10 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
             msg_dict['caseSensitive'] = caseSensitive
         if isRegex is not None:
             msg_dict['isRegex'] = isRegex
-        self.chrome.send('Network.searchInResponseBody', params=msg_dict, cb=cb)
+        self.chrome.send('Network.searchInResponseBody', params=msg_dict, cb=cb_wrapper)
 
 
-    def setBlockedURLs(self, urls):
+    def setBlockedURLs(self, urls, cb=None):
         """
         :param urls: URL patterns to block. Wildcards ('*') are allowed.
         :type urls: List[str]
@@ -289,7 +289,7 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         self.chrome.send('Network.setBlockedURLs', params=msg_dict)
 
 
-    def setBypassServiceWorker(self, bypass):
+    def setBypassServiceWorker(self, bypass, cb=None):
         """
         :param bypass: Bypass service worker and load from network.
         :type bypass: bool
@@ -300,7 +300,7 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         self.chrome.send('Network.setBypassServiceWorker', params=msg_dict)
 
 
-    def setCacheDisabled(self, cacheDisabled):
+    def setCacheDisabled(self, cacheDisabled, cb=None):
         """
         :param cacheDisabled: Cache disabled state.
         :type cacheDisabled: bool
@@ -311,7 +311,7 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         self.chrome.send('Network.setCacheDisabled', params=msg_dict)
 
 
-    def setCookie(self, name, value, url, domain, path, secure, httpOnly, sameSite, expires):
+    def setCookie(self, name, value, url, domain, path, secure, httpOnly, sameSite, expires, cb=None):
         """
         :param name: Cookie name.
         :type name: str
@@ -332,8 +332,8 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         :param expires: Cookie expiration date, session cookie if not set
         :type expires: Optional[float]
         """
-        def cb(res):
-            self.chrome.emit('Network.setCookie', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if name is not None:
             msg_dict['name'] = name
@@ -353,10 +353,10 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
             msg_dict['sameSite'] = sameSite
         if expires is not None:
             msg_dict['expires'] = expires
-        self.chrome.send('Network.setCookie', params=msg_dict, cb=cb)
+        self.chrome.send('Network.setCookie', params=msg_dict, cb=cb_wrapper)
 
 
-    def setCookies(self, cookies):
+    def setCookies(self, cookies, cb=None):
         """
         :param cookies: Cookies to be set.
         :type cookies: List[dict]
@@ -367,7 +367,7 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         self.chrome.send('Network.setCookies', params=msg_dict)
 
 
-    def setDataSizeLimitsForTest(self, maxTotalSize, maxResourceSize):
+    def setDataSizeLimitsForTest(self, maxTotalSize, maxResourceSize, cb=None):
         """
         :param maxTotalSize: Maximum total buffer size.
         :type maxTotalSize: int
@@ -382,7 +382,7 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         self.chrome.send('Network.setDataSizeLimitsForTest', params=msg_dict)
 
 
-    def setExtraHTTPHeaders(self, headers):
+    def setExtraHTTPHeaders(self, headers, cb=None):
         """
         :param headers: Map with extra HTTP headers.
         :type headers: dict
@@ -393,7 +393,7 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         self.chrome.send('Network.setExtraHTTPHeaders', params=msg_dict)
 
 
-    def setRequestInterception(self, patterns):
+    def setRequestInterception(self, patterns, cb=None):
         """
         :param patterns: Requests matching any of these patterns will be forwarded and wait for the corresponding continueInterceptedRequest call.
         :type patterns: List[dict]
@@ -404,7 +404,7 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         self.chrome.send('Network.setRequestInterception', params=msg_dict)
 
 
-    def setUserAgentOverride(self, userAgent, acceptLanguage, platform):
+    def setUserAgentOverride(self, userAgent, acceptLanguage, platform, cb=None):
         """
         :param userAgent: User agent to use.
         :type userAgent: str

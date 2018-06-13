@@ -10,22 +10,22 @@ class Profiler(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('Profiler.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('Profiler.enable')
 
 
-    def getBestEffortCoverage(self):
-        def cb(res):
+    def getBestEffortCoverage(self, cb=None):
+        def cb_wrapper(res):
             res['result'] = Types.ScriptCoverage.safe_create_from_list(res['result'])
-            self.chrome.emit('Profiler.getBestEffortCoverage', res)
-        self.chrome.send('Profiler.getBestEffortCoverage', cb=cb)
+            cb(res)
+        self.chrome.send('Profiler.getBestEffortCoverage', cb=cb_wrapper)
 
 
-    def setSamplingInterval(self, interval):
+    def setSamplingInterval(self, interval, cb=None):
         """
         :param interval: New sampling interval in microseconds.
         :type interval: int
@@ -36,11 +36,11 @@ class Profiler(object):
         self.chrome.send('Profiler.setSamplingInterval', params=msg_dict)
 
 
-    def start(self):
+    def start(self, cb=None):
         self.chrome.send('Profiler.start')
 
 
-    def startPreciseCoverage(self, callCount, detailed):
+    def startPreciseCoverage(self, callCount, detailed, cb=None):
         """
         :param callCount: Collect accurate call counts beyond simple 'covered' or 'not covered'.
         :type callCount: Optional[bool]
@@ -55,37 +55,37 @@ class Profiler(object):
         self.chrome.send('Profiler.startPreciseCoverage', params=msg_dict)
 
 
-    def startTypeProfile(self):
+    def startTypeProfile(self, cb=None):
         self.chrome.send('Profiler.startTypeProfile')
 
 
-    def stop(self):
-        def cb(res):
+    def stop(self, cb=None):
+        def cb_wrapper(res):
             res['profile'] = Types.Profile.safe_create(res['profile'])
-            self.chrome.emit('Profiler.stop', res)
-        self.chrome.send('Profiler.stop', cb=cb)
+            cb(res)
+        self.chrome.send('Profiler.stop', cb=cb_wrapper)
 
 
-    def stopPreciseCoverage(self):
+    def stopPreciseCoverage(self, cb=None):
         self.chrome.send('Profiler.stopPreciseCoverage')
 
 
-    def stopTypeProfile(self):
+    def stopTypeProfile(self, cb=None):
         self.chrome.send('Profiler.stopTypeProfile')
 
 
-    def takePreciseCoverage(self):
-        def cb(res):
+    def takePreciseCoverage(self, cb=None):
+        def cb_wrapper(res):
             res['result'] = Types.ScriptCoverage.safe_create_from_list(res['result'])
-            self.chrome.emit('Profiler.takePreciseCoverage', res)
-        self.chrome.send('Profiler.takePreciseCoverage', cb=cb)
+            cb(res)
+        self.chrome.send('Profiler.takePreciseCoverage', cb=cb_wrapper)
 
 
-    def takeTypeProfile(self):
-        def cb(res):
+    def takeTypeProfile(self, cb=None):
+        def cb_wrapper(res):
             res['result'] = Types.ScriptTypeProfile.safe_create_from_list(res['result'])
-            self.chrome.emit('Profiler.takeTypeProfile', res)
-        self.chrome.send('Profiler.takeTypeProfile', cb=cb)
+            cb(res)
+        self.chrome.send('Profiler.takeTypeProfile', cb=cb_wrapper)
 
 
     @staticmethod

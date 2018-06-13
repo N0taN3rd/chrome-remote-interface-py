@@ -10,17 +10,17 @@ class Tracing(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def end(self):
+    def end(self, cb=None):
         self.chrome.send('Tracing.end')
 
 
-    def getCategories(self):
-        def cb(res):
-            self.chrome.emit('Tracing.getCategories', res)
-        self.chrome.send('Tracing.getCategories', cb=cb)
+    def getCategories(self, cb=None):
+        def cb_wrapper(res):
+            cb(res)
+        self.chrome.send('Tracing.getCategories', cb=cb_wrapper)
 
 
-    def recordClockSyncMarker(self, syncId):
+    def recordClockSyncMarker(self, syncId, cb=None):
         """
         :param syncId: The ID of this clock sync marker
         :type syncId: str
@@ -31,13 +31,13 @@ class Tracing(object):
         self.chrome.send('Tracing.recordClockSyncMarker', params=msg_dict)
 
 
-    def requestMemoryDump(self):
-        def cb(res):
-            self.chrome.emit('Tracing.requestMemoryDump', res)
-        self.chrome.send('Tracing.requestMemoryDump', cb=cb)
+    def requestMemoryDump(self, cb=None):
+        def cb_wrapper(res):
+            cb(res)
+        self.chrome.send('Tracing.requestMemoryDump', cb=cb_wrapper)
 
 
-    def start(self, categories, options, bufferUsageReportingInterval, transferMode, streamCompression, traceConfig):
+    def start(self, categories, options, bufferUsageReportingInterval, transferMode, streamCompression, traceConfig, cb=None):
         """
         :param categories: Category/tag filter
         :type categories: Optional[str]

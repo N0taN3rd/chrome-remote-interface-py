@@ -17,32 +17,32 @@ class Overlay(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('Overlay.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('Overlay.enable')
 
 
-    def getHighlightObjectForTest(self, nodeId):
+    def getHighlightObjectForTest(self, nodeId, cb=None):
         """
         :param nodeId: Id of the node to get highlight object for.
         :type nodeId: int
         """
-        def cb(res):
-            self.chrome.emit('Overlay.getHighlightObjectForTest', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        self.chrome.send('Overlay.getHighlightObjectForTest', params=msg_dict, cb=cb)
+        self.chrome.send('Overlay.getHighlightObjectForTest', params=msg_dict, cb=cb_wrapper)
 
 
-    def hideHighlight(self):
+    def hideHighlight(self, cb=None):
         self.chrome.send('Overlay.hideHighlight')
 
 
-    def highlightFrame(self, frameId, contentColor, contentOutlineColor):
+    def highlightFrame(self, frameId, contentColor, contentOutlineColor, cb=None):
         """
         :param frameId: Identifier of the frame to highlight.
         :type frameId: str
@@ -61,7 +61,7 @@ class Overlay(object):
         self.chrome.send('Overlay.highlightFrame', params=msg_dict)
 
 
-    def highlightNode(self, highlightConfig, nodeId, backendNodeId, objectId):
+    def highlightNode(self, highlightConfig, nodeId, backendNodeId, objectId, cb=None):
         """
         :param highlightConfig: A descriptor for the highlight appearance.
         :type highlightConfig: dict
@@ -84,7 +84,7 @@ class Overlay(object):
         self.chrome.send('Overlay.highlightNode', params=msg_dict)
 
 
-    def highlightQuad(self, quad, color, outlineColor):
+    def highlightQuad(self, quad, color, outlineColor, cb=None):
         """
         :param quad: Quad to highlight
         :type quad: Any
@@ -103,7 +103,7 @@ class Overlay(object):
         self.chrome.send('Overlay.highlightQuad', params=msg_dict)
 
 
-    def highlightRect(self, x, y, width, height, color, outlineColor):
+    def highlightRect(self, x, y, width, height, color, outlineColor, cb=None):
         """
         :param x: X coordinate
         :type x: int
@@ -134,7 +134,7 @@ class Overlay(object):
         self.chrome.send('Overlay.highlightRect', params=msg_dict)
 
 
-    def setInspectMode(self, mode, highlightConfig):
+    def setInspectMode(self, mode, highlightConfig, cb=None):
         """
         :param mode: Set an inspection mode.
         :type mode: str
@@ -149,7 +149,7 @@ class Overlay(object):
         self.chrome.send('Overlay.setInspectMode', params=msg_dict)
 
 
-    def setPausedInDebuggerMessage(self, message):
+    def setPausedInDebuggerMessage(self, message, cb=None):
         """
         :param message: The message to display, also triggers resume and step over controls.
         :type message: Optional[str]
@@ -160,7 +160,7 @@ class Overlay(object):
         self.chrome.send('Overlay.setPausedInDebuggerMessage', params=msg_dict)
 
 
-    def setShowDebugBorders(self, show):
+    def setShowDebugBorders(self, show, cb=None):
         """
         :param show: True for showing debug borders
         :type show: bool
@@ -171,7 +171,7 @@ class Overlay(object):
         self.chrome.send('Overlay.setShowDebugBorders', params=msg_dict)
 
 
-    def setShowFPSCounter(self, show):
+    def setShowFPSCounter(self, show, cb=None):
         """
         :param show: True for showing the FPS counter
         :type show: bool
@@ -182,7 +182,7 @@ class Overlay(object):
         self.chrome.send('Overlay.setShowFPSCounter', params=msg_dict)
 
 
-    def setShowPaintRects(self, result):
+    def setShowPaintRects(self, result, cb=None):
         """
         :param result: True for showing paint rectangles
         :type result: bool
@@ -193,7 +193,7 @@ class Overlay(object):
         self.chrome.send('Overlay.setShowPaintRects', params=msg_dict)
 
 
-    def setShowScrollBottleneckRects(self, show):
+    def setShowScrollBottleneckRects(self, show, cb=None):
         """
         :param show: True for showing scroll bottleneck rects
         :type show: bool
@@ -204,7 +204,7 @@ class Overlay(object):
         self.chrome.send('Overlay.setShowScrollBottleneckRects', params=msg_dict)
 
 
-    def setShowViewportSizeOnResize(self, show):
+    def setShowViewportSizeOnResize(self, show, cb=None):
         """
         :param show: Whether to paint size or not.
         :type show: bool
@@ -215,7 +215,7 @@ class Overlay(object):
         self.chrome.send('Overlay.setShowViewportSizeOnResize', params=msg_dict)
 
 
-    def setSuspended(self, suspended):
+    def setSuspended(self, suspended, cb=None):
         """
         :param suspended: Whether overlay should be suspended and not consume any resources until resumed.
         :type suspended: bool

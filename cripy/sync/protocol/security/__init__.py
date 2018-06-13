@@ -13,15 +13,15 @@ class Security(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('Security.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('Security.enable')
 
 
-    def setIgnoreCertificateErrors(self, ignore):
+    def setIgnoreCertificateErrors(self, ignore, cb=None):
         """
         :param ignore: If true, all certificate errors will be ignored.
         :type ignore: bool
@@ -32,7 +32,7 @@ class Security(object):
         self.chrome.send('Security.setIgnoreCertificateErrors', params=msg_dict)
 
 
-    def handleCertificateError(self, eventId, action):
+    def handleCertificateError(self, eventId, action, cb=None):
         """
         :param eventId: The ID of the event.
         :type eventId: int
@@ -47,7 +47,7 @@ class Security(object):
         self.chrome.send('Security.handleCertificateError', params=msg_dict)
 
 
-    def setOverrideCertificateErrors(self, override):
+    def setOverrideCertificateErrors(self, override, cb=None):
         """
         :param override: If true, certificate errors will be overridden.
         :type override: bool

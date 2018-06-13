@@ -13,15 +13,15 @@ class DOMSnapshot(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('DOMSnapshot.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('DOMSnapshot.enable')
 
 
-    def getSnapshot(self, computedStyleWhitelist, includeEventListeners, includePaintOrder, includeUserAgentShadowTree):
+    def getSnapshot(self, computedStyleWhitelist, includeEventListeners, includePaintOrder, includeUserAgentShadowTree, cb=None):
         """
         :param computedStyleWhitelist: Whitelist of computed styles to return.
         :type computedStyleWhitelist: List[str]
@@ -32,11 +32,11 @@ class DOMSnapshot(object):
         :param includeUserAgentShadowTree: Whether to include UA shadow tree in the snapshot (default false).
         :type includeUserAgentShadowTree: Optional[bool]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['domNodes'] = Types.DOMNode.safe_create_from_list(res['domNodes'])
             res['layoutTreeNodes'] = Types.LayoutTreeNode.safe_create_from_list(res['layoutTreeNodes'])
             res['computedStyles'] = Types.ComputedStyle.safe_create_from_list(res['computedStyles'])
-            self.chrome.emit('DOMSnapshot.getSnapshot', res)
+            cb(res)
         msg_dict = dict()
         if computedStyleWhitelist is not None:
             msg_dict['computedStyleWhitelist'] = computedStyleWhitelist
@@ -46,7 +46,7 @@ class DOMSnapshot(object):
             msg_dict['includePaintOrder'] = includePaintOrder
         if includeUserAgentShadowTree is not None:
             msg_dict['includeUserAgentShadowTree'] = includeUserAgentShadowTree
-        self.chrome.send('DOMSnapshot.getSnapshot', params=msg_dict, cb=cb)
+        self.chrome.send('DOMSnapshot.getSnapshot', params=msg_dict, cb=cb_wrapper)
 
 
     @staticmethod

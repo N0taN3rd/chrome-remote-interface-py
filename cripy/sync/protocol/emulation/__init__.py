@@ -17,25 +17,25 @@ class Emulation(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def canEmulate(self):
-        def cb(res):
-            self.chrome.emit('Emulation.canEmulate', res)
-        self.chrome.send('Emulation.canEmulate', cb=cb)
+    def canEmulate(self, cb=None):
+        def cb_wrapper(res):
+            cb(res)
+        self.chrome.send('Emulation.canEmulate', cb=cb_wrapper)
 
 
-    def clearDeviceMetricsOverride(self):
+    def clearDeviceMetricsOverride(self, cb=None):
         self.chrome.send('Emulation.clearDeviceMetricsOverride')
 
 
-    def clearGeolocationOverride(self):
+    def clearGeolocationOverride(self, cb=None):
         self.chrome.send('Emulation.clearGeolocationOverride')
 
 
-    def resetPageScaleFactor(self):
+    def resetPageScaleFactor(self, cb=None):
         self.chrome.send('Emulation.resetPageScaleFactor')
 
 
-    def setCPUThrottlingRate(self, rate):
+    def setCPUThrottlingRate(self, rate, cb=None):
         """
         :param rate: Throttling rate as a slowdown factor (1 is no throttle, 2 is 2x slowdown, etc).
         :type rate: float
@@ -46,7 +46,7 @@ class Emulation(object):
         self.chrome.send('Emulation.setCPUThrottlingRate', params=msg_dict)
 
 
-    def setDefaultBackgroundColorOverride(self, color):
+    def setDefaultBackgroundColorOverride(self, color, cb=None):
         """
         :param color: RGBA of the default background color. If not specified, any existing override will be cleared.
         :type color: Optional[dict]
@@ -57,7 +57,7 @@ class Emulation(object):
         self.chrome.send('Emulation.setDefaultBackgroundColorOverride', params=msg_dict)
 
 
-    def setDeviceMetricsOverride(self, width, height, deviceScaleFactor, mobile, scale, screenWidth, screenHeight, positionX, positionY, dontSetVisibleSize, screenOrientation, viewport):
+    def setDeviceMetricsOverride(self, width, height, deviceScaleFactor, mobile, scale, screenWidth, screenHeight, positionX, positionY, dontSetVisibleSize, screenOrientation, viewport, cb=None):
         """
         :param width: Overriding width value in pixels (minimum 0, maximum 10000000). 0 disables the override.
         :type width: int
@@ -112,7 +112,7 @@ class Emulation(object):
         self.chrome.send('Emulation.setDeviceMetricsOverride', params=msg_dict)
 
 
-    def setScrollbarsHidden(self, hidden):
+    def setScrollbarsHidden(self, hidden, cb=None):
         """
         :param hidden: Whether scrollbars should be always hidden.
         :type hidden: bool
@@ -123,7 +123,7 @@ class Emulation(object):
         self.chrome.send('Emulation.setScrollbarsHidden', params=msg_dict)
 
 
-    def setDocumentCookieDisabled(self, disabled):
+    def setDocumentCookieDisabled(self, disabled, cb=None):
         """
         :param disabled: Whether document.coookie API should be disabled.
         :type disabled: bool
@@ -134,7 +134,7 @@ class Emulation(object):
         self.chrome.send('Emulation.setDocumentCookieDisabled', params=msg_dict)
 
 
-    def setEmitTouchEventsForMouse(self, enabled, configuration):
+    def setEmitTouchEventsForMouse(self, enabled, configuration, cb=None):
         """
         :param enabled: Whether touch emulation based on mouse input should be enabled.
         :type enabled: bool
@@ -149,7 +149,7 @@ class Emulation(object):
         self.chrome.send('Emulation.setEmitTouchEventsForMouse', params=msg_dict)
 
 
-    def setEmulatedMedia(self, media):
+    def setEmulatedMedia(self, media, cb=None):
         """
         :param media: Media type to emulate. Empty string disables the override.
         :type media: str
@@ -160,7 +160,7 @@ class Emulation(object):
         self.chrome.send('Emulation.setEmulatedMedia', params=msg_dict)
 
 
-    def setGeolocationOverride(self, latitude, longitude, accuracy):
+    def setGeolocationOverride(self, latitude, longitude, accuracy, cb=None):
         """
         :param latitude: Mock latitude
         :type latitude: Optional[float]
@@ -179,7 +179,7 @@ class Emulation(object):
         self.chrome.send('Emulation.setGeolocationOverride', params=msg_dict)
 
 
-    def setNavigatorOverrides(self, platform):
+    def setNavigatorOverrides(self, platform, cb=None):
         """
         :param platform: The platform navigator.platform should return.
         :type platform: str
@@ -190,7 +190,7 @@ class Emulation(object):
         self.chrome.send('Emulation.setNavigatorOverrides', params=msg_dict)
 
 
-    def setPageScaleFactor(self, pageScaleFactor):
+    def setPageScaleFactor(self, pageScaleFactor, cb=None):
         """
         :param pageScaleFactor: Page scale factor.
         :type pageScaleFactor: float
@@ -201,7 +201,7 @@ class Emulation(object):
         self.chrome.send('Emulation.setPageScaleFactor', params=msg_dict)
 
 
-    def setScriptExecutionDisabled(self, value):
+    def setScriptExecutionDisabled(self, value, cb=None):
         """
         :param value: Whether script execution should be disabled in the page.
         :type value: bool
@@ -212,7 +212,7 @@ class Emulation(object):
         self.chrome.send('Emulation.setScriptExecutionDisabled', params=msg_dict)
 
 
-    def setTouchEmulationEnabled(self, enabled, maxTouchPoints):
+    def setTouchEmulationEnabled(self, enabled, maxTouchPoints, cb=None):
         """
         :param enabled: Whether the touch event emulation should be enabled.
         :type enabled: bool
@@ -227,7 +227,7 @@ class Emulation(object):
         self.chrome.send('Emulation.setTouchEmulationEnabled', params=msg_dict)
 
 
-    def setVirtualTimePolicy(self, policy, budget, maxVirtualTimeTaskStarvationCount, waitForNavigation, initialVirtualTime):
+    def setVirtualTimePolicy(self, policy, budget, maxVirtualTimeTaskStarvationCount, waitForNavigation, initialVirtualTime, cb=None):
         """
         :param policy: The policy
         :type policy: str
@@ -240,8 +240,8 @@ class Emulation(object):
         :param initialVirtualTime: If set, base::Time::Now will be overriden to initially return this value.
         :type initialVirtualTime: Optional[float]
         """
-        def cb(res):
-            self.chrome.emit('Emulation.setVirtualTimePolicy', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if policy is not None:
             msg_dict['policy'] = policy
@@ -253,10 +253,10 @@ class Emulation(object):
             msg_dict['waitForNavigation'] = waitForNavigation
         if initialVirtualTime is not None:
             msg_dict['initialVirtualTime'] = initialVirtualTime
-        self.chrome.send('Emulation.setVirtualTimePolicy', params=msg_dict, cb=cb)
+        self.chrome.send('Emulation.setVirtualTimePolicy', params=msg_dict, cb=cb_wrapper)
 
 
-    def setVisibleSize(self, width, height):
+    def setVisibleSize(self, width, height, cb=None):
         """
         :param width: Frame width (DIP).
         :type width: int
@@ -271,7 +271,7 @@ class Emulation(object):
         self.chrome.send('Emulation.setVisibleSize', params=msg_dict)
 
 
-    def setUserAgentOverride(self, userAgent, acceptLanguage, platform):
+    def setUserAgentOverride(self, userAgent, acceptLanguage, platform, cb=None):
         """
         :param userAgent: User agent to use.
         :type userAgent: str

@@ -21,7 +21,7 @@ subsequently load the required stylesheet contents using the `getStyleSheet[Text
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def addRule(self, styleSheetId, ruleText, location):
+    def addRule(self, styleSheetId, ruleText, location, cb=None):
         """
         :param styleSheetId: The css style sheet identifier where a new rule should be inserted.
         :type styleSheetId: str
@@ -30,9 +30,9 @@ subsequently load the required stylesheet contents using the `getStyleSheet[Text
         :param location: Text position of a new rule in the target style sheet.
         :type location: dict
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['rule'] = Types.CSSRule.safe_create(res['rule'])
-            self.chrome.emit('CSS.addRule', res)
+            cb(res)
         msg_dict = dict()
         if styleSheetId is not None:
             msg_dict['styleSheetId'] = styleSheetId
@@ -40,44 +40,44 @@ subsequently load the required stylesheet contents using the `getStyleSheet[Text
             msg_dict['ruleText'] = ruleText
         if location is not None:
             msg_dict['location'] = location
-        self.chrome.send('CSS.addRule', params=msg_dict, cb=cb)
+        self.chrome.send('CSS.addRule', params=msg_dict, cb=cb_wrapper)
 
 
-    def collectClassNames(self, styleSheetId):
+    def collectClassNames(self, styleSheetId, cb=None):
         """
         :param styleSheetId: The styleSheetId
         :type styleSheetId: str
         """
-        def cb(res):
-            self.chrome.emit('CSS.collectClassNames', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if styleSheetId is not None:
             msg_dict['styleSheetId'] = styleSheetId
-        self.chrome.send('CSS.collectClassNames', params=msg_dict, cb=cb)
+        self.chrome.send('CSS.collectClassNames', params=msg_dict, cb=cb_wrapper)
 
 
-    def createStyleSheet(self, frameId):
+    def createStyleSheet(self, frameId, cb=None):
         """
         :param frameId: Identifier of the frame where "via-inspector" stylesheet should be created.
         :type frameId: str
         """
-        def cb(res):
-            self.chrome.emit('CSS.createStyleSheet', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if frameId is not None:
             msg_dict['frameId'] = frameId
-        self.chrome.send('CSS.createStyleSheet', params=msg_dict, cb=cb)
+        self.chrome.send('CSS.createStyleSheet', params=msg_dict, cb=cb_wrapper)
 
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('CSS.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('CSS.enable')
 
 
-    def forcePseudoState(self, nodeId, forcedPseudoClasses):
+    def forcePseudoState(self, nodeId, forcedPseudoClasses, cb=None):
         """
         :param nodeId: The element id for which to force the pseudo state.
         :type nodeId: int
@@ -92,102 +92,102 @@ subsequently load the required stylesheet contents using the `getStyleSheet[Text
         self.chrome.send('CSS.forcePseudoState', params=msg_dict)
 
 
-    def getBackgroundColors(self, nodeId):
+    def getBackgroundColors(self, nodeId, cb=None):
         """
         :param nodeId: Id of the node to get background colors for.
         :type nodeId: int
         """
-        def cb(res):
-            self.chrome.emit('CSS.getBackgroundColors', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        self.chrome.send('CSS.getBackgroundColors', params=msg_dict, cb=cb)
+        self.chrome.send('CSS.getBackgroundColors', params=msg_dict, cb=cb_wrapper)
 
 
-    def getComputedStyleForNode(self, nodeId):
+    def getComputedStyleForNode(self, nodeId, cb=None):
         """
         :param nodeId: The nodeId
         :type nodeId: int
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['computedStyle'] = Types.CSSComputedStyleProperty.safe_create_from_list(res['computedStyle'])
-            self.chrome.emit('CSS.getComputedStyleForNode', res)
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        self.chrome.send('CSS.getComputedStyleForNode', params=msg_dict, cb=cb)
+        self.chrome.send('CSS.getComputedStyleForNode', params=msg_dict, cb=cb_wrapper)
 
 
-    def getInlineStylesForNode(self, nodeId):
+    def getInlineStylesForNode(self, nodeId, cb=None):
         """
         :param nodeId: The nodeId
         :type nodeId: int
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['inlineStyle'] = Types.CSSStyle.safe_create(res['inlineStyle'])
             res['attributesStyle'] = Types.CSSStyle.safe_create(res['attributesStyle'])
-            self.chrome.emit('CSS.getInlineStylesForNode', res)
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        self.chrome.send('CSS.getInlineStylesForNode', params=msg_dict, cb=cb)
+        self.chrome.send('CSS.getInlineStylesForNode', params=msg_dict, cb=cb_wrapper)
 
 
-    def getMatchedStylesForNode(self, nodeId):
+    def getMatchedStylesForNode(self, nodeId, cb=None):
         """
         :param nodeId: The nodeId
         :type nodeId: int
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['inlineStyle'] = Types.CSSStyle.safe_create(res['inlineStyle'])
             res['attributesStyle'] = Types.CSSStyle.safe_create(res['attributesStyle'])
             res['matchedCSSRules'] = Types.RuleMatch.safe_create_from_list(res['matchedCSSRules'])
             res['pseudoElements'] = Types.PseudoElementMatches.safe_create_from_list(res['pseudoElements'])
             res['inherited'] = Types.InheritedStyleEntry.safe_create_from_list(res['inherited'])
             res['cssKeyframesRules'] = Types.CSSKeyframesRule.safe_create_from_list(res['cssKeyframesRules'])
-            self.chrome.emit('CSS.getMatchedStylesForNode', res)
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        self.chrome.send('CSS.getMatchedStylesForNode', params=msg_dict, cb=cb)
+        self.chrome.send('CSS.getMatchedStylesForNode', params=msg_dict, cb=cb_wrapper)
 
 
-    def getMediaQueries(self):
-        def cb(res):
+    def getMediaQueries(self, cb=None):
+        def cb_wrapper(res):
             res['medias'] = Types.CSSMedia.safe_create_from_list(res['medias'])
-            self.chrome.emit('CSS.getMediaQueries', res)
-        self.chrome.send('CSS.getMediaQueries', cb=cb)
+            cb(res)
+        self.chrome.send('CSS.getMediaQueries', cb=cb_wrapper)
 
 
-    def getPlatformFontsForNode(self, nodeId):
+    def getPlatformFontsForNode(self, nodeId, cb=None):
         """
         :param nodeId: The nodeId
         :type nodeId: int
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['fonts'] = Types.PlatformFontUsage.safe_create_from_list(res['fonts'])
-            self.chrome.emit('CSS.getPlatformFontsForNode', res)
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        self.chrome.send('CSS.getPlatformFontsForNode', params=msg_dict, cb=cb)
+        self.chrome.send('CSS.getPlatformFontsForNode', params=msg_dict, cb=cb_wrapper)
 
 
-    def getStyleSheetText(self, styleSheetId):
+    def getStyleSheetText(self, styleSheetId, cb=None):
         """
         :param styleSheetId: The styleSheetId
         :type styleSheetId: str
         """
-        def cb(res):
-            self.chrome.emit('CSS.getStyleSheetText', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if styleSheetId is not None:
             msg_dict['styleSheetId'] = styleSheetId
-        self.chrome.send('CSS.getStyleSheetText', params=msg_dict, cb=cb)
+        self.chrome.send('CSS.getStyleSheetText', params=msg_dict, cb=cb_wrapper)
 
 
-    def setEffectivePropertyValueForNode(self, nodeId, propertyName, value):
+    def setEffectivePropertyValueForNode(self, nodeId, propertyName, value, cb=None):
         """
         :param nodeId: The element id for which to set property.
         :type nodeId: int
@@ -206,7 +206,7 @@ subsequently load the required stylesheet contents using the `getStyleSheet[Text
         self.chrome.send('CSS.setEffectivePropertyValueForNode', params=msg_dict)
 
 
-    def setKeyframeKey(self, styleSheetId, range, keyText):
+    def setKeyframeKey(self, styleSheetId, range, keyText, cb=None):
         """
         :param styleSheetId: The styleSheetId
         :type styleSheetId: str
@@ -215,9 +215,9 @@ subsequently load the required stylesheet contents using the `getStyleSheet[Text
         :param keyText: The keyText
         :type keyText: str
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['keyText'] = Types.Value.safe_create(res['keyText'])
-            self.chrome.emit('CSS.setKeyframeKey', res)
+            cb(res)
         msg_dict = dict()
         if styleSheetId is not None:
             msg_dict['styleSheetId'] = styleSheetId
@@ -225,10 +225,10 @@ subsequently load the required stylesheet contents using the `getStyleSheet[Text
             msg_dict['range'] = range
         if keyText is not None:
             msg_dict['keyText'] = keyText
-        self.chrome.send('CSS.setKeyframeKey', params=msg_dict, cb=cb)
+        self.chrome.send('CSS.setKeyframeKey', params=msg_dict, cb=cb_wrapper)
 
 
-    def setMediaText(self, styleSheetId, range, text):
+    def setMediaText(self, styleSheetId, range, text, cb=None):
         """
         :param styleSheetId: The styleSheetId
         :type styleSheetId: str
@@ -237,9 +237,9 @@ subsequently load the required stylesheet contents using the `getStyleSheet[Text
         :param text: The text
         :type text: str
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['media'] = Types.CSSMedia.safe_create(res['media'])
-            self.chrome.emit('CSS.setMediaText', res)
+            cb(res)
         msg_dict = dict()
         if styleSheetId is not None:
             msg_dict['styleSheetId'] = styleSheetId
@@ -247,10 +247,10 @@ subsequently load the required stylesheet contents using the `getStyleSheet[Text
             msg_dict['range'] = range
         if text is not None:
             msg_dict['text'] = text
-        self.chrome.send('CSS.setMediaText', params=msg_dict, cb=cb)
+        self.chrome.send('CSS.setMediaText', params=msg_dict, cb=cb_wrapper)
 
 
-    def setRuleSelector(self, styleSheetId, range, selector):
+    def setRuleSelector(self, styleSheetId, range, selector, cb=None):
         """
         :param styleSheetId: The styleSheetId
         :type styleSheetId: str
@@ -259,9 +259,9 @@ subsequently load the required stylesheet contents using the `getStyleSheet[Text
         :param selector: The selector
         :type selector: str
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['selectorList'] = Types.SelectorList.safe_create(res['selectorList'])
-            self.chrome.emit('CSS.setRuleSelector', res)
+            cb(res)
         msg_dict = dict()
         if styleSheetId is not None:
             msg_dict['styleSheetId'] = styleSheetId
@@ -269,56 +269,56 @@ subsequently load the required stylesheet contents using the `getStyleSheet[Text
             msg_dict['range'] = range
         if selector is not None:
             msg_dict['selector'] = selector
-        self.chrome.send('CSS.setRuleSelector', params=msg_dict, cb=cb)
+        self.chrome.send('CSS.setRuleSelector', params=msg_dict, cb=cb_wrapper)
 
 
-    def setStyleSheetText(self, styleSheetId, text):
+    def setStyleSheetText(self, styleSheetId, text, cb=None):
         """
         :param styleSheetId: The styleSheetId
         :type styleSheetId: str
         :param text: The text
         :type text: str
         """
-        def cb(res):
-            self.chrome.emit('CSS.setStyleSheetText', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if styleSheetId is not None:
             msg_dict['styleSheetId'] = styleSheetId
         if text is not None:
             msg_dict['text'] = text
-        self.chrome.send('CSS.setStyleSheetText', params=msg_dict, cb=cb)
+        self.chrome.send('CSS.setStyleSheetText', params=msg_dict, cb=cb_wrapper)
 
 
-    def setStyleTexts(self, edits):
+    def setStyleTexts(self, edits, cb=None):
         """
         :param edits: The edits
         :type edits: List[dict]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['styles'] = Types.CSSStyle.safe_create_from_list(res['styles'])
-            self.chrome.emit('CSS.setStyleTexts', res)
+            cb(res)
         msg_dict = dict()
         if edits is not None:
             msg_dict['edits'] = edits
-        self.chrome.send('CSS.setStyleTexts', params=msg_dict, cb=cb)
+        self.chrome.send('CSS.setStyleTexts', params=msg_dict, cb=cb_wrapper)
 
 
-    def startRuleUsageTracking(self):
+    def startRuleUsageTracking(self, cb=None):
         self.chrome.send('CSS.startRuleUsageTracking')
 
 
-    def stopRuleUsageTracking(self):
-        def cb(res):
+    def stopRuleUsageTracking(self, cb=None):
+        def cb_wrapper(res):
             res['ruleUsage'] = Types.RuleUsage.safe_create_from_list(res['ruleUsage'])
-            self.chrome.emit('CSS.stopRuleUsageTracking', res)
-        self.chrome.send('CSS.stopRuleUsageTracking', cb=cb)
+            cb(res)
+        self.chrome.send('CSS.stopRuleUsageTracking', cb=cb_wrapper)
 
 
-    def takeCoverageDelta(self):
-        def cb(res):
+    def takeCoverageDelta(self, cb=None):
+        def cb_wrapper(res):
             res['coverage'] = Types.RuleUsage.safe_create_from_list(res['coverage'])
-            self.chrome.emit('CSS.takeCoverageDelta', res)
-        self.chrome.send('CSS.takeCoverageDelta', cb=cb)
+            cb(res)
+        self.chrome.send('CSS.takeCoverageDelta', cb=cb_wrapper)
 
 
     @staticmethod

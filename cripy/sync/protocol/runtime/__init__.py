@@ -17,7 +17,7 @@ other objects in their object group.
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def awaitPromise(self, promiseObjectId, returnByValue, generatePreview):
+    def awaitPromise(self, promiseObjectId, returnByValue, generatePreview, cb=None):
         """
         :param promiseObjectId: Identifier of the promise.
         :type promiseObjectId: str
@@ -26,10 +26,10 @@ other objects in their object group.
         :param generatePreview: Whether preview should be generated for the result.
         :type generatePreview: Optional[bool]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['result'] = Types.RemoteObject.safe_create(res['result'])
             res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
-            self.chrome.emit('Runtime.awaitPromise', res)
+            cb(res)
         msg_dict = dict()
         if promiseObjectId is not None:
             msg_dict['promiseObjectId'] = promiseObjectId
@@ -37,10 +37,10 @@ other objects in their object group.
             msg_dict['returnByValue'] = returnByValue
         if generatePreview is not None:
             msg_dict['generatePreview'] = generatePreview
-        self.chrome.send('Runtime.awaitPromise', params=msg_dict, cb=cb)
+        self.chrome.send('Runtime.awaitPromise', params=msg_dict, cb=cb_wrapper)
 
 
-    def callFunctionOn(self, functionDeclaration, objectId, arguments, silent, returnByValue, generatePreview, userGesture, awaitPromise, executionContextId, objectGroup):
+    def callFunctionOn(self, functionDeclaration, objectId, arguments, silent, returnByValue, generatePreview, userGesture, awaitPromise, executionContextId, objectGroup, cb=None):
         """
         :param functionDeclaration: Declaration of the function to call.
         :type functionDeclaration: str
@@ -63,10 +63,10 @@ other objects in their object group.
         :param objectGroup: Symbolic group name that can be used to release multiple objects. If objectGroup is not specified and objectId is, objectGroup will be inherited from object.
         :type objectGroup: Optional[str]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['result'] = Types.RemoteObject.safe_create(res['result'])
             res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
-            self.chrome.emit('Runtime.callFunctionOn', res)
+            cb(res)
         msg_dict = dict()
         if functionDeclaration is not None:
             msg_dict['functionDeclaration'] = functionDeclaration
@@ -88,10 +88,10 @@ other objects in their object group.
             msg_dict['executionContextId'] = executionContextId
         if objectGroup is not None:
             msg_dict['objectGroup'] = objectGroup
-        self.chrome.send('Runtime.callFunctionOn', params=msg_dict, cb=cb)
+        self.chrome.send('Runtime.callFunctionOn', params=msg_dict, cb=cb_wrapper)
 
 
-    def compileScript(self, expression, sourceURL, persistScript, executionContextId):
+    def compileScript(self, expression, sourceURL, persistScript, executionContextId, cb=None):
         """
         :param expression: Expression to compile.
         :type expression: str
@@ -102,9 +102,9 @@ other objects in their object group.
         :param executionContextId: Specifies in which execution context to perform script run. If the parameter is omitted the evaluation will be performed in the context of the inspected page.
         :type executionContextId: Optional[int]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
-            self.chrome.emit('Runtime.compileScript', res)
+            cb(res)
         msg_dict = dict()
         if expression is not None:
             msg_dict['expression'] = expression
@@ -114,22 +114,22 @@ other objects in their object group.
             msg_dict['persistScript'] = persistScript
         if executionContextId is not None:
             msg_dict['executionContextId'] = executionContextId
-        self.chrome.send('Runtime.compileScript', params=msg_dict, cb=cb)
+        self.chrome.send('Runtime.compileScript', params=msg_dict, cb=cb_wrapper)
 
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('Runtime.disable')
 
 
-    def discardConsoleEntries(self):
+    def discardConsoleEntries(self, cb=None):
         self.chrome.send('Runtime.discardConsoleEntries')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('Runtime.enable')
 
 
-    def evaluate(self, expression, objectGroup, includeCommandLineAPI, silent, contextId, returnByValue, generatePreview, userGesture, awaitPromise, throwOnSideEffect, timeout):
+    def evaluate(self, expression, objectGroup, includeCommandLineAPI, silent, contextId, returnByValue, generatePreview, userGesture, awaitPromise, throwOnSideEffect, timeout, cb=None):
         """
         :param expression: Expression to evaluate.
         :type expression: str
@@ -154,10 +154,10 @@ other objects in their object group.
         :param timeout: Terminate execution after timing out (number of milliseconds).
         :type timeout: Optional[float]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['result'] = Types.RemoteObject.safe_create(res['result'])
             res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
-            self.chrome.emit('Runtime.evaluate', res)
+            cb(res)
         msg_dict = dict()
         if expression is not None:
             msg_dict['expression'] = expression
@@ -181,22 +181,22 @@ other objects in their object group.
             msg_dict['throwOnSideEffect'] = throwOnSideEffect
         if timeout is not None:
             msg_dict['timeout'] = timeout
-        self.chrome.send('Runtime.evaluate', params=msg_dict, cb=cb)
+        self.chrome.send('Runtime.evaluate', params=msg_dict, cb=cb_wrapper)
 
 
-    def getIsolateId(self):
-        def cb(res):
-            self.chrome.emit('Runtime.getIsolateId', res)
-        self.chrome.send('Runtime.getIsolateId', cb=cb)
+    def getIsolateId(self, cb=None):
+        def cb_wrapper(res):
+            cb(res)
+        self.chrome.send('Runtime.getIsolateId', cb=cb_wrapper)
 
 
-    def getHeapUsage(self):
-        def cb(res):
-            self.chrome.emit('Runtime.getHeapUsage', res)
-        self.chrome.send('Runtime.getHeapUsage', cb=cb)
+    def getHeapUsage(self, cb=None):
+        def cb_wrapper(res):
+            cb(res)
+        self.chrome.send('Runtime.getHeapUsage', cb=cb_wrapper)
 
 
-    def getProperties(self, objectId, ownProperties, accessorPropertiesOnly, generatePreview):
+    def getProperties(self, objectId, ownProperties, accessorPropertiesOnly, generatePreview, cb=None):
         """
         :param objectId: Identifier of the object to return properties for.
         :type objectId: str
@@ -207,11 +207,11 @@ other objects in their object group.
         :param generatePreview: Whether preview should be generated for the results.
         :type generatePreview: Optional[bool]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['result'] = Types.PropertyDescriptor.safe_create_from_list(res['result'])
             res['internalProperties'] = Types.InternalPropertyDescriptor.safe_create_from_list(res['internalProperties'])
             res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
-            self.chrome.emit('Runtime.getProperties', res)
+            cb(res)
         msg_dict = dict()
         if objectId is not None:
             msg_dict['objectId'] = objectId
@@ -221,41 +221,41 @@ other objects in their object group.
             msg_dict['accessorPropertiesOnly'] = accessorPropertiesOnly
         if generatePreview is not None:
             msg_dict['generatePreview'] = generatePreview
-        self.chrome.send('Runtime.getProperties', params=msg_dict, cb=cb)
+        self.chrome.send('Runtime.getProperties', params=msg_dict, cb=cb_wrapper)
 
 
-    def globalLexicalScopeNames(self, executionContextId):
+    def globalLexicalScopeNames(self, executionContextId, cb=None):
         """
         :param executionContextId: Specifies in which execution context to lookup global scope variables.
         :type executionContextId: Optional[int]
         """
-        def cb(res):
-            self.chrome.emit('Runtime.globalLexicalScopeNames', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if executionContextId is not None:
             msg_dict['executionContextId'] = executionContextId
-        self.chrome.send('Runtime.globalLexicalScopeNames', params=msg_dict, cb=cb)
+        self.chrome.send('Runtime.globalLexicalScopeNames', params=msg_dict, cb=cb_wrapper)
 
 
-    def queryObjects(self, prototypeObjectId, objectGroup):
+    def queryObjects(self, prototypeObjectId, objectGroup, cb=None):
         """
         :param prototypeObjectId: Identifier of the prototype to return objects for.
         :type prototypeObjectId: str
         :param objectGroup: Symbolic group name that can be used to release the results.
         :type objectGroup: Optional[str]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['objects'] = Types.RemoteObject.safe_create(res['objects'])
-            self.chrome.emit('Runtime.queryObjects', res)
+            cb(res)
         msg_dict = dict()
         if prototypeObjectId is not None:
             msg_dict['prototypeObjectId'] = prototypeObjectId
         if objectGroup is not None:
             msg_dict['objectGroup'] = objectGroup
-        self.chrome.send('Runtime.queryObjects', params=msg_dict, cb=cb)
+        self.chrome.send('Runtime.queryObjects', params=msg_dict, cb=cb_wrapper)
 
 
-    def releaseObject(self, objectId):
+    def releaseObject(self, objectId, cb=None):
         """
         :param objectId: Identifier of the object to release.
         :type objectId: str
@@ -266,7 +266,7 @@ other objects in their object group.
         self.chrome.send('Runtime.releaseObject', params=msg_dict)
 
 
-    def releaseObjectGroup(self, objectGroup):
+    def releaseObjectGroup(self, objectGroup, cb=None):
         """
         :param objectGroup: Symbolic object group name.
         :type objectGroup: str
@@ -277,11 +277,11 @@ other objects in their object group.
         self.chrome.send('Runtime.releaseObjectGroup', params=msg_dict)
 
 
-    def runIfWaitingForDebugger(self):
+    def runIfWaitingForDebugger(self, cb=None):
         self.chrome.send('Runtime.runIfWaitingForDebugger')
 
 
-    def runScript(self, scriptId, executionContextId, objectGroup, silent, includeCommandLineAPI, returnByValue, generatePreview, awaitPromise):
+    def runScript(self, scriptId, executionContextId, objectGroup, silent, includeCommandLineAPI, returnByValue, generatePreview, awaitPromise, cb=None):
         """
         :param scriptId: Id of the script to run.
         :type scriptId: str
@@ -300,10 +300,10 @@ other objects in their object group.
         :param awaitPromise: Whether execution should `await` for resulting value and return once awaited promise is resolved.
         :type awaitPromise: Optional[bool]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['result'] = Types.RemoteObject.safe_create(res['result'])
             res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
-            self.chrome.emit('Runtime.runScript', res)
+            cb(res)
         msg_dict = dict()
         if scriptId is not None:
             msg_dict['scriptId'] = scriptId
@@ -321,10 +321,10 @@ other objects in their object group.
             msg_dict['generatePreview'] = generatePreview
         if awaitPromise is not None:
             msg_dict['awaitPromise'] = awaitPromise
-        self.chrome.send('Runtime.runScript', params=msg_dict, cb=cb)
+        self.chrome.send('Runtime.runScript', params=msg_dict, cb=cb_wrapper)
 
 
-    def setAsyncCallStackDepth(self, maxDepth):
+    def setAsyncCallStackDepth(self, maxDepth, cb=None):
         """
         :param maxDepth: Maximum depth of async call stacks. Setting to `0` will effectively disable collecting async call stacks (default).
         :type maxDepth: int
@@ -335,7 +335,7 @@ other objects in their object group.
         self.chrome.send('Runtime.setAsyncCallStackDepth', params=msg_dict)
 
 
-    def setCustomObjectFormatterEnabled(self, enabled):
+    def setCustomObjectFormatterEnabled(self, enabled, cb=None):
         """
         :param enabled: The enabled
         :type enabled: bool
@@ -346,7 +346,7 @@ other objects in their object group.
         self.chrome.send('Runtime.setCustomObjectFormatterEnabled', params=msg_dict)
 
 
-    def setMaxCallStackSizeToCapture(self, size):
+    def setMaxCallStackSizeToCapture(self, size, cb=None):
         """
         :param size: The size
         :type size: int
@@ -357,11 +357,11 @@ other objects in their object group.
         self.chrome.send('Runtime.setMaxCallStackSizeToCapture', params=msg_dict)
 
 
-    def terminateExecution(self):
+    def terminateExecution(self, cb=None):
         self.chrome.send('Runtime.terminateExecution')
 
 
-    def addBinding(self, name, executionContextId):
+    def addBinding(self, name, executionContextId, cb=None):
         """
         :param name: The name
         :type name: str
@@ -376,7 +376,7 @@ other objects in their object group.
         self.chrome.send('Runtime.addBinding', params=msg_dict)
 
 
-    def removeBinding(self, name):
+    def removeBinding(self, name, cb=None):
         """
         :param name: The name
         :type name: str

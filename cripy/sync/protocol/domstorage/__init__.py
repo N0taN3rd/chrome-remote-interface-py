@@ -13,7 +13,7 @@ class DOMStorage(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def clear(self, storageId):
+    def clear(self, storageId, cb=None):
         """
         :param storageId: The storageId
         :type storageId: dict
@@ -24,28 +24,28 @@ class DOMStorage(object):
         self.chrome.send('DOMStorage.clear', params=msg_dict)
 
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('DOMStorage.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('DOMStorage.enable')
 
 
-    def getDOMStorageItems(self, storageId):
+    def getDOMStorageItems(self, storageId, cb=None):
         """
         :param storageId: The storageId
         :type storageId: dict
         """
-        def cb(res):
-            self.chrome.emit('DOMStorage.getDOMStorageItems', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if storageId is not None:
             msg_dict['storageId'] = storageId
-        self.chrome.send('DOMStorage.getDOMStorageItems', params=msg_dict, cb=cb)
+        self.chrome.send('DOMStorage.getDOMStorageItems', params=msg_dict, cb=cb_wrapper)
 
 
-    def removeDOMStorageItem(self, storageId, key):
+    def removeDOMStorageItem(self, storageId, key, cb=None):
         """
         :param storageId: The storageId
         :type storageId: dict
@@ -60,7 +60,7 @@ class DOMStorage(object):
         self.chrome.send('DOMStorage.removeDOMStorageItem', params=msg_dict)
 
 
-    def setDOMStorageItem(self, storageId, key, value):
+    def setDOMStorageItem(self, storageId, key, value, cb=None):
         """
         :param storageId: The storageId
         :type storageId: dict

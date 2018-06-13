@@ -10,42 +10,42 @@ class ApplicationCache(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('ApplicationCache.enable')
 
 
-    def getApplicationCacheForFrame(self, frameId):
+    def getApplicationCacheForFrame(self, frameId, cb=None):
         """
         :param frameId: Identifier of the frame containing document whose application cache is retrieved.
         :type frameId: str
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['applicationCache'] = Types.ApplicationCache.safe_create(res['applicationCache'])
-            self.chrome.emit('ApplicationCache.getApplicationCacheForFrame', res)
+            cb(res)
         msg_dict = dict()
         if frameId is not None:
             msg_dict['frameId'] = frameId
-        self.chrome.send('ApplicationCache.getApplicationCacheForFrame', params=msg_dict, cb=cb)
+        self.chrome.send('ApplicationCache.getApplicationCacheForFrame', params=msg_dict, cb=cb_wrapper)
 
 
-    def getFramesWithManifests(self):
-        def cb(res):
+    def getFramesWithManifests(self, cb=None):
+        def cb_wrapper(res):
             res['frameIds'] = Types.FrameWithManifest.safe_create_from_list(res['frameIds'])
-            self.chrome.emit('ApplicationCache.getFramesWithManifests', res)
-        self.chrome.send('ApplicationCache.getFramesWithManifests', cb=cb)
+            cb(res)
+        self.chrome.send('ApplicationCache.getFramesWithManifests', cb=cb_wrapper)
 
 
-    def getManifestForFrame(self, frameId):
+    def getManifestForFrame(self, frameId, cb=None):
         """
         :param frameId: Identifier of the frame containing document whose manifest is retrieved.
         :type frameId: str
         """
-        def cb(res):
-            self.chrome.emit('ApplicationCache.getManifestForFrame', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if frameId is not None:
             msg_dict['frameId'] = frameId
-        self.chrome.send('ApplicationCache.getManifestForFrame', params=msg_dict, cb=cb)
+        self.chrome.send('ApplicationCache.getManifestForFrame', params=msg_dict, cb=cb_wrapper)
 
 
     @staticmethod

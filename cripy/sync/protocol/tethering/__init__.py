@@ -12,7 +12,7 @@ class Tethering(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def bind(self, port):
+    def bind(self, port, cb=None):
         """
         :param port: Port number to bind.
         :type port: int
@@ -23,7 +23,7 @@ class Tethering(object):
         self.chrome.send('Tethering.bind', params=msg_dict)
 
 
-    def unbind(self, port):
+    def unbind(self, port, cb=None):
         """
         :param port: Port number to unbind.
         :type port: int

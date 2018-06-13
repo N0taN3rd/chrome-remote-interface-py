@@ -11,7 +11,7 @@ class Accessibility(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def getPartialAXTree(self, nodeId, backendNodeId, objectId, fetchRelatives):
+    def getPartialAXTree(self, nodeId, backendNodeId, objectId, fetchRelatives, cb=None):
         """
         :param nodeId: Identifier of the node to get the partial accessibility tree for.
         :type nodeId: Optional[int]
@@ -22,9 +22,9 @@ class Accessibility(object):
         :param fetchRelatives: Whether to fetch this nodes ancestors, siblings and children. Defaults to true.
         :type fetchRelatives: Optional[bool]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['nodes'] = Types.AXNode.safe_create_from_list(res['nodes'])
-            self.chrome.emit('Accessibility.getPartialAXTree', res)
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
@@ -34,7 +34,7 @@ class Accessibility(object):
             msg_dict['objectId'] = objectId
         if fetchRelatives is not None:
             msg_dict['fetchRelatives'] = fetchRelatives
-        self.chrome.send('Accessibility.getPartialAXTree', params=msg_dict, cb=cb)
+        self.chrome.send('Accessibility.getPartialAXTree', params=msg_dict, cb=cb_wrapper)
 
 
     @staticmethod

@@ -8,11 +8,11 @@ class Inspector(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('Inspector.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('Inspector.enable')
 
 

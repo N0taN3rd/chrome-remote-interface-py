@@ -9,7 +9,7 @@ class ServiceWorker(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def deliverPushMessage(self, origin, registrationId, data):
+    def deliverPushMessage(self, origin, registrationId, data, cb=None):
         """
         :param origin: The origin
         :type origin: str
@@ -28,11 +28,11 @@ class ServiceWorker(object):
         self.chrome.send('ServiceWorker.deliverPushMessage', params=msg_dict)
 
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('ServiceWorker.disable')
 
 
-    def dispatchSyncEvent(self, origin, registrationId, tag, lastChance):
+    def dispatchSyncEvent(self, origin, registrationId, tag, lastChance, cb=None):
         """
         :param origin: The origin
         :type origin: str
@@ -55,11 +55,11 @@ class ServiceWorker(object):
         self.chrome.send('ServiceWorker.dispatchSyncEvent', params=msg_dict)
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('ServiceWorker.enable')
 
 
-    def inspectWorker(self, versionId):
+    def inspectWorker(self, versionId, cb=None):
         """
         :param versionId: The versionId
         :type versionId: str
@@ -70,7 +70,7 @@ class ServiceWorker(object):
         self.chrome.send('ServiceWorker.inspectWorker', params=msg_dict)
 
 
-    def setForceUpdateOnPageLoad(self, forceUpdateOnPageLoad):
+    def setForceUpdateOnPageLoad(self, forceUpdateOnPageLoad, cb=None):
         """
         :param forceUpdateOnPageLoad: The forceUpdateOnPageLoad
         :type forceUpdateOnPageLoad: bool
@@ -81,7 +81,7 @@ class ServiceWorker(object):
         self.chrome.send('ServiceWorker.setForceUpdateOnPageLoad', params=msg_dict)
 
 
-    def skipWaiting(self, scopeURL):
+    def skipWaiting(self, scopeURL, cb=None):
         """
         :param scopeURL: The scopeURL
         :type scopeURL: str
@@ -92,7 +92,7 @@ class ServiceWorker(object):
         self.chrome.send('ServiceWorker.skipWaiting', params=msg_dict)
 
 
-    def startWorker(self, scopeURL):
+    def startWorker(self, scopeURL, cb=None):
         """
         :param scopeURL: The scopeURL
         :type scopeURL: str
@@ -103,11 +103,11 @@ class ServiceWorker(object):
         self.chrome.send('ServiceWorker.startWorker', params=msg_dict)
 
 
-    def stopAllWorkers(self):
+    def stopAllWorkers(self, cb=None):
         self.chrome.send('ServiceWorker.stopAllWorkers')
 
 
-    def stopWorker(self, versionId):
+    def stopWorker(self, versionId, cb=None):
         """
         :param versionId: The versionId
         :type versionId: str
@@ -118,7 +118,7 @@ class ServiceWorker(object):
         self.chrome.send('ServiceWorker.stopWorker', params=msg_dict)
 
 
-    def unregister(self, scopeURL):
+    def unregister(self, scopeURL, cb=None):
         """
         :param scopeURL: The scopeURL
         :type scopeURL: str
@@ -129,7 +129,7 @@ class ServiceWorker(object):
         self.chrome.send('ServiceWorker.unregister', params=msg_dict)
 
 
-    def updateRegistration(self, scopeURL):
+    def updateRegistration(self, scopeURL, cb=None):
         """
         :param scopeURL: The scopeURL
         :type scopeURL: str

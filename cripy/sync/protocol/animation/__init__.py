@@ -11,34 +11,34 @@ class Animation(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('Animation.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('Animation.enable')
 
 
-    def getCurrentTime(self, id):
+    def getCurrentTime(self, id, cb=None):
         """
         :param id: Id of animation.
         :type id: str
         """
-        def cb(res):
-            self.chrome.emit('Animation.getCurrentTime', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if id is not None:
             msg_dict['id'] = id
-        self.chrome.send('Animation.getCurrentTime', params=msg_dict, cb=cb)
+        self.chrome.send('Animation.getCurrentTime', params=msg_dict, cb=cb_wrapper)
 
 
-    def getPlaybackRate(self):
-        def cb(res):
-            self.chrome.emit('Animation.getPlaybackRate', res)
-        self.chrome.send('Animation.getPlaybackRate', cb=cb)
+    def getPlaybackRate(self, cb=None):
+        def cb_wrapper(res):
+            cb(res)
+        self.chrome.send('Animation.getPlaybackRate', cb=cb_wrapper)
 
 
-    def releaseAnimations(self, animations):
+    def releaseAnimations(self, animations, cb=None):
         """
         :param animations: List of animation ids to seek.
         :type animations: List[str]
@@ -49,21 +49,21 @@ class Animation(object):
         self.chrome.send('Animation.releaseAnimations', params=msg_dict)
 
 
-    def resolveAnimation(self, animationId):
+    def resolveAnimation(self, animationId, cb=None):
         """
         :param animationId: Animation id.
         :type animationId: str
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['remoteObject'] = Runtime.RemoteObject.safe_create(res['remoteObject'])
-            self.chrome.emit('Animation.resolveAnimation', res)
+            cb(res)
         msg_dict = dict()
         if animationId is not None:
             msg_dict['animationId'] = animationId
-        self.chrome.send('Animation.resolveAnimation', params=msg_dict, cb=cb)
+        self.chrome.send('Animation.resolveAnimation', params=msg_dict, cb=cb_wrapper)
 
 
-    def seekAnimations(self, animations, currentTime):
+    def seekAnimations(self, animations, currentTime, cb=None):
         """
         :param animations: List of animation ids to seek.
         :type animations: List[str]
@@ -78,7 +78,7 @@ class Animation(object):
         self.chrome.send('Animation.seekAnimations', params=msg_dict)
 
 
-    def setPaused(self, animations, paused):
+    def setPaused(self, animations, paused, cb=None):
         """
         :param animations: Animations to set the pause state of.
         :type animations: List[str]
@@ -93,7 +93,7 @@ class Animation(object):
         self.chrome.send('Animation.setPaused', params=msg_dict)
 
 
-    def setPlaybackRate(self, playbackRate):
+    def setPlaybackRate(self, playbackRate, cb=None):
         """
         :param playbackRate: Playback rate for animations on page
         :type playbackRate: float
@@ -104,7 +104,7 @@ class Animation(object):
         self.chrome.send('Animation.setPlaybackRate', params=msg_dict)
 
 
-    def setTiming(self, animationId, duration, delay):
+    def setTiming(self, animationId, duration, delay, cb=None):
         """
         :param animationId: Animation id.
         :type animationId: str

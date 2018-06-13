@@ -7,11 +7,11 @@ class DeviceOrientation(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def clearDeviceOrientationOverride(self):
+    def clearDeviceOrientationOverride(self, cb=None):
         self.chrome.send('DeviceOrientation.clearDeviceOrientationOverride')
 
 
-    def setDeviceOrientationOverride(self, alpha, beta, gamma):
+    def setDeviceOrientationOverride(self, alpha, beta, gamma, cb=None):
         """
         :param alpha: Mock alpha
         :type alpha: float

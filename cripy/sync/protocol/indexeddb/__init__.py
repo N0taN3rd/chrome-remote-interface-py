@@ -9,7 +9,7 @@ class IndexedDB(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def clearObjectStore(self, securityOrigin, databaseName, objectStoreName):
+    def clearObjectStore(self, securityOrigin, databaseName, objectStoreName, cb=None):
         """
         :param securityOrigin: Security origin.
         :type securityOrigin: str
@@ -28,7 +28,7 @@ class IndexedDB(object):
         self.chrome.send('IndexedDB.clearObjectStore', params=msg_dict)
 
 
-    def deleteDatabase(self, securityOrigin, databaseName):
+    def deleteDatabase(self, securityOrigin, databaseName, cb=None):
         """
         :param securityOrigin: Security origin.
         :type securityOrigin: str
@@ -43,7 +43,7 @@ class IndexedDB(object):
         self.chrome.send('IndexedDB.deleteDatabase', params=msg_dict)
 
 
-    def deleteObjectStoreEntries(self, securityOrigin, databaseName, objectStoreName, keyRange):
+    def deleteObjectStoreEntries(self, securityOrigin, databaseName, objectStoreName, keyRange, cb=None):
         """
         :param securityOrigin: The securityOrigin
         :type securityOrigin: str
@@ -66,15 +66,15 @@ class IndexedDB(object):
         self.chrome.send('IndexedDB.deleteObjectStoreEntries', params=msg_dict)
 
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('IndexedDB.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('IndexedDB.enable')
 
 
-    def requestData(self, securityOrigin, databaseName, objectStoreName, indexName, skipCount, pageSize, keyRange):
+    def requestData(self, securityOrigin, databaseName, objectStoreName, indexName, skipCount, pageSize, keyRange, cb=None):
         """
         :param securityOrigin: Security origin.
         :type securityOrigin: str
@@ -91,9 +91,9 @@ class IndexedDB(object):
         :param keyRange: Key range.
         :type keyRange: Optional[dict]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['objectStoreDataEntries'] = Types.DataEntry.safe_create_from_list(res['objectStoreDataEntries'])
-            self.chrome.emit('IndexedDB.requestData', res)
+            cb(res)
         msg_dict = dict()
         if securityOrigin is not None:
             msg_dict['securityOrigin'] = securityOrigin
@@ -109,38 +109,38 @@ class IndexedDB(object):
             msg_dict['pageSize'] = pageSize
         if keyRange is not None:
             msg_dict['keyRange'] = keyRange
-        self.chrome.send('IndexedDB.requestData', params=msg_dict, cb=cb)
+        self.chrome.send('IndexedDB.requestData', params=msg_dict, cb=cb_wrapper)
 
 
-    def requestDatabase(self, securityOrigin, databaseName):
+    def requestDatabase(self, securityOrigin, databaseName, cb=None):
         """
         :param securityOrigin: Security origin.
         :type securityOrigin: str
         :param databaseName: Database name.
         :type databaseName: str
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['databaseWithObjectStores'] = Types.DatabaseWithObjectStores.safe_create(res['databaseWithObjectStores'])
-            self.chrome.emit('IndexedDB.requestDatabase', res)
+            cb(res)
         msg_dict = dict()
         if securityOrigin is not None:
             msg_dict['securityOrigin'] = securityOrigin
         if databaseName is not None:
             msg_dict['databaseName'] = databaseName
-        self.chrome.send('IndexedDB.requestDatabase', params=msg_dict, cb=cb)
+        self.chrome.send('IndexedDB.requestDatabase', params=msg_dict, cb=cb_wrapper)
 
 
-    def requestDatabaseNames(self, securityOrigin):
+    def requestDatabaseNames(self, securityOrigin, cb=None):
         """
         :param securityOrigin: Security origin.
         :type securityOrigin: str
         """
-        def cb(res):
-            self.chrome.emit('IndexedDB.requestDatabaseNames', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if securityOrigin is not None:
             msg_dict['securityOrigin'] = securityOrigin
-        self.chrome.send('IndexedDB.requestDatabaseNames', params=msg_dict, cb=cb)
+        self.chrome.send('IndexedDB.requestDatabaseNames', params=msg_dict, cb=cb_wrapper)
 
 
     @staticmethod

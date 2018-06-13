@@ -16,7 +16,7 @@ breakpoints, stepping through execution, exploring stack traces, etc.
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def continueToLocation(self, location, targetCallFrames):
+    def continueToLocation(self, location, targetCallFrames, cb=None):
         """
         :param location: Location to continue to.
         :type location: dict
@@ -31,17 +31,17 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         self.chrome.send('Debugger.continueToLocation', params=msg_dict)
 
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('Debugger.disable')
 
 
-    def enable(self):
-        def cb(res):
-            self.chrome.emit('Debugger.enable', res)
-        self.chrome.send('Debugger.enable', cb=cb)
+    def enable(self, cb=None):
+        def cb_wrapper(res):
+            cb(res)
+        self.chrome.send('Debugger.enable', cb=cb_wrapper)
 
 
-    def evaluateOnCallFrame(self, callFrameId, expression, objectGroup, includeCommandLineAPI, silent, returnByValue, generatePreview, throwOnSideEffect, timeout):
+    def evaluateOnCallFrame(self, callFrameId, expression, objectGroup, includeCommandLineAPI, silent, returnByValue, generatePreview, throwOnSideEffect, timeout, cb=None):
         """
         :param callFrameId: Call frame identifier to evaluate on.
         :type callFrameId: str
@@ -62,10 +62,10 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         :param timeout: Terminate execution after timing out (number of milliseconds).
         :type timeout: Optional[float]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['result'] = Runtime.RemoteObject.safe_create(res['result'])
             res['exceptionDetails'] = Runtime.ExceptionDetails.safe_create(res['exceptionDetails'])
-            self.chrome.emit('Debugger.evaluateOnCallFrame', res)
+            cb(res)
         msg_dict = dict()
         if callFrameId is not None:
             msg_dict['callFrameId'] = callFrameId
@@ -85,10 +85,10 @@ breakpoints, stepping through execution, exploring stack traces, etc.
             msg_dict['throwOnSideEffect'] = throwOnSideEffect
         if timeout is not None:
             msg_dict['timeout'] = timeout
-        self.chrome.send('Debugger.evaluateOnCallFrame', params=msg_dict, cb=cb)
+        self.chrome.send('Debugger.evaluateOnCallFrame', params=msg_dict, cb=cb_wrapper)
 
 
-    def getPossibleBreakpoints(self, start, end, restrictToFunction):
+    def getPossibleBreakpoints(self, start, end, restrictToFunction, cb=None):
         """
         :param start: Start of range to search possible breakpoint locations in.
         :type start: dict
@@ -97,9 +97,9 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         :param restrictToFunction: Only consider locations which are in the same (non-nested) function as start.
         :type restrictToFunction: Optional[bool]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['locations'] = Types.BreakLocation.safe_create_from_list(res['locations'])
-            self.chrome.emit('Debugger.getPossibleBreakpoints', res)
+            cb(res)
         msg_dict = dict()
         if start is not None:
             msg_dict['start'] = start
@@ -107,41 +107,41 @@ breakpoints, stepping through execution, exploring stack traces, etc.
             msg_dict['end'] = end
         if restrictToFunction is not None:
             msg_dict['restrictToFunction'] = restrictToFunction
-        self.chrome.send('Debugger.getPossibleBreakpoints', params=msg_dict, cb=cb)
+        self.chrome.send('Debugger.getPossibleBreakpoints', params=msg_dict, cb=cb_wrapper)
 
 
-    def getScriptSource(self, scriptId):
+    def getScriptSource(self, scriptId, cb=None):
         """
         :param scriptId: Id of the script to get source for.
         :type scriptId: str
         """
-        def cb(res):
-            self.chrome.emit('Debugger.getScriptSource', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if scriptId is not None:
             msg_dict['scriptId'] = scriptId
-        self.chrome.send('Debugger.getScriptSource', params=msg_dict, cb=cb)
+        self.chrome.send('Debugger.getScriptSource', params=msg_dict, cb=cb_wrapper)
 
 
-    def getStackTrace(self, stackTraceId):
+    def getStackTrace(self, stackTraceId, cb=None):
         """
         :param stackTraceId: The stackTraceId
         :type stackTraceId: dict
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['stackTrace'] = Runtime.StackTrace.safe_create(res['stackTrace'])
-            self.chrome.emit('Debugger.getStackTrace', res)
+            cb(res)
         msg_dict = dict()
         if stackTraceId is not None:
             msg_dict['stackTraceId'] = stackTraceId
-        self.chrome.send('Debugger.getStackTrace', params=msg_dict, cb=cb)
+        self.chrome.send('Debugger.getStackTrace', params=msg_dict, cb=cb_wrapper)
 
 
-    def pause(self):
+    def pause(self, cb=None):
         self.chrome.send('Debugger.pause')
 
 
-    def pauseOnAsyncCall(self, parentStackTraceId):
+    def pauseOnAsyncCall(self, parentStackTraceId, cb=None):
         """
         :param parentStackTraceId: Debugger will pause when async call with given stack trace is started.
         :type parentStackTraceId: dict
@@ -152,7 +152,7 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         self.chrome.send('Debugger.pauseOnAsyncCall', params=msg_dict)
 
 
-    def removeBreakpoint(self, breakpointId):
+    def removeBreakpoint(self, breakpointId, cb=None):
         """
         :param breakpointId: The breakpointId
         :type breakpointId: str
@@ -163,31 +163,31 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         self.chrome.send('Debugger.removeBreakpoint', params=msg_dict)
 
 
-    def restartFrame(self, callFrameId):
+    def restartFrame(self, callFrameId, cb=None):
         """
         :param callFrameId: Call frame identifier to evaluate on.
         :type callFrameId: str
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['callFrames'] = Types.CallFrame.safe_create_from_list(res['callFrames'])
             res['asyncStackTrace'] = Runtime.StackTrace.safe_create(res['asyncStackTrace'])
             res['asyncStackTraceId'] = Runtime.StackTraceId.safe_create(res['asyncStackTraceId'])
-            self.chrome.emit('Debugger.restartFrame', res)
+            cb(res)
         msg_dict = dict()
         if callFrameId is not None:
             msg_dict['callFrameId'] = callFrameId
-        self.chrome.send('Debugger.restartFrame', params=msg_dict, cb=cb)
+        self.chrome.send('Debugger.restartFrame', params=msg_dict, cb=cb_wrapper)
 
 
-    def resume(self):
+    def resume(self, cb=None):
         self.chrome.send('Debugger.resume')
 
 
-    def scheduleStepIntoAsync(self):
+    def scheduleStepIntoAsync(self, cb=None):
         self.chrome.send('Debugger.scheduleStepIntoAsync')
 
 
-    def searchInContent(self, scriptId, query, caseSensitive, isRegex):
+    def searchInContent(self, scriptId, query, caseSensitive, isRegex, cb=None):
         """
         :param scriptId: Id of the script to search in.
         :type scriptId: str
@@ -198,9 +198,9 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         :param isRegex: If true, treats string parameter as regex.
         :type isRegex: Optional[bool]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['result'] = Types.SearchMatch.safe_create_from_list(res['result'])
-            self.chrome.emit('Debugger.searchInContent', res)
+            cb(res)
         msg_dict = dict()
         if scriptId is not None:
             msg_dict['scriptId'] = scriptId
@@ -210,10 +210,10 @@ breakpoints, stepping through execution, exploring stack traces, etc.
             msg_dict['caseSensitive'] = caseSensitive
         if isRegex is not None:
             msg_dict['isRegex'] = isRegex
-        self.chrome.send('Debugger.searchInContent', params=msg_dict, cb=cb)
+        self.chrome.send('Debugger.searchInContent', params=msg_dict, cb=cb_wrapper)
 
 
-    def setAsyncCallStackDepth(self, maxDepth):
+    def setAsyncCallStackDepth(self, maxDepth, cb=None):
         """
         :param maxDepth: Maximum depth of async call stacks. Setting to `0` will effectively disable collecting async call stacks (default).
         :type maxDepth: int
@@ -224,7 +224,7 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         self.chrome.send('Debugger.setAsyncCallStackDepth', params=msg_dict)
 
 
-    def setBlackboxPatterns(self, patterns):
+    def setBlackboxPatterns(self, patterns, cb=None):
         """
         :param patterns: Array of regexps that will be used to check script url for blackbox state.
         :type patterns: List[str]
@@ -235,7 +235,7 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         self.chrome.send('Debugger.setBlackboxPatterns', params=msg_dict)
 
 
-    def setBlackboxedRanges(self, scriptId, positions):
+    def setBlackboxedRanges(self, scriptId, positions, cb=None):
         """
         :param scriptId: Id of the script.
         :type scriptId: str
@@ -250,25 +250,25 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         self.chrome.send('Debugger.setBlackboxedRanges', params=msg_dict)
 
 
-    def setBreakpoint(self, location, condition):
+    def setBreakpoint(self, location, condition, cb=None):
         """
         :param location: Location to set breakpoint in.
         :type location: dict
         :param condition: Expression to use as a breakpoint condition. When specified, debugger will only stop on the breakpoint if this expression evaluates to true.
         :type condition: Optional[str]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['actualLocation'] = Types.Location.safe_create(res['actualLocation'])
-            self.chrome.emit('Debugger.setBreakpoint', res)
+            cb(res)
         msg_dict = dict()
         if location is not None:
             msg_dict['location'] = location
         if condition is not None:
             msg_dict['condition'] = condition
-        self.chrome.send('Debugger.setBreakpoint', params=msg_dict, cb=cb)
+        self.chrome.send('Debugger.setBreakpoint', params=msg_dict, cb=cb_wrapper)
 
 
-    def setBreakpointByUrl(self, lineNumber, url, urlRegex, scriptHash, columnNumber, condition):
+    def setBreakpointByUrl(self, lineNumber, url, urlRegex, scriptHash, columnNumber, condition, cb=None):
         """
         :param lineNumber: Line number to set breakpoint at.
         :type lineNumber: int
@@ -283,9 +283,9 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         :param condition: Expression to use as a breakpoint condition. When specified, debugger will only stop on the breakpoint if this expression evaluates to true.
         :type condition: Optional[str]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['locations'] = Types.Location.safe_create_from_list(res['locations'])
-            self.chrome.emit('Debugger.setBreakpointByUrl', res)
+            cb(res)
         msg_dict = dict()
         if lineNumber is not None:
             msg_dict['lineNumber'] = lineNumber
@@ -299,27 +299,27 @@ breakpoints, stepping through execution, exploring stack traces, etc.
             msg_dict['columnNumber'] = columnNumber
         if condition is not None:
             msg_dict['condition'] = condition
-        self.chrome.send('Debugger.setBreakpointByUrl', params=msg_dict, cb=cb)
+        self.chrome.send('Debugger.setBreakpointByUrl', params=msg_dict, cb=cb_wrapper)
 
 
-    def setBreakpointOnFunctionCall(self, objectId, condition):
+    def setBreakpointOnFunctionCall(self, objectId, condition, cb=None):
         """
         :param objectId: Function object id.
         :type objectId: str
         :param condition: Expression to use as a breakpoint condition. When specified, debugger will stop on the breakpoint if this expression evaluates to true.
         :type condition: Optional[str]
         """
-        def cb(res):
-            self.chrome.emit('Debugger.setBreakpointOnFunctionCall', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if objectId is not None:
             msg_dict['objectId'] = objectId
         if condition is not None:
             msg_dict['condition'] = condition
-        self.chrome.send('Debugger.setBreakpointOnFunctionCall', params=msg_dict, cb=cb)
+        self.chrome.send('Debugger.setBreakpointOnFunctionCall', params=msg_dict, cb=cb_wrapper)
 
 
-    def setBreakpointsActive(self, active):
+    def setBreakpointsActive(self, active, cb=None):
         """
         :param active: New value for breakpoints active state.
         :type active: bool
@@ -330,7 +330,7 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         self.chrome.send('Debugger.setBreakpointsActive', params=msg_dict)
 
 
-    def setPauseOnExceptions(self, state):
+    def setPauseOnExceptions(self, state, cb=None):
         """
         :param state: Pause on exceptions mode.
         :type state: str
@@ -341,7 +341,7 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         self.chrome.send('Debugger.setPauseOnExceptions', params=msg_dict)
 
 
-    def setReturnValue(self, newValue):
+    def setReturnValue(self, newValue, cb=None):
         """
         :param newValue: New return value.
         :type newValue: dict
@@ -352,7 +352,7 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         self.chrome.send('Debugger.setReturnValue', params=msg_dict)
 
 
-    def setScriptSource(self, scriptId, scriptSource, dryRun):
+    def setScriptSource(self, scriptId, scriptSource, dryRun, cb=None):
         """
         :param scriptId: Id of the script to edit.
         :type scriptId: str
@@ -361,12 +361,12 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         :param dryRun: If true the change will not actually be applied. Dry run may be used to get result description without actually modifying the code.
         :type dryRun: Optional[bool]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['callFrames'] = Types.CallFrame.safe_create_from_list(res['callFrames'])
             res['asyncStackTrace'] = Runtime.StackTrace.safe_create(res['asyncStackTrace'])
             res['asyncStackTraceId'] = Runtime.StackTraceId.safe_create(res['asyncStackTraceId'])
             res['exceptionDetails'] = Runtime.ExceptionDetails.safe_create(res['exceptionDetails'])
-            self.chrome.emit('Debugger.setScriptSource', res)
+            cb(res)
         msg_dict = dict()
         if scriptId is not None:
             msg_dict['scriptId'] = scriptId
@@ -374,10 +374,10 @@ breakpoints, stepping through execution, exploring stack traces, etc.
             msg_dict['scriptSource'] = scriptSource
         if dryRun is not None:
             msg_dict['dryRun'] = dryRun
-        self.chrome.send('Debugger.setScriptSource', params=msg_dict, cb=cb)
+        self.chrome.send('Debugger.setScriptSource', params=msg_dict, cb=cb_wrapper)
 
 
-    def setSkipAllPauses(self, skip):
+    def setSkipAllPauses(self, skip, cb=None):
         """
         :param skip: New value for skip pauses state.
         :type skip: bool
@@ -388,7 +388,7 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         self.chrome.send('Debugger.setSkipAllPauses', params=msg_dict)
 
 
-    def setVariableValue(self, scopeNumber, variableName, newValue, callFrameId):
+    def setVariableValue(self, scopeNumber, variableName, newValue, callFrameId, cb=None):
         """
         :param scopeNumber: 0-based number of scope as was listed in scope chain. Only 'local', 'closure' and 'catch' scope types are allowed. Other scopes could be manipulated manually.
         :type scopeNumber: int
@@ -411,7 +411,7 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         self.chrome.send('Debugger.setVariableValue', params=msg_dict)
 
 
-    def stepInto(self, breakOnAsyncCall):
+    def stepInto(self, breakOnAsyncCall, cb=None):
         """
         :param breakOnAsyncCall: Debugger will issue additional Debugger.paused notification if any async task is scheduled before next pause.
         :type breakOnAsyncCall: Optional[bool]
@@ -422,11 +422,11 @@ breakpoints, stepping through execution, exploring stack traces, etc.
         self.chrome.send('Debugger.stepInto', params=msg_dict)
 
 
-    def stepOut(self):
+    def stepOut(self, cb=None):
         self.chrome.send('Debugger.stepOut')
 
 
-    def stepOver(self):
+    def stepOver(self, cb=None):
         self.chrome.send('Debugger.stepOver')
 
 

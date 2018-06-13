@@ -16,7 +16,7 @@ execution will stop on these operations as if there was a regular breakpoint set
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def getEventListeners(self, objectId, depth, pierce):
+    def getEventListeners(self, objectId, depth, pierce, cb=None):
         """
         :param objectId: Identifier of the object to return listeners for.
         :type objectId: str
@@ -25,9 +25,9 @@ execution will stop on these operations as if there was a regular breakpoint set
         :param pierce: Whether or not iframes and shadow roots should be traversed when returning the subtree (default is false). Reports listeners for all contexts if pierce is enabled.
         :type pierce: Optional[bool]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['listeners'] = Types.EventListener.safe_create_from_list(res['listeners'])
-            self.chrome.emit('DOMDebugger.getEventListeners', res)
+            cb(res)
         msg_dict = dict()
         if objectId is not None:
             msg_dict['objectId'] = objectId
@@ -35,10 +35,10 @@ execution will stop on these operations as if there was a regular breakpoint set
             msg_dict['depth'] = depth
         if pierce is not None:
             msg_dict['pierce'] = pierce
-        self.chrome.send('DOMDebugger.getEventListeners', params=msg_dict, cb=cb)
+        self.chrome.send('DOMDebugger.getEventListeners', params=msg_dict, cb=cb_wrapper)
 
 
-    def removeDOMBreakpoint(self, nodeId, type):
+    def removeDOMBreakpoint(self, nodeId, type, cb=None):
         """
         :param nodeId: Identifier of the node to remove breakpoint from.
         :type nodeId: int
@@ -53,7 +53,7 @@ execution will stop on these operations as if there was a regular breakpoint set
         self.chrome.send('DOMDebugger.removeDOMBreakpoint', params=msg_dict)
 
 
-    def removeEventListenerBreakpoint(self, eventName, targetName):
+    def removeEventListenerBreakpoint(self, eventName, targetName, cb=None):
         """
         :param eventName: Event name.
         :type eventName: str
@@ -68,7 +68,7 @@ execution will stop on these operations as if there was a regular breakpoint set
         self.chrome.send('DOMDebugger.removeEventListenerBreakpoint', params=msg_dict)
 
 
-    def removeInstrumentationBreakpoint(self, eventName):
+    def removeInstrumentationBreakpoint(self, eventName, cb=None):
         """
         :param eventName: Instrumentation name to stop on.
         :type eventName: str
@@ -79,7 +79,7 @@ execution will stop on these operations as if there was a regular breakpoint set
         self.chrome.send('DOMDebugger.removeInstrumentationBreakpoint', params=msg_dict)
 
 
-    def removeXHRBreakpoint(self, url):
+    def removeXHRBreakpoint(self, url, cb=None):
         """
         :param url: Resource URL substring.
         :type url: str
@@ -90,7 +90,7 @@ execution will stop on these operations as if there was a regular breakpoint set
         self.chrome.send('DOMDebugger.removeXHRBreakpoint', params=msg_dict)
 
 
-    def setDOMBreakpoint(self, nodeId, type):
+    def setDOMBreakpoint(self, nodeId, type, cb=None):
         """
         :param nodeId: Identifier of the node to set breakpoint on.
         :type nodeId: int
@@ -105,7 +105,7 @@ execution will stop on these operations as if there was a regular breakpoint set
         self.chrome.send('DOMDebugger.setDOMBreakpoint', params=msg_dict)
 
 
-    def setEventListenerBreakpoint(self, eventName, targetName):
+    def setEventListenerBreakpoint(self, eventName, targetName, cb=None):
         """
         :param eventName: DOM Event name to stop on (any DOM event will do).
         :type eventName: str
@@ -120,7 +120,7 @@ execution will stop on these operations as if there was a regular breakpoint set
         self.chrome.send('DOMDebugger.setEventListenerBreakpoint', params=msg_dict)
 
 
-    def setInstrumentationBreakpoint(self, eventName):
+    def setInstrumentationBreakpoint(self, eventName, cb=None):
         """
         :param eventName: Instrumentation name to stop on.
         :type eventName: str
@@ -131,7 +131,7 @@ execution will stop on these operations as if there was a regular breakpoint set
         self.chrome.send('DOMDebugger.setInstrumentationBreakpoint', params=msg_dict)
 
 
-    def setXHRBreakpoint(self, url):
+    def setXHRBreakpoint(self, url, cb=None):
         """
         :param url: Resource URL substring. All XHRs having this substring in the URL will get stopped upon.
         :type url: str

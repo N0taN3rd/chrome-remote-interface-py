@@ -13,7 +13,7 @@ class Audits(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def getEncodedResponse(self, requestId, encoding, quality, sizeOnly):
+    def getEncodedResponse(self, requestId, encoding, quality, sizeOnly, cb=None):
         """
         :param requestId: Identifier of the network request to get content for.
         :type requestId: str
@@ -24,8 +24,8 @@ class Audits(object):
         :param sizeOnly: Whether to only return the size information (defaults to false).
         :type sizeOnly: Optional[bool]
         """
-        def cb(res):
-            self.chrome.emit('Audits.getEncodedResponse', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if requestId is not None:
             msg_dict['requestId'] = requestId
@@ -35,7 +35,7 @@ class Audits(object):
             msg_dict['quality'] = quality
         if sizeOnly is not None:
             msg_dict['sizeOnly'] = sizeOnly
-        self.chrome.send('Audits.getEncodedResponse', params=msg_dict, cb=cb)
+        self.chrome.send('Audits.getEncodedResponse', params=msg_dict, cb=cb_wrapper)
 
 
     @staticmethod

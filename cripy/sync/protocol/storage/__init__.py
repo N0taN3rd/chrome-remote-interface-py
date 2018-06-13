@@ -9,7 +9,7 @@ class Storage(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def clearDataForOrigin(self, origin, storageTypes):
+    def clearDataForOrigin(self, origin, storageTypes, cb=None):
         """
         :param origin: Security origin.
         :type origin: str
@@ -24,21 +24,21 @@ class Storage(object):
         self.chrome.send('Storage.clearDataForOrigin', params=msg_dict)
 
 
-    def getUsageAndQuota(self, origin):
+    def getUsageAndQuota(self, origin, cb=None):
         """
         :param origin: Security origin.
         :type origin: str
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['usageBreakdown'] = Types.UsageForType.safe_create_from_list(res['usageBreakdown'])
-            self.chrome.emit('Storage.getUsageAndQuota', res)
+            cb(res)
         msg_dict = dict()
         if origin is not None:
             msg_dict['origin'] = origin
-        self.chrome.send('Storage.getUsageAndQuota', params=msg_dict, cb=cb)
+        self.chrome.send('Storage.getUsageAndQuota', params=msg_dict, cb=cb_wrapper)
 
 
-    def trackCacheStorageForOrigin(self, origin):
+    def trackCacheStorageForOrigin(self, origin, cb=None):
         """
         :param origin: Security origin.
         :type origin: str
@@ -49,7 +49,7 @@ class Storage(object):
         self.chrome.send('Storage.trackCacheStorageForOrigin', params=msg_dict)
 
 
-    def trackIndexedDBForOrigin(self, origin):
+    def trackIndexedDBForOrigin(self, origin, cb=None):
         """
         :param origin: Security origin.
         :type origin: str
@@ -60,7 +60,7 @@ class Storage(object):
         self.chrome.send('Storage.trackIndexedDBForOrigin', params=msg_dict)
 
 
-    def untrackCacheStorageForOrigin(self, origin):
+    def untrackCacheStorageForOrigin(self, origin, cb=None):
         """
         :param origin: Security origin.
         :type origin: str
@@ -71,7 +71,7 @@ class Storage(object):
         self.chrome.send('Storage.untrackCacheStorageForOrigin', params=msg_dict)
 
 
-    def untrackIndexedDBForOrigin(self, origin):
+    def untrackIndexedDBForOrigin(self, origin, cb=None):
         """
         :param origin: Security origin.
         :type origin: str

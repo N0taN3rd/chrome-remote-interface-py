@@ -8,7 +8,7 @@ class Input(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def dispatchKeyEvent(self, type, modifiers, timestamp, text, unmodifiedText, keyIdentifier, code, key, windowsVirtualKeyCode, nativeVirtualKeyCode, autoRepeat, isKeypad, isSystemKey, location):
+    def dispatchKeyEvent(self, type, modifiers, timestamp, text, unmodifiedText, keyIdentifier, code, key, windowsVirtualKeyCode, nativeVirtualKeyCode, autoRepeat, isKeypad, isSystemKey, location, cb=None):
         """
         :param type: Type of the key event.
         :type type: str
@@ -71,7 +71,7 @@ class Input(object):
         self.chrome.send('Input.dispatchKeyEvent', params=msg_dict)
 
 
-    def dispatchMouseEvent(self, type, x, y, modifiers, timestamp, button, clickCount, deltaX, deltaY):
+    def dispatchMouseEvent(self, type, x, y, modifiers, timestamp, button, clickCount, deltaX, deltaY, cb=None):
         """
         :param type: Type of the mouse event.
         :type type: str
@@ -114,7 +114,7 @@ class Input(object):
         self.chrome.send('Input.dispatchMouseEvent', params=msg_dict)
 
 
-    def dispatchTouchEvent(self, type, touchPoints, modifiers, timestamp):
+    def dispatchTouchEvent(self, type, touchPoints, modifiers, timestamp, cb=None):
         """
         :param type: Type of the touch event. TouchEnd and TouchCancel must not contain any touch points, while TouchStart and TouchMove must contains at least one.
         :type type: str
@@ -137,7 +137,7 @@ class Input(object):
         self.chrome.send('Input.dispatchTouchEvent', params=msg_dict)
 
 
-    def emulateTouchFromMouseEvent(self, type, x, y, button, timestamp, deltaX, deltaY, modifiers, clickCount):
+    def emulateTouchFromMouseEvent(self, type, x, y, button, timestamp, deltaX, deltaY, modifiers, clickCount, cb=None):
         """
         :param type: Type of the mouse event.
         :type type: str
@@ -180,7 +180,7 @@ class Input(object):
         self.chrome.send('Input.emulateTouchFromMouseEvent', params=msg_dict)
 
 
-    def setIgnoreInputEvents(self, ignore):
+    def setIgnoreInputEvents(self, ignore, cb=None):
         """
         :param ignore: Ignores input events processing when set to true.
         :type ignore: bool
@@ -191,7 +191,7 @@ class Input(object):
         self.chrome.send('Input.setIgnoreInputEvents', params=msg_dict)
 
 
-    def synthesizePinchGesture(self, x, y, scaleFactor, relativeSpeed, gestureSourceType):
+    def synthesizePinchGesture(self, x, y, scaleFactor, relativeSpeed, gestureSourceType, cb=None):
         """
         :param x: X coordinate of the start of the gesture in CSS pixels.
         :type x: float
@@ -218,7 +218,7 @@ class Input(object):
         self.chrome.send('Input.synthesizePinchGesture', params=msg_dict)
 
 
-    def synthesizeScrollGesture(self, x, y, xDistance, yDistance, xOverscroll, yOverscroll, preventFling, speed, gestureSourceType, repeatCount, repeatDelayMs, interactionMarkerName):
+    def synthesizeScrollGesture(self, x, y, xDistance, yDistance, xOverscroll, yOverscroll, preventFling, speed, gestureSourceType, repeatCount, repeatDelayMs, interactionMarkerName, cb=None):
         """
         :param x: X coordinate of the start of the gesture in CSS pixels.
         :type x: float
@@ -273,7 +273,7 @@ class Input(object):
         self.chrome.send('Input.synthesizeScrollGesture', params=msg_dict)
 
 
-    def synthesizeTapGesture(self, x, y, duration, tapCount, gestureSourceType):
+    def synthesizeTapGesture(self, x, y, duration, tapCount, gestureSourceType, cb=None):
         """
         :param x: X coordinate of the start of the gesture in CSS pixels.
         :type x: float

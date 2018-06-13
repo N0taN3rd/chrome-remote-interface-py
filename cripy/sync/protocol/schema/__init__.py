@@ -12,11 +12,11 @@ class Schema(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def getDomains(self):
-        def cb(res):
+    def getDomains(self, cb=None):
+        def cb_wrapper(res):
             res['domains'] = Types.Domain.safe_create_from_list(res['domains'])
-            self.chrome.emit('Schema.getDomains', res)
-        self.chrome.send('Schema.getDomains', cb=cb)
+            cb(res)
+        self.chrome.send('Schema.getDomains', cb=cb_wrapper)
 
 
     @staticmethod

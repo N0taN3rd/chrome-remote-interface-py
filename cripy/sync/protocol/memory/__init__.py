@@ -8,17 +8,17 @@ class Memory(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def getDOMCounters(self):
-        def cb(res):
-            self.chrome.emit('Memory.getDOMCounters', res)
-        self.chrome.send('Memory.getDOMCounters', cb=cb)
+    def getDOMCounters(self, cb=None):
+        def cb_wrapper(res):
+            cb(res)
+        self.chrome.send('Memory.getDOMCounters', cb=cb_wrapper)
 
 
-    def prepareForLeakDetection(self):
+    def prepareForLeakDetection(self, cb=None):
         self.chrome.send('Memory.prepareForLeakDetection')
 
 
-    def setPressureNotificationsSuppressed(self, suppressed):
+    def setPressureNotificationsSuppressed(self, suppressed, cb=None):
         """
         :param suppressed: If true, memory pressure notifications will be suppressed.
         :type suppressed: bool
@@ -29,7 +29,7 @@ class Memory(object):
         self.chrome.send('Memory.setPressureNotificationsSuppressed', params=msg_dict)
 
 
-    def simulatePressureNotification(self, level):
+    def simulatePressureNotification(self, level, cb=None):
         """
         :param level: Memory pressure level of the notification.
         :type level: str
@@ -40,7 +40,7 @@ class Memory(object):
         self.chrome.send('Memory.simulatePressureNotification', params=msg_dict)
 
 
-    def startSampling(self, samplingInterval, suppressRandomness):
+    def startSampling(self, samplingInterval, suppressRandomness, cb=None):
         """
         :param samplingInterval: Average number of bytes between samples.
         :type samplingInterval: Optional[int]
@@ -55,29 +55,29 @@ class Memory(object):
         self.chrome.send('Memory.startSampling', params=msg_dict)
 
 
-    def stopSampling(self):
+    def stopSampling(self, cb=None):
         self.chrome.send('Memory.stopSampling')
 
 
-    def getAllTimeSamplingProfile(self):
-        def cb(res):
+    def getAllTimeSamplingProfile(self, cb=None):
+        def cb_wrapper(res):
             res['profile'] = Types.SamplingProfile.safe_create(res['profile'])
-            self.chrome.emit('Memory.getAllTimeSamplingProfile', res)
-        self.chrome.send('Memory.getAllTimeSamplingProfile', cb=cb)
+            cb(res)
+        self.chrome.send('Memory.getAllTimeSamplingProfile', cb=cb_wrapper)
 
 
-    def getBrowserSamplingProfile(self):
-        def cb(res):
+    def getBrowserSamplingProfile(self, cb=None):
+        def cb_wrapper(res):
             res['profile'] = Types.SamplingProfile.safe_create(res['profile'])
-            self.chrome.emit('Memory.getBrowserSamplingProfile', res)
-        self.chrome.send('Memory.getBrowserSamplingProfile', cb=cb)
+            cb(res)
+        self.chrome.send('Memory.getBrowserSamplingProfile', cb=cb_wrapper)
 
 
-    def getSamplingProfile(self):
-        def cb(res):
+    def getSamplingProfile(self, cb=None):
+        def cb_wrapper(res):
             res['profile'] = Types.SamplingProfile.safe_create(res['profile'])
-            self.chrome.emit('Memory.getSamplingProfile', res)
-        self.chrome.send('Memory.getSamplingProfile', cb=cb)
+            cb(res)
+        self.chrome.send('Memory.getSamplingProfile', cb=cb_wrapper)
 
 
     @staticmethod

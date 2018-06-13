@@ -12,11 +12,11 @@ class SystemInfo(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def getInfo(self):
-        def cb(res):
+    def getInfo(self, cb=None):
+        def cb_wrapper(res):
             res['gpu'] = Types.GPUInfo.safe_create(res['gpu'])
-            self.chrome.emit('SystemInfo.getInfo', res)
-        self.chrome.send('SystemInfo.getInfo', cb=cb)
+            cb(res)
+        self.chrome.send('SystemInfo.getInfo', cb=cb_wrapper)
 
 
     @staticmethod

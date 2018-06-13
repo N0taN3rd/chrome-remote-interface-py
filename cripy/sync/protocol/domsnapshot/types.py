@@ -1,5 +1,5 @@
-from cripy.sync.protocol.dom import types as DOM
 from cripy.sync.protocol.domdebugger import types as DOMDebugger
+from cripy.sync.protocol.dom import types as DOM
 from cripy.sync.protocol.page import types as Page
 
 __all__ = [

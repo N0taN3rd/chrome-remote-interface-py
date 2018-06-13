@@ -14,7 +14,7 @@ class HeadlessExperimental(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def beginFrame(self, frameTimeTicks, interval, noDisplayUpdates, screenshot):
+    def beginFrame(self, frameTimeTicks, interval, noDisplayUpdates, screenshot, cb=None):
         """
         :param frameTimeTicks: Timestamp of this BeginFrame in Renderer TimeTicks (milliseconds of uptime). If not set, the current time will be used.
         :type frameTimeTicks: Optional[float]
@@ -25,8 +25,8 @@ class HeadlessExperimental(object):
         :param screenshot: If set, a screenshot of the frame will be captured and returned in the response. Otherwise, no screenshot will be captured. Note that capturing a screenshot can fail, for example, during renderer initialization. In such a case, no screenshot data will be returned.
         :type screenshot: Optional[dict]
         """
-        def cb(res):
-            self.chrome.emit('HeadlessExperimental.beginFrame', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if frameTimeTicks is not None:
             msg_dict['frameTimeTicks'] = frameTimeTicks
@@ -36,14 +36,14 @@ class HeadlessExperimental(object):
             msg_dict['noDisplayUpdates'] = noDisplayUpdates
         if screenshot is not None:
             msg_dict['screenshot'] = screenshot
-        self.chrome.send('HeadlessExperimental.beginFrame', params=msg_dict, cb=cb)
+        self.chrome.send('HeadlessExperimental.beginFrame', params=msg_dict, cb=cb_wrapper)
 
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('HeadlessExperimental.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('HeadlessExperimental.enable')
 
 

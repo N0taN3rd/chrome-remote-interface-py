@@ -11,54 +11,54 @@ class LayerTree(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def compositingReasons(self, layerId):
+    def compositingReasons(self, layerId, cb=None):
         """
         :param layerId: The id of the layer for which we want to get the reasons it was composited.
         :type layerId: str
         """
-        def cb(res):
-            self.chrome.emit('LayerTree.compositingReasons', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if layerId is not None:
             msg_dict['layerId'] = layerId
-        self.chrome.send('LayerTree.compositingReasons', params=msg_dict, cb=cb)
+        self.chrome.send('LayerTree.compositingReasons', params=msg_dict, cb=cb_wrapper)
 
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('LayerTree.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('LayerTree.enable')
 
 
-    def loadSnapshot(self, tiles):
+    def loadSnapshot(self, tiles, cb=None):
         """
         :param tiles: An array of tiles composing the snapshot.
         :type tiles: List[dict]
         """
-        def cb(res):
-            self.chrome.emit('LayerTree.loadSnapshot', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if tiles is not None:
             msg_dict['tiles'] = tiles
-        self.chrome.send('LayerTree.loadSnapshot', params=msg_dict, cb=cb)
+        self.chrome.send('LayerTree.loadSnapshot', params=msg_dict, cb=cb_wrapper)
 
 
-    def makeSnapshot(self, layerId):
+    def makeSnapshot(self, layerId, cb=None):
         """
         :param layerId: The id of the layer.
         :type layerId: str
         """
-        def cb(res):
-            self.chrome.emit('LayerTree.makeSnapshot', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if layerId is not None:
             msg_dict['layerId'] = layerId
-        self.chrome.send('LayerTree.makeSnapshot', params=msg_dict, cb=cb)
+        self.chrome.send('LayerTree.makeSnapshot', params=msg_dict, cb=cb_wrapper)
 
 
-    def profileSnapshot(self, snapshotId, minRepeatCount, minDuration, clipRect):
+    def profileSnapshot(self, snapshotId, minRepeatCount, minDuration, clipRect, cb=None):
         """
         :param snapshotId: The id of the layer snapshot.
         :type snapshotId: str
@@ -69,8 +69,8 @@ class LayerTree(object):
         :param clipRect: The clip rectangle to apply when replaying the snapshot.
         :type clipRect: Optional[dict]
         """
-        def cb(res):
-            self.chrome.emit('LayerTree.profileSnapshot', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if snapshotId is not None:
             msg_dict['snapshotId'] = snapshotId
@@ -80,10 +80,10 @@ class LayerTree(object):
             msg_dict['minDuration'] = minDuration
         if clipRect is not None:
             msg_dict['clipRect'] = clipRect
-        self.chrome.send('LayerTree.profileSnapshot', params=msg_dict, cb=cb)
+        self.chrome.send('LayerTree.profileSnapshot', params=msg_dict, cb=cb_wrapper)
 
 
-    def releaseSnapshot(self, snapshotId):
+    def releaseSnapshot(self, snapshotId, cb=None):
         """
         :param snapshotId: The id of the layer snapshot.
         :type snapshotId: str
@@ -94,7 +94,7 @@ class LayerTree(object):
         self.chrome.send('LayerTree.releaseSnapshot', params=msg_dict)
 
 
-    def replaySnapshot(self, snapshotId, fromStep, toStep, scale):
+    def replaySnapshot(self, snapshotId, fromStep, toStep, scale, cb=None):
         """
         :param snapshotId: The id of the layer snapshot.
         :type snapshotId: str
@@ -105,8 +105,8 @@ class LayerTree(object):
         :param scale: The scale to apply while replaying (defaults to 1).
         :type scale: Optional[float]
         """
-        def cb(res):
-            self.chrome.emit('LayerTree.replaySnapshot', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if snapshotId is not None:
             msg_dict['snapshotId'] = snapshotId
@@ -116,20 +116,20 @@ class LayerTree(object):
             msg_dict['toStep'] = toStep
         if scale is not None:
             msg_dict['scale'] = scale
-        self.chrome.send('LayerTree.replaySnapshot', params=msg_dict, cb=cb)
+        self.chrome.send('LayerTree.replaySnapshot', params=msg_dict, cb=cb_wrapper)
 
 
-    def snapshotCommandLog(self, snapshotId):
+    def snapshotCommandLog(self, snapshotId, cb=None):
         """
         :param snapshotId: The id of the layer snapshot.
         :type snapshotId: str
         """
-        def cb(res):
-            self.chrome.emit('LayerTree.snapshotCommandLog', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if snapshotId is not None:
             msg_dict['snapshotId'] = snapshotId
-        self.chrome.send('LayerTree.snapshotCommandLog', params=msg_dict, cb=cb)
+        self.chrome.send('LayerTree.snapshotCommandLog', params=msg_dict, cb=cb_wrapper)
 
 
     @staticmethod

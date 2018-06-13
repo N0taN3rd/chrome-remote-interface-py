@@ -14,19 +14,19 @@ class Log(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def clear(self):
+    def clear(self, cb=None):
         self.chrome.send('Log.clear')
 
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('Log.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('Log.enable')
 
 
-    def startViolationsReport(self, config):
+    def startViolationsReport(self, config, cb=None):
         """
         :param config: Configuration for violations.
         :type config: List[dict]
@@ -37,7 +37,7 @@ class Log(object):
         self.chrome.send('Log.startViolationsReport', params=msg_dict)
 
 
-    def stopViolationsReport(self):
+    def stopViolationsReport(self, cb=None):
         self.chrome.send('Log.stopViolationsReport')
 
 

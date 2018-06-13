@@ -31,7 +31,7 @@ class {{ d.domain }}(object):
     {% if command.has_parameters %}
     def {{ command.name }}(self, {{ command.command_arg_string_no_types }}, cb=None):
     {% else %}
-    def {{ command.name }}(self):
+    def {{ command.name }}(self, cb=None):
     {% endif %}
         {% if command.has_parameters %}
         """
@@ -65,7 +65,7 @@ class {{ d.domain }}(object):
         {% endif %}
         {% else %}
         {% if command.returns %}
-        self.chrome.send('{{ command.scoped_name }}', cb=cb)
+        self.chrome.send('{{ command.scoped_name }}', cb=cb_wrapper)
         {% else %}
         self.chrome.send('{{ command.scoped_name }}')
         {% endif %}

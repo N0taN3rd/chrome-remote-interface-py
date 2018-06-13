@@ -9,19 +9,19 @@ class Performance(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('Performance.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('Performance.enable')
 
 
-    def getMetrics(self):
-        def cb(res):
+    def getMetrics(self, cb=None):
+        def cb_wrapper(res):
             res['metrics'] = Types.Metric.safe_create_from_list(res['metrics'])
-            self.chrome.emit('Performance.getMetrics', res)
-        self.chrome.send('Performance.getMetrics', cb=cb)
+            cb(res)
+        self.chrome.send('Performance.getMetrics', cb=cb_wrapper)
 
 
     @staticmethod

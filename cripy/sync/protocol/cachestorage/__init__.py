@@ -8,7 +8,7 @@ class CacheStorage(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def deleteCache(self, cacheId):
+    def deleteCache(self, cacheId, cb=None):
         """
         :param cacheId: Id of cache for deletion.
         :type cacheId: str
@@ -19,7 +19,7 @@ class CacheStorage(object):
         self.chrome.send('CacheStorage.deleteCache', params=msg_dict)
 
 
-    def deleteEntry(self, cacheId, request):
+    def deleteEntry(self, cacheId, request, cb=None):
         """
         :param cacheId: Id of cache where the entry will be deleted.
         :type cacheId: str
@@ -34,39 +34,39 @@ class CacheStorage(object):
         self.chrome.send('CacheStorage.deleteEntry', params=msg_dict)
 
 
-    def requestCacheNames(self, securityOrigin):
+    def requestCacheNames(self, securityOrigin, cb=None):
         """
         :param securityOrigin: Security origin.
         :type securityOrigin: str
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['caches'] = Types.Cache.safe_create_from_list(res['caches'])
-            self.chrome.emit('CacheStorage.requestCacheNames', res)
+            cb(res)
         msg_dict = dict()
         if securityOrigin is not None:
             msg_dict['securityOrigin'] = securityOrigin
-        self.chrome.send('CacheStorage.requestCacheNames', params=msg_dict, cb=cb)
+        self.chrome.send('CacheStorage.requestCacheNames', params=msg_dict, cb=cb_wrapper)
 
 
-    def requestCachedResponse(self, cacheId, requestURL):
+    def requestCachedResponse(self, cacheId, requestURL, cb=None):
         """
         :param cacheId: Id of cache that contains the enty.
         :type cacheId: str
         :param requestURL: URL spec of the request.
         :type requestURL: str
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['response'] = Types.CachedResponse.safe_create(res['response'])
-            self.chrome.emit('CacheStorage.requestCachedResponse', res)
+            cb(res)
         msg_dict = dict()
         if cacheId is not None:
             msg_dict['cacheId'] = cacheId
         if requestURL is not None:
             msg_dict['requestURL'] = requestURL
-        self.chrome.send('CacheStorage.requestCachedResponse', params=msg_dict, cb=cb)
+        self.chrome.send('CacheStorage.requestCachedResponse', params=msg_dict, cb=cb_wrapper)
 
 
-    def requestEntries(self, cacheId, skipCount, pageSize):
+    def requestEntries(self, cacheId, skipCount, pageSize, cb=None):
         """
         :param cacheId: ID of cache to get entries from.
         :type cacheId: str
@@ -75,9 +75,9 @@ class CacheStorage(object):
         :param pageSize: Number of records to fetch.
         :type pageSize: int
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['cacheDataEntries'] = Types.DataEntry.safe_create_from_list(res['cacheDataEntries'])
-            self.chrome.emit('CacheStorage.requestEntries', res)
+            cb(res)
         msg_dict = dict()
         if cacheId is not None:
             msg_dict['cacheId'] = cacheId
@@ -85,7 +85,7 @@ class CacheStorage(object):
             msg_dict['skipCount'] = skipCount
         if pageSize is not None:
             msg_dict['pageSize'] = pageSize
-        self.chrome.send('CacheStorage.requestEntries', params=msg_dict, cb=cb)
+        self.chrome.send('CacheStorage.requestEntries', params=msg_dict, cb=cb_wrapper)
 
 
     @staticmethod

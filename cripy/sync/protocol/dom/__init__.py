@@ -22,20 +22,20 @@ corresponding document elements as their child nodes.</p>
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def collectClassNamesFromSubtree(self, nodeId):
+    def collectClassNamesFromSubtree(self, nodeId, cb=None):
         """
         :param nodeId: Id of the node to collect class names.
         :type nodeId: int
         """
-        def cb(res):
-            self.chrome.emit('DOM.collectClassNamesFromSubtree', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        self.chrome.send('DOM.collectClassNamesFromSubtree', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.collectClassNamesFromSubtree', params=msg_dict, cb=cb_wrapper)
 
 
-    def copyTo(self, nodeId, targetNodeId, insertBeforeNodeId):
+    def copyTo(self, nodeId, targetNodeId, insertBeforeNodeId, cb=None):
         """
         :param nodeId: Id of the node to copy.
         :type nodeId: int
@@ -44,8 +44,8 @@ corresponding document elements as their child nodes.</p>
         :param insertBeforeNodeId: Drop the copy before this node (if absent, the copy becomes the last child of `targetNodeId`).
         :type insertBeforeNodeId: Optional[int]
         """
-        def cb(res):
-            self.chrome.emit('DOM.copyTo', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
@@ -53,10 +53,10 @@ corresponding document elements as their child nodes.</p>
             msg_dict['targetNodeId'] = targetNodeId
         if insertBeforeNodeId is not None:
             msg_dict['insertBeforeNodeId'] = insertBeforeNodeId
-        self.chrome.send('DOM.copyTo', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.copyTo', params=msg_dict, cb=cb_wrapper)
 
 
-    def describeNode(self, nodeId, backendNodeId, objectId, depth, pierce):
+    def describeNode(self, nodeId, backendNodeId, objectId, depth, pierce, cb=None):
         """
         :param nodeId: Identifier of the node.
         :type nodeId: Optional[int]
@@ -69,9 +69,9 @@ corresponding document elements as their child nodes.</p>
         :param pierce: Whether or not iframes and shadow roots should be traversed when returning the subtree (default is false).
         :type pierce: Optional[bool]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['node'] = Types.Node.safe_create(res['node'])
-            self.chrome.emit('DOM.describeNode', res)
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
@@ -83,14 +83,14 @@ corresponding document elements as their child nodes.</p>
             msg_dict['depth'] = depth
         if pierce is not None:
             msg_dict['pierce'] = pierce
-        self.chrome.send('DOM.describeNode', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.describeNode', params=msg_dict, cb=cb_wrapper)
 
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('DOM.disable')
 
 
-    def discardSearchResults(self, searchId):
+    def discardSearchResults(self, searchId, cb=None):
         """
         :param searchId: Unique search session identifier.
         :type searchId: str
@@ -101,11 +101,11 @@ corresponding document elements as their child nodes.</p>
         self.chrome.send('DOM.discardSearchResults', params=msg_dict)
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('DOM.enable')
 
 
-    def focus(self, nodeId, backendNodeId, objectId):
+    def focus(self, nodeId, backendNodeId, objectId, cb=None):
         """
         :param nodeId: Identifier of the node.
         :type nodeId: Optional[int]
@@ -124,20 +124,20 @@ corresponding document elements as their child nodes.</p>
         self.chrome.send('DOM.focus', params=msg_dict)
 
 
-    def getAttributes(self, nodeId):
+    def getAttributes(self, nodeId, cb=None):
         """
         :param nodeId: Id of the node to retrieve attibutes for.
         :type nodeId: int
         """
-        def cb(res):
-            self.chrome.emit('DOM.getAttributes', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        self.chrome.send('DOM.getAttributes', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.getAttributes', params=msg_dict, cb=cb_wrapper)
 
 
-    def getBoxModel(self, nodeId, backendNodeId, objectId):
+    def getBoxModel(self, nodeId, backendNodeId, objectId, cb=None):
         """
         :param nodeId: Identifier of the node.
         :type nodeId: Optional[int]
@@ -146,9 +146,9 @@ corresponding document elements as their child nodes.</p>
         :param objectId: JavaScript object id of the node wrapper.
         :type objectId: Optional[str]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['model'] = Types.BoxModel.safe_create(res['model'])
-            self.chrome.emit('DOM.getBoxModel', res)
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
@@ -156,46 +156,46 @@ corresponding document elements as their child nodes.</p>
             msg_dict['backendNodeId'] = backendNodeId
         if objectId is not None:
             msg_dict['objectId'] = objectId
-        self.chrome.send('DOM.getBoxModel', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.getBoxModel', params=msg_dict, cb=cb_wrapper)
 
 
-    def getDocument(self, depth, pierce):
+    def getDocument(self, depth, pierce, cb=None):
         """
         :param depth: The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the entire subtree or provide an integer larger than 0.
         :type depth: Optional[int]
         :param pierce: Whether or not iframes and shadow roots should be traversed when returning the subtree (default is false).
         :type pierce: Optional[bool]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['root'] = Types.Node.safe_create(res['root'])
-            self.chrome.emit('DOM.getDocument', res)
+            cb(res)
         msg_dict = dict()
         if depth is not None:
             msg_dict['depth'] = depth
         if pierce is not None:
             msg_dict['pierce'] = pierce
-        self.chrome.send('DOM.getDocument', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.getDocument', params=msg_dict, cb=cb_wrapper)
 
 
-    def getFlattenedDocument(self, depth, pierce):
+    def getFlattenedDocument(self, depth, pierce, cb=None):
         """
         :param depth: The maximum depth at which children should be retrieved, defaults to 1. Use -1 for the entire subtree or provide an integer larger than 0.
         :type depth: Optional[int]
         :param pierce: Whether or not iframes and shadow roots should be traversed when returning the subtree (default is false).
         :type pierce: Optional[bool]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['nodes'] = Types.Node.safe_create_from_list(res['nodes'])
-            self.chrome.emit('DOM.getFlattenedDocument', res)
+            cb(res)
         msg_dict = dict()
         if depth is not None:
             msg_dict['depth'] = depth
         if pierce is not None:
             msg_dict['pierce'] = pierce
-        self.chrome.send('DOM.getFlattenedDocument', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.getFlattenedDocument', params=msg_dict, cb=cb_wrapper)
 
 
-    def getNodeForLocation(self, x, y, includeUserAgentShadowDOM):
+    def getNodeForLocation(self, x, y, includeUserAgentShadowDOM, cb=None):
         """
         :param x: X coordinate.
         :type x: int
@@ -204,8 +204,8 @@ corresponding document elements as their child nodes.</p>
         :param includeUserAgentShadowDOM: False to skip to the nearest non-UA shadow root ancestor (default: false).
         :type includeUserAgentShadowDOM: Optional[bool]
         """
-        def cb(res):
-            self.chrome.emit('DOM.getNodeForLocation', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if x is not None:
             msg_dict['x'] = x
@@ -213,10 +213,10 @@ corresponding document elements as their child nodes.</p>
             msg_dict['y'] = y
         if includeUserAgentShadowDOM is not None:
             msg_dict['includeUserAgentShadowDOM'] = includeUserAgentShadowDOM
-        self.chrome.send('DOM.getNodeForLocation', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.getNodeForLocation', params=msg_dict, cb=cb_wrapper)
 
 
-    def getOuterHTML(self, nodeId, backendNodeId, objectId):
+    def getOuterHTML(self, nodeId, backendNodeId, objectId, cb=None):
         """
         :param nodeId: Identifier of the node.
         :type nodeId: Optional[int]
@@ -225,8 +225,8 @@ corresponding document elements as their child nodes.</p>
         :param objectId: JavaScript object id of the node wrapper.
         :type objectId: Optional[str]
         """
-        def cb(res):
-            self.chrome.emit('DOM.getOuterHTML', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
@@ -234,23 +234,23 @@ corresponding document elements as their child nodes.</p>
             msg_dict['backendNodeId'] = backendNodeId
         if objectId is not None:
             msg_dict['objectId'] = objectId
-        self.chrome.send('DOM.getOuterHTML', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.getOuterHTML', params=msg_dict, cb=cb_wrapper)
 
 
-    def getRelayoutBoundary(self, nodeId):
+    def getRelayoutBoundary(self, nodeId, cb=None):
         """
         :param nodeId: Id of the node.
         :type nodeId: int
         """
-        def cb(res):
-            self.chrome.emit('DOM.getRelayoutBoundary', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        self.chrome.send('DOM.getRelayoutBoundary', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.getRelayoutBoundary', params=msg_dict, cb=cb_wrapper)
 
 
-    def getSearchResults(self, searchId, fromIndex, toIndex):
+    def getSearchResults(self, searchId, fromIndex, toIndex, cb=None):
         """
         :param searchId: Unique search session identifier.
         :type searchId: str
@@ -259,8 +259,8 @@ corresponding document elements as their child nodes.</p>
         :param toIndex: End index of the search result to be returned.
         :type toIndex: int
         """
-        def cb(res):
-            self.chrome.emit('DOM.getSearchResults', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if searchId is not None:
             msg_dict['searchId'] = searchId
@@ -268,26 +268,26 @@ corresponding document elements as their child nodes.</p>
             msg_dict['fromIndex'] = fromIndex
         if toIndex is not None:
             msg_dict['toIndex'] = toIndex
-        self.chrome.send('DOM.getSearchResults', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.getSearchResults', params=msg_dict, cb=cb_wrapper)
 
 
-    def hideHighlight(self):
+    def hideHighlight(self, cb=None):
         self.chrome.send('DOM.hideHighlight')
 
 
-    def highlightNode(self):
+    def highlightNode(self, cb=None):
         self.chrome.send('DOM.highlightNode')
 
 
-    def highlightRect(self):
+    def highlightRect(self, cb=None):
         self.chrome.send('DOM.highlightRect')
 
 
-    def markUndoableState(self):
+    def markUndoableState(self, cb=None):
         self.chrome.send('DOM.markUndoableState')
 
 
-    def moveTo(self, nodeId, targetNodeId, insertBeforeNodeId):
+    def moveTo(self, nodeId, targetNodeId, insertBeforeNodeId, cb=None):
         """
         :param nodeId: Id of the node to move.
         :type nodeId: int
@@ -296,8 +296,8 @@ corresponding document elements as their child nodes.</p>
         :param insertBeforeNodeId: Drop node before this one (if absent, the moved node becomes the last child of `targetNodeId`).
         :type insertBeforeNodeId: Optional[int]
         """
-        def cb(res):
-            self.chrome.emit('DOM.moveTo', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
@@ -305,91 +305,91 @@ corresponding document elements as their child nodes.</p>
             msg_dict['targetNodeId'] = targetNodeId
         if insertBeforeNodeId is not None:
             msg_dict['insertBeforeNodeId'] = insertBeforeNodeId
-        self.chrome.send('DOM.moveTo', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.moveTo', params=msg_dict, cb=cb_wrapper)
 
 
-    def performSearch(self, query, includeUserAgentShadowDOM):
+    def performSearch(self, query, includeUserAgentShadowDOM, cb=None):
         """
         :param query: Plain text or query selector or XPath search query.
         :type query: str
         :param includeUserAgentShadowDOM: True to search in user agent shadow DOM.
         :type includeUserAgentShadowDOM: Optional[bool]
         """
-        def cb(res):
-            self.chrome.emit('DOM.performSearch', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if query is not None:
             msg_dict['query'] = query
         if includeUserAgentShadowDOM is not None:
             msg_dict['includeUserAgentShadowDOM'] = includeUserAgentShadowDOM
-        self.chrome.send('DOM.performSearch', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.performSearch', params=msg_dict, cb=cb_wrapper)
 
 
-    def pushNodeByPathToFrontend(self, path):
+    def pushNodeByPathToFrontend(self, path, cb=None):
         """
         :param path: Path to node in the proprietary format.
         :type path: str
         """
-        def cb(res):
-            self.chrome.emit('DOM.pushNodeByPathToFrontend', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if path is not None:
             msg_dict['path'] = path
-        self.chrome.send('DOM.pushNodeByPathToFrontend', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.pushNodeByPathToFrontend', params=msg_dict, cb=cb_wrapper)
 
 
-    def pushNodesByBackendIdsToFrontend(self, backendNodeIds):
+    def pushNodesByBackendIdsToFrontend(self, backendNodeIds, cb=None):
         """
         :param backendNodeIds: The array of backend node ids.
         :type backendNodeIds: List[int]
         """
-        def cb(res):
-            self.chrome.emit('DOM.pushNodesByBackendIdsToFrontend', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if backendNodeIds is not None:
             msg_dict['backendNodeIds'] = backendNodeIds
-        self.chrome.send('DOM.pushNodesByBackendIdsToFrontend', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.pushNodesByBackendIdsToFrontend', params=msg_dict, cb=cb_wrapper)
 
 
-    def querySelector(self, nodeId, selector):
+    def querySelector(self, nodeId, selector, cb=None):
         """
         :param nodeId: Id of the node to query upon.
         :type nodeId: int
         :param selector: Selector string.
         :type selector: str
         """
-        def cb(res):
-            self.chrome.emit('DOM.querySelector', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
         if selector is not None:
             msg_dict['selector'] = selector
-        self.chrome.send('DOM.querySelector', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.querySelector', params=msg_dict, cb=cb_wrapper)
 
 
-    def querySelectorAll(self, nodeId, selector):
+    def querySelectorAll(self, nodeId, selector, cb=None):
         """
         :param nodeId: Id of the node to query upon.
         :type nodeId: int
         :param selector: Selector string.
         :type selector: str
         """
-        def cb(res):
-            self.chrome.emit('DOM.querySelectorAll', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
         if selector is not None:
             msg_dict['selector'] = selector
-        self.chrome.send('DOM.querySelectorAll', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.querySelectorAll', params=msg_dict, cb=cb_wrapper)
 
 
-    def redo(self):
+    def redo(self, cb=None):
         self.chrome.send('DOM.redo')
 
 
-    def removeAttribute(self, nodeId, name):
+    def removeAttribute(self, nodeId, name, cb=None):
         """
         :param nodeId: Id of the element to remove attribute from.
         :type nodeId: int
@@ -404,7 +404,7 @@ corresponding document elements as their child nodes.</p>
         self.chrome.send('DOM.removeAttribute', params=msg_dict)
 
 
-    def removeNode(self, nodeId):
+    def removeNode(self, nodeId, cb=None):
         """
         :param nodeId: Id of the node to remove.
         :type nodeId: int
@@ -415,7 +415,7 @@ corresponding document elements as their child nodes.</p>
         self.chrome.send('DOM.removeNode', params=msg_dict)
 
 
-    def requestChildNodes(self, nodeId, depth, pierce):
+    def requestChildNodes(self, nodeId, depth, pierce, cb=None):
         """
         :param nodeId: Id of the node to get children for.
         :type nodeId: int
@@ -434,20 +434,20 @@ corresponding document elements as their child nodes.</p>
         self.chrome.send('DOM.requestChildNodes', params=msg_dict)
 
 
-    def requestNode(self, objectId):
+    def requestNode(self, objectId, cb=None):
         """
         :param objectId: JavaScript object id to convert into node.
         :type objectId: str
         """
-        def cb(res):
-            self.chrome.emit('DOM.requestNode', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if objectId is not None:
             msg_dict['objectId'] = objectId
-        self.chrome.send('DOM.requestNode', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.requestNode', params=msg_dict, cb=cb_wrapper)
 
 
-    def resolveNode(self, nodeId, backendNodeId, objectGroup):
+    def resolveNode(self, nodeId, backendNodeId, objectGroup, cb=None):
         """
         :param nodeId: Id of the node to resolve.
         :type nodeId: Optional[int]
@@ -456,9 +456,9 @@ corresponding document elements as their child nodes.</p>
         :param objectGroup: Symbolic group name that can be used to release multiple objects.
         :type objectGroup: Optional[str]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['object'] = Runtime.RemoteObject.safe_create(res['object'])
-            self.chrome.emit('DOM.resolveNode', res)
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
@@ -466,10 +466,10 @@ corresponding document elements as their child nodes.</p>
             msg_dict['backendNodeId'] = backendNodeId
         if objectGroup is not None:
             msg_dict['objectGroup'] = objectGroup
-        self.chrome.send('DOM.resolveNode', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.resolveNode', params=msg_dict, cb=cb_wrapper)
 
 
-    def setAttributeValue(self, nodeId, name, value):
+    def setAttributeValue(self, nodeId, name, value, cb=None):
         """
         :param nodeId: Id of the element to set attribute for.
         :type nodeId: int
@@ -488,7 +488,7 @@ corresponding document elements as their child nodes.</p>
         self.chrome.send('DOM.setAttributeValue', params=msg_dict)
 
 
-    def setAttributesAsText(self, nodeId, text, name):
+    def setAttributesAsText(self, nodeId, text, name, cb=None):
         """
         :param nodeId: Id of the element to set attributes for.
         :type nodeId: int
@@ -507,7 +507,7 @@ corresponding document elements as their child nodes.</p>
         self.chrome.send('DOM.setAttributesAsText', params=msg_dict)
 
 
-    def setFileInputFiles(self, files, nodeId, backendNodeId, objectId):
+    def setFileInputFiles(self, files, nodeId, backendNodeId, objectId, cb=None):
         """
         :param files: Array of file paths to set.
         :type files: List[str]
@@ -530,7 +530,7 @@ corresponding document elements as their child nodes.</p>
         self.chrome.send('DOM.setFileInputFiles', params=msg_dict)
 
 
-    def setInspectedNode(self, nodeId):
+    def setInspectedNode(self, nodeId, cb=None):
         """
         :param nodeId: DOM node id to be accessible by means of $x command line API.
         :type nodeId: int
@@ -541,24 +541,24 @@ corresponding document elements as their child nodes.</p>
         self.chrome.send('DOM.setInspectedNode', params=msg_dict)
 
 
-    def setNodeName(self, nodeId, name):
+    def setNodeName(self, nodeId, name, cb=None):
         """
         :param nodeId: Id of the node to set name for.
         :type nodeId: int
         :param name: New node's name.
         :type name: str
         """
-        def cb(res):
-            self.chrome.emit('DOM.setNodeName', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
         if name is not None:
             msg_dict['name'] = name
-        self.chrome.send('DOM.setNodeName', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.setNodeName', params=msg_dict, cb=cb_wrapper)
 
 
-    def setNodeValue(self, nodeId, value):
+    def setNodeValue(self, nodeId, value, cb=None):
         """
         :param nodeId: Id of the node to set value for.
         :type nodeId: int
@@ -573,7 +573,7 @@ corresponding document elements as their child nodes.</p>
         self.chrome.send('DOM.setNodeValue', params=msg_dict)
 
 
-    def setOuterHTML(self, nodeId, outerHTML):
+    def setOuterHTML(self, nodeId, outerHTML, cb=None):
         """
         :param nodeId: Id of the node to set markup for.
         :type nodeId: int
@@ -588,21 +588,21 @@ corresponding document elements as their child nodes.</p>
         self.chrome.send('DOM.setOuterHTML', params=msg_dict)
 
 
-    def undo(self):
+    def undo(self, cb=None):
         self.chrome.send('DOM.undo')
 
 
-    def getFrameOwner(self, frameId):
+    def getFrameOwner(self, frameId, cb=None):
         """
         :param frameId: The frameId
         :type frameId: str
         """
-        def cb(res):
-            self.chrome.emit('DOM.getFrameOwner', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if frameId is not None:
             msg_dict['frameId'] = frameId
-        self.chrome.send('DOM.getFrameOwner', params=msg_dict, cb=cb)
+        self.chrome.send('DOM.getFrameOwner', params=msg_dict, cb=cb_wrapper)
 
 
     @staticmethod

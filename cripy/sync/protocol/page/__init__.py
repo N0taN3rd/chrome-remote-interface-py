@@ -1,8 +1,8 @@
-from cripy.sync.protocol.debugger import types as Debugger
-from cripy.sync.protocol.emulation import types as Emulation
-from cripy.sync.protocol.runtime import types as Runtime
 from cripy.sync.protocol.dom import types as DOM
+from cripy.sync.protocol.runtime import types as Runtime
+from cripy.sync.protocol.emulation import types as Emulation
 from cripy.sync.protocol.network import types as Network
+from cripy.sync.protocol.debugger import types as Debugger
 from cripy.sync.protocol.page import events as Events
 from cripy.sync.protocol.page import types as Types
 
@@ -19,37 +19,37 @@ class Page(object):
     def __init__(self, chrome):
         self.chrome = chrome
 
-    def addScriptToEvaluateOnLoad(self, scriptSource):
+    def addScriptToEvaluateOnLoad(self, scriptSource, cb=None):
         """
         :param scriptSource: The scriptSource
         :type scriptSource: str
         """
-        def cb(res):
-            self.chrome.emit('Page.addScriptToEvaluateOnLoad', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if scriptSource is not None:
             msg_dict['scriptSource'] = scriptSource
-        self.chrome.send('Page.addScriptToEvaluateOnLoad', params=msg_dict, cb=cb)
+        self.chrome.send('Page.addScriptToEvaluateOnLoad', params=msg_dict, cb=cb_wrapper)
 
 
-    def addScriptToEvaluateOnNewDocument(self, source):
+    def addScriptToEvaluateOnNewDocument(self, source, cb=None):
         """
         :param source: The source
         :type source: str
         """
-        def cb(res):
-            self.chrome.emit('Page.addScriptToEvaluateOnNewDocument', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if source is not None:
             msg_dict['source'] = source
-        self.chrome.send('Page.addScriptToEvaluateOnNewDocument', params=msg_dict, cb=cb)
+        self.chrome.send('Page.addScriptToEvaluateOnNewDocument', params=msg_dict, cb=cb_wrapper)
 
 
-    def bringToFront(self):
+    def bringToFront(self, cb=None):
         self.chrome.send('Page.bringToFront')
 
 
-    def captureScreenshot(self, format, quality, clip, fromSurface):
+    def captureScreenshot(self, format, quality, clip, fromSurface, cb=None):
         """
         :param format: Image compression format (defaults to png).
         :type format: Optional[str]
@@ -60,8 +60,8 @@ class Page(object):
         :param fromSurface: Capture the screenshot from the surface, rather than the view. Defaults to true.
         :type fromSurface: Optional[bool]
         """
-        def cb(res):
-            self.chrome.emit('Page.captureScreenshot', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if format is not None:
             msg_dict['format'] = format
@@ -71,22 +71,22 @@ class Page(object):
             msg_dict['clip'] = clip
         if fromSurface is not None:
             msg_dict['fromSurface'] = fromSurface
-        self.chrome.send('Page.captureScreenshot', params=msg_dict, cb=cb)
+        self.chrome.send('Page.captureScreenshot', params=msg_dict, cb=cb_wrapper)
 
 
-    def clearDeviceMetricsOverride(self):
+    def clearDeviceMetricsOverride(self, cb=None):
         self.chrome.send('Page.clearDeviceMetricsOverride')
 
 
-    def clearDeviceOrientationOverride(self):
+    def clearDeviceOrientationOverride(self, cb=None):
         self.chrome.send('Page.clearDeviceOrientationOverride')
 
 
-    def clearGeolocationOverride(self):
+    def clearGeolocationOverride(self, cb=None):
         self.chrome.send('Page.clearGeolocationOverride')
 
 
-    def createIsolatedWorld(self, frameId, worldName, grantUniveralAccess):
+    def createIsolatedWorld(self, frameId, worldName, grantUniveralAccess, cb=None):
         """
         :param frameId: Id of the frame in which the isolated world should be created.
         :type frameId: str
@@ -95,8 +95,8 @@ class Page(object):
         :param grantUniveralAccess: Whether or not universal access should be granted to the isolated world. This is a powerful option, use with caution.
         :type grantUniveralAccess: Optional[bool]
         """
-        def cb(res):
-            self.chrome.emit('Page.createIsolatedWorld', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if frameId is not None:
             msg_dict['frameId'] = frameId
@@ -104,10 +104,10 @@ class Page(object):
             msg_dict['worldName'] = worldName
         if grantUniveralAccess is not None:
             msg_dict['grantUniveralAccess'] = grantUniveralAccess
-        self.chrome.send('Page.createIsolatedWorld', params=msg_dict, cb=cb)
+        self.chrome.send('Page.createIsolatedWorld', params=msg_dict, cb=cb_wrapper)
 
 
-    def deleteCookie(self, cookieName, url):
+    def deleteCookie(self, cookieName, url, cb=None):
         """
         :param cookieName: Name of the cookie to remove.
         :type cookieName: str
@@ -122,76 +122,76 @@ class Page(object):
         self.chrome.send('Page.deleteCookie', params=msg_dict)
 
 
-    def disable(self):
+    def disable(self, cb=None):
         self.chrome.send('Page.disable')
 
 
-    def enable(self):
+    def enable(self, cb=None):
         self.chrome.send('Page.enable')
 
 
-    def getAppManifest(self):
-        def cb(res):
+    def getAppManifest(self, cb=None):
+        def cb_wrapper(res):
             res['errors'] = Types.AppManifestError.safe_create_from_list(res['errors'])
-            self.chrome.emit('Page.getAppManifest', res)
-        self.chrome.send('Page.getAppManifest', cb=cb)
+            cb(res)
+        self.chrome.send('Page.getAppManifest', cb=cb_wrapper)
 
 
-    def getCookies(self):
-        def cb(res):
+    def getCookies(self, cb=None):
+        def cb_wrapper(res):
             res['cookies'] = Network.Cookie.safe_create_from_list(res['cookies'])
-            self.chrome.emit('Page.getCookies', res)
-        self.chrome.send('Page.getCookies', cb=cb)
+            cb(res)
+        self.chrome.send('Page.getCookies', cb=cb_wrapper)
 
 
-    def getFrameTree(self):
-        def cb(res):
+    def getFrameTree(self, cb=None):
+        def cb_wrapper(res):
             res['frameTree'] = Types.FrameTree.safe_create(res['frameTree'])
-            self.chrome.emit('Page.getFrameTree', res)
-        self.chrome.send('Page.getFrameTree', cb=cb)
+            cb(res)
+        self.chrome.send('Page.getFrameTree', cb=cb_wrapper)
 
 
-    def getLayoutMetrics(self):
-        def cb(res):
+    def getLayoutMetrics(self, cb=None):
+        def cb_wrapper(res):
             res['layoutViewport'] = Types.LayoutViewport.safe_create(res['layoutViewport'])
             res['visualViewport'] = Types.VisualViewport.safe_create(res['visualViewport'])
             res['contentSize'] = DOM.Rect.safe_create(res['contentSize'])
-            self.chrome.emit('Page.getLayoutMetrics', res)
-        self.chrome.send('Page.getLayoutMetrics', cb=cb)
+            cb(res)
+        self.chrome.send('Page.getLayoutMetrics', cb=cb_wrapper)
 
 
-    def getNavigationHistory(self):
-        def cb(res):
+    def getNavigationHistory(self, cb=None):
+        def cb_wrapper(res):
             res['entries'] = Types.NavigationEntry.safe_create_from_list(res['entries'])
-            self.chrome.emit('Page.getNavigationHistory', res)
-        self.chrome.send('Page.getNavigationHistory', cb=cb)
+            cb(res)
+        self.chrome.send('Page.getNavigationHistory', cb=cb_wrapper)
 
 
-    def getResourceContent(self, frameId, url):
+    def getResourceContent(self, frameId, url, cb=None):
         """
         :param frameId: Frame id to get resource for.
         :type frameId: str
         :param url: URL of the resource to get content for.
         :type url: str
         """
-        def cb(res):
-            self.chrome.emit('Page.getResourceContent', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if frameId is not None:
             msg_dict['frameId'] = frameId
         if url is not None:
             msg_dict['url'] = url
-        self.chrome.send('Page.getResourceContent', params=msg_dict, cb=cb)
+        self.chrome.send('Page.getResourceContent', params=msg_dict, cb=cb_wrapper)
 
 
-    def getResourceTree(self):
-        def cb(res):
+    def getResourceTree(self, cb=None):
+        def cb_wrapper(res):
             res['frameTree'] = Types.FrameResourceTree.safe_create(res['frameTree'])
-            self.chrome.emit('Page.getResourceTree', res)
-        self.chrome.send('Page.getResourceTree', cb=cb)
+            cb(res)
+        self.chrome.send('Page.getResourceTree', cb=cb_wrapper)
 
 
-    def handleJavaScriptDialog(self, accept, promptText):
+    def handleJavaScriptDialog(self, accept, promptText, cb=None):
         """
         :param accept: Whether to accept or dismiss the dialog.
         :type accept: bool
@@ -206,7 +206,7 @@ class Page(object):
         self.chrome.send('Page.handleJavaScriptDialog', params=msg_dict)
 
 
-    def navigate(self, url, referrer, transitionType, frameId):
+    def navigate(self, url, referrer, transitionType, frameId, cb=None):
         """
         :param url: URL to navigate the page to.
         :type url: str
@@ -217,8 +217,8 @@ class Page(object):
         :param frameId: Frame id to navigate, if not specified navigates the top frame.
         :type frameId: Optional[str]
         """
-        def cb(res):
-            self.chrome.emit('Page.navigate', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if url is not None:
             msg_dict['url'] = url
@@ -228,10 +228,10 @@ class Page(object):
             msg_dict['transitionType'] = transitionType
         if frameId is not None:
             msg_dict['frameId'] = frameId
-        self.chrome.send('Page.navigate', params=msg_dict, cb=cb)
+        self.chrome.send('Page.navigate', params=msg_dict, cb=cb_wrapper)
 
 
-    def navigateToHistoryEntry(self, entryId):
+    def navigateToHistoryEntry(self, entryId, cb=None):
         """
         :param entryId: Unique id of the entry to navigate to.
         :type entryId: int
@@ -242,7 +242,7 @@ class Page(object):
         self.chrome.send('Page.navigateToHistoryEntry', params=msg_dict)
 
 
-    def printToPDF(self, landscape, displayHeaderFooter, printBackground, scale, paperWidth, paperHeight, marginTop, marginBottom, marginLeft, marginRight, pageRanges, ignoreInvalidPageRanges, headerTemplate, footerTemplate, preferCSSPageSize):
+    def printToPDF(self, landscape, displayHeaderFooter, printBackground, scale, paperWidth, paperHeight, marginTop, marginBottom, marginLeft, marginRight, pageRanges, ignoreInvalidPageRanges, headerTemplate, footerTemplate, preferCSSPageSize, cb=None):
         """
         :param landscape: Paper orientation. Defaults to false.
         :type landscape: Optional[bool]
@@ -275,8 +275,8 @@ class Page(object):
         :param preferCSSPageSize: Whether or not to prefer page size as defined by css. Defaults to false, in which case the content will be scaled to fit the paper size.
         :type preferCSSPageSize: Optional[bool]
         """
-        def cb(res):
-            self.chrome.emit('Page.printToPDF', res)
+        def cb_wrapper(res):
+            cb(res)
         msg_dict = dict()
         if landscape is not None:
             msg_dict['landscape'] = landscape
@@ -308,10 +308,10 @@ class Page(object):
             msg_dict['footerTemplate'] = footerTemplate
         if preferCSSPageSize is not None:
             msg_dict['preferCSSPageSize'] = preferCSSPageSize
-        self.chrome.send('Page.printToPDF', params=msg_dict, cb=cb)
+        self.chrome.send('Page.printToPDF', params=msg_dict, cb=cb_wrapper)
 
 
-    def reload(self, ignoreCache, scriptToEvaluateOnLoad):
+    def reload(self, ignoreCache, scriptToEvaluateOnLoad, cb=None):
         """
         :param ignoreCache: If true, browser cache is ignored (as if the user pressed Shift+refresh).
         :type ignoreCache: Optional[bool]
@@ -326,7 +326,7 @@ class Page(object):
         self.chrome.send('Page.reload', params=msg_dict)
 
 
-    def removeScriptToEvaluateOnLoad(self, identifier):
+    def removeScriptToEvaluateOnLoad(self, identifier, cb=None):
         """
         :param identifier: The identifier
         :type identifier: str
@@ -337,7 +337,7 @@ class Page(object):
         self.chrome.send('Page.removeScriptToEvaluateOnLoad', params=msg_dict)
 
 
-    def removeScriptToEvaluateOnNewDocument(self, identifier):
+    def removeScriptToEvaluateOnNewDocument(self, identifier, cb=None):
         """
         :param identifier: The identifier
         :type identifier: str
@@ -348,11 +348,11 @@ class Page(object):
         self.chrome.send('Page.removeScriptToEvaluateOnNewDocument', params=msg_dict)
 
 
-    def requestAppBanner(self):
+    def requestAppBanner(self, cb=None):
         self.chrome.send('Page.requestAppBanner')
 
 
-    def screencastFrameAck(self, sessionId):
+    def screencastFrameAck(self, sessionId, cb=None):
         """
         :param sessionId: Frame number.
         :type sessionId: int
@@ -363,7 +363,7 @@ class Page(object):
         self.chrome.send('Page.screencastFrameAck', params=msg_dict)
 
 
-    def searchInResource(self, frameId, url, query, caseSensitive, isRegex):
+    def searchInResource(self, frameId, url, query, caseSensitive, isRegex, cb=None):
         """
         :param frameId: Frame id for resource to search in.
         :type frameId: str
@@ -376,9 +376,9 @@ class Page(object):
         :param isRegex: If true, treats string parameter as regex.
         :type isRegex: Optional[bool]
         """
-        def cb(res):
+        def cb_wrapper(res):
             res['result'] = Debugger.SearchMatch.safe_create_from_list(res['result'])
-            self.chrome.emit('Page.searchInResource', res)
+            cb(res)
         msg_dict = dict()
         if frameId is not None:
             msg_dict['frameId'] = frameId
@@ -390,10 +390,10 @@ class Page(object):
             msg_dict['caseSensitive'] = caseSensitive
         if isRegex is not None:
             msg_dict['isRegex'] = isRegex
-        self.chrome.send('Page.searchInResource', params=msg_dict, cb=cb)
+        self.chrome.send('Page.searchInResource', params=msg_dict, cb=cb_wrapper)
 
 
-    def setAdBlockingEnabled(self, enabled):
+    def setAdBlockingEnabled(self, enabled, cb=None):
         """
         :param enabled: Whether to block ads.
         :type enabled: bool
@@ -404,7 +404,7 @@ class Page(object):
         self.chrome.send('Page.setAdBlockingEnabled', params=msg_dict)
 
 
-    def setBypassCSP(self, enabled):
+    def setBypassCSP(self, enabled, cb=None):
         """
         :param enabled: Whether to bypass page CSP.
         :type enabled: bool
@@ -415,7 +415,7 @@ class Page(object):
         self.chrome.send('Page.setBypassCSP', params=msg_dict)
 
 
-    def setDeviceMetricsOverride(self, width, height, deviceScaleFactor, mobile, scale, screenWidth, screenHeight, positionX, positionY, dontSetVisibleSize, screenOrientation, viewport):
+    def setDeviceMetricsOverride(self, width, height, deviceScaleFactor, mobile, scale, screenWidth, screenHeight, positionX, positionY, dontSetVisibleSize, screenOrientation, viewport, cb=None):
         """
         :param width: Overriding width value in pixels (minimum 0, maximum 10000000). 0 disables the override.
         :type width: int
@@ -470,7 +470,7 @@ class Page(object):
         self.chrome.send('Page.setDeviceMetricsOverride', params=msg_dict)
 
 
-    def setDeviceOrientationOverride(self, alpha, beta, gamma):
+    def setDeviceOrientationOverride(self, alpha, beta, gamma, cb=None):
         """
         :param alpha: Mock alpha
         :type alpha: float
@@ -489,7 +489,7 @@ class Page(object):
         self.chrome.send('Page.setDeviceOrientationOverride', params=msg_dict)
 
 
-    def setFontFamilies(self, fontFamilies):
+    def setFontFamilies(self, fontFamilies, cb=None):
         """
         :param fontFamilies: Specifies font families to set. If a font family is not specified, it won't be changed.
         :type fontFamilies: dict
@@ -500,7 +500,7 @@ class Page(object):
         self.chrome.send('Page.setFontFamilies', params=msg_dict)
 
 
-    def setFontSizes(self, fontSizes):
+    def setFontSizes(self, fontSizes, cb=None):
         """
         :param fontSizes: Specifies font sizes to set. If a font size is not specified, it won't be changed.
         :type fontSizes: dict
@@ -511,7 +511,7 @@ class Page(object):
         self.chrome.send('Page.setFontSizes', params=msg_dict)
 
 
-    def setDocumentContent(self, frameId, html):
+    def setDocumentContent(self, frameId, html, cb=None):
         """
         :param frameId: Frame id to set HTML for.
         :type frameId: str
@@ -526,7 +526,7 @@ class Page(object):
         self.chrome.send('Page.setDocumentContent', params=msg_dict)
 
 
-    def setDownloadBehavior(self, behavior, downloadPath):
+    def setDownloadBehavior(self, behavior, downloadPath, cb=None):
         """
         :param behavior: Whether to allow all or deny all download requests, or use default Chrome behavior if available (otherwise deny).
         :type behavior: str
@@ -541,7 +541,7 @@ class Page(object):
         self.chrome.send('Page.setDownloadBehavior', params=msg_dict)
 
 
-    def setGeolocationOverride(self, latitude, longitude, accuracy):
+    def setGeolocationOverride(self, latitude, longitude, accuracy, cb=None):
         """
         :param latitude: Mock latitude
         :type latitude: Optional[float]
@@ -560,7 +560,7 @@ class Page(object):
         self.chrome.send('Page.setGeolocationOverride', params=msg_dict)
 
 
-    def setLifecycleEventsEnabled(self, enabled):
+    def setLifecycleEventsEnabled(self, enabled, cb=None):
         """
         :param enabled: If true, starts emitting lifecycle events.
         :type enabled: bool
@@ -571,7 +571,7 @@ class Page(object):
         self.chrome.send('Page.setLifecycleEventsEnabled', params=msg_dict)
 
 
-    def setTouchEmulationEnabled(self, enabled, configuration):
+    def setTouchEmulationEnabled(self, enabled, configuration, cb=None):
         """
         :param enabled: Whether the touch event emulation should be enabled.
         :type enabled: bool
@@ -586,7 +586,7 @@ class Page(object):
         self.chrome.send('Page.setTouchEmulationEnabled', params=msg_dict)
 
 
-    def startScreencast(self, format, quality, maxWidth, maxHeight, everyNthFrame):
+    def startScreencast(self, format, quality, maxWidth, maxHeight, everyNthFrame, cb=None):
         """
         :param format: Image compression format.
         :type format: Optional[str]
@@ -613,19 +613,19 @@ class Page(object):
         self.chrome.send('Page.startScreencast', params=msg_dict)
 
 
-    def stopLoading(self):
+    def stopLoading(self, cb=None):
         self.chrome.send('Page.stopLoading')
 
 
-    def crash(self):
+    def crash(self, cb=None):
         self.chrome.send('Page.crash')
 
 
-    def close(self):
+    def close(self, cb=None):
         self.chrome.send('Page.close')
 
 
-    def setWebLifecycleState(self, state):
+    def setWebLifecycleState(self, state, cb=None):
         """
         :param state: Target lifecycle state
         :type state: str
@@ -636,7 +636,7 @@ class Page(object):
         self.chrome.send('Page.setWebLifecycleState', params=msg_dict)
 
 
-    def stopScreencast(self):
+    def stopScreencast(self, cb=None):
         self.chrome.send('Page.stopScreencast')
 
 
