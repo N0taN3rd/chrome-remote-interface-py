@@ -1,8 +1,0 @@
-{% for type in domain.types %}
- {{ type.id }}
-  {% if type.has_foreign_refs %}
-   {% for fr in type.foreign_refs %}
-
-   {% endfor %}
-  {% endif %}
-{% endfor %}

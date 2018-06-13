@@ -1,0 +1,84 @@
+{% set dl = d.domain | lower %}
+{% for import in timports %}
+from cripy.sync.protocol.{{ import | lower }} import types as {{ import }}
+{% endfor %}
+{% if d.has_events %}
+from cripy.sync.protocol.{{ dl }} import events as Events
+{% endif %}
+{% if d.has_types %}
+from cripy.sync.protocol.{{ dl }} import types as Types
+{% endif %}
+
+__all__ = ["{{ d.domain }}"]{% if d.has_events %} + Events.__all__ {% endif %}{% if d.has_types %}+ Types.__all__ {% endif %}
+
+
+
+class {{ d.domain }}(object):
+{% if d.description %}
+    """
+    {{ d.description }}
+    """
+
+{% endif %}
+{% if d.has_deps %}
+    {{ d.dep_list_str }}
+{% endif %}
+
+    def __init__(self, chrome):
+        self.chrome = chrome
+
+    {% for command in d.commands %}
+    {% if command.has_parameters %}
+    def {{ command.name }}(self, {{ command.command_arg_string_no_types }}, cb=None):
+    {% else %}
+    def {{ command.name }}(self):
+    {% endif %}
+        {% if command.has_parameters %}
+        """
+        {% for prop in command.parameters %}
+        {% if prop.description %}
+        :param {{ prop.name }}: {{ prop.nice_description }}
+        {% else %}
+        :param {{ prop.name }}: The {{ prop.name }}
+        {% endif %}
+        :type {{ prop.name }}: {{ prop.constructor_docstr }}
+        {% endfor %}
+        """
+        {% endif %}
+        {% if command.returns %}
+        def cb_wrapper(res):
+            {% for trans in command.returns.yield_result_trans() %}
+            {{ trans }}
+            {% endfor %}
+            cb(res)
+        {% endif %}
+        {% if command.has_parameters %}
+        msg_dict = dict()
+        {% for param in command.parameters %}
+        if {{ param.name }} is not None:
+            msg_dict['{{ param.name }}'] = {{ param.name }}
+        {% endfor %}
+        {% if command.returns %}
+        self.chrome.send('{{ command.scoped_name }}', params=msg_dict, cb=cb_wrapper)
+        {% else %}
+        self.chrome.send('{{ command.scoped_name }}', params=msg_dict)
+        {% endif %}
+        {% else %}
+        {% if command.returns %}
+        self.chrome.send('{{ command.scoped_name }}', cb=cb)
+        {% else %}
+        self.chrome.send('{{ command.scoped_name }}')
+        {% endif %}
+        {% endif %}
+
+
+    {% endfor %}
+    @staticmethod
+    def get_event_classes():
+        {% if d.has_events %}
+        return Events.EVENT_TO_CLASS
+        {% else %}
+        return None
+        {% endif %}
+
+

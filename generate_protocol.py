@@ -13,8 +13,12 @@ init_template = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "data/protocol_init.py.j2")
 )
 output_dir_fp = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "cripy/protocol/")
+    os.path.join(os.path.dirname(__file__), "cripy/async/protocol/")
 )
+output_dirsync_fp = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), "cripy/sync/protocol")
+)
+
 browser_json_fp = (
     "browser",
     os.path.abspath(
@@ -118,6 +122,15 @@ def generate_commands(d: Domain, template, dp: Path) -> None:
         print(d)
 
 
+def proto_gen_good() -> None:
+    from cripy.async.protocol import ProtocolMixin
+
+    class IT(ProtocolMixin):
+        pass
+
+    print(IT().protocol_events)
+
+
 def gen() -> None:
     with open("templates/domain_type.py.j2", "r") as iin:
         domain_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
@@ -125,6 +138,10 @@ def gen() -> None:
         event_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
     with open("templates/commands.async.py.j2", "r") as iin:
         command_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
+    with open("templates/commands.py.j2", "r") as iin:
+        command_template_sync = Template(
+            iin.read(), trim_blocks=True, lstrip_blocks=True
+        )
     with open("templates/protocol_init.py.j2", "r") as iin:
         pinit = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
 
@@ -137,15 +154,56 @@ def gen() -> None:
             domains.append(Domain(domain))
     for d in domains:
         dp = Path(output_dir_fp, d.domain.lower())
+        dp_sync = Path(output_dirsync_fp, d.domain.lower())
         if not dp.exists():
             dp.mkdir()
+        if not dp_sync.exists():
+            dp_sync.mkdir()
         generate_types(d, domain_template, dp)
+        generate_types(d, domain_template, dp_sync)
         generate_events(d, event_template, dp)
+        generate_events(d, event_template, dp_sync)
         generate_commands(d, command_template, dp)
+        generate_commands(d, command_template_sync, dp_sync)
     init = Path(output_dir_fp, "__init__.py")
     with init.open("w") as out:
         out.write(pinit.render(domains=mixin_imports))
-    from cripy.protocol import ProtocolMixin
+    init = Path(output_dirsync_fp, "__init__.py")
+    with init.open("w") as out:
+        out.write(pinit.render(domains=mixin_imports))
+    proto_gen_good()
+
+
+def gen_no_types() -> None:
+    with open("templates/domain_typent.py.j2", "r") as iin:
+        domain_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
+    with open("templates/eventsnt.py.j2", "r") as iin:
+        event_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
+    with open("templates/commands.py.j2", "r") as iin:
+        command_template_sync = Template(
+            iin.read(), trim_blocks=True, lstrip_blocks=True
+        )
+    with open("templates/protocol_init.py.j2", "r") as iin:
+        pinit = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
+
+    domains = []
+    mixin_imports = []
+    for which, fp in [js_json_fp, browser_json_fp]:
+        data = read_json(fp)
+        for domain in data["domains"]:
+            mixin_imports.append((domain["domain"].lower(), domain["domain"]))
+            domains.append(Domain(domain))
+    for d in domains:
+        dp_sync = Path(output_dirsync_fp, d.domain.lower())
+        if not dp_sync.exists():
+            dp_sync.mkdir()
+        generate_types(d, domain_template, dp_sync)
+        generate_events(d, event_template, dp_sync)
+        generate_commands(d, command_template_sync, dp_sync)
+    init = Path(output_dirsync_fp, "__init__.py")
+    with init.open("w") as out:
+        out.write(pinit.render(domains=mixin_imports))
+    from cripy.sync.protocol import ProtocolMixin
 
     class IT(ProtocolMixin):
         pass
@@ -154,4 +212,4 @@ def gen() -> None:
 
 
 if __name__ == "__main__":
-    gen()
+    gen_no_types()

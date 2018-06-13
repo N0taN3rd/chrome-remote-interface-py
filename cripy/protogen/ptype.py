@@ -11,7 +11,6 @@ PT_PYT = dict(
 
 
 class Type(object):
-
     def __init__(self, t: dict) -> None:
         _type = t.get("type", None)
         if _type is not None:

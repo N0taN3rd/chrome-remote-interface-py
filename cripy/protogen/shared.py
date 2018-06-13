@@ -5,7 +5,6 @@ ForeignRefs = Optional[Set[str]]
 
 
 class FRefCollector(object):
-
     def __init__(self) -> None:
         self.foreign_refs: Optional[Set[str]] = None
 
@@ -37,7 +36,6 @@ class FRefCollector(object):
 
 
 class ScopedEntity(object):
-
     @property
     def scope(self) -> str:
         raise NotImplementedError("Scoped.scope not implemented")

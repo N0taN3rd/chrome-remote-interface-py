@@ -9,3 +9,5 @@ async-timeout
 cchardet
 aiodns
 stringcase
+uvloop
+websocket-client

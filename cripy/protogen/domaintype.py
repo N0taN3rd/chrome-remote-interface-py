@@ -10,7 +10,6 @@ Props = Optional[List[Property]]
 
 
 class DomainType(FRefCollector):
-
     def __init__(self, domain: str, dt: dict) -> None:
         super().__init__()
         self.domain = domain
@@ -78,6 +77,25 @@ class DomainType(FRefCollector):
                         notoptional.append(
                             prop.constructor_string.replace("'Any'", "Any")
                         )
+                return ", ".join(notoptional + optionals)
+            else:
+                print(self.scoped_name, "is array", self.items)
+                return ""
+        else:
+            print(self.scoped_name, "is array", self.items)
+            return ""
+
+    @property
+    def constructor_string_no_type(self) -> str:
+        if self.type.is_object:
+            if self.has_properties:
+                optionals = []
+                notoptional = []
+                for prop in self.properties:
+                    if prop.optional:
+                        optionals.append(prop.constructor_string_no_type)
+                    else:
+                        notoptional.append(prop.constructor_string_no_type)
                 return ", ".join(notoptional + optionals)
             else:
                 print(self.scoped_name, "is array", self.items)

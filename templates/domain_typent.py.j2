@@ -1,0 +1,95 @@
+{% for import in timports %}
+from cripy.sync.protocol.{{ import | lower }} import types as {{ import }}
+{% endfor %}
+
+__all__ = [
+{%+ for dt in obj_types %}
+    "{{ dt.id }}",
+{% endfor %}
+]
+
+
+{%+ for dt in obj_types %}
+{% if dt.has_properties %}
+class {{ dt.id }}(object):
+{% else %}
+class {{ dt.id }}(dict):
+{% endif %}
+{% if dt.description %}
+    """
+    {{ dt.description }}
+    """
+
+{% endif %}
+{% if dt.has_properties %}
+    def __init__(self, {{ dt.constructor_string_no_type }}):
+        """
+        {% for prop in dt.properties %}
+        {% if prop.description %}
+        :param {{ prop.name }}: {{ prop.nice_description }}
+        {% else %}
+        :param {{ prop.name }}: The {{ prop.name }}
+        {% endif %}
+        :type {{ prop.name }}: {{ prop.constructor_docstr }}
+        {% endfor %}
+        """
+        super().__init__()
+    {% for prop in dt.properties %}
+        {{ prop.construct_thyself }}
+{#        self.{{ prop.name }} = {{ prop.name }}#}
+    {% endfor %}
+
+{% endif %}
+    {% if dt.has_properties %}
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k):
+        return self.__dict__[k]
+
+    def get(self, what, default=None):
+        return self.__dict__.get(what, default)
+    {% endif %}
+
+    def __repr__(self):
+        {% if dt.has_properties %}
+        repr_args = []
+        {% for prop in dt.properties %}
+        if self.{{ prop.name }} is not None:
+            repr_args.append("{{ prop.name }}={!r}".format(self.{{ prop.name }}))
+        {% endfor %}
+        return "{{ dt.id }}(" + ', '.join(repr_args)+")"
+        {% else %}
+        return "{{ dt.id }}(dict)"
+        {% endif %}
+
+    @staticmethod
+    def safe_create(init):
+        if init is not None:
+            try:
+                ourselves = {{ dt.id }}(**init)
+                return ourselves
+            except Exception:
+                return init
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init):
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append({{ dt.id }}.safe_create(it))
+            return list_of_self
+        else:
+            return init
+
+
+{% endfor %}
+{% if obj_types | length > 0 %}
+TYPE_TO_OBJECT = {
+{% for dt in obj_types %}
+    "{{ dt.id }}": {{ dt.id }},
+{% endfor %}
+}
+{% endif %}

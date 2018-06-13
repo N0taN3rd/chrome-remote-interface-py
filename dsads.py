@@ -1,34 +1,12 @@
-import asyncio
-import aiohttp
-import logging
-import sys
-from cripy.chrome.launcher import launch
-
-wsurl = "ws://localhost:9222/devtools/page/16EC887194626130148B6660141B019D"
+from cripy.sync.client import EventEmitter
 
 
-def print_Req(r):
-    print(r.preq)
-
-
-def print_Res(r):
-    print(r.pres)
-
-
-async def tlaunch():
-    browser = await launch(executablePath="google-chrome-beta", headless=False)
-    browser.on('disconnected', lambda x: print('disconnected'))
-    page = await browser.newPage()
-    await page.goto("https://www.example.com/", dict(waitUntil="load"))
-    await page.screenshot({"path": "example.png"})
-    await browser.close()
-
-
-def main():
-    loop = asyncio.get_event_loop()  # event loop
-    loop.run_until_complete(tlaunch())
-    # loop.run_forever()
+class It(EventEmitter):
+    def __init__(self):
+        super().__init__()
 
 
 if __name__ == "__main__":
-    main()
+    ee = It()
+    ee.on('it', lambda *args: print('it event', *args))
+    ee.emit('it', 1)

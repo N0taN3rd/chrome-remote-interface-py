@@ -23,7 +23,6 @@ def clean_string(s: str) -> str:
 
 
 class Property(FRefCollector):
-
     def __init__(self, owner: str, prop: dict) -> None:
         super().__init__()
         self.owner: str = owner
@@ -72,11 +71,15 @@ class Property(FRefCollector):
                 if TYPER.is_primitive_or_any(self.items):
                     return f"self.{self.name} = {self.name}"
                 else:
-                    return (
-                        f"self.{self.name} = {self.items.type}.safe_create_from_list({self.name})"
-                    )
+                    return f"self.{self.name} = {self.items.type}.safe_create_from_list({self.name})"
             # got
 
+        return f"self.{self.name} = {self.name}"
+
+    @property
+    def construct_thyself_no_type(self) -> str:
+        if TYPER.is_object(self.type):
+            return f"self.{self.name} = {self.type}.safe_create({self.name})"
         return f"self.{self.name} = {self.name}"
 
     @property
@@ -106,6 +109,10 @@ class Property(FRefCollector):
             ts = self._wrap_if_optionalc(ars)
         return f"{self.name}: {ts}"
 
+    @property
+    def constructor_string_no_type(self) -> str:
+        return f"{self.name}"
+
     def command_arg_string(self, domain) -> str:
         if self.is_array:
             ars = TYPER.command_sig(self.items, domain)
@@ -131,6 +138,9 @@ class Property(FRefCollector):
                 )
             ts = self._wrap_if_optionalc(ars)
         return f"{self.name}: {ts}"
+
+    def command_arg_string_no_types(self, domain) -> str:
+        return f"{self.name}"
 
     @property
     def constructor_docstr(self) -> str:

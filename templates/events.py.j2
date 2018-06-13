@@ -1,10 +1,10 @@
 from typing import Any, List, Optional, Union
 from types import SimpleNamespace
 {% for import in timports %}
-from cripy.protocol.{{ import | lower }} import types as {{ import }}
+from cripy.async.protocol.{{ import | lower }} import types as {{ import }}
 {% endfor %}
 try:
-    from cripy.protocol.{{ domain | lower }}.types import *
+    from cripy.async.protocol.{{ domain | lower }}.types import *
 except ImportError:
     pass
 

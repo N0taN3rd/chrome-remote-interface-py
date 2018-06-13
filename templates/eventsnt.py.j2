@@ -1,0 +1,113 @@
+from types import SimpleNamespace
+{% for import in timports %}
+from cripy.sync.protocol.{{ import | lower }} import types as {{ import }}
+{% endfor %}
+try:
+    from cripy.sync.protocol.{{ domain | lower }}.types import *
+except ImportError:
+    pass
+
+__all__ = [
+{%+ for event in events %}
+    "{{event.class_name}}",
+{% endfor %}
+]
+
+
+{%+ for event in events %}
+{% if event.has_parameters %}
+class {{ event.class_name }}(object):
+{% else %}
+class {{ event.class_name }}(dict):
+{% endif %}
+    {% if event.description %}
+    """
+    {{ event.description }}
+    """
+    {% endif %}
+
+    event = "{{ event.scoped_name }}"
+
+    {% if event.has_parameters %}
+    def __init__(self, {{ event.constructor_string_no_type }}):
+        {% if event.has_parameters %}
+        """
+        {% for prop in event.parameters %}
+        {% if prop.description %}
+        :param {{ prop.name }}: {{ prop.nice_description }}
+        {% else %}
+        :param {{ prop.name }}: The {{ prop.name }}
+        {% endif %}
+        :type {{ prop.name }}: {{ prop.constructor_docstr }}
+        {% endfor %}
+        """
+        {% endif %}
+        super().__init__()
+        {% if event.has_parameters %}
+        {% for prop in event.parameters %}
+        {{ prop.construct_thyself_no_type }}
+        {% endfor %}
+        {% endif %}
+    {% else %}
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    {% endif %}
+
+    {% if event.has_parameters %}
+    def __contains__(self, item):
+        return item in self.__dict__
+
+    def __getitem__(self, k):
+        return self.__dict__[k]
+
+    def get(self, what, default=None):
+        return self.__dict__.get(what, default)
+    {% endif %}
+
+    def __repr__(self):
+        {% if event.has_parameters %}
+        repr_args = []
+        {% for prop in event.parameters %}
+        if self.{{ prop.name }} is not None:
+            repr_args.append("{{ prop.name }}={!r}".format(self.{{ prop.name }}))
+        {% endfor %}
+        return "{{ event.class_name }}(" + ', '.join(repr_args)+")"
+        {% else %}
+        return "{{ event.class_name }}(dict)"
+        {% endif %}
+
+    @staticmethod
+    def safe_create(init):
+        if init is not None:
+            try:
+                ourselves = {{ event.class_name }}(**init)
+                return ourselves
+            except Exception:
+                return init
+        else:
+            return init
+
+    @staticmethod
+    def safe_create_from_list(init):
+        if init is not None:
+            list_of_self = []
+            for it in init:
+                list_of_self.append({{ event.class_name }}.safe_create(it))
+            return list_of_self
+        else:
+            return init
+
+
+{% endfor %}
+EVENT_TO_CLASS = {
+{% for ename, clazz in event_to_clazz %}
+   "{{ ename }}": {{ clazz }},
+{% endfor %}
+}
+
+EVENT_NS = SimpleNamespace(
+{% for ename, clazz in event_to_clazz %}
+  {{ pascalcase(ename.split('.')[1]) }}="{{ ename }}",
+{% endfor %}
+)
+

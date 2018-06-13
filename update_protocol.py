@@ -3,6 +3,12 @@ from aiohttp import ClientSession
 from typing import Tuple
 import pathlib
 
+try:
+    import uvloop
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+except ImportError:
+    pass
+
 
 async def fetch(url, session) -> Tuple[str, bytes]:
     """Fetch a url, using specified ClientSession."""
@@ -32,5 +38,4 @@ if __name__ == "__main__":
         "https://raw.githubusercontent.com/ChromeDevTools/devtools-protocol/master/json/js_protocol.json",
     ]
     loop = asyncio.get_event_loop()  # event loop
-    future = asyncio.ensure_future(fetch_all(urls))  # tasks to do
-    loop.run_until_complete(future)
+    loop.run_until_complete(fetch_all(urls))

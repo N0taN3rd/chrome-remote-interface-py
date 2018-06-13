@@ -8,7 +8,6 @@ PropertyList = Optional[List[Property]]
 
 
 class Event(FRefCollector):
-
     def __init__(self, domain: str, event: dict) -> None:
         super().__init__()
         self.domain: str = domain
@@ -30,6 +29,20 @@ class Event(FRefCollector):
                     optionals.append(prop.constructor_string.replace("'", ""))
                 else:
                     notoptional.append(prop.constructor_string.replace("'", ""))
+            return ", ".join(notoptional + optionals)
+        else:
+            return ""
+
+    @property
+    def constructor_string_no_type(self) -> str:
+        if self.has_parameters:
+            optionals = []
+            notoptional = []
+            for prop in self.parameters:
+                if prop.optional:
+                    optionals.append(prop.constructor_string_no_type)
+                else:
+                    notoptional.append(prop.constructor_string_no_type)
             return ", ".join(notoptional + optionals)
         else:
             return ""

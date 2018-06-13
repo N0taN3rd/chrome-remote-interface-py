@@ -7,7 +7,6 @@ from .typer import TYPER
 
 
 class Command(FRefCollector):
-
     def __init__(self, domain: str, command: dict) -> None:
         super().__init__()
         self.domain: str = domain
@@ -70,6 +69,20 @@ class Command(FRefCollector):
                     optionals.append(prop.command_arg_string(self.domain))
                 else:
                     notoptional.append(prop.command_arg_string(self.domain))
+            return ", ".join(notoptional + optionals)
+        else:
+            return ""
+
+    @property
+    def command_arg_string_no_types(self) -> str:
+        if self.has_parameters:
+            optionals = []
+            notoptional = []
+            for prop in self.parameters:
+                if prop.optional:
+                    optionals.append(prop.command_arg_string_no_types(self.domain))
+                else:
+                    notoptional.append(prop.command_arg_string_no_types(self.domain))
             return ", ".join(notoptional + optionals)
         else:
             return ""
