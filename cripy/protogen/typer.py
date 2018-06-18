@@ -13,6 +13,7 @@ class InferredType(Enum):
 
 
 class Typer(object):
+
     def __init__(self) -> None:
         self.objects: Set[str] = set()
         self.primitives: Dict[str, str] = dict()

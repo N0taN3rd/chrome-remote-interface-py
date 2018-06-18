@@ -27,6 +27,7 @@ class NetworkError(Exception):  # noqa: D204
 
 
 class Client(ProtocolMixin, EventEmitter):
+
     def __init__(
         self,
         url: Optional[str] = None,

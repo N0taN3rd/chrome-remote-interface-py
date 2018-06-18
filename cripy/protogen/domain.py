@@ -7,6 +7,7 @@ from .shared import FRefCollector
 
 
 class Domain(FRefCollector):
+
     def __init__(self, domain: dict) -> None:
         super().__init__()
         self.domain: str = domain["domain"]

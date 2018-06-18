@@ -23,6 +23,7 @@ def clean_string(s: str) -> str:
 
 
 class Property(FRefCollector):
+
     def __init__(self, owner: str, prop: dict) -> None:
         super().__init__()
         self.owner: str = owner
@@ -71,7 +72,9 @@ class Property(FRefCollector):
                 if TYPER.is_primitive_or_any(self.items):
                     return f"self.{self.name} = {self.name}"
                 else:
-                    return f"self.{self.name} = {self.items.type}.safe_create_from_list({self.name})"
+                    return (
+                        f"self.{self.name} = {self.items.type}.safe_create_from_list({self.name})"
+                    )
             # got
 
         return f"self.{self.name} = {self.name}"
@@ -111,6 +114,8 @@ class Property(FRefCollector):
 
     @property
     def constructor_string_no_type(self) -> str:
+        if self.optional:
+            return f"{self.name}=None"
         return f"{self.name}"
 
     def command_arg_string(self, domain) -> str:
@@ -140,6 +145,8 @@ class Property(FRefCollector):
         return f"{self.name}: {ts}"
 
     def command_arg_string_no_types(self, domain) -> str:
+        if self.optional:
+            return f"{self.name}=None"
         return f"{self.name}"
 
     @property

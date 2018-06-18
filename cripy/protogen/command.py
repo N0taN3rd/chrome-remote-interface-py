@@ -7,6 +7,7 @@ from .typer import TYPER
 
 
 class Command(FRefCollector):
+
     def __init__(self, domain: str, command: dict) -> None:
         super().__init__()
         self.domain: str = domain

@@ -6,6 +6,7 @@ from .typer import TYPER
 
 
 class Returns(FRefCollector):
+
     def __init__(self, domain, owner: str, rt: List[dict]) -> None:
         super().__init__()
         self.domain: str = domain

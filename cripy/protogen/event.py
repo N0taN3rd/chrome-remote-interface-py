@@ -8,6 +8,7 @@ PropertyList = Optional[List[Property]]
 
 
 class Event(FRefCollector):
+
     def __init__(self, domain: str, event: dict) -> None:
         super().__init__()
         self.domain: str = domain

@@ -53,6 +53,7 @@ class LauncherError(Exception):
 
 
 class Launcher(object):
+
     def __init__(self, options: Dict[str, Any] = None, **kwargs: Any) -> None:
         self.options: Dict[str, Any] = merge_dict(options, kwargs)
         self.chrome_dead: bool = True
