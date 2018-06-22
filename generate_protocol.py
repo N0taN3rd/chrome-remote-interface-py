@@ -8,7 +8,7 @@ from protogen.typer import TYPER
 from stringcase import pascalcase
 
 output_dir_fp = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "cripy/async/protocol/")
+    os.path.join(os.path.dirname(__file__), "cripy/asyncio/protocol/")
 )
 output_dirsync_fp = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "cripy/gevent/protocol")
@@ -160,7 +160,7 @@ def generate_domain_init(d: Domain, template, dp: Path) -> None:
 
 
 def proto_gen_good() -> None:
-    from cripy.async.protocol import ProtocolMixin
+    from cripy.asyncio.protocol import ProtocolMixin
 
     class IT(ProtocolMixin):
         pass
@@ -195,7 +195,7 @@ def gen() -> None:
         generate_domain_init(d, DOMAIN_INIT, dp)
     init = Path(output_dir_fp, "__init__.py")
     with init.open("w") as out:
-        out.write(pinit.render(domains=mixin_imports, which="async"))
+        out.write(pinit.render(domains=mixin_imports, which="asyncio"))
     proto_gen_good()
 
 

@@ -1,13 +1,13 @@
 {% set dl = d.domain | lower %}
 from typing import Any, List, Optional, Union
 {% for import in timports %}
-from cripy.async.protocol.{{ import | lower }} import types as {{ import }}
+from cripy.asyncio.protocol.{{ import | lower }} import types as {{ import }}
 {% endfor %}
 {% if d.has_events %}
-from cripy.async.protocol.{{ dl }} import events as Events
+from cripy.asyncio.protocol.{{ dl }} import events as Events
 {% endif %}
 {% if d.has_types %}
-from cripy.async.protocol.{{ dl }} import types as Types
+from cripy.asyncio.protocol.{{ dl }} import types as Types
 {% endif %}
 
 __all__ = ["{{ d.domain }}"]

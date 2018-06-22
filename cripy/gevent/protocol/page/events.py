@@ -1,6 +1,6 @@
 from collections import namedtuple
-from cripy.gevent.protocol.runtime import types as Runtime
 from cripy.gevent.protocol.network import types as Network
+from cripy.gevent.protocol.runtime import types as Runtime
 from cripy.gevent.protocol.page.types import *
 
 __all__ = [

@@ -1,5 +1,5 @@
-from cripy.gevent.protocol.dom import types as DOM
 from cripy.gevent.protocol.runtime import types as Runtime
+from cripy.gevent.protocol.dom import types as DOM
 
 __all__ = [
     "EventListener",

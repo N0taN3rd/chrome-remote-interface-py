@@ -1,6 +1,6 @@
 from collections import namedtuple
-from cripy.gevent.protocol.page import types as Page
 from cripy.gevent.protocol.dom import types as DOM
+from cripy.gevent.protocol.page import types as Page
 from cripy.gevent.protocol.overlay.types import *
 
 __all__ = [

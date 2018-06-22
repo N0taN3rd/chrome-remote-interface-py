@@ -1,8 +1,8 @@
+from cripy.gevent.protocol.network import types as Network
+from cripy.gevent.protocol.emulation import types as Emulation
 from cripy.gevent.protocol.debugger import types as Debugger
 from cripy.gevent.protocol.runtime import types as Runtime
-from cripy.gevent.protocol.network import types as Network
 from cripy.gevent.protocol.dom import types as DOM
-from cripy.gevent.protocol.emulation import types as Emulation
 from cripy.gevent.protocol.page import events as Events
 from cripy.gevent.protocol.page import types as Types
 

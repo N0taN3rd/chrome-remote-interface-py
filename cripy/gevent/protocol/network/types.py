@@ -1,6 +1,6 @@
-from cripy.gevent.protocol.page import types as Page
-from cripy.gevent.protocol.security import types as Security
 from cripy.gevent.protocol.runtime import types as Runtime
+from cripy.gevent.protocol.security import types as Security
+from cripy.gevent.protocol.page import types as Page
 
 __all__ = [
     "WebSocketResponse",

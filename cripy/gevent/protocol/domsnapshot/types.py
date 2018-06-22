@@ -1,5 +1,5 @@
-from cripy.gevent.protocol.page import types as Page
 from cripy.gevent.protocol.dom import types as DOM
+from cripy.gevent.protocol.page import types as Page
 from cripy.gevent.protocol.domdebugger import types as DOMDebugger
 
 __all__ = [

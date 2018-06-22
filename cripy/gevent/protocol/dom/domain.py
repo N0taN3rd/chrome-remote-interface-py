@@ -1,5 +1,5 @@
-from cripy.gevent.protocol.page import types as Page
 from cripy.gevent.protocol.runtime import types as Runtime
+from cripy.gevent.protocol.page import types as Page
 from cripy.gevent.protocol.dom import events as Events
 from cripy.gevent.protocol.dom import types as Types
 

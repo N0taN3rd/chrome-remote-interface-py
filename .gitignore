@@ -123,7 +123,7 @@ docs/_build/
 
 # PyBuilder
 target/
-!cripy/async/protocol/target/
+!cripy/asyncio/protocol/target/
 !cripy/gevent/protocol/target/
 # Jupyter Notebook
 .ipynb_checkpoints

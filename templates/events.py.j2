@@ -1,10 +1,10 @@
 from typing import Any, List, Optional, Union
 from collections import namedtuple
 {% for import in timports %}
-from cripy.async.protocol.{{ import | lower }} import types as {{ import }}
+from cripy.asyncio.protocol.{{ import | lower }} import types as {{ import }}
 {% endfor %}
 {% if dhastype %}
-from cripy.async.protocol.{{ domain | lower }}.types import *
+from cripy.asyncio.protocol.{{ domain | lower }}.types import *
 {% endif %}
 {% set dup = domain | upper %}
 

@@ -1,6 +1,6 @@
+from cripy.gevent.protocol.network import types as Network
 from cripy.gevent.protocol.page import types as Page
 from cripy.gevent.protocol.dom import types as DOM
-from cripy.gevent.protocol.network import types as Network
 from cripy.gevent.protocol.emulation import events as Events
 from cripy.gevent.protocol.emulation import types as Types
 
