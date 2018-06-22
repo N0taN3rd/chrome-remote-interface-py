@@ -1,15 +1,12 @@
 from os import path
-from typing import List
-
 from setuptools import setup, find_packages
 from pathlib import Path
-from m2r import M2R
 
 
 basedir = Path(path.dirname(path.abspath(__file__)))
 
 
-def get_requirements() -> List[str]:
+def get_requirements():
     reqs = []
     reqp = basedir.joinpath("requirements.txt")
     with reqp.open("r") as rin:
@@ -19,27 +16,14 @@ def get_requirements() -> List[str]:
                 reqs.append(l)
     return reqs
 
-
-def transform_readme() -> str:
-    readmep = basedir / 'README.md'
-    with readmep.open('r') as rin:
-        src = rin.read()
-        try:
-            readme = M2R()(src)
-        except:
-            readme = src
-    return readme
-
-
 extra_args = {}
+
 setup(
     name="cripy",
     version="0.0.1",
     description=(
-        "Unofficial port of chrome-remote-interface and fork of pyppeteer"
-        "(unofficial port of puppeteer)"
+        "Unofficial port of chrome-remote-interface"
     ),
-    long_description=transform_readme(),
     author="John Berlin",
     author_email="n0tan3rd@gmail.com",
     url="https://github.com/n0tan3rd/chrome-remote-interface-py",
@@ -56,6 +40,5 @@ setup(
         "Programming Language :: Python :: 3.6",
         'Topic :: Software Development :: DevTools Protocol',
     ],
-    python_requires=">=3.6",
-    **extra_args,
+    python_requires=">=3",
 )

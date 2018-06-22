@@ -1,3 +1,0 @@
-greenlet>=0.4.13 ; platform_python_implementation == "CPython"
-cffi >= 1.11.5 ; platform_python_implementation == "CPython"
-git+git://github.com/gevent/gevent.git#egg=gevent
