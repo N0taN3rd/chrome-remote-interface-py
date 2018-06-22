@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional
 from aiohttp import ClientConnectorError
 
 from cripy.util import merge_dict
-from . import Client
+from .client import Client
 
 __all__ = ["LauncherError", "Launcher", "launch"]
 
