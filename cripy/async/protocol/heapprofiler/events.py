@@ -1,43 +1,52 @@
 from typing import Any, List, Optional, Union
-from types import SimpleNamespace
+from collections import namedtuple
+from cripy.async.protocol.heapprofiler.types import *
 
-try:
-    from cripy.async.protocol.heapprofiler.types import *
-except ImportError:
-    pass
-
+__all__ = [
+    "AddHeapSnapshotChunkEvent",
+    "HeapStatsUpdateEvent",
+    "LastSeenObjectIdEvent",
+    "ReportHeapSnapshotProgressEvent",
+    "ResetProfilesEvent",
+    "HEAPPROFILER_EVENTS_TO_CLASS",
+    "HEAPPROFILER_EVENTS_NS"
+]
 
 class AddHeapSnapshotChunkEvent(object):
 
     event = "HeapProfiler.addHeapSnapshotChunk"
 
+    __slots__ = ["chunk"]
+
     def __init__(self, chunk: str) -> None:
         """
+        Create a new instance of AddHeapSnapshotChunkEvent
+
         :param chunk: The chunk
         :type chunk: str
         """
         super().__init__()
         self.chunk = chunk
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.chunk is not None:
             repr_args.append("chunk={!r}".format(self.chunk))
-        return "AddHeapSnapshotChunkEvent(" + ", ".join(repr_args) + ")"
+        return "AddHeapSnapshotChunkEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["AddHeapSnapshotChunkEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AddHeapSnapshotChunkEvent', dict]]:
+        """
+        Safely create AddHeapSnapshotChunkEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of AddHeapSnapshotChunkEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of AddHeapSnapshotChunkEvent if creation did not fail
+        :rtype: Optional[Union[dict, AddHeapSnapshotChunkEvent]]
+        """
         if init is not None:
             try:
                 ourselves = AddHeapSnapshotChunkEvent(**init)
@@ -48,9 +57,18 @@ class AddHeapSnapshotChunkEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["AddHeapSnapshotChunkEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AddHeapSnapshotChunkEvent', dict]]]:
+        """
+        Safely create a new list AddHeapSnapshotChunkEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list AddHeapSnapshotChunkEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of AddHeapSnapshotChunkEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, AddHeapSnapshotChunkEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -67,33 +85,37 @@ class HeapStatsUpdateEvent(object):
 
     event = "HeapProfiler.heapStatsUpdate"
 
+    __slots__ = ["statsUpdate"]
+
     def __init__(self, statsUpdate: List[int]) -> None:
         """
+        Create a new instance of HeapStatsUpdateEvent
+
         :param statsUpdate: An array of triplets. Each triplet describes a fragment. The first integer is the fragment index, the second integer is a total count of objects for the fragment, the third integer is a total size of the objects for the fragment.
         :type statsUpdate: List[int]
         """
         super().__init__()
         self.statsUpdate = statsUpdate
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.statsUpdate is not None:
             repr_args.append("statsUpdate={!r}".format(self.statsUpdate))
-        return "HeapStatsUpdateEvent(" + ", ".join(repr_args) + ")"
+        return "HeapStatsUpdateEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["HeapStatsUpdateEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['HeapStatsUpdateEvent', dict]]:
+        """
+        Safely create HeapStatsUpdateEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of HeapStatsUpdateEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of HeapStatsUpdateEvent if creation did not fail
+        :rtype: Optional[Union[dict, HeapStatsUpdateEvent]]
+        """
         if init is not None:
             try:
                 ourselves = HeapStatsUpdateEvent(**init)
@@ -104,9 +126,18 @@ class HeapStatsUpdateEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["HeapStatsUpdateEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['HeapStatsUpdateEvent', dict]]]:
+        """
+        Safely create a new list HeapStatsUpdateEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list HeapStatsUpdateEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of HeapStatsUpdateEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, HeapStatsUpdateEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -124,8 +155,12 @@ class LastSeenObjectIdEvent(object):
 
     event = "HeapProfiler.lastSeenObjectId"
 
+    __slots__ = ["lastSeenObjectId", "timestamp"]
+
     def __init__(self, lastSeenObjectId: int, timestamp: float) -> None:
         """
+        Create a new instance of LastSeenObjectIdEvent
+
         :param lastSeenObjectId: The lastSeenObjectId
         :type lastSeenObjectId: int
         :param timestamp: The timestamp
@@ -135,27 +170,27 @@ class LastSeenObjectIdEvent(object):
         self.lastSeenObjectId = lastSeenObjectId
         self.timestamp = timestamp
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.lastSeenObjectId is not None:
             repr_args.append("lastSeenObjectId={!r}".format(self.lastSeenObjectId))
         if self.timestamp is not None:
             repr_args.append("timestamp={!r}".format(self.timestamp))
-        return "LastSeenObjectIdEvent(" + ", ".join(repr_args) + ")"
+        return "LastSeenObjectIdEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["LastSeenObjectIdEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['LastSeenObjectIdEvent', dict]]:
+        """
+        Safely create LastSeenObjectIdEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of LastSeenObjectIdEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of LastSeenObjectIdEvent if creation did not fail
+        :rtype: Optional[Union[dict, LastSeenObjectIdEvent]]
+        """
         if init is not None:
             try:
                 ourselves = LastSeenObjectIdEvent(**init)
@@ -166,9 +201,18 @@ class LastSeenObjectIdEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["LastSeenObjectIdEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LastSeenObjectIdEvent', dict]]]:
+        """
+        Safely create a new list LastSeenObjectIdEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list LastSeenObjectIdEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of LastSeenObjectIdEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, LastSeenObjectIdEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -182,8 +226,12 @@ class ReportHeapSnapshotProgressEvent(object):
 
     event = "HeapProfiler.reportHeapSnapshotProgress"
 
+    __slots__ = ["done", "total", "finished"]
+
     def __init__(self, done: int, total: int, finished: Optional[bool] = None) -> None:
         """
+        Create a new instance of ReportHeapSnapshotProgressEvent
+
         :param done: The done
         :type done: int
         :param total: The total
@@ -196,15 +244,6 @@ class ReportHeapSnapshotProgressEvent(object):
         self.total = total
         self.finished = finished
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.done is not None:
@@ -213,12 +252,21 @@ class ReportHeapSnapshotProgressEvent(object):
             repr_args.append("total={!r}".format(self.total))
         if self.finished is not None:
             repr_args.append("finished={!r}".format(self.finished))
-        return "ReportHeapSnapshotProgressEvent(" + ", ".join(repr_args) + ")"
+        return "ReportHeapSnapshotProgressEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["ReportHeapSnapshotProgressEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ReportHeapSnapshotProgressEvent', dict]]:
+        """
+        Safely create ReportHeapSnapshotProgressEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ReportHeapSnapshotProgressEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ReportHeapSnapshotProgressEvent if creation did not fail
+        :rtype: Optional[Union[dict, ReportHeapSnapshotProgressEvent]]
+        """
         if init is not None:
             try:
                 ourselves = ReportHeapSnapshotProgressEvent(**init)
@@ -229,9 +277,18 @@ class ReportHeapSnapshotProgressEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ReportHeapSnapshotProgressEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ReportHeapSnapshotProgressEvent', dict]]]:
+        """
+        Safely create a new list ReportHeapSnapshotProgressEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ReportHeapSnapshotProgressEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ReportHeapSnapshotProgressEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ReportHeapSnapshotProgressEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -252,9 +309,18 @@ class ResetProfilesEvent(dict):
         return "ResetProfilesEvent(dict)"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["ResetProfilesEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ResetProfilesEvent', dict]]:
+        """
+        Safely create ResetProfilesEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ResetProfilesEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ResetProfilesEvent if creation did not fail
+        :rtype: Optional[Union[dict, ResetProfilesEvent]]
+        """
         if init is not None:
             try:
                 ourselves = ResetProfilesEvent(**init)
@@ -265,9 +331,18 @@ class ResetProfilesEvent(dict):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ResetProfilesEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ResetProfilesEvent', dict]]]:
+        """
+        Safely create a new list ResetProfilesEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ResetProfilesEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ResetProfilesEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ResetProfilesEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -277,18 +352,20 @@ class ResetProfilesEvent(dict):
             return init
 
 
-EVENT_TO_CLASS = {
-    "HeapProfiler.addHeapSnapshotChunk": AddHeapSnapshotChunkEvent,
-    "HeapProfiler.heapStatsUpdate": HeapStatsUpdateEvent,
-    "HeapProfiler.lastSeenObjectId": LastSeenObjectIdEvent,
-    "HeapProfiler.reportHeapSnapshotProgress": ReportHeapSnapshotProgressEvent,
-    "HeapProfiler.resetProfiles": ResetProfilesEvent,
+HEAPPROFILER_EVENTS_TO_CLASS = {
+   "HeapProfiler.addHeapSnapshotChunk": AddHeapSnapshotChunkEvent,
+   "HeapProfiler.heapStatsUpdate": HeapStatsUpdateEvent,
+   "HeapProfiler.lastSeenObjectId": LastSeenObjectIdEvent,
+   "HeapProfiler.reportHeapSnapshotProgress": ReportHeapSnapshotProgressEvent,
+   "HeapProfiler.resetProfiles": ResetProfilesEvent,
 }
 
-EVENT_NS = SimpleNamespace(
-    AddHeapSnapshotChunk="HeapProfiler.addHeapSnapshotChunk",
-    HeapStatsUpdate="HeapProfiler.heapStatsUpdate",
-    LastSeenObjectId="HeapProfiler.lastSeenObjectId",
-    ReportHeapSnapshotProgress="HeapProfiler.reportHeapSnapshotProgress",
-    ResetProfiles="HeapProfiler.resetProfiles",
+HeapProfilerNS = namedtuple("HeapProfilerNS", ["AddHeapSnapshotChunk", "HeapStatsUpdate", "LastSeenObjectId", "ReportHeapSnapshotProgress", "ResetProfiles"])
+
+HEAPPROFILER_EVENTS_NS = HeapProfilerNS(
+  AddHeapSnapshotChunk="HeapProfiler.addHeapSnapshotChunk",
+  HeapStatsUpdate="HeapProfiler.heapStatsUpdate",
+  LastSeenObjectId="HeapProfiler.lastSeenObjectId",
+  ReportHeapSnapshotProgress="HeapProfiler.reportHeapSnapshotProgress",
+  ResetProfiles="HeapProfiler.resetProfiles",
 )

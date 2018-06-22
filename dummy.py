@@ -1,57 +1,46 @@
-import asyncio
-import aiohttp
-from cripy.client.launcher import launch
-from cripy.client import Client
+from gevent import monkey as george
 
-wsurl = "ws://localhost:9222/devtools/page/16EC887194626130148B6660141B019D"
+george.patch_all()
 
+import gevent
+import signal
 
-async def go():
-    chrome = Client(wsurl=wsurl)
-    print("connected?")
-    await chrome.Page.enable()
-    print("page enable")
-    await chrome.Network.enable()
-    print("network enable enable")
-    await chrome.Page.navigate(url="https://www.reuters.com/")
-
-    def print_on(event):
-        print(event)
-        print(event.__dict__)
-
-    chrome.on("Network.requestWillBeSent", print_on)
-    chrome.on("Network.responseReceived", print_on)
+from cripy.gevent.client import Client
 
 
-async def err():
-    async with aiohttp.ClientSession() as session:
-        try:
-            data = await session.get("http://localhost:9000")
-        except Exception as e:
-            print(e)
-            print(type(e))
+def signal_shutdown(*args, **kwargs):
+    raise KeyboardInterrupt
 
 
-async def test_launch():
-    res = await Client.JSON()
-    for it in res:
-        print(it)
+def star_msg(msg):
+    print(msg)
+
+
+def run():
+    c = Client()
+    c.on("*", star_msg)
+    c.connect()
+    res = c.Page.getFrameTree()
+    print(res)
+    print(c.Page.enable())
+    print(c.Network.enable())
+    print(c.Page.setLifecycleEventsEnabled(enabled=True))
+    # c.Page.navigate(url="https://google.com")
 
 
 def main():
-    loop = asyncio.get_event_loop()  # event loop
-    loop.run_until_complete(test_launch())
+    gevent.signal(signal.SIGQUIT, signal_shutdown)
+    gevent.signal(signal.SIGINT, signal_shutdown)
+    gevent.signal(signal.SIGTERM, signal_shutdown)
+    greenlet = gevent.spawn(run)
+    greenlet.join()
+    forever = gevent.event.Event()
+    try:
+        forever.wait()
+    except KeyboardInterrupt:
+        print("done")
+        gevent.kill(greenlet)
 
 
 if __name__ == "__main__":
-    class It(object):
-        def __init__(self):
-            self.i = 0
-
-        def __getitem__(self, k):
-            return self.__dict__[k]
-
-        def get(self, what, default=None):
-            return self.__dict__.get(what, default)
-    it = It()
-    print(it.get('i'))
+    main()

@@ -1,16 +1,15 @@
 {% set dl = d.domain | lower %}
 {% for import in timports %}
-from cripy.sync.protocol.{{ import | lower }} import types as {{ import }}
+from cripy.gevent.protocol.{{ import | lower }} import types as {{ import }}
 {% endfor %}
 {% if d.has_events %}
-from cripy.sync.protocol.{{ dl }} import events as Events
+from cripy.gevent.protocol.{{ dl }} import events as Events
 {% endif %}
 {% if d.has_types %}
-from cripy.sync.protocol.{{ dl }} import types as Types
+from cripy.gevent.protocol.{{ dl }} import types as Types
 {% endif %}
 
-__all__ = ["{{ d.domain }}"]{% if d.has_events %} + Events.__all__ {% endif %}{% if d.has_types %}+ Types.__all__ {% endif %}
-
+__all__ = ["{{ d.domain }}"]
 
 
 class {{ d.domain }}(object):
@@ -22,19 +21,32 @@ class {{ d.domain }}(object):
 {% endif %}
 {% if d.has_deps %}
     {{ d.dep_list_str }}
-{% endif %}
 
+{% endif %}
+{% if d.has_events %}
+    events = Events.{{ d.domain | upper }}_EVENTS_NS
+
+{% endif %}
     def __init__(self, chrome):
+        """
+        Construct a new {{ d.domain }} object
+
+        :param chrome: An instance of the devtools protocol client
+        """
         self.chrome = chrome
 
     {% for command in d.commands %}
     {% if command.has_parameters %}
-    def {{ command.name }}(self, {{ command.command_arg_string_no_types }}, cb=None):
+    def {{ command.name }}(self, {{ command.command_arg_string_no_types }}):
     {% else %}
-    def {{ command.name }}(self, cb=None):
+    def {{ command.name }}(self):
     {% endif %}
         {% if command.has_parameters %}
         """
+        {% if command.description %}
+        {{ command.description }}
+
+        {% endif %}
         {% for prop in command.parameters %}
         {% if prop.description %}
         :param {{ prop.name }}: {{ prop.nice_description }}
@@ -44,13 +56,10 @@ class {{ d.domain }}(object):
         :type {{ prop.name }}: {{ prop.constructor_docstr }}
         {% endfor %}
         """
-        {% endif %}
-        {% if command.returns %}
-        def cb_wrapper(res):
-            {% for trans in command.returns.yield_result_trans() %}
-            {{ trans }}
-            {% endfor %}
-            cb(res)
+        {% elif command.description %}
+        """
+        {{ command.description }}
+        """
         {% endif %}
         {% if command.has_parameters %}
         msg_dict = dict()
@@ -58,25 +67,34 @@ class {{ d.domain }}(object):
         if {{ param.name }} is not None:
             msg_dict['{{ param.name }}'] = {{ param.name }}
         {% endfor %}
+        wres = self.chrome.send('{{ command.scoped_name }}', msg_dict)
+        {% else %}
+        wres = self.chrome.send('{{ command.scoped_name }}')
+        {% endif %}
         {% if command.returns %}
-        self.chrome.send('{{ command.scoped_name }}', params=msg_dict, cb=cb_wrapper)
+        res = wres.get()
+        {% for trans in command.returns.yield_result_trans() %}
+        {{ trans }}
+        {% endfor %}
+        return res
         {% else %}
-        self.chrome.send('{{ command.scoped_name }}', params=msg_dict)
+        return wres.get()
         {% endif %}
-        {% else %}
-        {% if command.returns %}
-        self.chrome.send('{{ command.scoped_name }}', cb=cb_wrapper)
-        {% else %}
-        self.chrome.send('{{ command.scoped_name }}')
-        {% endif %}
-        {% endif %}
-
 
     {% endfor %}
     @staticmethod
     def get_event_classes():
+        """
+        Retrieve a dictionary of events emitted by the {{ dup }} domain to their python class
+
+        If {{ dup }} has events this method returns a dictionary of
+        fully qualified event name (str) to it python class
+
+        :return: Dictionary of the {{ dup }} domain event classes
+        :retype: Optional[dict]
+        """
         {% if d.has_events %}
-        return Events.EVENT_TO_CLASS
+        return Events.{{ d.domain | upper }}_EVENTS_TO_CLASS
         {% else %}
         return None
         {% endif %}

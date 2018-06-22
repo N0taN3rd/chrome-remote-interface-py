@@ -7,6 +7,7 @@ __all__ = [
     "Location",
     "CallFrame",
     "BreakLocation",
+    "DEBUGGER_TYPE_TO_OBJECT"
 ]
 
 
@@ -15,6 +16,8 @@ class SearchMatch(object):
     Search match for resource.
     """
 
+    __slots__ = ["lineNumber", "lineContent"]
+
     def __init__(self, lineNumber, lineContent):
         """
         :param lineNumber: Line number in resource content.
@@ -22,18 +25,9 @@ class SearchMatch(object):
         :param lineContent: Line with match content.
         :type lineContent: str
         """
-        super().__init__()
+        super(SearchMatch, self).__init__()
         self.lineNumber = lineNumber
         self.lineContent = lineContent
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -41,10 +35,21 @@ class SearchMatch(object):
             repr_args.append("lineNumber={!r}".format(self.lineNumber))
         if self.lineContent is not None:
             repr_args.append("lineContent={!r}".format(self.lineContent))
-        return "SearchMatch(" + ", ".join(repr_args) + ")"
+        return "SearchMatch(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create SearchMatch from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of SearchMatch
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of SearchMatch if creation did not fail
+        :rtype: Optional[Union[dict, SearchMatch]]
+        """
         if init is not None:
             try:
                 ourselves = SearchMatch(**init)
@@ -56,6 +61,17 @@ class SearchMatch(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list SearchMatchs from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list SearchMatch instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of SearchMatch instances if creation did not fail
+        :rtype: Optional[List[Union[dict, SearchMatch]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -70,6 +86,8 @@ class ScriptPosition(object):
     Location in the source code.
     """
 
+    __slots__ = ["lineNumber", "columnNumber"]
+
     def __init__(self, lineNumber, columnNumber):
         """
         :param lineNumber: The lineNumber
@@ -77,18 +95,9 @@ class ScriptPosition(object):
         :param columnNumber: The columnNumber
         :type columnNumber: int
         """
-        super().__init__()
+        super(ScriptPosition, self).__init__()
         self.lineNumber = lineNumber
         self.columnNumber = columnNumber
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -96,10 +105,21 @@ class ScriptPosition(object):
             repr_args.append("lineNumber={!r}".format(self.lineNumber))
         if self.columnNumber is not None:
             repr_args.append("columnNumber={!r}".format(self.columnNumber))
-        return "ScriptPosition(" + ", ".join(repr_args) + ")"
+        return "ScriptPosition(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ScriptPosition from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ScriptPosition
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ScriptPosition if creation did not fail
+        :rtype: Optional[Union[dict, ScriptPosition]]
+        """
         if init is not None:
             try:
                 ourselves = ScriptPosition(**init)
@@ -111,6 +131,17 @@ class ScriptPosition(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ScriptPositions from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ScriptPosition instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ScriptPosition instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ScriptPosition]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -125,6 +156,8 @@ class Scope(object):
     Scope description.
     """
 
+    __slots__ = ["type", "object", "name", "startLocation", "endLocation"]
+
     def __init__(self, type, object, name=None, startLocation=None, endLocation=None):
         """
         :param type: Scope type.
@@ -138,21 +171,12 @@ class Scope(object):
         :param endLocation: Location in the source code where scope ends
         :type endLocation: Optional[dict]
         """
-        super().__init__()
+        super(Scope, self).__init__()
         self.type = type
         self.object = Runtime.RemoteObject.safe_create(object)
         self.name = name
         self.startLocation = Location.safe_create(startLocation)
         self.endLocation = Location.safe_create(endLocation)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -166,10 +190,21 @@ class Scope(object):
             repr_args.append("startLocation={!r}".format(self.startLocation))
         if self.endLocation is not None:
             repr_args.append("endLocation={!r}".format(self.endLocation))
-        return "Scope(" + ", ".join(repr_args) + ")"
+        return "Scope(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Scope from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Scope
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Scope if creation did not fail
+        :rtype: Optional[Union[dict, Scope]]
+        """
         if init is not None:
             try:
                 ourselves = Scope(**init)
@@ -181,6 +216,17 @@ class Scope(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Scopes from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Scope instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Scope instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Scope]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -195,6 +241,8 @@ class Location(object):
     Location in the source code.
     """
 
+    __slots__ = ["scriptId", "lineNumber", "columnNumber"]
+
     def __init__(self, scriptId, lineNumber, columnNumber=None):
         """
         :param scriptId: Script identifier as reported in the `Debugger.scriptParsed`.
@@ -204,19 +252,10 @@ class Location(object):
         :param columnNumber: Column number in the script (0-based).
         :type columnNumber: Optional[int]
         """
-        super().__init__()
+        super(Location, self).__init__()
         self.scriptId = scriptId
         self.lineNumber = lineNumber
         self.columnNumber = columnNumber
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -226,10 +265,21 @@ class Location(object):
             repr_args.append("lineNumber={!r}".format(self.lineNumber))
         if self.columnNumber is not None:
             repr_args.append("columnNumber={!r}".format(self.columnNumber))
-        return "Location(" + ", ".join(repr_args) + ")"
+        return "Location(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Location from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Location
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Location if creation did not fail
+        :rtype: Optional[Union[dict, Location]]
+        """
         if init is not None:
             try:
                 ourselves = Location(**init)
@@ -241,6 +291,17 @@ class Location(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Locations from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Location instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Location instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Location]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -255,17 +316,9 @@ class CallFrame(object):
     JavaScript call frame. Array of call frames form the call stack.
     """
 
-    def __init__(
-        self,
-        callFrameId,
-        functionName,
-        location,
-        url,
-        scopeChain,
-        this,
-        functionLocation=None,
-        returnValue=None,
-    ):
+    __slots__ = ["callFrameId", "functionName", "functionLocation", "location", "url", "scopeChain", "this", "returnValue"]
+
+    def __init__(self, callFrameId, functionName, location, url, scopeChain, this, functionLocation=None, returnValue=None):
         """
         :param callFrameId: Call frame identifier. This identifier is only valid while the virtual machine is paused.
         :type callFrameId: str
@@ -284,7 +337,7 @@ class CallFrame(object):
         :param returnValue: The value being returned, if the function is at return point.
         :type returnValue: Optional[dict]
         """
-        super().__init__()
+        super(CallFrame, self).__init__()
         self.callFrameId = callFrameId
         self.functionName = functionName
         self.functionLocation = Location.safe_create(functionLocation)
@@ -293,15 +346,6 @@ class CallFrame(object):
         self.scopeChain = Scope.safe_create_from_list(scopeChain)
         self.this = Runtime.RemoteObject.safe_create(this)
         self.returnValue = Runtime.RemoteObject.safe_create(returnValue)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -321,10 +365,21 @@ class CallFrame(object):
             repr_args.append("this={!r}".format(self.this))
         if self.returnValue is not None:
             repr_args.append("returnValue={!r}".format(self.returnValue))
-        return "CallFrame(" + ", ".join(repr_args) + ")"
+        return "CallFrame(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CallFrame from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CallFrame
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CallFrame if creation did not fail
+        :rtype: Optional[Union[dict, CallFrame]]
+        """
         if init is not None:
             try:
                 ourselves = CallFrame(**init)
@@ -336,6 +391,17 @@ class CallFrame(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CallFrames from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CallFrame instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CallFrame instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CallFrame]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -346,6 +412,7 @@ class CallFrame(object):
 
 
 class BreakLocation(object):
+    __slots__ = ["scriptId", "lineNumber", "columnNumber", "type"]
 
     def __init__(self, scriptId, lineNumber, columnNumber=None, type=None):
         """
@@ -358,20 +425,11 @@ class BreakLocation(object):
         :param type: The type
         :type type: Optional[str]
         """
-        super().__init__()
+        super(BreakLocation, self).__init__()
         self.scriptId = scriptId
         self.lineNumber = lineNumber
         self.columnNumber = columnNumber
         self.type = type
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -383,10 +441,21 @@ class BreakLocation(object):
             repr_args.append("columnNumber={!r}".format(self.columnNumber))
         if self.type is not None:
             repr_args.append("type={!r}".format(self.type))
-        return "BreakLocation(" + ", ".join(repr_args) + ")"
+        return "BreakLocation(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create BreakLocation from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of BreakLocation
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of BreakLocation if creation did not fail
+        :rtype: Optional[Union[dict, BreakLocation]]
+        """
         if init is not None:
             try:
                 ourselves = BreakLocation(**init)
@@ -398,6 +467,17 @@ class BreakLocation(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list BreakLocations from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list BreakLocation instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of BreakLocation instances if creation did not fail
+        :rtype: Optional[List[Union[dict, BreakLocation]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -407,7 +487,7 @@ class BreakLocation(object):
             return init
 
 
-TYPE_TO_OBJECT = {
+DEBUGGER_TYPE_TO_OBJECT = {
     "SearchMatch": SearchMatch,
     "ScriptPosition": ScriptPosition,
     "Scope": Scope,

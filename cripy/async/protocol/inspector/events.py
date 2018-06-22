@@ -1,11 +1,13 @@
 from typing import Any, List, Optional, Union
-from types import SimpleNamespace
+from collections import namedtuple
 
-try:
-    from cripy.async.protocol.inspector.types import *
-except ImportError:
-    pass
-
+__all__ = [
+    "DetachedEvent",
+    "TargetCrashedEvent",
+    "TargetReloadedAfterCrashEvent",
+    "INSPECTOR_EVENTS_TO_CLASS",
+    "INSPECTOR_EVENTS_NS"
+]
 
 class DetachedEvent(object):
     """
@@ -15,31 +17,37 @@ class DetachedEvent(object):
 
     event = "Inspector.detached"
 
+    __slots__ = ["reason"]
+
     def __init__(self, reason: str) -> None:
         """
+        Create a new instance of DetachedEvent
+
         :param reason: The reason why connection has been terminated.
         :type reason: str
         """
         super().__init__()
         self.reason = reason
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.reason is not None:
             repr_args.append("reason={!r}".format(self.reason))
-        return "DetachedEvent(" + ", ".join(repr_args) + ")"
+        return "DetachedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["DetachedEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DetachedEvent', dict]]:
+        """
+        Safely create DetachedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of DetachedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of DetachedEvent if creation did not fail
+        :rtype: Optional[Union[dict, DetachedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = DetachedEvent(**init)
@@ -50,9 +58,18 @@ class DetachedEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["DetachedEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DetachedEvent', dict]]]:
+        """
+        Safely create a new list DetachedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list DetachedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of DetachedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, DetachedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -76,9 +93,18 @@ class TargetCrashedEvent(dict):
         return "TargetCrashedEvent(dict)"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["TargetCrashedEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['TargetCrashedEvent', dict]]:
+        """
+        Safely create TargetCrashedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of TargetCrashedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of TargetCrashedEvent if creation did not fail
+        :rtype: Optional[Union[dict, TargetCrashedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = TargetCrashedEvent(**init)
@@ -89,9 +115,18 @@ class TargetCrashedEvent(dict):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["TargetCrashedEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TargetCrashedEvent', dict]]]:
+        """
+        Safely create a new list TargetCrashedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list TargetCrashedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of TargetCrashedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, TargetCrashedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -115,9 +150,18 @@ class TargetReloadedAfterCrashEvent(dict):
         return "TargetReloadedAfterCrashEvent(dict)"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["TargetReloadedAfterCrashEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['TargetReloadedAfterCrashEvent', dict]]:
+        """
+        Safely create TargetReloadedAfterCrashEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of TargetReloadedAfterCrashEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of TargetReloadedAfterCrashEvent if creation did not fail
+        :rtype: Optional[Union[dict, TargetReloadedAfterCrashEvent]]
+        """
         if init is not None:
             try:
                 ourselves = TargetReloadedAfterCrashEvent(**init)
@@ -128,9 +172,18 @@ class TargetReloadedAfterCrashEvent(dict):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["TargetReloadedAfterCrashEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TargetReloadedAfterCrashEvent', dict]]]:
+        """
+        Safely create a new list TargetReloadedAfterCrashEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list TargetReloadedAfterCrashEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of TargetReloadedAfterCrashEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, TargetReloadedAfterCrashEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -140,14 +193,16 @@ class TargetReloadedAfterCrashEvent(dict):
             return init
 
 
-EVENT_TO_CLASS = {
-    "Inspector.detached": DetachedEvent,
-    "Inspector.targetCrashed": TargetCrashedEvent,
-    "Inspector.targetReloadedAfterCrash": TargetReloadedAfterCrashEvent,
+INSPECTOR_EVENTS_TO_CLASS = {
+   "Inspector.detached": DetachedEvent,
+   "Inspector.targetCrashed": TargetCrashedEvent,
+   "Inspector.targetReloadedAfterCrash": TargetReloadedAfterCrashEvent,
 }
 
-EVENT_NS = SimpleNamespace(
-    Detached="Inspector.detached",
-    TargetCrashed="Inspector.targetCrashed",
-    TargetReloadedAfterCrash="Inspector.targetReloadedAfterCrash",
+InspectorNS = namedtuple("InspectorNS", ["Detached", "TargetCrashed", "TargetReloadedAfterCrash"])
+
+INSPECTOR_EVENTS_NS = InspectorNS(
+  Detached="Inspector.detached",
+  TargetCrashed="Inspector.targetCrashed",
+  TargetReloadedAfterCrash="Inspector.targetReloadedAfterCrash",
 )

@@ -1,10 +1,6 @@
-from types import SimpleNamespace
+from collections import namedtuple
 from cripy.gevent.protocol.runtime import types as Runtime
-
-try:
-    from cripy.gevent.protocol.debugger.types import *
-except ImportError:
-    pass
+from cripy.gevent.protocol.debugger.types import *
 
 __all__ = [
     "BreakpointResolvedEvent",
@@ -12,6 +8,8 @@ __all__ = [
     "ResumedEvent",
     "ScriptFailedToParseEvent",
     "ScriptParsedEvent",
+    "DEBUGGER_EVENTS_TO_CLASS",
+    "DEBUGGER_EVENTS_NS"
 ]
 
 
@@ -20,27 +18,20 @@ class BreakpointResolvedEvent(object):
     Fired when breakpoint is resolved to an actual script and location.
     """
 
-    event = "Debugger.breakpointResolved"
+    __slots__ = ["breakpointId", "location"]
 
     def __init__(self, breakpointId, location):
         """
+        Create a new instance of BreakpointResolvedEvent
+
         :param breakpointId: Breakpoint unique identifier.
         :type breakpointId: str
         :param location: Actual breakpoint location.
         :type location: dict
         """
-        super().__init__()
+        super(BreakpointResolvedEvent, self).__init__()
         self.breakpointId = breakpointId
         self.location = Location.safe_create(location)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -48,10 +39,21 @@ class BreakpointResolvedEvent(object):
             repr_args.append("breakpointId={!r}".format(self.breakpointId))
         if self.location is not None:
             repr_args.append("location={!r}".format(self.location))
-        return "BreakpointResolvedEvent(" + ", ".join(repr_args) + ")"
+        return "BreakpointResolvedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create BreakpointResolvedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of BreakpointResolvedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of BreakpointResolvedEvent if creation did not fail
+        :rtype: Optional[Union[dict, BreakpointResolvedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = BreakpointResolvedEvent(**init)
@@ -63,6 +65,17 @@ class BreakpointResolvedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list BreakpointResolvedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list BreakpointResolvedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of BreakpointResolvedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, BreakpointResolvedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -77,19 +90,12 @@ class PausedEvent(object):
     Fired when the virtual machine stopped on breakpoint or exception or any other stop criteria.
     """
 
-    event = "Debugger.paused"
+    __slots__ = ["callFrames", "reason", "data", "hitBreakpoints", "asyncStackTrace", "asyncStackTraceId", "asyncCallStackTraceId"]
 
-    def __init__(
-        self,
-        callFrames,
-        reason,
-        data=None,
-        hitBreakpoints=None,
-        asyncStackTrace=None,
-        asyncStackTraceId=None,
-        asyncCallStackTraceId=None,
-    ):
+    def __init__(self, callFrames, reason, data=None, hitBreakpoints=None, asyncStackTrace=None, asyncStackTraceId=None, asyncCallStackTraceId=None):
         """
+        Create a new instance of PausedEvent
+
         :param callFrames: Call stack the virtual machine stopped on.
         :type callFrames: List[dict]
         :param reason: Pause reason.
@@ -105,25 +111,14 @@ class PausedEvent(object):
         :param asyncCallStackTraceId: Just scheduled async call will have this stack trace as parent stack during async execution. This field is available only after `Debugger.stepInto` call with `breakOnAsynCall` flag.
         :type asyncCallStackTraceId: Optional[dict]
         """
-        super().__init__()
+        super(PausedEvent, self).__init__()
         self.callFrames = callFrames
         self.reason = reason
         self.data = data
         self.hitBreakpoints = hitBreakpoints
         self.asyncStackTrace = Runtime.StackTrace.safe_create(asyncStackTrace)
         self.asyncStackTraceId = Runtime.StackTraceId.safe_create(asyncStackTraceId)
-        self.asyncCallStackTraceId = Runtime.StackTraceId.safe_create(
-            asyncCallStackTraceId
-        )
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
+        self.asyncCallStackTraceId = Runtime.StackTraceId.safe_create(asyncCallStackTraceId)
 
     def __repr__(self):
         repr_args = []
@@ -140,13 +135,22 @@ class PausedEvent(object):
         if self.asyncStackTraceId is not None:
             repr_args.append("asyncStackTraceId={!r}".format(self.asyncStackTraceId))
         if self.asyncCallStackTraceId is not None:
-            repr_args.append(
-                "asyncCallStackTraceId={!r}".format(self.asyncCallStackTraceId)
-            )
-        return "PausedEvent(" + ", ".join(repr_args) + ")"
+            repr_args.append("asyncCallStackTraceId={!r}".format(self.asyncCallStackTraceId))
+        return "PausedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create PausedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of PausedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of PausedEvent if creation did not fail
+        :rtype: Optional[Union[dict, PausedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = PausedEvent(**init)
@@ -158,6 +162,17 @@ class PausedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list PausedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list PausedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of PausedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, PausedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -172,16 +187,22 @@ class ResumedEvent(dict):
     Fired when the virtual machine resumed execution.
     """
 
-    event = "Debugger.resumed"
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
     def __repr__(self):
         return "ResumedEvent(dict)"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ResumedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ResumedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ResumedEvent if creation did not fail
+        :rtype: Optional[Union[dict, ResumedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = ResumedEvent(**init)
@@ -193,6 +214,17 @@ class ResumedEvent(dict):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ResumedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ResumedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ResumedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ResumedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -207,26 +239,12 @@ class ScriptFailedToParseEvent(object):
     Fired when virtual machine fails to parse the script.
     """
 
-    event = "Debugger.scriptFailedToParse"
+    __slots__ = ["scriptId", "url", "startLine", "startColumn", "endLine", "endColumn", "executionContextId", "hash", "executionContextAuxData", "sourceMapURL", "hasSourceURL", "isModule", "length", "stackTrace"]
 
-    def __init__(
-        self,
-        scriptId,
-        url,
-        startLine,
-        startColumn,
-        endLine,
-        endColumn,
-        executionContextId,
-        hash,
-        executionContextAuxData=None,
-        sourceMapURL=None,
-        hasSourceURL=None,
-        isModule=None,
-        length=None,
-        stackTrace=None,
-    ):
+    def __init__(self, scriptId, url, startLine, startColumn, endLine, endColumn, executionContextId, hash, executionContextAuxData=None, sourceMapURL=None, hasSourceURL=None, isModule=None, length=None, stackTrace=None):
         """
+        Create a new instance of ScriptFailedToParseEvent
+
         :param scriptId: Identifier of the script parsed.
         :type scriptId: str
         :param url: URL or name of the script parsed (if any).
@@ -256,7 +274,7 @@ class ScriptFailedToParseEvent(object):
         :param stackTrace: JavaScript top stack frame of where the script parsed event was triggered if available.
         :type stackTrace: Optional[dict]
         """
-        super().__init__()
+        super(ScriptFailedToParseEvent, self).__init__()
         self.scriptId = scriptId
         self.url = url
         self.startLine = startLine
@@ -271,15 +289,6 @@ class ScriptFailedToParseEvent(object):
         self.isModule = isModule
         self.length = length
         self.stackTrace = Runtime.StackTrace.safe_create(stackTrace)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -300,9 +309,7 @@ class ScriptFailedToParseEvent(object):
         if self.hash is not None:
             repr_args.append("hash={!r}".format(self.hash))
         if self.executionContextAuxData is not None:
-            repr_args.append(
-                "executionContextAuxData={!r}".format(self.executionContextAuxData)
-            )
+            repr_args.append("executionContextAuxData={!r}".format(self.executionContextAuxData))
         if self.sourceMapURL is not None:
             repr_args.append("sourceMapURL={!r}".format(self.sourceMapURL))
         if self.hasSourceURL is not None:
@@ -313,10 +320,21 @@ class ScriptFailedToParseEvent(object):
             repr_args.append("length={!r}".format(self.length))
         if self.stackTrace is not None:
             repr_args.append("stackTrace={!r}".format(self.stackTrace))
-        return "ScriptFailedToParseEvent(" + ", ".join(repr_args) + ")"
+        return "ScriptFailedToParseEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ScriptFailedToParseEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ScriptFailedToParseEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ScriptFailedToParseEvent if creation did not fail
+        :rtype: Optional[Union[dict, ScriptFailedToParseEvent]]
+        """
         if init is not None:
             try:
                 ourselves = ScriptFailedToParseEvent(**init)
@@ -328,6 +346,17 @@ class ScriptFailedToParseEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ScriptFailedToParseEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ScriptFailedToParseEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ScriptFailedToParseEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ScriptFailedToParseEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -343,27 +372,12 @@ class ScriptParsedEvent(object):
 	This event is also fired for all known and uncollected scripts upon enabling debugger.
     """
 
-    event = "Debugger.scriptParsed"
+    __slots__ = ["scriptId", "url", "startLine", "startColumn", "endLine", "endColumn", "executionContextId", "hash", "executionContextAuxData", "isLiveEdit", "sourceMapURL", "hasSourceURL", "isModule", "length", "stackTrace"]
 
-    def __init__(
-        self,
-        scriptId,
-        url,
-        startLine,
-        startColumn,
-        endLine,
-        endColumn,
-        executionContextId,
-        hash,
-        executionContextAuxData=None,
-        isLiveEdit=None,
-        sourceMapURL=None,
-        hasSourceURL=None,
-        isModule=None,
-        length=None,
-        stackTrace=None,
-    ):
+    def __init__(self, scriptId, url, startLine, startColumn, endLine, endColumn, executionContextId, hash, executionContextAuxData=None, isLiveEdit=None, sourceMapURL=None, hasSourceURL=None, isModule=None, length=None, stackTrace=None):
         """
+        Create a new instance of ScriptParsedEvent
+
         :param scriptId: Identifier of the script parsed.
         :type scriptId: str
         :param url: URL or name of the script parsed (if any).
@@ -395,7 +409,7 @@ class ScriptParsedEvent(object):
         :param stackTrace: JavaScript top stack frame of where the script parsed event was triggered if available.
         :type stackTrace: Optional[dict]
         """
-        super().__init__()
+        super(ScriptParsedEvent, self).__init__()
         self.scriptId = scriptId
         self.url = url
         self.startLine = startLine
@@ -411,15 +425,6 @@ class ScriptParsedEvent(object):
         self.isModule = isModule
         self.length = length
         self.stackTrace = Runtime.StackTrace.safe_create(stackTrace)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -440,9 +445,7 @@ class ScriptParsedEvent(object):
         if self.hash is not None:
             repr_args.append("hash={!r}".format(self.hash))
         if self.executionContextAuxData is not None:
-            repr_args.append(
-                "executionContextAuxData={!r}".format(self.executionContextAuxData)
-            )
+            repr_args.append("executionContextAuxData={!r}".format(self.executionContextAuxData))
         if self.isLiveEdit is not None:
             repr_args.append("isLiveEdit={!r}".format(self.isLiveEdit))
         if self.sourceMapURL is not None:
@@ -455,10 +458,21 @@ class ScriptParsedEvent(object):
             repr_args.append("length={!r}".format(self.length))
         if self.stackTrace is not None:
             repr_args.append("stackTrace={!r}".format(self.stackTrace))
-        return "ScriptParsedEvent(" + ", ".join(repr_args) + ")"
+        return "ScriptParsedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ScriptParsedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ScriptParsedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ScriptParsedEvent if creation did not fail
+        :rtype: Optional[Union[dict, ScriptParsedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = ScriptParsedEvent(**init)
@@ -470,6 +484,17 @@ class ScriptParsedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ScriptParsedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ScriptParsedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ScriptParsedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ScriptParsedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -479,18 +504,20 @@ class ScriptParsedEvent(object):
             return init
 
 
-EVENT_TO_CLASS = {
-    "Debugger.breakpointResolved": BreakpointResolvedEvent,
-    "Debugger.paused": PausedEvent,
-    "Debugger.resumed": ResumedEvent,
-    "Debugger.scriptFailedToParse": ScriptFailedToParseEvent,
-    "Debugger.scriptParsed": ScriptParsedEvent,
+DEBUGGER_EVENTS_TO_CLASS = {
+   "Debugger.breakpointResolved": BreakpointResolvedEvent,
+   "Debugger.paused": PausedEvent,
+   "Debugger.resumed": ResumedEvent,
+   "Debugger.scriptFailedToParse": ScriptFailedToParseEvent,
+   "Debugger.scriptParsed": ScriptParsedEvent,
 }
 
-EVENT_NS = SimpleNamespace(
-    BreakpointResolved="Debugger.breakpointResolved",
-    Paused="Debugger.paused",
-    Resumed="Debugger.resumed",
-    ScriptFailedToParse="Debugger.scriptFailedToParse",
-    ScriptParsed="Debugger.scriptParsed",
+DebuggerNS = namedtuple("DebuggerNS", ["BreakpointResolved", "Paused", "Resumed", "ScriptFailedToParse", "ScriptParsed"])
+
+DEBUGGER_EVENTS_NS = DebuggerNS(
+  BreakpointResolved="Debugger.breakpointResolved",
+  Paused="Debugger.paused",
+  Resumed="Debugger.resumed",
+  ScriptFailedToParse="Debugger.scriptFailedToParse",
+  ScriptParsed="Debugger.scriptParsed",
 )

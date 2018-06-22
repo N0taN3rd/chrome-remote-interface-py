@@ -23,6 +23,7 @@ __all__ = [
     "CachedResource",
     "AuthChallengeResponse",
     "AuthChallenge",
+    "NETWORK_TYPE_TO_OBJECT"
 ]
 
 
@@ -31,15 +32,9 @@ class WebSocketResponse(object):
     WebSocket response data.
     """
 
-    def __init__(
-        self,
-        status,
-        statusText,
-        headers,
-        headersText=None,
-        requestHeaders=None,
-        requestHeadersText=None,
-    ):
+    __slots__ = ["status", "statusText", "headers", "headersText", "requestHeaders", "requestHeadersText"]
+
+    def __init__(self, status, statusText, headers, headersText=None, requestHeaders=None, requestHeadersText=None):
         """
         :param status: HTTP response status code.
         :type status: int
@@ -54,22 +49,13 @@ class WebSocketResponse(object):
         :param requestHeadersText: HTTP request headers text.
         :type requestHeadersText: Optional[str]
         """
-        super().__init__()
+        super(WebSocketResponse, self).__init__()
         self.status = status
         self.statusText = statusText
         self.headers = Headers.safe_create(headers)
         self.headersText = headersText
         self.requestHeaders = Headers.safe_create(requestHeaders)
         self.requestHeadersText = requestHeadersText
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -85,10 +71,21 @@ class WebSocketResponse(object):
             repr_args.append("requestHeaders={!r}".format(self.requestHeaders))
         if self.requestHeadersText is not None:
             repr_args.append("requestHeadersText={!r}".format(self.requestHeadersText))
-        return "WebSocketResponse(" + ", ".join(repr_args) + ")"
+        return "WebSocketResponse(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create WebSocketResponse from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of WebSocketResponse
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of WebSocketResponse if creation did not fail
+        :rtype: Optional[Union[dict, WebSocketResponse]]
+        """
         if init is not None:
             try:
                 ourselves = WebSocketResponse(**init)
@@ -100,6 +97,17 @@ class WebSocketResponse(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list WebSocketResponses from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list WebSocketResponse instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of WebSocketResponse instances if creation did not fail
+        :rtype: Optional[List[Union[dict, WebSocketResponse]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -114,31 +122,35 @@ class WebSocketRequest(object):
     WebSocket request data.
     """
 
+    __slots__ = ["headers"]
+
     def __init__(self, headers):
         """
         :param headers: HTTP request headers.
         :type headers: dict
         """
-        super().__init__()
+        super(WebSocketRequest, self).__init__()
         self.headers = Headers.safe_create(headers)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
         if self.headers is not None:
             repr_args.append("headers={!r}".format(self.headers))
-        return "WebSocketRequest(" + ", ".join(repr_args) + ")"
+        return "WebSocketRequest(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create WebSocketRequest from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of WebSocketRequest
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of WebSocketRequest if creation did not fail
+        :rtype: Optional[Union[dict, WebSocketRequest]]
+        """
         if init is not None:
             try:
                 ourselves = WebSocketRequest(**init)
@@ -150,6 +162,17 @@ class WebSocketRequest(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list WebSocketRequests from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list WebSocketRequest instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of WebSocketRequest instances if creation did not fail
+        :rtype: Optional[List[Union[dict, WebSocketRequest]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -164,6 +187,8 @@ class WebSocketFrame(object):
     WebSocket frame data.
     """
 
+    __slots__ = ["opcode", "mask", "payloadData"]
+
     def __init__(self, opcode, mask, payloadData):
         """
         :param opcode: WebSocket frame opcode.
@@ -173,19 +198,10 @@ class WebSocketFrame(object):
         :param payloadData: WebSocke frame payload data.
         :type payloadData: str
         """
-        super().__init__()
+        super(WebSocketFrame, self).__init__()
         self.opcode = opcode
         self.mask = mask
         self.payloadData = payloadData
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -195,10 +211,21 @@ class WebSocketFrame(object):
             repr_args.append("mask={!r}".format(self.mask))
         if self.payloadData is not None:
             repr_args.append("payloadData={!r}".format(self.payloadData))
-        return "WebSocketFrame(" + ", ".join(repr_args) + ")"
+        return "WebSocketFrame(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create WebSocketFrame from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of WebSocketFrame
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of WebSocketFrame if creation did not fail
+        :rtype: Optional[Union[dict, WebSocketFrame]]
+        """
         if init is not None:
             try:
                 ourselves = WebSocketFrame(**init)
@@ -210,6 +237,17 @@ class WebSocketFrame(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list WebSocketFrames from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list WebSocketFrame instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of WebSocketFrame instances if creation did not fail
+        :rtype: Optional[List[Union[dict, WebSocketFrame]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -225,18 +263,9 @@ class SignedExchangeSignature(object):
 https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-impl.html#rfc.section.3.1
     """
 
-    def __init__(
-        self,
-        label,
-        signature,
-        integrity,
-        validityUrl,
-        date,
-        expires,
-        certUrl=None,
-        certSha256=None,
-        certificates=None,
-    ):
+    __slots__ = ["label", "signature", "integrity", "certUrl", "certSha256", "validityUrl", "date", "expires", "certificates"]
+
+    def __init__(self, label, signature, integrity, validityUrl, date, expires, certUrl=None, certSha256=None, certificates=None):
         """
         :param label: Signed exchange signature label.
         :type label: str
@@ -257,7 +286,7 @@ https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-
         :param certificates: The encoded certificates.
         :type certificates: Optional[List[str]]
         """
-        super().__init__()
+        super(SignedExchangeSignature, self).__init__()
         self.label = label
         self.signature = signature
         self.integrity = integrity
@@ -267,15 +296,6 @@ https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-
         self.date = date
         self.expires = expires
         self.certificates = certificates
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -297,10 +317,21 @@ https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-
             repr_args.append("expires={!r}".format(self.expires))
         if self.certificates is not None:
             repr_args.append("certificates={!r}".format(self.certificates))
-        return "SignedExchangeSignature(" + ", ".join(repr_args) + ")"
+        return "SignedExchangeSignature(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create SignedExchangeSignature from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of SignedExchangeSignature
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of SignedExchangeSignature if creation did not fail
+        :rtype: Optional[Union[dict, SignedExchangeSignature]]
+        """
         if init is not None:
             try:
                 ourselves = SignedExchangeSignature(**init)
@@ -312,6 +343,17 @@ https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list SignedExchangeSignatures from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list SignedExchangeSignature instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of SignedExchangeSignature instances if creation did not fail
+        :rtype: Optional[List[Union[dict, SignedExchangeSignature]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -326,6 +368,8 @@ class SignedExchangeInfo(object):
     Information about a signed exchange response.
     """
 
+    __slots__ = ["outerResponse", "header", "securityDetails", "errors"]
+
     def __init__(self, outerResponse, header=None, securityDetails=None, errors=None):
         """
         :param outerResponse: The outer response of signed HTTP exchange which was received from network.
@@ -337,20 +381,11 @@ class SignedExchangeInfo(object):
         :param errors: Errors occurred while handling the signed exchagne.
         :type errors: Optional[List[dict]]
         """
-        super().__init__()
+        super(SignedExchangeInfo, self).__init__()
         self.outerResponse = Response.safe_create(outerResponse)
         self.header = SignedExchangeHeader.safe_create(header)
         self.securityDetails = SecurityDetails.safe_create(securityDetails)
         self.errors = SignedExchangeError.safe_create_from_list(errors)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -362,10 +397,21 @@ class SignedExchangeInfo(object):
             repr_args.append("securityDetails={!r}".format(self.securityDetails))
         if self.errors is not None:
             repr_args.append("errors={!r}".format(self.errors))
-        return "SignedExchangeInfo(" + ", ".join(repr_args) + ")"
+        return "SignedExchangeInfo(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create SignedExchangeInfo from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of SignedExchangeInfo
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of SignedExchangeInfo if creation did not fail
+        :rtype: Optional[Union[dict, SignedExchangeInfo]]
+        """
         if init is not None:
             try:
                 ourselves = SignedExchangeInfo(**init)
@@ -377,6 +423,17 @@ class SignedExchangeInfo(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list SignedExchangeInfos from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list SignedExchangeInfo instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of SignedExchangeInfo instances if creation did not fail
+        :rtype: Optional[List[Union[dict, SignedExchangeInfo]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -392,9 +449,9 @@ class SignedExchangeHeader(object):
 https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-impl.html#cbor-representation
     """
 
-    def __init__(
-        self, requestUrl, requestMethod, responseCode, responseHeaders, signatures
-    ):
+    __slots__ = ["requestUrl", "requestMethod", "responseCode", "responseHeaders", "signatures"]
+
+    def __init__(self, requestUrl, requestMethod, responseCode, responseHeaders, signatures):
         """
         :param requestUrl: Signed exchange request URL.
         :type requestUrl: str
@@ -407,21 +464,12 @@ https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-
         :param signatures: Signed exchange response signature.
         :type signatures: List[dict]
         """
-        super().__init__()
+        super(SignedExchangeHeader, self).__init__()
         self.requestUrl = requestUrl
         self.requestMethod = requestMethod
         self.responseCode = responseCode
         self.responseHeaders = Headers.safe_create(responseHeaders)
         self.signatures = SignedExchangeSignature.safe_create_from_list(signatures)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -435,10 +483,21 @@ https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-
             repr_args.append("responseHeaders={!r}".format(self.responseHeaders))
         if self.signatures is not None:
             repr_args.append("signatures={!r}".format(self.signatures))
-        return "SignedExchangeHeader(" + ", ".join(repr_args) + ")"
+        return "SignedExchangeHeader(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create SignedExchangeHeader from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of SignedExchangeHeader
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of SignedExchangeHeader if creation did not fail
+        :rtype: Optional[Union[dict, SignedExchangeHeader]]
+        """
         if init is not None:
             try:
                 ourselves = SignedExchangeHeader(**init)
@@ -450,6 +509,17 @@ https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list SignedExchangeHeaders from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list SignedExchangeHeader instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of SignedExchangeHeader instances if creation did not fail
+        :rtype: Optional[List[Union[dict, SignedExchangeHeader]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -464,6 +534,8 @@ class SignedExchangeError(object):
     Information about a signed exchange response.
     """
 
+    __slots__ = ["message", "signatureIndex", "errorField"]
+
     def __init__(self, message, signatureIndex=None, errorField=None):
         """
         :param message: Error message.
@@ -473,19 +545,10 @@ class SignedExchangeError(object):
         :param errorField: The field which caused the error.
         :type errorField: Optional[str]
         """
-        super().__init__()
+        super(SignedExchangeError, self).__init__()
         self.message = message
         self.signatureIndex = signatureIndex
         self.errorField = errorField
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -495,10 +558,21 @@ class SignedExchangeError(object):
             repr_args.append("signatureIndex={!r}".format(self.signatureIndex))
         if self.errorField is not None:
             repr_args.append("errorField={!r}".format(self.errorField))
-        return "SignedExchangeError(" + ", ".join(repr_args) + ")"
+        return "SignedExchangeError(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create SignedExchangeError from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of SignedExchangeError
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of SignedExchangeError if creation did not fail
+        :rtype: Optional[Union[dict, SignedExchangeError]]
+        """
         if init is not None:
             try:
                 ourselves = SignedExchangeError(**init)
@@ -510,6 +584,17 @@ class SignedExchangeError(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list SignedExchangeErrors from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list SignedExchangeError instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of SignedExchangeError instances if creation did not fail
+        :rtype: Optional[List[Union[dict, SignedExchangeError]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -524,17 +609,9 @@ class SignedCertificateTimestamp(object):
     Details of a signed certificate timestamp (SCT).
     """
 
-    def __init__(
-        self,
-        status,
-        origin,
-        logDescription,
-        logId,
-        timestamp,
-        hashAlgorithm,
-        signatureAlgorithm,
-        signatureData,
-    ):
+    __slots__ = ["status", "origin", "logDescription", "logId", "timestamp", "hashAlgorithm", "signatureAlgorithm", "signatureData"]
+
+    def __init__(self, status, origin, logDescription, logId, timestamp, hashAlgorithm, signatureAlgorithm, signatureData):
         """
         :param status: Validation status.
         :type status: str
@@ -553,7 +630,7 @@ class SignedCertificateTimestamp(object):
         :param signatureData: Signature data.
         :type signatureData: str
         """
-        super().__init__()
+        super(SignedCertificateTimestamp, self).__init__()
         self.status = status
         self.origin = origin
         self.logDescription = logDescription
@@ -562,15 +639,6 @@ class SignedCertificateTimestamp(object):
         self.hashAlgorithm = hashAlgorithm
         self.signatureAlgorithm = signatureAlgorithm
         self.signatureData = signatureData
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -590,10 +658,21 @@ class SignedCertificateTimestamp(object):
             repr_args.append("signatureAlgorithm={!r}".format(self.signatureAlgorithm))
         if self.signatureData is not None:
             repr_args.append("signatureData={!r}".format(self.signatureData))
-        return "SignedCertificateTimestamp(" + ", ".join(repr_args) + ")"
+        return "SignedCertificateTimestamp(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create SignedCertificateTimestamp from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of SignedCertificateTimestamp
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of SignedCertificateTimestamp if creation did not fail
+        :rtype: Optional[Union[dict, SignedCertificateTimestamp]]
+        """
         if init is not None:
             try:
                 ourselves = SignedCertificateTimestamp(**init)
@@ -605,6 +684,17 @@ class SignedCertificateTimestamp(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list SignedCertificateTimestamps from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list SignedCertificateTimestamp instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of SignedCertificateTimestamp instances if creation did not fail
+        :rtype: Optional[List[Union[dict, SignedCertificateTimestamp]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -619,22 +709,9 @@ class SecurityDetails(object):
     Security details about a request.
     """
 
-    def __init__(
-        self,
-        protocol,
-        keyExchange,
-        cipher,
-        certificateId,
-        subjectName,
-        sanList,
-        issuer,
-        validFrom,
-        validTo,
-        signedCertificateTimestampList,
-        certificateTransparencyCompliance,
-        keyExchangeGroup=None,
-        mac=None,
-    ):
+    __slots__ = ["protocol", "keyExchange", "keyExchangeGroup", "cipher", "mac", "certificateId", "subjectName", "sanList", "issuer", "validFrom", "validTo", "signedCertificateTimestampList", "certificateTransparencyCompliance"]
+
+    def __init__(self, protocol, keyExchange, cipher, certificateId, subjectName, sanList, issuer, validFrom, validTo, signedCertificateTimestampList, certificateTransparencyCompliance, keyExchangeGroup=None, mac=None):
         """
         :param protocol: Protocol name (e.g. "TLS 1.2" or "QUIC").
         :type protocol: str
@@ -663,7 +740,7 @@ class SecurityDetails(object):
         :param certificateTransparencyCompliance: Whether the request complied with Certificate Transparency policy
         :type certificateTransparencyCompliance: str
         """
-        super().__init__()
+        super(SecurityDetails, self).__init__()
         self.protocol = protocol
         self.keyExchange = keyExchange
         self.keyExchangeGroup = keyExchangeGroup
@@ -675,19 +752,8 @@ class SecurityDetails(object):
         self.issuer = issuer
         self.validFrom = validFrom
         self.validTo = validTo
-        self.signedCertificateTimestampList = SignedCertificateTimestamp.safe_create_from_list(
-            signedCertificateTimestampList
-        )
+        self.signedCertificateTimestampList = SignedCertificateTimestamp.safe_create_from_list(signedCertificateTimestampList)
         self.certificateTransparencyCompliance = certificateTransparencyCompliance
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -714,21 +780,24 @@ class SecurityDetails(object):
         if self.validTo is not None:
             repr_args.append("validTo={!r}".format(self.validTo))
         if self.signedCertificateTimestampList is not None:
-            repr_args.append(
-                "signedCertificateTimestampList={!r}".format(
-                    self.signedCertificateTimestampList
-                )
-            )
+            repr_args.append("signedCertificateTimestampList={!r}".format(self.signedCertificateTimestampList))
         if self.certificateTransparencyCompliance is not None:
-            repr_args.append(
-                "certificateTransparencyCompliance={!r}".format(
-                    self.certificateTransparencyCompliance
-                )
-            )
-        return "SecurityDetails(" + ", ".join(repr_args) + ")"
+            repr_args.append("certificateTransparencyCompliance={!r}".format(self.certificateTransparencyCompliance))
+        return "SecurityDetails(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create SecurityDetails from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of SecurityDetails
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of SecurityDetails if creation did not fail
+        :rtype: Optional[Union[dict, SecurityDetails]]
+        """
         if init is not None:
             try:
                 ourselves = SecurityDetails(**init)
@@ -740,6 +809,17 @@ class SecurityDetails(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list SecurityDetailss from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list SecurityDetails instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of SecurityDetails instances if creation did not fail
+        :rtype: Optional[List[Union[dict, SecurityDetails]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -754,28 +834,9 @@ class Response(object):
     HTTP response data.
     """
 
-    def __init__(
-        self,
-        url,
-        status,
-        statusText,
-        headers,
-        mimeType,
-        connectionReused,
-        connectionId,
-        encodedDataLength,
-        securityState,
-        headersText=None,
-        requestHeaders=None,
-        requestHeadersText=None,
-        remoteIPAddress=None,
-        remotePort=None,
-        fromDiskCache=None,
-        fromServiceWorker=None,
-        timing=None,
-        protocol=None,
-        securityDetails=None,
-    ):
+    __slots__ = ["url", "status", "statusText", "headers", "headersText", "mimeType", "requestHeaders", "requestHeadersText", "connectionReused", "connectionId", "remoteIPAddress", "remotePort", "fromDiskCache", "fromServiceWorker", "encodedDataLength", "timing", "protocol", "securityState", "securityDetails"]
+
+    def __init__(self, url, status, statusText, headers, mimeType, connectionReused, connectionId, encodedDataLength, securityState, headersText=None, requestHeaders=None, requestHeadersText=None, remoteIPAddress=None, remotePort=None, fromDiskCache=None, fromServiceWorker=None, timing=None, protocol=None, securityDetails=None):
         """
         :param url: Response URL. This URL can be different from CachedResource.url in case of redirect.
         :type url: str
@@ -816,7 +877,7 @@ class Response(object):
         :param securityDetails: Security details for the request.
         :type securityDetails: Optional[dict]
         """
-        super().__init__()
+        super(Response, self).__init__()
         self.url = url
         self.status = status
         self.statusText = statusText
@@ -836,15 +897,6 @@ class Response(object):
         self.protocol = protocol
         self.securityState = securityState
         self.securityDetails = SecurityDetails.safe_create(securityDetails)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -886,10 +938,21 @@ class Response(object):
             repr_args.append("securityState={!r}".format(self.securityState))
         if self.securityDetails is not None:
             repr_args.append("securityDetails={!r}".format(self.securityDetails))
-        return "Response(" + ", ".join(repr_args) + ")"
+        return "Response(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Response from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Response
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Response if creation did not fail
+        :rtype: Optional[Union[dict, Response]]
+        """
         if init is not None:
             try:
                 ourselves = Response(**init)
@@ -901,6 +964,17 @@ class Response(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Responses from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Response instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Response instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Response]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -915,25 +989,9 @@ class ResourceTiming(object):
     Timing information for the request.
     """
 
-    def __init__(
-        self,
-        requestTime,
-        proxyStart,
-        proxyEnd,
-        dnsStart,
-        dnsEnd,
-        connectStart,
-        connectEnd,
-        sslStart,
-        sslEnd,
-        workerStart,
-        workerReady,
-        sendStart,
-        sendEnd,
-        pushStart,
-        pushEnd,
-        receiveHeadersEnd,
-    ):
+    __slots__ = ["requestTime", "proxyStart", "proxyEnd", "dnsStart", "dnsEnd", "connectStart", "connectEnd", "sslStart", "sslEnd", "workerStart", "workerReady", "sendStart", "sendEnd", "pushStart", "pushEnd", "receiveHeadersEnd"]
+
+    def __init__(self, requestTime, proxyStart, proxyEnd, dnsStart, dnsEnd, connectStart, connectEnd, sslStart, sslEnd, workerStart, workerReady, sendStart, sendEnd, pushStart, pushEnd, receiveHeadersEnd):
         """
         :param requestTime: Timing's requestTime is a baseline in seconds, while the other numbers are ticks in milliseconds relatively to this requestTime.
         :type requestTime: float
@@ -968,7 +1026,7 @@ class ResourceTiming(object):
         :param receiveHeadersEnd: Finished receiving response headers.
         :type receiveHeadersEnd: float
         """
-        super().__init__()
+        super(ResourceTiming, self).__init__()
         self.requestTime = requestTime
         self.proxyStart = proxyStart
         self.proxyEnd = proxyEnd
@@ -985,15 +1043,6 @@ class ResourceTiming(object):
         self.pushStart = pushStart
         self.pushEnd = pushEnd
         self.receiveHeadersEnd = receiveHeadersEnd
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1029,10 +1078,21 @@ class ResourceTiming(object):
             repr_args.append("pushEnd={!r}".format(self.pushEnd))
         if self.receiveHeadersEnd is not None:
             repr_args.append("receiveHeadersEnd={!r}".format(self.receiveHeadersEnd))
-        return "ResourceTiming(" + ", ".join(repr_args) + ")"
+        return "ResourceTiming(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ResourceTiming from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ResourceTiming
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ResourceTiming if creation did not fail
+        :rtype: Optional[Union[dict, ResourceTiming]]
+        """
         if init is not None:
             try:
                 ourselves = ResourceTiming(**init)
@@ -1044,6 +1104,17 @@ class ResourceTiming(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ResourceTimings from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ResourceTiming instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ResourceTiming instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ResourceTiming]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1058,6 +1129,8 @@ class RequestPattern(object):
     Request pattern for interception.
     """
 
+    __slots__ = ["urlPattern", "resourceType", "interceptionStage"]
+
     def __init__(self, urlPattern=None, resourceType=None, interceptionStage=None):
         """
         :param urlPattern: Wildcards ('*' -> zero or more, '?' -> exactly one) are allowed. Escape character is backslash. Omitting is equivalent to "*".
@@ -1067,19 +1140,10 @@ class RequestPattern(object):
         :param interceptionStage: Stage at wich to begin intercepting requests. Default is Request.
         :type interceptionStage: Optional[str]
         """
-        super().__init__()
+        super(RequestPattern, self).__init__()
         self.urlPattern = urlPattern
         self.resourceType = resourceType
         self.interceptionStage = interceptionStage
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1089,10 +1153,21 @@ class RequestPattern(object):
             repr_args.append("resourceType={!r}".format(self.resourceType))
         if self.interceptionStage is not None:
             repr_args.append("interceptionStage={!r}".format(self.interceptionStage))
-        return "RequestPattern(" + ", ".join(repr_args) + ")"
+        return "RequestPattern(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create RequestPattern from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of RequestPattern
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of RequestPattern if creation did not fail
+        :rtype: Optional[Union[dict, RequestPattern]]
+        """
         if init is not None:
             try:
                 ourselves = RequestPattern(**init)
@@ -1104,6 +1179,17 @@ class RequestPattern(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list RequestPatterns from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list RequestPattern instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of RequestPattern instances if creation did not fail
+        :rtype: Optional[List[Union[dict, RequestPattern]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1118,19 +1204,9 @@ class Request(object):
     HTTP request data.
     """
 
-    def __init__(
-        self,
-        url,
-        method,
-        headers,
-        initialPriority,
-        referrerPolicy,
-        urlFragment=None,
-        postData=None,
-        hasPostData=None,
-        mixedContentType=None,
-        isLinkPreload=None,
-    ):
+    __slots__ = ["url", "urlFragment", "method", "headers", "postData", "hasPostData", "mixedContentType", "initialPriority", "referrerPolicy", "isLinkPreload"]
+
+    def __init__(self, url, method, headers, initialPriority, referrerPolicy, urlFragment=None, postData=None, hasPostData=None, mixedContentType=None, isLinkPreload=None):
         """
         :param url: Request URL (without fragment).
         :type url: str
@@ -1153,7 +1229,7 @@ class Request(object):
         :param isLinkPreload: Whether is loaded via link preload.
         :type isLinkPreload: Optional[bool]
         """
-        super().__init__()
+        super(Request, self).__init__()
         self.url = url
         self.urlFragment = urlFragment
         self.method = method
@@ -1164,15 +1240,6 @@ class Request(object):
         self.initialPriority = initialPriority
         self.referrerPolicy = referrerPolicy
         self.isLinkPreload = isLinkPreload
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1196,10 +1263,21 @@ class Request(object):
             repr_args.append("referrerPolicy={!r}".format(self.referrerPolicy))
         if self.isLinkPreload is not None:
             repr_args.append("isLinkPreload={!r}".format(self.isLinkPreload))
-        return "Request(" + ", ".join(repr_args) + ")"
+        return "Request(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Request from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Request
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Request if creation did not fail
+        :rtype: Optional[Union[dict, Request]]
+        """
         if init is not None:
             try:
                 ourselves = Request(**init)
@@ -1211,6 +1289,17 @@ class Request(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Requests from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Request instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Request instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Request]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1225,6 +1314,8 @@ class Initiator(object):
     Information about the request initiator.
     """
 
+    __slots__ = ["type", "stack", "url", "lineNumber"]
+
     def __init__(self, type, stack=None, url=None, lineNumber=None):
         """
         :param type: Type of this initiator.
@@ -1236,20 +1327,11 @@ class Initiator(object):
         :param lineNumber: Initiator line number, set for Parser type or for Script type (when script is importing module) (0-based).
         :type lineNumber: Optional[float]
         """
-        super().__init__()
+        super(Initiator, self).__init__()
         self.type = type
         self.stack = Runtime.StackTrace.safe_create(stack)
         self.url = url
         self.lineNumber = lineNumber
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1261,10 +1343,21 @@ class Initiator(object):
             repr_args.append("url={!r}".format(self.url))
         if self.lineNumber is not None:
             repr_args.append("lineNumber={!r}".format(self.lineNumber))
-        return "Initiator(" + ", ".join(repr_args) + ")"
+        return "Initiator(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Initiator from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Initiator
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Initiator if creation did not fail
+        :rtype: Optional[Union[dict, Initiator]]
+        """
         if init is not None:
             try:
                 ourselves = Initiator(**init)
@@ -1276,6 +1369,17 @@ class Initiator(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Initiators from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Initiator instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Initiator instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Initiator]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1290,11 +1394,23 @@ class Headers(dict):
     Request / response headers as keys / values of JSON object.
     """
 
+
     def __repr__(self):
         return "Headers(dict)"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Headers from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Headers
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Headers if creation did not fail
+        :rtype: Optional[Union[dict, Headers]]
+        """
         if init is not None:
             try:
                 ourselves = Headers(**init)
@@ -1306,6 +1422,17 @@ class Headers(dict):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Headerss from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Headers instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Headers instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Headers]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1320,18 +1447,9 @@ class CookieParam(object):
     Cookie parameter object
     """
 
-    def __init__(
-        self,
-        name,
-        value,
-        url=None,
-        domain=None,
-        path=None,
-        secure=None,
-        httpOnly=None,
-        sameSite=None,
-        expires=None,
-    ):
+    __slots__ = ["name", "value", "url", "domain", "path", "secure", "httpOnly", "sameSite", "expires"]
+
+    def __init__(self, name, value, url=None, domain=None, path=None, secure=None, httpOnly=None, sameSite=None, expires=None):
         """
         :param name: Cookie name.
         :type name: str
@@ -1352,7 +1470,7 @@ class CookieParam(object):
         :param expires: Cookie expiration date, session cookie if not set
         :type expires: Optional[float]
         """
-        super().__init__()
+        super(CookieParam, self).__init__()
         self.name = name
         self.value = value
         self.url = url
@@ -1362,15 +1480,6 @@ class CookieParam(object):
         self.httpOnly = httpOnly
         self.sameSite = sameSite
         self.expires = expires
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1392,10 +1501,21 @@ class CookieParam(object):
             repr_args.append("sameSite={!r}".format(self.sameSite))
         if self.expires is not None:
             repr_args.append("expires={!r}".format(self.expires))
-        return "CookieParam(" + ", ".join(repr_args) + ")"
+        return "CookieParam(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CookieParam from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CookieParam
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CookieParam if creation did not fail
+        :rtype: Optional[Union[dict, CookieParam]]
+        """
         if init is not None:
             try:
                 ourselves = CookieParam(**init)
@@ -1407,6 +1527,17 @@ class CookieParam(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CookieParams from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CookieParam instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CookieParam instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CookieParam]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1421,19 +1552,9 @@ class Cookie(object):
     Cookie object
     """
 
-    def __init__(
-        self,
-        name,
-        value,
-        domain,
-        path,
-        expires,
-        size,
-        httpOnly,
-        secure,
-        session,
-        sameSite=None,
-    ):
+    __slots__ = ["name", "value", "domain", "path", "expires", "size", "httpOnly", "secure", "session", "sameSite"]
+
+    def __init__(self, name, value, domain, path, expires, size, httpOnly, secure, session, sameSite=None):
         """
         :param name: Cookie name.
         :type name: str
@@ -1456,7 +1577,7 @@ class Cookie(object):
         :param sameSite: Cookie SameSite type.
         :type sameSite: Optional[str]
         """
-        super().__init__()
+        super(Cookie, self).__init__()
         self.name = name
         self.value = value
         self.domain = domain
@@ -1467,15 +1588,6 @@ class Cookie(object):
         self.secure = secure
         self.session = session
         self.sameSite = sameSite
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1499,10 +1611,21 @@ class Cookie(object):
             repr_args.append("session={!r}".format(self.session))
         if self.sameSite is not None:
             repr_args.append("sameSite={!r}".format(self.sameSite))
-        return "Cookie(" + ", ".join(repr_args) + ")"
+        return "Cookie(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Cookie from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Cookie
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Cookie if creation did not fail
+        :rtype: Optional[Union[dict, Cookie]]
+        """
         if init is not None:
             try:
                 ourselves = Cookie(**init)
@@ -1514,6 +1637,17 @@ class Cookie(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Cookies from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Cookie instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Cookie instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Cookie]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1528,6 +1662,8 @@ class CachedResource(object):
     Information about the cached resource.
     """
 
+    __slots__ = ["url", "type", "response", "bodySize"]
+
     def __init__(self, url, type, bodySize, response=None):
         """
         :param url: Resource URL. This is the url of the original network request.
@@ -1539,20 +1675,11 @@ class CachedResource(object):
         :param bodySize: Cached response body size.
         :type bodySize: float
         """
-        super().__init__()
+        super(CachedResource, self).__init__()
         self.url = url
         self.type = type
         self.response = Response.safe_create(response)
         self.bodySize = bodySize
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1564,10 +1691,21 @@ class CachedResource(object):
             repr_args.append("response={!r}".format(self.response))
         if self.bodySize is not None:
             repr_args.append("bodySize={!r}".format(self.bodySize))
-        return "CachedResource(" + ", ".join(repr_args) + ")"
+        return "CachedResource(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CachedResource from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CachedResource
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CachedResource if creation did not fail
+        :rtype: Optional[Union[dict, CachedResource]]
+        """
         if init is not None:
             try:
                 ourselves = CachedResource(**init)
@@ -1579,6 +1717,17 @@ class CachedResource(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CachedResources from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CachedResource instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CachedResource instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CachedResource]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1593,6 +1742,8 @@ class AuthChallengeResponse(object):
     Response to an AuthChallenge.
     """
 
+    __slots__ = ["response", "username", "password"]
+
     def __init__(self, response, username=None, password=None):
         """
         :param response: The decision on what to do in response to the authorization challenge.  Default means deferring to the default behavior of the net stack, which will likely either the Cancel authentication or display a popup dialog box.
@@ -1602,19 +1753,10 @@ class AuthChallengeResponse(object):
         :param password: The password to provide, possibly empty. Should only be set if response is ProvideCredentials.
         :type password: Optional[str]
         """
-        super().__init__()
+        super(AuthChallengeResponse, self).__init__()
         self.response = response
         self.username = username
         self.password = password
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1624,10 +1766,21 @@ class AuthChallengeResponse(object):
             repr_args.append("username={!r}".format(self.username))
         if self.password is not None:
             repr_args.append("password={!r}".format(self.password))
-        return "AuthChallengeResponse(" + ", ".join(repr_args) + ")"
+        return "AuthChallengeResponse(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create AuthChallengeResponse from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of AuthChallengeResponse
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of AuthChallengeResponse if creation did not fail
+        :rtype: Optional[Union[dict, AuthChallengeResponse]]
+        """
         if init is not None:
             try:
                 ourselves = AuthChallengeResponse(**init)
@@ -1639,6 +1792,17 @@ class AuthChallengeResponse(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list AuthChallengeResponses from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list AuthChallengeResponse instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of AuthChallengeResponse instances if creation did not fail
+        :rtype: Optional[List[Union[dict, AuthChallengeResponse]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1653,6 +1817,8 @@ class AuthChallenge(object):
     Authorization challenge for HTTP status code 401 or 407.
     """
 
+    __slots__ = ["source", "origin", "scheme", "realm"]
+
     def __init__(self, origin, scheme, realm, source=None):
         """
         :param source: Source of the authentication challenge.
@@ -1664,20 +1830,11 @@ class AuthChallenge(object):
         :param realm: The realm of the challenge. May be empty.
         :type realm: str
         """
-        super().__init__()
+        super(AuthChallenge, self).__init__()
         self.source = source
         self.origin = origin
         self.scheme = scheme
         self.realm = realm
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1689,10 +1846,21 @@ class AuthChallenge(object):
             repr_args.append("scheme={!r}".format(self.scheme))
         if self.realm is not None:
             repr_args.append("realm={!r}".format(self.realm))
-        return "AuthChallenge(" + ", ".join(repr_args) + ")"
+        return "AuthChallenge(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create AuthChallenge from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of AuthChallenge
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of AuthChallenge if creation did not fail
+        :rtype: Optional[Union[dict, AuthChallenge]]
+        """
         if init is not None:
             try:
                 ourselves = AuthChallenge(**init)
@@ -1704,6 +1872,17 @@ class AuthChallenge(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list AuthChallenges from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list AuthChallenge instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of AuthChallenge instances if creation did not fail
+        :rtype: Optional[List[Union[dict, AuthChallenge]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1713,7 +1892,7 @@ class AuthChallenge(object):
             return init
 
 
-TYPE_TO_OBJECT = {
+NETWORK_TYPE_TO_OBJECT = {
     "WebSocketResponse": WebSocketResponse,
     "WebSocketRequest": WebSocketRequest,
     "WebSocketFrame": WebSocketFrame,

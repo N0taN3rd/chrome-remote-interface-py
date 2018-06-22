@@ -13,6 +13,7 @@ __all__ = [
     "CustomPreview",
     "CallFrame",
     "CallArgument",
+    "RUNTIME_TYPE_TO_OBJECT"
 ]
 
 
@@ -22,6 +23,8 @@ class StackTraceId(object):
 allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.paused` for usages.
     """
 
+    __slots__ = ["id", "debuggerId"]
+
     def __init__(self, id, debuggerId=None):
         """
         :param id: The id
@@ -29,18 +32,9 @@ allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.pau
         :param debuggerId: The debuggerId
         :type debuggerId: Optional[str]
         """
-        super().__init__()
+        super(StackTraceId, self).__init__()
         self.id = id
         self.debuggerId = debuggerId
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -48,10 +42,21 @@ allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.pau
             repr_args.append("id={!r}".format(self.id))
         if self.debuggerId is not None:
             repr_args.append("debuggerId={!r}".format(self.debuggerId))
-        return "StackTraceId(" + ", ".join(repr_args) + ")"
+        return "StackTraceId(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create StackTraceId from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of StackTraceId
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of StackTraceId if creation did not fail
+        :rtype: Optional[Union[dict, StackTraceId]]
+        """
         if init is not None:
             try:
                 ourselves = StackTraceId(**init)
@@ -63,6 +68,17 @@ allows to track cross-debugger calls. See `Runtime.StackTrace` and `Debugger.pau
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list StackTraceIds from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list StackTraceId instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of StackTraceId instances if creation did not fail
+        :rtype: Optional[List[Union[dict, StackTraceId]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -77,6 +93,8 @@ class StackTrace(object):
     Call frames for assertions or error messages.
     """
 
+    __slots__ = ["description", "callFrames", "parent", "parentId"]
+
     def __init__(self, callFrames, description=None, parent=None, parentId=None):
         """
         :param description: String label of this stack trace. For async traces this may be a name of the function that initiated the async call.
@@ -88,20 +106,11 @@ class StackTrace(object):
         :param parentId: Asynchronous JavaScript stack trace that preceded this stack, if available.
         :type parentId: Optional[dict]
         """
-        super().__init__()
+        super(StackTrace, self).__init__()
         self.description = description
         self.callFrames = CallFrame.safe_create_from_list(callFrames)
         self.parent = StackTrace.safe_create(parent)
         self.parentId = StackTraceId.safe_create(parentId)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -113,10 +122,21 @@ class StackTrace(object):
             repr_args.append("parent={!r}".format(self.parent))
         if self.parentId is not None:
             repr_args.append("parentId={!r}".format(self.parentId))
-        return "StackTrace(" + ", ".join(repr_args) + ")"
+        return "StackTrace(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create StackTrace from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of StackTrace
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of StackTrace if creation did not fail
+        :rtype: Optional[Union[dict, StackTrace]]
+        """
         if init is not None:
             try:
                 ourselves = StackTrace(**init)
@@ -128,6 +148,17 @@ class StackTrace(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list StackTraces from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list StackTrace instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of StackTrace instances if creation did not fail
+        :rtype: Optional[List[Union[dict, StackTrace]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -142,18 +173,9 @@ class RemoteObject(object):
     Mirror object referencing original JavaScript object.
     """
 
-    def __init__(
-        self,
-        type,
-        subtype=None,
-        className=None,
-        value=None,
-        unserializableValue=None,
-        description=None,
-        objectId=None,
-        preview=None,
-        customPreview=None,
-    ):
+    __slots__ = ["type", "subtype", "className", "value", "unserializableValue", "description", "objectId", "preview", "customPreview"]
+
+    def __init__(self, type, subtype=None, className=None, value=None, unserializableValue=None, description=None, objectId=None, preview=None, customPreview=None):
         """
         :param type: Object type.
         :type type: str
@@ -174,7 +196,7 @@ class RemoteObject(object):
         :param customPreview: The customPreview
         :type customPreview: Optional[dict]
         """
-        super().__init__()
+        super(RemoteObject, self).__init__()
         self.type = type
         self.subtype = subtype
         self.className = className
@@ -184,15 +206,6 @@ class RemoteObject(object):
         self.objectId = objectId
         self.preview = ObjectPreview.safe_create(preview)
         self.customPreview = CustomPreview.safe_create(customPreview)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -205,9 +218,7 @@ class RemoteObject(object):
         if self.value is not None:
             repr_args.append("value={!r}".format(self.value))
         if self.unserializableValue is not None:
-            repr_args.append(
-                "unserializableValue={!r}".format(self.unserializableValue)
-            )
+            repr_args.append("unserializableValue={!r}".format(self.unserializableValue))
         if self.description is not None:
             repr_args.append("description={!r}".format(self.description))
         if self.objectId is not None:
@@ -216,10 +227,21 @@ class RemoteObject(object):
             repr_args.append("preview={!r}".format(self.preview))
         if self.customPreview is not None:
             repr_args.append("customPreview={!r}".format(self.customPreview))
-        return "RemoteObject(" + ", ".join(repr_args) + ")"
+        return "RemoteObject(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create RemoteObject from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of RemoteObject
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of RemoteObject if creation did not fail
+        :rtype: Optional[Union[dict, RemoteObject]]
+        """
         if init is not None:
             try:
                 ourselves = RemoteObject(**init)
@@ -231,6 +253,17 @@ class RemoteObject(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list RemoteObjects from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list RemoteObject instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of RemoteObject instances if creation did not fail
+        :rtype: Optional[List[Union[dict, RemoteObject]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -241,6 +274,7 @@ class RemoteObject(object):
 
 
 class PropertyPreview(object):
+    __slots__ = ["name", "type", "value", "valuePreview", "subtype"]
 
     def __init__(self, name, type, value=None, valuePreview=None, subtype=None):
         """
@@ -255,21 +289,12 @@ class PropertyPreview(object):
         :param subtype: Object subtype hint. Specified for `object` type values only.
         :type subtype: Optional[str]
         """
-        super().__init__()
+        super(PropertyPreview, self).__init__()
         self.name = name
         self.type = type
         self.value = value
         self.valuePreview = ObjectPreview.safe_create(valuePreview)
         self.subtype = subtype
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -283,10 +308,21 @@ class PropertyPreview(object):
             repr_args.append("valuePreview={!r}".format(self.valuePreview))
         if self.subtype is not None:
             repr_args.append("subtype={!r}".format(self.subtype))
-        return "PropertyPreview(" + ", ".join(repr_args) + ")"
+        return "PropertyPreview(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create PropertyPreview from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of PropertyPreview
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of PropertyPreview if creation did not fail
+        :rtype: Optional[Union[dict, PropertyPreview]]
+        """
         if init is not None:
             try:
                 ourselves = PropertyPreview(**init)
@@ -298,6 +334,17 @@ class PropertyPreview(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list PropertyPreviews from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list PropertyPreview instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of PropertyPreview instances if creation did not fail
+        :rtype: Optional[List[Union[dict, PropertyPreview]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -312,19 +359,9 @@ class PropertyDescriptor(object):
     Object property descriptor.
     """
 
-    def __init__(
-        self,
-        name,
-        configurable,
-        enumerable,
-        value=None,
-        writable=None,
-        get=None,
-        set=None,
-        wasThrown=None,
-        isOwn=None,
-        symbol=None,
-    ):
+    __slots__ = ["name", "value", "writable", "get", "set", "configurable", "enumerable", "wasThrown", "isOwn", "symbol"]
+
+    def __init__(self, name, configurable, enumerable, value=None, writable=None, get=None, set=None, wasThrown=None, isOwn=None, symbol=None):
         """
         :param name: Property name or symbol description.
         :type name: str
@@ -347,7 +384,7 @@ class PropertyDescriptor(object):
         :param symbol: Property symbol object, if the property is of the `symbol` type.
         :type symbol: Optional[dict]
         """
-        super().__init__()
+        super(PropertyDescriptor, self).__init__()
         self.name = name
         self.value = RemoteObject.safe_create(value)
         self.writable = writable
@@ -358,15 +395,6 @@ class PropertyDescriptor(object):
         self.wasThrown = wasThrown
         self.isOwn = isOwn
         self.symbol = RemoteObject.safe_create(symbol)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -390,10 +418,21 @@ class PropertyDescriptor(object):
             repr_args.append("isOwn={!r}".format(self.isOwn))
         if self.symbol is not None:
             repr_args.append("symbol={!r}".format(self.symbol))
-        return "PropertyDescriptor(" + ", ".join(repr_args) + ")"
+        return "PropertyDescriptor(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create PropertyDescriptor from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of PropertyDescriptor
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of PropertyDescriptor if creation did not fail
+        :rtype: Optional[Union[dict, PropertyDescriptor]]
+        """
         if init is not None:
             try:
                 ourselves = PropertyDescriptor(**init)
@@ -405,6 +444,17 @@ class PropertyDescriptor(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list PropertyDescriptors from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list PropertyDescriptor instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of PropertyDescriptor instances if creation did not fail
+        :rtype: Optional[List[Union[dict, PropertyDescriptor]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -419,9 +469,9 @@ class ObjectPreview(object):
     Object containing abbreviated remote object value.
     """
 
-    def __init__(
-        self, type, overflow, properties, subtype=None, description=None, entries=None
-    ):
+    __slots__ = ["type", "subtype", "description", "overflow", "properties", "entries"]
+
+    def __init__(self, type, overflow, properties, subtype=None, description=None, entries=None):
         """
         :param type: Object type.
         :type type: str
@@ -436,22 +486,13 @@ class ObjectPreview(object):
         :param entries: List of the entries. Specified for `map` and `set` subtype values only.
         :type entries: Optional[List[dict]]
         """
-        super().__init__()
+        super(ObjectPreview, self).__init__()
         self.type = type
         self.subtype = subtype
         self.description = description
         self.overflow = overflow
         self.properties = PropertyPreview.safe_create_from_list(properties)
         self.entries = EntryPreview.safe_create_from_list(entries)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -467,10 +508,21 @@ class ObjectPreview(object):
             repr_args.append("properties={!r}".format(self.properties))
         if self.entries is not None:
             repr_args.append("entries={!r}".format(self.entries))
-        return "ObjectPreview(" + ", ".join(repr_args) + ")"
+        return "ObjectPreview(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ObjectPreview from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ObjectPreview
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ObjectPreview if creation did not fail
+        :rtype: Optional[Union[dict, ObjectPreview]]
+        """
         if init is not None:
             try:
                 ourselves = ObjectPreview(**init)
@@ -482,6 +534,17 @@ class ObjectPreview(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ObjectPreviews from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ObjectPreview instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ObjectPreview instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ObjectPreview]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -496,6 +559,8 @@ class InternalPropertyDescriptor(object):
     Object internal property descriptor. This property isn't normally visible in JavaScript code.
     """
 
+    __slots__ = ["name", "value"]
+
     def __init__(self, name, value=None):
         """
         :param name: Conventional property name.
@@ -503,18 +568,9 @@ class InternalPropertyDescriptor(object):
         :param value: The value associated with the property.
         :type value: Optional[dict]
         """
-        super().__init__()
+        super(InternalPropertyDescriptor, self).__init__()
         self.name = name
         self.value = RemoteObject.safe_create(value)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -522,10 +578,21 @@ class InternalPropertyDescriptor(object):
             repr_args.append("name={!r}".format(self.name))
         if self.value is not None:
             repr_args.append("value={!r}".format(self.value))
-        return "InternalPropertyDescriptor(" + ", ".join(repr_args) + ")"
+        return "InternalPropertyDescriptor(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create InternalPropertyDescriptor from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of InternalPropertyDescriptor
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of InternalPropertyDescriptor if creation did not fail
+        :rtype: Optional[Union[dict, InternalPropertyDescriptor]]
+        """
         if init is not None:
             try:
                 ourselves = InternalPropertyDescriptor(**init)
@@ -537,6 +604,17 @@ class InternalPropertyDescriptor(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list InternalPropertyDescriptors from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list InternalPropertyDescriptor instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of InternalPropertyDescriptor instances if creation did not fail
+        :rtype: Optional[List[Union[dict, InternalPropertyDescriptor]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -551,6 +629,8 @@ class ExecutionContextDescription(object):
     Description of an isolated world.
     """
 
+    __slots__ = ["id", "origin", "name", "auxData"]
+
     def __init__(self, id, origin, name, auxData=None):
         """
         :param id: Unique id of the execution context. It can be used to specify in which execution context script evaluation should be performed.
@@ -562,20 +642,11 @@ class ExecutionContextDescription(object):
         :param auxData: Embedder-specific auxiliary data.
         :type auxData: Optional[dict]
         """
-        super().__init__()
+        super(ExecutionContextDescription, self).__init__()
         self.id = id
         self.origin = origin
         self.name = name
         self.auxData = auxData
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -587,10 +658,21 @@ class ExecutionContextDescription(object):
             repr_args.append("name={!r}".format(self.name))
         if self.auxData is not None:
             repr_args.append("auxData={!r}".format(self.auxData))
-        return "ExecutionContextDescription(" + ", ".join(repr_args) + ")"
+        return "ExecutionContextDescription(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ExecutionContextDescription from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ExecutionContextDescription
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ExecutionContextDescription if creation did not fail
+        :rtype: Optional[Union[dict, ExecutionContextDescription]]
+        """
         if init is not None:
             try:
                 ourselves = ExecutionContextDescription(**init)
@@ -602,6 +684,17 @@ class ExecutionContextDescription(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ExecutionContextDescriptions from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ExecutionContextDescription instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ExecutionContextDescription instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ExecutionContextDescription]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -617,18 +710,9 @@ class ExceptionDetails(object):
 execution.
     """
 
-    def __init__(
-        self,
-        exceptionId,
-        text,
-        lineNumber,
-        columnNumber,
-        scriptId=None,
-        url=None,
-        stackTrace=None,
-        exception=None,
-        executionContextId=None,
-    ):
+    __slots__ = ["exceptionId", "text", "lineNumber", "columnNumber", "scriptId", "url", "stackTrace", "exception", "executionContextId"]
+
+    def __init__(self, exceptionId, text, lineNumber, columnNumber, scriptId=None, url=None, stackTrace=None, exception=None, executionContextId=None):
         """
         :param exceptionId: Exception id.
         :type exceptionId: int
@@ -649,7 +733,7 @@ execution.
         :param executionContextId: Identifier of the context where exception happened.
         :type executionContextId: Optional[int]
         """
-        super().__init__()
+        super(ExceptionDetails, self).__init__()
         self.exceptionId = exceptionId
         self.text = text
         self.lineNumber = lineNumber
@@ -659,15 +743,6 @@ execution.
         self.stackTrace = StackTrace.safe_create(stackTrace)
         self.exception = RemoteObject.safe_create(exception)
         self.executionContextId = executionContextId
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -689,10 +764,21 @@ execution.
             repr_args.append("exception={!r}".format(self.exception))
         if self.executionContextId is not None:
             repr_args.append("executionContextId={!r}".format(self.executionContextId))
-        return "ExceptionDetails(" + ", ".join(repr_args) + ")"
+        return "ExceptionDetails(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ExceptionDetails from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ExceptionDetails
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ExceptionDetails if creation did not fail
+        :rtype: Optional[Union[dict, ExceptionDetails]]
+        """
         if init is not None:
             try:
                 ourselves = ExceptionDetails(**init)
@@ -704,6 +790,17 @@ execution.
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ExceptionDetailss from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ExceptionDetails instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ExceptionDetails instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ExceptionDetails]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -714,6 +811,7 @@ execution.
 
 
 class EntryPreview(object):
+    __slots__ = ["key", "value"]
 
     def __init__(self, value, key=None):
         """
@@ -722,18 +820,9 @@ class EntryPreview(object):
         :param value: Preview of the value.
         :type value: dict
         """
-        super().__init__()
+        super(EntryPreview, self).__init__()
         self.key = ObjectPreview.safe_create(key)
         self.value = ObjectPreview.safe_create(value)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -741,10 +830,21 @@ class EntryPreview(object):
             repr_args.append("key={!r}".format(self.key))
         if self.value is not None:
             repr_args.append("value={!r}".format(self.value))
-        return "EntryPreview(" + ", ".join(repr_args) + ")"
+        return "EntryPreview(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create EntryPreview from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of EntryPreview
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of EntryPreview if creation did not fail
+        :rtype: Optional[Union[dict, EntryPreview]]
+        """
         if init is not None:
             try:
                 ourselves = EntryPreview(**init)
@@ -756,6 +856,17 @@ class EntryPreview(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list EntryPreviews from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list EntryPreview instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of EntryPreview instances if creation did not fail
+        :rtype: Optional[List[Union[dict, EntryPreview]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -766,15 +877,9 @@ class EntryPreview(object):
 
 
 class CustomPreview(object):
+    __slots__ = ["header", "hasBody", "formatterObjectId", "bindRemoteObjectFunctionId", "configObjectId"]
 
-    def __init__(
-        self,
-        header,
-        hasBody,
-        formatterObjectId,
-        bindRemoteObjectFunctionId,
-        configObjectId=None,
-    ):
+    def __init__(self, header, hasBody, formatterObjectId, bindRemoteObjectFunctionId, configObjectId=None):
         """
         :param header: The header
         :type header: str
@@ -787,21 +892,12 @@ class CustomPreview(object):
         :param configObjectId: The configObjectId
         :type configObjectId: Optional[str]
         """
-        super().__init__()
+        super(CustomPreview, self).__init__()
         self.header = header
         self.hasBody = hasBody
         self.formatterObjectId = formatterObjectId
         self.bindRemoteObjectFunctionId = bindRemoteObjectFunctionId
         self.configObjectId = configObjectId
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -812,17 +908,24 @@ class CustomPreview(object):
         if self.formatterObjectId is not None:
             repr_args.append("formatterObjectId={!r}".format(self.formatterObjectId))
         if self.bindRemoteObjectFunctionId is not None:
-            repr_args.append(
-                "bindRemoteObjectFunctionId={!r}".format(
-                    self.bindRemoteObjectFunctionId
-                )
-            )
+            repr_args.append("bindRemoteObjectFunctionId={!r}".format(self.bindRemoteObjectFunctionId))
         if self.configObjectId is not None:
             repr_args.append("configObjectId={!r}".format(self.configObjectId))
-        return "CustomPreview(" + ", ".join(repr_args) + ")"
+        return "CustomPreview(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CustomPreview from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CustomPreview
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CustomPreview if creation did not fail
+        :rtype: Optional[Union[dict, CustomPreview]]
+        """
         if init is not None:
             try:
                 ourselves = CustomPreview(**init)
@@ -834,6 +937,17 @@ class CustomPreview(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CustomPreviews from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CustomPreview instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CustomPreview instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CustomPreview]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -848,6 +962,8 @@ class CallFrame(object):
     Stack entry for runtime errors and assertions.
     """
 
+    __slots__ = ["functionName", "scriptId", "url", "lineNumber", "columnNumber"]
+
     def __init__(self, functionName, scriptId, url, lineNumber, columnNumber):
         """
         :param functionName: JavaScript function name.
@@ -861,21 +977,12 @@ class CallFrame(object):
         :param columnNumber: JavaScript script column number (0-based).
         :type columnNumber: int
         """
-        super().__init__()
+        super(CallFrame, self).__init__()
         self.functionName = functionName
         self.scriptId = scriptId
         self.url = url
         self.lineNumber = lineNumber
         self.columnNumber = columnNumber
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -889,10 +996,21 @@ class CallFrame(object):
             repr_args.append("lineNumber={!r}".format(self.lineNumber))
         if self.columnNumber is not None:
             repr_args.append("columnNumber={!r}".format(self.columnNumber))
-        return "CallFrame(" + ", ".join(repr_args) + ")"
+        return "CallFrame(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CallFrame from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CallFrame
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CallFrame if creation did not fail
+        :rtype: Optional[Union[dict, CallFrame]]
+        """
         if init is not None:
             try:
                 ourselves = CallFrame(**init)
@@ -904,6 +1022,17 @@ class CallFrame(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CallFrames from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CallFrame instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CallFrame instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CallFrame]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -919,6 +1048,8 @@ class CallArgument(object):
 unserializable primitive value or neither of (for undefined) them should be specified.
     """
 
+    __slots__ = ["value", "unserializableValue", "objectId"]
+
     def __init__(self, value=None, unserializableValue=None, objectId=None):
         """
         :param value: Primitive value or serializable javascript object.
@@ -928,34 +1059,34 @@ unserializable primitive value or neither of (for undefined) them should be spec
         :param objectId: Remote object handle.
         :type objectId: Optional[str]
         """
-        super().__init__()
+        super(CallArgument, self).__init__()
         self.value = value
         self.unserializableValue = unserializableValue
         self.objectId = objectId
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
         if self.value is not None:
             repr_args.append("value={!r}".format(self.value))
         if self.unserializableValue is not None:
-            repr_args.append(
-                "unserializableValue={!r}".format(self.unserializableValue)
-            )
+            repr_args.append("unserializableValue={!r}".format(self.unserializableValue))
         if self.objectId is not None:
             repr_args.append("objectId={!r}".format(self.objectId))
-        return "CallArgument(" + ", ".join(repr_args) + ")"
+        return "CallArgument(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CallArgument from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CallArgument
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CallArgument if creation did not fail
+        :rtype: Optional[Union[dict, CallArgument]]
+        """
         if init is not None:
             try:
                 ourselves = CallArgument(**init)
@@ -967,6 +1098,17 @@ unserializable primitive value or neither of (for undefined) them should be spec
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CallArguments from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CallArgument instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CallArgument instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CallArgument]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -976,7 +1118,7 @@ unserializable primitive value or neither of (for undefined) them should be spec
             return init
 
 
-TYPE_TO_OBJECT = {
+RUNTIME_TYPE_TO_OBJECT = {
     "StackTraceId": StackTraceId,
     "StackTrace": StackTrace,
     "RemoteObject": RemoteObject,

@@ -1,5 +1,7 @@
 from collections import defaultdict, OrderedDict
 
+__all__ = ["EventEmitter"]
+
 
 class EventEmitter(object):
 
@@ -16,8 +18,6 @@ class EventEmitter(object):
 
             def g(*args, **kwargs):
                 myself.remove_listener(event, f)
-                # f may return a coroutine, so we need to return that
-                # result here so that emit can schedule it
                 return f(*args, **kwargs)
 
             myself._add_event_handler(event, f, g)
@@ -30,7 +30,7 @@ class EventEmitter(object):
         for f in list(self._events[event].values()):
             try:
                 result = f(*args, **kwargs)
-            except Exception as e:
+            except Exception:
                 pass
             handled = True
         return handled

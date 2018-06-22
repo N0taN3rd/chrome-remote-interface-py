@@ -10,6 +10,7 @@ __all__ = [
     "PositionTickInfo",
     "FunctionCoverage",
     "CoverageRange",
+    "PROFILER_TYPE_TO_OBJECT"
 ]
 
 
@@ -18,6 +19,8 @@ class TypeProfileEntry(object):
     Source offset and types for a parameter or return value.
     """
 
+    __slots__ = ["offset", "types"]
+
     def __init__(self, offset, types):
         """
         :param offset: Source offset of the parameter or end of function for return values.
@@ -25,18 +28,9 @@ class TypeProfileEntry(object):
         :param types: The types for this parameter or return value.
         :type types: List[dict]
         """
-        super().__init__()
+        super(TypeProfileEntry, self).__init__()
         self.offset = offset
         self.types = TypeObject.safe_create_from_list(types)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -44,10 +38,21 @@ class TypeProfileEntry(object):
             repr_args.append("offset={!r}".format(self.offset))
         if self.types is not None:
             repr_args.append("types={!r}".format(self.types))
-        return "TypeProfileEntry(" + ", ".join(repr_args) + ")"
+        return "TypeProfileEntry(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create TypeProfileEntry from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of TypeProfileEntry
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of TypeProfileEntry if creation did not fail
+        :rtype: Optional[Union[dict, TypeProfileEntry]]
+        """
         if init is not None:
             try:
                 ourselves = TypeProfileEntry(**init)
@@ -59,6 +64,17 @@ class TypeProfileEntry(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list TypeProfileEntrys from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list TypeProfileEntry instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of TypeProfileEntry instances if creation did not fail
+        :rtype: Optional[List[Union[dict, TypeProfileEntry]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -73,31 +89,35 @@ class TypeObject(object):
     Describes a type collected during runtime.
     """
 
+    __slots__ = ["name"]
+
     def __init__(self, name):
         """
         :param name: Name of a type collected with type profiling.
         :type name: str
         """
-        super().__init__()
+        super(TypeObject, self).__init__()
         self.name = name
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
         if self.name is not None:
             repr_args.append("name={!r}".format(self.name))
-        return "TypeObject(" + ", ".join(repr_args) + ")"
+        return "TypeObject(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create TypeObject from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of TypeObject
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of TypeObject if creation did not fail
+        :rtype: Optional[Union[dict, TypeObject]]
+        """
         if init is not None:
             try:
                 ourselves = TypeObject(**init)
@@ -109,6 +129,17 @@ class TypeObject(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list TypeObjects from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list TypeObject instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of TypeObject instances if creation did not fail
+        :rtype: Optional[List[Union[dict, TypeObject]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -123,6 +154,8 @@ class ScriptTypeProfile(object):
     Type profile data collected during runtime for a JavaScript script.
     """
 
+    __slots__ = ["scriptId", "url", "entries"]
+
     def __init__(self, scriptId, url, entries):
         """
         :param scriptId: JavaScript script id.
@@ -132,19 +165,10 @@ class ScriptTypeProfile(object):
         :param entries: Type profile entries for parameters and return values of the functions in the script.
         :type entries: List[dict]
         """
-        super().__init__()
+        super(ScriptTypeProfile, self).__init__()
         self.scriptId = scriptId
         self.url = url
         self.entries = TypeProfileEntry.safe_create_from_list(entries)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -154,10 +178,21 @@ class ScriptTypeProfile(object):
             repr_args.append("url={!r}".format(self.url))
         if self.entries is not None:
             repr_args.append("entries={!r}".format(self.entries))
-        return "ScriptTypeProfile(" + ", ".join(repr_args) + ")"
+        return "ScriptTypeProfile(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ScriptTypeProfile from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ScriptTypeProfile
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ScriptTypeProfile if creation did not fail
+        :rtype: Optional[Union[dict, ScriptTypeProfile]]
+        """
         if init is not None:
             try:
                 ourselves = ScriptTypeProfile(**init)
@@ -169,6 +204,17 @@ class ScriptTypeProfile(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ScriptTypeProfiles from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ScriptTypeProfile instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ScriptTypeProfile instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ScriptTypeProfile]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -183,6 +229,8 @@ class ScriptCoverage(object):
     Coverage data for a JavaScript script.
     """
 
+    __slots__ = ["scriptId", "url", "functions"]
+
     def __init__(self, scriptId, url, functions):
         """
         :param scriptId: JavaScript script id.
@@ -192,19 +240,10 @@ class ScriptCoverage(object):
         :param functions: Functions contained in the script that has coverage data.
         :type functions: List[dict]
         """
-        super().__init__()
+        super(ScriptCoverage, self).__init__()
         self.scriptId = scriptId
         self.url = url
         self.functions = FunctionCoverage.safe_create_from_list(functions)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -214,10 +253,21 @@ class ScriptCoverage(object):
             repr_args.append("url={!r}".format(self.url))
         if self.functions is not None:
             repr_args.append("functions={!r}".format(self.functions))
-        return "ScriptCoverage(" + ", ".join(repr_args) + ")"
+        return "ScriptCoverage(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ScriptCoverage from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ScriptCoverage
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ScriptCoverage if creation did not fail
+        :rtype: Optional[Union[dict, ScriptCoverage]]
+        """
         if init is not None:
             try:
                 ourselves = ScriptCoverage(**init)
@@ -229,6 +279,17 @@ class ScriptCoverage(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ScriptCoverages from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ScriptCoverage instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ScriptCoverage instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ScriptCoverage]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -243,15 +304,9 @@ class ProfileNode(object):
     Profile node. Holds callsite information, execution statistics and child nodes.
     """
 
-    def __init__(
-        self,
-        id,
-        callFrame,
-        hitCount=None,
-        children=None,
-        deoptReason=None,
-        positionTicks=None,
-    ):
+    __slots__ = ["id", "callFrame", "hitCount", "children", "deoptReason", "positionTicks"]
+
+    def __init__(self, id, callFrame, hitCount=None, children=None, deoptReason=None, positionTicks=None):
         """
         :param id: Unique id of the node.
         :type id: int
@@ -266,22 +321,13 @@ class ProfileNode(object):
         :param positionTicks: An array of source position ticks.
         :type positionTicks: Optional[List[dict]]
         """
-        super().__init__()
+        super(ProfileNode, self).__init__()
         self.id = id
         self.callFrame = Runtime.CallFrame.safe_create(callFrame)
         self.hitCount = hitCount
         self.children = children
         self.deoptReason = deoptReason
         self.positionTicks = PositionTickInfo.safe_create_from_list(positionTicks)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -297,10 +343,21 @@ class ProfileNode(object):
             repr_args.append("deoptReason={!r}".format(self.deoptReason))
         if self.positionTicks is not None:
             repr_args.append("positionTicks={!r}".format(self.positionTicks))
-        return "ProfileNode(" + ", ".join(repr_args) + ")"
+        return "ProfileNode(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ProfileNode from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ProfileNode
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ProfileNode if creation did not fail
+        :rtype: Optional[Union[dict, ProfileNode]]
+        """
         if init is not None:
             try:
                 ourselves = ProfileNode(**init)
@@ -312,6 +369,17 @@ class ProfileNode(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ProfileNodes from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ProfileNode instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ProfileNode instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ProfileNode]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -326,6 +394,8 @@ class Profile(object):
     Profile.
     """
 
+    __slots__ = ["nodes", "startTime", "endTime", "samples", "timeDeltas"]
+
     def __init__(self, nodes, startTime, endTime, samples=None, timeDeltas=None):
         """
         :param nodes: The list of profile nodes. First item is the root node.
@@ -339,21 +409,12 @@ class Profile(object):
         :param timeDeltas: Time intervals between adjacent samples in microseconds. The first delta is relative to the profile startTime.
         :type timeDeltas: Optional[List[int]]
         """
-        super().__init__()
+        super(Profile, self).__init__()
         self.nodes = ProfileNode.safe_create_from_list(nodes)
         self.startTime = startTime
         self.endTime = endTime
         self.samples = samples
         self.timeDeltas = timeDeltas
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -367,10 +428,21 @@ class Profile(object):
             repr_args.append("samples={!r}".format(self.samples))
         if self.timeDeltas is not None:
             repr_args.append("timeDeltas={!r}".format(self.timeDeltas))
-        return "Profile(" + ", ".join(repr_args) + ")"
+        return "Profile(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Profile from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Profile
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Profile if creation did not fail
+        :rtype: Optional[Union[dict, Profile]]
+        """
         if init is not None:
             try:
                 ourselves = Profile(**init)
@@ -382,6 +454,17 @@ class Profile(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Profiles from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Profile instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Profile instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Profile]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -396,6 +479,8 @@ class PositionTickInfo(object):
     Specifies a number of samples attributed to a certain source position.
     """
 
+    __slots__ = ["line", "ticks"]
+
     def __init__(self, line, ticks):
         """
         :param line: Source line number (1-based).
@@ -403,18 +488,9 @@ class PositionTickInfo(object):
         :param ticks: Number of samples attributed to the source line.
         :type ticks: int
         """
-        super().__init__()
+        super(PositionTickInfo, self).__init__()
         self.line = line
         self.ticks = ticks
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -422,10 +498,21 @@ class PositionTickInfo(object):
             repr_args.append("line={!r}".format(self.line))
         if self.ticks is not None:
             repr_args.append("ticks={!r}".format(self.ticks))
-        return "PositionTickInfo(" + ", ".join(repr_args) + ")"
+        return "PositionTickInfo(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create PositionTickInfo from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of PositionTickInfo
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of PositionTickInfo if creation did not fail
+        :rtype: Optional[Union[dict, PositionTickInfo]]
+        """
         if init is not None:
             try:
                 ourselves = PositionTickInfo(**init)
@@ -437,6 +524,17 @@ class PositionTickInfo(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list PositionTickInfos from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list PositionTickInfo instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of PositionTickInfo instances if creation did not fail
+        :rtype: Optional[List[Union[dict, PositionTickInfo]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -451,6 +549,8 @@ class FunctionCoverage(object):
     Coverage data for a JavaScript function.
     """
 
+    __slots__ = ["functionName", "ranges", "isBlockCoverage"]
+
     def __init__(self, functionName, ranges, isBlockCoverage):
         """
         :param functionName: JavaScript function name.
@@ -460,19 +560,10 @@ class FunctionCoverage(object):
         :param isBlockCoverage: Whether coverage data for this function has block granularity.
         :type isBlockCoverage: bool
         """
-        super().__init__()
+        super(FunctionCoverage, self).__init__()
         self.functionName = functionName
         self.ranges = CoverageRange.safe_create_from_list(ranges)
         self.isBlockCoverage = isBlockCoverage
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -482,10 +573,21 @@ class FunctionCoverage(object):
             repr_args.append("ranges={!r}".format(self.ranges))
         if self.isBlockCoverage is not None:
             repr_args.append("isBlockCoverage={!r}".format(self.isBlockCoverage))
-        return "FunctionCoverage(" + ", ".join(repr_args) + ")"
+        return "FunctionCoverage(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create FunctionCoverage from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of FunctionCoverage
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of FunctionCoverage if creation did not fail
+        :rtype: Optional[Union[dict, FunctionCoverage]]
+        """
         if init is not None:
             try:
                 ourselves = FunctionCoverage(**init)
@@ -497,6 +599,17 @@ class FunctionCoverage(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list FunctionCoverages from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list FunctionCoverage instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of FunctionCoverage instances if creation did not fail
+        :rtype: Optional[List[Union[dict, FunctionCoverage]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -511,6 +624,8 @@ class CoverageRange(object):
     Coverage data for a source range.
     """
 
+    __slots__ = ["startOffset", "endOffset", "count"]
+
     def __init__(self, startOffset, endOffset, count):
         """
         :param startOffset: JavaScript script source offset for the range start.
@@ -520,19 +635,10 @@ class CoverageRange(object):
         :param count: Collected execution count of the source range.
         :type count: int
         """
-        super().__init__()
+        super(CoverageRange, self).__init__()
         self.startOffset = startOffset
         self.endOffset = endOffset
         self.count = count
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -542,10 +648,21 @@ class CoverageRange(object):
             repr_args.append("endOffset={!r}".format(self.endOffset))
         if self.count is not None:
             repr_args.append("count={!r}".format(self.count))
-        return "CoverageRange(" + ", ".join(repr_args) + ")"
+        return "CoverageRange(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CoverageRange from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CoverageRange
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CoverageRange if creation did not fail
+        :rtype: Optional[Union[dict, CoverageRange]]
+        """
         if init is not None:
             try:
                 ourselves = CoverageRange(**init)
@@ -557,6 +674,17 @@ class CoverageRange(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CoverageRanges from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CoverageRange instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CoverageRange instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CoverageRange]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -566,7 +694,7 @@ class CoverageRange(object):
             return init
 
 
-TYPE_TO_OBJECT = {
+PROFILER_TYPE_TO_OBJECT = {
     "TypeProfileEntry": TypeProfileEntry,
     "TypeObject": TypeObject,
     "ScriptTypeProfile": ScriptTypeProfile,

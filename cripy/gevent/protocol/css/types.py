@@ -23,6 +23,7 @@ __all__ = [
     "CSSKeyframesRule",
     "CSSKeyframeRule",
     "CSSComputedStyleProperty",
+    "CSS_TYPE_TO_OBJECT"
 ]
 
 
@@ -31,6 +32,8 @@ class Value(object):
     Data for a simple selector (these are delimited by commas in a selector list).
     """
 
+    __slots__ = ["text", "range"]
+
     def __init__(self, text, range=None):
         """
         :param text: Value text.
@@ -38,18 +41,9 @@ class Value(object):
         :param range: Value range in the underlying resource (if available).
         :type range: Optional[dict]
         """
-        super().__init__()
+        super(Value, self).__init__()
         self.text = text
         self.range = SourceRange.safe_create(range)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -57,10 +51,21 @@ class Value(object):
             repr_args.append("text={!r}".format(self.text))
         if self.range is not None:
             repr_args.append("range={!r}".format(self.range))
-        return "Value(" + ", ".join(repr_args) + ")"
+        return "Value(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Value from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Value
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Value if creation did not fail
+        :rtype: Optional[Union[dict, Value]]
+        """
         if init is not None:
             try:
                 ourselves = Value(**init)
@@ -72,6 +77,17 @@ class Value(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Values from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Value instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Value instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Value]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -86,6 +102,8 @@ class StyleDeclarationEdit(object):
     A descriptor of operation to mutate style declaration text.
     """
 
+    __slots__ = ["styleSheetId", "range", "text"]
+
     def __init__(self, styleSheetId, range, text):
         """
         :param styleSheetId: The css style sheet identifier.
@@ -95,19 +113,10 @@ class StyleDeclarationEdit(object):
         :param text: New style text.
         :type text: str
         """
-        super().__init__()
+        super(StyleDeclarationEdit, self).__init__()
         self.styleSheetId = styleSheetId
         self.range = SourceRange.safe_create(range)
         self.text = text
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -117,10 +126,21 @@ class StyleDeclarationEdit(object):
             repr_args.append("range={!r}".format(self.range))
         if self.text is not None:
             repr_args.append("text={!r}".format(self.text))
-        return "StyleDeclarationEdit(" + ", ".join(repr_args) + ")"
+        return "StyleDeclarationEdit(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create StyleDeclarationEdit from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of StyleDeclarationEdit
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of StyleDeclarationEdit if creation did not fail
+        :rtype: Optional[Union[dict, StyleDeclarationEdit]]
+        """
         if init is not None:
             try:
                 ourselves = StyleDeclarationEdit(**init)
@@ -132,6 +152,17 @@ class StyleDeclarationEdit(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list StyleDeclarationEdits from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list StyleDeclarationEdit instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of StyleDeclarationEdit instances if creation did not fail
+        :rtype: Optional[List[Union[dict, StyleDeclarationEdit]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -146,6 +177,8 @@ class SourceRange(object):
     Text range within a resource. All numbers are zero-based.
     """
 
+    __slots__ = ["startLine", "startColumn", "endLine", "endColumn"]
+
     def __init__(self, startLine, startColumn, endLine, endColumn):
         """
         :param startLine: Start line of range.
@@ -157,20 +190,11 @@ class SourceRange(object):
         :param endColumn: End column of range (exclusive).
         :type endColumn: int
         """
-        super().__init__()
+        super(SourceRange, self).__init__()
         self.startLine = startLine
         self.startColumn = startColumn
         self.endLine = endLine
         self.endColumn = endColumn
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -182,10 +206,21 @@ class SourceRange(object):
             repr_args.append("endLine={!r}".format(self.endLine))
         if self.endColumn is not None:
             repr_args.append("endColumn={!r}".format(self.endColumn))
-        return "SourceRange(" + ", ".join(repr_args) + ")"
+        return "SourceRange(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create SourceRange from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of SourceRange
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of SourceRange if creation did not fail
+        :rtype: Optional[Union[dict, SourceRange]]
+        """
         if init is not None:
             try:
                 ourselves = SourceRange(**init)
@@ -197,6 +232,17 @@ class SourceRange(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list SourceRanges from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list SourceRange instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of SourceRange instances if creation did not fail
+        :rtype: Optional[List[Union[dict, SourceRange]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -207,6 +253,7 @@ class SourceRange(object):
 
 
 class ShorthandEntry(object):
+    __slots__ = ["name", "value", "important"]
 
     def __init__(self, name, value, important=None):
         """
@@ -217,19 +264,10 @@ class ShorthandEntry(object):
         :param important: Whether the property has "!important" annotation (implies `false` if absent).
         :type important: Optional[bool]
         """
-        super().__init__()
+        super(ShorthandEntry, self).__init__()
         self.name = name
         self.value = value
         self.important = important
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -239,10 +277,21 @@ class ShorthandEntry(object):
             repr_args.append("value={!r}".format(self.value))
         if self.important is not None:
             repr_args.append("important={!r}".format(self.important))
-        return "ShorthandEntry(" + ", ".join(repr_args) + ")"
+        return "ShorthandEntry(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ShorthandEntry from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ShorthandEntry
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ShorthandEntry if creation did not fail
+        :rtype: Optional[Union[dict, ShorthandEntry]]
+        """
         if init is not None:
             try:
                 ourselves = ShorthandEntry(**init)
@@ -254,6 +303,17 @@ class ShorthandEntry(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ShorthandEntrys from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ShorthandEntry instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ShorthandEntry instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ShorthandEntry]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -268,6 +328,8 @@ class SelectorList(object):
     Selector list data.
     """
 
+    __slots__ = ["selectors", "text"]
+
     def __init__(self, selectors, text):
         """
         :param selectors: Selectors in the list.
@@ -275,18 +337,9 @@ class SelectorList(object):
         :param text: Rule selector text.
         :type text: str
         """
-        super().__init__()
+        super(SelectorList, self).__init__()
         self.selectors = Value.safe_create_from_list(selectors)
         self.text = text
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -294,10 +347,21 @@ class SelectorList(object):
             repr_args.append("selectors={!r}".format(self.selectors))
         if self.text is not None:
             repr_args.append("text={!r}".format(self.text))
-        return "SelectorList(" + ", ".join(repr_args) + ")"
+        return "SelectorList(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create SelectorList from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of SelectorList
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of SelectorList if creation did not fail
+        :rtype: Optional[Union[dict, SelectorList]]
+        """
         if init is not None:
             try:
                 ourselves = SelectorList(**init)
@@ -309,6 +373,17 @@ class SelectorList(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list SelectorLists from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list SelectorList instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of SelectorList instances if creation did not fail
+        :rtype: Optional[List[Union[dict, SelectorList]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -323,6 +398,8 @@ class RuleUsage(object):
     CSS coverage information.
     """
 
+    __slots__ = ["styleSheetId", "startOffset", "endOffset", "used"]
+
     def __init__(self, styleSheetId, startOffset, endOffset, used):
         """
         :param styleSheetId: The css style sheet identifier (absent for user agent stylesheet and user-specified stylesheet rules) this rule came from.
@@ -334,20 +411,11 @@ class RuleUsage(object):
         :param used: Indicates whether the rule was actually used by some element in the page.
         :type used: bool
         """
-        super().__init__()
+        super(RuleUsage, self).__init__()
         self.styleSheetId = styleSheetId
         self.startOffset = startOffset
         self.endOffset = endOffset
         self.used = used
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -359,10 +427,21 @@ class RuleUsage(object):
             repr_args.append("endOffset={!r}".format(self.endOffset))
         if self.used is not None:
             repr_args.append("used={!r}".format(self.used))
-        return "RuleUsage(" + ", ".join(repr_args) + ")"
+        return "RuleUsage(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create RuleUsage from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of RuleUsage
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of RuleUsage if creation did not fail
+        :rtype: Optional[Union[dict, RuleUsage]]
+        """
         if init is not None:
             try:
                 ourselves = RuleUsage(**init)
@@ -374,6 +453,17 @@ class RuleUsage(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list RuleUsages from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list RuleUsage instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of RuleUsage instances if creation did not fail
+        :rtype: Optional[List[Union[dict, RuleUsage]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -388,6 +478,8 @@ class RuleMatch(object):
     Match data for a CSS rule.
     """
 
+    __slots__ = ["rule", "matchingSelectors"]
+
     def __init__(self, rule, matchingSelectors):
         """
         :param rule: CSS rule in the match.
@@ -395,18 +487,9 @@ class RuleMatch(object):
         :param matchingSelectors: Matching selector indices in the rule's selectorList selectors (0-based).
         :type matchingSelectors: List[int]
         """
-        super().__init__()
+        super(RuleMatch, self).__init__()
         self.rule = CSSRule.safe_create(rule)
         self.matchingSelectors = matchingSelectors
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -414,10 +497,21 @@ class RuleMatch(object):
             repr_args.append("rule={!r}".format(self.rule))
         if self.matchingSelectors is not None:
             repr_args.append("matchingSelectors={!r}".format(self.matchingSelectors))
-        return "RuleMatch(" + ", ".join(repr_args) + ")"
+        return "RuleMatch(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create RuleMatch from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of RuleMatch
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of RuleMatch if creation did not fail
+        :rtype: Optional[Union[dict, RuleMatch]]
+        """
         if init is not None:
             try:
                 ourselves = RuleMatch(**init)
@@ -429,6 +523,17 @@ class RuleMatch(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list RuleMatchs from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list RuleMatch instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of RuleMatch instances if creation did not fail
+        :rtype: Optional[List[Union[dict, RuleMatch]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -443,6 +548,8 @@ class PseudoElementMatches(object):
     CSS rule collection for a single pseudo style.
     """
 
+    __slots__ = ["pseudoType", "matches"]
+
     def __init__(self, pseudoType, matches):
         """
         :param pseudoType: Pseudo element type.
@@ -450,18 +557,9 @@ class PseudoElementMatches(object):
         :param matches: Matches of CSS rules applicable to the pseudo style.
         :type matches: List[dict]
         """
-        super().__init__()
+        super(PseudoElementMatches, self).__init__()
         self.pseudoType = pseudoType
         self.matches = RuleMatch.safe_create_from_list(matches)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -469,10 +567,21 @@ class PseudoElementMatches(object):
             repr_args.append("pseudoType={!r}".format(self.pseudoType))
         if self.matches is not None:
             repr_args.append("matches={!r}".format(self.matches))
-        return "PseudoElementMatches(" + ", ".join(repr_args) + ")"
+        return "PseudoElementMatches(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create PseudoElementMatches from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of PseudoElementMatches
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of PseudoElementMatches if creation did not fail
+        :rtype: Optional[Union[dict, PseudoElementMatches]]
+        """
         if init is not None:
             try:
                 ourselves = PseudoElementMatches(**init)
@@ -484,6 +593,17 @@ class PseudoElementMatches(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list PseudoElementMatchess from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list PseudoElementMatches instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of PseudoElementMatches instances if creation did not fail
+        :rtype: Optional[List[Union[dict, PseudoElementMatches]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -498,6 +618,8 @@ class PlatformFontUsage(object):
     Information about amount of glyphs that were rendered with given font.
     """
 
+    __slots__ = ["familyName", "isCustomFont", "glyphCount"]
+
     def __init__(self, familyName, isCustomFont, glyphCount):
         """
         :param familyName: Font's family name reported by platform.
@@ -507,19 +629,10 @@ class PlatformFontUsage(object):
         :param glyphCount: Amount of glyphs that were rendered with this font.
         :type glyphCount: float
         """
-        super().__init__()
+        super(PlatformFontUsage, self).__init__()
         self.familyName = familyName
         self.isCustomFont = isCustomFont
         self.glyphCount = glyphCount
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -529,10 +642,21 @@ class PlatformFontUsage(object):
             repr_args.append("isCustomFont={!r}".format(self.isCustomFont))
         if self.glyphCount is not None:
             repr_args.append("glyphCount={!r}".format(self.glyphCount))
-        return "PlatformFontUsage(" + ", ".join(repr_args) + ")"
+        return "PlatformFontUsage(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create PlatformFontUsage from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of PlatformFontUsage
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of PlatformFontUsage if creation did not fail
+        :rtype: Optional[Union[dict, PlatformFontUsage]]
+        """
         if init is not None:
             try:
                 ourselves = PlatformFontUsage(**init)
@@ -544,6 +668,17 @@ class PlatformFontUsage(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list PlatformFontUsages from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list PlatformFontUsage instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of PlatformFontUsage instances if creation did not fail
+        :rtype: Optional[List[Union[dict, PlatformFontUsage]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -558,6 +693,8 @@ class MediaQueryExpression(object):
     Media query expression descriptor.
     """
 
+    __slots__ = ["value", "unit", "feature", "valueRange", "computedLength"]
+
     def __init__(self, value, unit, feature, valueRange=None, computedLength=None):
         """
         :param value: Media query expression value.
@@ -571,21 +708,12 @@ class MediaQueryExpression(object):
         :param computedLength: Computed length of media query expression (if applicable).
         :type computedLength: Optional[float]
         """
-        super().__init__()
+        super(MediaQueryExpression, self).__init__()
         self.value = value
         self.unit = unit
         self.feature = feature
         self.valueRange = SourceRange.safe_create(valueRange)
         self.computedLength = computedLength
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -599,10 +727,21 @@ class MediaQueryExpression(object):
             repr_args.append("valueRange={!r}".format(self.valueRange))
         if self.computedLength is not None:
             repr_args.append("computedLength={!r}".format(self.computedLength))
-        return "MediaQueryExpression(" + ", ".join(repr_args) + ")"
+        return "MediaQueryExpression(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create MediaQueryExpression from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of MediaQueryExpression
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of MediaQueryExpression if creation did not fail
+        :rtype: Optional[Union[dict, MediaQueryExpression]]
+        """
         if init is not None:
             try:
                 ourselves = MediaQueryExpression(**init)
@@ -614,6 +753,17 @@ class MediaQueryExpression(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list MediaQueryExpressions from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list MediaQueryExpression instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of MediaQueryExpression instances if creation did not fail
+        :rtype: Optional[List[Union[dict, MediaQueryExpression]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -628,6 +778,8 @@ class MediaQuery(object):
     Media query descriptor.
     """
 
+    __slots__ = ["expressions", "active"]
+
     def __init__(self, expressions, active):
         """
         :param expressions: Array of media query expressions.
@@ -635,18 +787,9 @@ class MediaQuery(object):
         :param active: Whether the media query condition is satisfied.
         :type active: bool
         """
-        super().__init__()
+        super(MediaQuery, self).__init__()
         self.expressions = MediaQueryExpression.safe_create_from_list(expressions)
         self.active = active
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -654,10 +797,21 @@ class MediaQuery(object):
             repr_args.append("expressions={!r}".format(self.expressions))
         if self.active is not None:
             repr_args.append("active={!r}".format(self.active))
-        return "MediaQuery(" + ", ".join(repr_args) + ")"
+        return "MediaQuery(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create MediaQuery from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of MediaQuery
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of MediaQuery if creation did not fail
+        :rtype: Optional[Union[dict, MediaQuery]]
+        """
         if init is not None:
             try:
                 ourselves = MediaQuery(**init)
@@ -669,6 +823,17 @@ class MediaQuery(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list MediaQuerys from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list MediaQuery instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of MediaQuery instances if creation did not fail
+        :rtype: Optional[List[Union[dict, MediaQuery]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -683,6 +848,8 @@ class InheritedStyleEntry(object):
     Inherited CSS rule collection from ancestor node.
     """
 
+    __slots__ = ["inlineStyle", "matchedCSSRules"]
+
     def __init__(self, matchedCSSRules, inlineStyle=None):
         """
         :param inlineStyle: The ancestor node's inline style, if any, in the style inheritance chain.
@@ -690,18 +857,9 @@ class InheritedStyleEntry(object):
         :param matchedCSSRules: Matches of CSS rules matching the ancestor node in the style inheritance chain.
         :type matchedCSSRules: List[dict]
         """
-        super().__init__()
+        super(InheritedStyleEntry, self).__init__()
         self.inlineStyle = CSSStyle.safe_create(inlineStyle)
         self.matchedCSSRules = RuleMatch.safe_create_from_list(matchedCSSRules)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -709,10 +867,21 @@ class InheritedStyleEntry(object):
             repr_args.append("inlineStyle={!r}".format(self.inlineStyle))
         if self.matchedCSSRules is not None:
             repr_args.append("matchedCSSRules={!r}".format(self.matchedCSSRules))
-        return "InheritedStyleEntry(" + ", ".join(repr_args) + ")"
+        return "InheritedStyleEntry(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create InheritedStyleEntry from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of InheritedStyleEntry
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of InheritedStyleEntry if creation did not fail
+        :rtype: Optional[Union[dict, InheritedStyleEntry]]
+        """
         if init is not None:
             try:
                 ourselves = InheritedStyleEntry(**init)
@@ -724,6 +893,17 @@ class InheritedStyleEntry(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list InheritedStyleEntrys from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list InheritedStyleEntry instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of InheritedStyleEntry instances if creation did not fail
+        :rtype: Optional[List[Union[dict, InheritedStyleEntry]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -738,17 +918,9 @@ class FontFace(object):
     Properties of a web font: https://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#font-descriptions
     """
 
-    def __init__(
-        self,
-        fontFamily,
-        fontStyle,
-        fontVariant,
-        fontWeight,
-        fontStretch,
-        unicodeRange,
-        src,
-        platformFontFamily,
-    ):
+    __slots__ = ["fontFamily", "fontStyle", "fontVariant", "fontWeight", "fontStretch", "unicodeRange", "src", "platformFontFamily"]
+
+    def __init__(self, fontFamily, fontStyle, fontVariant, fontWeight, fontStretch, unicodeRange, src, platformFontFamily):
         """
         :param fontFamily: The font-family.
         :type fontFamily: str
@@ -767,7 +939,7 @@ class FontFace(object):
         :param platformFontFamily: The resolved platform font family
         :type platformFontFamily: str
         """
-        super().__init__()
+        super(FontFace, self).__init__()
         self.fontFamily = fontFamily
         self.fontStyle = fontStyle
         self.fontVariant = fontVariant
@@ -776,15 +948,6 @@ class FontFace(object):
         self.unicodeRange = unicodeRange
         self.src = src
         self.platformFontFamily = platformFontFamily
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -804,10 +967,21 @@ class FontFace(object):
             repr_args.append("src={!r}".format(self.src))
         if self.platformFontFamily is not None:
             repr_args.append("platformFontFamily={!r}".format(self.platformFontFamily))
-        return "FontFace(" + ", ".join(repr_args) + ")"
+        return "FontFace(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create FontFace from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of FontFace
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of FontFace if creation did not fail
+        :rtype: Optional[Union[dict, FontFace]]
+        """
         if init is not None:
             try:
                 ourselves = FontFace(**init)
@@ -819,6 +993,17 @@ class FontFace(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list FontFaces from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list FontFace instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of FontFace instances if creation did not fail
+        :rtype: Optional[List[Union[dict, FontFace]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -833,22 +1018,9 @@ class CSSStyleSheetHeader(object):
     CSS stylesheet metainformation.
     """
 
-    def __init__(
-        self,
-        styleSheetId,
-        frameId,
-        sourceURL,
-        origin,
-        title,
-        disabled,
-        isInline,
-        startLine,
-        startColumn,
-        length,
-        sourceMapURL=None,
-        ownerNode=None,
-        hasSourceURL=None,
-    ):
+    __slots__ = ["styleSheetId", "frameId", "sourceURL", "sourceMapURL", "origin", "title", "ownerNode", "disabled", "hasSourceURL", "isInline", "startLine", "startColumn", "length"]
+
+    def __init__(self, styleSheetId, frameId, sourceURL, origin, title, disabled, isInline, startLine, startColumn, length, sourceMapURL=None, ownerNode=None, hasSourceURL=None):
         """
         :param styleSheetId: The stylesheet identifier.
         :type styleSheetId: str
@@ -877,7 +1049,7 @@ class CSSStyleSheetHeader(object):
         :param length: Size of the content (in characters).
         :type length: float
         """
-        super().__init__()
+        super(CSSStyleSheetHeader, self).__init__()
         self.styleSheetId = styleSheetId
         self.frameId = frameId
         self.sourceURL = sourceURL
@@ -891,15 +1063,6 @@ class CSSStyleSheetHeader(object):
         self.startLine = startLine
         self.startColumn = startColumn
         self.length = length
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -929,10 +1092,21 @@ class CSSStyleSheetHeader(object):
             repr_args.append("startColumn={!r}".format(self.startColumn))
         if self.length is not None:
             repr_args.append("length={!r}".format(self.length))
-        return "CSSStyleSheetHeader(" + ", ".join(repr_args) + ")"
+        return "CSSStyleSheetHeader(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CSSStyleSheetHeader from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CSSStyleSheetHeader
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CSSStyleSheetHeader if creation did not fail
+        :rtype: Optional[Union[dict, CSSStyleSheetHeader]]
+        """
         if init is not None:
             try:
                 ourselves = CSSStyleSheetHeader(**init)
@@ -944,6 +1118,17 @@ class CSSStyleSheetHeader(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CSSStyleSheetHeaders from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CSSStyleSheetHeader instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CSSStyleSheetHeader instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CSSStyleSheetHeader]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -958,14 +1143,9 @@ class CSSStyle(object):
     CSS style representation.
     """
 
-    def __init__(
-        self,
-        cssProperties,
-        shorthandEntries,
-        styleSheetId=None,
-        cssText=None,
-        range=None,
-    ):
+    __slots__ = ["styleSheetId", "cssProperties", "shorthandEntries", "cssText", "range"]
+
+    def __init__(self, cssProperties, shorthandEntries, styleSheetId=None, cssText=None, range=None):
         """
         :param styleSheetId: The css style sheet identifier (absent for user agent stylesheet and user-specified stylesheet rules) this rule came from.
         :type styleSheetId: Optional[str]
@@ -978,21 +1158,12 @@ class CSSStyle(object):
         :param range: Style declaration range in the enclosing stylesheet (if available).
         :type range: Optional[dict]
         """
-        super().__init__()
+        super(CSSStyle, self).__init__()
         self.styleSheetId = styleSheetId
         self.cssProperties = CSSProperty.safe_create_from_list(cssProperties)
         self.shorthandEntries = ShorthandEntry.safe_create_from_list(shorthandEntries)
         self.cssText = cssText
         self.range = SourceRange.safe_create(range)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1006,10 +1177,21 @@ class CSSStyle(object):
             repr_args.append("cssText={!r}".format(self.cssText))
         if self.range is not None:
             repr_args.append("range={!r}".format(self.range))
-        return "CSSStyle(" + ", ".join(repr_args) + ")"
+        return "CSSStyle(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CSSStyle from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CSSStyle
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CSSStyle if creation did not fail
+        :rtype: Optional[Union[dict, CSSStyle]]
+        """
         if init is not None:
             try:
                 ourselves = CSSStyle(**init)
@@ -1021,6 +1203,17 @@ class CSSStyle(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CSSStyles from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CSSStyle instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CSSStyle instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CSSStyle]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1035,6 +1228,8 @@ class CSSRule(object):
     CSS rule representation.
     """
 
+    __slots__ = ["styleSheetId", "selectorList", "origin", "style", "media"]
+
     def __init__(self, selectorList, origin, style, styleSheetId=None, media=None):
         """
         :param styleSheetId: The css style sheet identifier (absent for user agent stylesheet and user-specified stylesheet rules) this rule came from.
@@ -1048,21 +1243,12 @@ class CSSRule(object):
         :param media: Media list array (for rules involving media queries). The array enumerates media queries starting with the innermost one, going outwards.
         :type media: Optional[List[dict]]
         """
-        super().__init__()
+        super(CSSRule, self).__init__()
         self.styleSheetId = styleSheetId
         self.selectorList = SelectorList.safe_create(selectorList)
         self.origin = origin
         self.style = CSSStyle.safe_create(style)
         self.media = CSSMedia.safe_create_from_list(media)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1076,10 +1262,21 @@ class CSSRule(object):
             repr_args.append("style={!r}".format(self.style))
         if self.media is not None:
             repr_args.append("media={!r}".format(self.media))
-        return "CSSRule(" + ", ".join(repr_args) + ")"
+        return "CSSRule(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CSSRule from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CSSRule
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CSSRule if creation did not fail
+        :rtype: Optional[Union[dict, CSSRule]]
+        """
         if init is not None:
             try:
                 ourselves = CSSRule(**init)
@@ -1091,6 +1288,17 @@ class CSSRule(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CSSRules from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CSSRule instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CSSRule instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CSSRule]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1105,17 +1313,9 @@ class CSSProperty(object):
     CSS property declaration data.
     """
 
-    def __init__(
-        self,
-        name,
-        value,
-        important=None,
-        implicit=None,
-        text=None,
-        parsedOk=None,
-        disabled=None,
-        range=None,
-    ):
+    __slots__ = ["name", "value", "important", "implicit", "text", "parsedOk", "disabled", "range"]
+
+    def __init__(self, name, value, important=None, implicit=None, text=None, parsedOk=None, disabled=None, range=None):
         """
         :param name: The property name.
         :type name: str
@@ -1134,7 +1334,7 @@ class CSSProperty(object):
         :param range: The entire property range in the enclosing style declaration (if available).
         :type range: Optional[dict]
         """
-        super().__init__()
+        super(CSSProperty, self).__init__()
         self.name = name
         self.value = value
         self.important = important
@@ -1143,15 +1343,6 @@ class CSSProperty(object):
         self.parsedOk = parsedOk
         self.disabled = disabled
         self.range = SourceRange.safe_create(range)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1171,10 +1362,21 @@ class CSSProperty(object):
             repr_args.append("disabled={!r}".format(self.disabled))
         if self.range is not None:
             repr_args.append("range={!r}".format(self.range))
-        return "CSSProperty(" + ", ".join(repr_args) + ")"
+        return "CSSProperty(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CSSProperty from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CSSProperty
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CSSProperty if creation did not fail
+        :rtype: Optional[Union[dict, CSSProperty]]
+        """
         if init is not None:
             try:
                 ourselves = CSSProperty(**init)
@@ -1186,6 +1388,17 @@ class CSSProperty(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CSSPropertys from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CSSProperty instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CSSProperty instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CSSProperty]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1200,15 +1413,9 @@ class CSSMedia(object):
     CSS media rule descriptor.
     """
 
-    def __init__(
-        self,
-        text,
-        source,
-        sourceURL=None,
-        range=None,
-        styleSheetId=None,
-        mediaList=None,
-    ):
+    __slots__ = ["text", "source", "sourceURL", "range", "styleSheetId", "mediaList"]
+
+    def __init__(self, text, source, sourceURL=None, range=None, styleSheetId=None, mediaList=None):
         """
         :param text: Media query text.
         :type text: str
@@ -1223,22 +1430,13 @@ class CSSMedia(object):
         :param mediaList: Array of media queries.
         :type mediaList: Optional[List[dict]]
         """
-        super().__init__()
+        super(CSSMedia, self).__init__()
         self.text = text
         self.source = source
         self.sourceURL = sourceURL
         self.range = SourceRange.safe_create(range)
         self.styleSheetId = styleSheetId
         self.mediaList = MediaQuery.safe_create_from_list(mediaList)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1254,10 +1452,21 @@ class CSSMedia(object):
             repr_args.append("styleSheetId={!r}".format(self.styleSheetId))
         if self.mediaList is not None:
             repr_args.append("mediaList={!r}".format(self.mediaList))
-        return "CSSMedia(" + ", ".join(repr_args) + ")"
+        return "CSSMedia(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CSSMedia from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CSSMedia
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CSSMedia if creation did not fail
+        :rtype: Optional[Union[dict, CSSMedia]]
+        """
         if init is not None:
             try:
                 ourselves = CSSMedia(**init)
@@ -1269,6 +1478,17 @@ class CSSMedia(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CSSMedias from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CSSMedia instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CSSMedia instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CSSMedia]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1283,6 +1503,8 @@ class CSSKeyframesRule(object):
     CSS keyframes rule representation.
     """
 
+    __slots__ = ["animationName", "keyframes"]
+
     def __init__(self, animationName, keyframes):
         """
         :param animationName: Animation name.
@@ -1290,18 +1512,9 @@ class CSSKeyframesRule(object):
         :param keyframes: List of keyframes.
         :type keyframes: List[dict]
         """
-        super().__init__()
+        super(CSSKeyframesRule, self).__init__()
         self.animationName = Value.safe_create(animationName)
         self.keyframes = CSSKeyframeRule.safe_create_from_list(keyframes)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1309,10 +1522,21 @@ class CSSKeyframesRule(object):
             repr_args.append("animationName={!r}".format(self.animationName))
         if self.keyframes is not None:
             repr_args.append("keyframes={!r}".format(self.keyframes))
-        return "CSSKeyframesRule(" + ", ".join(repr_args) + ")"
+        return "CSSKeyframesRule(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CSSKeyframesRule from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CSSKeyframesRule
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CSSKeyframesRule if creation did not fail
+        :rtype: Optional[Union[dict, CSSKeyframesRule]]
+        """
         if init is not None:
             try:
                 ourselves = CSSKeyframesRule(**init)
@@ -1324,6 +1548,17 @@ class CSSKeyframesRule(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CSSKeyframesRules from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CSSKeyframesRule instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CSSKeyframesRule instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CSSKeyframesRule]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1338,6 +1573,8 @@ class CSSKeyframeRule(object):
     CSS keyframe rule representation.
     """
 
+    __slots__ = ["styleSheetId", "origin", "keyText", "style"]
+
     def __init__(self, origin, keyText, style, styleSheetId=None):
         """
         :param styleSheetId: The css style sheet identifier (absent for user agent stylesheet and user-specified stylesheet rules) this rule came from.
@@ -1349,20 +1586,11 @@ class CSSKeyframeRule(object):
         :param style: Associated style declaration.
         :type style: dict
         """
-        super().__init__()
+        super(CSSKeyframeRule, self).__init__()
         self.styleSheetId = styleSheetId
         self.origin = origin
         self.keyText = Value.safe_create(keyText)
         self.style = CSSStyle.safe_create(style)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1374,10 +1602,21 @@ class CSSKeyframeRule(object):
             repr_args.append("keyText={!r}".format(self.keyText))
         if self.style is not None:
             repr_args.append("style={!r}".format(self.style))
-        return "CSSKeyframeRule(" + ", ".join(repr_args) + ")"
+        return "CSSKeyframeRule(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CSSKeyframeRule from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CSSKeyframeRule
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CSSKeyframeRule if creation did not fail
+        :rtype: Optional[Union[dict, CSSKeyframeRule]]
+        """
         if init is not None:
             try:
                 ourselves = CSSKeyframeRule(**init)
@@ -1389,6 +1628,17 @@ class CSSKeyframeRule(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CSSKeyframeRules from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CSSKeyframeRule instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CSSKeyframeRule instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CSSKeyframeRule]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1399,6 +1649,7 @@ class CSSKeyframeRule(object):
 
 
 class CSSComputedStyleProperty(object):
+    __slots__ = ["name", "value"]
 
     def __init__(self, name, value):
         """
@@ -1407,18 +1658,9 @@ class CSSComputedStyleProperty(object):
         :param value: Computed style property value.
         :type value: str
         """
-        super().__init__()
+        super(CSSComputedStyleProperty, self).__init__()
         self.name = name
         self.value = value
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1426,10 +1668,21 @@ class CSSComputedStyleProperty(object):
             repr_args.append("name={!r}".format(self.name))
         if self.value is not None:
             repr_args.append("value={!r}".format(self.value))
-        return "CSSComputedStyleProperty(" + ", ".join(repr_args) + ")"
+        return "CSSComputedStyleProperty(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create CSSComputedStyleProperty from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CSSComputedStyleProperty
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CSSComputedStyleProperty if creation did not fail
+        :rtype: Optional[Union[dict, CSSComputedStyleProperty]]
+        """
         if init is not None:
             try:
                 ourselves = CSSComputedStyleProperty(**init)
@@ -1441,6 +1694,17 @@ class CSSComputedStyleProperty(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list CSSComputedStylePropertys from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CSSComputedStyleProperty instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CSSComputedStyleProperty instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CSSComputedStyleProperty]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1450,7 +1714,7 @@ class CSSComputedStyleProperty(object):
             return init
 
 
-TYPE_TO_OBJECT = {
+CSS_TYPE_TO_OBJECT = {
     "Value": Value,
     "StyleDeclarationEdit": StyleDeclarationEdit,
     "SourceRange": SourceRange,

@@ -1,11 +1,16 @@
 from typing import Any, List, Optional, Union
-from types import SimpleNamespace
+from collections import namedtuple
+from cripy.async.protocol.css.types import *
 
-try:
-    from cripy.async.protocol.css.types import *
-except ImportError:
-    pass
-
+__all__ = [
+    "FontsUpdatedEvent",
+    "MediaQueryResultChangedEvent",
+    "StyleSheetAddedEvent",
+    "StyleSheetChangedEvent",
+    "StyleSheetRemovedEvent",
+    "CSS_EVENTS_TO_CLASS",
+    "CSS_EVENTS_NS"
+]
 
 class FontsUpdatedEvent(object):
     """
@@ -15,31 +20,37 @@ class FontsUpdatedEvent(object):
 
     event = "CSS.fontsUpdated"
 
+    __slots__ = ["font"]
+
     def __init__(self, font: Optional[Union[FontFace, dict]] = None) -> None:
         """
+        Create a new instance of FontsUpdatedEvent
+
         :param font: The web font that has loaded.
         :type font: Optional[dict]
         """
         super().__init__()
         self.font = FontFace.safe_create(font)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.font is not None:
             repr_args.append("font={!r}".format(self.font))
-        return "FontsUpdatedEvent(" + ", ".join(repr_args) + ")"
+        return "FontsUpdatedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["FontsUpdatedEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FontsUpdatedEvent', dict]]:
+        """
+        Safely create FontsUpdatedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of FontsUpdatedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of FontsUpdatedEvent if creation did not fail
+        :rtype: Optional[Union[dict, FontsUpdatedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = FontsUpdatedEvent(**init)
@@ -50,9 +61,18 @@ class FontsUpdatedEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["FontsUpdatedEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FontsUpdatedEvent', dict]]]:
+        """
+        Safely create a new list FontsUpdatedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list FontsUpdatedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of FontsUpdatedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, FontsUpdatedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -76,9 +96,18 @@ class MediaQueryResultChangedEvent(dict):
         return "MediaQueryResultChangedEvent(dict)"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["MediaQueryResultChangedEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['MediaQueryResultChangedEvent', dict]]:
+        """
+        Safely create MediaQueryResultChangedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of MediaQueryResultChangedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of MediaQueryResultChangedEvent if creation did not fail
+        :rtype: Optional[Union[dict, MediaQueryResultChangedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = MediaQueryResultChangedEvent(**init)
@@ -89,9 +118,18 @@ class MediaQueryResultChangedEvent(dict):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["MediaQueryResultChangedEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['MediaQueryResultChangedEvent', dict]]]:
+        """
+        Safely create a new list MediaQueryResultChangedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list MediaQueryResultChangedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of MediaQueryResultChangedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, MediaQueryResultChangedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -108,33 +146,37 @@ class StyleSheetAddedEvent(object):
 
     event = "CSS.styleSheetAdded"
 
+    __slots__ = ["header"]
+
     def __init__(self, header: Union[CSSStyleSheetHeader, dict]) -> None:
         """
+        Create a new instance of StyleSheetAddedEvent
+
         :param header: Added stylesheet metainfo.
         :type header: dict
         """
         super().__init__()
         self.header = CSSStyleSheetHeader.safe_create(header)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.header is not None:
             repr_args.append("header={!r}".format(self.header))
-        return "StyleSheetAddedEvent(" + ", ".join(repr_args) + ")"
+        return "StyleSheetAddedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["StyleSheetAddedEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['StyleSheetAddedEvent', dict]]:
+        """
+        Safely create StyleSheetAddedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of StyleSheetAddedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of StyleSheetAddedEvent if creation did not fail
+        :rtype: Optional[Union[dict, StyleSheetAddedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = StyleSheetAddedEvent(**init)
@@ -145,9 +187,18 @@ class StyleSheetAddedEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["StyleSheetAddedEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['StyleSheetAddedEvent', dict]]]:
+        """
+        Safely create a new list StyleSheetAddedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list StyleSheetAddedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of StyleSheetAddedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, StyleSheetAddedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -164,33 +215,37 @@ class StyleSheetChangedEvent(object):
 
     event = "CSS.styleSheetChanged"
 
+    __slots__ = ["styleSheetId"]
+
     def __init__(self, styleSheetId: str) -> None:
         """
+        Create a new instance of StyleSheetChangedEvent
+
         :param styleSheetId: The styleSheetId
         :type styleSheetId: str
         """
         super().__init__()
         self.styleSheetId = styleSheetId
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.styleSheetId is not None:
             repr_args.append("styleSheetId={!r}".format(self.styleSheetId))
-        return "StyleSheetChangedEvent(" + ", ".join(repr_args) + ")"
+        return "StyleSheetChangedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["StyleSheetChangedEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['StyleSheetChangedEvent', dict]]:
+        """
+        Safely create StyleSheetChangedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of StyleSheetChangedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of StyleSheetChangedEvent if creation did not fail
+        :rtype: Optional[Union[dict, StyleSheetChangedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = StyleSheetChangedEvent(**init)
@@ -201,9 +256,18 @@ class StyleSheetChangedEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["StyleSheetChangedEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['StyleSheetChangedEvent', dict]]]:
+        """
+        Safely create a new list StyleSheetChangedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list StyleSheetChangedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of StyleSheetChangedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, StyleSheetChangedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -220,33 +284,37 @@ class StyleSheetRemovedEvent(object):
 
     event = "CSS.styleSheetRemoved"
 
+    __slots__ = ["styleSheetId"]
+
     def __init__(self, styleSheetId: str) -> None:
         """
+        Create a new instance of StyleSheetRemovedEvent
+
         :param styleSheetId: Identifier of the removed stylesheet.
         :type styleSheetId: str
         """
         super().__init__()
         self.styleSheetId = styleSheetId
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.styleSheetId is not None:
             repr_args.append("styleSheetId={!r}".format(self.styleSheetId))
-        return "StyleSheetRemovedEvent(" + ", ".join(repr_args) + ")"
+        return "StyleSheetRemovedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["StyleSheetRemovedEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['StyleSheetRemovedEvent', dict]]:
+        """
+        Safely create StyleSheetRemovedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of StyleSheetRemovedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of StyleSheetRemovedEvent if creation did not fail
+        :rtype: Optional[Union[dict, StyleSheetRemovedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = StyleSheetRemovedEvent(**init)
@@ -257,9 +325,18 @@ class StyleSheetRemovedEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["StyleSheetRemovedEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['StyleSheetRemovedEvent', dict]]]:
+        """
+        Safely create a new list StyleSheetRemovedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list StyleSheetRemovedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of StyleSheetRemovedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, StyleSheetRemovedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -269,18 +346,20 @@ class StyleSheetRemovedEvent(object):
             return init
 
 
-EVENT_TO_CLASS = {
-    "CSS.fontsUpdated": FontsUpdatedEvent,
-    "CSS.mediaQueryResultChanged": MediaQueryResultChangedEvent,
-    "CSS.styleSheetAdded": StyleSheetAddedEvent,
-    "CSS.styleSheetChanged": StyleSheetChangedEvent,
-    "CSS.styleSheetRemoved": StyleSheetRemovedEvent,
+CSS_EVENTS_TO_CLASS = {
+   "CSS.fontsUpdated": FontsUpdatedEvent,
+   "CSS.mediaQueryResultChanged": MediaQueryResultChangedEvent,
+   "CSS.styleSheetAdded": StyleSheetAddedEvent,
+   "CSS.styleSheetChanged": StyleSheetChangedEvent,
+   "CSS.styleSheetRemoved": StyleSheetRemovedEvent,
 }
 
-EVENT_NS = SimpleNamespace(
-    FontsUpdated="CSS.fontsUpdated",
-    MediaQueryResultChanged="CSS.mediaQueryResultChanged",
-    StyleSheetAdded="CSS.styleSheetAdded",
-    StyleSheetChanged="CSS.styleSheetChanged",
-    StyleSheetRemoved="CSS.styleSheetRemoved",
+CSSNS = namedtuple("CSSNS", ["FontsUpdated", "MediaQueryResultChanged", "StyleSheetAdded", "StyleSheetChanged", "StyleSheetRemoved"])
+
+CSS_EVENTS_NS = CSSNS(
+  FontsUpdated="CSS.fontsUpdated",
+  MediaQueryResultChanged="CSS.mediaQueryResultChanged",
+  StyleSheetAdded="CSS.styleSheetAdded",
+  StyleSheetChanged="CSS.styleSheetChanged",
+  StyleSheetRemoved="CSS.styleSheetRemoved",
 )

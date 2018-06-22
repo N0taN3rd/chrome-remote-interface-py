@@ -1,48 +1,49 @@
-from .console import Console
-from .debugger import Debugger
-from .heapprofiler import HeapProfiler
-from .profiler import Profiler
-from .runtime import Runtime
-from .schema import Schema
-from .accessibility import Accessibility
-from .animation import Animation
-from .applicationcache import ApplicationCache
-from .audits import Audits
-from .browser import Browser
-from .css import CSS
-from .cachestorage import CacheStorage
-from .dom import DOM
-from .domdebugger import DOMDebugger
-from .domsnapshot import DOMSnapshot
-from .domstorage import DOMStorage
-from .database import Database
-from .deviceorientation import DeviceOrientation
-from .emulation import Emulation
-from .headlessexperimental import HeadlessExperimental
-from .io import IO
-from .indexeddb import IndexedDB
-from .input import Input
-from .inspector import Inspector
-from .layertree import LayerTree
-from .log import Log
-from .memory import Memory
-from .network import Network
-from .overlay import Overlay
-from .page import Page
-from .performance import Performance
-from .security import Security
-from .serviceworker import ServiceWorker
-from .storage import Storage
-from .systeminfo import SystemInfo
-from .target import Target
-from .tethering import Tethering
-from .tracing import Tracing
+from cripy.gevent.protocol.console import Console
+from cripy.gevent.protocol.debugger import Debugger
+from cripy.gevent.protocol.heapprofiler import HeapProfiler
+from cripy.gevent.protocol.profiler import Profiler
+from cripy.gevent.protocol.runtime import Runtime
+from cripy.gevent.protocol.schema import Schema
+from cripy.gevent.protocol.accessibility import Accessibility
+from cripy.gevent.protocol.animation import Animation
+from cripy.gevent.protocol.applicationcache import ApplicationCache
+from cripy.gevent.protocol.audits import Audits
+from cripy.gevent.protocol.browser import Browser
+from cripy.gevent.protocol.css import CSS
+from cripy.gevent.protocol.cachestorage import CacheStorage
+from cripy.gevent.protocol.dom import DOM
+from cripy.gevent.protocol.domdebugger import DOMDebugger
+from cripy.gevent.protocol.domsnapshot import DOMSnapshot
+from cripy.gevent.protocol.domstorage import DOMStorage
+from cripy.gevent.protocol.database import Database
+from cripy.gevent.protocol.deviceorientation import DeviceOrientation
+from cripy.gevent.protocol.emulation import Emulation
+from cripy.gevent.protocol.headlessexperimental import HeadlessExperimental
+from cripy.gevent.protocol.io import IO
+from cripy.gevent.protocol.indexeddb import IndexedDB
+from cripy.gevent.protocol.input import Input
+from cripy.gevent.protocol.inspector import Inspector
+from cripy.gevent.protocol.layertree import LayerTree
+from cripy.gevent.protocol.log import Log
+from cripy.gevent.protocol.memory import Memory
+from cripy.gevent.protocol.network import Network
+from cripy.gevent.protocol.overlay import Overlay
+from cripy.gevent.protocol.page import Page
+from cripy.gevent.protocol.performance import Performance
+from cripy.gevent.protocol.security import Security
+from cripy.gevent.protocol.serviceworker import ServiceWorker
+from cripy.gevent.protocol.storage import Storage
+from cripy.gevent.protocol.systeminfo import SystemInfo
+from cripy.gevent.protocol.target import Target
+from cripy.gevent.protocol.tethering import Tethering
+from cripy.gevent.protocol.tracing import Tracing
+
+__all__ = [ "ProtocolMixin" ]
 
 
 class ProtocolMixin(object):
-
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(ProtocolMixin, self).__init__(*args, **kwargs)
         self.protocol_events = dict()
         self.Console: Console = Console(self)
         self._update_protocol_events(self.Console.get_event_classes())

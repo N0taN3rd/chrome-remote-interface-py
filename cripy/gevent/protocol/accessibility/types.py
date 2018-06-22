@@ -1,6 +1,13 @@
 from cripy.gevent.protocol.dom import types as DOM
 
-__all__ = ["AXValueSource", "AXValue", "AXRelatedNode", "AXProperty", "AXNode"]
+__all__ = [
+    "AXValueSource",
+    "AXValue",
+    "AXRelatedNode",
+    "AXProperty",
+    "AXNode",
+    "ACCESSIBILITY_TYPE_TO_OBJECT"
+]
 
 
 class AXValueSource(object):
@@ -8,18 +15,9 @@ class AXValueSource(object):
     A single source for a computed AX property.
     """
 
-    def __init__(
-        self,
-        type,
-        value=None,
-        attribute=None,
-        attributeValue=None,
-        superseded=None,
-        nativeSource=None,
-        nativeSourceValue=None,
-        invalid=None,
-        invalidReason=None,
-    ):
+    __slots__ = ["type", "value", "attribute", "attributeValue", "superseded", "nativeSource", "nativeSourceValue", "invalid", "invalidReason"]
+
+    def __init__(self, type, value=None, attribute=None, attributeValue=None, superseded=None, nativeSource=None, nativeSourceValue=None, invalid=None, invalidReason=None):
         """
         :param type: What type of source this is.
         :type type: str
@@ -40,7 +38,7 @@ class AXValueSource(object):
         :param invalidReason: Reason for the value being invalid, if it is.
         :type invalidReason: Optional[str]
         """
-        super().__init__()
+        super(AXValueSource, self).__init__()
         self.type = type
         self.value = AXValue.safe_create(value)
         self.attribute = attribute
@@ -50,15 +48,6 @@ class AXValueSource(object):
         self.nativeSourceValue = AXValue.safe_create(nativeSourceValue)
         self.invalid = invalid
         self.invalidReason = invalidReason
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -80,10 +69,21 @@ class AXValueSource(object):
             repr_args.append("invalid={!r}".format(self.invalid))
         if self.invalidReason is not None:
             repr_args.append("invalidReason={!r}".format(self.invalidReason))
-        return "AXValueSource(" + ", ".join(repr_args) + ")"
+        return "AXValueSource(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create AXValueSource from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of AXValueSource
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of AXValueSource if creation did not fail
+        :rtype: Optional[Union[dict, AXValueSource]]
+        """
         if init is not None:
             try:
                 ourselves = AXValueSource(**init)
@@ -95,6 +95,17 @@ class AXValueSource(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list AXValueSources from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list AXValueSource instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of AXValueSource instances if creation did not fail
+        :rtype: Optional[List[Union[dict, AXValueSource]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -109,6 +120,8 @@ class AXValue(object):
     A single computed AX property.
     """
 
+    __slots__ = ["type", "value", "relatedNodes", "sources"]
+
     def __init__(self, type, value=None, relatedNodes=None, sources=None):
         """
         :param type: The type of this value.
@@ -120,20 +133,11 @@ class AXValue(object):
         :param sources: The sources which contributed to the computation of this property.
         :type sources: Optional[List[dict]]
         """
-        super().__init__()
+        super(AXValue, self).__init__()
         self.type = type
         self.value = value
         self.relatedNodes = AXRelatedNode.safe_create_from_list(relatedNodes)
         self.sources = AXValueSource.safe_create_from_list(sources)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -145,10 +149,21 @@ class AXValue(object):
             repr_args.append("relatedNodes={!r}".format(self.relatedNodes))
         if self.sources is not None:
             repr_args.append("sources={!r}".format(self.sources))
-        return "AXValue(" + ", ".join(repr_args) + ")"
+        return "AXValue(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create AXValue from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of AXValue
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of AXValue if creation did not fail
+        :rtype: Optional[Union[dict, AXValue]]
+        """
         if init is not None:
             try:
                 ourselves = AXValue(**init)
@@ -160,6 +175,17 @@ class AXValue(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list AXValues from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list AXValue instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of AXValue instances if creation did not fail
+        :rtype: Optional[List[Union[dict, AXValue]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -170,6 +196,7 @@ class AXValue(object):
 
 
 class AXRelatedNode(object):
+    __slots__ = ["backendDOMNodeId", "idref", "text"]
 
     def __init__(self, backendDOMNodeId, idref=None, text=None):
         """
@@ -180,19 +207,10 @@ class AXRelatedNode(object):
         :param text: The text alternative of this node in the current context.
         :type text: Optional[str]
         """
-        super().__init__()
+        super(AXRelatedNode, self).__init__()
         self.backendDOMNodeId = backendDOMNodeId
         self.idref = idref
         self.text = text
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -202,10 +220,21 @@ class AXRelatedNode(object):
             repr_args.append("idref={!r}".format(self.idref))
         if self.text is not None:
             repr_args.append("text={!r}".format(self.text))
-        return "AXRelatedNode(" + ", ".join(repr_args) + ")"
+        return "AXRelatedNode(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create AXRelatedNode from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of AXRelatedNode
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of AXRelatedNode if creation did not fail
+        :rtype: Optional[Union[dict, AXRelatedNode]]
+        """
         if init is not None:
             try:
                 ourselves = AXRelatedNode(**init)
@@ -217,6 +246,17 @@ class AXRelatedNode(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list AXRelatedNodes from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list AXRelatedNode instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of AXRelatedNode instances if creation did not fail
+        :rtype: Optional[List[Union[dict, AXRelatedNode]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -227,6 +267,7 @@ class AXRelatedNode(object):
 
 
 class AXProperty(object):
+    __slots__ = ["name", "value"]
 
     def __init__(self, name, value):
         """
@@ -235,18 +276,9 @@ class AXProperty(object):
         :param value: The value of this property.
         :type value: dict
         """
-        super().__init__()
+        super(AXProperty, self).__init__()
         self.name = name
         self.value = AXValue.safe_create(value)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -254,10 +286,21 @@ class AXProperty(object):
             repr_args.append("name={!r}".format(self.name))
         if self.value is not None:
             repr_args.append("value={!r}".format(self.value))
-        return "AXProperty(" + ", ".join(repr_args) + ")"
+        return "AXProperty(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create AXProperty from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of AXProperty
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of AXProperty if creation did not fail
+        :rtype: Optional[Union[dict, AXProperty]]
+        """
         if init is not None:
             try:
                 ourselves = AXProperty(**init)
@@ -269,6 +312,17 @@ class AXProperty(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list AXPropertys from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list AXProperty instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of AXProperty instances if creation did not fail
+        :rtype: Optional[List[Union[dict, AXProperty]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -283,19 +337,9 @@ class AXNode(object):
     A node in the accessibility tree.
     """
 
-    def __init__(
-        self,
-        nodeId,
-        ignored,
-        ignoredReasons=None,
-        role=None,
-        name=None,
-        description=None,
-        value=None,
-        properties=None,
-        childIds=None,
-        backendDOMNodeId=None,
-    ):
+    __slots__ = ["nodeId", "ignored", "ignoredReasons", "role", "name", "description", "value", "properties", "childIds", "backendDOMNodeId"]
+
+    def __init__(self, nodeId, ignored, ignoredReasons=None, role=None, name=None, description=None, value=None, properties=None, childIds=None, backendDOMNodeId=None):
         """
         :param nodeId: Unique identifier for this node.
         :type nodeId: str
@@ -318,7 +362,7 @@ class AXNode(object):
         :param backendDOMNodeId: The backend ID for the associated DOM node, if any.
         :type backendDOMNodeId: Optional[int]
         """
-        super().__init__()
+        super(AXNode, self).__init__()
         self.nodeId = nodeId
         self.ignored = ignored
         self.ignoredReasons = AXProperty.safe_create_from_list(ignoredReasons)
@@ -329,15 +373,6 @@ class AXNode(object):
         self.properties = AXProperty.safe_create_from_list(properties)
         self.childIds = childIds
         self.backendDOMNodeId = backendDOMNodeId
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -361,10 +396,21 @@ class AXNode(object):
             repr_args.append("childIds={!r}".format(self.childIds))
         if self.backendDOMNodeId is not None:
             repr_args.append("backendDOMNodeId={!r}".format(self.backendDOMNodeId))
-        return "AXNode(" + ", ".join(repr_args) + ")"
+        return "AXNode(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create AXNode from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of AXNode
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of AXNode if creation did not fail
+        :rtype: Optional[Union[dict, AXNode]]
+        """
         if init is not None:
             try:
                 ourselves = AXNode(**init)
@@ -376,6 +422,17 @@ class AXNode(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list AXNodes from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list AXNode instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of AXNode instances if creation did not fail
+        :rtype: Optional[List[Union[dict, AXNode]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -385,7 +442,7 @@ class AXNode(object):
             return init
 
 
-TYPE_TO_OBJECT = {
+ACCESSIBILITY_TYPE_TO_OBJECT = {
     "AXValueSource": AXValueSource,
     "AXValue": AXValue,
     "AXRelatedNode": AXRelatedNode,

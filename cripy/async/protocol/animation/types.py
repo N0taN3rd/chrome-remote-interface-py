@@ -1,5 +1,13 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
 from cripy.async.protocol.dom import types as DOM
+
+__all__ = [
+    "KeyframesRule",
+    "KeyframeStyle",
+    "AnimationEffect",
+    "AnimationT",
+    "ANIMATION_TYPES_TO_OBJECT"
+]
 
 
 class KeyframesRule(object):
@@ -7,9 +15,9 @@ class KeyframesRule(object):
     Keyframes Rule
     """
 
-    def __init__(
-        self, keyframes: List[Union["KeyframeStyle", dict]], name: Optional[str] = None
-    ) -> None:
+    __slots__ = ["name", "keyframes"]
+
+    def __init__(self, keyframes: List[Union['KeyframeStyle', dict]], name: Optional[str] = None) -> None:
         """
         :param name: CSS keyframed animation's name.
         :type name: Optional[str]
@@ -20,25 +28,27 @@ class KeyframesRule(object):
         self.name = name
         self.keyframes = KeyframeStyle.safe_create_from_list(keyframes)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.name is not None:
             repr_args.append("name={!r}".format(self.name))
         if self.keyframes is not None:
             repr_args.append("keyframes={!r}".format(self.keyframes))
-        return "KeyframesRule(" + ", ".join(repr_args) + ")"
+        return "KeyframesRule(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["KeyframesRule", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['KeyframesRule', dict]]:
+        """
+        Safely create KeyframesRule from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of KeyframesRule
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of KeyframesRule if creation did not fail
+        :rtype: Optional[Union[dict, KeyframesRule]]
+        """
         if init is not None:
             try:
                 ourselves = KeyframesRule(**init)
@@ -49,9 +59,18 @@ class KeyframesRule(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["KeyframesRule", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['KeyframesRule', dict]]]:
+        """
+        Safely create a new list KeyframesRules from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list KeyframesRule instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of KeyframesRule instances if creation did not fail
+        :rtype: Optional[List[Union[dict, KeyframesRule]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -66,6 +85,8 @@ class KeyframeStyle(object):
     Keyframe Style
     """
 
+    __slots__ = ["offset", "easing"]
+
     def __init__(self, offset: str, easing: str) -> None:
         """
         :param offset: Keyframe's time offset.
@@ -77,25 +98,27 @@ class KeyframeStyle(object):
         self.offset = offset
         self.easing = easing
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.offset is not None:
             repr_args.append("offset={!r}".format(self.offset))
         if self.easing is not None:
             repr_args.append("easing={!r}".format(self.easing))
-        return "KeyframeStyle(" + ", ".join(repr_args) + ")"
+        return "KeyframeStyle(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["KeyframeStyle", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['KeyframeStyle', dict]]:
+        """
+        Safely create KeyframeStyle from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of KeyframeStyle
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of KeyframeStyle if creation did not fail
+        :rtype: Optional[Union[dict, KeyframeStyle]]
+        """
         if init is not None:
             try:
                 ourselves = KeyframeStyle(**init)
@@ -106,9 +129,18 @@ class KeyframeStyle(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["KeyframeStyle", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['KeyframeStyle', dict]]]:
+        """
+        Safely create a new list KeyframeStyles from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list KeyframeStyle instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of KeyframeStyle instances if creation did not fail
+        :rtype: Optional[List[Union[dict, KeyframeStyle]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -123,19 +155,9 @@ class AnimationEffect(object):
     AnimationEffect instance
     """
 
-    def __init__(
-        self,
-        delay: float,
-        endDelay: float,
-        iterationStart: float,
-        iterations: float,
-        duration: float,
-        direction: str,
-        fill: str,
-        easing: str,
-        backendNodeId: Optional[int] = None,
-        keyframesRule: Optional[Union["KeyframesRule", dict]] = None,
-    ) -> None:
+    __slots__ = ["delay", "endDelay", "iterationStart", "iterations", "duration", "direction", "fill", "backendNodeId", "keyframesRule", "easing"]
+
+    def __init__(self, delay: float, endDelay: float, iterationStart: float, iterations: float, duration: float, direction: str, fill: str, easing: str, backendNodeId: Optional[int] = None, keyframesRule: Optional[Union['KeyframesRule', dict]] = None) -> None:
         """
         :param delay: `AnimationEffect`'s delay.
         :type delay: float
@@ -170,15 +192,6 @@ class AnimationEffect(object):
         self.keyframesRule = KeyframesRule.safe_create(keyframesRule)
         self.easing = easing
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.delay is not None:
@@ -201,10 +214,21 @@ class AnimationEffect(object):
             repr_args.append("keyframesRule={!r}".format(self.keyframesRule))
         if self.easing is not None:
             repr_args.append("easing={!r}".format(self.easing))
-        return "AnimationEffect(" + ", ".join(repr_args) + ")"
+        return "AnimationEffect(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["AnimationEffect", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AnimationEffect', dict]]:
+        """
+        Safely create AnimationEffect from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of AnimationEffect
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of AnimationEffect if creation did not fail
+        :rtype: Optional[Union[dict, AnimationEffect]]
+        """
         if init is not None:
             try:
                 ourselves = AnimationEffect(**init)
@@ -215,9 +239,18 @@ class AnimationEffect(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["AnimationEffect", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AnimationEffect', dict]]]:
+        """
+        Safely create a new list AnimationEffects from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list AnimationEffect instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of AnimationEffect instances if creation did not fail
+        :rtype: Optional[List[Union[dict, AnimationEffect]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -227,24 +260,14 @@ class AnimationEffect(object):
             return init
 
 
-class Animation(object):
+class AnimationT(object):
     """
     Animation instance.
     """
 
-    def __init__(
-        self,
-        id: str,
-        name: str,
-        pausedState: bool,
-        playState: str,
-        playbackRate: float,
-        startTime: float,
-        currentTime: float,
-        type: str,
-        source: Optional[Union["AnimationEffect", dict]] = None,
-        cssId: Optional[str] = None,
-    ) -> None:
+    __slots__ = ["id", "name", "pausedState", "playState", "playbackRate", "startTime", "currentTime", "type", "source", "cssId"]
+
+    def __init__(self, id: str, name: str, pausedState: bool, playState: str, playbackRate: float, startTime: float, currentTime: float, type: str, source: Optional[Union['AnimationEffect', dict]] = None, cssId: Optional[str] = None) -> None:
         """
         :param id: `Animation`'s id.
         :type id: str
@@ -279,15 +302,6 @@ class Animation(object):
         self.source = AnimationEffect.safe_create(source)
         self.cssId = cssId
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.id is not None:
@@ -310,13 +324,24 @@ class Animation(object):
             repr_args.append("source={!r}".format(self.source))
         if self.cssId is not None:
             repr_args.append("cssId={!r}".format(self.cssId))
-        return "Animation(" + ", ".join(repr_args) + ")"
+        return "AnimationT(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["Animation", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AnimationT', dict]]:
+        """
+        Safely create AnimationT from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of AnimationT
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of AnimationT if creation did not fail
+        :rtype: Optional[Union[dict, AnimationT]]
+        """
         if init is not None:
             try:
-                ourselves = Animation(**init)
+                ourselves = AnimationT(**init)
                 return ourselves
             except Exception:
                 return init
@@ -324,21 +349,30 @@ class Animation(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["Animation", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AnimationT', dict]]]:
+        """
+        Safely create a new list AnimationTs from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list AnimationT instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of AnimationT instances if creation did not fail
+        :rtype: Optional[List[Union[dict, AnimationT]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Animation.safe_create(it))
+                list_of_self.append(AnimationT.safe_create(it))
             return list_of_self
         else:
             return init
 
 
-TYPE_TO_OBJECT = {
+ANIMATION_TYPES_TO_OBJECT = {
     "KeyframesRule": KeyframesRule,
     "KeyframeStyle": KeyframeStyle,
     "AnimationEffect": AnimationEffect,
-    "Animation": Animation,
+    "AnimationT": AnimationT,
 }

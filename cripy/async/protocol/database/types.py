@@ -1,10 +1,18 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
+
+__all__ = [
+    "Error",
+    "DatabaseT",
+    "DATABASE_TYPES_TO_OBJECT"
+]
 
 
 class Error(object):
     """
     Database error.
     """
+
+    __slots__ = ["message", "code"]
 
     def __init__(self, message: str, code: int) -> None:
         """
@@ -17,25 +25,27 @@ class Error(object):
         self.message = message
         self.code = code
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.message is not None:
             repr_args.append("message={!r}".format(self.message))
         if self.code is not None:
             repr_args.append("code={!r}".format(self.code))
-        return "Error(" + ", ".join(repr_args) + ")"
+        return "Error(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["Error", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Error', dict]]:
+        """
+        Safely create Error from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Error
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Error if creation did not fail
+        :rtype: Optional[Union[dict, Error]]
+        """
         if init is not None:
             try:
                 ourselves = Error(**init)
@@ -46,9 +56,18 @@ class Error(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["Error", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Error', dict]]]:
+        """
+        Safely create a new list Errors from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Error instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Error instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Error]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -58,10 +77,12 @@ class Error(object):
             return init
 
 
-class Database(object):
+class DatabaseT(object):
     """
     Database object.
     """
+
+    __slots__ = ["id", "domain", "name", "version"]
 
     def __init__(self, id: str, domain: str, name: str, version: str) -> None:
         """
@@ -80,15 +101,6 @@ class Database(object):
         self.name = name
         self.version = version
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.id is not None:
@@ -99,13 +111,24 @@ class Database(object):
             repr_args.append("name={!r}".format(self.name))
         if self.version is not None:
             repr_args.append("version={!r}".format(self.version))
-        return "Database(" + ", ".join(repr_args) + ")"
+        return "DatabaseT(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["Database", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DatabaseT', dict]]:
+        """
+        Safely create DatabaseT from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of DatabaseT
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of DatabaseT if creation did not fail
+        :rtype: Optional[Union[dict, DatabaseT]]
+        """
         if init is not None:
             try:
-                ourselves = Database(**init)
+                ourselves = DatabaseT(**init)
                 return ourselves
             except Exception:
                 return init
@@ -113,16 +136,28 @@ class Database(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["Database", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DatabaseT', dict]]]:
+        """
+        Safely create a new list DatabaseTs from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list DatabaseT instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of DatabaseT instances if creation did not fail
+        :rtype: Optional[List[Union[dict, DatabaseT]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(Database.safe_create(it))
+                list_of_self.append(DatabaseT.safe_create(it))
             return list_of_self
         else:
             return init
 
 
-TYPE_TO_OBJECT = {"Error": Error, "Database": Database}
+DATABASE_TYPES_TO_OBJECT = {
+    "Error": Error,
+    "DatabaseT": DatabaseT,
+}

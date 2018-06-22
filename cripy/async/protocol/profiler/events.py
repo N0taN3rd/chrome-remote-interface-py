@@ -1,25 +1,25 @@
 from typing import Any, List, Optional, Union
-from types import SimpleNamespace
+from collections import namedtuple
 from cripy.async.protocol.debugger import types as Debugger
+from cripy.async.protocol.profiler.types import *
 
-try:
-    from cripy.async.protocol.profiler.types import *
-except ImportError:
-    pass
-
+__all__ = [
+    "ConsoleProfileFinishedEvent",
+    "ConsoleProfileStartedEvent",
+    "PROFILER_EVENTS_TO_CLASS",
+    "PROFILER_EVENTS_NS"
+]
 
 class ConsoleProfileFinishedEvent(object):
 
     event = "Profiler.consoleProfileFinished"
 
-    def __init__(
-        self,
-        id: str,
-        location: Union[Debugger.Location, dict],
-        profile: Union[Profile, dict],
-        title: Optional[str] = None,
-    ) -> None:
+    __slots__ = ["id", "location", "profile", "title"]
+
+    def __init__(self, id: str, location: Union[Debugger.Location, dict], profile: Union[Profile, dict], title: Optional[str] = None) -> None:
         """
+        Create a new instance of ConsoleProfileFinishedEvent
+
         :param id: The id
         :type id: str
         :param location: Location of console.profileEnd().
@@ -35,15 +35,6 @@ class ConsoleProfileFinishedEvent(object):
         self.profile = Profile.safe_create(profile)
         self.title = title
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.id is not None:
@@ -54,12 +45,21 @@ class ConsoleProfileFinishedEvent(object):
             repr_args.append("profile={!r}".format(self.profile))
         if self.title is not None:
             repr_args.append("title={!r}".format(self.title))
-        return "ConsoleProfileFinishedEvent(" + ", ".join(repr_args) + ")"
+        return "ConsoleProfileFinishedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["ConsoleProfileFinishedEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ConsoleProfileFinishedEvent', dict]]:
+        """
+        Safely create ConsoleProfileFinishedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ConsoleProfileFinishedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ConsoleProfileFinishedEvent if creation did not fail
+        :rtype: Optional[Union[dict, ConsoleProfileFinishedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = ConsoleProfileFinishedEvent(**init)
@@ -70,9 +70,18 @@ class ConsoleProfileFinishedEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ConsoleProfileFinishedEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ConsoleProfileFinishedEvent', dict]]]:
+        """
+        Safely create a new list ConsoleProfileFinishedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ConsoleProfileFinishedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ConsoleProfileFinishedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ConsoleProfileFinishedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -89,13 +98,12 @@ class ConsoleProfileStartedEvent(object):
 
     event = "Profiler.consoleProfileStarted"
 
-    def __init__(
-        self,
-        id: str,
-        location: Union[Debugger.Location, dict],
-        title: Optional[str] = None,
-    ) -> None:
+    __slots__ = ["id", "location", "title"]
+
+    def __init__(self, id: str, location: Union[Debugger.Location, dict], title: Optional[str] = None) -> None:
         """
+        Create a new instance of ConsoleProfileStartedEvent
+
         :param id: The id
         :type id: str
         :param location: Location of console.profile().
@@ -108,15 +116,6 @@ class ConsoleProfileStartedEvent(object):
         self.location = Debugger.Location.safe_create(location)
         self.title = title
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.id is not None:
@@ -125,12 +124,21 @@ class ConsoleProfileStartedEvent(object):
             repr_args.append("location={!r}".format(self.location))
         if self.title is not None:
             repr_args.append("title={!r}".format(self.title))
-        return "ConsoleProfileStartedEvent(" + ", ".join(repr_args) + ")"
+        return "ConsoleProfileStartedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["ConsoleProfileStartedEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ConsoleProfileStartedEvent', dict]]:
+        """
+        Safely create ConsoleProfileStartedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ConsoleProfileStartedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ConsoleProfileStartedEvent if creation did not fail
+        :rtype: Optional[Union[dict, ConsoleProfileStartedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = ConsoleProfileStartedEvent(**init)
@@ -141,9 +149,18 @@ class ConsoleProfileStartedEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ConsoleProfileStartedEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ConsoleProfileStartedEvent', dict]]]:
+        """
+        Safely create a new list ConsoleProfileStartedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ConsoleProfileStartedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ConsoleProfileStartedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ConsoleProfileStartedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -153,12 +170,14 @@ class ConsoleProfileStartedEvent(object):
             return init
 
 
-EVENT_TO_CLASS = {
-    "Profiler.consoleProfileFinished": ConsoleProfileFinishedEvent,
-    "Profiler.consoleProfileStarted": ConsoleProfileStartedEvent,
+PROFILER_EVENTS_TO_CLASS = {
+   "Profiler.consoleProfileFinished": ConsoleProfileFinishedEvent,
+   "Profiler.consoleProfileStarted": ConsoleProfileStartedEvent,
 }
 
-EVENT_NS = SimpleNamespace(
-    ConsoleProfileFinished="Profiler.consoleProfileFinished",
-    ConsoleProfileStarted="Profiler.consoleProfileStarted",
+ProfilerNS = namedtuple("ProfilerNS", ["ConsoleProfileFinished", "ConsoleProfileStarted"])
+
+PROFILER_EVENTS_NS = ProfilerNS(
+  ConsoleProfileFinished="Profiler.consoleProfileFinished",
+  ConsoleProfileStarted="Profiler.consoleProfileStarted",
 )

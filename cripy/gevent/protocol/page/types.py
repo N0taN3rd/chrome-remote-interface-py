@@ -13,6 +13,7 @@ __all__ = [
     "FontSizes",
     "FontFamilies",
     "AppManifestError",
+    "PAGE_TYPE_TO_OBJECT"
 ]
 
 
@@ -21,9 +22,9 @@ class VisualViewport(object):
     Visual viewport position, dimensions, and scale.
     """
 
-    def __init__(
-        self, offsetX, offsetY, pageX, pageY, clientWidth, clientHeight, scale
-    ):
+    __slots__ = ["offsetX", "offsetY", "pageX", "pageY", "clientWidth", "clientHeight", "scale"]
+
+    def __init__(self, offsetX, offsetY, pageX, pageY, clientWidth, clientHeight, scale):
         """
         :param offsetX: Horizontal offset relative to the layout viewport (CSS pixels).
         :type offsetX: float
@@ -40,7 +41,7 @@ class VisualViewport(object):
         :param scale: Scale relative to the ideal viewport (size at width=device-width).
         :type scale: float
         """
-        super().__init__()
+        super(VisualViewport, self).__init__()
         self.offsetX = offsetX
         self.offsetY = offsetY
         self.pageX = pageX
@@ -48,15 +49,6 @@ class VisualViewport(object):
         self.clientWidth = clientWidth
         self.clientHeight = clientHeight
         self.scale = scale
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -74,10 +66,21 @@ class VisualViewport(object):
             repr_args.append("clientHeight={!r}".format(self.clientHeight))
         if self.scale is not None:
             repr_args.append("scale={!r}".format(self.scale))
-        return "VisualViewport(" + ", ".join(repr_args) + ")"
+        return "VisualViewport(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create VisualViewport from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of VisualViewport
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of VisualViewport if creation did not fail
+        :rtype: Optional[Union[dict, VisualViewport]]
+        """
         if init is not None:
             try:
                 ourselves = VisualViewport(**init)
@@ -89,6 +92,17 @@ class VisualViewport(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list VisualViewports from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list VisualViewport instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of VisualViewport instances if creation did not fail
+        :rtype: Optional[List[Union[dict, VisualViewport]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -103,6 +117,8 @@ class Viewport(object):
     Viewport for capturing screenshot.
     """
 
+    __slots__ = ["x", "y", "width", "height", "scale"]
+
     def __init__(self, x, y, width, height, scale):
         """
         :param x: X offset in CSS pixels.
@@ -116,21 +132,12 @@ class Viewport(object):
         :param scale: Page scale factor.
         :type scale: float
         """
-        super().__init__()
+        super(Viewport, self).__init__()
         self.x = x
         self.y = y
         self.width = width
         self.height = height
         self.scale = scale
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -144,10 +151,21 @@ class Viewport(object):
             repr_args.append("height={!r}".format(self.height))
         if self.scale is not None:
             repr_args.append("scale={!r}".format(self.scale))
-        return "Viewport(" + ", ".join(repr_args) + ")"
+        return "Viewport(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Viewport from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Viewport
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Viewport if creation did not fail
+        :rtype: Optional[Union[dict, Viewport]]
+        """
         if init is not None:
             try:
                 ourselves = Viewport(**init)
@@ -159,6 +177,17 @@ class Viewport(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Viewports from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Viewport instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Viewport instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Viewport]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -173,16 +202,9 @@ class ScreencastFrameMetadata(object):
     Screencast frame metadata.
     """
 
-    def __init__(
-        self,
-        offsetTop,
-        pageScaleFactor,
-        deviceWidth,
-        deviceHeight,
-        scrollOffsetX,
-        scrollOffsetY,
-        timestamp=None,
-    ):
+    __slots__ = ["offsetTop", "pageScaleFactor", "deviceWidth", "deviceHeight", "scrollOffsetX", "scrollOffsetY", "timestamp"]
+
+    def __init__(self, offsetTop, pageScaleFactor, deviceWidth, deviceHeight, scrollOffsetX, scrollOffsetY, timestamp=None):
         """
         :param offsetTop: Top offset in DIP.
         :type offsetTop: float
@@ -199,7 +221,7 @@ class ScreencastFrameMetadata(object):
         :param timestamp: Frame swap timestamp.
         :type timestamp: Optional[float]
         """
-        super().__init__()
+        super(ScreencastFrameMetadata, self).__init__()
         self.offsetTop = offsetTop
         self.pageScaleFactor = pageScaleFactor
         self.deviceWidth = deviceWidth
@@ -207,15 +229,6 @@ class ScreencastFrameMetadata(object):
         self.scrollOffsetX = scrollOffsetX
         self.scrollOffsetY = scrollOffsetY
         self.timestamp = timestamp
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -233,10 +246,21 @@ class ScreencastFrameMetadata(object):
             repr_args.append("scrollOffsetY={!r}".format(self.scrollOffsetY))
         if self.timestamp is not None:
             repr_args.append("timestamp={!r}".format(self.timestamp))
-        return "ScreencastFrameMetadata(" + ", ".join(repr_args) + ")"
+        return "ScreencastFrameMetadata(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ScreencastFrameMetadata from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ScreencastFrameMetadata
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ScreencastFrameMetadata if creation did not fail
+        :rtype: Optional[Union[dict, ScreencastFrameMetadata]]
+        """
         if init is not None:
             try:
                 ourselves = ScreencastFrameMetadata(**init)
@@ -248,6 +272,17 @@ class ScreencastFrameMetadata(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ScreencastFrameMetadatas from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ScreencastFrameMetadata instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ScreencastFrameMetadata instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ScreencastFrameMetadata]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -262,6 +297,8 @@ class NavigationEntry(object):
     Navigation history entry.
     """
 
+    __slots__ = ["id", "url", "userTypedURL", "title", "transitionType"]
+
     def __init__(self, id, url, userTypedURL, title, transitionType):
         """
         :param id: Unique id of the navigation history entry.
@@ -275,21 +312,12 @@ class NavigationEntry(object):
         :param transitionType: Transition type.
         :type transitionType: str
         """
-        super().__init__()
+        super(NavigationEntry, self).__init__()
         self.id = id
         self.url = url
         self.userTypedURL = userTypedURL
         self.title = title
         self.transitionType = transitionType
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -303,10 +331,21 @@ class NavigationEntry(object):
             repr_args.append("title={!r}".format(self.title))
         if self.transitionType is not None:
             repr_args.append("transitionType={!r}".format(self.transitionType))
-        return "NavigationEntry(" + ", ".join(repr_args) + ")"
+        return "NavigationEntry(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create NavigationEntry from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of NavigationEntry
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of NavigationEntry if creation did not fail
+        :rtype: Optional[Union[dict, NavigationEntry]]
+        """
         if init is not None:
             try:
                 ourselves = NavigationEntry(**init)
@@ -318,6 +357,17 @@ class NavigationEntry(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list NavigationEntrys from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list NavigationEntry instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of NavigationEntry instances if creation did not fail
+        :rtype: Optional[List[Union[dict, NavigationEntry]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -332,6 +382,8 @@ class LayoutViewport(object):
     Layout viewport position and dimensions.
     """
 
+    __slots__ = ["pageX", "pageY", "clientWidth", "clientHeight"]
+
     def __init__(self, pageX, pageY, clientWidth, clientHeight):
         """
         :param pageX: Horizontal offset relative to the document (CSS pixels).
@@ -343,20 +395,11 @@ class LayoutViewport(object):
         :param clientHeight: Height (CSS pixels), excludes scrollbar if present.
         :type clientHeight: int
         """
-        super().__init__()
+        super(LayoutViewport, self).__init__()
         self.pageX = pageX
         self.pageY = pageY
         self.clientWidth = clientWidth
         self.clientHeight = clientHeight
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -368,10 +411,21 @@ class LayoutViewport(object):
             repr_args.append("clientWidth={!r}".format(self.clientWidth))
         if self.clientHeight is not None:
             repr_args.append("clientHeight={!r}".format(self.clientHeight))
-        return "LayoutViewport(" + ", ".join(repr_args) + ")"
+        return "LayoutViewport(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create LayoutViewport from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of LayoutViewport
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of LayoutViewport if creation did not fail
+        :rtype: Optional[Union[dict, LayoutViewport]]
+        """
         if init is not None:
             try:
                 ourselves = LayoutViewport(**init)
@@ -383,6 +437,17 @@ class LayoutViewport(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list LayoutViewports from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list LayoutViewport instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of LayoutViewport instances if creation did not fail
+        :rtype: Optional[List[Union[dict, LayoutViewport]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -397,6 +462,8 @@ class FrameTree(object):
     Information about the Frame hierarchy.
     """
 
+    __slots__ = ["frame", "childFrames"]
+
     def __init__(self, frame, childFrames=None):
         """
         :param frame: Frame information for this tree item.
@@ -404,18 +471,9 @@ class FrameTree(object):
         :param childFrames: Child frames.
         :type childFrames: Optional[List[dict]]
         """
-        super().__init__()
+        super(FrameTree, self).__init__()
         self.frame = Frame.safe_create(frame)
         self.childFrames = FrameTree.safe_create_from_list(childFrames)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -423,10 +481,21 @@ class FrameTree(object):
             repr_args.append("frame={!r}".format(self.frame))
         if self.childFrames is not None:
             repr_args.append("childFrames={!r}".format(self.childFrames))
-        return "FrameTree(" + ", ".join(repr_args) + ")"
+        return "FrameTree(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create FrameTree from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of FrameTree
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of FrameTree if creation did not fail
+        :rtype: Optional[Union[dict, FrameTree]]
+        """
         if init is not None:
             try:
                 ourselves = FrameTree(**init)
@@ -438,6 +507,17 @@ class FrameTree(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list FrameTrees from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list FrameTree instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of FrameTree instances if creation did not fail
+        :rtype: Optional[List[Union[dict, FrameTree]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -452,6 +532,8 @@ class FrameResourceTree(object):
     Information about the Frame hierarchy along with their cached resources.
     """
 
+    __slots__ = ["frame", "childFrames", "resources"]
+
     def __init__(self, frame, resources, childFrames=None):
         """
         :param frame: Frame information for this tree item.
@@ -461,19 +543,10 @@ class FrameResourceTree(object):
         :param resources: Information about frame resources.
         :type resources: List[dict]
         """
-        super().__init__()
+        super(FrameResourceTree, self).__init__()
         self.frame = Frame.safe_create(frame)
         self.childFrames = FrameResourceTree.safe_create_from_list(childFrames)
         self.resources = FrameResource.safe_create_from_list(resources)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -483,10 +556,21 @@ class FrameResourceTree(object):
             repr_args.append("childFrames={!r}".format(self.childFrames))
         if self.resources is not None:
             repr_args.append("resources={!r}".format(self.resources))
-        return "FrameResourceTree(" + ", ".join(repr_args) + ")"
+        return "FrameResourceTree(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create FrameResourceTree from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of FrameResourceTree
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of FrameResourceTree if creation did not fail
+        :rtype: Optional[Union[dict, FrameResourceTree]]
+        """
         if init is not None:
             try:
                 ourselves = FrameResourceTree(**init)
@@ -498,6 +582,17 @@ class FrameResourceTree(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list FrameResourceTrees from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list FrameResourceTree instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of FrameResourceTree instances if creation did not fail
+        :rtype: Optional[List[Union[dict, FrameResourceTree]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -512,16 +607,9 @@ class FrameResource(object):
     Information about the Resource on the page.
     """
 
-    def __init__(
-        self,
-        url,
-        type,
-        mimeType,
-        lastModified=None,
-        contentSize=None,
-        failed=None,
-        canceled=None,
-    ):
+    __slots__ = ["url", "type", "mimeType", "lastModified", "contentSize", "failed", "canceled"]
+
+    def __init__(self, url, type, mimeType, lastModified=None, contentSize=None, failed=None, canceled=None):
         """
         :param url: Resource URL.
         :type url: str
@@ -538,7 +626,7 @@ class FrameResource(object):
         :param canceled: True if the resource was canceled during loading.
         :type canceled: Optional[bool]
         """
-        super().__init__()
+        super(FrameResource, self).__init__()
         self.url = url
         self.type = type
         self.mimeType = mimeType
@@ -546,15 +634,6 @@ class FrameResource(object):
         self.contentSize = contentSize
         self.failed = failed
         self.canceled = canceled
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -572,10 +651,21 @@ class FrameResource(object):
             repr_args.append("failed={!r}".format(self.failed))
         if self.canceled is not None:
             repr_args.append("canceled={!r}".format(self.canceled))
-        return "FrameResource(" + ", ".join(repr_args) + ")"
+        return "FrameResource(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create FrameResource from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of FrameResource
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of FrameResource if creation did not fail
+        :rtype: Optional[Union[dict, FrameResource]]
+        """
         if init is not None:
             try:
                 ourselves = FrameResource(**init)
@@ -587,6 +677,17 @@ class FrameResource(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list FrameResources from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list FrameResource instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of FrameResource instances if creation did not fail
+        :rtype: Optional[List[Union[dict, FrameResource]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -601,17 +702,9 @@ class Frame(object):
     Information about the Frame on the page.
     """
 
-    def __init__(
-        self,
-        id,
-        loaderId,
-        url,
-        securityOrigin,
-        mimeType,
-        parentId=None,
-        name=None,
-        unreachableUrl=None,
-    ):
+    __slots__ = ["id", "parentId", "loaderId", "name", "url", "securityOrigin", "mimeType", "unreachableUrl"]
+
+    def __init__(self, id, loaderId, url, securityOrigin, mimeType, parentId=None, name=None, unreachableUrl=None):
         """
         :param id: Frame unique identifier.
         :type id: str
@@ -630,7 +723,7 @@ class Frame(object):
         :param unreachableUrl: If the frame failed to load, this contains the URL that could not be loaded.
         :type unreachableUrl: Optional[str]
         """
-        super().__init__()
+        super(Frame, self).__init__()
         self.id = id
         self.parentId = parentId
         self.loaderId = loaderId
@@ -639,15 +732,6 @@ class Frame(object):
         self.securityOrigin = securityOrigin
         self.mimeType = mimeType
         self.unreachableUrl = unreachableUrl
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -667,10 +751,21 @@ class Frame(object):
             repr_args.append("mimeType={!r}".format(self.mimeType))
         if self.unreachableUrl is not None:
             repr_args.append("unreachableUrl={!r}".format(self.unreachableUrl))
-        return "Frame(" + ", ".join(repr_args) + ")"
+        return "Frame(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Frame from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Frame
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Frame if creation did not fail
+        :rtype: Optional[Union[dict, Frame]]
+        """
         if init is not None:
             try:
                 ourselves = Frame(**init)
@@ -682,6 +777,17 @@ class Frame(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Frames from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Frame instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Frame instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Frame]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -696,6 +802,8 @@ class FontSizes(object):
     Default font sizes.
     """
 
+    __slots__ = ["standard", "fixed"]
+
     def __init__(self, standard=None, fixed=None):
         """
         :param standard: Default standard font size.
@@ -703,18 +811,9 @@ class FontSizes(object):
         :param fixed: Default fixed font size.
         :type fixed: Optional[int]
         """
-        super().__init__()
+        super(FontSizes, self).__init__()
         self.standard = standard
         self.fixed = fixed
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -722,10 +821,21 @@ class FontSizes(object):
             repr_args.append("standard={!r}".format(self.standard))
         if self.fixed is not None:
             repr_args.append("fixed={!r}".format(self.fixed))
-        return "FontSizes(" + ", ".join(repr_args) + ")"
+        return "FontSizes(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create FontSizes from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of FontSizes
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of FontSizes if creation did not fail
+        :rtype: Optional[Union[dict, FontSizes]]
+        """
         if init is not None:
             try:
                 ourselves = FontSizes(**init)
@@ -737,6 +847,17 @@ class FontSizes(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list FontSizess from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list FontSizes instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of FontSizes instances if creation did not fail
+        :rtype: Optional[List[Union[dict, FontSizes]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -751,16 +872,9 @@ class FontFamilies(object):
     Generic font families collection.
     """
 
-    def __init__(
-        self,
-        standard=None,
-        fixed=None,
-        serif=None,
-        sansSerif=None,
-        cursive=None,
-        fantasy=None,
-        pictograph=None,
-    ):
+    __slots__ = ["standard", "fixed", "serif", "sansSerif", "cursive", "fantasy", "pictograph"]
+
+    def __init__(self, standard=None, fixed=None, serif=None, sansSerif=None, cursive=None, fantasy=None, pictograph=None):
         """
         :param standard: The standard font-family.
         :type standard: Optional[str]
@@ -777,7 +891,7 @@ class FontFamilies(object):
         :param pictograph: The pictograph font-family.
         :type pictograph: Optional[str]
         """
-        super().__init__()
+        super(FontFamilies, self).__init__()
         self.standard = standard
         self.fixed = fixed
         self.serif = serif
@@ -785,15 +899,6 @@ class FontFamilies(object):
         self.cursive = cursive
         self.fantasy = fantasy
         self.pictograph = pictograph
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -811,10 +916,21 @@ class FontFamilies(object):
             repr_args.append("fantasy={!r}".format(self.fantasy))
         if self.pictograph is not None:
             repr_args.append("pictograph={!r}".format(self.pictograph))
-        return "FontFamilies(" + ", ".join(repr_args) + ")"
+        return "FontFamilies(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create FontFamilies from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of FontFamilies
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of FontFamilies if creation did not fail
+        :rtype: Optional[Union[dict, FontFamilies]]
+        """
         if init is not None:
             try:
                 ourselves = FontFamilies(**init)
@@ -826,6 +942,17 @@ class FontFamilies(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list FontFamiliess from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list FontFamilies instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of FontFamilies instances if creation did not fail
+        :rtype: Optional[List[Union[dict, FontFamilies]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -840,6 +967,8 @@ class AppManifestError(object):
     Error while paring app manifest.
     """
 
+    __slots__ = ["message", "critical", "line", "column"]
+
     def __init__(self, message, critical, line, column):
         """
         :param message: Error message.
@@ -851,20 +980,11 @@ class AppManifestError(object):
         :param column: Error column.
         :type column: int
         """
-        super().__init__()
+        super(AppManifestError, self).__init__()
         self.message = message
         self.critical = critical
         self.line = line
         self.column = column
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -876,10 +996,21 @@ class AppManifestError(object):
             repr_args.append("line={!r}".format(self.line))
         if self.column is not None:
             repr_args.append("column={!r}".format(self.column))
-        return "AppManifestError(" + ", ".join(repr_args) + ")"
+        return "AppManifestError(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create AppManifestError from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of AppManifestError
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of AppManifestError if creation did not fail
+        :rtype: Optional[Union[dict, AppManifestError]]
+        """
         if init is not None:
             try:
                 ourselves = AppManifestError(**init)
@@ -891,6 +1022,17 @@ class AppManifestError(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list AppManifestErrors from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list AppManifestError instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of AppManifestError instances if creation did not fail
+        :rtype: Optional[List[Union[dict, AppManifestError]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -900,7 +1042,7 @@ class AppManifestError(object):
             return init
 
 
-TYPE_TO_OBJECT = {
+PAGE_TYPE_TO_OBJECT = {
     "VisualViewport": VisualViewport,
     "Viewport": Viewport,
     "ScreencastFrameMetadata": ScreencastFrameMetadata,

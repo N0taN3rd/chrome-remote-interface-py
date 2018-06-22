@@ -1,13 +1,24 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
 from cripy.async.protocol.page import types as Page
 from cripy.async.protocol.dom import types as DOM
 from cripy.async.protocol.domdebugger import types as DOMDebugger
+
+__all__ = [
+    "NameValue",
+    "LayoutTreeNode",
+    "InlineTextBox",
+    "DOMNode",
+    "ComputedStyle",
+    "DOMSNAPSHOT_TYPES_TO_OBJECT"
+]
 
 
 class NameValue(object):
     """
     A name/value pair.
     """
+
+    __slots__ = ["name", "value"]
 
     def __init__(self, name: str, value: str) -> None:
         """
@@ -20,25 +31,27 @@ class NameValue(object):
         self.name = name
         self.value = value
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.name is not None:
             repr_args.append("name={!r}".format(self.name))
         if self.value is not None:
             repr_args.append("value={!r}".format(self.value))
-        return "NameValue(" + ", ".join(repr_args) + ")"
+        return "NameValue(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["NameValue", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['NameValue', dict]]:
+        """
+        Safely create NameValue from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of NameValue
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of NameValue if creation did not fail
+        :rtype: Optional[Union[dict, NameValue]]
+        """
         if init is not None:
             try:
                 ourselves = NameValue(**init)
@@ -49,9 +62,18 @@ class NameValue(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["NameValue", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['NameValue', dict]]]:
+        """
+        Safely create a new list NameValues from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list NameValue instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of NameValue instances if creation did not fail
+        :rtype: Optional[List[Union[dict, NameValue]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -66,15 +88,9 @@ class LayoutTreeNode(object):
     Details of an element in the DOM tree with a LayoutObject.
     """
 
-    def __init__(
-        self,
-        domNodeIndex: int,
-        boundingBox: Union["DOM.Rect", dict],
-        layoutText: Optional[str] = None,
-        inlineTextNodes: Optional[List[Union["InlineTextBox", dict]]] = None,
-        styleIndex: Optional[int] = None,
-        paintOrder: Optional[int] = None,
-    ) -> None:
+    __slots__ = ["domNodeIndex", "boundingBox", "layoutText", "inlineTextNodes", "styleIndex", "paintOrder"]
+
+    def __init__(self, domNodeIndex: int, boundingBox: Union['DOM.Rect', dict], layoutText: Optional[str] = None, inlineTextNodes: Optional[List[Union['InlineTextBox', dict]]] = None, styleIndex: Optional[int] = None, paintOrder: Optional[int] = None) -> None:
         """
         :param domNodeIndex: The index of the related DOM node in the `domNodes` array returned by `getSnapshot`.
         :type domNodeIndex: int
@@ -97,15 +113,6 @@ class LayoutTreeNode(object):
         self.styleIndex = styleIndex
         self.paintOrder = paintOrder
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.domNodeIndex is not None:
@@ -120,10 +127,21 @@ class LayoutTreeNode(object):
             repr_args.append("styleIndex={!r}".format(self.styleIndex))
         if self.paintOrder is not None:
             repr_args.append("paintOrder={!r}".format(self.paintOrder))
-        return "LayoutTreeNode(" + ", ".join(repr_args) + ")"
+        return "LayoutTreeNode(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["LayoutTreeNode", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['LayoutTreeNode', dict]]:
+        """
+        Safely create LayoutTreeNode from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of LayoutTreeNode
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of LayoutTreeNode if creation did not fail
+        :rtype: Optional[Union[dict, LayoutTreeNode]]
+        """
         if init is not None:
             try:
                 ourselves = LayoutTreeNode(**init)
@@ -134,9 +152,18 @@ class LayoutTreeNode(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["LayoutTreeNode", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LayoutTreeNode', dict]]]:
+        """
+        Safely create a new list LayoutTreeNodes from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list LayoutTreeNode instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of LayoutTreeNode instances if creation did not fail
+        :rtype: Optional[List[Union[dict, LayoutTreeNode]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -152,12 +179,9 @@ class InlineTextBox(object):
 stable and may change between versions.
     """
 
-    def __init__(
-        self,
-        boundingBox: Union["DOM.Rect", dict],
-        startCharacterIndex: int,
-        numCharacters: int,
-    ) -> None:
+    __slots__ = ["boundingBox", "startCharacterIndex", "numCharacters"]
+
+    def __init__(self, boundingBox: Union['DOM.Rect', dict], startCharacterIndex: int, numCharacters: int) -> None:
         """
         :param boundingBox: The absolute position bounding box.
         :type boundingBox: dict
@@ -171,29 +195,29 @@ stable and may change between versions.
         self.startCharacterIndex = startCharacterIndex
         self.numCharacters = numCharacters
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.boundingBox is not None:
             repr_args.append("boundingBox={!r}".format(self.boundingBox))
         if self.startCharacterIndex is not None:
-            repr_args.append(
-                "startCharacterIndex={!r}".format(self.startCharacterIndex)
-            )
+            repr_args.append("startCharacterIndex={!r}".format(self.startCharacterIndex))
         if self.numCharacters is not None:
             repr_args.append("numCharacters={!r}".format(self.numCharacters))
-        return "InlineTextBox(" + ", ".join(repr_args) + ")"
+        return "InlineTextBox(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["InlineTextBox", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['InlineTextBox', dict]]:
+        """
+        Safely create InlineTextBox from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of InlineTextBox
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of InlineTextBox if creation did not fail
+        :rtype: Optional[Union[dict, InlineTextBox]]
+        """
         if init is not None:
             try:
                 ourselves = InlineTextBox(**init)
@@ -204,9 +228,18 @@ stable and may change between versions.
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["InlineTextBox", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['InlineTextBox', dict]]]:
+        """
+        Safely create a new list InlineTextBoxs from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list InlineTextBox instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of InlineTextBox instances if creation did not fail
+        :rtype: Optional[List[Union[dict, InlineTextBox]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -221,37 +254,9 @@ class DOMNode(object):
     A Node in the DOM tree.
     """
 
-    def __init__(
-        self,
-        nodeType: int,
-        nodeName: str,
-        nodeValue: str,
-        backendNodeId: int,
-        textValue: Optional[str] = None,
-        inputValue: Optional[str] = None,
-        inputChecked: Optional[bool] = None,
-        optionSelected: Optional[bool] = None,
-        childNodeIndexes: Optional[List[int]] = None,
-        attributes: Optional[List[Union["NameValue", dict]]] = None,
-        pseudoElementIndexes: Optional[List[int]] = None,
-        layoutNodeIndex: Optional[int] = None,
-        documentURL: Optional[str] = None,
-        baseURL: Optional[str] = None,
-        contentLanguage: Optional[str] = None,
-        documentEncoding: Optional[str] = None,
-        publicId: Optional[str] = None,
-        systemId: Optional[str] = None,
-        frameId: Optional[str] = None,
-        contentDocumentIndex: Optional[int] = None,
-        importedDocumentIndex: Optional[int] = None,
-        templateContentIndex: Optional[int] = None,
-        pseudoType: Optional[str] = None,
-        shadowRootType: Optional[str] = None,
-        isClickable: Optional[bool] = None,
-        eventListeners: Optional[List[Union["DOMDebugger.EventListener", dict]]] = None,
-        currentSourceURL: Optional[str] = None,
-        originURL: Optional[str] = None,
-    ) -> None:
+    __slots__ = ["nodeType", "nodeName", "nodeValue", "textValue", "inputValue", "inputChecked", "optionSelected", "backendNodeId", "childNodeIndexes", "attributes", "pseudoElementIndexes", "layoutNodeIndex", "documentURL", "baseURL", "contentLanguage", "documentEncoding", "publicId", "systemId", "frameId", "contentDocumentIndex", "importedDocumentIndex", "templateContentIndex", "pseudoType", "shadowRootType", "isClickable", "eventListeners", "currentSourceURL", "originURL"]
+
+    def __init__(self, nodeType: int, nodeName: str, nodeValue: str, backendNodeId: int, textValue: Optional[str] = None, inputValue: Optional[str] = None, inputChecked: Optional[bool] = None, optionSelected: Optional[bool] = None, childNodeIndexes: Optional[List[int]] = None, attributes: Optional[List[Union['NameValue', dict]]] = None, pseudoElementIndexes: Optional[List[int]] = None, layoutNodeIndex: Optional[int] = None, documentURL: Optional[str] = None, baseURL: Optional[str] = None, contentLanguage: Optional[str] = None, documentEncoding: Optional[str] = None, publicId: Optional[str] = None, systemId: Optional[str] = None, frameId: Optional[str] = None, contentDocumentIndex: Optional[int] = None, importedDocumentIndex: Optional[int] = None, templateContentIndex: Optional[int] = None, pseudoType: Optional[str] = None, shadowRootType: Optional[str] = None, isClickable: Optional[bool] = None, eventListeners: Optional[List[Union['DOMDebugger.EventListener', dict]]] = None, currentSourceURL: Optional[str] = None, originURL: Optional[str] = None) -> None:
         """
         :param nodeType: `Node`'s nodeType.
         :type nodeType: int
@@ -336,20 +341,9 @@ class DOMNode(object):
         self.pseudoType = pseudoType
         self.shadowRootType = shadowRootType
         self.isClickable = isClickable
-        self.eventListeners = DOMDebugger.EventListener.safe_create_from_list(
-            eventListeners
-        )
+        self.eventListeners = DOMDebugger.EventListener.safe_create_from_list(eventListeners)
         self.currentSourceURL = currentSourceURL
         self.originURL = originURL
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
 
     def __repr__(self) -> str:
         repr_args = []
@@ -374,9 +368,7 @@ class DOMNode(object):
         if self.attributes is not None:
             repr_args.append("attributes={!r}".format(self.attributes))
         if self.pseudoElementIndexes is not None:
-            repr_args.append(
-                "pseudoElementIndexes={!r}".format(self.pseudoElementIndexes)
-            )
+            repr_args.append("pseudoElementIndexes={!r}".format(self.pseudoElementIndexes))
         if self.layoutNodeIndex is not None:
             repr_args.append("layoutNodeIndex={!r}".format(self.layoutNodeIndex))
         if self.documentURL is not None:
@@ -394,17 +386,11 @@ class DOMNode(object):
         if self.frameId is not None:
             repr_args.append("frameId={!r}".format(self.frameId))
         if self.contentDocumentIndex is not None:
-            repr_args.append(
-                "contentDocumentIndex={!r}".format(self.contentDocumentIndex)
-            )
+            repr_args.append("contentDocumentIndex={!r}".format(self.contentDocumentIndex))
         if self.importedDocumentIndex is not None:
-            repr_args.append(
-                "importedDocumentIndex={!r}".format(self.importedDocumentIndex)
-            )
+            repr_args.append("importedDocumentIndex={!r}".format(self.importedDocumentIndex))
         if self.templateContentIndex is not None:
-            repr_args.append(
-                "templateContentIndex={!r}".format(self.templateContentIndex)
-            )
+            repr_args.append("templateContentIndex={!r}".format(self.templateContentIndex))
         if self.pseudoType is not None:
             repr_args.append("pseudoType={!r}".format(self.pseudoType))
         if self.shadowRootType is not None:
@@ -417,10 +403,21 @@ class DOMNode(object):
             repr_args.append("currentSourceURL={!r}".format(self.currentSourceURL))
         if self.originURL is not None:
             repr_args.append("originURL={!r}".format(self.originURL))
-        return "DOMNode(" + ", ".join(repr_args) + ")"
+        return "DOMNode(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["DOMNode", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DOMNode', dict]]:
+        """
+        Safely create DOMNode from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of DOMNode
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of DOMNode if creation did not fail
+        :rtype: Optional[Union[dict, DOMNode]]
+        """
         if init is not None:
             try:
                 ourselves = DOMNode(**init)
@@ -431,9 +428,18 @@ class DOMNode(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["DOMNode", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DOMNode', dict]]]:
+        """
+        Safely create a new list DOMNodes from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list DOMNode instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of DOMNode instances if creation did not fail
+        :rtype: Optional[List[Union[dict, DOMNode]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -448,7 +454,9 @@ class ComputedStyle(object):
     A subset of the full ComputedStyle as defined by the request whitelist.
     """
 
-    def __init__(self, properties: List[Union["NameValue", dict]]) -> None:
+    __slots__ = ["properties"]
+
+    def __init__(self, properties: List[Union['NameValue', dict]]) -> None:
         """
         :param properties: Name/value pairs of computed style properties.
         :type properties: List[dict]
@@ -456,23 +464,25 @@ class ComputedStyle(object):
         super().__init__()
         self.properties = NameValue.safe_create_from_list(properties)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.properties is not None:
             repr_args.append("properties={!r}".format(self.properties))
-        return "ComputedStyle(" + ", ".join(repr_args) + ")"
+        return "ComputedStyle(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["ComputedStyle", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ComputedStyle', dict]]:
+        """
+        Safely create ComputedStyle from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ComputedStyle
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ComputedStyle if creation did not fail
+        :rtype: Optional[Union[dict, ComputedStyle]]
+        """
         if init is not None:
             try:
                 ourselves = ComputedStyle(**init)
@@ -483,9 +493,18 @@ class ComputedStyle(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ComputedStyle", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ComputedStyle', dict]]]:
+        """
+        Safely create a new list ComputedStyles from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ComputedStyle instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ComputedStyle instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ComputedStyle]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -495,7 +514,7 @@ class ComputedStyle(object):
             return init
 
 
-TYPE_TO_OBJECT = {
+DOMSNAPSHOT_TYPES_TO_OBJECT = {
     "NameValue": NameValue,
     "LayoutTreeNode": LayoutTreeNode,
     "InlineTextBox": InlineTextBox,

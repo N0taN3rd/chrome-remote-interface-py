@@ -1,6 +1,9 @@
 from cripy.gevent.protocol.dom import types as DOM
 
-__all__ = ["HighlightConfig"]
+__all__ = [
+    "HighlightConfig",
+    "OVERLAY_TYPE_TO_OBJECT"
+]
 
 
 class HighlightConfig(object):
@@ -8,22 +11,9 @@ class HighlightConfig(object):
     Configuration data for the highlighting of page elements.
     """
 
-    def __init__(
-        self,
-        showInfo=None,
-        showRulers=None,
-        showExtensionLines=None,
-        displayAsMaterial=None,
-        contentColor=None,
-        paddingColor=None,
-        borderColor=None,
-        marginColor=None,
-        eventTargetColor=None,
-        shapeColor=None,
-        shapeMarginColor=None,
-        selectorList=None,
-        cssGridColor=None,
-    ):
+    __slots__ = ["showInfo", "showRulers", "showExtensionLines", "displayAsMaterial", "contentColor", "paddingColor", "borderColor", "marginColor", "eventTargetColor", "shapeColor", "shapeMarginColor", "selectorList", "cssGridColor"]
+
+    def __init__(self, showInfo=None, showRulers=None, showExtensionLines=None, displayAsMaterial=None, contentColor=None, paddingColor=None, borderColor=None, marginColor=None, eventTargetColor=None, shapeColor=None, shapeMarginColor=None, selectorList=None, cssGridColor=None):
         """
         :param showInfo: Whether the node info tooltip should be shown (default: false).
         :type showInfo: Optional[bool]
@@ -52,7 +42,7 @@ class HighlightConfig(object):
         :param cssGridColor: The grid layout color (default: transparent).
         :type cssGridColor: Optional[dict]
         """
-        super().__init__()
+        super(HighlightConfig, self).__init__()
         self.showInfo = showInfo
         self.showRulers = showRulers
         self.showExtensionLines = showExtensionLines
@@ -66,15 +56,6 @@ class HighlightConfig(object):
         self.shapeMarginColor = DOM.RGBA.safe_create(shapeMarginColor)
         self.selectorList = selectorList
         self.cssGridColor = DOM.RGBA.safe_create(cssGridColor)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -104,10 +85,21 @@ class HighlightConfig(object):
             repr_args.append("selectorList={!r}".format(self.selectorList))
         if self.cssGridColor is not None:
             repr_args.append("cssGridColor={!r}".format(self.cssGridColor))
-        return "HighlightConfig(" + ", ".join(repr_args) + ")"
+        return "HighlightConfig(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create HighlightConfig from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of HighlightConfig
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of HighlightConfig if creation did not fail
+        :rtype: Optional[Union[dict, HighlightConfig]]
+        """
         if init is not None:
             try:
                 ourselves = HighlightConfig(**init)
@@ -119,6 +111,17 @@ class HighlightConfig(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list HighlightConfigs from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list HighlightConfig instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of HighlightConfig instances if creation did not fail
+        :rtype: Optional[List[Union[dict, HighlightConfig]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -128,4 +131,6 @@ class HighlightConfig(object):
             return init
 
 
-TYPE_TO_OBJECT = {"HighlightConfig": HighlightConfig}
+OVERLAY_TYPE_TO_OBJECT = {
+    "HighlightConfig": HighlightConfig,
+}

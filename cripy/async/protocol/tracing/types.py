@@ -1,19 +1,16 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
+
+__all__ = [
+    "TraceConfig",
+    "MemoryDumpConfig",
+    "TRACING_TYPES_TO_OBJECT"
+]
 
 
 class TraceConfig(object):
+    __slots__ = ["recordMode", "enableSampling", "enableSystrace", "enableArgumentFilter", "includedCategories", "excludedCategories", "syntheticDelays", "memoryDumpConfig"]
 
-    def __init__(
-        self,
-        recordMode: Optional[str] = None,
-        enableSampling: Optional[bool] = None,
-        enableSystrace: Optional[bool] = None,
-        enableArgumentFilter: Optional[bool] = None,
-        includedCategories: Optional[List[str]] = None,
-        excludedCategories: Optional[List[str]] = None,
-        syntheticDelays: Optional[List[str]] = None,
-        memoryDumpConfig: Optional[Union["MemoryDumpConfig", dict]] = None,
-    ) -> None:
+    def __init__(self, recordMode: Optional[str] = None, enableSampling: Optional[bool] = None, enableSystrace: Optional[bool] = None, enableArgumentFilter: Optional[bool] = None, includedCategories: Optional[List[str]] = None, excludedCategories: Optional[List[str]] = None, syntheticDelays: Optional[List[str]] = None, memoryDumpConfig: Optional[Union['MemoryDumpConfig', dict]] = None) -> None:
         """
         :param recordMode: Controls how the trace buffer stores data.
         :type recordMode: Optional[str]
@@ -42,15 +39,6 @@ class TraceConfig(object):
         self.syntheticDelays = syntheticDelays
         self.memoryDumpConfig = MemoryDumpConfig.safe_create(memoryDumpConfig)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.recordMode is not None:
@@ -60,9 +48,7 @@ class TraceConfig(object):
         if self.enableSystrace is not None:
             repr_args.append("enableSystrace={!r}".format(self.enableSystrace))
         if self.enableArgumentFilter is not None:
-            repr_args.append(
-                "enableArgumentFilter={!r}".format(self.enableArgumentFilter)
-            )
+            repr_args.append("enableArgumentFilter={!r}".format(self.enableArgumentFilter))
         if self.includedCategories is not None:
             repr_args.append("includedCategories={!r}".format(self.includedCategories))
         if self.excludedCategories is not None:
@@ -71,10 +57,21 @@ class TraceConfig(object):
             repr_args.append("syntheticDelays={!r}".format(self.syntheticDelays))
         if self.memoryDumpConfig is not None:
             repr_args.append("memoryDumpConfig={!r}".format(self.memoryDumpConfig))
-        return "TraceConfig(" + ", ".join(repr_args) + ")"
+        return "TraceConfig(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["TraceConfig", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['TraceConfig', dict]]:
+        """
+        Safely create TraceConfig from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of TraceConfig
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of TraceConfig if creation did not fail
+        :rtype: Optional[Union[dict, TraceConfig]]
+        """
         if init is not None:
             try:
                 ourselves = TraceConfig(**init)
@@ -85,9 +82,18 @@ class TraceConfig(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["TraceConfig", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TraceConfig', dict]]]:
+        """
+        Safely create a new list TraceConfigs from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list TraceConfig instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of TraceConfig instances if creation did not fail
+        :rtype: Optional[List[Union[dict, TraceConfig]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -102,11 +108,23 @@ class MemoryDumpConfig(dict):
     Configuration for memory dump. Used only when "memory-infra" category is enabled.
     """
 
+
     def __repr__(self) -> str:
         return "MemoryDumpConfig(dict)"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["MemoryDumpConfig", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['MemoryDumpConfig', dict]]:
+        """
+        Safely create MemoryDumpConfig from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of MemoryDumpConfig
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of MemoryDumpConfig if creation did not fail
+        :rtype: Optional[Union[dict, MemoryDumpConfig]]
+        """
         if init is not None:
             try:
                 ourselves = MemoryDumpConfig(**init)
@@ -117,9 +135,18 @@ class MemoryDumpConfig(dict):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["MemoryDumpConfig", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['MemoryDumpConfig', dict]]]:
+        """
+        Safely create a new list MemoryDumpConfigs from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list MemoryDumpConfig instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of MemoryDumpConfig instances if creation did not fail
+        :rtype: Optional[List[Union[dict, MemoryDumpConfig]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -129,4 +156,7 @@ class MemoryDumpConfig(dict):
             return init
 
 
-TYPE_TO_OBJECT = {"TraceConfig": TraceConfig, "MemoryDumpConfig": MemoryDumpConfig}
+TRACING_TYPES_TO_OBJECT = {
+    "TraceConfig": TraceConfig,
+    "MemoryDumpConfig": MemoryDumpConfig,
+}

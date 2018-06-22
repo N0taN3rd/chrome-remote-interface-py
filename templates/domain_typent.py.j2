@@ -1,19 +1,20 @@
 {% for import in timports %}
-from cripy.sync.protocol.{{ import | lower }} import types as {{ import }}
+from cripy.gevent.protocol.{{ import | lower }} import types as {{ import }}
 {% endfor %}
 
 __all__ = [
 {%+ for dt in obj_types %}
-    "{{ dt.id }}",
+    "{{ dt.type_name }}",
 {% endfor %}
+    "{{ domain | upper }}_TYPE_TO_OBJECT"
 ]
 
 
 {%+ for dt in obj_types %}
 {% if dt.has_properties %}
-class {{ dt.id }}(object):
+class {{ dt.type_name }}(object):
 {% else %}
-class {{ dt.id }}(dict):
+class {{ dt.type_name }}(dict):
 {% endif %}
 {% if dt.description %}
     """
@@ -22,6 +23,8 @@ class {{ dt.id }}(dict):
 
 {% endif %}
 {% if dt.has_properties %}
+    __slots__ = [{{ slotgen(dt.properties) }}]
+
     def __init__(self, {{ dt.constructor_string_no_type }}):
         """
         {% for prop in dt.properties %}
@@ -33,23 +36,12 @@ class {{ dt.id }}(dict):
         :type {{ prop.name }}: {{ prop.constructor_docstr }}
         {% endfor %}
         """
-        super().__init__()
+        super({{ dt.type_name }}, self).__init__()
     {% for prop in dt.properties %}
         {{ prop.construct_thyself }}
 {#        self.{{ prop.name }} = {{ prop.name }}#}
     {% endfor %}
-
 {% endif %}
-    {% if dt.has_properties %}
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
-    {% endif %}
 
     def __repr__(self):
         {% if dt.has_properties %}
@@ -58,16 +50,27 @@ class {{ dt.id }}(dict):
         if self.{{ prop.name }} is not None:
             repr_args.append("{{ prop.name }}={!r}".format(self.{{ prop.name }}))
         {% endfor %}
-        return "{{ dt.id }}(" + ', '.join(repr_args)+")"
+        return "{{ dt.type_name }}(" + ', '.join(repr_args)+")"
         {% else %}
-        return "{{ dt.id }}(dict)"
+        return "{{ dt.type_name }}(dict)"
         {% endif %}
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create {{ dt.type_name }} from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of {{ dt.type_name }}
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of {{ dt.type_name }} if creation did not fail
+        :rtype: Optional[Union[dict, {{ dt.type_name}}]]
+        """
         if init is not None:
             try:
-                ourselves = {{ dt.id }}(**init)
+                ourselves = {{ dt.type_name }}(**init)
                 return ourselves
             except Exception:
                 return init
@@ -76,10 +79,21 @@ class {{ dt.id }}(dict):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list {{ dt.type_name }}s from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list {{ dt.type_name }} instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of {{ dt.type_name }} instances if creation did not fail
+        :rtype: Optional[List[Union[dict, {{ dt.type_name}}]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append({{ dt.id }}.safe_create(it))
+                list_of_self.append({{ dt.type_name }}.safe_create(it))
             return list_of_self
         else:
             return init
@@ -87,9 +101,9 @@ class {{ dt.id }}(dict):
 
 {% endfor %}
 {% if obj_types | length > 0 %}
-TYPE_TO_OBJECT = {
+{{ domain | upper }}_TYPE_TO_OBJECT = {
 {% for dt in obj_types %}
-    "{{ dt.id }}": {{ dt.id }},
+    "{{ dt.type_name }}": {{ dt.type_name }},
 {% endfor %}
 }
 {% endif %}

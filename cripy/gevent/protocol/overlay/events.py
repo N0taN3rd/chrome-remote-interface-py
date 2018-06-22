@@ -1,16 +1,14 @@
-from types import SimpleNamespace
+from collections import namedtuple
 from cripy.gevent.protocol.page import types as Page
 from cripy.gevent.protocol.dom import types as DOM
-
-try:
-    from cripy.gevent.protocol.overlay.types import *
-except ImportError:
-    pass
+from cripy.gevent.protocol.overlay.types import *
 
 __all__ = [
     "InspectNodeRequestedEvent",
     "NodeHighlightRequestedEvent",
     "ScreenshotRequestedEvent",
+    "OVERLAY_EVENTS_TO_CLASS",
+    "OVERLAY_EVENTS_NS"
 ]
 
 
@@ -20,33 +18,37 @@ class InspectNodeRequestedEvent(object):
 	This happens after call to `setInspectMode` or when user manually inspects an element.
     """
 
-    event = "Overlay.inspectNodeRequested"
+    __slots__ = ["backendNodeId"]
 
     def __init__(self, backendNodeId):
         """
+        Create a new instance of InspectNodeRequestedEvent
+
         :param backendNodeId: Id of the node to inspect.
         :type backendNodeId: int
         """
-        super().__init__()
+        super(InspectNodeRequestedEvent, self).__init__()
         self.backendNodeId = backendNodeId
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
         if self.backendNodeId is not None:
             repr_args.append("backendNodeId={!r}".format(self.backendNodeId))
-        return "InspectNodeRequestedEvent(" + ", ".join(repr_args) + ")"
+        return "InspectNodeRequestedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create InspectNodeRequestedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of InspectNodeRequestedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of InspectNodeRequestedEvent if creation did not fail
+        :rtype: Optional[Union[dict, InspectNodeRequestedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = InspectNodeRequestedEvent(**init)
@@ -58,6 +60,17 @@ class InspectNodeRequestedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list InspectNodeRequestedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list InspectNodeRequestedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of InspectNodeRequestedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, InspectNodeRequestedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -73,33 +86,37 @@ class NodeHighlightRequestedEvent(object):
 	This happens after call to `setInspectMode`.
     """
 
-    event = "Overlay.nodeHighlightRequested"
+    __slots__ = ["nodeId"]
 
     def __init__(self, nodeId):
         """
+        Create a new instance of NodeHighlightRequestedEvent
+
         :param nodeId: The nodeId
         :type nodeId: int
         """
-        super().__init__()
+        super(NodeHighlightRequestedEvent, self).__init__()
         self.nodeId = nodeId
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
         if self.nodeId is not None:
             repr_args.append("nodeId={!r}".format(self.nodeId))
-        return "NodeHighlightRequestedEvent(" + ", ".join(repr_args) + ")"
+        return "NodeHighlightRequestedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create NodeHighlightRequestedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of NodeHighlightRequestedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of NodeHighlightRequestedEvent if creation did not fail
+        :rtype: Optional[Union[dict, NodeHighlightRequestedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = NodeHighlightRequestedEvent(**init)
@@ -111,6 +128,17 @@ class NodeHighlightRequestedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list NodeHighlightRequestedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list NodeHighlightRequestedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of NodeHighlightRequestedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, NodeHighlightRequestedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -125,33 +153,37 @@ class ScreenshotRequestedEvent(object):
     Fired when user asks to capture screenshot of some area on the page.
     """
 
-    event = "Overlay.screenshotRequested"
+    __slots__ = ["viewport"]
 
     def __init__(self, viewport):
         """
+        Create a new instance of ScreenshotRequestedEvent
+
         :param viewport: Viewport to capture, in CSS.
         :type viewport: dict
         """
-        super().__init__()
+        super(ScreenshotRequestedEvent, self).__init__()
         self.viewport = Page.Viewport.safe_create(viewport)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
         if self.viewport is not None:
             repr_args.append("viewport={!r}".format(self.viewport))
-        return "ScreenshotRequestedEvent(" + ", ".join(repr_args) + ")"
+        return "ScreenshotRequestedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ScreenshotRequestedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ScreenshotRequestedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ScreenshotRequestedEvent if creation did not fail
+        :rtype: Optional[Union[dict, ScreenshotRequestedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = ScreenshotRequestedEvent(**init)
@@ -163,6 +195,17 @@ class ScreenshotRequestedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ScreenshotRequestedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ScreenshotRequestedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ScreenshotRequestedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ScreenshotRequestedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -172,14 +215,16 @@ class ScreenshotRequestedEvent(object):
             return init
 
 
-EVENT_TO_CLASS = {
-    "Overlay.inspectNodeRequested": InspectNodeRequestedEvent,
-    "Overlay.nodeHighlightRequested": NodeHighlightRequestedEvent,
-    "Overlay.screenshotRequested": ScreenshotRequestedEvent,
+OVERLAY_EVENTS_TO_CLASS = {
+   "Overlay.inspectNodeRequested": InspectNodeRequestedEvent,
+   "Overlay.nodeHighlightRequested": NodeHighlightRequestedEvent,
+   "Overlay.screenshotRequested": ScreenshotRequestedEvent,
 }
 
-EVENT_NS = SimpleNamespace(
-    InspectNodeRequested="Overlay.inspectNodeRequested",
-    NodeHighlightRequested="Overlay.nodeHighlightRequested",
-    ScreenshotRequested="Overlay.screenshotRequested",
+OverlayNS = namedtuple("OverlayNS", ["InspectNodeRequested", "NodeHighlightRequested", "ScreenshotRequested"])
+
+OVERLAY_EVENTS_NS = OverlayNS(
+  InspectNodeRequested="Overlay.inspectNodeRequested",
+  NodeHighlightRequested="Overlay.nodeHighlightRequested",
+  ScreenshotRequested="Overlay.screenshotRequested",
 )

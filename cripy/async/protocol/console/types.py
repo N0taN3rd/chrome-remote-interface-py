@@ -1,4 +1,9 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
+
+__all__ = [
+    "ConsoleMessage",
+    "CONSOLE_TYPES_TO_OBJECT"
+]
 
 
 class ConsoleMessage(object):
@@ -6,15 +11,9 @@ class ConsoleMessage(object):
     Console message.
     """
 
-    def __init__(
-        self,
-        source: str,
-        level: str,
-        text: str,
-        url: Optional[str] = None,
-        line: Optional[int] = None,
-        column: Optional[int] = None,
-    ) -> None:
+    __slots__ = ["source", "level", "text", "url", "line", "column"]
+
+    def __init__(self, source: str, level: str, text: str, url: Optional[str] = None, line: Optional[int] = None, column: Optional[int] = None) -> None:
         """
         :param source: Message source.
         :type source: str
@@ -37,15 +36,6 @@ class ConsoleMessage(object):
         self.line = line
         self.column = column
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.source is not None:
@@ -60,10 +50,21 @@ class ConsoleMessage(object):
             repr_args.append("line={!r}".format(self.line))
         if self.column is not None:
             repr_args.append("column={!r}".format(self.column))
-        return "ConsoleMessage(" + ", ".join(repr_args) + ")"
+        return "ConsoleMessage(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["ConsoleMessage", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ConsoleMessage', dict]]:
+        """
+        Safely create ConsoleMessage from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ConsoleMessage
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ConsoleMessage if creation did not fail
+        :rtype: Optional[Union[dict, ConsoleMessage]]
+        """
         if init is not None:
             try:
                 ourselves = ConsoleMessage(**init)
@@ -74,9 +75,18 @@ class ConsoleMessage(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ConsoleMessage", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ConsoleMessage', dict]]]:
+        """
+        Safely create a new list ConsoleMessages from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ConsoleMessage instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ConsoleMessage instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ConsoleMessage]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -86,4 +96,6 @@ class ConsoleMessage(object):
             return init
 
 
-TYPE_TO_OBJECT = {"ConsoleMessage": ConsoleMessage}
+CONSOLE_TYPES_TO_OBJECT = {
+    "ConsoleMessage": ConsoleMessage,
+}

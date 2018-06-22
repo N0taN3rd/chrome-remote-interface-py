@@ -1,11 +1,12 @@
 from typing import Any, List, Optional, Union
-from types import SimpleNamespace
+from collections import namedtuple
+from cripy.async.protocol.log.types import *
 
-try:
-    from cripy.async.protocol.log.types import *
-except ImportError:
-    pass
-
+__all__ = [
+    "EntryAddedEvent",
+    "LOG_EVENTS_TO_CLASS",
+    "LOG_EVENTS_NS"
+]
 
 class EntryAddedEvent(object):
     """
@@ -14,31 +15,37 @@ class EntryAddedEvent(object):
 
     event = "Log.entryAdded"
 
+    __slots__ = ["entry"]
+
     def __init__(self, entry: Union[LogEntry, dict]) -> None:
         """
+        Create a new instance of EntryAddedEvent
+
         :param entry: The entry.
         :type entry: dict
         """
         super().__init__()
         self.entry = LogEntry.safe_create(entry)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.entry is not None:
             repr_args.append("entry={!r}".format(self.entry))
-        return "EntryAddedEvent(" + ", ".join(repr_args) + ")"
+        return "EntryAddedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["EntryAddedEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['EntryAddedEvent', dict]]:
+        """
+        Safely create EntryAddedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of EntryAddedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of EntryAddedEvent if creation did not fail
+        :rtype: Optional[Union[dict, EntryAddedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = EntryAddedEvent(**init)
@@ -49,9 +56,18 @@ class EntryAddedEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["EntryAddedEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['EntryAddedEvent', dict]]]:
+        """
+        Safely create a new list EntryAddedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list EntryAddedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of EntryAddedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, EntryAddedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -61,6 +77,12 @@ class EntryAddedEvent(object):
             return init
 
 
-EVENT_TO_CLASS = {"Log.entryAdded": EntryAddedEvent}
+LOG_EVENTS_TO_CLASS = {
+   "Log.entryAdded": EntryAddedEvent,
+}
 
-EVENT_NS = SimpleNamespace(EntryAdded="Log.entryAdded")
+LogNS = namedtuple("LogNS", ["EntryAdded"])
+
+LOG_EVENTS_NS = LogNS(
+  EntryAdded="Log.entryAdded",
+)

@@ -1,7 +1,16 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
+
+__all__ = [
+    "Header",
+    "DataEntry",
+    "CachedResponse",
+    "Cache",
+    "CACHESTORAGE_TYPES_TO_OBJECT"
+]
 
 
 class Header(object):
+    __slots__ = ["name", "value"]
 
     def __init__(self, name: str, value: str) -> None:
         """
@@ -14,25 +23,27 @@ class Header(object):
         self.name = name
         self.value = value
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.name is not None:
             repr_args.append("name={!r}".format(self.name))
         if self.value is not None:
             repr_args.append("value={!r}".format(self.value))
-        return "Header(" + ", ".join(repr_args) + ")"
+        return "Header(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["Header", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Header', dict]]:
+        """
+        Safely create Header from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Header
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Header if creation did not fail
+        :rtype: Optional[Union[dict, Header]]
+        """
         if init is not None:
             try:
                 ourselves = Header(**init)
@@ -43,9 +54,18 @@ class Header(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["Header", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Header', dict]]]:
+        """
+        Safely create a new list Headers from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Header instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Header instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Header]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -60,16 +80,9 @@ class DataEntry(object):
     Data entry.
     """
 
-    def __init__(
-        self,
-        requestURL: str,
-        requestMethod: str,
-        requestHeaders: List[Union["Header", dict]],
-        responseTime: float,
-        responseStatus: int,
-        responseStatusText: str,
-        responseHeaders: List[Union["Header", dict]],
-    ) -> None:
+    __slots__ = ["requestURL", "requestMethod", "requestHeaders", "responseTime", "responseStatus", "responseStatusText", "responseHeaders"]
+
+    def __init__(self, requestURL: str, requestMethod: str, requestHeaders: List[Union['Header', dict]], responseTime: float, responseStatus: int, responseStatusText: str, responseHeaders: List[Union['Header', dict]]) -> None:
         """
         :param requestURL: Request URL.
         :type requestURL: str
@@ -95,15 +108,6 @@ class DataEntry(object):
         self.responseStatusText = responseStatusText
         self.responseHeaders = Header.safe_create_from_list(responseHeaders)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.requestURL is not None:
@@ -120,10 +124,21 @@ class DataEntry(object):
             repr_args.append("responseStatusText={!r}".format(self.responseStatusText))
         if self.responseHeaders is not None:
             repr_args.append("responseHeaders={!r}".format(self.responseHeaders))
-        return "DataEntry(" + ", ".join(repr_args) + ")"
+        return "DataEntry(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["DataEntry", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DataEntry', dict]]:
+        """
+        Safely create DataEntry from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of DataEntry
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of DataEntry if creation did not fail
+        :rtype: Optional[Union[dict, DataEntry]]
+        """
         if init is not None:
             try:
                 ourselves = DataEntry(**init)
@@ -134,9 +149,18 @@ class DataEntry(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["DataEntry", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DataEntry', dict]]]:
+        """
+        Safely create a new list DataEntrys from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list DataEntry instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of DataEntry instances if creation did not fail
+        :rtype: Optional[List[Union[dict, DataEntry]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -151,6 +175,8 @@ class CachedResponse(object):
     Cached response
     """
 
+    __slots__ = ["body"]
+
     def __init__(self, body: str) -> None:
         """
         :param body: Entry content, base64-encoded.
@@ -159,23 +185,25 @@ class CachedResponse(object):
         super().__init__()
         self.body = body
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.body is not None:
             repr_args.append("body={!r}".format(self.body))
-        return "CachedResponse(" + ", ".join(repr_args) + ")"
+        return "CachedResponse(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["CachedResponse", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CachedResponse', dict]]:
+        """
+        Safely create CachedResponse from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CachedResponse
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CachedResponse if creation did not fail
+        :rtype: Optional[Union[dict, CachedResponse]]
+        """
         if init is not None:
             try:
                 ourselves = CachedResponse(**init)
@@ -186,9 +214,18 @@ class CachedResponse(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["CachedResponse", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CachedResponse', dict]]]:
+        """
+        Safely create a new list CachedResponses from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CachedResponse instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CachedResponse instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CachedResponse]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -202,6 +239,8 @@ class Cache(object):
     """
     Cache identifier.
     """
+
+    __slots__ = ["cacheId", "securityOrigin", "cacheName"]
 
     def __init__(self, cacheId: str, securityOrigin: str, cacheName: str) -> None:
         """
@@ -217,15 +256,6 @@ class Cache(object):
         self.securityOrigin = securityOrigin
         self.cacheName = cacheName
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.cacheId is not None:
@@ -234,10 +264,21 @@ class Cache(object):
             repr_args.append("securityOrigin={!r}".format(self.securityOrigin))
         if self.cacheName is not None:
             repr_args.append("cacheName={!r}".format(self.cacheName))
-        return "Cache(" + ", ".join(repr_args) + ")"
+        return "Cache(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["Cache", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Cache', dict]]:
+        """
+        Safely create Cache from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Cache
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Cache if creation did not fail
+        :rtype: Optional[Union[dict, Cache]]
+        """
         if init is not None:
             try:
                 ourselves = Cache(**init)
@@ -248,9 +289,18 @@ class Cache(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["Cache", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Cache', dict]]]:
+        """
+        Safely create a new list Caches from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Cache instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Cache instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Cache]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -260,7 +310,7 @@ class Cache(object):
             return init
 
 
-TYPE_TO_OBJECT = {
+CACHESTORAGE_TYPES_TO_OBJECT = {
     "Header": Header,
     "DataEntry": DataEntry,
     "CachedResponse": CachedResponse,

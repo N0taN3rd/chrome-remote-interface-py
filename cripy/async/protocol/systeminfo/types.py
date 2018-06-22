@@ -1,4 +1,10 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
+
+__all__ = [
+    "GPUInfo",
+    "GPUDevice",
+    "SYSTEMINFO_TYPES_TO_OBJECT"
+]
 
 
 class GPUInfo(object):
@@ -6,13 +12,9 @@ class GPUInfo(object):
     Provides information about the GPU(s) on the system.
     """
 
-    def __init__(
-        self,
-        devices: List[Union["GPUDevice", dict]],
-        driverBugWorkarounds: List[str],
-        auxAttributes: Optional[dict] = None,
-        featureStatus: Optional[dict] = None,
-    ) -> None:
+    __slots__ = ["devices", "auxAttributes", "featureStatus", "driverBugWorkarounds"]
+
+    def __init__(self, devices: List[Union['GPUDevice', dict]], driverBugWorkarounds: List[str], auxAttributes: Optional[dict] = None, featureStatus: Optional[dict] = None) -> None:
         """
         :param devices: The graphics devices on the system. Element 0 is the primary GPU.
         :type devices: List[dict]
@@ -29,15 +31,6 @@ class GPUInfo(object):
         self.featureStatus = featureStatus
         self.driverBugWorkarounds = driverBugWorkarounds
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.devices is not None:
@@ -47,13 +40,22 @@ class GPUInfo(object):
         if self.featureStatus is not None:
             repr_args.append("featureStatus={!r}".format(self.featureStatus))
         if self.driverBugWorkarounds is not None:
-            repr_args.append(
-                "driverBugWorkarounds={!r}".format(self.driverBugWorkarounds)
-            )
-        return "GPUInfo(" + ", ".join(repr_args) + ")"
+            repr_args.append("driverBugWorkarounds={!r}".format(self.driverBugWorkarounds))
+        return "GPUInfo(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["GPUInfo", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['GPUInfo', dict]]:
+        """
+        Safely create GPUInfo from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of GPUInfo
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of GPUInfo if creation did not fail
+        :rtype: Optional[Union[dict, GPUInfo]]
+        """
         if init is not None:
             try:
                 ourselves = GPUInfo(**init)
@@ -64,9 +66,18 @@ class GPUInfo(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["GPUInfo", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['GPUInfo', dict]]]:
+        """
+        Safely create a new list GPUInfos from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list GPUInfo instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of GPUInfo instances if creation did not fail
+        :rtype: Optional[List[Union[dict, GPUInfo]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -81,9 +92,9 @@ class GPUDevice(object):
     Describes a single graphics processor (GPU).
     """
 
-    def __init__(
-        self, vendorId: float, deviceId: float, vendorString: str, deviceString: str
-    ) -> None:
+    __slots__ = ["vendorId", "deviceId", "vendorString", "deviceString"]
+
+    def __init__(self, vendorId: float, deviceId: float, vendorString: str, deviceString: str) -> None:
         """
         :param vendorId: PCI ID of the GPU vendor, if available; 0 otherwise.
         :type vendorId: float
@@ -100,15 +111,6 @@ class GPUDevice(object):
         self.vendorString = vendorString
         self.deviceString = deviceString
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.vendorId is not None:
@@ -119,10 +121,21 @@ class GPUDevice(object):
             repr_args.append("vendorString={!r}".format(self.vendorString))
         if self.deviceString is not None:
             repr_args.append("deviceString={!r}".format(self.deviceString))
-        return "GPUDevice(" + ", ".join(repr_args) + ")"
+        return "GPUDevice(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["GPUDevice", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['GPUDevice', dict]]:
+        """
+        Safely create GPUDevice from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of GPUDevice
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of GPUDevice if creation did not fail
+        :rtype: Optional[Union[dict, GPUDevice]]
+        """
         if init is not None:
             try:
                 ourselves = GPUDevice(**init)
@@ -133,9 +146,18 @@ class GPUDevice(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["GPUDevice", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['GPUDevice', dict]]]:
+        """
+        Safely create a new list GPUDevices from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list GPUDevice instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of GPUDevice instances if creation did not fail
+        :rtype: Optional[List[Union[dict, GPUDevice]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -145,4 +167,7 @@ class GPUDevice(object):
             return init
 
 
-TYPE_TO_OBJECT = {"GPUInfo": GPUInfo, "GPUDevice": GPUDevice}
+SYSTEMINFO_TYPES_TO_OBJECT = {
+    "GPUInfo": GPUInfo,
+    "GPUDevice": GPUDevice,
+}

@@ -1,18 +1,15 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
+
+__all__ = [
+    "TouchPoint",
+    "INPUT_TYPES_TO_OBJECT"
+]
 
 
 class TouchPoint(object):
+    __slots__ = ["x", "y", "radiusX", "radiusY", "rotationAngle", "force", "id"]
 
-    def __init__(
-        self,
-        x: float,
-        y: float,
-        radiusX: Optional[float] = None,
-        radiusY: Optional[float] = None,
-        rotationAngle: Optional[float] = None,
-        force: Optional[float] = None,
-        id: Optional[float] = None,
-    ) -> None:
+    def __init__(self, x: float, y: float, radiusX: Optional[float] = None, radiusY: Optional[float] = None, rotationAngle: Optional[float] = None, force: Optional[float] = None, id: Optional[float] = None) -> None:
         """
         :param x: X coordinate of the event relative to the main frame's viewport in CSS pixels.
         :type x: float
@@ -38,15 +35,6 @@ class TouchPoint(object):
         self.force = force
         self.id = id
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.x is not None:
@@ -63,10 +51,21 @@ class TouchPoint(object):
             repr_args.append("force={!r}".format(self.force))
         if self.id is not None:
             repr_args.append("id={!r}".format(self.id))
-        return "TouchPoint(" + ", ".join(repr_args) + ")"
+        return "TouchPoint(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["TouchPoint", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['TouchPoint', dict]]:
+        """
+        Safely create TouchPoint from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of TouchPoint
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of TouchPoint if creation did not fail
+        :rtype: Optional[Union[dict, TouchPoint]]
+        """
         if init is not None:
             try:
                 ourselves = TouchPoint(**init)
@@ -77,9 +76,18 @@ class TouchPoint(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["TouchPoint", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['TouchPoint', dict]]]:
+        """
+        Safely create a new list TouchPoints from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list TouchPoint instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of TouchPoint instances if creation did not fail
+        :rtype: Optional[List[Union[dict, TouchPoint]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -89,4 +97,6 @@ class TouchPoint(object):
             return init
 
 
-TYPE_TO_OBJECT = {"TouchPoint": TouchPoint}
+INPUT_TYPES_TO_OBJECT = {
+    "TouchPoint": TouchPoint,
+}

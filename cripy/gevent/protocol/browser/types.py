@@ -1,11 +1,18 @@
 
-__all__ = ["Histogram", "Bucket", "Bounds"]
+__all__ = [
+    "Histogram",
+    "Bucket",
+    "Bounds",
+    "BROWSER_TYPE_TO_OBJECT"
+]
 
 
 class Histogram(object):
     """
     Chrome histogram.
     """
+
+    __slots__ = ["name", "sum", "count", "buckets"]
 
     def __init__(self, name, sum, count, buckets):
         """
@@ -18,20 +25,11 @@ class Histogram(object):
         :param buckets: Buckets.
         :type buckets: List[dict]
         """
-        super().__init__()
+        super(Histogram, self).__init__()
         self.name = name
         self.sum = sum
         self.count = count
         self.buckets = Bucket.safe_create_from_list(buckets)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -43,10 +41,21 @@ class Histogram(object):
             repr_args.append("count={!r}".format(self.count))
         if self.buckets is not None:
             repr_args.append("buckets={!r}".format(self.buckets))
-        return "Histogram(" + ", ".join(repr_args) + ")"
+        return "Histogram(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Histogram from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Histogram
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Histogram if creation did not fail
+        :rtype: Optional[Union[dict, Histogram]]
+        """
         if init is not None:
             try:
                 ourselves = Histogram(**init)
@@ -58,6 +67,17 @@ class Histogram(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Histograms from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Histogram instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Histogram instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Histogram]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -72,6 +92,8 @@ class Bucket(object):
     Chrome histogram bucket.
     """
 
+    __slots__ = ["low", "high", "count"]
+
     def __init__(self, low, high, count):
         """
         :param low: Minimum value (inclusive).
@@ -81,19 +103,10 @@ class Bucket(object):
         :param count: Number of samples.
         :type count: int
         """
-        super().__init__()
+        super(Bucket, self).__init__()
         self.low = low
         self.high = high
         self.count = count
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -103,10 +116,21 @@ class Bucket(object):
             repr_args.append("high={!r}".format(self.high))
         if self.count is not None:
             repr_args.append("count={!r}".format(self.count))
-        return "Bucket(" + ", ".join(repr_args) + ")"
+        return "Bucket(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Bucket from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Bucket
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Bucket if creation did not fail
+        :rtype: Optional[Union[dict, Bucket]]
+        """
         if init is not None:
             try:
                 ourselves = Bucket(**init)
@@ -118,6 +142,17 @@ class Bucket(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Buckets from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Bucket instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Bucket instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Bucket]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -132,6 +167,8 @@ class Bounds(object):
     Browser window bounds information
     """
 
+    __slots__ = ["left", "top", "width", "height", "windowState"]
+
     def __init__(self, left=None, top=None, width=None, height=None, windowState=None):
         """
         :param left: The offset from the left edge of the screen to the window in pixels.
@@ -145,21 +182,12 @@ class Bounds(object):
         :param windowState: The window state. Default to normal.
         :type windowState: Optional[str]
         """
-        super().__init__()
+        super(Bounds, self).__init__()
         self.left = left
         self.top = top
         self.width = width
         self.height = height
         self.windowState = windowState
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -173,10 +201,21 @@ class Bounds(object):
             repr_args.append("height={!r}".format(self.height))
         if self.windowState is not None:
             repr_args.append("windowState={!r}".format(self.windowState))
-        return "Bounds(" + ", ".join(repr_args) + ")"
+        return "Bounds(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Bounds from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Bounds
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Bounds if creation did not fail
+        :rtype: Optional[Union[dict, Bounds]]
+        """
         if init is not None:
             try:
                 ourselves = Bounds(**init)
@@ -188,6 +227,17 @@ class Bounds(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Boundss from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Bounds instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Bounds instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Bounds]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -197,4 +247,8 @@ class Bounds(object):
             return init
 
 
-TYPE_TO_OBJECT = {"Histogram": Histogram, "Bucket": Bucket, "Bounds": Bounds}
+BROWSER_TYPE_TO_OBJECT = {
+    "Histogram": Histogram,
+    "Bucket": Bucket,
+    "Bounds": Bounds,
+}

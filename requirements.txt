@@ -10,4 +10,15 @@ cchardet
 aiodns
 stringcase
 uvloop
+numpy
+wsaccel
 websocket-client
+idna
+dnspython
+zope.event
+zope.interface
+zope.component
+cffi >= 1.11.5 ; platform_python_implementation == "CPython"
+greenlet>=0.4.13 ; platform_python_implementation == "CPython"
+git+git://github.com/gevent/gevent.git#egg=gevent
+requests

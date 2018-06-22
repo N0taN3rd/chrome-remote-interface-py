@@ -1,6 +1,12 @@
 from cripy.gevent.protocol.dom import types as DOM
 
-__all__ = ["StickyPositionConstraint", "ScrollRect", "PictureTile", "Layer"]
+__all__ = [
+    "StickyPositionConstraint",
+    "ScrollRect",
+    "PictureTile",
+    "Layer",
+    "LAYERTREE_TYPE_TO_OBJECT"
+]
 
 
 class StickyPositionConstraint(object):
@@ -8,13 +14,9 @@ class StickyPositionConstraint(object):
     Sticky position constraints.
     """
 
-    def __init__(
-        self,
-        stickyBoxRect,
-        containingBlockRect,
-        nearestLayerShiftingStickyBox=None,
-        nearestLayerShiftingContainingBlock=None,
-    ):
+    __slots__ = ["stickyBoxRect", "containingBlockRect", "nearestLayerShiftingStickyBox", "nearestLayerShiftingContainingBlock"]
+
+    def __init__(self, stickyBoxRect, containingBlockRect, nearestLayerShiftingStickyBox=None, nearestLayerShiftingContainingBlock=None):
         """
         :param stickyBoxRect: Layout rectangle of the sticky element before being shifted
         :type stickyBoxRect: dict
@@ -25,45 +27,37 @@ class StickyPositionConstraint(object):
         :param nearestLayerShiftingContainingBlock: The nearest sticky layer that shifts the containing block
         :type nearestLayerShiftingContainingBlock: Optional[str]
         """
-        super().__init__()
+        super(StickyPositionConstraint, self).__init__()
         self.stickyBoxRect = DOM.Rect.safe_create(stickyBoxRect)
         self.containingBlockRect = DOM.Rect.safe_create(containingBlockRect)
         self.nearestLayerShiftingStickyBox = nearestLayerShiftingStickyBox
         self.nearestLayerShiftingContainingBlock = nearestLayerShiftingContainingBlock
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
         if self.stickyBoxRect is not None:
             repr_args.append("stickyBoxRect={!r}".format(self.stickyBoxRect))
         if self.containingBlockRect is not None:
-            repr_args.append(
-                "containingBlockRect={!r}".format(self.containingBlockRect)
-            )
+            repr_args.append("containingBlockRect={!r}".format(self.containingBlockRect))
         if self.nearestLayerShiftingStickyBox is not None:
-            repr_args.append(
-                "nearestLayerShiftingStickyBox={!r}".format(
-                    self.nearestLayerShiftingStickyBox
-                )
-            )
+            repr_args.append("nearestLayerShiftingStickyBox={!r}".format(self.nearestLayerShiftingStickyBox))
         if self.nearestLayerShiftingContainingBlock is not None:
-            repr_args.append(
-                "nearestLayerShiftingContainingBlock={!r}".format(
-                    self.nearestLayerShiftingContainingBlock
-                )
-            )
-        return "StickyPositionConstraint(" + ", ".join(repr_args) + ")"
+            repr_args.append("nearestLayerShiftingContainingBlock={!r}".format(self.nearestLayerShiftingContainingBlock))
+        return "StickyPositionConstraint(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create StickyPositionConstraint from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of StickyPositionConstraint
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of StickyPositionConstraint if creation did not fail
+        :rtype: Optional[Union[dict, StickyPositionConstraint]]
+        """
         if init is not None:
             try:
                 ourselves = StickyPositionConstraint(**init)
@@ -75,6 +69,17 @@ class StickyPositionConstraint(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list StickyPositionConstraints from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list StickyPositionConstraint instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of StickyPositionConstraint instances if creation did not fail
+        :rtype: Optional[List[Union[dict, StickyPositionConstraint]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -89,6 +94,8 @@ class ScrollRect(object):
     Rectangle where scrolling happens on the main thread.
     """
 
+    __slots__ = ["rect", "type"]
+
     def __init__(self, rect, type):
         """
         :param rect: Rectangle itself.
@@ -96,18 +103,9 @@ class ScrollRect(object):
         :param type: Reason for rectangle to force scrolling on the main thread
         :type type: str
         """
-        super().__init__()
+        super(ScrollRect, self).__init__()
         self.rect = DOM.Rect.safe_create(rect)
         self.type = type
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -115,10 +113,21 @@ class ScrollRect(object):
             repr_args.append("rect={!r}".format(self.rect))
         if self.type is not None:
             repr_args.append("type={!r}".format(self.type))
-        return "ScrollRect(" + ", ".join(repr_args) + ")"
+        return "ScrollRect(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ScrollRect from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ScrollRect
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ScrollRect if creation did not fail
+        :rtype: Optional[Union[dict, ScrollRect]]
+        """
         if init is not None:
             try:
                 ourselves = ScrollRect(**init)
@@ -130,6 +139,17 @@ class ScrollRect(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ScrollRects from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ScrollRect instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ScrollRect instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ScrollRect]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -144,6 +164,8 @@ class PictureTile(object):
     Serialized fragment of layer picture along with its offset within the layer.
     """
 
+    __slots__ = ["x", "y", "picture"]
+
     def __init__(self, x, y, picture):
         """
         :param x: Offset from owning layer left boundary
@@ -153,19 +175,10 @@ class PictureTile(object):
         :param picture: Base64-encoded snapshot data.
         :type picture: str
         """
-        super().__init__()
+        super(PictureTile, self).__init__()
         self.x = x
         self.y = y
         self.picture = picture
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -175,10 +188,21 @@ class PictureTile(object):
             repr_args.append("y={!r}".format(self.y))
         if self.picture is not None:
             repr_args.append("picture={!r}".format(self.picture))
-        return "PictureTile(" + ", ".join(repr_args) + ")"
+        return "PictureTile(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create PictureTile from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of PictureTile
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of PictureTile if creation did not fail
+        :rtype: Optional[Union[dict, PictureTile]]
+        """
         if init is not None:
             try:
                 ourselves = PictureTile(**init)
@@ -190,6 +214,17 @@ class PictureTile(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list PictureTiles from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list PictureTile instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of PictureTile instances if creation did not fail
+        :rtype: Optional[List[Union[dict, PictureTile]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -204,25 +239,9 @@ class Layer(object):
     Information about a compositing layer.
     """
 
-    def __init__(
-        self,
-        layerId,
-        offsetX,
-        offsetY,
-        width,
-        height,
-        paintCount,
-        drawsContent,
-        parentLayerId=None,
-        backendNodeId=None,
-        transform=None,
-        anchorX=None,
-        anchorY=None,
-        anchorZ=None,
-        invisible=None,
-        scrollRects=None,
-        stickyPositionConstraint=None,
-    ):
+    __slots__ = ["layerId", "parentLayerId", "backendNodeId", "offsetX", "offsetY", "width", "height", "transform", "anchorX", "anchorY", "anchorZ", "paintCount", "drawsContent", "invisible", "scrollRects", "stickyPositionConstraint"]
+
+    def __init__(self, layerId, offsetX, offsetY, width, height, paintCount, drawsContent, parentLayerId=None, backendNodeId=None, transform=None, anchorX=None, anchorY=None, anchorZ=None, invisible=None, scrollRects=None, stickyPositionConstraint=None):
         """
         :param layerId: The unique id for this layer.
         :type layerId: str
@@ -257,7 +276,7 @@ class Layer(object):
         :param stickyPositionConstraint: Sticky position constraint information
         :type stickyPositionConstraint: Optional[dict]
         """
-        super().__init__()
+        super(Layer, self).__init__()
         self.layerId = layerId
         self.parentLayerId = parentLayerId
         self.backendNodeId = backendNodeId
@@ -273,18 +292,7 @@ class Layer(object):
         self.drawsContent = drawsContent
         self.invisible = invisible
         self.scrollRects = ScrollRect.safe_create_from_list(scrollRects)
-        self.stickyPositionConstraint = StickyPositionConstraint.safe_create(
-            stickyPositionConstraint
-        )
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
+        self.stickyPositionConstraint = StickyPositionConstraint.safe_create(stickyPositionConstraint)
 
     def __repr__(self):
         repr_args = []
@@ -319,13 +327,22 @@ class Layer(object):
         if self.scrollRects is not None:
             repr_args.append("scrollRects={!r}".format(self.scrollRects))
         if self.stickyPositionConstraint is not None:
-            repr_args.append(
-                "stickyPositionConstraint={!r}".format(self.stickyPositionConstraint)
-            )
-        return "Layer(" + ", ".join(repr_args) + ")"
+            repr_args.append("stickyPositionConstraint={!r}".format(self.stickyPositionConstraint))
+        return "Layer(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create Layer from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Layer
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Layer if creation did not fail
+        :rtype: Optional[Union[dict, Layer]]
+        """
         if init is not None:
             try:
                 ourselves = Layer(**init)
@@ -337,6 +354,17 @@ class Layer(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list Layers from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Layer instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Layer instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Layer]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -346,7 +374,7 @@ class Layer(object):
             return init
 
 
-TYPE_TO_OBJECT = {
+LAYERTREE_TYPE_TO_OBJECT = {
     "StickyPositionConstraint": StickyPositionConstraint,
     "ScrollRect": ScrollRect,
     "PictureTile": PictureTile,

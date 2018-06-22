@@ -1,11 +1,23 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
 from cripy.async.protocol.page import types as Page
+
+__all__ = [
+    "ShapeOutsideInfo",
+    "Rect",
+    "RGBA",
+    "Node",
+    "BoxModel",
+    "BackendNode",
+    "DOM_TYPES_TO_OBJECT"
+]
 
 
 class ShapeOutsideInfo(object):
     """
     CSS Shape Outside details.
     """
+
+    __slots__ = ["bounds", "shape", "marginShape"]
 
     def __init__(self, bounds: list, shape: List[Any], marginShape: List[Any]) -> None:
         """
@@ -21,15 +33,6 @@ class ShapeOutsideInfo(object):
         self.shape = shape
         self.marginShape = marginShape
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.bounds is not None:
@@ -38,10 +41,21 @@ class ShapeOutsideInfo(object):
             repr_args.append("shape={!r}".format(self.shape))
         if self.marginShape is not None:
             repr_args.append("marginShape={!r}".format(self.marginShape))
-        return "ShapeOutsideInfo(" + ", ".join(repr_args) + ")"
+        return "ShapeOutsideInfo(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["ShapeOutsideInfo", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ShapeOutsideInfo', dict]]:
+        """
+        Safely create ShapeOutsideInfo from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ShapeOutsideInfo
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ShapeOutsideInfo if creation did not fail
+        :rtype: Optional[Union[dict, ShapeOutsideInfo]]
+        """
         if init is not None:
             try:
                 ourselves = ShapeOutsideInfo(**init)
@@ -52,9 +66,18 @@ class ShapeOutsideInfo(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ShapeOutsideInfo", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ShapeOutsideInfo', dict]]]:
+        """
+        Safely create a new list ShapeOutsideInfos from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ShapeOutsideInfo instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ShapeOutsideInfo instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ShapeOutsideInfo]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -68,6 +91,8 @@ class Rect(object):
     """
     Rectangle.
     """
+
+    __slots__ = ["x", "y", "width", "height"]
 
     def __init__(self, x: float, y: float, width: float, height: float) -> None:
         """
@@ -86,15 +111,6 @@ class Rect(object):
         self.width = width
         self.height = height
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.x is not None:
@@ -105,10 +121,21 @@ class Rect(object):
             repr_args.append("width={!r}".format(self.width))
         if self.height is not None:
             repr_args.append("height={!r}".format(self.height))
-        return "Rect(" + ", ".join(repr_args) + ")"
+        return "Rect(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["Rect", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Rect', dict]]:
+        """
+        Safely create Rect from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Rect
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Rect if creation did not fail
+        :rtype: Optional[Union[dict, Rect]]
+        """
         if init is not None:
             try:
                 ourselves = Rect(**init)
@@ -119,9 +146,18 @@ class Rect(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["Rect", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Rect', dict]]]:
+        """
+        Safely create a new list Rects from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Rect instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Rect instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Rect]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -135,6 +171,8 @@ class RGBA(object):
     """
     A structure holding an RGBA color.
     """
+
+    __slots__ = ["r", "g", "b", "a"]
 
     def __init__(self, r: int, g: int, b: int, a: Optional[float] = None) -> None:
         """
@@ -153,15 +191,6 @@ class RGBA(object):
         self.b = b
         self.a = a
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.r is not None:
@@ -172,10 +201,21 @@ class RGBA(object):
             repr_args.append("b={!r}".format(self.b))
         if self.a is not None:
             repr_args.append("a={!r}".format(self.a))
-        return "RGBA(" + ", ".join(repr_args) + ")"
+        return "RGBA(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["RGBA", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['RGBA', dict]]:
+        """
+        Safely create RGBA from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of RGBA
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of RGBA if creation did not fail
+        :rtype: Optional[Union[dict, RGBA]]
+        """
         if init is not None:
             try:
                 ourselves = RGBA(**init)
@@ -186,9 +226,18 @@ class RGBA(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["RGBA", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['RGBA', dict]]]:
+        """
+        Safely create a new list RGBAs from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list RGBA instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of RGBA instances if creation did not fail
+        :rtype: Optional[List[Union[dict, RGBA]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -204,37 +253,9 @@ class Node(object):
 DOMNode is a base node mirror type.
     """
 
-    def __init__(
-        self,
-        nodeId: int,
-        backendNodeId: int,
-        nodeType: int,
-        nodeName: str,
-        localName: str,
-        nodeValue: str,
-        parentId: Optional[int] = None,
-        childNodeCount: Optional[int] = None,
-        children: Optional[List[Union["Node", dict]]] = None,
-        attributes: Optional[List[str]] = None,
-        documentURL: Optional[str] = None,
-        baseURL: Optional[str] = None,
-        publicId: Optional[str] = None,
-        systemId: Optional[str] = None,
-        internalSubset: Optional[str] = None,
-        xmlVersion: Optional[str] = None,
-        name: Optional[str] = None,
-        value: Optional[str] = None,
-        pseudoType: Optional[str] = None,
-        shadowRootType: Optional[str] = None,
-        frameId: Optional[str] = None,
-        contentDocument: Optional[Union["Node", dict]] = None,
-        shadowRoots: Optional[List[Union["Node", dict]]] = None,
-        templateContent: Optional[Union["Node", dict]] = None,
-        pseudoElements: Optional[List[Union["Node", dict]]] = None,
-        importedDocument: Optional[Union["Node", dict]] = None,
-        distributedNodes: Optional[List[Union["BackendNode", dict]]] = None,
-        isSVG: Optional[bool] = None,
-    ) -> None:
+    __slots__ = ["nodeId", "parentId", "backendNodeId", "nodeType", "nodeName", "localName", "nodeValue", "childNodeCount", "children", "attributes", "documentURL", "baseURL", "publicId", "systemId", "internalSubset", "xmlVersion", "name", "value", "pseudoType", "shadowRootType", "frameId", "contentDocument", "shadowRoots", "templateContent", "pseudoElements", "importedDocument", "distributedNodes", "isSVG"]
+
+    def __init__(self, nodeId: int, backendNodeId: int, nodeType: int, nodeName: str, localName: str, nodeValue: str, parentId: Optional[int] = None, childNodeCount: Optional[int] = None, children: Optional[List[Union['Node', dict]]] = None, attributes: Optional[List[str]] = None, documentURL: Optional[str] = None, baseURL: Optional[str] = None, publicId: Optional[str] = None, systemId: Optional[str] = None, internalSubset: Optional[str] = None, xmlVersion: Optional[str] = None, name: Optional[str] = None, value: Optional[str] = None, pseudoType: Optional[str] = None, shadowRootType: Optional[str] = None, frameId: Optional[str] = None, contentDocument: Optional[Union['Node', dict]] = None, shadowRoots: Optional[List[Union['Node', dict]]] = None, templateContent: Optional[Union['Node', dict]] = None, pseudoElements: Optional[List[Union['Node', dict]]] = None, importedDocument: Optional[Union['Node', dict]] = None, distributedNodes: Optional[List[Union['BackendNode', dict]]] = None, isSVG: Optional[bool] = None) -> None:
         """
         :param nodeId: Node identifier that is passed into the rest of the DOM messages as the `nodeId`. Backend will only push node with given `id` once. It is aware of all requested nodes and will only fire DOM events for nodes known to the client.
         :type nodeId: int
@@ -323,15 +344,6 @@ DOMNode is a base node mirror type.
         self.distributedNodes = BackendNode.safe_create_from_list(distributedNodes)
         self.isSVG = isSVG
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.nodeId is not None:
@@ -390,10 +402,21 @@ DOMNode is a base node mirror type.
             repr_args.append("distributedNodes={!r}".format(self.distributedNodes))
         if self.isSVG is not None:
             repr_args.append("isSVG={!r}".format(self.isSVG))
-        return "Node(" + ", ".join(repr_args) + ")"
+        return "Node(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["Node", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Node', dict]]:
+        """
+        Safely create Node from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Node
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Node if creation did not fail
+        :rtype: Optional[Union[dict, Node]]
+        """
         if init is not None:
             try:
                 ourselves = Node(**init)
@@ -404,9 +427,18 @@ DOMNode is a base node mirror type.
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["Node", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Node', dict]]]:
+        """
+        Safely create a new list Nodes from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Node instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Node instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Node]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -421,16 +453,9 @@ class BoxModel(object):
     Box model.
     """
 
-    def __init__(
-        self,
-        content: list,
-        padding: list,
-        border: list,
-        margin: list,
-        width: int,
-        height: int,
-        shapeOutside: Optional[Union["ShapeOutsideInfo", dict]] = None,
-    ) -> None:
+    __slots__ = ["content", "padding", "border", "margin", "width", "height", "shapeOutside"]
+
+    def __init__(self, content: list, padding: list, border: list, margin: list, width: int, height: int, shapeOutside: Optional[Union['ShapeOutsideInfo', dict]] = None) -> None:
         """
         :param content: Content box
         :type content: Any
@@ -456,15 +481,6 @@ class BoxModel(object):
         self.height = height
         self.shapeOutside = ShapeOutsideInfo.safe_create(shapeOutside)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.content is not None:
@@ -481,10 +497,21 @@ class BoxModel(object):
             repr_args.append("height={!r}".format(self.height))
         if self.shapeOutside is not None:
             repr_args.append("shapeOutside={!r}".format(self.shapeOutside))
-        return "BoxModel(" + ", ".join(repr_args) + ")"
+        return "BoxModel(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["BoxModel", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['BoxModel', dict]]:
+        """
+        Safely create BoxModel from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of BoxModel
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of BoxModel if creation did not fail
+        :rtype: Optional[Union[dict, BoxModel]]
+        """
         if init is not None:
             try:
                 ourselves = BoxModel(**init)
@@ -495,9 +522,18 @@ class BoxModel(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["BoxModel", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['BoxModel', dict]]]:
+        """
+        Safely create a new list BoxModels from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list BoxModel instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of BoxModel instances if creation did not fail
+        :rtype: Optional[List[Union[dict, BoxModel]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -511,6 +547,8 @@ class BackendNode(object):
     """
     Backend node with a friendly name.
     """
+
+    __slots__ = ["nodeType", "nodeName", "backendNodeId"]
 
     def __init__(self, nodeType: int, nodeName: str, backendNodeId: int) -> None:
         """
@@ -526,15 +564,6 @@ class BackendNode(object):
         self.nodeName = nodeName
         self.backendNodeId = backendNodeId
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.nodeType is not None:
@@ -543,10 +572,21 @@ class BackendNode(object):
             repr_args.append("nodeName={!r}".format(self.nodeName))
         if self.backendNodeId is not None:
             repr_args.append("backendNodeId={!r}".format(self.backendNodeId))
-        return "BackendNode(" + ", ".join(repr_args) + ")"
+        return "BackendNode(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["BackendNode", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['BackendNode', dict]]:
+        """
+        Safely create BackendNode from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of BackendNode
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of BackendNode if creation did not fail
+        :rtype: Optional[Union[dict, BackendNode]]
+        """
         if init is not None:
             try:
                 ourselves = BackendNode(**init)
@@ -557,9 +597,18 @@ class BackendNode(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["BackendNode", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['BackendNode', dict]]]:
+        """
+        Safely create a new list BackendNodes from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list BackendNode instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of BackendNode instances if creation did not fail
+        :rtype: Optional[List[Union[dict, BackendNode]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -569,7 +618,7 @@ class BackendNode(object):
             return init
 
 
-TYPE_TO_OBJECT = {
+DOM_TYPES_TO_OBJECT = {
     "ShapeOutsideInfo": ShapeOutsideInfo,
     "Rect": Rect,
     "RGBA": RGBA,

@@ -1,14 +1,23 @@
-from cripy.gevent.protocol.domdebugger import types as DOMDebugger
 from cripy.gevent.protocol.page import types as Page
 from cripy.gevent.protocol.dom import types as DOM
+from cripy.gevent.protocol.domdebugger import types as DOMDebugger
 
-__all__ = ["NameValue", "LayoutTreeNode", "InlineTextBox", "DOMNode", "ComputedStyle"]
+__all__ = [
+    "NameValue",
+    "LayoutTreeNode",
+    "InlineTextBox",
+    "DOMNode",
+    "ComputedStyle",
+    "DOMSNAPSHOT_TYPE_TO_OBJECT"
+]
 
 
 class NameValue(object):
     """
     A name/value pair.
     """
+
+    __slots__ = ["name", "value"]
 
     def __init__(self, name, value):
         """
@@ -17,18 +26,9 @@ class NameValue(object):
         :param value: Attribute/property value.
         :type value: str
         """
-        super().__init__()
+        super(NameValue, self).__init__()
         self.name = name
         self.value = value
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -36,10 +36,21 @@ class NameValue(object):
             repr_args.append("name={!r}".format(self.name))
         if self.value is not None:
             repr_args.append("value={!r}".format(self.value))
-        return "NameValue(" + ", ".join(repr_args) + ")"
+        return "NameValue(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create NameValue from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of NameValue
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of NameValue if creation did not fail
+        :rtype: Optional[Union[dict, NameValue]]
+        """
         if init is not None:
             try:
                 ourselves = NameValue(**init)
@@ -51,6 +62,17 @@ class NameValue(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list NameValues from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list NameValue instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of NameValue instances if creation did not fail
+        :rtype: Optional[List[Union[dict, NameValue]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -65,15 +87,9 @@ class LayoutTreeNode(object):
     Details of an element in the DOM tree with a LayoutObject.
     """
 
-    def __init__(
-        self,
-        domNodeIndex,
-        boundingBox,
-        layoutText=None,
-        inlineTextNodes=None,
-        styleIndex=None,
-        paintOrder=None,
-    ):
+    __slots__ = ["domNodeIndex", "boundingBox", "layoutText", "inlineTextNodes", "styleIndex", "paintOrder"]
+
+    def __init__(self, domNodeIndex, boundingBox, layoutText=None, inlineTextNodes=None, styleIndex=None, paintOrder=None):
         """
         :param domNodeIndex: The index of the related DOM node in the `domNodes` array returned by `getSnapshot`.
         :type domNodeIndex: int
@@ -88,22 +104,13 @@ class LayoutTreeNode(object):
         :param paintOrder: Global paint order index, which is determined by the stacking order of the nodes. Nodes that are painted together will have the same index. Only provided if includePaintOrder in getSnapshot was true.
         :type paintOrder: Optional[int]
         """
-        super().__init__()
+        super(LayoutTreeNode, self).__init__()
         self.domNodeIndex = domNodeIndex
         self.boundingBox = DOM.Rect.safe_create(boundingBox)
         self.layoutText = layoutText
         self.inlineTextNodes = InlineTextBox.safe_create_from_list(inlineTextNodes)
         self.styleIndex = styleIndex
         self.paintOrder = paintOrder
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -119,10 +126,21 @@ class LayoutTreeNode(object):
             repr_args.append("styleIndex={!r}".format(self.styleIndex))
         if self.paintOrder is not None:
             repr_args.append("paintOrder={!r}".format(self.paintOrder))
-        return "LayoutTreeNode(" + ", ".join(repr_args) + ")"
+        return "LayoutTreeNode(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create LayoutTreeNode from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of LayoutTreeNode
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of LayoutTreeNode if creation did not fail
+        :rtype: Optional[Union[dict, LayoutTreeNode]]
+        """
         if init is not None:
             try:
                 ourselves = LayoutTreeNode(**init)
@@ -134,6 +152,17 @@ class LayoutTreeNode(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list LayoutTreeNodes from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list LayoutTreeNode instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of LayoutTreeNode instances if creation did not fail
+        :rtype: Optional[List[Union[dict, LayoutTreeNode]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -149,6 +178,8 @@ class InlineTextBox(object):
 stable and may change between versions.
     """
 
+    __slots__ = ["boundingBox", "startCharacterIndex", "numCharacters"]
+
     def __init__(self, boundingBox, startCharacterIndex, numCharacters):
         """
         :param boundingBox: The absolute position bounding box.
@@ -158,34 +189,34 @@ stable and may change between versions.
         :param numCharacters: The number of characters in this post layout textbox substring. Characters that would be represented as a surrogate pair in UTF-16 have length 2.
         :type numCharacters: int
         """
-        super().__init__()
+        super(InlineTextBox, self).__init__()
         self.boundingBox = DOM.Rect.safe_create(boundingBox)
         self.startCharacterIndex = startCharacterIndex
         self.numCharacters = numCharacters
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
         if self.boundingBox is not None:
             repr_args.append("boundingBox={!r}".format(self.boundingBox))
         if self.startCharacterIndex is not None:
-            repr_args.append(
-                "startCharacterIndex={!r}".format(self.startCharacterIndex)
-            )
+            repr_args.append("startCharacterIndex={!r}".format(self.startCharacterIndex))
         if self.numCharacters is not None:
             repr_args.append("numCharacters={!r}".format(self.numCharacters))
-        return "InlineTextBox(" + ", ".join(repr_args) + ")"
+        return "InlineTextBox(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create InlineTextBox from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of InlineTextBox
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of InlineTextBox if creation did not fail
+        :rtype: Optional[Union[dict, InlineTextBox]]
+        """
         if init is not None:
             try:
                 ourselves = InlineTextBox(**init)
@@ -197,6 +228,17 @@ stable and may change between versions.
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list InlineTextBoxs from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list InlineTextBox instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of InlineTextBox instances if creation did not fail
+        :rtype: Optional[List[Union[dict, InlineTextBox]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -211,37 +253,9 @@ class DOMNode(object):
     A Node in the DOM tree.
     """
 
-    def __init__(
-        self,
-        nodeType,
-        nodeName,
-        nodeValue,
-        backendNodeId,
-        textValue=None,
-        inputValue=None,
-        inputChecked=None,
-        optionSelected=None,
-        childNodeIndexes=None,
-        attributes=None,
-        pseudoElementIndexes=None,
-        layoutNodeIndex=None,
-        documentURL=None,
-        baseURL=None,
-        contentLanguage=None,
-        documentEncoding=None,
-        publicId=None,
-        systemId=None,
-        frameId=None,
-        contentDocumentIndex=None,
-        importedDocumentIndex=None,
-        templateContentIndex=None,
-        pseudoType=None,
-        shadowRootType=None,
-        isClickable=None,
-        eventListeners=None,
-        currentSourceURL=None,
-        originURL=None,
-    ):
+    __slots__ = ["nodeType", "nodeName", "nodeValue", "textValue", "inputValue", "inputChecked", "optionSelected", "backendNodeId", "childNodeIndexes", "attributes", "pseudoElementIndexes", "layoutNodeIndex", "documentURL", "baseURL", "contentLanguage", "documentEncoding", "publicId", "systemId", "frameId", "contentDocumentIndex", "importedDocumentIndex", "templateContentIndex", "pseudoType", "shadowRootType", "isClickable", "eventListeners", "currentSourceURL", "originURL"]
+
+    def __init__(self, nodeType, nodeName, nodeValue, backendNodeId, textValue=None, inputValue=None, inputChecked=None, optionSelected=None, childNodeIndexes=None, attributes=None, pseudoElementIndexes=None, layoutNodeIndex=None, documentURL=None, baseURL=None, contentLanguage=None, documentEncoding=None, publicId=None, systemId=None, frameId=None, contentDocumentIndex=None, importedDocumentIndex=None, templateContentIndex=None, pseudoType=None, shadowRootType=None, isClickable=None, eventListeners=None, currentSourceURL=None, originURL=None):
         """
         :param nodeType: `Node`'s nodeType.
         :type nodeType: int
@@ -300,7 +314,7 @@ class DOMNode(object):
         :param originURL: The url of the script (if any) that generates this node.
         :type originURL: Optional[str]
         """
-        super().__init__()
+        super(DOMNode, self).__init__()
         self.nodeType = nodeType
         self.nodeName = nodeName
         self.nodeValue = nodeValue
@@ -326,20 +340,9 @@ class DOMNode(object):
         self.pseudoType = pseudoType
         self.shadowRootType = shadowRootType
         self.isClickable = isClickable
-        self.eventListeners = DOMDebugger.EventListener.safe_create_from_list(
-            eventListeners
-        )
+        self.eventListeners = DOMDebugger.EventListener.safe_create_from_list(eventListeners)
         self.currentSourceURL = currentSourceURL
         self.originURL = originURL
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -364,9 +367,7 @@ class DOMNode(object):
         if self.attributes is not None:
             repr_args.append("attributes={!r}".format(self.attributes))
         if self.pseudoElementIndexes is not None:
-            repr_args.append(
-                "pseudoElementIndexes={!r}".format(self.pseudoElementIndexes)
-            )
+            repr_args.append("pseudoElementIndexes={!r}".format(self.pseudoElementIndexes))
         if self.layoutNodeIndex is not None:
             repr_args.append("layoutNodeIndex={!r}".format(self.layoutNodeIndex))
         if self.documentURL is not None:
@@ -384,17 +385,11 @@ class DOMNode(object):
         if self.frameId is not None:
             repr_args.append("frameId={!r}".format(self.frameId))
         if self.contentDocumentIndex is not None:
-            repr_args.append(
-                "contentDocumentIndex={!r}".format(self.contentDocumentIndex)
-            )
+            repr_args.append("contentDocumentIndex={!r}".format(self.contentDocumentIndex))
         if self.importedDocumentIndex is not None:
-            repr_args.append(
-                "importedDocumentIndex={!r}".format(self.importedDocumentIndex)
-            )
+            repr_args.append("importedDocumentIndex={!r}".format(self.importedDocumentIndex))
         if self.templateContentIndex is not None:
-            repr_args.append(
-                "templateContentIndex={!r}".format(self.templateContentIndex)
-            )
+            repr_args.append("templateContentIndex={!r}".format(self.templateContentIndex))
         if self.pseudoType is not None:
             repr_args.append("pseudoType={!r}".format(self.pseudoType))
         if self.shadowRootType is not None:
@@ -407,10 +402,21 @@ class DOMNode(object):
             repr_args.append("currentSourceURL={!r}".format(self.currentSourceURL))
         if self.originURL is not None:
             repr_args.append("originURL={!r}".format(self.originURL))
-        return "DOMNode(" + ", ".join(repr_args) + ")"
+        return "DOMNode(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create DOMNode from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of DOMNode
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of DOMNode if creation did not fail
+        :rtype: Optional[Union[dict, DOMNode]]
+        """
         if init is not None:
             try:
                 ourselves = DOMNode(**init)
@@ -422,6 +428,17 @@ class DOMNode(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list DOMNodes from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list DOMNode instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of DOMNode instances if creation did not fail
+        :rtype: Optional[List[Union[dict, DOMNode]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -436,31 +453,35 @@ class ComputedStyle(object):
     A subset of the full ComputedStyle as defined by the request whitelist.
     """
 
+    __slots__ = ["properties"]
+
     def __init__(self, properties):
         """
         :param properties: Name/value pairs of computed style properties.
         :type properties: List[dict]
         """
-        super().__init__()
+        super(ComputedStyle, self).__init__()
         self.properties = NameValue.safe_create_from_list(properties)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
         if self.properties is not None:
             repr_args.append("properties={!r}".format(self.properties))
-        return "ComputedStyle(" + ", ".join(repr_args) + ")"
+        return "ComputedStyle(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ComputedStyle from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ComputedStyle
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ComputedStyle if creation did not fail
+        :rtype: Optional[Union[dict, ComputedStyle]]
+        """
         if init is not None:
             try:
                 ourselves = ComputedStyle(**init)
@@ -472,6 +493,17 @@ class ComputedStyle(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ComputedStyles from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ComputedStyle instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ComputedStyle instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ComputedStyle]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -481,7 +513,7 @@ class ComputedStyle(object):
             return init
 
 
-TYPE_TO_OBJECT = {
+DOMSNAPSHOT_TYPE_TO_OBJECT = {
     "NameValue": NameValue,
     "LayoutTreeNode": LayoutTreeNode,
     "InlineTextBox": InlineTextBox,

@@ -10,6 +10,8 @@ from cripy.async.protocol.{{ dl }} import events as Events
 from cripy.async.protocol.{{ dl }} import types as Types
 {% endif %}
 
+__all__ = ["{{ d.domain }}"]
+
 
 class {{ d.domain }}(object):
 {% if d.description %}
@@ -20,9 +22,18 @@ class {{ d.domain }}(object):
 {% endif %}
 {% if d.has_deps %}
     {{ d.dep_list_str }}
-{% endif %}
 
+{% endif %}
+{% if d.has_events %}
+    events = Events.{{ d.domain | upper }}_EVENTS_NS
+
+{% endif %}
     def __init__(self, chrome):
+        """
+        Construct a new {{ d.domain }} object
+
+        :param chrome: An instance of the devtools protocol client
+        """
         self.chrome = chrome
 
     {% for command in d.commands %}
@@ -33,6 +44,10 @@ class {{ d.domain }}(object):
     {% endif %}
         {% if command.has_parameters %}
         """
+        {% if command.description %}
+        {{ command.description }}
+
+        {% endif %}
         {% for prop in command.parameters %}
         {% if prop.description %}
         :param {{ prop.name }}: {{ prop.nice_description }}
@@ -41,6 +56,10 @@ class {{ d.domain }}(object):
         {% endif %}
         :type {{ prop.name }}: {{ prop.constructor_docstr }}
         {% endfor %}
+        """
+        {% elif command.description %}
+        """
+        {{ command.description }}
         """
         {% endif %}
         {% if command.has_parameters %}
@@ -66,8 +85,17 @@ class {{ d.domain }}(object):
     {% endfor %}
     @staticmethod
     def get_event_classes() -> Optional[dict]:
+        """
+        Retrieve a dictionary of events emitted by the {{ dup }} domain to their python class
+
+        If {{ dup }} has events this method returns a dictionary of
+        fully qualified event name (str) to it python class
+
+        :return: Dictionary of the {{ dup }} domain event classes
+        :retype: Optional[dict]
+        """
         {% if d.has_events %}
-        return Events.EVENT_TO_CLASS
+        return Events.{{ d.domain | upper }}_EVENTS_TO_CLASS
         {% else %}
         return None
         {% endif %}

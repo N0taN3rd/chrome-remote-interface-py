@@ -1,11 +1,20 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
 from cripy.async.protocol.page import types as Page
+
+__all__ = [
+    "FrameWithManifest",
+    "ApplicationCacheResource",
+    "ApplicationCacheT",
+    "APPLICATIONCACHE_TYPES_TO_OBJECT"
+]
 
 
 class FrameWithManifest(object):
     """
     Frame identifier - manifest URL pair.
     """
+
+    __slots__ = ["frameId", "manifestURL", "status"]
 
     def __init__(self, frameId: str, manifestURL: str, status: int) -> None:
         """
@@ -21,15 +30,6 @@ class FrameWithManifest(object):
         self.manifestURL = manifestURL
         self.status = status
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.frameId is not None:
@@ -38,10 +38,21 @@ class FrameWithManifest(object):
             repr_args.append("manifestURL={!r}".format(self.manifestURL))
         if self.status is not None:
             repr_args.append("status={!r}".format(self.status))
-        return "FrameWithManifest(" + ", ".join(repr_args) + ")"
+        return "FrameWithManifest(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["FrameWithManifest", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['FrameWithManifest', dict]]:
+        """
+        Safely create FrameWithManifest from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of FrameWithManifest
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of FrameWithManifest if creation did not fail
+        :rtype: Optional[Union[dict, FrameWithManifest]]
+        """
         if init is not None:
             try:
                 ourselves = FrameWithManifest(**init)
@@ -52,9 +63,18 @@ class FrameWithManifest(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["FrameWithManifest", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['FrameWithManifest', dict]]]:
+        """
+        Safely create a new list FrameWithManifests from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list FrameWithManifest instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of FrameWithManifest instances if creation did not fail
+        :rtype: Optional[List[Union[dict, FrameWithManifest]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -68,6 +88,8 @@ class ApplicationCacheResource(object):
     """
     Detailed application cache resource information.
     """
+
+    __slots__ = ["url", "size", "type"]
 
     def __init__(self, url: str, size: int, type: str) -> None:
         """
@@ -83,15 +105,6 @@ class ApplicationCacheResource(object):
         self.size = size
         self.type = type
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.url is not None:
@@ -100,12 +113,21 @@ class ApplicationCacheResource(object):
             repr_args.append("size={!r}".format(self.size))
         if self.type is not None:
             repr_args.append("type={!r}".format(self.type))
-        return "ApplicationCacheResource(" + ", ".join(repr_args) + ")"
+        return "ApplicationCacheResource(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["ApplicationCacheResource", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ApplicationCacheResource', dict]]:
+        """
+        Safely create ApplicationCacheResource from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ApplicationCacheResource
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ApplicationCacheResource if creation did not fail
+        :rtype: Optional[Union[dict, ApplicationCacheResource]]
+        """
         if init is not None:
             try:
                 ourselves = ApplicationCacheResource(**init)
@@ -116,9 +138,18 @@ class ApplicationCacheResource(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ApplicationCacheResource", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ApplicationCacheResource', dict]]]:
+        """
+        Safely create a new list ApplicationCacheResources from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ApplicationCacheResource instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ApplicationCacheResource instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ApplicationCacheResource]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -128,19 +159,14 @@ class ApplicationCacheResource(object):
             return init
 
 
-class ApplicationCache(object):
+class ApplicationCacheT(object):
     """
     Detailed application cache information.
     """
 
-    def __init__(
-        self,
-        manifestURL: str,
-        size: float,
-        creationTime: float,
-        updateTime: float,
-        resources: List[Union["ApplicationCacheResource", dict]],
-    ) -> None:
+    __slots__ = ["manifestURL", "size", "creationTime", "updateTime", "resources"]
+
+    def __init__(self, manifestURL: str, size: float, creationTime: float, updateTime: float, resources: List[Union['ApplicationCacheResource', dict]]) -> None:
         """
         :param manifestURL: Manifest URL.
         :type manifestURL: str
@@ -160,15 +186,6 @@ class ApplicationCache(object):
         self.updateTime = updateTime
         self.resources = ApplicationCacheResource.safe_create_from_list(resources)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.manifestURL is not None:
@@ -181,13 +198,24 @@ class ApplicationCache(object):
             repr_args.append("updateTime={!r}".format(self.updateTime))
         if self.resources is not None:
             repr_args.append("resources={!r}".format(self.resources))
-        return "ApplicationCache(" + ", ".join(repr_args) + ")"
+        return "ApplicationCacheT(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["ApplicationCache", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ApplicationCacheT', dict]]:
+        """
+        Safely create ApplicationCacheT from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ApplicationCacheT
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ApplicationCacheT if creation did not fail
+        :rtype: Optional[Union[dict, ApplicationCacheT]]
+        """
         if init is not None:
             try:
-                ourselves = ApplicationCache(**init)
+                ourselves = ApplicationCacheT(**init)
                 return ourselves
             except Exception:
                 return init
@@ -195,20 +223,29 @@ class ApplicationCache(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ApplicationCache", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ApplicationCacheT', dict]]]:
+        """
+        Safely create a new list ApplicationCacheTs from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ApplicationCacheT instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ApplicationCacheT instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ApplicationCacheT]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(ApplicationCache.safe_create(it))
+                list_of_self.append(ApplicationCacheT.safe_create(it))
             return list_of_self
         else:
             return init
 
 
-TYPE_TO_OBJECT = {
+APPLICATIONCACHE_TYPES_TO_OBJECT = {
     "FrameWithManifest": FrameWithManifest,
     "ApplicationCacheResource": ApplicationCacheResource,
-    "ApplicationCache": ApplicationCache,
+    "ApplicationCacheT": ApplicationCacheT,
 }

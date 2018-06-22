@@ -1,5 +1,9 @@
 
-__all__ = ["GPUInfo", "GPUDevice"]
+__all__ = [
+    "GPUInfo",
+    "GPUDevice",
+    "SYSTEMINFO_TYPE_TO_OBJECT"
+]
 
 
 class GPUInfo(object):
@@ -7,9 +11,9 @@ class GPUInfo(object):
     Provides information about the GPU(s) on the system.
     """
 
-    def __init__(
-        self, devices, driverBugWorkarounds, auxAttributes=None, featureStatus=None
-    ):
+    __slots__ = ["devices", "auxAttributes", "featureStatus", "driverBugWorkarounds"]
+
+    def __init__(self, devices, driverBugWorkarounds, auxAttributes=None, featureStatus=None):
         """
         :param devices: The graphics devices on the system. Element 0 is the primary GPU.
         :type devices: List[dict]
@@ -20,20 +24,11 @@ class GPUInfo(object):
         :param driverBugWorkarounds: An optional array of GPU driver bug workarounds.
         :type driverBugWorkarounds: List[str]
         """
-        super().__init__()
+        super(GPUInfo, self).__init__()
         self.devices = GPUDevice.safe_create_from_list(devices)
         self.auxAttributes = auxAttributes
         self.featureStatus = featureStatus
         self.driverBugWorkarounds = driverBugWorkarounds
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -44,13 +39,22 @@ class GPUInfo(object):
         if self.featureStatus is not None:
             repr_args.append("featureStatus={!r}".format(self.featureStatus))
         if self.driverBugWorkarounds is not None:
-            repr_args.append(
-                "driverBugWorkarounds={!r}".format(self.driverBugWorkarounds)
-            )
-        return "GPUInfo(" + ", ".join(repr_args) + ")"
+            repr_args.append("driverBugWorkarounds={!r}".format(self.driverBugWorkarounds))
+        return "GPUInfo(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create GPUInfo from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of GPUInfo
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of GPUInfo if creation did not fail
+        :rtype: Optional[Union[dict, GPUInfo]]
+        """
         if init is not None:
             try:
                 ourselves = GPUInfo(**init)
@@ -62,6 +66,17 @@ class GPUInfo(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list GPUInfos from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list GPUInfo instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of GPUInfo instances if creation did not fail
+        :rtype: Optional[List[Union[dict, GPUInfo]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -76,6 +91,8 @@ class GPUDevice(object):
     Describes a single graphics processor (GPU).
     """
 
+    __slots__ = ["vendorId", "deviceId", "vendorString", "deviceString"]
+
     def __init__(self, vendorId, deviceId, vendorString, deviceString):
         """
         :param vendorId: PCI ID of the GPU vendor, if available; 0 otherwise.
@@ -87,20 +104,11 @@ class GPUDevice(object):
         :param deviceString: String description of the GPU device, if the PCI ID is not available.
         :type deviceString: str
         """
-        super().__init__()
+        super(GPUDevice, self).__init__()
         self.vendorId = vendorId
         self.deviceId = deviceId
         self.vendorString = vendorString
         self.deviceString = deviceString
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -112,10 +120,21 @@ class GPUDevice(object):
             repr_args.append("vendorString={!r}".format(self.vendorString))
         if self.deviceString is not None:
             repr_args.append("deviceString={!r}".format(self.deviceString))
-        return "GPUDevice(" + ", ".join(repr_args) + ")"
+        return "GPUDevice(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create GPUDevice from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of GPUDevice
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of GPUDevice if creation did not fail
+        :rtype: Optional[Union[dict, GPUDevice]]
+        """
         if init is not None:
             try:
                 ourselves = GPUDevice(**init)
@@ -127,6 +146,17 @@ class GPUDevice(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list GPUDevices from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list GPUDevice instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of GPUDevice instances if creation did not fail
+        :rtype: Optional[List[Union[dict, GPUDevice]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -136,4 +166,7 @@ class GPUDevice(object):
             return init
 
 
-TYPE_TO_OBJECT = {"GPUInfo": GPUInfo, "GPUDevice": GPUDevice}
+SYSTEMINFO_TYPE_TO_OBJECT = {
+    "GPUInfo": GPUInfo,
+    "GPUDevice": GPUDevice,
+}

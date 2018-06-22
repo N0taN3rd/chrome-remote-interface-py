@@ -1,12 +1,20 @@
-from typing import Any, List, Optional, Union, TypeVar
-from cripy.async.protocol.network import types as Network
+from typing import Any, List, Optional, Union
 from cripy.async.protocol.runtime import types as Runtime
+from cripy.async.protocol.network import types as Network
+
+__all__ = [
+    "ViolationSetting",
+    "LogEntry",
+    "LOG_TYPES_TO_OBJECT"
+]
 
 
 class ViolationSetting(object):
     """
     Violation configuration setting.
     """
+
+    __slots__ = ["name", "threshold"]
 
     def __init__(self, name: str, threshold: float) -> None:
         """
@@ -19,25 +27,27 @@ class ViolationSetting(object):
         self.name = name
         self.threshold = threshold
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.name is not None:
             repr_args.append("name={!r}".format(self.name))
         if self.threshold is not None:
             repr_args.append("threshold={!r}".format(self.threshold))
-        return "ViolationSetting(" + ", ".join(repr_args) + ")"
+        return "ViolationSetting(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["ViolationSetting", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ViolationSetting', dict]]:
+        """
+        Safely create ViolationSetting from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ViolationSetting
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ViolationSetting if creation did not fail
+        :rtype: Optional[Union[dict, ViolationSetting]]
+        """
         if init is not None:
             try:
                 ourselves = ViolationSetting(**init)
@@ -48,9 +58,18 @@ class ViolationSetting(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ViolationSetting", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ViolationSetting', dict]]]:
+        """
+        Safely create a new list ViolationSettings from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ViolationSetting instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ViolationSetting instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ViolationSetting]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -65,19 +84,9 @@ class LogEntry(object):
     Log entry.
     """
 
-    def __init__(
-        self,
-        source: str,
-        level: str,
-        text: str,
-        timestamp: float,
-        url: Optional[str] = None,
-        lineNumber: Optional[int] = None,
-        stackTrace: Optional[Union["Runtime.StackTrace", dict]] = None,
-        networkRequestId: Optional[str] = None,
-        workerId: Optional[str] = None,
-        args: Optional[List[Union["Runtime.RemoteObject", dict]]] = None,
-    ) -> None:
+    __slots__ = ["source", "level", "text", "timestamp", "url", "lineNumber", "stackTrace", "networkRequestId", "workerId", "args"]
+
+    def __init__(self, source: str, level: str, text: str, timestamp: float, url: Optional[str] = None, lineNumber: Optional[int] = None, stackTrace: Optional[Union['Runtime.StackTrace', dict]] = None, networkRequestId: Optional[str] = None, workerId: Optional[str] = None, args: Optional[List[Union['Runtime.RemoteObject', dict]]] = None) -> None:
         """
         :param source: Log entry source.
         :type source: str
@@ -112,15 +121,6 @@ class LogEntry(object):
         self.workerId = workerId
         self.args = Runtime.RemoteObject.safe_create_from_list(args)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.source is not None:
@@ -143,10 +143,21 @@ class LogEntry(object):
             repr_args.append("workerId={!r}".format(self.workerId))
         if self.args is not None:
             repr_args.append("args={!r}".format(self.args))
-        return "LogEntry(" + ", ".join(repr_args) + ")"
+        return "LogEntry(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["LogEntry", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['LogEntry', dict]]:
+        """
+        Safely create LogEntry from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of LogEntry
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of LogEntry if creation did not fail
+        :rtype: Optional[Union[dict, LogEntry]]
+        """
         if init is not None:
             try:
                 ourselves = LogEntry(**init)
@@ -157,9 +168,18 @@ class LogEntry(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["LogEntry", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['LogEntry', dict]]]:
+        """
+        Safely create a new list LogEntrys from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list LogEntry instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of LogEntry instances if creation did not fail
+        :rtype: Optional[List[Union[dict, LogEntry]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -169,4 +189,7 @@ class LogEntry(object):
             return init
 
 
-TYPE_TO_OBJECT = {"ViolationSetting": ViolationSetting, "LogEntry": LogEntry}
+LOG_TYPES_TO_OBJECT = {
+    "ViolationSetting": ViolationSetting,
+    "LogEntry": LogEntry,
+}

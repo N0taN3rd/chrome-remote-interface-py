@@ -1,11 +1,13 @@
 from typing import Any, List, Optional, Union
-from types import SimpleNamespace
+from collections import namedtuple
+from cripy.async.protocol.security.types import *
 
-try:
-    from cripy.async.protocol.security.types import *
-except ImportError:
-    pass
-
+__all__ = [
+    "CertificateErrorEvent",
+    "SecurityStateChangedEvent",
+    "SECURITY_EVENTS_TO_CLASS",
+    "SECURITY_EVENTS_NS"
+]
 
 class CertificateErrorEvent(object):
     """
@@ -17,8 +19,12 @@ class CertificateErrorEvent(object):
 
     event = "Security.certificateError"
 
+    __slots__ = ["eventId", "errorType", "requestURL"]
+
     def __init__(self, eventId: int, errorType: str, requestURL: str) -> None:
         """
+        Create a new instance of CertificateErrorEvent
+
         :param eventId: The ID of the event.
         :type eventId: int
         :param errorType: The type of the error.
@@ -31,15 +37,6 @@ class CertificateErrorEvent(object):
         self.errorType = errorType
         self.requestURL = requestURL
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.eventId is not None:
@@ -48,12 +45,21 @@ class CertificateErrorEvent(object):
             repr_args.append("errorType={!r}".format(self.errorType))
         if self.requestURL is not None:
             repr_args.append("requestURL={!r}".format(self.requestURL))
-        return "CertificateErrorEvent(" + ", ".join(repr_args) + ")"
+        return "CertificateErrorEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["CertificateErrorEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['CertificateErrorEvent', dict]]:
+        """
+        Safely create CertificateErrorEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of CertificateErrorEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of CertificateErrorEvent if creation did not fail
+        :rtype: Optional[Union[dict, CertificateErrorEvent]]
+        """
         if init is not None:
             try:
                 ourselves = CertificateErrorEvent(**init)
@@ -64,9 +70,18 @@ class CertificateErrorEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["CertificateErrorEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['CertificateErrorEvent', dict]]]:
+        """
+        Safely create a new list CertificateErrorEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list CertificateErrorEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of CertificateErrorEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, CertificateErrorEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -83,15 +98,12 @@ class SecurityStateChangedEvent(object):
 
     event = "Security.securityStateChanged"
 
-    def __init__(
-        self,
-        securityState: str,
-        schemeIsCryptographic: bool,
-        explanations: List[Union[SecurityStateExplanation, dict]],
-        insecureContentStatus: Union[InsecureContentStatus, dict],
-        summary: Optional[str] = None,
-    ) -> None:
+    __slots__ = ["securityState", "schemeIsCryptographic", "explanations", "insecureContentStatus", "summary"]
+
+    def __init__(self, securityState: str, schemeIsCryptographic: bool, explanations: List[Union[SecurityStateExplanation, dict]], insecureContentStatus: Union[InsecureContentStatus, dict], summary: Optional[str] = None) -> None:
         """
+        Create a new instance of SecurityStateChangedEvent
+
         :param securityState: Security state.
         :type securityState: str
         :param schemeIsCryptographic: True if the page was loaded over cryptographic transport such as HTTPS.
@@ -107,42 +119,36 @@ class SecurityStateChangedEvent(object):
         self.securityState = securityState
         self.schemeIsCryptographic = schemeIsCryptographic
         self.explanations = SecurityStateExplanation.safe_create_from_list(explanations)
-        self.insecureContentStatus = InsecureContentStatus.safe_create(
-            insecureContentStatus
-        )
+        self.insecureContentStatus = InsecureContentStatus.safe_create(insecureContentStatus)
         self.summary = summary
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
 
     def __repr__(self) -> str:
         repr_args = []
         if self.securityState is not None:
             repr_args.append("securityState={!r}".format(self.securityState))
         if self.schemeIsCryptographic is not None:
-            repr_args.append(
-                "schemeIsCryptographic={!r}".format(self.schemeIsCryptographic)
-            )
+            repr_args.append("schemeIsCryptographic={!r}".format(self.schemeIsCryptographic))
         if self.explanations is not None:
             repr_args.append("explanations={!r}".format(self.explanations))
         if self.insecureContentStatus is not None:
-            repr_args.append(
-                "insecureContentStatus={!r}".format(self.insecureContentStatus)
-            )
+            repr_args.append("insecureContentStatus={!r}".format(self.insecureContentStatus))
         if self.summary is not None:
             repr_args.append("summary={!r}".format(self.summary))
-        return "SecurityStateChangedEvent(" + ", ".join(repr_args) + ")"
+        return "SecurityStateChangedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["SecurityStateChangedEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['SecurityStateChangedEvent', dict]]:
+        """
+        Safely create SecurityStateChangedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of SecurityStateChangedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of SecurityStateChangedEvent if creation did not fail
+        :rtype: Optional[Union[dict, SecurityStateChangedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = SecurityStateChangedEvent(**init)
@@ -153,9 +159,18 @@ class SecurityStateChangedEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["SecurityStateChangedEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SecurityStateChangedEvent', dict]]]:
+        """
+        Safely create a new list SecurityStateChangedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list SecurityStateChangedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of SecurityStateChangedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, SecurityStateChangedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -165,12 +180,14 @@ class SecurityStateChangedEvent(object):
             return init
 
 
-EVENT_TO_CLASS = {
-    "Security.certificateError": CertificateErrorEvent,
-    "Security.securityStateChanged": SecurityStateChangedEvent,
+SECURITY_EVENTS_TO_CLASS = {
+   "Security.certificateError": CertificateErrorEvent,
+   "Security.securityStateChanged": SecurityStateChangedEvent,
 }
 
-EVENT_NS = SimpleNamespace(
-    CertificateError="Security.certificateError",
-    SecurityStateChanged="Security.securityStateChanged",
+SecurityNS = namedtuple("SecurityNS", ["CertificateError", "SecurityStateChanged"])
+
+SECURITY_EVENTS_NS = SecurityNS(
+  CertificateError="Security.certificateError",
+  SecurityStateChanged="Security.securityStateChanged",
 )

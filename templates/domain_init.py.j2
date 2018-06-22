@@ -1,0 +1,12 @@
+{% if d.has_events %}
+from .events import *
+{% endif %}
+{% if d.has_types %}
+from .types import *
+{% endif %}
+from .domain import *
+
+__all__ = domain.__all__{% if d.has_events %} + events.__all__{% endif %}{% if d.has_types %} + types.__all__{% endif %}
+{%+ if True %}
+
+{% endif %}

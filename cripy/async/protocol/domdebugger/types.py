@@ -1,6 +1,11 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
 from cripy.async.protocol.dom import types as DOM
 from cripy.async.protocol.runtime import types as Runtime
+
+__all__ = [
+    "EventListener",
+    "DOMDEBUGGER_TYPES_TO_OBJECT"
+]
 
 
 class EventListener(object):
@@ -8,19 +13,9 @@ class EventListener(object):
     Object event listener.
     """
 
-    def __init__(
-        self,
-        type: str,
-        useCapture: bool,
-        passive: bool,
-        once: bool,
-        scriptId: str,
-        lineNumber: int,
-        columnNumber: int,
-        handler: Optional[Union["Runtime.RemoteObject", dict]] = None,
-        originalHandler: Optional[Union["Runtime.RemoteObject", dict]] = None,
-        backendNodeId: Optional[int] = None,
-    ) -> None:
+    __slots__ = ["type", "useCapture", "passive", "once", "scriptId", "lineNumber", "columnNumber", "handler", "originalHandler", "backendNodeId"]
+
+    def __init__(self, type: str, useCapture: bool, passive: bool, once: bool, scriptId: str, lineNumber: int, columnNumber: int, handler: Optional[Union['Runtime.RemoteObject', dict]] = None, originalHandler: Optional[Union['Runtime.RemoteObject', dict]] = None, backendNodeId: Optional[int] = None) -> None:
         """
         :param type: `EventListener`'s type.
         :type type: str
@@ -55,15 +50,6 @@ class EventListener(object):
         self.originalHandler = Runtime.RemoteObject.safe_create(originalHandler)
         self.backendNodeId = backendNodeId
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.type is not None:
@@ -86,10 +72,21 @@ class EventListener(object):
             repr_args.append("originalHandler={!r}".format(self.originalHandler))
         if self.backendNodeId is not None:
             repr_args.append("backendNodeId={!r}".format(self.backendNodeId))
-        return "EventListener(" + ", ".join(repr_args) + ")"
+        return "EventListener(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["EventListener", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['EventListener', dict]]:
+        """
+        Safely create EventListener from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of EventListener
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of EventListener if creation did not fail
+        :rtype: Optional[Union[dict, EventListener]]
+        """
         if init is not None:
             try:
                 ourselves = EventListener(**init)
@@ -100,9 +97,18 @@ class EventListener(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["EventListener", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['EventListener', dict]]]:
+        """
+        Safely create a new list EventListeners from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list EventListener instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of EventListener instances if creation did not fail
+        :rtype: Optional[List[Union[dict, EventListener]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -112,4 +118,6 @@ class EventListener(object):
             return init
 
 
-TYPE_TO_OBJECT = {"EventListener": EventListener}
+DOMDEBUGGER_TYPES_TO_OBJECT = {
+    "EventListener": EventListener,
+}

@@ -1,5 +1,11 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
 from cripy.async.protocol.runtime import types as Runtime
+
+__all__ = [
+    "SamplingHeapProfileNode",
+    "SamplingHeapProfile",
+    "HEAPPROFILER_TYPES_TO_OBJECT"
+]
 
 
 class SamplingHeapProfileNode(object):
@@ -7,12 +13,9 @@ class SamplingHeapProfileNode(object):
     Sampling Heap Profile node. Holds callsite information, allocation statistics and child nodes.
     """
 
-    def __init__(
-        self,
-        callFrame: Union["Runtime.CallFrame", dict],
-        selfSize: float,
-        children: List[Union["SamplingHeapProfileNode", dict]],
-    ) -> None:
+    __slots__ = ["callFrame", "selfSize", "children"]
+
+    def __init__(self, callFrame: Union['Runtime.CallFrame', dict], selfSize: float, children: List[Union['SamplingHeapProfileNode', dict]]) -> None:
         """
         :param callFrame: Function location.
         :type callFrame: dict
@@ -26,15 +29,6 @@ class SamplingHeapProfileNode(object):
         self.selfSize = selfSize
         self.children = SamplingHeapProfileNode.safe_create_from_list(children)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.callFrame is not None:
@@ -43,12 +37,21 @@ class SamplingHeapProfileNode(object):
             repr_args.append("selfSize={!r}".format(self.selfSize))
         if self.children is not None:
             repr_args.append("children={!r}".format(self.children))
-        return "SamplingHeapProfileNode(" + ", ".join(repr_args) + ")"
+        return "SamplingHeapProfileNode(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["SamplingHeapProfileNode", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['SamplingHeapProfileNode', dict]]:
+        """
+        Safely create SamplingHeapProfileNode from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of SamplingHeapProfileNode
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of SamplingHeapProfileNode if creation did not fail
+        :rtype: Optional[Union[dict, SamplingHeapProfileNode]]
+        """
         if init is not None:
             try:
                 ourselves = SamplingHeapProfileNode(**init)
@@ -59,9 +62,18 @@ class SamplingHeapProfileNode(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["SamplingHeapProfileNode", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SamplingHeapProfileNode', dict]]]:
+        """
+        Safely create a new list SamplingHeapProfileNodes from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list SamplingHeapProfileNode instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of SamplingHeapProfileNode instances if creation did not fail
+        :rtype: Optional[List[Union[dict, SamplingHeapProfileNode]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -76,7 +88,9 @@ class SamplingHeapProfile(object):
     Profile.
     """
 
-    def __init__(self, head: Union["SamplingHeapProfileNode", dict]) -> None:
+    __slots__ = ["head"]
+
+    def __init__(self, head: Union['SamplingHeapProfileNode', dict]) -> None:
         """
         :param head: The head
         :type head: dict
@@ -84,25 +98,25 @@ class SamplingHeapProfile(object):
         super().__init__()
         self.head = SamplingHeapProfileNode.safe_create(head)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.head is not None:
             repr_args.append("head={!r}".format(self.head))
-        return "SamplingHeapProfile(" + ", ".join(repr_args) + ")"
+        return "SamplingHeapProfile(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["SamplingHeapProfile", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['SamplingHeapProfile', dict]]:
+        """
+        Safely create SamplingHeapProfile from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of SamplingHeapProfile
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of SamplingHeapProfile if creation did not fail
+        :rtype: Optional[Union[dict, SamplingHeapProfile]]
+        """
         if init is not None:
             try:
                 ourselves = SamplingHeapProfile(**init)
@@ -113,9 +127,18 @@ class SamplingHeapProfile(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["SamplingHeapProfile", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['SamplingHeapProfile', dict]]]:
+        """
+        Safely create a new list SamplingHeapProfiles from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list SamplingHeapProfile instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of SamplingHeapProfile instances if creation did not fail
+        :rtype: Optional[List[Union[dict, SamplingHeapProfile]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -125,7 +148,7 @@ class SamplingHeapProfile(object):
             return init
 
 
-TYPE_TO_OBJECT = {
+HEAPPROFILER_TYPES_TO_OBJECT = {
     "SamplingHeapProfileNode": SamplingHeapProfileNode,
     "SamplingHeapProfile": SamplingHeapProfile,
 }

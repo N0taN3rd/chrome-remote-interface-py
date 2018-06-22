@@ -1,11 +1,16 @@
 
-__all__ = ["StorageId"]
+__all__ = [
+    "StorageId",
+    "DOMSTORAGE_TYPE_TO_OBJECT"
+]
 
 
 class StorageId(object):
     """
     DOM Storage identifier.
     """
+
+    __slots__ = ["securityOrigin", "isLocalStorage"]
 
     def __init__(self, securityOrigin, isLocalStorage):
         """
@@ -14,18 +19,9 @@ class StorageId(object):
         :param isLocalStorage: Whether the storage is local storage (not session storage).
         :type isLocalStorage: bool
         """
-        super().__init__()
+        super(StorageId, self).__init__()
         self.securityOrigin = securityOrigin
         self.isLocalStorage = isLocalStorage
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -33,10 +29,21 @@ class StorageId(object):
             repr_args.append("securityOrigin={!r}".format(self.securityOrigin))
         if self.isLocalStorage is not None:
             repr_args.append("isLocalStorage={!r}".format(self.isLocalStorage))
-        return "StorageId(" + ", ".join(repr_args) + ")"
+        return "StorageId(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create StorageId from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of StorageId
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of StorageId if creation did not fail
+        :rtype: Optional[Union[dict, StorageId]]
+        """
         if init is not None:
             try:
                 ourselves = StorageId(**init)
@@ -48,6 +55,17 @@ class StorageId(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list StorageIds from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list StorageId instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of StorageId instances if creation did not fail
+        :rtype: Optional[List[Union[dict, StorageId]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -57,4 +75,6 @@ class StorageId(object):
             return init
 
 
-TYPE_TO_OBJECT = {"StorageId": StorageId}
+DOMSTORAGE_TYPE_TO_OBJECT = {
+    "StorageId": StorageId,
+}

@@ -1,10 +1,6 @@
-from types import SimpleNamespace
+from collections import namedtuple
 from cripy.gevent.protocol.page import types as Page
-
-try:
-    from cripy.gevent.protocol.network.types import *
-except ImportError:
-    pass
+from cripy.gevent.protocol.network.types import *
 
 __all__ = [
     "DataReceivedEvent",
@@ -24,6 +20,8 @@ __all__ = [
     "WebSocketFrameSentEvent",
     "WebSocketHandshakeResponseReceivedEvent",
     "WebSocketWillSendHandshakeRequestEvent",
+    "NETWORK_EVENTS_TO_CLASS",
+    "NETWORK_EVENTS_NS"
 ]
 
 
@@ -32,10 +30,12 @@ class DataReceivedEvent(object):
     Fired when data chunk was received over the network.
     """
 
-    event = "Network.dataReceived"
+    __slots__ = ["requestId", "timestamp", "dataLength", "encodedDataLength"]
 
     def __init__(self, requestId, timestamp, dataLength, encodedDataLength):
         """
+        Create a new instance of DataReceivedEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param timestamp: Timestamp.
@@ -45,20 +45,11 @@ class DataReceivedEvent(object):
         :param encodedDataLength: Actual bytes received (might be less than dataLength for compressed encodings).
         :type encodedDataLength: int
         """
-        super().__init__()
+        super(DataReceivedEvent, self).__init__()
         self.requestId = requestId
         self.timestamp = timestamp
         self.dataLength = dataLength
         self.encodedDataLength = encodedDataLength
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -70,10 +61,21 @@ class DataReceivedEvent(object):
             repr_args.append("dataLength={!r}".format(self.dataLength))
         if self.encodedDataLength is not None:
             repr_args.append("encodedDataLength={!r}".format(self.encodedDataLength))
-        return "DataReceivedEvent(" + ", ".join(repr_args) + ")"
+        return "DataReceivedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create DataReceivedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of DataReceivedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of DataReceivedEvent if creation did not fail
+        :rtype: Optional[Union[dict, DataReceivedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = DataReceivedEvent(**init)
@@ -85,6 +87,17 @@ class DataReceivedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list DataReceivedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list DataReceivedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of DataReceivedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, DataReceivedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -99,10 +112,12 @@ class EventSourceMessageReceivedEvent(object):
     Fired when EventSource message is received.
     """
 
-    event = "Network.eventSourceMessageReceived"
+    __slots__ = ["requestId", "timestamp", "eventName", "eventId", "data"]
 
     def __init__(self, requestId, timestamp, eventName, eventId, data):
         """
+        Create a new instance of EventSourceMessageReceivedEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param timestamp: Timestamp.
@@ -114,21 +129,12 @@ class EventSourceMessageReceivedEvent(object):
         :param data: Message content.
         :type data: str
         """
-        super().__init__()
+        super(EventSourceMessageReceivedEvent, self).__init__()
         self.requestId = requestId
         self.timestamp = timestamp
         self.eventName = eventName
         self.eventId = eventId
         self.data = data
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -142,10 +148,21 @@ class EventSourceMessageReceivedEvent(object):
             repr_args.append("eventId={!r}".format(self.eventId))
         if self.data is not None:
             repr_args.append("data={!r}".format(self.data))
-        return "EventSourceMessageReceivedEvent(" + ", ".join(repr_args) + ")"
+        return "EventSourceMessageReceivedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create EventSourceMessageReceivedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of EventSourceMessageReceivedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of EventSourceMessageReceivedEvent if creation did not fail
+        :rtype: Optional[Union[dict, EventSourceMessageReceivedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = EventSourceMessageReceivedEvent(**init)
@@ -157,6 +174,17 @@ class EventSourceMessageReceivedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list EventSourceMessageReceivedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list EventSourceMessageReceivedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of EventSourceMessageReceivedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, EventSourceMessageReceivedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -171,12 +199,12 @@ class LoadingFailedEvent(object):
     Fired when HTTP request has failed to load.
     """
 
-    event = "Network.loadingFailed"
+    __slots__ = ["requestId", "timestamp", "type", "errorText", "canceled", "blockedReason"]
 
-    def __init__(
-        self, requestId, timestamp, type, errorText, canceled=None, blockedReason=None
-    ):
+    def __init__(self, requestId, timestamp, type, errorText, canceled=None, blockedReason=None):
         """
+        Create a new instance of LoadingFailedEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param timestamp: Timestamp.
@@ -190,22 +218,13 @@ class LoadingFailedEvent(object):
         :param blockedReason: The reason why loading was blocked, if any.
         :type blockedReason: Optional[str]
         """
-        super().__init__()
+        super(LoadingFailedEvent, self).__init__()
         self.requestId = requestId
         self.timestamp = timestamp
         self.type = type
         self.errorText = errorText
         self.canceled = canceled
         self.blockedReason = blockedReason
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -221,10 +240,21 @@ class LoadingFailedEvent(object):
             repr_args.append("canceled={!r}".format(self.canceled))
         if self.blockedReason is not None:
             repr_args.append("blockedReason={!r}".format(self.blockedReason))
-        return "LoadingFailedEvent(" + ", ".join(repr_args) + ")"
+        return "LoadingFailedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create LoadingFailedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of LoadingFailedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of LoadingFailedEvent if creation did not fail
+        :rtype: Optional[Union[dict, LoadingFailedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = LoadingFailedEvent(**init)
@@ -236,6 +266,17 @@ class LoadingFailedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list LoadingFailedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list LoadingFailedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of LoadingFailedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, LoadingFailedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -250,12 +291,12 @@ class LoadingFinishedEvent(object):
     Fired when HTTP request has finished loading.
     """
 
-    event = "Network.loadingFinished"
+    __slots__ = ["requestId", "timestamp", "encodedDataLength", "shouldReportCorbBlocking"]
 
-    def __init__(
-        self, requestId, timestamp, encodedDataLength, shouldReportCorbBlocking=None
-    ):
+    def __init__(self, requestId, timestamp, encodedDataLength, shouldReportCorbBlocking=None):
         """
+        Create a new instance of LoadingFinishedEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param timestamp: Timestamp.
@@ -265,20 +306,11 @@ class LoadingFinishedEvent(object):
         :param shouldReportCorbBlocking: Set when 1) response was blocked by Cross-Origin Read Blocking and also 2) this needs to be reported to the DevTools console.
         :type shouldReportCorbBlocking: Optional[bool]
         """
-        super().__init__()
+        super(LoadingFinishedEvent, self).__init__()
         self.requestId = requestId
         self.timestamp = timestamp
         self.encodedDataLength = encodedDataLength
         self.shouldReportCorbBlocking = shouldReportCorbBlocking
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -289,13 +321,22 @@ class LoadingFinishedEvent(object):
         if self.encodedDataLength is not None:
             repr_args.append("encodedDataLength={!r}".format(self.encodedDataLength))
         if self.shouldReportCorbBlocking is not None:
-            repr_args.append(
-                "shouldReportCorbBlocking={!r}".format(self.shouldReportCorbBlocking)
-            )
-        return "LoadingFinishedEvent(" + ", ".join(repr_args) + ")"
+            repr_args.append("shouldReportCorbBlocking={!r}".format(self.shouldReportCorbBlocking))
+        return "LoadingFinishedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create LoadingFinishedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of LoadingFinishedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of LoadingFinishedEvent if creation did not fail
+        :rtype: Optional[Union[dict, LoadingFinishedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = LoadingFinishedEvent(**init)
@@ -307,6 +348,17 @@ class LoadingFinishedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list LoadingFinishedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list LoadingFinishedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of LoadingFinishedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, LoadingFinishedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -321,23 +373,12 @@ class RequestInterceptedEvent(object):
     Details of an intercepted HTTP request, which must be either allowed, blocked, modified or mocked.
     """
 
-    event = "Network.requestIntercepted"
+    __slots__ = ["interceptionId", "request", "frameId", "resourceType", "isNavigationRequest", "isDownload", "redirectUrl", "authChallenge", "responseErrorReason", "responseStatusCode", "responseHeaders"]
 
-    def __init__(
-        self,
-        interceptionId,
-        request,
-        frameId,
-        resourceType,
-        isNavigationRequest,
-        isDownload=None,
-        redirectUrl=None,
-        authChallenge=None,
-        responseErrorReason=None,
-        responseStatusCode=None,
-        responseHeaders=None,
-    ):
+    def __init__(self, interceptionId, request, frameId, resourceType, isNavigationRequest, isDownload=None, redirectUrl=None, authChallenge=None, responseErrorReason=None, responseStatusCode=None, responseHeaders=None):
         """
+        Create a new instance of RequestInterceptedEvent
+
         :param interceptionId: Each request the page makes will have a unique id, however if any redirects are encountered while processing that fetch, they will be reported with the same id as the original fetch. Likewise if HTTP authentication is needed then the same fetch id will be used.
         :type interceptionId: str
         :param request: The request
@@ -361,7 +402,7 @@ class RequestInterceptedEvent(object):
         :param responseHeaders: Response headers if intercepted at the response stage or if redirect occurred while intercepting request or auth retry occurred.
         :type responseHeaders: Optional[dict]
         """
-        super().__init__()
+        super(RequestInterceptedEvent, self).__init__()
         self.interceptionId = interceptionId
         self.request = Request.safe_create(request)
         self.frameId = frameId
@@ -374,15 +415,6 @@ class RequestInterceptedEvent(object):
         self.responseStatusCode = responseStatusCode
         self.responseHeaders = Headers.safe_create(responseHeaders)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
-
     def __repr__(self):
         repr_args = []
         if self.interceptionId is not None:
@@ -394,9 +426,7 @@ class RequestInterceptedEvent(object):
         if self.resourceType is not None:
             repr_args.append("resourceType={!r}".format(self.resourceType))
         if self.isNavigationRequest is not None:
-            repr_args.append(
-                "isNavigationRequest={!r}".format(self.isNavigationRequest)
-            )
+            repr_args.append("isNavigationRequest={!r}".format(self.isNavigationRequest))
         if self.isDownload is not None:
             repr_args.append("isDownload={!r}".format(self.isDownload))
         if self.redirectUrl is not None:
@@ -404,17 +434,26 @@ class RequestInterceptedEvent(object):
         if self.authChallenge is not None:
             repr_args.append("authChallenge={!r}".format(self.authChallenge))
         if self.responseErrorReason is not None:
-            repr_args.append(
-                "responseErrorReason={!r}".format(self.responseErrorReason)
-            )
+            repr_args.append("responseErrorReason={!r}".format(self.responseErrorReason))
         if self.responseStatusCode is not None:
             repr_args.append("responseStatusCode={!r}".format(self.responseStatusCode))
         if self.responseHeaders is not None:
             repr_args.append("responseHeaders={!r}".format(self.responseHeaders))
-        return "RequestInterceptedEvent(" + ", ".join(repr_args) + ")"
+        return "RequestInterceptedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create RequestInterceptedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of RequestInterceptedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of RequestInterceptedEvent if creation did not fail
+        :rtype: Optional[Union[dict, RequestInterceptedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = RequestInterceptedEvent(**init)
@@ -426,6 +465,17 @@ class RequestInterceptedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list RequestInterceptedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list RequestInterceptedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of RequestInterceptedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, RequestInterceptedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -440,33 +490,37 @@ class RequestServedFromCacheEvent(object):
     Fired if request ended up loading from cache.
     """
 
-    event = "Network.requestServedFromCache"
+    __slots__ = ["requestId"]
 
     def __init__(self, requestId):
         """
+        Create a new instance of RequestServedFromCacheEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         """
-        super().__init__()
+        super(RequestServedFromCacheEvent, self).__init__()
         self.requestId = requestId
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
         if self.requestId is not None:
             repr_args.append("requestId={!r}".format(self.requestId))
-        return "RequestServedFromCacheEvent(" + ", ".join(repr_args) + ")"
+        return "RequestServedFromCacheEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create RequestServedFromCacheEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of RequestServedFromCacheEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of RequestServedFromCacheEvent if creation did not fail
+        :rtype: Optional[Union[dict, RequestServedFromCacheEvent]]
+        """
         if init is not None:
             try:
                 ourselves = RequestServedFromCacheEvent(**init)
@@ -478,6 +532,17 @@ class RequestServedFromCacheEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list RequestServedFromCacheEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list RequestServedFromCacheEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of RequestServedFromCacheEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, RequestServedFromCacheEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -492,23 +557,12 @@ class RequestWillBeSentEvent(object):
     Fired when page is about to send HTTP request.
     """
 
-    event = "Network.requestWillBeSent"
+    __slots__ = ["requestId", "loaderId", "documentURL", "request", "timestamp", "wallTime", "initiator", "redirectResponse", "type", "frameId", "hasUserGesture"]
 
-    def __init__(
-        self,
-        requestId,
-        loaderId,
-        documentURL,
-        request,
-        timestamp,
-        wallTime,
-        initiator,
-        redirectResponse=None,
-        type=None,
-        frameId=None,
-        hasUserGesture=None,
-    ):
+    def __init__(self, requestId, loaderId, documentURL, request, timestamp, wallTime, initiator, redirectResponse=None, type=None, frameId=None, hasUserGesture=None):
         """
+        Create a new instance of RequestWillBeSentEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param loaderId: Loader identifier. Empty string if the request is fetched from worker.
@@ -532,7 +586,7 @@ class RequestWillBeSentEvent(object):
         :param hasUserGesture: Whether the request is initiated by a user gesture. Defaults to false.
         :type hasUserGesture: Optional[bool]
         """
-        super().__init__()
+        super(RequestWillBeSentEvent, self).__init__()
         self.requestId = requestId
         self.loaderId = loaderId
         self.documentURL = documentURL
@@ -544,15 +598,6 @@ class RequestWillBeSentEvent(object):
         self.type = type
         self.frameId = frameId
         self.hasUserGesture = hasUserGesture
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -578,10 +623,21 @@ class RequestWillBeSentEvent(object):
             repr_args.append("frameId={!r}".format(self.frameId))
         if self.hasUserGesture is not None:
             repr_args.append("hasUserGesture={!r}".format(self.hasUserGesture))
-        return "RequestWillBeSentEvent(" + ", ".join(repr_args) + ")"
+        return "RequestWillBeSentEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create RequestWillBeSentEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of RequestWillBeSentEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of RequestWillBeSentEvent if creation did not fail
+        :rtype: Optional[Union[dict, RequestWillBeSentEvent]]
+        """
         if init is not None:
             try:
                 ourselves = RequestWillBeSentEvent(**init)
@@ -593,6 +649,17 @@ class RequestWillBeSentEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list RequestWillBeSentEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list RequestWillBeSentEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of RequestWillBeSentEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, RequestWillBeSentEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -607,10 +674,12 @@ class ResourceChangedPriorityEvent(object):
     Fired when resource loading priority is changed
     """
 
-    event = "Network.resourceChangedPriority"
+    __slots__ = ["requestId", "newPriority", "timestamp"]
 
     def __init__(self, requestId, newPriority, timestamp):
         """
+        Create a new instance of ResourceChangedPriorityEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param newPriority: New priority
@@ -618,19 +687,10 @@ class ResourceChangedPriorityEvent(object):
         :param timestamp: Timestamp.
         :type timestamp: float
         """
-        super().__init__()
+        super(ResourceChangedPriorityEvent, self).__init__()
         self.requestId = requestId
         self.newPriority = newPriority
         self.timestamp = timestamp
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -640,10 +700,21 @@ class ResourceChangedPriorityEvent(object):
             repr_args.append("newPriority={!r}".format(self.newPriority))
         if self.timestamp is not None:
             repr_args.append("timestamp={!r}".format(self.timestamp))
-        return "ResourceChangedPriorityEvent(" + ", ".join(repr_args) + ")"
+        return "ResourceChangedPriorityEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ResourceChangedPriorityEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ResourceChangedPriorityEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ResourceChangedPriorityEvent if creation did not fail
+        :rtype: Optional[Union[dict, ResourceChangedPriorityEvent]]
+        """
         if init is not None:
             try:
                 ourselves = ResourceChangedPriorityEvent(**init)
@@ -655,6 +726,17 @@ class ResourceChangedPriorityEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ResourceChangedPriorityEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ResourceChangedPriorityEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ResourceChangedPriorityEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ResourceChangedPriorityEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -669,27 +751,20 @@ class SignedExchangeReceivedEvent(object):
     Fired when a signed exchange was received over the network
     """
 
-    event = "Network.signedExchangeReceived"
+    __slots__ = ["requestId", "info"]
 
     def __init__(self, requestId, info):
         """
+        Create a new instance of SignedExchangeReceivedEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param info: Information about the signed exchange response.
         :type info: dict
         """
-        super().__init__()
+        super(SignedExchangeReceivedEvent, self).__init__()
         self.requestId = requestId
         self.info = SignedExchangeInfo.safe_create(info)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -697,10 +772,21 @@ class SignedExchangeReceivedEvent(object):
             repr_args.append("requestId={!r}".format(self.requestId))
         if self.info is not None:
             repr_args.append("info={!r}".format(self.info))
-        return "SignedExchangeReceivedEvent(" + ", ".join(repr_args) + ")"
+        return "SignedExchangeReceivedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create SignedExchangeReceivedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of SignedExchangeReceivedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of SignedExchangeReceivedEvent if creation did not fail
+        :rtype: Optional[Union[dict, SignedExchangeReceivedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = SignedExchangeReceivedEvent(**init)
@@ -712,6 +798,17 @@ class SignedExchangeReceivedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list SignedExchangeReceivedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list SignedExchangeReceivedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of SignedExchangeReceivedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, SignedExchangeReceivedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -726,10 +823,12 @@ class ResponseReceivedEvent(object):
     Fired when HTTP response is available.
     """
 
-    event = "Network.responseReceived"
+    __slots__ = ["requestId", "loaderId", "timestamp", "type", "response", "frameId"]
 
     def __init__(self, requestId, loaderId, timestamp, type, response, frameId=None):
         """
+        Create a new instance of ResponseReceivedEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param loaderId: Loader identifier. Empty string if the request is fetched from worker.
@@ -743,22 +842,13 @@ class ResponseReceivedEvent(object):
         :param frameId: Frame identifier.
         :type frameId: Optional[str]
         """
-        super().__init__()
+        super(ResponseReceivedEvent, self).__init__()
         self.requestId = requestId
         self.loaderId = loaderId
         self.timestamp = timestamp
         self.type = type
         self.response = Response.safe_create(response)
         self.frameId = frameId
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -774,10 +864,21 @@ class ResponseReceivedEvent(object):
             repr_args.append("response={!r}".format(self.response))
         if self.frameId is not None:
             repr_args.append("frameId={!r}".format(self.frameId))
-        return "ResponseReceivedEvent(" + ", ".join(repr_args) + ")"
+        return "ResponseReceivedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ResponseReceivedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ResponseReceivedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ResponseReceivedEvent if creation did not fail
+        :rtype: Optional[Union[dict, ResponseReceivedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = ResponseReceivedEvent(**init)
@@ -789,6 +890,17 @@ class ResponseReceivedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ResponseReceivedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ResponseReceivedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ResponseReceivedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ResponseReceivedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -803,27 +915,20 @@ class WebSocketClosedEvent(object):
     Fired when WebSocket is closed.
     """
 
-    event = "Network.webSocketClosed"
+    __slots__ = ["requestId", "timestamp"]
 
     def __init__(self, requestId, timestamp):
         """
+        Create a new instance of WebSocketClosedEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param timestamp: Timestamp.
         :type timestamp: float
         """
-        super().__init__()
+        super(WebSocketClosedEvent, self).__init__()
         self.requestId = requestId
         self.timestamp = timestamp
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -831,10 +936,21 @@ class WebSocketClosedEvent(object):
             repr_args.append("requestId={!r}".format(self.requestId))
         if self.timestamp is not None:
             repr_args.append("timestamp={!r}".format(self.timestamp))
-        return "WebSocketClosedEvent(" + ", ".join(repr_args) + ")"
+        return "WebSocketClosedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create WebSocketClosedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of WebSocketClosedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of WebSocketClosedEvent if creation did not fail
+        :rtype: Optional[Union[dict, WebSocketClosedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = WebSocketClosedEvent(**init)
@@ -846,6 +962,17 @@ class WebSocketClosedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list WebSocketClosedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list WebSocketClosedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of WebSocketClosedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, WebSocketClosedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -860,10 +987,12 @@ class WebSocketCreatedEvent(object):
     Fired upon WebSocket creation.
     """
 
-    event = "Network.webSocketCreated"
+    __slots__ = ["requestId", "url", "initiator"]
 
     def __init__(self, requestId, url, initiator=None):
         """
+        Create a new instance of WebSocketCreatedEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param url: WebSocket request URL.
@@ -871,19 +1000,10 @@ class WebSocketCreatedEvent(object):
         :param initiator: Request initiator.
         :type initiator: Optional[dict]
         """
-        super().__init__()
+        super(WebSocketCreatedEvent, self).__init__()
         self.requestId = requestId
         self.url = url
         self.initiator = Initiator.safe_create(initiator)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -893,10 +1013,21 @@ class WebSocketCreatedEvent(object):
             repr_args.append("url={!r}".format(self.url))
         if self.initiator is not None:
             repr_args.append("initiator={!r}".format(self.initiator))
-        return "WebSocketCreatedEvent(" + ", ".join(repr_args) + ")"
+        return "WebSocketCreatedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create WebSocketCreatedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of WebSocketCreatedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of WebSocketCreatedEvent if creation did not fail
+        :rtype: Optional[Union[dict, WebSocketCreatedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = WebSocketCreatedEvent(**init)
@@ -908,6 +1039,17 @@ class WebSocketCreatedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list WebSocketCreatedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list WebSocketCreatedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of WebSocketCreatedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, WebSocketCreatedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -922,10 +1064,12 @@ class WebSocketFrameErrorEvent(object):
     Fired when WebSocket frame error occurs.
     """
 
-    event = "Network.webSocketFrameError"
+    __slots__ = ["requestId", "timestamp", "errorMessage"]
 
     def __init__(self, requestId, timestamp, errorMessage):
         """
+        Create a new instance of WebSocketFrameErrorEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param timestamp: Timestamp.
@@ -933,19 +1077,10 @@ class WebSocketFrameErrorEvent(object):
         :param errorMessage: WebSocket frame error message.
         :type errorMessage: str
         """
-        super().__init__()
+        super(WebSocketFrameErrorEvent, self).__init__()
         self.requestId = requestId
         self.timestamp = timestamp
         self.errorMessage = errorMessage
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -955,10 +1090,21 @@ class WebSocketFrameErrorEvent(object):
             repr_args.append("timestamp={!r}".format(self.timestamp))
         if self.errorMessage is not None:
             repr_args.append("errorMessage={!r}".format(self.errorMessage))
-        return "WebSocketFrameErrorEvent(" + ", ".join(repr_args) + ")"
+        return "WebSocketFrameErrorEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create WebSocketFrameErrorEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of WebSocketFrameErrorEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of WebSocketFrameErrorEvent if creation did not fail
+        :rtype: Optional[Union[dict, WebSocketFrameErrorEvent]]
+        """
         if init is not None:
             try:
                 ourselves = WebSocketFrameErrorEvent(**init)
@@ -970,6 +1116,17 @@ class WebSocketFrameErrorEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list WebSocketFrameErrorEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list WebSocketFrameErrorEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of WebSocketFrameErrorEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, WebSocketFrameErrorEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -984,10 +1141,12 @@ class WebSocketFrameReceivedEvent(object):
     Fired when WebSocket frame is received.
     """
 
-    event = "Network.webSocketFrameReceived"
+    __slots__ = ["requestId", "timestamp", "response"]
 
     def __init__(self, requestId, timestamp, response):
         """
+        Create a new instance of WebSocketFrameReceivedEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param timestamp: Timestamp.
@@ -995,19 +1154,10 @@ class WebSocketFrameReceivedEvent(object):
         :param response: WebSocket response data.
         :type response: dict
         """
-        super().__init__()
+        super(WebSocketFrameReceivedEvent, self).__init__()
         self.requestId = requestId
         self.timestamp = timestamp
         self.response = WebSocketFrame.safe_create(response)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1017,10 +1167,21 @@ class WebSocketFrameReceivedEvent(object):
             repr_args.append("timestamp={!r}".format(self.timestamp))
         if self.response is not None:
             repr_args.append("response={!r}".format(self.response))
-        return "WebSocketFrameReceivedEvent(" + ", ".join(repr_args) + ")"
+        return "WebSocketFrameReceivedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create WebSocketFrameReceivedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of WebSocketFrameReceivedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of WebSocketFrameReceivedEvent if creation did not fail
+        :rtype: Optional[Union[dict, WebSocketFrameReceivedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = WebSocketFrameReceivedEvent(**init)
@@ -1032,6 +1193,17 @@ class WebSocketFrameReceivedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list WebSocketFrameReceivedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list WebSocketFrameReceivedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of WebSocketFrameReceivedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, WebSocketFrameReceivedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1046,10 +1218,12 @@ class WebSocketFrameSentEvent(object):
     Fired when WebSocket frame is sent.
     """
 
-    event = "Network.webSocketFrameSent"
+    __slots__ = ["requestId", "timestamp", "response"]
 
     def __init__(self, requestId, timestamp, response):
         """
+        Create a new instance of WebSocketFrameSentEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param timestamp: Timestamp.
@@ -1057,19 +1231,10 @@ class WebSocketFrameSentEvent(object):
         :param response: WebSocket response data.
         :type response: dict
         """
-        super().__init__()
+        super(WebSocketFrameSentEvent, self).__init__()
         self.requestId = requestId
         self.timestamp = timestamp
         self.response = WebSocketFrame.safe_create(response)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1079,10 +1244,21 @@ class WebSocketFrameSentEvent(object):
             repr_args.append("timestamp={!r}".format(self.timestamp))
         if self.response is not None:
             repr_args.append("response={!r}".format(self.response))
-        return "WebSocketFrameSentEvent(" + ", ".join(repr_args) + ")"
+        return "WebSocketFrameSentEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create WebSocketFrameSentEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of WebSocketFrameSentEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of WebSocketFrameSentEvent if creation did not fail
+        :rtype: Optional[Union[dict, WebSocketFrameSentEvent]]
+        """
         if init is not None:
             try:
                 ourselves = WebSocketFrameSentEvent(**init)
@@ -1094,6 +1270,17 @@ class WebSocketFrameSentEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list WebSocketFrameSentEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list WebSocketFrameSentEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of WebSocketFrameSentEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, WebSocketFrameSentEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -1108,10 +1295,12 @@ class WebSocketHandshakeResponseReceivedEvent(object):
     Fired when WebSocket handshake response becomes available.
     """
 
-    event = "Network.webSocketHandshakeResponseReceived"
+    __slots__ = ["requestId", "timestamp", "response"]
 
     def __init__(self, requestId, timestamp, response):
         """
+        Create a new instance of WebSocketHandshakeResponseReceivedEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param timestamp: Timestamp.
@@ -1119,19 +1308,10 @@ class WebSocketHandshakeResponseReceivedEvent(object):
         :param response: WebSocket response data.
         :type response: dict
         """
-        super().__init__()
+        super(WebSocketHandshakeResponseReceivedEvent, self).__init__()
         self.requestId = requestId
         self.timestamp = timestamp
         self.response = WebSocketResponse.safe_create(response)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1141,10 +1321,21 @@ class WebSocketHandshakeResponseReceivedEvent(object):
             repr_args.append("timestamp={!r}".format(self.timestamp))
         if self.response is not None:
             repr_args.append("response={!r}".format(self.response))
-        return "WebSocketHandshakeResponseReceivedEvent(" + ", ".join(repr_args) + ")"
+        return "WebSocketHandshakeResponseReceivedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create WebSocketHandshakeResponseReceivedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of WebSocketHandshakeResponseReceivedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of WebSocketHandshakeResponseReceivedEvent if creation did not fail
+        :rtype: Optional[Union[dict, WebSocketHandshakeResponseReceivedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = WebSocketHandshakeResponseReceivedEvent(**init)
@@ -1156,12 +1347,21 @@ class WebSocketHandshakeResponseReceivedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list WebSocketHandshakeResponseReceivedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list WebSocketHandshakeResponseReceivedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of WebSocketHandshakeResponseReceivedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, WebSocketHandshakeResponseReceivedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(
-                    WebSocketHandshakeResponseReceivedEvent.safe_create(it)
-                )
+                list_of_self.append(WebSocketHandshakeResponseReceivedEvent.safe_create(it))
             return list_of_self
         else:
             return init
@@ -1172,10 +1372,12 @@ class WebSocketWillSendHandshakeRequestEvent(object):
     Fired when WebSocket is about to initiate handshake.
     """
 
-    event = "Network.webSocketWillSendHandshakeRequest"
+    __slots__ = ["requestId", "timestamp", "wallTime", "request"]
 
     def __init__(self, requestId, timestamp, wallTime, request):
         """
+        Create a new instance of WebSocketWillSendHandshakeRequestEvent
+
         :param requestId: Request identifier.
         :type requestId: str
         :param timestamp: Timestamp.
@@ -1185,20 +1387,11 @@ class WebSocketWillSendHandshakeRequestEvent(object):
         :param request: WebSocket request data.
         :type request: dict
         """
-        super().__init__()
+        super(WebSocketWillSendHandshakeRequestEvent, self).__init__()
         self.requestId = requestId
         self.timestamp = timestamp
         self.wallTime = wallTime
         self.request = WebSocketRequest.safe_create(request)
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -1210,10 +1403,21 @@ class WebSocketWillSendHandshakeRequestEvent(object):
             repr_args.append("wallTime={!r}".format(self.wallTime))
         if self.request is not None:
             repr_args.append("request={!r}".format(self.request))
-        return "WebSocketWillSendHandshakeRequestEvent(" + ", ".join(repr_args) + ")"
+        return "WebSocketWillSendHandshakeRequestEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create WebSocketWillSendHandshakeRequestEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of WebSocketWillSendHandshakeRequestEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of WebSocketWillSendHandshakeRequestEvent if creation did not fail
+        :rtype: Optional[Union[dict, WebSocketWillSendHandshakeRequestEvent]]
+        """
         if init is not None:
             try:
                 ourselves = WebSocketWillSendHandshakeRequestEvent(**init)
@@ -1225,53 +1429,64 @@ class WebSocketWillSendHandshakeRequestEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list WebSocketWillSendHandshakeRequestEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list WebSocketWillSendHandshakeRequestEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of WebSocketWillSendHandshakeRequestEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, WebSocketWillSendHandshakeRequestEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
-                list_of_self.append(
-                    WebSocketWillSendHandshakeRequestEvent.safe_create(it)
-                )
+                list_of_self.append(WebSocketWillSendHandshakeRequestEvent.safe_create(it))
             return list_of_self
         else:
             return init
 
 
-EVENT_TO_CLASS = {
-    "Network.dataReceived": DataReceivedEvent,
-    "Network.eventSourceMessageReceived": EventSourceMessageReceivedEvent,
-    "Network.loadingFailed": LoadingFailedEvent,
-    "Network.loadingFinished": LoadingFinishedEvent,
-    "Network.requestIntercepted": RequestInterceptedEvent,
-    "Network.requestServedFromCache": RequestServedFromCacheEvent,
-    "Network.requestWillBeSent": RequestWillBeSentEvent,
-    "Network.resourceChangedPriority": ResourceChangedPriorityEvent,
-    "Network.signedExchangeReceived": SignedExchangeReceivedEvent,
-    "Network.responseReceived": ResponseReceivedEvent,
-    "Network.webSocketClosed": WebSocketClosedEvent,
-    "Network.webSocketCreated": WebSocketCreatedEvent,
-    "Network.webSocketFrameError": WebSocketFrameErrorEvent,
-    "Network.webSocketFrameReceived": WebSocketFrameReceivedEvent,
-    "Network.webSocketFrameSent": WebSocketFrameSentEvent,
-    "Network.webSocketHandshakeResponseReceived": WebSocketHandshakeResponseReceivedEvent,
-    "Network.webSocketWillSendHandshakeRequest": WebSocketWillSendHandshakeRequestEvent,
+NETWORK_EVENTS_TO_CLASS = {
+   "Network.dataReceived": DataReceivedEvent,
+   "Network.eventSourceMessageReceived": EventSourceMessageReceivedEvent,
+   "Network.loadingFailed": LoadingFailedEvent,
+   "Network.loadingFinished": LoadingFinishedEvent,
+   "Network.requestIntercepted": RequestInterceptedEvent,
+   "Network.requestServedFromCache": RequestServedFromCacheEvent,
+   "Network.requestWillBeSent": RequestWillBeSentEvent,
+   "Network.resourceChangedPriority": ResourceChangedPriorityEvent,
+   "Network.signedExchangeReceived": SignedExchangeReceivedEvent,
+   "Network.responseReceived": ResponseReceivedEvent,
+   "Network.webSocketClosed": WebSocketClosedEvent,
+   "Network.webSocketCreated": WebSocketCreatedEvent,
+   "Network.webSocketFrameError": WebSocketFrameErrorEvent,
+   "Network.webSocketFrameReceived": WebSocketFrameReceivedEvent,
+   "Network.webSocketFrameSent": WebSocketFrameSentEvent,
+   "Network.webSocketHandshakeResponseReceived": WebSocketHandshakeResponseReceivedEvent,
+   "Network.webSocketWillSendHandshakeRequest": WebSocketWillSendHandshakeRequestEvent,
 }
 
-EVENT_NS = SimpleNamespace(
-    DataReceived="Network.dataReceived",
-    EventSourceMessageReceived="Network.eventSourceMessageReceived",
-    LoadingFailed="Network.loadingFailed",
-    LoadingFinished="Network.loadingFinished",
-    RequestIntercepted="Network.requestIntercepted",
-    RequestServedFromCache="Network.requestServedFromCache",
-    RequestWillBeSent="Network.requestWillBeSent",
-    ResourceChangedPriority="Network.resourceChangedPriority",
-    SignedExchangeReceived="Network.signedExchangeReceived",
-    ResponseReceived="Network.responseReceived",
-    WebSocketClosed="Network.webSocketClosed",
-    WebSocketCreated="Network.webSocketCreated",
-    WebSocketFrameError="Network.webSocketFrameError",
-    WebSocketFrameReceived="Network.webSocketFrameReceived",
-    WebSocketFrameSent="Network.webSocketFrameSent",
-    WebSocketHandshakeResponseReceived="Network.webSocketHandshakeResponseReceived",
-    WebSocketWillSendHandshakeRequest="Network.webSocketWillSendHandshakeRequest",
+NetworkNS = namedtuple("NetworkNS", ["DataReceived", "EventSourceMessageReceived", "LoadingFailed", "LoadingFinished", "RequestIntercepted", "RequestServedFromCache", "RequestWillBeSent", "ResourceChangedPriority", "SignedExchangeReceived", "ResponseReceived", "WebSocketClosed", "WebSocketCreated", "WebSocketFrameError", "WebSocketFrameReceived", "WebSocketFrameSent", "WebSocketHandshakeResponseReceived", "WebSocketWillSendHandshakeRequest"])
+
+NETWORK_EVENTS_NS = NetworkNS(
+  DataReceived="Network.dataReceived",
+  EventSourceMessageReceived="Network.eventSourceMessageReceived",
+  LoadingFailed="Network.loadingFailed",
+  LoadingFinished="Network.loadingFinished",
+  RequestIntercepted="Network.requestIntercepted",
+  RequestServedFromCache="Network.requestServedFromCache",
+  RequestWillBeSent="Network.requestWillBeSent",
+  ResourceChangedPriority="Network.resourceChangedPriority",
+  SignedExchangeReceived="Network.signedExchangeReceived",
+  ResponseReceived="Network.responseReceived",
+  WebSocketClosed="Network.webSocketClosed",
+  WebSocketCreated="Network.webSocketCreated",
+  WebSocketFrameError="Network.webSocketFrameError",
+  WebSocketFrameReceived="Network.webSocketFrameReceived",
+  WebSocketFrameSent="Network.webSocketFrameSent",
+  WebSocketHandshakeResponseReceived="Network.webSocketHandshakeResponseReceived",
+  WebSocketWillSendHandshakeRequest="Network.webSocketWillSendHandshakeRequest",
 )

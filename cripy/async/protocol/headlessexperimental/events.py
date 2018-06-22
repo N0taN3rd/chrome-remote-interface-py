@@ -1,11 +1,12 @@
 from typing import Any, List, Optional, Union
-from types import SimpleNamespace
+from collections import namedtuple
+from cripy.async.protocol.headlessexperimental.types import *
 
-try:
-    from cripy.async.protocol.headlessexperimental.types import *
-except ImportError:
-    pass
-
+__all__ = [
+    "NeedsBeginFramesChangedEvent",
+    "HEADLESSEXPERIMENTAL_EVENTS_TO_CLASS",
+    "HEADLESSEXPERIMENTAL_EVENTS_NS"
+]
 
 class NeedsBeginFramesChangedEvent(object):
     """
@@ -14,33 +15,37 @@ class NeedsBeginFramesChangedEvent(object):
 
     event = "HeadlessExperimental.needsBeginFramesChanged"
 
+    __slots__ = ["needsBeginFrames"]
+
     def __init__(self, needsBeginFrames: bool) -> None:
         """
+        Create a new instance of NeedsBeginFramesChangedEvent
+
         :param needsBeginFrames: True if BeginFrames are needed, false otherwise.
         :type needsBeginFrames: bool
         """
         super().__init__()
         self.needsBeginFrames = needsBeginFrames
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.needsBeginFrames is not None:
             repr_args.append("needsBeginFrames={!r}".format(self.needsBeginFrames))
-        return "NeedsBeginFramesChangedEvent(" + ", ".join(repr_args) + ")"
+        return "NeedsBeginFramesChangedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["NeedsBeginFramesChangedEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['NeedsBeginFramesChangedEvent', dict]]:
+        """
+        Safely create NeedsBeginFramesChangedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of NeedsBeginFramesChangedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of NeedsBeginFramesChangedEvent if creation did not fail
+        :rtype: Optional[Union[dict, NeedsBeginFramesChangedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = NeedsBeginFramesChangedEvent(**init)
@@ -51,9 +56,18 @@ class NeedsBeginFramesChangedEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["NeedsBeginFramesChangedEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['NeedsBeginFramesChangedEvent', dict]]]:
+        """
+        Safely create a new list NeedsBeginFramesChangedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list NeedsBeginFramesChangedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of NeedsBeginFramesChangedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, NeedsBeginFramesChangedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -63,10 +77,12 @@ class NeedsBeginFramesChangedEvent(object):
             return init
 
 
-EVENT_TO_CLASS = {
-    "HeadlessExperimental.needsBeginFramesChanged": NeedsBeginFramesChangedEvent
+HEADLESSEXPERIMENTAL_EVENTS_TO_CLASS = {
+   "HeadlessExperimental.needsBeginFramesChanged": NeedsBeginFramesChangedEvent,
 }
 
-EVENT_NS = SimpleNamespace(
-    NeedsBeginFramesChanged="HeadlessExperimental.needsBeginFramesChanged"
+HeadlessExperimentalNS = namedtuple("HeadlessExperimentalNS", ["NeedsBeginFramesChanged"])
+
+HEADLESSEXPERIMENTAL_EVENTS_NS = HeadlessExperimentalNS(
+  NeedsBeginFramesChanged="HeadlessExperimental.needsBeginFramesChanged",
 )

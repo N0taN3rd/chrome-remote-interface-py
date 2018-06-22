@@ -1,20 +1,22 @@
-from types import SimpleNamespace
+from collections import namedtuple
 from cripy.gevent.protocol.page import types as Page
+from cripy.gevent.protocol.applicationcache.types import *
 
-try:
-    from cripy.gevent.protocol.applicationcache.types import *
-except ImportError:
-    pass
-
-__all__ = ["ApplicationCacheStatusUpdatedEvent", "NetworkStateUpdatedEvent"]
+__all__ = [
+    "ApplicationCacheStatusUpdatedEvent",
+    "NetworkStateUpdatedEvent",
+    "APPLICATIONCACHE_EVENTS_TO_CLASS",
+    "APPLICATIONCACHE_EVENTS_NS"
+]
 
 
 class ApplicationCacheStatusUpdatedEvent(object):
-
-    event = "ApplicationCache.applicationCacheStatusUpdated"
+    __slots__ = ["frameId", "manifestURL", "status"]
 
     def __init__(self, frameId, manifestURL, status):
         """
+        Create a new instance of ApplicationCacheStatusUpdatedEvent
+
         :param frameId: Identifier of the frame containing document whose application cache updated status.
         :type frameId: str
         :param manifestURL: Manifest URL.
@@ -22,19 +24,10 @@ class ApplicationCacheStatusUpdatedEvent(object):
         :param status: Updated application cache status.
         :type status: int
         """
-        super().__init__()
+        super(ApplicationCacheStatusUpdatedEvent, self).__init__()
         self.frameId = frameId
         self.manifestURL = manifestURL
         self.status = status
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -44,10 +37,21 @@ class ApplicationCacheStatusUpdatedEvent(object):
             repr_args.append("manifestURL={!r}".format(self.manifestURL))
         if self.status is not None:
             repr_args.append("status={!r}".format(self.status))
-        return "ApplicationCacheStatusUpdatedEvent(" + ", ".join(repr_args) + ")"
+        return "ApplicationCacheStatusUpdatedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create ApplicationCacheStatusUpdatedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ApplicationCacheStatusUpdatedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ApplicationCacheStatusUpdatedEvent if creation did not fail
+        :rtype: Optional[Union[dict, ApplicationCacheStatusUpdatedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = ApplicationCacheStatusUpdatedEvent(**init)
@@ -59,6 +63,17 @@ class ApplicationCacheStatusUpdatedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list ApplicationCacheStatusUpdatedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ApplicationCacheStatusUpdatedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ApplicationCacheStatusUpdatedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ApplicationCacheStatusUpdatedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -69,34 +84,37 @@ class ApplicationCacheStatusUpdatedEvent(object):
 
 
 class NetworkStateUpdatedEvent(object):
-
-    event = "ApplicationCache.networkStateUpdated"
+    __slots__ = ["isNowOnline"]
 
     def __init__(self, isNowOnline):
         """
+        Create a new instance of NetworkStateUpdatedEvent
+
         :param isNowOnline: The isNowOnline
         :type isNowOnline: bool
         """
-        super().__init__()
+        super(NetworkStateUpdatedEvent, self).__init__()
         self.isNowOnline = isNowOnline
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
         if self.isNowOnline is not None:
             repr_args.append("isNowOnline={!r}".format(self.isNowOnline))
-        return "NetworkStateUpdatedEvent(" + ", ".join(repr_args) + ")"
+        return "NetworkStateUpdatedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create NetworkStateUpdatedEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of NetworkStateUpdatedEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of NetworkStateUpdatedEvent if creation did not fail
+        :rtype: Optional[Union[dict, NetworkStateUpdatedEvent]]
+        """
         if init is not None:
             try:
                 ourselves = NetworkStateUpdatedEvent(**init)
@@ -108,6 +126,17 @@ class NetworkStateUpdatedEvent(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list NetworkStateUpdatedEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list NetworkStateUpdatedEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of NetworkStateUpdatedEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, NetworkStateUpdatedEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -117,12 +146,14 @@ class NetworkStateUpdatedEvent(object):
             return init
 
 
-EVENT_TO_CLASS = {
-    "ApplicationCache.applicationCacheStatusUpdated": ApplicationCacheStatusUpdatedEvent,
-    "ApplicationCache.networkStateUpdated": NetworkStateUpdatedEvent,
+APPLICATIONCACHE_EVENTS_TO_CLASS = {
+   "ApplicationCache.applicationCacheStatusUpdated": ApplicationCacheStatusUpdatedEvent,
+   "ApplicationCache.networkStateUpdated": NetworkStateUpdatedEvent,
 }
 
-EVENT_NS = SimpleNamespace(
-    ApplicationCacheStatusUpdated="ApplicationCache.applicationCacheStatusUpdated",
-    NetworkStateUpdated="ApplicationCache.networkStateUpdated",
+ApplicationCacheNS = namedtuple("ApplicationCacheNS", ["ApplicationCacheStatusUpdated", "NetworkStateUpdated"])
+
+APPLICATIONCACHE_EVENTS_NS = ApplicationCacheNS(
+  ApplicationCacheStatusUpdated="ApplicationCache.applicationCacheStatusUpdated",
+  NetworkStateUpdated="ApplicationCache.networkStateUpdated",
 )

@@ -1,5 +1,12 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
 from cripy.async.protocol.target import types as Target
+
+__all__ = [
+    "ServiceWorkerVersion",
+    "ServiceWorkerRegistration",
+    "ServiceWorkerErrorMessage",
+    "SERVICEWORKER_TYPES_TO_OBJECT"
+]
 
 
 class ServiceWorkerVersion(object):
@@ -7,18 +14,9 @@ class ServiceWorkerVersion(object):
     ServiceWorker version.
     """
 
-    def __init__(
-        self,
-        versionId: str,
-        registrationId: str,
-        scriptURL: str,
-        runningStatus: str,
-        status: str,
-        scriptLastModified: Optional[float] = None,
-        scriptResponseTime: Optional[float] = None,
-        controlledClients: Optional[List[str]] = None,
-        targetId: Optional[str] = None,
-    ) -> None:
+    __slots__ = ["versionId", "registrationId", "scriptURL", "runningStatus", "status", "scriptLastModified", "scriptResponseTime", "controlledClients", "targetId"]
+
+    def __init__(self, versionId: str, registrationId: str, scriptURL: str, runningStatus: str, status: str, scriptLastModified: Optional[float] = None, scriptResponseTime: Optional[float] = None, controlledClients: Optional[List[str]] = None, targetId: Optional[str] = None) -> None:
         """
         :param versionId: The versionId
         :type versionId: str
@@ -50,15 +48,6 @@ class ServiceWorkerVersion(object):
         self.controlledClients = controlledClients
         self.targetId = targetId
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.versionId is not None:
@@ -79,12 +68,21 @@ class ServiceWorkerVersion(object):
             repr_args.append("controlledClients={!r}".format(self.controlledClients))
         if self.targetId is not None:
             repr_args.append("targetId={!r}".format(self.targetId))
-        return "ServiceWorkerVersion(" + ", ".join(repr_args) + ")"
+        return "ServiceWorkerVersion(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["ServiceWorkerVersion", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ServiceWorkerVersion', dict]]:
+        """
+        Safely create ServiceWorkerVersion from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ServiceWorkerVersion
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ServiceWorkerVersion if creation did not fail
+        :rtype: Optional[Union[dict, ServiceWorkerVersion]]
+        """
         if init is not None:
             try:
                 ourselves = ServiceWorkerVersion(**init)
@@ -95,9 +93,18 @@ class ServiceWorkerVersion(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ServiceWorkerVersion", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ServiceWorkerVersion', dict]]]:
+        """
+        Safely create a new list ServiceWorkerVersions from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ServiceWorkerVersion instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ServiceWorkerVersion instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ServiceWorkerVersion]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -111,6 +118,8 @@ class ServiceWorkerRegistration(object):
     """
     ServiceWorker registration.
     """
+
+    __slots__ = ["registrationId", "scopeURL", "isDeleted"]
 
     def __init__(self, registrationId: str, scopeURL: str, isDeleted: bool) -> None:
         """
@@ -126,15 +135,6 @@ class ServiceWorkerRegistration(object):
         self.scopeURL = scopeURL
         self.isDeleted = isDeleted
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.registrationId is not None:
@@ -143,12 +143,21 @@ class ServiceWorkerRegistration(object):
             repr_args.append("scopeURL={!r}".format(self.scopeURL))
         if self.isDeleted is not None:
             repr_args.append("isDeleted={!r}".format(self.isDeleted))
-        return "ServiceWorkerRegistration(" + ", ".join(repr_args) + ")"
+        return "ServiceWorkerRegistration(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["ServiceWorkerRegistration", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ServiceWorkerRegistration', dict]]:
+        """
+        Safely create ServiceWorkerRegistration from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ServiceWorkerRegistration
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ServiceWorkerRegistration if creation did not fail
+        :rtype: Optional[Union[dict, ServiceWorkerRegistration]]
+        """
         if init is not None:
             try:
                 ourselves = ServiceWorkerRegistration(**init)
@@ -159,9 +168,18 @@ class ServiceWorkerRegistration(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ServiceWorkerRegistration", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ServiceWorkerRegistration', dict]]]:
+        """
+        Safely create a new list ServiceWorkerRegistrations from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ServiceWorkerRegistration instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ServiceWorkerRegistration instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ServiceWorkerRegistration]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -176,15 +194,9 @@ class ServiceWorkerErrorMessage(object):
     ServiceWorker error message.
     """
 
-    def __init__(
-        self,
-        errorMessage: str,
-        registrationId: str,
-        versionId: str,
-        sourceURL: str,
-        lineNumber: int,
-        columnNumber: int,
-    ) -> None:
+    __slots__ = ["errorMessage", "registrationId", "versionId", "sourceURL", "lineNumber", "columnNumber"]
+
+    def __init__(self, errorMessage: str, registrationId: str, versionId: str, sourceURL: str, lineNumber: int, columnNumber: int) -> None:
         """
         :param errorMessage: The errorMessage
         :type errorMessage: str
@@ -207,15 +219,6 @@ class ServiceWorkerErrorMessage(object):
         self.lineNumber = lineNumber
         self.columnNumber = columnNumber
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.errorMessage is not None:
@@ -230,12 +233,21 @@ class ServiceWorkerErrorMessage(object):
             repr_args.append("lineNumber={!r}".format(self.lineNumber))
         if self.columnNumber is not None:
             repr_args.append("columnNumber={!r}".format(self.columnNumber))
-        return "ServiceWorkerErrorMessage(" + ", ".join(repr_args) + ")"
+        return "ServiceWorkerErrorMessage(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["ServiceWorkerErrorMessage", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ServiceWorkerErrorMessage', dict]]:
+        """
+        Safely create ServiceWorkerErrorMessage from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ServiceWorkerErrorMessage
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ServiceWorkerErrorMessage if creation did not fail
+        :rtype: Optional[Union[dict, ServiceWorkerErrorMessage]]
+        """
         if init is not None:
             try:
                 ourselves = ServiceWorkerErrorMessage(**init)
@@ -246,9 +258,18 @@ class ServiceWorkerErrorMessage(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ServiceWorkerErrorMessage", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ServiceWorkerErrorMessage', dict]]]:
+        """
+        Safely create a new list ServiceWorkerErrorMessages from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ServiceWorkerErrorMessage instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ServiceWorkerErrorMessage instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ServiceWorkerErrorMessage]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -258,7 +279,7 @@ class ServiceWorkerErrorMessage(object):
             return init
 
 
-TYPE_TO_OBJECT = {
+SERVICEWORKER_TYPES_TO_OBJECT = {
     "ServiceWorkerVersion": ServiceWorkerVersion,
     "ServiceWorkerRegistration": ServiceWorkerRegistration,
     "ServiceWorkerErrorMessage": ServiceWorkerErrorMessage,

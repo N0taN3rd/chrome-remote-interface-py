@@ -1,11 +1,16 @@
 
-__all__ = ["UsageForType"]
+__all__ = [
+    "UsageForType",
+    "STORAGE_TYPE_TO_OBJECT"
+]
 
 
 class UsageForType(object):
     """
     Usage for a storage type.
     """
+
+    __slots__ = ["storageType", "usage"]
 
     def __init__(self, storageType, usage):
         """
@@ -14,18 +19,9 @@ class UsageForType(object):
         :param usage: Storage usage (bytes).
         :type usage: float
         """
-        super().__init__()
+        super(UsageForType, self).__init__()
         self.storageType = storageType
         self.usage = usage
-
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k):
-        return self.__dict__[k]
-
-    def get(self, what, default=None):
-        return self.__dict__.get(what, default)
 
     def __repr__(self):
         repr_args = []
@@ -33,10 +29,21 @@ class UsageForType(object):
             repr_args.append("storageType={!r}".format(self.storageType))
         if self.usage is not None:
             repr_args.append("usage={!r}".format(self.usage))
-        return "UsageForType(" + ", ".join(repr_args) + ")"
+        return "UsageForType(" + ', '.join(repr_args)+")"
 
     @staticmethod
     def safe_create(init):
+        """
+        Safely create UsageForType from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of UsageForType
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of UsageForType if creation did not fail
+        :rtype: Optional[Union[dict, UsageForType]]
+        """
         if init is not None:
             try:
                 ourselves = UsageForType(**init)
@@ -48,6 +55,17 @@ class UsageForType(object):
 
     @staticmethod
     def safe_create_from_list(init):
+        """
+        Safely create a new list UsageForTypes from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list UsageForType instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of UsageForType instances if creation did not fail
+        :rtype: Optional[List[Union[dict, UsageForType]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -57,4 +75,6 @@ class UsageForType(object):
             return init
 
 
-TYPE_TO_OBJECT = {"UsageForType": UsageForType}
+STORAGE_TYPE_TO_OBJECT = {
+    "UsageForType": UsageForType,
+}

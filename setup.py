@@ -2,11 +2,9 @@ from os import path
 from typing import List
 
 from setuptools import setup, find_packages
-import sys
 from pathlib import Path
 from m2r import M2R
 
-assert sys.version_info >= (3, 6, 0), "cripy requires Python 3.6+"
 
 basedir = Path(path.dirname(path.abspath(__file__)))
 
@@ -48,7 +46,6 @@ setup(
     packages=['cripy'] + find_packages(),
     include_package_data=True,
     install_requires=get_requirements(),
-    license="MIT",
     zip_safe=True,
     keywords="cripy",
     classifiers=[

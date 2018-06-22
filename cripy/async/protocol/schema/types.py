@@ -1,10 +1,17 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
+
+__all__ = [
+    "Domain",
+    "SCHEMA_TYPES_TO_OBJECT"
+]
 
 
 class Domain(object):
     """
     Description of the protocol domain.
     """
+
+    __slots__ = ["name", "version"]
 
     def __init__(self, name: str, version: str) -> None:
         """
@@ -17,25 +24,27 @@ class Domain(object):
         self.name = name
         self.version = version
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.name is not None:
             repr_args.append("name={!r}".format(self.name))
         if self.version is not None:
             repr_args.append("version={!r}".format(self.version))
-        return "Domain(" + ", ".join(repr_args) + ")"
+        return "Domain(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["Domain", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Domain', dict]]:
+        """
+        Safely create Domain from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Domain
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Domain if creation did not fail
+        :rtype: Optional[Union[dict, Domain]]
+        """
         if init is not None:
             try:
                 ourselves = Domain(**init)
@@ -46,9 +55,18 @@ class Domain(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["Domain", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Domain', dict]]]:
+        """
+        Safely create a new list Domains from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Domain instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Domain instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Domain]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -58,4 +76,6 @@ class Domain(object):
             return init
 
 
-TYPE_TO_OBJECT = {"Domain": Domain}
+SCHEMA_TYPES_TO_OBJECT = {
+    "Domain": Domain,
+}

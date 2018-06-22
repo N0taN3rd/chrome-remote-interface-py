@@ -1,5 +1,10 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
 from cripy.async.protocol.dom import types as DOM
+
+__all__ = [
+    "HighlightConfig",
+    "OVERLAY_TYPES_TO_OBJECT"
+]
 
 
 class HighlightConfig(object):
@@ -7,22 +12,9 @@ class HighlightConfig(object):
     Configuration data for the highlighting of page elements.
     """
 
-    def __init__(
-        self,
-        showInfo: Optional[bool] = None,
-        showRulers: Optional[bool] = None,
-        showExtensionLines: Optional[bool] = None,
-        displayAsMaterial: Optional[bool] = None,
-        contentColor: Optional[Union["DOM.RGBA", dict]] = None,
-        paddingColor: Optional[Union["DOM.RGBA", dict]] = None,
-        borderColor: Optional[Union["DOM.RGBA", dict]] = None,
-        marginColor: Optional[Union["DOM.RGBA", dict]] = None,
-        eventTargetColor: Optional[Union["DOM.RGBA", dict]] = None,
-        shapeColor: Optional[Union["DOM.RGBA", dict]] = None,
-        shapeMarginColor: Optional[Union["DOM.RGBA", dict]] = None,
-        selectorList: Optional[str] = None,
-        cssGridColor: Optional[Union["DOM.RGBA", dict]] = None,
-    ) -> None:
+    __slots__ = ["showInfo", "showRulers", "showExtensionLines", "displayAsMaterial", "contentColor", "paddingColor", "borderColor", "marginColor", "eventTargetColor", "shapeColor", "shapeMarginColor", "selectorList", "cssGridColor"]
+
+    def __init__(self, showInfo: Optional[bool] = None, showRulers: Optional[bool] = None, showExtensionLines: Optional[bool] = None, displayAsMaterial: Optional[bool] = None, contentColor: Optional[Union['DOM.RGBA', dict]] = None, paddingColor: Optional[Union['DOM.RGBA', dict]] = None, borderColor: Optional[Union['DOM.RGBA', dict]] = None, marginColor: Optional[Union['DOM.RGBA', dict]] = None, eventTargetColor: Optional[Union['DOM.RGBA', dict]] = None, shapeColor: Optional[Union['DOM.RGBA', dict]] = None, shapeMarginColor: Optional[Union['DOM.RGBA', dict]] = None, selectorList: Optional[str] = None, cssGridColor: Optional[Union['DOM.RGBA', dict]] = None) -> None:
         """
         :param showInfo: Whether the node info tooltip should be shown (default: false).
         :type showInfo: Optional[bool]
@@ -66,15 +58,6 @@ class HighlightConfig(object):
         self.selectorList = selectorList
         self.cssGridColor = DOM.RGBA.safe_create(cssGridColor)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.showInfo is not None:
@@ -103,10 +86,21 @@ class HighlightConfig(object):
             repr_args.append("selectorList={!r}".format(self.selectorList))
         if self.cssGridColor is not None:
             repr_args.append("cssGridColor={!r}".format(self.cssGridColor))
-        return "HighlightConfig(" + ", ".join(repr_args) + ")"
+        return "HighlightConfig(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["HighlightConfig", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['HighlightConfig', dict]]:
+        """
+        Safely create HighlightConfig from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of HighlightConfig
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of HighlightConfig if creation did not fail
+        :rtype: Optional[Union[dict, HighlightConfig]]
+        """
         if init is not None:
             try:
                 ourselves = HighlightConfig(**init)
@@ -117,9 +111,18 @@ class HighlightConfig(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["HighlightConfig", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['HighlightConfig', dict]]]:
+        """
+        Safely create a new list HighlightConfigs from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list HighlightConfig instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of HighlightConfig instances if creation did not fail
+        :rtype: Optional[List[Union[dict, HighlightConfig]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -129,4 +132,6 @@ class HighlightConfig(object):
             return init
 
 
-TYPE_TO_OBJECT = {"HighlightConfig": HighlightConfig}
+OVERLAY_TYPES_TO_OBJECT = {
+    "HighlightConfig": HighlightConfig,
+}

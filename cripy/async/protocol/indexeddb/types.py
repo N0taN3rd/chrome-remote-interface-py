@@ -1,5 +1,16 @@
-from typing import Any, List, Optional, Union, TypeVar
+from typing import Any, List, Optional, Union
 from cripy.async.protocol.runtime import types as Runtime
+
+__all__ = [
+    "ObjectStoreIndex",
+    "ObjectStore",
+    "KeyRange",
+    "KeyPath",
+    "Key",
+    "DatabaseWithObjectStores",
+    "DataEntry",
+    "INDEXEDDB_TYPES_TO_OBJECT"
+]
 
 
 class ObjectStoreIndex(object):
@@ -7,9 +18,9 @@ class ObjectStoreIndex(object):
     Object store index.
     """
 
-    def __init__(
-        self, name: str, keyPath: Union["KeyPath", dict], unique: bool, multiEntry: bool
-    ) -> None:
+    __slots__ = ["name", "keyPath", "unique", "multiEntry"]
+
+    def __init__(self, name: str, keyPath: Union['KeyPath', dict], unique: bool, multiEntry: bool) -> None:
         """
         :param name: Index name.
         :type name: str
@@ -26,15 +37,6 @@ class ObjectStoreIndex(object):
         self.unique = unique
         self.multiEntry = multiEntry
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.name is not None:
@@ -45,10 +47,21 @@ class ObjectStoreIndex(object):
             repr_args.append("unique={!r}".format(self.unique))
         if self.multiEntry is not None:
             repr_args.append("multiEntry={!r}".format(self.multiEntry))
-        return "ObjectStoreIndex(" + ", ".join(repr_args) + ")"
+        return "ObjectStoreIndex(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["ObjectStoreIndex", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ObjectStoreIndex', dict]]:
+        """
+        Safely create ObjectStoreIndex from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ObjectStoreIndex
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ObjectStoreIndex if creation did not fail
+        :rtype: Optional[Union[dict, ObjectStoreIndex]]
+        """
         if init is not None:
             try:
                 ourselves = ObjectStoreIndex(**init)
@@ -59,9 +72,18 @@ class ObjectStoreIndex(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ObjectStoreIndex", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ObjectStoreIndex', dict]]]:
+        """
+        Safely create a new list ObjectStoreIndexs from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ObjectStoreIndex instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ObjectStoreIndex instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ObjectStoreIndex]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -76,13 +98,9 @@ class ObjectStore(object):
     Object store.
     """
 
-    def __init__(
-        self,
-        name: str,
-        keyPath: Union["KeyPath", dict],
-        autoIncrement: bool,
-        indexes: List[Union["ObjectStoreIndex", dict]],
-    ) -> None:
+    __slots__ = ["name", "keyPath", "autoIncrement", "indexes"]
+
+    def __init__(self, name: str, keyPath: Union['KeyPath', dict], autoIncrement: bool, indexes: List[Union['ObjectStoreIndex', dict]]) -> None:
         """
         :param name: Object store name.
         :type name: str
@@ -99,15 +117,6 @@ class ObjectStore(object):
         self.autoIncrement = autoIncrement
         self.indexes = ObjectStoreIndex.safe_create_from_list(indexes)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.name is not None:
@@ -118,10 +127,21 @@ class ObjectStore(object):
             repr_args.append("autoIncrement={!r}".format(self.autoIncrement))
         if self.indexes is not None:
             repr_args.append("indexes={!r}".format(self.indexes))
-        return "ObjectStore(" + ", ".join(repr_args) + ")"
+        return "ObjectStore(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["ObjectStore", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['ObjectStore', dict]]:
+        """
+        Safely create ObjectStore from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of ObjectStore
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of ObjectStore if creation did not fail
+        :rtype: Optional[Union[dict, ObjectStore]]
+        """
         if init is not None:
             try:
                 ourselves = ObjectStore(**init)
@@ -132,9 +152,18 @@ class ObjectStore(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["ObjectStore", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['ObjectStore', dict]]]:
+        """
+        Safely create a new list ObjectStores from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list ObjectStore instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of ObjectStore instances if creation did not fail
+        :rtype: Optional[List[Union[dict, ObjectStore]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -149,13 +178,9 @@ class KeyRange(object):
     Key range.
     """
 
-    def __init__(
-        self,
-        lowerOpen: bool,
-        upperOpen: bool,
-        lower: Optional[Union["Key", dict]] = None,
-        upper: Optional[Union["Key", dict]] = None,
-    ) -> None:
+    __slots__ = ["lower", "upper", "lowerOpen", "upperOpen"]
+
+    def __init__(self, lowerOpen: bool, upperOpen: bool, lower: Optional[Union['Key', dict]] = None, upper: Optional[Union['Key', dict]] = None) -> None:
         """
         :param lower: Lower bound.
         :type lower: Optional[dict]
@@ -172,15 +197,6 @@ class KeyRange(object):
         self.lowerOpen = lowerOpen
         self.upperOpen = upperOpen
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.lower is not None:
@@ -191,10 +207,21 @@ class KeyRange(object):
             repr_args.append("lowerOpen={!r}".format(self.lowerOpen))
         if self.upperOpen is not None:
             repr_args.append("upperOpen={!r}".format(self.upperOpen))
-        return "KeyRange(" + ", ".join(repr_args) + ")"
+        return "KeyRange(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["KeyRange", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['KeyRange', dict]]:
+        """
+        Safely create KeyRange from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of KeyRange
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of KeyRange if creation did not fail
+        :rtype: Optional[Union[dict, KeyRange]]
+        """
         if init is not None:
             try:
                 ourselves = KeyRange(**init)
@@ -205,9 +232,18 @@ class KeyRange(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["KeyRange", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['KeyRange', dict]]]:
+        """
+        Safely create a new list KeyRanges from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list KeyRange instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of KeyRange instances if creation did not fail
+        :rtype: Optional[List[Union[dict, KeyRange]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -222,9 +258,9 @@ class KeyPath(object):
     Key path.
     """
 
-    def __init__(
-        self, type: str, string: Optional[str] = None, array: Optional[List[str]] = None
-    ) -> None:
+    __slots__ = ["type", "string", "array"]
+
+    def __init__(self, type: str, string: Optional[str] = None, array: Optional[List[str]] = None) -> None:
         """
         :param type: Key path type.
         :type type: str
@@ -238,15 +274,6 @@ class KeyPath(object):
         self.string = string
         self.array = array
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.type is not None:
@@ -255,10 +282,21 @@ class KeyPath(object):
             repr_args.append("string={!r}".format(self.string))
         if self.array is not None:
             repr_args.append("array={!r}".format(self.array))
-        return "KeyPath(" + ", ".join(repr_args) + ")"
+        return "KeyPath(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["KeyPath", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['KeyPath', dict]]:
+        """
+        Safely create KeyPath from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of KeyPath
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of KeyPath if creation did not fail
+        :rtype: Optional[Union[dict, KeyPath]]
+        """
         if init is not None:
             try:
                 ourselves = KeyPath(**init)
@@ -269,9 +307,18 @@ class KeyPath(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["KeyPath", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['KeyPath', dict]]]:
+        """
+        Safely create a new list KeyPaths from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list KeyPath instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of KeyPath instances if creation did not fail
+        :rtype: Optional[List[Union[dict, KeyPath]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -286,14 +333,9 @@ class Key(object):
     Key.
     """
 
-    def __init__(
-        self,
-        type: str,
-        number: Optional[float] = None,
-        string: Optional[str] = None,
-        date: Optional[float] = None,
-        array: Optional[List[Union["Key", dict]]] = None,
-    ) -> None:
+    __slots__ = ["type", "number", "string", "date", "array"]
+
+    def __init__(self, type: str, number: Optional[float] = None, string: Optional[str] = None, date: Optional[float] = None, array: Optional[List[Union['Key', dict]]] = None) -> None:
         """
         :param type: Key type.
         :type type: str
@@ -313,15 +355,6 @@ class Key(object):
         self.date = date
         self.array = Key.safe_create_from_list(array)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.type is not None:
@@ -334,10 +367,21 @@ class Key(object):
             repr_args.append("date={!r}".format(self.date))
         if self.array is not None:
             repr_args.append("array={!r}".format(self.array))
-        return "Key(" + ", ".join(repr_args) + ")"
+        return "Key(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["Key", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['Key', dict]]:
+        """
+        Safely create Key from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of Key
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of Key if creation did not fail
+        :rtype: Optional[Union[dict, Key]]
+        """
         if init is not None:
             try:
                 ourselves = Key(**init)
@@ -348,9 +392,18 @@ class Key(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["Key", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['Key', dict]]]:
+        """
+        Safely create a new list Keys from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list Key instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of Key instances if creation did not fail
+        :rtype: Optional[List[Union[dict, Key]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -365,9 +418,9 @@ class DatabaseWithObjectStores(object):
     Database with an array of object stores.
     """
 
-    def __init__(
-        self, name: str, version: int, objectStores: List[Union["ObjectStore", dict]]
-    ) -> None:
+    __slots__ = ["name", "version", "objectStores"]
+
+    def __init__(self, name: str, version: int, objectStores: List[Union['ObjectStore', dict]]) -> None:
         """
         :param name: Database name.
         :type name: str
@@ -381,15 +434,6 @@ class DatabaseWithObjectStores(object):
         self.version = version
         self.objectStores = ObjectStore.safe_create_from_list(objectStores)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.name is not None:
@@ -398,12 +442,21 @@ class DatabaseWithObjectStores(object):
             repr_args.append("version={!r}".format(self.version))
         if self.objectStores is not None:
             repr_args.append("objectStores={!r}".format(self.objectStores))
-        return "DatabaseWithObjectStores(" + ", ".join(repr_args) + ")"
+        return "DatabaseWithObjectStores(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(
-        init: Optional[dict]
-    ) -> Optional[Union["DatabaseWithObjectStores", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DatabaseWithObjectStores', dict]]:
+        """
+        Safely create DatabaseWithObjectStores from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of DatabaseWithObjectStores
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of DatabaseWithObjectStores if creation did not fail
+        :rtype: Optional[Union[dict, DatabaseWithObjectStores]]
+        """
         if init is not None:
             try:
                 ourselves = DatabaseWithObjectStores(**init)
@@ -414,9 +467,18 @@ class DatabaseWithObjectStores(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["DatabaseWithObjectStores", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DatabaseWithObjectStores', dict]]]:
+        """
+        Safely create a new list DatabaseWithObjectStoress from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list DatabaseWithObjectStores instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of DatabaseWithObjectStores instances if creation did not fail
+        :rtype: Optional[List[Union[dict, DatabaseWithObjectStores]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -431,12 +493,9 @@ class DataEntry(object):
     Data entry.
     """
 
-    def __init__(
-        self,
-        key: Union["Runtime.RemoteObject", dict],
-        primaryKey: Union["Runtime.RemoteObject", dict],
-        value: Union["Runtime.RemoteObject", dict],
-    ) -> None:
+    __slots__ = ["key", "primaryKey", "value"]
+
+    def __init__(self, key: Union['Runtime.RemoteObject', dict], primaryKey: Union['Runtime.RemoteObject', dict], value: Union['Runtime.RemoteObject', dict]) -> None:
         """
         :param key: Key object.
         :type key: dict
@@ -450,15 +509,6 @@ class DataEntry(object):
         self.primaryKey = Runtime.RemoteObject.safe_create(primaryKey)
         self.value = Runtime.RemoteObject.safe_create(value)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.key is not None:
@@ -467,10 +517,21 @@ class DataEntry(object):
             repr_args.append("primaryKey={!r}".format(self.primaryKey))
         if self.value is not None:
             repr_args.append("value={!r}".format(self.value))
-        return "DataEntry(" + ", ".join(repr_args) + ")"
+        return "DataEntry(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["DataEntry", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['DataEntry', dict]]:
+        """
+        Safely create DataEntry from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of DataEntry
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of DataEntry if creation did not fail
+        :rtype: Optional[Union[dict, DataEntry]]
+        """
         if init is not None:
             try:
                 ourselves = DataEntry(**init)
@@ -481,9 +542,18 @@ class DataEntry(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["DataEntry", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['DataEntry', dict]]]:
+        """
+        Safely create a new list DataEntrys from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list DataEntry instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of DataEntry instances if creation did not fail
+        :rtype: Optional[List[Union[dict, DataEntry]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -493,7 +563,7 @@ class DataEntry(object):
             return init
 
 
-TYPE_TO_OBJECT = {
+INDEXEDDB_TYPES_TO_OBJECT = {
     "ObjectStoreIndex": ObjectStoreIndex,
     "ObjectStore": ObjectStore,
     "KeyRange": KeyRange,

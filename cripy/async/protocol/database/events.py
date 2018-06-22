@@ -1,41 +1,48 @@
 from typing import Any, List, Optional, Union
-from types import SimpleNamespace
+from collections import namedtuple
+from cripy.async.protocol.database.types import *
 
-try:
-    from cripy.async.protocol.database.types import *
-except ImportError:
-    pass
-
+__all__ = [
+    "AddDatabaseEvent",
+    "DATABASE_EVENTS_TO_CLASS",
+    "DATABASE_EVENTS_NS"
+]
 
 class AddDatabaseEvent(object):
 
     event = "Database.addDatabase"
 
-    def __init__(self, database: Union[Database, dict]) -> None:
+    __slots__ = ["database"]
+
+    def __init__(self, database: Union[DatabaseT, dict]) -> None:
         """
+        Create a new instance of AddDatabaseEvent
+
         :param database: The database
         :type database: dict
         """
         super().__init__()
         self.database = Database.safe_create(database)
 
-    def __contains__(self, item):
-        return item in self.__dict__
-
-    def __getitem__(self, k) -> Any:
-        return self.__dict__[k]
-
-    def get(self, what, default=None) -> Any:
-        return self.__dict__.get(what, default)
-
     def __repr__(self) -> str:
         repr_args = []
         if self.database is not None:
             repr_args.append("database={!r}".format(self.database))
-        return "AddDatabaseEvent(" + ", ".join(repr_args) + ")"
+        return "AddDatabaseEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod
-    def safe_create(init: Optional[dict]) -> Optional[Union["AddDatabaseEvent", dict]]:
+    def safe_create(init: Optional[dict]) -> Optional[Union['AddDatabaseEvent', dict]]:
+        """
+        Safely create AddDatabaseEvent from the supplied init dictionary.
+
+        This method will not throw an Exception and will return a new instance of AddDatabaseEvent
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new instance of AddDatabaseEvent if creation did not fail
+        :rtype: Optional[Union[dict, AddDatabaseEvent]]
+        """
         if init is not None:
             try:
                 ourselves = AddDatabaseEvent(**init)
@@ -46,9 +53,18 @@ class AddDatabaseEvent(object):
             return init
 
     @staticmethod
-    def safe_create_from_list(
-        init: Optional[List[dict]]
-    ) -> Optional[List[Union["AddDatabaseEvent", dict]]]:
+    def safe_create_from_list(init: Optional[List[dict]]) -> Optional[List[Union['AddDatabaseEvent', dict]]]:
+        """
+        Safely create a new list AddDatabaseEvents from the supplied list of dictionaries.
+
+        This method will not throw an Exception and will return a new list AddDatabaseEvent instances
+        if init is not None otherwise returns init or None if init was None.
+
+        :param init: The init dictionary
+        :type init: dict
+        :return: A new list of AddDatabaseEvent instances if creation did not fail
+        :rtype: Optional[List[Union[dict, AddDatabaseEvent]]]
+        """
         if init is not None:
             list_of_self = []
             for it in init:
@@ -58,6 +74,12 @@ class AddDatabaseEvent(object):
             return init
 
 
-EVENT_TO_CLASS = {"Database.addDatabase": AddDatabaseEvent}
+DATABASE_EVENTS_TO_CLASS = {
+   "Database.addDatabase": AddDatabaseEvent,
+}
 
-EVENT_NS = SimpleNamespace(AddDatabase="Database.addDatabase")
+DatabaseNS = namedtuple("DatabaseNS", ["AddDatabase"])
+
+DATABASE_EVENTS_NS = DatabaseNS(
+  AddDatabase="Database.addDatabase",
+)
