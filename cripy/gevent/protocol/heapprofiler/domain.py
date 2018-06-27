@@ -129,6 +129,21 @@ $x functions).
         wres = self.chrome.send('HeapProfiler.takeHeapSnapshot', msg_dict)
         return wres.get()
 
+    def addHeapSnapshotChunk(self, fn, once=False):
+        self.chrome.on("HeapProfiler.addHeapSnapshotChunk", fn, once=once)
+
+    def heapStatsUpdate(self, fn, once=False):
+        self.chrome.on("HeapProfiler.heapStatsUpdate", fn, once=once)
+
+    def lastSeenObjectId(self, fn, once=False):
+        self.chrome.on("HeapProfiler.lastSeenObjectId", fn, once=once)
+
+    def reportHeapSnapshotProgress(self, fn, once=False):
+        self.chrome.on("HeapProfiler.reportHeapSnapshotProgress", fn, once=once)
+
+    def resetProfiles(self, fn, once=False):
+        self.chrome.on("HeapProfiler.resetProfiles", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

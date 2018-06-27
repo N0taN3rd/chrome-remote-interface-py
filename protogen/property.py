@@ -25,10 +25,10 @@ def clean_string(s: str) -> str:
 
 
 class Property(FRefCollector):
-
     def __init__(self, owner: str, prop: dict) -> None:
         super().__init__()
         self.owner: str = owner
+        self.domain: str = None
         self.name: str = prop["name"]
         self.scoped_name: str = f"{self.owner}.{self.name}"
         self.description: Optional[str] = prop.get("description", None)
@@ -65,6 +65,8 @@ class Property(FRefCollector):
     @property
     def construct_thyself(self) -> str:
         if TYPER.is_object(self.type):
+            if self.domain is not None and str(self.type) == self.domain:
+                return f"self.{self.name} = {self.type}T.safe_create({self.name})"
             return f"self.{self.name} = {self.type}.safe_create({self.name})"
 
         if self.type.is_array:
@@ -74,9 +76,7 @@ class Property(FRefCollector):
                 if TYPER.is_primitive_or_any(self.items):
                     return f"self.{self.name} = {self.name}"
                 else:
-                    return (
-                        f"self.{self.name} = {self.items.type}.safe_create_from_list({self.name})"
-                    )
+                    return f"self.{self.name} = {self.items.type}.safe_create_from_list({self.name})"
             # got
 
         return f"self.{self.name} = {self.name}"

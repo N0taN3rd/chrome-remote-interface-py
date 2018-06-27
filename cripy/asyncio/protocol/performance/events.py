@@ -8,12 +8,12 @@ __all__ = [
     "PERFORMANCE_EVENTS_NS"
 ]
 
+
 class MetricsEvent(object):
     """
     Current values of the metrics.
     """
 
-    event = "Performance.metrics"
 
     __slots__ = ["metrics", "title"]
 

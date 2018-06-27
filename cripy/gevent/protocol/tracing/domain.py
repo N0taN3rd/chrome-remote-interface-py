@@ -86,6 +86,15 @@ class Tracing(object):
         wres = self.chrome.send('Tracing.start', msg_dict)
         return wres.get()
 
+    def bufferUsage(self, fn, once=False):
+        self.chrome.on("Tracing.bufferUsage", fn, once=once)
+
+    def dataCollected(self, fn, once=False):
+        self.chrome.on("Tracing.dataCollected", fn, once=once)
+
+    def tracingComplete(self, fn, once=False):
+        self.chrome.on("Tracing.tracingComplete", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

@@ -84,7 +84,7 @@ class WorkerRegistrationUpdatedEvent(object):
         :type registrations: List[dict]
         """
         super(WorkerRegistrationUpdatedEvent, self).__init__()
-        self.registrations = registrations
+        self.registrations = ServiceWorkerRegistration.safe_create_from_list(registrations)
 
     def __repr__(self):
         repr_args = []
@@ -147,7 +147,7 @@ class WorkerVersionUpdatedEvent(object):
         :type versions: List[dict]
         """
         super(WorkerVersionUpdatedEvent, self).__init__()
-        self.versions = versions
+        self.versions = ServiceWorkerVersion.safe_create_from_list(versions)
 
     def __repr__(self):
         repr_args = []

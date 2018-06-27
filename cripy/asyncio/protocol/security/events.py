@@ -9,6 +9,7 @@ __all__ = [
     "SECURITY_EVENTS_NS"
 ]
 
+
 class CertificateErrorEvent(object):
     """
     There is a certificate error.
@@ -17,7 +18,6 @@ class CertificateErrorEvent(object):
 	Only one client per target should override certificate errors at the same time.
     """
 
-    event = "Security.certificateError"
 
     __slots__ = ["eventId", "errorType", "requestURL"]
 
@@ -96,7 +96,6 @@ class SecurityStateChangedEvent(object):
     The security state of the page changed.
     """
 
-    event = "Security.securityStateChanged"
 
     __slots__ = ["securityState", "schemeIsCryptographic", "explanations", "insecureContentStatus", "summary"]
 

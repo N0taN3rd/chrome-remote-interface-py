@@ -75,8 +75,8 @@ class Input(object):
             msg_dict['isSystemKey'] = isSystemKey
         if location is not None:
             msg_dict['location'] = location
-        mayberes = await self.chrome.send('Input.dispatchKeyEvent', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Input.dispatchKeyEvent', msg_dict)
+        return res
 
     async def dispatchMouseEvent(self, type: str, x: float, y: float, modifiers: Optional[int] = None, timestamp: Optional[float] = None, button: Optional[str] = None, clickCount: Optional[int] = None, deltaX: Optional[float] = None, deltaY: Optional[float] = None) -> Optional[dict]:
         """
@@ -120,8 +120,8 @@ class Input(object):
             msg_dict['deltaX'] = deltaX
         if deltaY is not None:
             msg_dict['deltaY'] = deltaY
-        mayberes = await self.chrome.send('Input.dispatchMouseEvent', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Input.dispatchMouseEvent', msg_dict)
+        return res
 
     async def dispatchTouchEvent(self, type: str, touchPoints: List[dict], modifiers: Optional[int] = None, timestamp: Optional[float] = None) -> Optional[dict]:
         """
@@ -145,8 +145,8 @@ class Input(object):
             msg_dict['modifiers'] = modifiers
         if timestamp is not None:
             msg_dict['timestamp'] = timestamp
-        mayberes = await self.chrome.send('Input.dispatchTouchEvent', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Input.dispatchTouchEvent', msg_dict)
+        return res
 
     async def emulateTouchFromMouseEvent(self, type: str, x: int, y: int, button: str, timestamp: Optional[float] = None, deltaX: Optional[float] = None, deltaY: Optional[float] = None, modifiers: Optional[int] = None, clickCount: Optional[int] = None) -> Optional[dict]:
         """
@@ -190,8 +190,8 @@ class Input(object):
             msg_dict['modifiers'] = modifiers
         if clickCount is not None:
             msg_dict['clickCount'] = clickCount
-        mayberes = await self.chrome.send('Input.emulateTouchFromMouseEvent', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Input.emulateTouchFromMouseEvent', msg_dict)
+        return res
 
     async def setIgnoreInputEvents(self, ignore: bool) -> Optional[dict]:
         """
@@ -203,8 +203,8 @@ class Input(object):
         msg_dict = dict()
         if ignore is not None:
             msg_dict['ignore'] = ignore
-        mayberes = await self.chrome.send('Input.setIgnoreInputEvents', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Input.setIgnoreInputEvents', msg_dict)
+        return res
 
     async def synthesizePinchGesture(self, x: float, y: float, scaleFactor: float, relativeSpeed: Optional[int] = None, gestureSourceType: Optional[str] = None) -> Optional[dict]:
         """
@@ -232,8 +232,8 @@ class Input(object):
             msg_dict['relativeSpeed'] = relativeSpeed
         if gestureSourceType is not None:
             msg_dict['gestureSourceType'] = gestureSourceType
-        mayberes = await self.chrome.send('Input.synthesizePinchGesture', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Input.synthesizePinchGesture', msg_dict)
+        return res
 
     async def synthesizeScrollGesture(self, x: float, y: float, xDistance: Optional[float] = None, yDistance: Optional[float] = None, xOverscroll: Optional[float] = None, yOverscroll: Optional[float] = None, preventFling: Optional[bool] = None, speed: Optional[int] = None, gestureSourceType: Optional[str] = None, repeatCount: Optional[int] = None, repeatDelayMs: Optional[int] = None, interactionMarkerName: Optional[str] = None) -> Optional[dict]:
         """
@@ -289,8 +289,8 @@ class Input(object):
             msg_dict['repeatDelayMs'] = repeatDelayMs
         if interactionMarkerName is not None:
             msg_dict['interactionMarkerName'] = interactionMarkerName
-        mayberes = await self.chrome.send('Input.synthesizeScrollGesture', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Input.synthesizeScrollGesture', msg_dict)
+        return res
 
     async def synthesizeTapGesture(self, x: float, y: float, duration: Optional[int] = None, tapCount: Optional[int] = None, gestureSourceType: Optional[str] = None) -> Optional[dict]:
         """
@@ -318,8 +318,8 @@ class Input(object):
             msg_dict['tapCount'] = tapCount
         if gestureSourceType is not None:
             msg_dict['gestureSourceType'] = gestureSourceType
-        mayberes = await self.chrome.send('Input.synthesizeTapGesture', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Input.synthesizeTapGesture', msg_dict)
+        return res
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

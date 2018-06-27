@@ -60,30 +60,6 @@ class Target(object):
         res = wres.get()
         return res
 
-    def exposeDevToolsProtocol(self, targetId, bindingName=None):
-        """
-        Inject object to the target's main frame that provides a communication
-channel with browser target.
-
-Injected object will be available as `window[bindingName]`.
-
-The object has the follwing API:
-- `binding.send(json)` - a method to send messages over the remote debugging protocol
-- `binding.onmessage = json => handleMessage(json)` - a callback that will be called for the protocol notifications and command responses.
-
-        :param targetId: The targetId
-        :type targetId: str
-        :param bindingName: Binding name, 'cdp' if not specified.
-        :type bindingName: Optional[str]
-        """
-        msg_dict = dict()
-        if targetId is not None:
-            msg_dict['targetId'] = targetId
-        if bindingName is not None:
-            msg_dict['bindingName'] = bindingName
-        wres = self.chrome.send('Target.exposeDevToolsProtocol', msg_dict)
-        return wres.get()
-
     def createBrowserContext(self):
         """
         Creates a new empty BrowserContext. Similar to an incognito profile but you can have more than
@@ -253,6 +229,24 @@ automatically detaches from all currently attached targets.
             msg_dict['locations'] = locations
         wres = self.chrome.send('Target.setRemoteLocations', msg_dict)
         return wres.get()
+
+    def attachedToTarget(self, fn, once=False):
+        self.chrome.on("Target.attachedToTarget", fn, once=once)
+
+    def detachedFromTarget(self, fn, once=False):
+        self.chrome.on("Target.detachedFromTarget", fn, once=once)
+
+    def receivedMessageFromTarget(self, fn, once=False):
+        self.chrome.on("Target.receivedMessageFromTarget", fn, once=once)
+
+    def targetCreated(self, fn, once=False):
+        self.chrome.on("Target.targetCreated", fn, once=once)
+
+    def targetDestroyed(self, fn, once=False):
+        self.chrome.on("Target.targetDestroyed", fn, once=once)
+
+    def targetInfoChanged(self, fn, once=False):
+        self.chrome.on("Target.targetInfoChanged", fn, once=once)
 
     @staticmethod
     def get_event_classes():

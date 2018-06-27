@@ -28,9 +28,9 @@ __all__ = [
     "PAGE_EVENTS_NS"
 ]
 
+
 class DomContentEventFiredEvent(object):
 
-    event = "Page.domContentEventFired"
 
     __slots__ = ["timestamp"]
 
@@ -99,7 +99,6 @@ class FrameAttachedEvent(object):
     Fired when frame has been attached to its parent.
     """
 
-    event = "Page.frameAttached"
 
     __slots__ = ["frameId", "parentFrameId", "stack"]
 
@@ -178,7 +177,6 @@ class FrameClearedScheduledNavigationEvent(object):
     Fired when frame no longer has a scheduled navigation.
     """
 
-    event = "Page.frameClearedScheduledNavigation"
 
     __slots__ = ["frameId"]
 
@@ -247,7 +245,6 @@ class FrameDetachedEvent(object):
     Fired when frame has been detached from its parent.
     """
 
-    event = "Page.frameDetached"
 
     __slots__ = ["frameId"]
 
@@ -317,7 +314,6 @@ class FrameNavigatedEvent(object):
 	Frame is now associated with the new loader.
     """
 
-    event = "Page.frameNavigated"
 
     __slots__ = ["frame"]
 
@@ -383,7 +379,6 @@ class FrameNavigatedEvent(object):
 
 class FrameResizedEvent(dict):
 
-    event = "Page.frameResized"
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -440,7 +435,6 @@ class FrameScheduledNavigationEvent(object):
     Fired when frame schedules a potential navigation.
     """
 
-    event = "Page.frameScheduledNavigation"
 
     __slots__ = ["frameId", "delay", "reason", "url"]
 
@@ -524,7 +518,6 @@ class FrameStartedLoadingEvent(object):
     Fired when frame has started loading.
     """
 
-    event = "Page.frameStartedLoading"
 
     __slots__ = ["frameId"]
 
@@ -593,7 +586,6 @@ class FrameStoppedLoadingEvent(object):
     Fired when frame has stopped loading.
     """
 
-    event = "Page.frameStoppedLoading"
 
     __slots__ = ["frameId"]
 
@@ -662,7 +654,6 @@ class InterstitialHiddenEvent(dict):
     Fired when interstitial page was hidden
     """
 
-    event = "Page.interstitialHidden"
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -719,7 +710,6 @@ class InterstitialShownEvent(dict):
     Fired when interstitial page was shown
     """
 
-    event = "Page.interstitialShown"
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -776,7 +766,6 @@ class JavascriptDialogClosedEvent(object):
     Fired when a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload) has been closed.
     """
 
-    event = "Page.javascriptDialogClosed"
 
     __slots__ = ["result", "userInput"]
 
@@ -850,7 +839,6 @@ class JavascriptDialogOpeningEvent(object):
     Fired when a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload) is about to open.
     """
 
-    event = "Page.javascriptDialogOpening"
 
     __slots__ = ["url", "message", "type", "hasBrowserHandler", "defaultPrompt"]
 
@@ -939,7 +927,6 @@ class LifecycleEventEvent(object):
     Fired for top level page lifecycle events such as navigation, load, paint, etc.
     """
 
-    event = "Page.lifecycleEvent"
 
     __slots__ = ["frameId", "loaderId", "name", "timestamp"]
 
@@ -1020,7 +1007,6 @@ class LifecycleEventEvent(object):
 
 class LoadEventFiredEvent(object):
 
-    event = "Page.loadEventFired"
 
     __slots__ = ["timestamp"]
 
@@ -1090,7 +1076,6 @@ class NavigatedWithinDocumentEvent(object):
 	due to history API usage or anchor navigation.
     """
 
-    event = "Page.navigatedWithinDocument"
 
     __slots__ = ["frameId", "url"]
 
@@ -1164,7 +1149,6 @@ class ScreencastFrameEvent(object):
     Compressed image data requested by the `startScreencast`.
     """
 
-    event = "Page.screencastFrame"
 
     __slots__ = ["data", "metadata", "sessionId"]
 
@@ -1243,7 +1227,6 @@ class ScreencastVisibilityChangedEvent(object):
     Fired when the page with currently enabled screencast was shown or hidden `.
     """
 
-    event = "Page.screencastVisibilityChanged"
 
     __slots__ = ["visible"]
 
@@ -1312,7 +1295,6 @@ class WindowOpenEvent(object):
     Fired when a new window is going to be opened, via window.open(), link click, form submission, etc.
     """
 
-    event = "Page.windowOpen"
 
     __slots__ = ["url", "windowName", "windowFeatures", "userGesture"]
 

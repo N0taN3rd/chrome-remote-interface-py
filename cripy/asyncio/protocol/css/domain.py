@@ -48,8 +48,7 @@ position specified by `location`.
             msg_dict['ruleText'] = ruleText
         if location is not None:
             msg_dict['location'] = location
-        mayberes = await self.chrome.send('CSS.addRule', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CSS.addRule', msg_dict)
         res['rule'] = Types.CSSRule.safe_create(res['rule'])
         return res
 
@@ -63,8 +62,7 @@ position specified by `location`.
         msg_dict = dict()
         if styleSheetId is not None:
             msg_dict['styleSheetId'] = styleSheetId
-        mayberes = await self.chrome.send('CSS.collectClassNames', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CSS.collectClassNames', msg_dict)
         return res
 
     async def createStyleSheet(self, frameId: str) -> Optional[dict]:
@@ -77,24 +75,23 @@ position specified by `location`.
         msg_dict = dict()
         if frameId is not None:
             msg_dict['frameId'] = frameId
-        mayberes = await self.chrome.send('CSS.createStyleSheet', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CSS.createStyleSheet', msg_dict)
         return res
 
     async def disable(self) -> Optional[dict]:
         """
         Disables the CSS agent for the given page.
         """
-        mayberes = await self.chrome.send('CSS.disable')
-        return mayberes
+        res = await self.chrome.send('CSS.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
         Enables the CSS agent for the given page. Clients should not assume that the CSS agent has been
 enabled until the result of this command is received.
         """
-        mayberes = await self.chrome.send('CSS.enable')
-        return mayberes
+        res = await self.chrome.send('CSS.enable')
+        return res
 
     async def forcePseudoState(self, nodeId: int, forcedPseudoClasses: List[str]) -> Optional[dict]:
         """
@@ -111,8 +108,8 @@ the browser.
             msg_dict['nodeId'] = nodeId
         if forcedPseudoClasses is not None:
             msg_dict['forcedPseudoClasses'] = forcedPseudoClasses
-        mayberes = await self.chrome.send('CSS.forcePseudoState', msg_dict)
-        return mayberes
+        res = await self.chrome.send('CSS.forcePseudoState', msg_dict)
+        return res
 
     async def getBackgroundColors(self, nodeId: int) -> Optional[dict]:
         """
@@ -122,8 +119,7 @@ the browser.
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        mayberes = await self.chrome.send('CSS.getBackgroundColors', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CSS.getBackgroundColors', msg_dict)
         return res
 
     async def getComputedStyleForNode(self, nodeId: int) -> Optional[dict]:
@@ -136,8 +132,7 @@ the browser.
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        mayberes = await self.chrome.send('CSS.getComputedStyleForNode', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CSS.getComputedStyleForNode', msg_dict)
         res['computedStyle'] = Types.CSSComputedStyleProperty.safe_create_from_list(res['computedStyle'])
         return res
 
@@ -152,8 +147,7 @@ attributes) for a DOM node identified by `nodeId`.
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        mayberes = await self.chrome.send('CSS.getInlineStylesForNode', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CSS.getInlineStylesForNode', msg_dict)
         res['inlineStyle'] = Types.CSSStyle.safe_create(res['inlineStyle'])
         res['attributesStyle'] = Types.CSSStyle.safe_create(res['attributesStyle'])
         return res
@@ -168,8 +162,7 @@ attributes) for a DOM node identified by `nodeId`.
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        mayberes = await self.chrome.send('CSS.getMatchedStylesForNode', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CSS.getMatchedStylesForNode', msg_dict)
         res['inlineStyle'] = Types.CSSStyle.safe_create(res['inlineStyle'])
         res['attributesStyle'] = Types.CSSStyle.safe_create(res['attributesStyle'])
         res['matchedCSSRules'] = Types.RuleMatch.safe_create_from_list(res['matchedCSSRules'])
@@ -182,8 +175,7 @@ attributes) for a DOM node identified by `nodeId`.
         """
         Returns all media queries parsed by the rendering engine.
         """
-        mayberes = await self.chrome.send('CSS.getMediaQueries')
-        res = await mayberes
+        res = await self.chrome.send('CSS.getMediaQueries')
         res['medias'] = Types.CSSMedia.safe_create_from_list(res['medias'])
         return res
 
@@ -198,8 +190,7 @@ node.
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        mayberes = await self.chrome.send('CSS.getPlatformFontsForNode', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CSS.getPlatformFontsForNode', msg_dict)
         res['fonts'] = Types.PlatformFontUsage.safe_create_from_list(res['fonts'])
         return res
 
@@ -213,8 +204,7 @@ node.
         msg_dict = dict()
         if styleSheetId is not None:
             msg_dict['styleSheetId'] = styleSheetId
-        mayberes = await self.chrome.send('CSS.getStyleSheetText', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CSS.getStyleSheetText', msg_dict)
         return res
 
     async def setEffectivePropertyValueForNode(self, nodeId: int, propertyName: str, value: str) -> Optional[dict]:
@@ -236,8 +226,8 @@ property
             msg_dict['propertyName'] = propertyName
         if value is not None:
             msg_dict['value'] = value
-        mayberes = await self.chrome.send('CSS.setEffectivePropertyValueForNode', msg_dict)
-        return mayberes
+        res = await self.chrome.send('CSS.setEffectivePropertyValueForNode', msg_dict)
+        return res
 
     async def setKeyframeKey(self, styleSheetId: str, range: dict, keyText: str) -> Optional[dict]:
         """
@@ -257,8 +247,7 @@ property
             msg_dict['range'] = range
         if keyText is not None:
             msg_dict['keyText'] = keyText
-        mayberes = await self.chrome.send('CSS.setKeyframeKey', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CSS.setKeyframeKey', msg_dict)
         res['keyText'] = Types.Value.safe_create(res['keyText'])
         return res
 
@@ -280,8 +269,7 @@ property
             msg_dict['range'] = range
         if text is not None:
             msg_dict['text'] = text
-        mayberes = await self.chrome.send('CSS.setMediaText', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CSS.setMediaText', msg_dict)
         res['media'] = Types.CSSMedia.safe_create(res['media'])
         return res
 
@@ -303,8 +291,7 @@ property
             msg_dict['range'] = range
         if selector is not None:
             msg_dict['selector'] = selector
-        mayberes = await self.chrome.send('CSS.setRuleSelector', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CSS.setRuleSelector', msg_dict)
         res['selectorList'] = Types.SelectorList.safe_create(res['selectorList'])
         return res
 
@@ -322,8 +309,7 @@ property
             msg_dict['styleSheetId'] = styleSheetId
         if text is not None:
             msg_dict['text'] = text
-        mayberes = await self.chrome.send('CSS.setStyleSheetText', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CSS.setStyleSheetText', msg_dict)
         return res
 
     async def setStyleTexts(self, edits: List[dict]) -> Optional[dict]:
@@ -336,8 +322,7 @@ property
         msg_dict = dict()
         if edits is not None:
             msg_dict['edits'] = edits
-        mayberes = await self.chrome.send('CSS.setStyleTexts', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CSS.setStyleTexts', msg_dict)
         res['styles'] = Types.CSSStyle.safe_create_from_list(res['styles'])
         return res
 
@@ -345,16 +330,15 @@ property
         """
         Enables the selector recording.
         """
-        mayberes = await self.chrome.send('CSS.startRuleUsageTracking')
-        return mayberes
+        res = await self.chrome.send('CSS.startRuleUsageTracking')
+        return res
 
     async def stopRuleUsageTracking(self) -> Optional[dict]:
         """
         Stop tracking rule usage and return the list of rules that were used since last call to
 `takeCoverageDelta` (or since start of coverage instrumentation)
         """
-        mayberes = await self.chrome.send('CSS.stopRuleUsageTracking')
-        res = await mayberes
+        res = await self.chrome.send('CSS.stopRuleUsageTracking')
         res['ruleUsage'] = Types.RuleUsage.safe_create_from_list(res['ruleUsage'])
         return res
 
@@ -363,10 +347,39 @@ property
         Obtain list of rules that became used since last call to this method (or since start of coverage
 instrumentation)
         """
-        mayberes = await self.chrome.send('CSS.takeCoverageDelta')
-        res = await mayberes
+        res = await self.chrome.send('CSS.takeCoverageDelta')
         res['coverage'] = Types.RuleUsage.safe_create_from_list(res['coverage'])
         return res
+
+    def fontsUpdated(self, fn, once=False):
+        if once:
+            self.chrome.once("CSS.fontsUpdated", fn)
+        else:
+            self.chrome.on("CSS.fontsUpdated", fn)
+
+    def mediaQueryResultChanged(self, fn, once=False):
+        if once:
+            self.chrome.once("CSS.mediaQueryResultChanged", fn)
+        else:
+            self.chrome.on("CSS.mediaQueryResultChanged", fn)
+
+    def styleSheetAdded(self, fn, once=False):
+        if once:
+            self.chrome.once("CSS.styleSheetAdded", fn)
+        else:
+            self.chrome.on("CSS.styleSheetAdded", fn)
+
+    def styleSheetChanged(self, fn, once=False):
+        if once:
+            self.chrome.once("CSS.styleSheetChanged", fn)
+        else:
+            self.chrome.on("CSS.styleSheetChanged", fn)
+
+    def styleSheetRemoved(self, fn, once=False):
+        if once:
+            self.chrome.once("CSS.styleSheetRemoved", fn)
+        else:
+            self.chrome.on("CSS.styleSheetRemoved", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

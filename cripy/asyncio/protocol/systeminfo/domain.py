@@ -21,8 +21,7 @@ class SystemInfo(object):
         """
         Returns information about the system.
         """
-        mayberes = await self.chrome.send('SystemInfo.getInfo')
-        res = await mayberes
+        res = await self.chrome.send('SystemInfo.getInfo')
         res['gpu'] = Types.GPUInfo.safe_create(res['gpu'])
         return res
 

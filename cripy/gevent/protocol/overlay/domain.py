@@ -1,5 +1,5 @@
-from cripy.gevent.protocol.runtime import types as Runtime
 from cripy.gevent.protocol.page import types as Page
+from cripy.gevent.protocol.runtime import types as Runtime
 from cripy.gevent.protocol.dom import types as DOM
 from cripy.gevent.protocol.overlay import events as Events
 from cripy.gevent.protocol.overlay import types as Types
@@ -264,6 +264,15 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
             msg_dict['suspended'] = suspended
         wres = self.chrome.send('Overlay.setSuspended', msg_dict)
         return wres.get()
+
+    def inspectNodeRequested(self, fn, once=False):
+        self.chrome.on("Overlay.inspectNodeRequested", fn, once=once)
+
+    def nodeHighlightRequested(self, fn, once=False):
+        self.chrome.on("Overlay.nodeHighlightRequested", fn, once=once)
+
+    def screenshotRequested(self, fn, once=False):
+        self.chrome.on("Overlay.screenshotRequested", fn, once=once)
 
     @staticmethod
     def get_event_classes():

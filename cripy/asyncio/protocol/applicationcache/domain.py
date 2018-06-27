@@ -21,8 +21,8 @@ class ApplicationCache(object):
         """
         Enables application cache domain notifications.
         """
-        mayberes = await self.chrome.send('ApplicationCache.enable')
-        return mayberes
+        res = await self.chrome.send('ApplicationCache.enable')
+        return res
 
     async def getApplicationCacheForFrame(self, frameId: str) -> Optional[dict]:
         """
@@ -34,8 +34,7 @@ class ApplicationCache(object):
         msg_dict = dict()
         if frameId is not None:
             msg_dict['frameId'] = frameId
-        mayberes = await self.chrome.send('ApplicationCache.getApplicationCacheForFrame', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('ApplicationCache.getApplicationCacheForFrame', msg_dict)
         res['applicationCache'] = Types.ApplicationCache.safe_create(res['applicationCache'])
         return res
 
@@ -44,8 +43,7 @@ class ApplicationCache(object):
         Returns array of frame identifiers with manifest urls for each frame containing a document
 associated with some application cache.
         """
-        mayberes = await self.chrome.send('ApplicationCache.getFramesWithManifests')
-        res = await mayberes
+        res = await self.chrome.send('ApplicationCache.getFramesWithManifests')
         res['frameIds'] = Types.FrameWithManifest.safe_create_from_list(res['frameIds'])
         return res
 
@@ -59,9 +57,20 @@ associated with some application cache.
         msg_dict = dict()
         if frameId is not None:
             msg_dict['frameId'] = frameId
-        mayberes = await self.chrome.send('ApplicationCache.getManifestForFrame', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('ApplicationCache.getManifestForFrame', msg_dict)
         return res
+
+    def applicationCacheStatusUpdated(self, fn, once=False):
+        if once:
+            self.chrome.once("ApplicationCache.applicationCacheStatusUpdated", fn)
+        else:
+            self.chrome.on("ApplicationCache.applicationCacheStatusUpdated", fn)
+
+    def networkStateUpdated(self, fn, once=False):
+        if once:
+            self.chrome.once("ApplicationCache.networkStateUpdated", fn)
+        else:
+            self.chrome.on("ApplicationCache.networkStateUpdated", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

@@ -2,11 +2,11 @@ import gevent
 from gevent import monkey as george; george.patch_all()
 import ujson as json
 from gevent.event import AsyncResult
+from gevent.queue import UnboundQueue
 import websocket
 import requests
 from urllib.parse import urljoin
-
-from .event_emitter import EventEmitter
+from eventemitter import EventEmitter
 from ..protocol import ProtocolMixin
 
 __all__ = ["Client"]
@@ -16,6 +16,15 @@ DEFAULT_PORT: int = 9222
 
 
 def ensure_url(url, host, port, secure, suffix):
+    """
+
+    :param url: 
+    :param host: 
+    :param port: 
+    :param secure: 
+    :param suffix: 
+
+    """
     if url is None:
         url = "{0}//{1}:{2}".format("https:" if secure else "http:", host, port)
     if not url.endswith(suffix):
@@ -24,6 +33,7 @@ def ensure_url(url, host, port, secure, suffix):
 
 
 class Client(ProtocolMixin, EventEmitter):
+    """ """
 
     def __init__(
         self,
@@ -36,7 +46,7 @@ class Client(ProtocolMixin, EventEmitter):
         **kwargs,
     ):
         super(Client, self).__init__(*args, **kwargs)
-        self.browser_running = False
+        self.connected = False
         self.ws = None
         self._ws_url = wsurl  # type: str
         self._host = host  # type: str
@@ -45,8 +55,14 @@ class Client(ProtocolMixin, EventEmitter):
         self._message_id = 0  # type: int
         self._callbacks = dict()  # type: Dict[int, AsyncResult]
         self._recv_let = None  # type: gevent.Greenlet
+        self._send_queue = UnboundQueue()  # type: UnboundQueue
+        self._sendlet = None  # type: gevent.Greenlet
 
     def _make_url(self, url=None, secure=False):
+        """
+        :param url:  (Default value = None)
+        :param secure:  (Default value = False)
+        """
         if url is None:
             return "{0}//{1}:{2}".format(
                 "https:" if secure else "http:", self._host, self._port
@@ -54,6 +70,7 @@ class Client(ProtocolMixin, EventEmitter):
         return url
 
     def connect(self):
+        """ """
         if self._ws_url is None:
             tabs = self.List(self._url)
             found = list(filter(lambda x: x["type"] == "page", tabs))[0]
@@ -62,6 +79,10 @@ class Client(ProtocolMixin, EventEmitter):
         self._recv_let = gevent.spawn(self._recv_loop)
 
     def send(self, method, params=None):
+        """
+        :param method:
+        :param params:  (Default value = None)
+        """
         if params is None:
             params = dict()
         self._message_id += 1
@@ -74,16 +95,35 @@ class Client(ProtocolMixin, EventEmitter):
         return cb
 
     def _send_async(self, msg):
-        gevent.spawn(self.ws.send, msg)
+        """
+        :param msg:
+        """
+        self._send_queue.put(msg, block=False)
+        if self._sendlet is None or self._sendlet.ready():
+            self._sendlet = gevent.spawn(self._send_worker)
+        # gevent.spawn(self.ws.send, msg)
+
+    def _send_worker(self):
+        """ """
+        for msg in self._send_queue:
+            # self.ws.send(msg)
+            gevent.spawn(self.ws.send, msg)
+            gevent.idle()
+            if self._send_queue.empty():
+                break
 
     def _recv_loop(self):
-        self.browser_running = True
-        while self.browser_running:
+        """ """
+        self.connected = True
+        while self.connected:
             rmsg = self.ws.recv()
             if rmsg:
                 self._on_message(rmsg)
 
     def _on_message(self, rmsg):
+        """
+        :param rmsg:
+        """
         msg = json.loads(rmsg)
         id = msg.get("id")
         if id is not None and id in self._callbacks:
@@ -105,6 +145,13 @@ class Client(ProtocolMixin, EventEmitter):
 
     @classmethod
     def JSON(cls, url=None, host=DEFAULT_HOST, port=DEFAULT_PORT, secure=False):
+        """
+
+        :param url:  (Default value = None)
+        :param host:  (Default value = DEFAULT_HOST)
+        :param port:  (Default value = DEFAULT_PORT)
+        :param secure:  (Default value = False)
+        """
         url = ensure_url(url, host, port, secure, "/json")
         try:
             res = requests.get(url)
@@ -114,6 +161,14 @@ class Client(ProtocolMixin, EventEmitter):
 
     @classmethod
     def Activate(cls, id, url=None, host=DEFAULT_HOST, port=DEFAULT_PORT, secure=False):
+        """
+
+        :param id: 
+        :param url:  (Default value = None)
+        :param host:  (Default value = DEFAULT_HOST)
+        :param port:  (Default value = DEFAULT_PORT)
+        :param secure:  (Default value = False)
+        """
         url = ensure_url(url, host, port, secure, "/json/activate")
         try:
             res = requests.get(urljoin(url, id))
@@ -123,6 +178,14 @@ class Client(ProtocolMixin, EventEmitter):
 
     @classmethod
     def List(cls, url=None, host=DEFAULT_HOST, port=DEFAULT_PORT, secure=False):
+        """
+
+        :param url:  (Default value = None)
+        :param host:  (Default value = DEFAULT_HOST)
+        :param port:  (Default value = DEFAULT_PORT)
+        :param secure:  (Default value = False)
+
+        """
         url = ensure_url(url, host, port, secure, "json/list")
         try:
             res = requests.get(url)
@@ -132,6 +195,14 @@ class Client(ProtocolMixin, EventEmitter):
 
     @classmethod
     def New(cls, url=None, host=DEFAULT_HOST, port=DEFAULT_PORT, secure=False):
+        """
+
+        :param url:  (Default value = None)
+        :param host:  (Default value = DEFAULT_HOST)
+        :param port:  (Default value = DEFAULT_PORT)
+        :param secure:  (Default value = False)
+
+        """
         url = ensure_url(url, host, port, secure, "/json/new")
         try:
             res = requests.get(url)
@@ -141,6 +212,14 @@ class Client(ProtocolMixin, EventEmitter):
 
     @classmethod
     def Protocol(cls, url=None, host=DEFAULT_HOST, port=DEFAULT_PORT, secure=False):
+        """
+
+        :param url:  (Default value = None)
+        :param host:  (Default value = DEFAULT_HOST)
+        :param port:  (Default value = DEFAULT_PORT)
+        :param secure:  (Default value = False)
+
+        """
         url = ensure_url(url, host, port, secure, "/json/protocol")
         try:
             res = requests.get(url)
@@ -150,6 +229,14 @@ class Client(ProtocolMixin, EventEmitter):
 
     @classmethod
     def Version(cls, url=None, host=DEFAULT_HOST, port=DEFAULT_PORT, secure=False):
+        """
+
+        :param url:  (Default value = None)
+        :param host:  (Default value = DEFAULT_HOST)
+        :param port:  (Default value = DEFAULT_PORT)
+        :param secure:  (Default value = False)
+
+        """
         url = ensure_url(url, host, port, secure, "/json/version")
         try:
             res = requests.get(url)

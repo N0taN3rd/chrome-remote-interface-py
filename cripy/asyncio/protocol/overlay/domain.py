@@ -1,6 +1,6 @@
 from typing import Any, List, Optional, Union
-from cripy.asyncio.protocol.runtime import types as Runtime
 from cripy.asyncio.protocol.page import types as Page
+from cripy.asyncio.protocol.runtime import types as Runtime
 from cripy.asyncio.protocol.dom import types as DOM
 from cripy.asyncio.protocol.overlay import events as Events
 from cripy.asyncio.protocol.overlay import types as Types
@@ -29,15 +29,15 @@ class Overlay(object):
         """
         Disables domain notifications.
         """
-        mayberes = await self.chrome.send('Overlay.disable')
-        return mayberes
+        res = await self.chrome.send('Overlay.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
         Enables domain notifications.
         """
-        mayberes = await self.chrome.send('Overlay.enable')
-        return mayberes
+        res = await self.chrome.send('Overlay.enable')
+        return res
 
     async def getHighlightObjectForTest(self, nodeId: int) -> Optional[dict]:
         """
@@ -49,16 +49,15 @@ class Overlay(object):
         msg_dict = dict()
         if nodeId is not None:
             msg_dict['nodeId'] = nodeId
-        mayberes = await self.chrome.send('Overlay.getHighlightObjectForTest', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Overlay.getHighlightObjectForTest', msg_dict)
         return res
 
     async def hideHighlight(self) -> Optional[dict]:
         """
         Hides any highlight.
         """
-        mayberes = await self.chrome.send('Overlay.hideHighlight')
-        return mayberes
+        res = await self.chrome.send('Overlay.hideHighlight')
+        return res
 
     async def highlightFrame(self, frameId: str, contentColor: Optional[dict] = None, contentOutlineColor: Optional[dict] = None) -> Optional[dict]:
         """
@@ -78,8 +77,8 @@ class Overlay(object):
             msg_dict['contentColor'] = contentColor
         if contentOutlineColor is not None:
             msg_dict['contentOutlineColor'] = contentOutlineColor
-        mayberes = await self.chrome.send('Overlay.highlightFrame', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Overlay.highlightFrame', msg_dict)
+        return res
 
     async def highlightNode(self, highlightConfig: dict, nodeId: Optional[int] = None, backendNodeId: Optional[int] = None, objectId: Optional[str] = None) -> Optional[dict]:
         """
@@ -104,8 +103,8 @@ objectId must be specified.
             msg_dict['backendNodeId'] = backendNodeId
         if objectId is not None:
             msg_dict['objectId'] = objectId
-        mayberes = await self.chrome.send('Overlay.highlightNode', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Overlay.highlightNode', msg_dict)
+        return res
 
     async def highlightQuad(self, quad: list, color: Optional[dict] = None, outlineColor: Optional[dict] = None) -> Optional[dict]:
         """
@@ -125,8 +124,8 @@ objectId must be specified.
             msg_dict['color'] = color
         if outlineColor is not None:
             msg_dict['outlineColor'] = outlineColor
-        mayberes = await self.chrome.send('Overlay.highlightQuad', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Overlay.highlightQuad', msg_dict)
+        return res
 
     async def highlightRect(self, x: int, y: int, width: int, height: int, color: Optional[dict] = None, outlineColor: Optional[dict] = None) -> Optional[dict]:
         """
@@ -158,8 +157,8 @@ objectId must be specified.
             msg_dict['color'] = color
         if outlineColor is not None:
             msg_dict['outlineColor'] = outlineColor
-        mayberes = await self.chrome.send('Overlay.highlightRect', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Overlay.highlightRect', msg_dict)
+        return res
 
     async def setInspectMode(self, mode: str, highlightConfig: Optional[dict] = None) -> Optional[dict]:
         """
@@ -176,8 +175,8 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
             msg_dict['mode'] = mode
         if highlightConfig is not None:
             msg_dict['highlightConfig'] = highlightConfig
-        mayberes = await self.chrome.send('Overlay.setInspectMode', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Overlay.setInspectMode', msg_dict)
+        return res
 
     async def setPausedInDebuggerMessage(self, message: Optional[str] = None) -> Optional[dict]:
         """
@@ -187,8 +186,8 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         msg_dict = dict()
         if message is not None:
             msg_dict['message'] = message
-        mayberes = await self.chrome.send('Overlay.setPausedInDebuggerMessage', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Overlay.setPausedInDebuggerMessage', msg_dict)
+        return res
 
     async def setShowDebugBorders(self, show: bool) -> Optional[dict]:
         """
@@ -200,8 +199,8 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         msg_dict = dict()
         if show is not None:
             msg_dict['show'] = show
-        mayberes = await self.chrome.send('Overlay.setShowDebugBorders', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Overlay.setShowDebugBorders', msg_dict)
+        return res
 
     async def setShowFPSCounter(self, show: bool) -> Optional[dict]:
         """
@@ -213,8 +212,8 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         msg_dict = dict()
         if show is not None:
             msg_dict['show'] = show
-        mayberes = await self.chrome.send('Overlay.setShowFPSCounter', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Overlay.setShowFPSCounter', msg_dict)
+        return res
 
     async def setShowPaintRects(self, result: bool) -> Optional[dict]:
         """
@@ -226,8 +225,8 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         msg_dict = dict()
         if result is not None:
             msg_dict['result'] = result
-        mayberes = await self.chrome.send('Overlay.setShowPaintRects', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Overlay.setShowPaintRects', msg_dict)
+        return res
 
     async def setShowScrollBottleneckRects(self, show: bool) -> Optional[dict]:
         """
@@ -239,8 +238,8 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         msg_dict = dict()
         if show is not None:
             msg_dict['show'] = show
-        mayberes = await self.chrome.send('Overlay.setShowScrollBottleneckRects', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Overlay.setShowScrollBottleneckRects', msg_dict)
+        return res
 
     async def setShowViewportSizeOnResize(self, show: bool) -> Optional[dict]:
         """
@@ -252,8 +251,8 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         msg_dict = dict()
         if show is not None:
             msg_dict['show'] = show
-        mayberes = await self.chrome.send('Overlay.setShowViewportSizeOnResize', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Overlay.setShowViewportSizeOnResize', msg_dict)
+        return res
 
     async def setSuspended(self, suspended: bool) -> Optional[dict]:
         """
@@ -263,8 +262,26 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         msg_dict = dict()
         if suspended is not None:
             msg_dict['suspended'] = suspended
-        mayberes = await self.chrome.send('Overlay.setSuspended', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Overlay.setSuspended', msg_dict)
+        return res
+
+    def inspectNodeRequested(self, fn, once=False):
+        if once:
+            self.chrome.once("Overlay.inspectNodeRequested", fn)
+        else:
+            self.chrome.on("Overlay.inspectNodeRequested", fn)
+
+    def nodeHighlightRequested(self, fn, once=False):
+        if once:
+            self.chrome.once("Overlay.nodeHighlightRequested", fn)
+        else:
+            self.chrome.on("Overlay.nodeHighlightRequested", fn)
+
+    def screenshotRequested(self, fn, once=False):
+        if once:
+            self.chrome.once("Overlay.screenshotRequested", fn)
+        else:
+            self.chrome.on("Overlay.screenshotRequested", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

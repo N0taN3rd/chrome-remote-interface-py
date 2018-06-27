@@ -63,6 +63,9 @@ class Log(object):
         wres = self.chrome.send('Log.stopViolationsReport')
         return wres.get()
 
+    def entryAdded(self, fn, once=False):
+        self.chrome.on("Log.entryAdded", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

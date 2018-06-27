@@ -23,15 +23,15 @@ class DOMSnapshot(object):
         """
         Disables DOM snapshot agent for the given page.
         """
-        mayberes = await self.chrome.send('DOMSnapshot.disable')
-        return mayberes
+        res = await self.chrome.send('DOMSnapshot.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
         Enables DOM snapshot agent for the given page.
         """
-        mayberes = await self.chrome.send('DOMSnapshot.enable')
-        return mayberes
+        res = await self.chrome.send('DOMSnapshot.enable')
+        return res
 
     async def getSnapshot(self, computedStyleWhitelist: List[str], includeEventListeners: Optional[bool] = None, includePaintOrder: Optional[bool] = None, includeUserAgentShadowTree: Optional[bool] = None) -> Optional[dict]:
         """
@@ -58,8 +58,7 @@ flattened.
             msg_dict['includePaintOrder'] = includePaintOrder
         if includeUserAgentShadowTree is not None:
             msg_dict['includeUserAgentShadowTree'] = includeUserAgentShadowTree
-        mayberes = await self.chrome.send('DOMSnapshot.getSnapshot', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('DOMSnapshot.getSnapshot', msg_dict)
         res['domNodes'] = Types.DOMNode.safe_create_from_list(res['domNodes'])
         res['layoutTreeNodes'] = Types.LayoutTreeNode.safe_create_from_list(res['layoutTreeNodes'])
         res['computedStyles'] = Types.ComputedStyle.safe_create_from_list(res['computedStyles'])

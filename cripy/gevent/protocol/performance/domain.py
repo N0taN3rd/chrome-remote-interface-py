@@ -38,6 +38,9 @@ class Performance(object):
         res['metrics'] = Types.Metric.safe_create_from_list(res['metrics'])
         return res
 
+    def metrics(self, fn, once=False):
+        self.chrome.on("Performance.metrics", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

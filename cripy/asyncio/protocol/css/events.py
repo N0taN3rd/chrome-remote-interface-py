@@ -12,13 +12,13 @@ __all__ = [
     "CSS_EVENTS_NS"
 ]
 
+
 class FontsUpdatedEvent(object):
     """
     Fires whenever a web font is updated.
 	 A non-empty font parameter indicates a successfully loaded web font
     """
 
-    event = "CSS.fontsUpdated"
 
     __slots__ = ["font"]
 
@@ -87,7 +87,6 @@ class MediaQueryResultChangedEvent(dict):
     Fires whenever a MediaQuery result changes (for example, after a browser window has been resized.) The current implementation considers only viewport-dependent media features.
     """
 
-    event = "CSS.mediaQueryResultChanged"
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -144,7 +143,6 @@ class StyleSheetAddedEvent(object):
     Fired whenever an active document stylesheet is added.
     """
 
-    event = "CSS.styleSheetAdded"
 
     __slots__ = ["header"]
 
@@ -213,7 +211,6 @@ class StyleSheetChangedEvent(object):
     Fired whenever a stylesheet is changed as a result of the client operation.
     """
 
-    event = "CSS.styleSheetChanged"
 
     __slots__ = ["styleSheetId"]
 
@@ -282,7 +279,6 @@ class StyleSheetRemovedEvent(object):
     Fired whenever an active document stylesheet is removed.
     """
 
-    event = "CSS.styleSheetRemoved"
 
     __slots__ = ["styleSheetId"]
 

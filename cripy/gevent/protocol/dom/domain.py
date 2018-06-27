@@ -1,5 +1,5 @@
-from cripy.gevent.protocol.runtime import types as Runtime
 from cripy.gevent.protocol.page import types as Page
+from cripy.gevent.protocol.runtime import types as Runtime
 from cripy.gevent.protocol.dom import events as Events
 from cripy.gevent.protocol.dom import types as Types
 
@@ -689,6 +689,48 @@ $x functions).
         wres = self.chrome.send('DOM.getFrameOwner', msg_dict)
         res = wres.get()
         return res
+
+    def attributeModified(self, fn, once=False):
+        self.chrome.on("DOM.attributeModified", fn, once=once)
+
+    def attributeRemoved(self, fn, once=False):
+        self.chrome.on("DOM.attributeRemoved", fn, once=once)
+
+    def characterDataModified(self, fn, once=False):
+        self.chrome.on("DOM.characterDataModified", fn, once=once)
+
+    def childNodeCountUpdated(self, fn, once=False):
+        self.chrome.on("DOM.childNodeCountUpdated", fn, once=once)
+
+    def childNodeInserted(self, fn, once=False):
+        self.chrome.on("DOM.childNodeInserted", fn, once=once)
+
+    def childNodeRemoved(self, fn, once=False):
+        self.chrome.on("DOM.childNodeRemoved", fn, once=once)
+
+    def distributedNodesUpdated(self, fn, once=False):
+        self.chrome.on("DOM.distributedNodesUpdated", fn, once=once)
+
+    def documentUpdated(self, fn, once=False):
+        self.chrome.on("DOM.documentUpdated", fn, once=once)
+
+    def inlineStyleInvalidated(self, fn, once=False):
+        self.chrome.on("DOM.inlineStyleInvalidated", fn, once=once)
+
+    def pseudoElementAdded(self, fn, once=False):
+        self.chrome.on("DOM.pseudoElementAdded", fn, once=once)
+
+    def pseudoElementRemoved(self, fn, once=False):
+        self.chrome.on("DOM.pseudoElementRemoved", fn, once=once)
+
+    def setChildNodes(self, fn, once=False):
+        self.chrome.on("DOM.setChildNodes", fn, once=once)
+
+    def shadowRootPopped(self, fn, once=False):
+        self.chrome.on("DOM.shadowRootPopped", fn, once=once)
+
+    def shadowRootPushed(self, fn, once=False):
+        self.chrome.on("DOM.shadowRootPushed", fn, once=once)
 
     @staticmethod
     def get_event_classes():

@@ -10,8 +10,6 @@ __all__ = [
     "FrameResourceTree",
     "FrameResource",
     "Frame",
-    "FontSizes",
-    "FontFamilies",
     "AppManifestError",
     "PAGE_TYPE_TO_OBJECT"
 ]
@@ -797,171 +795,6 @@ class Frame(object):
             return init
 
 
-class FontSizes(object):
-    """
-    Default font sizes.
-    """
-
-    __slots__ = ["standard", "fixed"]
-
-    def __init__(self, standard=None, fixed=None):
-        """
-        :param standard: Default standard font size.
-        :type standard: Optional[int]
-        :param fixed: Default fixed font size.
-        :type fixed: Optional[int]
-        """
-        super(FontSizes, self).__init__()
-        self.standard = standard
-        self.fixed = fixed
-
-    def __repr__(self):
-        repr_args = []
-        if self.standard is not None:
-            repr_args.append("standard={!r}".format(self.standard))
-        if self.fixed is not None:
-            repr_args.append("fixed={!r}".format(self.fixed))
-        return "FontSizes(" + ', '.join(repr_args)+")"
-
-    @staticmethod
-    def safe_create(init):
-        """
-        Safely create FontSizes from the supplied init dictionary.
-
-        This method will not throw an Exception and will return a new instance of FontSizes
-        if init is not None otherwise returns init or None if init was None.
-
-        :param init: The init dictionary
-        :type init: dict
-        :return: A new instance of FontSizes if creation did not fail
-        :rtype: Optional[Union[dict, FontSizes]]
-        """
-        if init is not None:
-            try:
-                ourselves = FontSizes(**init)
-                return ourselves
-            except Exception:
-                return init
-        else:
-            return init
-
-    @staticmethod
-    def safe_create_from_list(init):
-        """
-        Safely create a new list FontSizess from the supplied list of dictionaries.
-
-        This method will not throw an Exception and will return a new list FontSizes instances
-        if init is not None otherwise returns init or None if init was None.
-
-        :param init: The init dictionary
-        :type init: dict
-        :return: A new list of FontSizes instances if creation did not fail
-        :rtype: Optional[List[Union[dict, FontSizes]]]
-        """
-        if init is not None:
-            list_of_self = []
-            for it in init:
-                list_of_self.append(FontSizes.safe_create(it))
-            return list_of_self
-        else:
-            return init
-
-
-class FontFamilies(object):
-    """
-    Generic font families collection.
-    """
-
-    __slots__ = ["standard", "fixed", "serif", "sansSerif", "cursive", "fantasy", "pictograph"]
-
-    def __init__(self, standard=None, fixed=None, serif=None, sansSerif=None, cursive=None, fantasy=None, pictograph=None):
-        """
-        :param standard: The standard font-family.
-        :type standard: Optional[str]
-        :param fixed: The fixed font-family.
-        :type fixed: Optional[str]
-        :param serif: The serif font-family.
-        :type serif: Optional[str]
-        :param sansSerif: The sansSerif font-family.
-        :type sansSerif: Optional[str]
-        :param cursive: The cursive font-family.
-        :type cursive: Optional[str]
-        :param fantasy: The fantasy font-family.
-        :type fantasy: Optional[str]
-        :param pictograph: The pictograph font-family.
-        :type pictograph: Optional[str]
-        """
-        super(FontFamilies, self).__init__()
-        self.standard = standard
-        self.fixed = fixed
-        self.serif = serif
-        self.sansSerif = sansSerif
-        self.cursive = cursive
-        self.fantasy = fantasy
-        self.pictograph = pictograph
-
-    def __repr__(self):
-        repr_args = []
-        if self.standard is not None:
-            repr_args.append("standard={!r}".format(self.standard))
-        if self.fixed is not None:
-            repr_args.append("fixed={!r}".format(self.fixed))
-        if self.serif is not None:
-            repr_args.append("serif={!r}".format(self.serif))
-        if self.sansSerif is not None:
-            repr_args.append("sansSerif={!r}".format(self.sansSerif))
-        if self.cursive is not None:
-            repr_args.append("cursive={!r}".format(self.cursive))
-        if self.fantasy is not None:
-            repr_args.append("fantasy={!r}".format(self.fantasy))
-        if self.pictograph is not None:
-            repr_args.append("pictograph={!r}".format(self.pictograph))
-        return "FontFamilies(" + ', '.join(repr_args)+")"
-
-    @staticmethod
-    def safe_create(init):
-        """
-        Safely create FontFamilies from the supplied init dictionary.
-
-        This method will not throw an Exception and will return a new instance of FontFamilies
-        if init is not None otherwise returns init or None if init was None.
-
-        :param init: The init dictionary
-        :type init: dict
-        :return: A new instance of FontFamilies if creation did not fail
-        :rtype: Optional[Union[dict, FontFamilies]]
-        """
-        if init is not None:
-            try:
-                ourselves = FontFamilies(**init)
-                return ourselves
-            except Exception:
-                return init
-        else:
-            return init
-
-    @staticmethod
-    def safe_create_from_list(init):
-        """
-        Safely create a new list FontFamiliess from the supplied list of dictionaries.
-
-        This method will not throw an Exception and will return a new list FontFamilies instances
-        if init is not None otherwise returns init or None if init was None.
-
-        :param init: The init dictionary
-        :type init: dict
-        :return: A new list of FontFamilies instances if creation did not fail
-        :rtype: Optional[List[Union[dict, FontFamilies]]]
-        """
-        if init is not None:
-            list_of_self = []
-            for it in init:
-                list_of_self.append(FontFamilies.safe_create(it))
-            return list_of_self
-        else:
-            return init
-
-
 class AppManifestError(object):
     """
     Error while paring app manifest.
@@ -1052,7 +885,5 @@ PAGE_TYPE_TO_OBJECT = {
     "FrameResourceTree": FrameResourceTree,
     "FrameResource": FrameResource,
     "Frame": Frame,
-    "FontSizes": FontSizes,
-    "FontFamilies": FontFamilies,
     "AppManifestError": AppManifestError,
 }

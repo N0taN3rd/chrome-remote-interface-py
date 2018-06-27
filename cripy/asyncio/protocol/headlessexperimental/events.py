@@ -8,12 +8,12 @@ __all__ = [
     "HEADLESSEXPERIMENTAL_EVENTS_NS"
 ]
 
+
 class NeedsBeginFramesChangedEvent(object):
     """
     Issued when the target starts or stops needing BeginFrames.
     """
 
-    event = "HeadlessExperimental.needsBeginFramesChanged"
 
     __slots__ = ["needsBeginFrames"]
 

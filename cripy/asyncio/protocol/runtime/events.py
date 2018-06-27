@@ -15,12 +15,12 @@ __all__ = [
     "RUNTIME_EVENTS_NS"
 ]
 
+
 class BindingCalledEvent(object):
     """
     Notification is issued every time when binding is called.
     """
 
-    event = "Runtime.bindingCalled"
 
     __slots__ = ["name", "payload", "executionContextId"]
 
@@ -99,7 +99,6 @@ class ConsoleAPICalledEvent(object):
     Issued when console API was called.
     """
 
-    event = "Runtime.consoleAPICalled"
 
     __slots__ = ["type", "args", "executionContextId", "timestamp", "stackTrace", "context"]
 
@@ -193,7 +192,6 @@ class ExceptionRevokedEvent(object):
     Issued when unhandled exception was revoked.
     """
 
-    event = "Runtime.exceptionRevoked"
 
     __slots__ = ["reason", "exceptionId"]
 
@@ -267,7 +265,6 @@ class ExceptionThrownEvent(object):
     Issued when exception was thrown and unhandled.
     """
 
-    event = "Runtime.exceptionThrown"
 
     __slots__ = ["timestamp", "exceptionDetails"]
 
@@ -341,7 +338,6 @@ class ExecutionContextCreatedEvent(object):
     Issued when new execution context is created.
     """
 
-    event = "Runtime.executionContextCreated"
 
     __slots__ = ["context"]
 
@@ -410,7 +406,6 @@ class ExecutionContextDestroyedEvent(object):
     Issued when execution context is destroyed.
     """
 
-    event = "Runtime.executionContextDestroyed"
 
     __slots__ = ["executionContextId"]
 
@@ -479,7 +474,6 @@ class ExecutionContextsClearedEvent(dict):
     Issued when all executionContexts were cleared in browser
     """
 
-    event = "Runtime.executionContextsCleared"
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -536,7 +530,6 @@ class InspectRequestedEvent(object):
     Issued when object should be inspected (for example, as a result of inspect() command line API call).
     """
 
-    event = "Runtime.inspectRequested"
 
     __slots__ = ["object", "hints"]
 

@@ -10,9 +10,9 @@ __all__ = [
     "SERVICEWORKER_EVENTS_NS"
 ]
 
+
 class WorkerErrorReportedEvent(object):
 
-    event = "ServiceWorker.workerErrorReported"
 
     __slots__ = ["errorMessage"]
 
@@ -78,7 +78,6 @@ class WorkerErrorReportedEvent(object):
 
 class WorkerRegistrationUpdatedEvent(object):
 
-    event = "ServiceWorker.workerRegistrationUpdated"
 
     __slots__ = ["registrations"]
 
@@ -144,7 +143,6 @@ class WorkerRegistrationUpdatedEvent(object):
 
 class WorkerVersionUpdatedEvent(object):
 
-    event = "ServiceWorker.workerVersionUpdated"
 
     __slots__ = ["versions"]
 

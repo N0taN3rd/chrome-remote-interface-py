@@ -42,8 +42,7 @@ other objects in their object group.
             msg_dict['returnByValue'] = returnByValue
         if generatePreview is not None:
             msg_dict['generatePreview'] = generatePreview
-        mayberes = await self.chrome.send('Runtime.awaitPromise', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Runtime.awaitPromise', msg_dict)
         res['result'] = Types.RemoteObject.safe_create(res['result'])
         res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
         return res
@@ -95,8 +94,7 @@ inherited from the target object.
             msg_dict['executionContextId'] = executionContextId
         if objectGroup is not None:
             msg_dict['objectGroup'] = objectGroup
-        mayberes = await self.chrome.send('Runtime.callFunctionOn', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Runtime.callFunctionOn', msg_dict)
         res['result'] = Types.RemoteObject.safe_create(res['result'])
         res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
         return res
@@ -123,8 +121,7 @@ inherited from the target object.
             msg_dict['persistScript'] = persistScript
         if executionContextId is not None:
             msg_dict['executionContextId'] = executionContextId
-        mayberes = await self.chrome.send('Runtime.compileScript', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Runtime.compileScript', msg_dict)
         res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
         return res
 
@@ -132,15 +129,15 @@ inherited from the target object.
         """
         Disables reporting of execution contexts creation.
         """
-        mayberes = await self.chrome.send('Runtime.disable')
-        return mayberes
+        res = await self.chrome.send('Runtime.disable')
+        return res
 
     async def discardConsoleEntries(self) -> Optional[dict]:
         """
         Discards collected exceptions and console API calls.
         """
-        mayberes = await self.chrome.send('Runtime.discardConsoleEntries')
-        return mayberes
+        res = await self.chrome.send('Runtime.discardConsoleEntries')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
@@ -148,8 +145,8 @@ inherited from the target object.
 When the reporting gets enabled the event will be sent immediately for each existing execution
 context.
         """
-        mayberes = await self.chrome.send('Runtime.enable')
-        return mayberes
+        res = await self.chrome.send('Runtime.enable')
+        return res
 
     async def evaluate(self, expression: str, objectGroup: Optional[str] = None, includeCommandLineAPI: Optional[bool] = None, silent: Optional[bool] = None, contextId: Optional[int] = None, returnByValue: Optional[bool] = None, generatePreview: Optional[bool] = None, userGesture: Optional[bool] = None, awaitPromise: Optional[bool] = None, throwOnSideEffect: Optional[bool] = None, timeout: Optional[float] = None) -> Optional[dict]:
         """
@@ -201,8 +198,7 @@ context.
             msg_dict['throwOnSideEffect'] = throwOnSideEffect
         if timeout is not None:
             msg_dict['timeout'] = timeout
-        mayberes = await self.chrome.send('Runtime.evaluate', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Runtime.evaluate', msg_dict)
         res['result'] = Types.RemoteObject.safe_create(res['result'])
         res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
         return res
@@ -211,8 +207,7 @@ context.
         """
         Returns the isolate id.
         """
-        mayberes = await self.chrome.send('Runtime.getIsolateId')
-        res = await mayberes
+        res = await self.chrome.send('Runtime.getIsolateId')
         return res
 
     async def getHeapUsage(self) -> Optional[dict]:
@@ -220,8 +215,7 @@ context.
         Returns the JavaScript heap usage.
 It is the total usage of the corresponding isolate not scoped to a particular Runtime.
         """
-        mayberes = await self.chrome.send('Runtime.getHeapUsage')
-        res = await mayberes
+        res = await self.chrome.send('Runtime.getHeapUsage')
         return res
 
     async def getProperties(self, objectId: str, ownProperties: Optional[bool] = None, accessorPropertiesOnly: Optional[bool] = None, generatePreview: Optional[bool] = None) -> Optional[dict]:
@@ -247,8 +241,7 @@ object.
             msg_dict['accessorPropertiesOnly'] = accessorPropertiesOnly
         if generatePreview is not None:
             msg_dict['generatePreview'] = generatePreview
-        mayberes = await self.chrome.send('Runtime.getProperties', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Runtime.getProperties', msg_dict)
         res['result'] = Types.PropertyDescriptor.safe_create_from_list(res['result'])
         res['internalProperties'] = Types.InternalPropertyDescriptor.safe_create_from_list(res['internalProperties'])
         res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
@@ -264,8 +257,7 @@ object.
         msg_dict = dict()
         if executionContextId is not None:
             msg_dict['executionContextId'] = executionContextId
-        mayberes = await self.chrome.send('Runtime.globalLexicalScopeNames', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Runtime.globalLexicalScopeNames', msg_dict)
         return res
 
     async def queryObjects(self, prototypeObjectId: str, objectGroup: Optional[str] = None) -> Optional[dict]:
@@ -280,8 +272,7 @@ object.
             msg_dict['prototypeObjectId'] = prototypeObjectId
         if objectGroup is not None:
             msg_dict['objectGroup'] = objectGroup
-        mayberes = await self.chrome.send('Runtime.queryObjects', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Runtime.queryObjects', msg_dict)
         res['objects'] = Types.RemoteObject.safe_create(res['objects'])
         return res
 
@@ -295,8 +286,8 @@ object.
         msg_dict = dict()
         if objectId is not None:
             msg_dict['objectId'] = objectId
-        mayberes = await self.chrome.send('Runtime.releaseObject', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Runtime.releaseObject', msg_dict)
+        return res
 
     async def releaseObjectGroup(self, objectGroup: str) -> Optional[dict]:
         """
@@ -308,15 +299,15 @@ object.
         msg_dict = dict()
         if objectGroup is not None:
             msg_dict['objectGroup'] = objectGroup
-        mayberes = await self.chrome.send('Runtime.releaseObjectGroup', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Runtime.releaseObjectGroup', msg_dict)
+        return res
 
     async def runIfWaitingForDebugger(self) -> Optional[dict]:
         """
         Tells inspected instance to run if it was waiting for debugger to attach.
         """
-        mayberes = await self.chrome.send('Runtime.runIfWaitingForDebugger')
-        return mayberes
+        res = await self.chrome.send('Runtime.runIfWaitingForDebugger')
+        return res
 
     async def runScript(self, scriptId: str, executionContextId: Optional[int] = None, objectGroup: Optional[str] = None, silent: Optional[bool] = None, includeCommandLineAPI: Optional[bool] = None, returnByValue: Optional[bool] = None, generatePreview: Optional[bool] = None, awaitPromise: Optional[bool] = None) -> Optional[dict]:
         """
@@ -356,8 +347,7 @@ object.
             msg_dict['generatePreview'] = generatePreview
         if awaitPromise is not None:
             msg_dict['awaitPromise'] = awaitPromise
-        mayberes = await self.chrome.send('Runtime.runScript', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Runtime.runScript', msg_dict)
         res['result'] = Types.RemoteObject.safe_create(res['result'])
         res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
         return res
@@ -372,8 +362,8 @@ object.
         msg_dict = dict()
         if maxDepth is not None:
             msg_dict['maxDepth'] = maxDepth
-        mayberes = await self.chrome.send('Runtime.setAsyncCallStackDepth', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Runtime.setAsyncCallStackDepth', msg_dict)
+        return res
 
     async def setCustomObjectFormatterEnabled(self, enabled: bool) -> Optional[dict]:
         """
@@ -383,8 +373,8 @@ object.
         msg_dict = dict()
         if enabled is not None:
             msg_dict['enabled'] = enabled
-        mayberes = await self.chrome.send('Runtime.setCustomObjectFormatterEnabled', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Runtime.setCustomObjectFormatterEnabled', msg_dict)
+        return res
 
     async def setMaxCallStackSizeToCapture(self, size: int) -> Optional[dict]:
         """
@@ -394,16 +384,16 @@ object.
         msg_dict = dict()
         if size is not None:
             msg_dict['size'] = size
-        mayberes = await self.chrome.send('Runtime.setMaxCallStackSizeToCapture', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Runtime.setMaxCallStackSizeToCapture', msg_dict)
+        return res
 
     async def terminateExecution(self) -> Optional[dict]:
         """
         Terminate current or next JavaScript execution.
 Will cancel the termination when the outer-most script execution ends.
         """
-        mayberes = await self.chrome.send('Runtime.terminateExecution')
-        return mayberes
+        res = await self.chrome.send('Runtime.terminateExecution')
+        return res
 
     async def addBinding(self, name: str, executionContextId: Optional[int] = None) -> Optional[dict]:
         """
@@ -426,8 +416,8 @@ Each binding function call produces Runtime.bindingCalled notification.
             msg_dict['name'] = name
         if executionContextId is not None:
             msg_dict['executionContextId'] = executionContextId
-        mayberes = await self.chrome.send('Runtime.addBinding', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Runtime.addBinding', msg_dict)
+        return res
 
     async def removeBinding(self, name: str) -> Optional[dict]:
         """
@@ -440,8 +430,56 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
         msg_dict = dict()
         if name is not None:
             msg_dict['name'] = name
-        mayberes = await self.chrome.send('Runtime.removeBinding', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Runtime.removeBinding', msg_dict)
+        return res
+
+    def bindingCalled(self, fn, once=False):
+        if once:
+            self.chrome.once("Runtime.bindingCalled", fn)
+        else:
+            self.chrome.on("Runtime.bindingCalled", fn)
+
+    def consoleAPICalled(self, fn, once=False):
+        if once:
+            self.chrome.once("Runtime.consoleAPICalled", fn)
+        else:
+            self.chrome.on("Runtime.consoleAPICalled", fn)
+
+    def exceptionRevoked(self, fn, once=False):
+        if once:
+            self.chrome.once("Runtime.exceptionRevoked", fn)
+        else:
+            self.chrome.on("Runtime.exceptionRevoked", fn)
+
+    def exceptionThrown(self, fn, once=False):
+        if once:
+            self.chrome.once("Runtime.exceptionThrown", fn)
+        else:
+            self.chrome.on("Runtime.exceptionThrown", fn)
+
+    def executionContextCreated(self, fn, once=False):
+        if once:
+            self.chrome.once("Runtime.executionContextCreated", fn)
+        else:
+            self.chrome.on("Runtime.executionContextCreated", fn)
+
+    def executionContextDestroyed(self, fn, once=False):
+        if once:
+            self.chrome.once("Runtime.executionContextDestroyed", fn)
+        else:
+            self.chrome.on("Runtime.executionContextDestroyed", fn)
+
+    def executionContextsCleared(self, fn, once=False):
+        if once:
+            self.chrome.once("Runtime.executionContextsCleared", fn)
+        else:
+            self.chrome.on("Runtime.executionContextsCleared", fn)
+
+    def inspectRequested(self, fn, once=False):
+        if once:
+            self.chrome.once("Runtime.inspectRequested", fn)
+        else:
+            self.chrome.on("Runtime.inspectRequested", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

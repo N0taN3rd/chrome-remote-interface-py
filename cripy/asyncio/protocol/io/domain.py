@@ -27,8 +27,8 @@ class IO(object):
         msg_dict = dict()
         if handle is not None:
             msg_dict['handle'] = handle
-        mayberes = await self.chrome.send('IO.close', msg_dict)
-        return mayberes
+        res = await self.chrome.send('IO.close', msg_dict)
+        return res
 
     async def read(self, handle: str, offset: Optional[int] = None, size: Optional[int] = None) -> Optional[dict]:
         """
@@ -48,8 +48,7 @@ class IO(object):
             msg_dict['offset'] = offset
         if size is not None:
             msg_dict['size'] = size
-        mayberes = await self.chrome.send('IO.read', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('IO.read', msg_dict)
         return res
 
     async def resolveBlob(self, objectId: str) -> Optional[dict]:
@@ -62,8 +61,7 @@ class IO(object):
         msg_dict = dict()
         if objectId is not None:
             msg_dict['objectId'] = objectId
-        mayberes = await self.chrome.send('IO.resolveBlob', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('IO.resolveBlob', msg_dict)
         return res
 
     @staticmethod

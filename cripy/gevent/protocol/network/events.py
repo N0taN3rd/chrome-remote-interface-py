@@ -291,9 +291,9 @@ class LoadingFinishedEvent(object):
     Fired when HTTP request has finished loading.
     """
 
-    __slots__ = ["requestId", "timestamp", "encodedDataLength", "shouldReportCorbBlocking"]
+    __slots__ = ["requestId", "timestamp", "encodedDataLength", "blockedCrossSiteDocument"]
 
-    def __init__(self, requestId, timestamp, encodedDataLength, shouldReportCorbBlocking=None):
+    def __init__(self, requestId, timestamp, encodedDataLength, blockedCrossSiteDocument=None):
         """
         Create a new instance of LoadingFinishedEvent
 
@@ -303,14 +303,14 @@ class LoadingFinishedEvent(object):
         :type timestamp: float
         :param encodedDataLength: Total number of bytes received for this request.
         :type encodedDataLength: float
-        :param shouldReportCorbBlocking: Set when 1) response was blocked by Cross-Origin Read Blocking and also 2) this needs to be reported to the DevTools console.
-        :type shouldReportCorbBlocking: Optional[bool]
+        :param blockedCrossSiteDocument: Set when response was blocked due to being cross-site document response.
+        :type blockedCrossSiteDocument: Optional[bool]
         """
         super(LoadingFinishedEvent, self).__init__()
         self.requestId = requestId
         self.timestamp = timestamp
         self.encodedDataLength = encodedDataLength
-        self.shouldReportCorbBlocking = shouldReportCorbBlocking
+        self.blockedCrossSiteDocument = blockedCrossSiteDocument
 
     def __repr__(self):
         repr_args = []
@@ -320,8 +320,8 @@ class LoadingFinishedEvent(object):
             repr_args.append("timestamp={!r}".format(self.timestamp))
         if self.encodedDataLength is not None:
             repr_args.append("encodedDataLength={!r}".format(self.encodedDataLength))
-        if self.shouldReportCorbBlocking is not None:
-            repr_args.append("shouldReportCorbBlocking={!r}".format(self.shouldReportCorbBlocking))
+        if self.blockedCrossSiteDocument is not None:
+            repr_args.append("blockedCrossSiteDocument={!r}".format(self.blockedCrossSiteDocument))
         return "LoadingFinishedEvent(" + ', '.join(repr_args)+")"
 
     @staticmethod

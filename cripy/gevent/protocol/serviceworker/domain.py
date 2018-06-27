@@ -146,6 +146,15 @@ class ServiceWorker(object):
         wres = self.chrome.send('ServiceWorker.updateRegistration', msg_dict)
         return wres.get()
 
+    def workerErrorReported(self, fn, once=False):
+        self.chrome.on("ServiceWorker.workerErrorReported", fn, once=once)
+
+    def workerRegistrationUpdated(self, fn, once=False):
+        self.chrome.on("ServiceWorker.workerRegistrationUpdated", fn, once=once)
+
+    def workerVersionUpdated(self, fn, once=False):
+        self.chrome.on("ServiceWorker.workerVersionUpdated", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

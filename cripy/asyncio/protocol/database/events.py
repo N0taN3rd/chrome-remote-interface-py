@@ -8,9 +8,9 @@ __all__ = [
     "DATABASE_EVENTS_NS"
 ]
 
+
 class AddDatabaseEvent(object):
 
-    event = "Database.addDatabase"
 
     __slots__ = ["database"]
 
@@ -22,7 +22,7 @@ class AddDatabaseEvent(object):
         :type database: dict
         """
         super().__init__()
-        self.database = Database.safe_create(database)
+        self.database = DatabaseT.safe_create(database)
 
     def __repr__(self) -> str:
         repr_args = []

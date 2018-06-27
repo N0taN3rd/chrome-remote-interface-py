@@ -11,9 +11,9 @@ __all__ = [
     "DOMSTORAGE_EVENTS_NS"
 ]
 
+
 class DomStorageItemAddedEvent(object):
 
-    event = "DOMStorage.domStorageItemAdded"
 
     __slots__ = ["storageId", "key", "newValue"]
 
@@ -89,7 +89,6 @@ class DomStorageItemAddedEvent(object):
 
 class DomStorageItemRemovedEvent(object):
 
-    event = "DOMStorage.domStorageItemRemoved"
 
     __slots__ = ["storageId", "key"]
 
@@ -160,7 +159,6 @@ class DomStorageItemRemovedEvent(object):
 
 class DomStorageItemUpdatedEvent(object):
 
-    event = "DOMStorage.domStorageItemUpdated"
 
     __slots__ = ["storageId", "key", "oldValue", "newValue"]
 
@@ -241,7 +239,6 @@ class DomStorageItemUpdatedEvent(object):
 
 class DomStorageItemsClearedEvent(object):
 
-    event = "DOMStorage.domStorageItemsCleared"
 
     __slots__ = ["storageId"]
 

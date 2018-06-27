@@ -8,12 +8,12 @@ __all__ = [
     "CONSOLE_EVENTS_NS"
 ]
 
+
 class MessageAddedEvent(object):
     """
     Issued when new console message is added.
     """
 
-    event = "Console.messageAdded"
 
     __slots__ = ["message"]
 

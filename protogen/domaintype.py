@@ -12,7 +12,6 @@ __all__ = ["DomainType"]
 
 
 class DomainType(FRefCollector):
-
     def __init__(self, domain: str, dt: dict) -> None:
         super().__init__()
         self.domain = domain

@@ -62,6 +62,12 @@ associated with some application cache.
         res = wres.get()
         return res
 
+    def applicationCacheStatusUpdated(self, fn, once=False):
+        self.chrome.on("ApplicationCache.applicationCacheStatusUpdated", fn, once=once)
+
+    def networkStateUpdated(self, fn, once=False):
+        self.chrome.on("ApplicationCache.networkStateUpdated", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

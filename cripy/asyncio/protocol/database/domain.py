@@ -20,15 +20,15 @@ class Database(object):
         """
         Disables database tracking, prevents database events from being sent to the client.
         """
-        mayberes = await self.chrome.send('Database.disable')
-        return mayberes
+        res = await self.chrome.send('Database.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
         Enables database tracking, database events will now be delivered to the client.
         """
-        mayberes = await self.chrome.send('Database.enable')
-        return mayberes
+        res = await self.chrome.send('Database.enable')
+        return res
 
     async def executeSQL(self, databaseId: str, query: str) -> Optional[dict]:
         """
@@ -42,8 +42,7 @@ class Database(object):
             msg_dict['databaseId'] = databaseId
         if query is not None:
             msg_dict['query'] = query
-        mayberes = await self.chrome.send('Database.executeSQL', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Database.executeSQL', msg_dict)
         res['sqlError'] = Types.Error.safe_create(res['sqlError'])
         return res
 
@@ -55,9 +54,14 @@ class Database(object):
         msg_dict = dict()
         if databaseId is not None:
             msg_dict['databaseId'] = databaseId
-        mayberes = await self.chrome.send('Database.getDatabaseTableNames', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Database.getDatabaseTableNames', msg_dict)
         return res
+
+    def addDatabase(self, fn, once=False):
+        if once:
+            self.chrome.once("Database.addDatabase", fn)
+        else:
+            self.chrome.on("Database.addDatabase", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

@@ -118,6 +118,12 @@ coverage needs to have started.
         res['result'] = Types.ScriptTypeProfile.safe_create_from_list(res['result'])
         return res
 
+    def consoleProfileFinished(self, fn, once=False):
+        self.chrome.on("Profiler.consoleProfileFinished", fn, once=once)
+
+    def consoleProfileStarted(self, fn, once=False):
+        self.chrome.on("Profiler.consoleProfileStarted", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

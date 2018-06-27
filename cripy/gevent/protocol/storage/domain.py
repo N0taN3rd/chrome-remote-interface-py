@@ -99,6 +99,18 @@ class Storage(object):
         wres = self.chrome.send('Storage.untrackIndexedDBForOrigin', msg_dict)
         return wres.get()
 
+    def cacheStorageContentUpdated(self, fn, once=False):
+        self.chrome.on("Storage.cacheStorageContentUpdated", fn, once=once)
+
+    def cacheStorageListUpdated(self, fn, once=False):
+        self.chrome.on("Storage.cacheStorageListUpdated", fn, once=once)
+
+    def indexedDBContentUpdated(self, fn, once=False):
+        self.chrome.on("Storage.indexedDBContentUpdated", fn, once=once)
+
+    def indexedDBListUpdated(self, fn, once=False):
+        self.chrome.on("Storage.indexedDBListUpdated", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

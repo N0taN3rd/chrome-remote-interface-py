@@ -24,15 +24,15 @@ class Security(object):
         """
         Disables tracking security state changes.
         """
-        mayberes = await self.chrome.send('Security.disable')
-        return mayberes
+        res = await self.chrome.send('Security.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
         Enables tracking security state changes.
         """
-        mayberes = await self.chrome.send('Security.enable')
-        return mayberes
+        res = await self.chrome.send('Security.enable')
+        return res
 
     async def setIgnoreCertificateErrors(self, ignore: bool) -> Optional[dict]:
         """
@@ -44,8 +44,8 @@ class Security(object):
         msg_dict = dict()
         if ignore is not None:
             msg_dict['ignore'] = ignore
-        mayberes = await self.chrome.send('Security.setIgnoreCertificateErrors', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Security.setIgnoreCertificateErrors', msg_dict)
+        return res
 
     async def handleCertificateError(self, eventId: int, action: str) -> Optional[dict]:
         """
@@ -61,8 +61,8 @@ class Security(object):
             msg_dict['eventId'] = eventId
         if action is not None:
             msg_dict['action'] = action
-        mayberes = await self.chrome.send('Security.handleCertificateError', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Security.handleCertificateError', msg_dict)
+        return res
 
     async def setOverrideCertificateErrors(self, override: bool) -> Optional[dict]:
         """
@@ -75,8 +75,20 @@ be handled by the DevTools client and should be answered with `handleCertificate
         msg_dict = dict()
         if override is not None:
             msg_dict['override'] = override
-        mayberes = await self.chrome.send('Security.setOverrideCertificateErrors', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Security.setOverrideCertificateErrors', msg_dict)
+        return res
+
+    def certificateError(self, fn, once=False):
+        if once:
+            self.chrome.once("Security.certificateError", fn)
+        else:
+            self.chrome.on("Security.certificateError", fn)
+
+    def securityStateChanged(self, fn, once=False):
+        if once:
+            self.chrome.once("Security.securityStateChanged", fn)
+        else:
+            self.chrome.on("Security.securityStateChanged", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

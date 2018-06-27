@@ -151,6 +151,12 @@ class LayerTree(object):
         res = wres.get()
         return res
 
+    def layerPainted(self, fn, once=False):
+        self.chrome.on("LayerTree.layerPainted", fn, once=once)
+
+    def layerTreeDidChange(self, fn, once=False):
+        self.chrome.on("LayerTree.layerTreeDidChange", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

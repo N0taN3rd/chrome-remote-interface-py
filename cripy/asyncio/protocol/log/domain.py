@@ -26,23 +26,23 @@ class Log(object):
         """
         Clears the log.
         """
-        mayberes = await self.chrome.send('Log.clear')
-        return mayberes
+        res = await self.chrome.send('Log.clear')
+        return res
 
     async def disable(self) -> Optional[dict]:
         """
         Disables log domain, prevents further log entries from being reported to the client.
         """
-        mayberes = await self.chrome.send('Log.disable')
-        return mayberes
+        res = await self.chrome.send('Log.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
         Enables log domain, sends the entries collected so far to the client by means of the
 `entryAdded` notification.
         """
-        mayberes = await self.chrome.send('Log.enable')
-        return mayberes
+        res = await self.chrome.send('Log.enable')
+        return res
 
     async def startViolationsReport(self, config: List[dict]) -> Optional[dict]:
         """
@@ -54,15 +54,21 @@ class Log(object):
         msg_dict = dict()
         if config is not None:
             msg_dict['config'] = config
-        mayberes = await self.chrome.send('Log.startViolationsReport', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Log.startViolationsReport', msg_dict)
+        return res
 
     async def stopViolationsReport(self) -> Optional[dict]:
         """
         Stop violation reporting.
         """
-        mayberes = await self.chrome.send('Log.stopViolationsReport')
-        return mayberes
+        res = await self.chrome.send('Log.stopViolationsReport')
+        return res
+
+    def entryAdded(self, fn, once=False):
+        if once:
+            self.chrome.once("Log.entryAdded", fn)
+        else:
+            self.chrome.on("Log.entryAdded", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

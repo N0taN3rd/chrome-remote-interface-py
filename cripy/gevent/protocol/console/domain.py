@@ -43,6 +43,9 @@ class Console(object):
         wres = self.chrome.send('Console.enable')
         return wres.get()
 
+    def messageAdded(self, fn, once=False):
+        self.chrome.on("Console.messageAdded", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

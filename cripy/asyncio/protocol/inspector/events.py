@@ -9,13 +9,13 @@ __all__ = [
     "INSPECTOR_EVENTS_NS"
 ]
 
+
 class DetachedEvent(object):
     """
     Fired when remote debugging connection is about to be terminated.
 	Contains detach reason.
     """
 
-    event = "Inspector.detached"
 
     __slots__ = ["reason"]
 
@@ -84,7 +84,6 @@ class TargetCrashedEvent(dict):
     Fired when debugging target has crashed
     """
 
-    event = "Inspector.targetCrashed"
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -141,7 +140,6 @@ class TargetReloadedAfterCrashEvent(dict):
     Fired when debugging target has reloaded after crash
     """
 
-    event = "Inspector.targetReloadedAfterCrash"
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)

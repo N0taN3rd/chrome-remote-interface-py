@@ -2,7 +2,6 @@ from collections import namedtuple
 from cripy.gevent.protocol.runtime.types import *
 
 __all__ = [
-    "BindingCalledEvent",
     "ConsoleAPICalledEvent",
     "ExceptionRevokedEvent",
     "ExceptionThrownEvent",
@@ -13,83 +12,6 @@ __all__ = [
     "RUNTIME_EVENTS_TO_CLASS",
     "RUNTIME_EVENTS_NS"
 ]
-
-
-class BindingCalledEvent(object):
-    """
-    Notification is issued every time when binding is called.
-    """
-
-    __slots__ = ["name", "payload", "executionContextId"]
-
-    def __init__(self, name, payload, executionContextId):
-        """
-        Create a new instance of BindingCalledEvent
-
-        :param name: The name
-        :type name: str
-        :param payload: The payload
-        :type payload: str
-        :param executionContextId: Identifier of the context where the call was made.
-        :type executionContextId: int
-        """
-        super(BindingCalledEvent, self).__init__()
-        self.name = name
-        self.payload = payload
-        self.executionContextId = executionContextId
-
-    def __repr__(self):
-        repr_args = []
-        if self.name is not None:
-            repr_args.append("name={!r}".format(self.name))
-        if self.payload is not None:
-            repr_args.append("payload={!r}".format(self.payload))
-        if self.executionContextId is not None:
-            repr_args.append("executionContextId={!r}".format(self.executionContextId))
-        return "BindingCalledEvent(" + ', '.join(repr_args)+")"
-
-    @staticmethod
-    def safe_create(init):
-        """
-        Safely create BindingCalledEvent from the supplied init dictionary.
-
-        This method will not throw an Exception and will return a new instance of BindingCalledEvent
-        if init is not None otherwise returns init or None if init was None.
-
-        :param init: The init dictionary
-        :type init: dict
-        :return: A new instance of BindingCalledEvent if creation did not fail
-        :rtype: Optional[Union[dict, BindingCalledEvent]]
-        """
-        if init is not None:
-            try:
-                ourselves = BindingCalledEvent(**init)
-                return ourselves
-            except Exception:
-                return init
-        else:
-            return init
-
-    @staticmethod
-    def safe_create_from_list(init):
-        """
-        Safely create a new list BindingCalledEvents from the supplied list of dictionaries.
-
-        This method will not throw an Exception and will return a new list BindingCalledEvent instances
-        if init is not None otherwise returns init or None if init was None.
-
-        :param init: The init dictionary
-        :type init: dict
-        :return: A new list of BindingCalledEvent instances if creation did not fail
-        :rtype: Optional[List[Union[dict, BindingCalledEvent]]]
-        """
-        if init is not None:
-            list_of_self = []
-            for it in init:
-                list_of_self.append(BindingCalledEvent.safe_create(it))
-            return list_of_self
-        else:
-            return init
 
 
 class ConsoleAPICalledEvent(object):
@@ -118,7 +40,7 @@ class ConsoleAPICalledEvent(object):
         """
         super(ConsoleAPICalledEvent, self).__init__()
         self.type = type
-        self.args = args
+        self.args = RemoteObject.safe_create_from_list(args)
         self.executionContextId = executionContextId
         self.timestamp = timestamp
         self.stackTrace = StackTrace.safe_create(stackTrace)
@@ -587,7 +509,6 @@ class InspectRequestedEvent(object):
 
 
 RUNTIME_EVENTS_TO_CLASS = {
-   "Runtime.bindingCalled": BindingCalledEvent,
    "Runtime.consoleAPICalled": ConsoleAPICalledEvent,
    "Runtime.exceptionRevoked": ExceptionRevokedEvent,
    "Runtime.exceptionThrown": ExceptionThrownEvent,
@@ -597,10 +518,9 @@ RUNTIME_EVENTS_TO_CLASS = {
    "Runtime.inspectRequested": InspectRequestedEvent,
 }
 
-RuntimeNS = namedtuple("RuntimeNS", ["BindingCalled", "ConsoleAPICalled", "ExceptionRevoked", "ExceptionThrown", "ExecutionContextCreated", "ExecutionContextDestroyed", "ExecutionContextsCleared", "InspectRequested"])
+RuntimeNS = namedtuple("RuntimeNS", ["ConsoleAPICalled", "ExceptionRevoked", "ExceptionThrown", "ExecutionContextCreated", "ExecutionContextDestroyed", "ExecutionContextsCleared", "InspectRequested"])
 
 RUNTIME_EVENTS_NS = RuntimeNS(
-  BindingCalled="Runtime.bindingCalled",
   ConsoleAPICalled="Runtime.consoleAPICalled",
   ExceptionRevoked="Runtime.exceptionRevoked",
   ExceptionThrown="Runtime.exceptionThrown",

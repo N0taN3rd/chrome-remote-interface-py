@@ -10,9 +10,9 @@ __all__ = [
     "APPLICATIONCACHE_EVENTS_NS"
 ]
 
+
 class ApplicationCacheStatusUpdatedEvent(object):
 
-    event = "ApplicationCache.applicationCacheStatusUpdated"
 
     __slots__ = ["frameId", "manifestURL", "status"]
 
@@ -88,7 +88,6 @@ class ApplicationCacheStatusUpdatedEvent(object):
 
 class NetworkStateUpdatedEvent(object):
 
-    event = "ApplicationCache.networkStateUpdated"
 
     __slots__ = ["isNowOnline"]
 

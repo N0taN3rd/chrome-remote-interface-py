@@ -506,6 +506,21 @@ mutated manually.
         wres = self.chrome.send('Debugger.stepOver')
         return wres.get()
 
+    def breakpointResolved(self, fn, once=False):
+        self.chrome.on("Debugger.breakpointResolved", fn, once=once)
+
+    def paused(self, fn, once=False):
+        self.chrome.on("Debugger.paused", fn, once=once)
+
+    def resumed(self, fn, once=False):
+        self.chrome.on("Debugger.resumed", fn, once=once)
+
+    def scriptFailedToParse(self, fn, once=False):
+        self.chrome.on("Debugger.scriptFailedToParse", fn, once=once)
+
+    def scriptParsed(self, fn, once=False):
+        self.chrome.on("Debugger.scriptParsed", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

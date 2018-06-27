@@ -23,8 +23,8 @@ class CacheStorage(object):
         msg_dict = dict()
         if cacheId is not None:
             msg_dict['cacheId'] = cacheId
-        mayberes = await self.chrome.send('CacheStorage.deleteCache', msg_dict)
-        return mayberes
+        res = await self.chrome.send('CacheStorage.deleteCache', msg_dict)
+        return res
 
     async def deleteEntry(self, cacheId: str, request: str) -> Optional[dict]:
         """
@@ -40,8 +40,8 @@ class CacheStorage(object):
             msg_dict['cacheId'] = cacheId
         if request is not None:
             msg_dict['request'] = request
-        mayberes = await self.chrome.send('CacheStorage.deleteEntry', msg_dict)
-        return mayberes
+        res = await self.chrome.send('CacheStorage.deleteEntry', msg_dict)
+        return res
 
     async def requestCacheNames(self, securityOrigin: str) -> Optional[dict]:
         """
@@ -53,8 +53,7 @@ class CacheStorage(object):
         msg_dict = dict()
         if securityOrigin is not None:
             msg_dict['securityOrigin'] = securityOrigin
-        mayberes = await self.chrome.send('CacheStorage.requestCacheNames', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CacheStorage.requestCacheNames', msg_dict)
         res['caches'] = Types.Cache.safe_create_from_list(res['caches'])
         return res
 
@@ -72,8 +71,7 @@ class CacheStorage(object):
             msg_dict['cacheId'] = cacheId
         if requestURL is not None:
             msg_dict['requestURL'] = requestURL
-        mayberes = await self.chrome.send('CacheStorage.requestCachedResponse', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CacheStorage.requestCachedResponse', msg_dict)
         res['response'] = Types.CachedResponse.safe_create(res['response'])
         return res
 
@@ -95,8 +93,7 @@ class CacheStorage(object):
             msg_dict['skipCount'] = skipCount
         if pageSize is not None:
             msg_dict['pageSize'] = pageSize
-        mayberes = await self.chrome.send('CacheStorage.requestEntries', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('CacheStorage.requestEntries', msg_dict)
         res['cacheDataEntries'] = Types.DataEntry.safe_create_from_list(res['cacheDataEntries'])
         return res
 

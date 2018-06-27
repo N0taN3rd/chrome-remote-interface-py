@@ -26,23 +26,29 @@ class Console(object):
         """
         Does nothing.
         """
-        mayberes = await self.chrome.send('Console.clearMessages')
-        return mayberes
+        res = await self.chrome.send('Console.clearMessages')
+        return res
 
     async def disable(self) -> Optional[dict]:
         """
         Disables console domain, prevents further console messages from being reported to the client.
         """
-        mayberes = await self.chrome.send('Console.disable')
-        return mayberes
+        res = await self.chrome.send('Console.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
         Enables console domain, sends the messages collected so far to the client by means of the
 `messageAdded` notification.
         """
-        mayberes = await self.chrome.send('Console.enable')
-        return mayberes
+        res = await self.chrome.send('Console.enable')
+        return res
+
+    def messageAdded(self, fn, once=False):
+        if once:
+            self.chrome.once("Console.messageAdded", fn)
+        else:
+            self.chrome.on("Console.messageAdded", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

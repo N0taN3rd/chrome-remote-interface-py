@@ -30,8 +30,8 @@ class Target(object):
         msg_dict = dict()
         if targetId is not None:
             msg_dict['targetId'] = targetId
-        mayberes = await self.chrome.send('Target.activateTarget', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Target.activateTarget', msg_dict)
+        return res
 
     async def attachToTarget(self, targetId: str) -> Optional[dict]:
         """
@@ -43,8 +43,7 @@ class Target(object):
         msg_dict = dict()
         if targetId is not None:
             msg_dict['targetId'] = targetId
-        mayberes = await self.chrome.send('Target.attachToTarget', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Target.attachToTarget', msg_dict)
         return res
 
     async def closeTarget(self, targetId: str) -> Optional[dict]:
@@ -57,8 +56,7 @@ class Target(object):
         msg_dict = dict()
         if targetId is not None:
             msg_dict['targetId'] = targetId
-        mayberes = await self.chrome.send('Target.closeTarget', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Target.closeTarget', msg_dict)
         return res
 
     async def exposeDevToolsProtocol(self, targetId: str, bindingName: Optional[str] = None) -> Optional[dict]:
@@ -82,24 +80,22 @@ The object has the follwing API:
             msg_dict['targetId'] = targetId
         if bindingName is not None:
             msg_dict['bindingName'] = bindingName
-        mayberes = await self.chrome.send('Target.exposeDevToolsProtocol', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Target.exposeDevToolsProtocol', msg_dict)
+        return res
 
     async def createBrowserContext(self) -> Optional[dict]:
         """
         Creates a new empty BrowserContext. Similar to an incognito profile but you can have more than
 one.
         """
-        mayberes = await self.chrome.send('Target.createBrowserContext')
-        res = await mayberes
+        res = await self.chrome.send('Target.createBrowserContext')
         return res
 
     async def getBrowserContexts(self) -> Optional[dict]:
         """
         Returns all browser contexts created with `Target.createBrowserContext` method.
         """
-        mayberes = await self.chrome.send('Target.getBrowserContexts')
-        res = await mayberes
+        res = await self.chrome.send('Target.getBrowserContexts')
         return res
 
     async def createTarget(self, url: str, width: Optional[int] = None, height: Optional[int] = None, browserContextId: Optional[str] = None, enableBeginFrameControl: Optional[bool] = None) -> Optional[dict]:
@@ -128,8 +124,7 @@ one.
             msg_dict['browserContextId'] = browserContextId
         if enableBeginFrameControl is not None:
             msg_dict['enableBeginFrameControl'] = enableBeginFrameControl
-        mayberes = await self.chrome.send('Target.createTarget', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Target.createTarget', msg_dict)
         return res
 
     async def detachFromTarget(self, sessionId: Optional[str] = None, targetId: Optional[str] = None) -> Optional[dict]:
@@ -146,8 +141,8 @@ one.
             msg_dict['sessionId'] = sessionId
         if targetId is not None:
             msg_dict['targetId'] = targetId
-        mayberes = await self.chrome.send('Target.detachFromTarget', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Target.detachFromTarget', msg_dict)
+        return res
 
     async def disposeBrowserContext(self, browserContextId: str) -> Optional[dict]:
         """
@@ -160,8 +155,8 @@ beforeunload hooks.
         msg_dict = dict()
         if browserContextId is not None:
             msg_dict['browserContextId'] = browserContextId
-        mayberes = await self.chrome.send('Target.disposeBrowserContext', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Target.disposeBrowserContext', msg_dict)
+        return res
 
     async def getTargetInfo(self, targetId: str) -> Optional[dict]:
         """
@@ -173,8 +168,7 @@ beforeunload hooks.
         msg_dict = dict()
         if targetId is not None:
             msg_dict['targetId'] = targetId
-        mayberes = await self.chrome.send('Target.getTargetInfo', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Target.getTargetInfo', msg_dict)
         res['targetInfo'] = Types.TargetInfo.safe_create(res['targetInfo'])
         return res
 
@@ -182,8 +176,7 @@ beforeunload hooks.
         """
         Retrieves a list of available targets.
         """
-        mayberes = await self.chrome.send('Target.getTargets')
-        res = await mayberes
+        res = await self.chrome.send('Target.getTargets')
         res['targetInfos'] = Types.TargetInfo.safe_create_from_list(res['targetInfos'])
         return res
 
@@ -205,8 +198,8 @@ beforeunload hooks.
             msg_dict['sessionId'] = sessionId
         if targetId is not None:
             msg_dict['targetId'] = targetId
-        mayberes = await self.chrome.send('Target.sendMessageToTarget', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Target.sendMessageToTarget', msg_dict)
+        return res
 
     async def setAutoAttach(self, autoAttach: bool, waitForDebuggerOnStart: bool) -> Optional[dict]:
         """
@@ -224,8 +217,8 @@ automatically detaches from all currently attached targets.
             msg_dict['autoAttach'] = autoAttach
         if waitForDebuggerOnStart is not None:
             msg_dict['waitForDebuggerOnStart'] = waitForDebuggerOnStart
-        mayberes = await self.chrome.send('Target.setAutoAttach', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Target.setAutoAttach', msg_dict)
+        return res
 
     async def setDiscoverTargets(self, discover: bool) -> Optional[dict]:
         """
@@ -238,8 +231,8 @@ automatically detaches from all currently attached targets.
         msg_dict = dict()
         if discover is not None:
             msg_dict['discover'] = discover
-        mayberes = await self.chrome.send('Target.setDiscoverTargets', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Target.setDiscoverTargets', msg_dict)
+        return res
 
     async def setRemoteLocations(self, locations: List[dict]) -> Optional[dict]:
         """
@@ -252,8 +245,50 @@ automatically detaches from all currently attached targets.
         msg_dict = dict()
         if locations is not None:
             msg_dict['locations'] = locations
-        mayberes = await self.chrome.send('Target.setRemoteLocations', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Target.setRemoteLocations', msg_dict)
+        return res
+
+    def attachedToTarget(self, fn, once=False):
+        if once:
+            self.chrome.once("Target.attachedToTarget", fn)
+        else:
+            self.chrome.on("Target.attachedToTarget", fn)
+
+    def detachedFromTarget(self, fn, once=False):
+        if once:
+            self.chrome.once("Target.detachedFromTarget", fn)
+        else:
+            self.chrome.on("Target.detachedFromTarget", fn)
+
+    def receivedMessageFromTarget(self, fn, once=False):
+        if once:
+            self.chrome.once("Target.receivedMessageFromTarget", fn)
+        else:
+            self.chrome.on("Target.receivedMessageFromTarget", fn)
+
+    def targetCreated(self, fn, once=False):
+        if once:
+            self.chrome.once("Target.targetCreated", fn)
+        else:
+            self.chrome.on("Target.targetCreated", fn)
+
+    def targetDestroyed(self, fn, once=False):
+        if once:
+            self.chrome.once("Target.targetDestroyed", fn)
+        else:
+            self.chrome.on("Target.targetDestroyed", fn)
+
+    def targetCrashed(self, fn, once=False):
+        if once:
+            self.chrome.once("Target.targetCrashed", fn)
+        else:
+            self.chrome.on("Target.targetCrashed", fn)
+
+    def targetInfoChanged(self, fn, once=False):
+        if once:
+            self.chrome.once("Target.targetInfoChanged", fn)
+        else:
+            self.chrome.on("Target.targetInfoChanged", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

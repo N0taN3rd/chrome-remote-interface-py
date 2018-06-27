@@ -1,11 +1,12 @@
 import ujson as json
 import os.path
 from pathlib import Path
+from typing import Optional, List, Tuple
 
 from jinja2 import Template
 from protogen.domain import Domain
 from protogen.typer import TYPER
-from stringcase import pascalcase
+from stringcase import pascalcase, snakecase
 
 output_dir_fp = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "cripy/asyncio/protocol/")
@@ -95,7 +96,7 @@ def generate_types(d, template, dp) -> None:
             )
 
 
-def generate_events(d: Domain, template, dp: Path) -> None:
+def generate_events(d: Domain, template, dp: Path) -> Optional[List[Tuple[str, str]]]:
     if d.has_events:
         eventsp = dp.joinpath("events.py")
         with eventsp.open("w") as tout:
@@ -111,7 +112,7 @@ def generate_events(d: Domain, template, dp: Path) -> None:
                         if param.type.is_ref and not param.type.is_foreign_ref:
                             types.add(param.type)
                 event_to_clazz.append((e.scoped_name, e.class_name))
-            timports.discard('IO')
+            timports.discard("IO")
             tout.write(
                 template.render(
                     pascalcase=pascalcase,
@@ -125,9 +126,11 @@ def generate_events(d: Domain, template, dp: Path) -> None:
                     event_ns_init=event_ns_init,
                 )
             )
+            return event_to_clazz
+    return None
 
 
-def generate_commands(d: Domain, template, dp: Path) -> None:
+def generate_commands(d: Domain, template, dp: Path, events) -> None:
     if d.has_commands:
         eventsp = dp.joinpath("domain.py")
         with eventsp.open("w") as tout:
@@ -138,7 +141,7 @@ def generate_commands(d: Domain, template, dp: Path) -> None:
                 if e.has_foreign_refs:
                     timports.update(e.foreign_refs)
             timports.discard(d.domain)
-            timports.discard('IO')
+            timports.discard("IO")
             tout.write(
                 template.render(
                     d=d,
@@ -147,10 +150,16 @@ def generate_commands(d: Domain, template, dp: Path) -> None:
                     timports=timports,
                     types=types,
                     slotgen=slotgen,
+                    events=events,
+                    onEvent=onEvent,
                 )
             )
     else:
         print(d)
+
+
+def onEvent(fe):
+    return fe.split(".")[1]
 
 
 def generate_domain_init(d: Domain, template, dp: Path) -> None:
@@ -190,8 +199,8 @@ def gen() -> None:
         if not dp.exists():
             dp.mkdir(parents=True)
         generate_types(d, domain_template, dp)
-        generate_events(d, event_template, dp)
-        generate_commands(d, command_template, dp)
+        events = generate_events(d, event_template, dp)
+        generate_commands(d, command_template, dp, events)
         generate_domain_init(d, DOMAIN_INIT, dp)
     init = Path(output_dir_fp, "__init__.py")
     with init.open("w") as out:
@@ -214,7 +223,7 @@ def gen_no_types() -> None:
     domains = []
     mixin_imports = []
     allstrs = []
-    for which, fp in [js_json_fp, browser_json_fp]:
+    for which, fp in [("all", "data/protocol.json")]:
         data = read_json(fp)
         for domain in data["domains"]:
             mixin_imports.append((domain["domain"].lower(), domain["domain"]))
@@ -225,8 +234,8 @@ def gen_no_types() -> None:
         if not dp_sync.exists():
             dp_sync.mkdir(parents=True)
         generate_types(d, domain_template, dp_sync)
-        generate_events(d, event_template, dp_sync)
-        generate_commands(d, command_template_sync, dp_sync)
+        events = generate_events(d, event_template, dp_sync)
+        generate_commands(d, command_template_sync, dp_sync, events)
         generate_domain_init(d, DOMAIN_INIT, dp_sync)
     init = Path(output_dirsync_fp, "__init__.py")
     with init.open("w") as out:

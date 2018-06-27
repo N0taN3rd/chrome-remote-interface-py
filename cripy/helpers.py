@@ -4,6 +4,12 @@ __all__ = ["make_namespace"]
 
 
 def make_namespace(name, events):
+    """
+
+    :param name: 
+    :param events: 
+
+    """
     fields = []
     for field in events.keys():
         fields.append(field)

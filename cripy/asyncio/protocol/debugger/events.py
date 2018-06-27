@@ -13,12 +13,12 @@ __all__ = [
     "DEBUGGER_EVENTS_NS"
 ]
 
+
 class BreakpointResolvedEvent(object):
     """
     Fired when breakpoint is resolved to an actual script and location.
     """
 
-    event = "Debugger.breakpointResolved"
 
     __slots__ = ["breakpointId", "location"]
 
@@ -92,7 +92,6 @@ class PausedEvent(object):
     Fired when the virtual machine stopped on breakpoint or exception or any other stop criteria.
     """
 
-    event = "Debugger.paused"
 
     __slots__ = ["callFrames", "reason", "data", "hitBreakpoints", "asyncStackTrace", "asyncStackTraceId", "asyncCallStackTraceId"]
 
@@ -191,7 +190,6 @@ class ResumedEvent(dict):
     Fired when the virtual machine resumed execution.
     """
 
-    event = "Debugger.resumed"
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -248,7 +246,6 @@ class ScriptFailedToParseEvent(object):
     Fired when virtual machine fails to parse the script.
     """
 
-    event = "Debugger.scriptFailedToParse"
 
     __slots__ = ["scriptId", "url", "startLine", "startColumn", "endLine", "endColumn", "executionContextId", "hash", "executionContextAuxData", "sourceMapURL", "hasSourceURL", "isModule", "length", "stackTrace"]
 
@@ -383,7 +380,6 @@ class ScriptParsedEvent(object):
 	This event is also fired for all known and uncollected scripts upon enabling debugger.
     """
 
-    event = "Debugger.scriptParsed"
 
     __slots__ = ["scriptId", "url", "startLine", "startColumn", "endLine", "endColumn", "executionContextId", "hash", "executionContextAuxData", "isLiveEdit", "sourceMapURL", "hasSourceURL", "isModule", "length", "stackTrace"]
 

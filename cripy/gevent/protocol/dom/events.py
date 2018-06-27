@@ -481,7 +481,7 @@ class DistributedNodesUpdatedEvent(object):
         """
         super(DistributedNodesUpdatedEvent, self).__init__()
         self.insertionPointId = insertionPointId
-        self.distributedNodes = distributedNodes
+        self.distributedNodes = BackendNode.safe_create_from_list(distributedNodes)
 
     def __repr__(self):
         repr_args = []
@@ -818,7 +818,7 @@ class SetChildNodesEvent(object):
         """
         super(SetChildNodesEvent, self).__init__()
         self.parentId = parentId
-        self.nodes = nodes
+        self.nodes = Node.safe_create_from_list(nodes)
 
     def __repr__(self):
         repr_args = []

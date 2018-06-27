@@ -25,7 +25,7 @@ class MetricsEvent(object):
         :type title: str
         """
         super(MetricsEvent, self).__init__()
-        self.metrics = metrics
+        self.metrics = Metric.safe_create_from_list(metrics)
         self.title = title
 
     def __repr__(self):

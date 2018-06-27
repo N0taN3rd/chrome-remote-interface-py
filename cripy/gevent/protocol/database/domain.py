@@ -58,6 +58,9 @@ class Database(object):
         res = wres.get()
         return res
 
+    def addDatabase(self, fn, once=False):
+        self.chrome.on("Database.addDatabase", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

@@ -8,12 +8,12 @@ __all__ = [
     "LOG_EVENTS_NS"
 ]
 
+
 class EntryAddedEvent(object):
     """
     Issued when new message was logged.
     """
 
-    event = "Log.entryAdded"
 
     __slots__ = ["entry"]
 

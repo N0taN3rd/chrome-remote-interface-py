@@ -21,12 +21,12 @@ __all__ = [
     "DOM_EVENTS_NS"
 ]
 
+
 class AttributeModifiedEvent(object):
     """
     Fired when `Element`'s attribute is modified.
     """
 
-    event = "DOM.attributeModified"
 
     __slots__ = ["nodeId", "name", "value"]
 
@@ -105,7 +105,6 @@ class AttributeRemovedEvent(object):
     Fired when `Element`'s attribute is removed.
     """
 
-    event = "DOM.attributeRemoved"
 
     __slots__ = ["nodeId", "name"]
 
@@ -179,7 +178,6 @@ class CharacterDataModifiedEvent(object):
     Mirrors `DOMCharacterDataModified` event.
     """
 
-    event = "DOM.characterDataModified"
 
     __slots__ = ["nodeId", "characterData"]
 
@@ -253,7 +251,6 @@ class ChildNodeCountUpdatedEvent(object):
     Fired when `Container`'s child node count has changed.
     """
 
-    event = "DOM.childNodeCountUpdated"
 
     __slots__ = ["nodeId", "childNodeCount"]
 
@@ -327,7 +324,6 @@ class ChildNodeInsertedEvent(object):
     Mirrors `DOMNodeInserted` event.
     """
 
-    event = "DOM.childNodeInserted"
 
     __slots__ = ["parentNodeId", "previousNodeId", "node"]
 
@@ -406,7 +402,6 @@ class ChildNodeRemovedEvent(object):
     Mirrors `DOMNodeRemoved` event.
     """
 
-    event = "DOM.childNodeRemoved"
 
     __slots__ = ["parentNodeId", "nodeId"]
 
@@ -480,7 +475,6 @@ class DistributedNodesUpdatedEvent(object):
     Called when distrubution is changed.
     """
 
-    event = "DOM.distributedNodesUpdated"
 
     __slots__ = ["insertionPointId", "distributedNodes"]
 
@@ -555,7 +549,6 @@ class DocumentUpdatedEvent(dict):
 	Node ids are no longer valid.
     """
 
-    event = "DOM.documentUpdated"
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -612,7 +605,6 @@ class InlineStyleInvalidatedEvent(object):
     Fired when `Element`'s inline style is modified via a CSS property modification.
     """
 
-    event = "DOM.inlineStyleInvalidated"
 
     __slots__ = ["nodeIds"]
 
@@ -681,7 +673,6 @@ class PseudoElementAddedEvent(object):
     Called when a pseudo element is added to an element.
     """
 
-    event = "DOM.pseudoElementAdded"
 
     __slots__ = ["parentId", "pseudoElement"]
 
@@ -755,7 +746,6 @@ class PseudoElementRemovedEvent(object):
     Called when a pseudo element is removed from an element.
     """
 
-    event = "DOM.pseudoElementRemoved"
 
     __slots__ = ["parentId", "pseudoElementId"]
 
@@ -830,7 +820,6 @@ class SetChildNodesEvent(object):
 	This happens upon most of the calls requesting node ids.
     """
 
-    event = "DOM.setChildNodes"
 
     __slots__ = ["parentId", "nodes"]
 
@@ -904,7 +893,6 @@ class ShadowRootPoppedEvent(object):
     Called when shadow root is popped from the element.
     """
 
-    event = "DOM.shadowRootPopped"
 
     __slots__ = ["hostId", "rootId"]
 
@@ -978,7 +966,6 @@ class ShadowRootPushedEvent(object):
     Called when shadow root is pushed into the element.
     """
 
-    event = "DOM.shadowRootPushed"
 
     __slots__ = ["hostId", "root"]
 

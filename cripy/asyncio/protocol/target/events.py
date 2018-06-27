@@ -14,12 +14,12 @@ __all__ = [
     "TARGET_EVENTS_NS"
 ]
 
+
 class AttachedToTargetEvent(object):
     """
     Issued when attached to target because of auto-attach or `attachToTarget` command.
     """
 
-    event = "Target.attachedToTarget"
 
     __slots__ = ["sessionId", "targetInfo", "waitingForDebugger"]
 
@@ -99,7 +99,6 @@ class DetachedFromTargetEvent(object):
 	Can be issued multiple times per target if multiple sessions have been attached to it.
     """
 
-    event = "Target.detachedFromTarget"
 
     __slots__ = ["sessionId", "targetId"]
 
@@ -173,7 +172,6 @@ class ReceivedMessageFromTargetEvent(object):
     Notifies about a new protocol message received from the session (as reported in `attachedToTarget` event).
     """
 
-    event = "Target.receivedMessageFromTarget"
 
     __slots__ = ["sessionId", "message", "targetId"]
 
@@ -252,7 +250,6 @@ class TargetCreatedEvent(object):
     Issued when a possible inspection target is created.
     """
 
-    event = "Target.targetCreated"
 
     __slots__ = ["targetInfo"]
 
@@ -321,7 +318,6 @@ class TargetDestroyedEvent(object):
     Issued when a target is destroyed.
     """
 
-    event = "Target.targetDestroyed"
 
     __slots__ = ["targetId"]
 
@@ -390,7 +386,6 @@ class TargetCrashedEvent(object):
     Issued when a target has crashed.
     """
 
-    event = "Target.targetCrashed"
 
     __slots__ = ["targetId", "status", "errorCode"]
 
@@ -470,7 +465,6 @@ class TargetInfoChangedEvent(object):
 	This only happens between `targetCreated` and `targetDestroyed`.
     """
 
-    event = "Target.targetInfoChanged"
 
     __slots__ = ["targetInfo"]
 

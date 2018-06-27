@@ -21,8 +21,7 @@ class Schema(object):
         """
         Returns supported domains.
         """
-        mayberes = await self.chrome.send('Schema.getDomains')
-        res = await mayberes
+        res = await self.chrome.send('Schema.getDomains')
         res['domains'] = Types.Domain.safe_create_from_list(res['domains'])
         return res
 

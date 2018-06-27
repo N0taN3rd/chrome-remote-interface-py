@@ -1,6 +1,6 @@
 from typing import Any, List, Optional, Union
-from cripy.asyncio.protocol.network import types as Network
 from cripy.asyncio.protocol.page import types as Page
+from cripy.asyncio.protocol.network import types as Network
 from cripy.asyncio.protocol.dom import types as DOM
 from cripy.asyncio.protocol.emulation import events as Events
 from cripy.asyncio.protocol.emulation import types as Types
@@ -29,30 +29,29 @@ class Emulation(object):
         """
         Tells whether emulation is supported.
         """
-        mayberes = await self.chrome.send('Emulation.canEmulate')
-        res = await mayberes
+        res = await self.chrome.send('Emulation.canEmulate')
         return res
 
     async def clearDeviceMetricsOverride(self) -> Optional[dict]:
         """
         Clears the overriden device metrics.
         """
-        mayberes = await self.chrome.send('Emulation.clearDeviceMetricsOverride')
-        return mayberes
+        res = await self.chrome.send('Emulation.clearDeviceMetricsOverride')
+        return res
 
     async def clearGeolocationOverride(self) -> Optional[dict]:
         """
         Clears the overriden Geolocation Position and Error.
         """
-        mayberes = await self.chrome.send('Emulation.clearGeolocationOverride')
-        return mayberes
+        res = await self.chrome.send('Emulation.clearGeolocationOverride')
+        return res
 
     async def resetPageScaleFactor(self) -> Optional[dict]:
         """
         Requests that page scale factor is reset to initial values.
         """
-        mayberes = await self.chrome.send('Emulation.resetPageScaleFactor')
-        return mayberes
+        res = await self.chrome.send('Emulation.resetPageScaleFactor')
+        return res
 
     async def setCPUThrottlingRate(self, rate: float) -> Optional[dict]:
         """
@@ -64,8 +63,8 @@ class Emulation(object):
         msg_dict = dict()
         if rate is not None:
             msg_dict['rate'] = rate
-        mayberes = await self.chrome.send('Emulation.setCPUThrottlingRate', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Emulation.setCPUThrottlingRate', msg_dict)
+        return res
 
     async def setDefaultBackgroundColorOverride(self, color: Optional[dict] = None) -> Optional[dict]:
         """
@@ -78,8 +77,8 @@ if the content does not specify one.
         msg_dict = dict()
         if color is not None:
             msg_dict['color'] = color
-        mayberes = await self.chrome.send('Emulation.setDefaultBackgroundColorOverride', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Emulation.setDefaultBackgroundColorOverride', msg_dict)
+        return res
 
     async def setDeviceMetricsOverride(self, width: int, height: int, deviceScaleFactor: float, mobile: bool, scale: Optional[float] = None, screenWidth: Optional[int] = None, screenHeight: Optional[int] = None, positionX: Optional[int] = None, positionY: Optional[int] = None, dontSetVisibleSize: Optional[bool] = None, screenOrientation: Optional[dict] = None, viewport: Optional[dict] = None) -> Optional[dict]:
         """
@@ -137,8 +136,8 @@ query results).
             msg_dict['screenOrientation'] = screenOrientation
         if viewport is not None:
             msg_dict['viewport'] = viewport
-        mayberes = await self.chrome.send('Emulation.setDeviceMetricsOverride', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Emulation.setDeviceMetricsOverride', msg_dict)
+        return res
 
     async def setScrollbarsHidden(self, hidden: bool) -> Optional[dict]:
         """
@@ -148,8 +147,8 @@ query results).
         msg_dict = dict()
         if hidden is not None:
             msg_dict['hidden'] = hidden
-        mayberes = await self.chrome.send('Emulation.setScrollbarsHidden', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Emulation.setScrollbarsHidden', msg_dict)
+        return res
 
     async def setDocumentCookieDisabled(self, disabled: bool) -> Optional[dict]:
         """
@@ -159,8 +158,8 @@ query results).
         msg_dict = dict()
         if disabled is not None:
             msg_dict['disabled'] = disabled
-        mayberes = await self.chrome.send('Emulation.setDocumentCookieDisabled', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Emulation.setDocumentCookieDisabled', msg_dict)
+        return res
 
     async def setEmitTouchEventsForMouse(self, enabled: bool, configuration: Optional[str] = None) -> Optional[dict]:
         """
@@ -174,8 +173,8 @@ query results).
             msg_dict['enabled'] = enabled
         if configuration is not None:
             msg_dict['configuration'] = configuration
-        mayberes = await self.chrome.send('Emulation.setEmitTouchEventsForMouse', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Emulation.setEmitTouchEventsForMouse', msg_dict)
+        return res
 
     async def setEmulatedMedia(self, media: str) -> Optional[dict]:
         """
@@ -187,8 +186,8 @@ query results).
         msg_dict = dict()
         if media is not None:
             msg_dict['media'] = media
-        mayberes = await self.chrome.send('Emulation.setEmulatedMedia', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Emulation.setEmulatedMedia', msg_dict)
+        return res
 
     async def setGeolocationOverride(self, latitude: Optional[float] = None, longitude: Optional[float] = None, accuracy: Optional[float] = None) -> Optional[dict]:
         """
@@ -209,8 +208,8 @@ unavailable.
             msg_dict['longitude'] = longitude
         if accuracy is not None:
             msg_dict['accuracy'] = accuracy
-        mayberes = await self.chrome.send('Emulation.setGeolocationOverride', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Emulation.setGeolocationOverride', msg_dict)
+        return res
 
     async def setNavigatorOverrides(self, platform: str) -> Optional[dict]:
         """
@@ -222,8 +221,8 @@ unavailable.
         msg_dict = dict()
         if platform is not None:
             msg_dict['platform'] = platform
-        mayberes = await self.chrome.send('Emulation.setNavigatorOverrides', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Emulation.setNavigatorOverrides', msg_dict)
+        return res
 
     async def setPageScaleFactor(self, pageScaleFactor: float) -> Optional[dict]:
         """
@@ -235,8 +234,8 @@ unavailable.
         msg_dict = dict()
         if pageScaleFactor is not None:
             msg_dict['pageScaleFactor'] = pageScaleFactor
-        mayberes = await self.chrome.send('Emulation.setPageScaleFactor', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Emulation.setPageScaleFactor', msg_dict)
+        return res
 
     async def setScriptExecutionDisabled(self, value: bool) -> Optional[dict]:
         """
@@ -248,8 +247,8 @@ unavailable.
         msg_dict = dict()
         if value is not None:
             msg_dict['value'] = value
-        mayberes = await self.chrome.send('Emulation.setScriptExecutionDisabled', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Emulation.setScriptExecutionDisabled', msg_dict)
+        return res
 
     async def setTouchEmulationEnabled(self, enabled: bool, maxTouchPoints: Optional[int] = None) -> Optional[dict]:
         """
@@ -265,8 +264,8 @@ unavailable.
             msg_dict['enabled'] = enabled
         if maxTouchPoints is not None:
             msg_dict['maxTouchPoints'] = maxTouchPoints
-        mayberes = await self.chrome.send('Emulation.setTouchEmulationEnabled', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Emulation.setTouchEmulationEnabled', msg_dict)
+        return res
 
     async def setVirtualTimePolicy(self, policy: str, budget: Optional[float] = None, maxVirtualTimeTaskStarvationCount: Optional[int] = None, waitForNavigation: Optional[bool] = None, initialVirtualTime: Optional[float] = None) -> Optional[dict]:
         """
@@ -295,8 +294,7 @@ the current virtual time policy.  Note this supersedes any previous time budget.
             msg_dict['waitForNavigation'] = waitForNavigation
         if initialVirtualTime is not None:
             msg_dict['initialVirtualTime'] = initialVirtualTime
-        mayberes = await self.chrome.send('Emulation.setVirtualTimePolicy', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Emulation.setVirtualTimePolicy', msg_dict)
         return res
 
     async def setVisibleSize(self, width: int, height: int) -> Optional[dict]:
@@ -315,8 +313,8 @@ on Android.
             msg_dict['width'] = width
         if height is not None:
             msg_dict['height'] = height
-        mayberes = await self.chrome.send('Emulation.setVisibleSize', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Emulation.setVisibleSize', msg_dict)
+        return res
 
     async def setUserAgentOverride(self, userAgent: str, acceptLanguage: Optional[str] = None, platform: Optional[str] = None) -> Optional[dict]:
         """
@@ -336,8 +334,26 @@ on Android.
             msg_dict['acceptLanguage'] = acceptLanguage
         if platform is not None:
             msg_dict['platform'] = platform
-        mayberes = await self.chrome.send('Emulation.setUserAgentOverride', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Emulation.setUserAgentOverride', msg_dict)
+        return res
+
+    def virtualTimeAdvanced(self, fn, once=False):
+        if once:
+            self.chrome.once("Emulation.virtualTimeAdvanced", fn)
+        else:
+            self.chrome.on("Emulation.virtualTimeAdvanced", fn)
+
+    def virtualTimeBudgetExpired(self, fn, once=False):
+        if once:
+            self.chrome.once("Emulation.virtualTimeBudgetExpired", fn)
+        else:
+            self.chrome.on("Emulation.virtualTimeBudgetExpired", fn)
+
+    def virtualTimePaused(self, fn, once=False):
+        if once:
+            self.chrome.once("Emulation.virtualTimePaused", fn)
+        else:
+            self.chrome.on("Emulation.virtualTimePaused", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

@@ -1,6 +1,6 @@
 from typing import Any, List, Optional, Union
-from cripy.asyncio.protocol.domdebugger import types as DOMDebugger
 from cripy.asyncio.protocol.page import types as Page
+from cripy.asyncio.protocol.domdebugger import types as DOMDebugger
 from cripy.asyncio.protocol.dom import types as DOM
 
 __all__ = [

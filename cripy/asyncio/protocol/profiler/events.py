@@ -10,9 +10,9 @@ __all__ = [
     "PROFILER_EVENTS_NS"
 ]
 
+
 class ConsoleProfileFinishedEvent(object):
 
-    event = "Profiler.consoleProfileFinished"
 
     __slots__ = ["id", "location", "profile", "title"]
 
@@ -96,7 +96,6 @@ class ConsoleProfileStartedEvent(object):
     Sent when new profile recording is started using console.profile() call.
     """
 
-    event = "Profiler.consoleProfileStarted"
 
     __slots__ = ["id", "location", "title"]
 

@@ -52,7 +52,7 @@ class {{ event.class_name }}(dict):
         {% endif %}
         super({{ event.class_name }}, self).__init__()
         {% for prop in event.parameters %}
-        {{ prop.construct_thyself_no_type }}
+        {{ prop.construct_thyself }}
         {% endfor %}
 
     {% endif %}

@@ -89,7 +89,7 @@ class LayerTreeDidChangeEvent(object):
         :type layers: Optional[List[dict]]
         """
         super(LayerTreeDidChangeEvent, self).__init__()
-        self.layers = layers
+        self.layers = Layer.safe_create_from_list(layers)
 
     def __repr__(self):
         repr_args = []

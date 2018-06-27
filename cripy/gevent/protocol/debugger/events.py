@@ -112,7 +112,7 @@ class PausedEvent(object):
         :type asyncCallStackTraceId: Optional[dict]
         """
         super(PausedEvent, self).__init__()
-        self.callFrames = callFrames
+        self.callFrames = CallFrame.safe_create_from_list(callFrames)
         self.reason = reason
         self.data = data
         self.hitBreakpoints = hitBreakpoints

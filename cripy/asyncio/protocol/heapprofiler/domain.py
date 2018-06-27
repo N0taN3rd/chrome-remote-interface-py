@@ -30,20 +30,20 @@ $x functions).
         msg_dict = dict()
         if heapObjectId is not None:
             msg_dict['heapObjectId'] = heapObjectId
-        mayberes = await self.chrome.send('HeapProfiler.addInspectedHeapObject', msg_dict)
-        return mayberes
+        res = await self.chrome.send('HeapProfiler.addInspectedHeapObject', msg_dict)
+        return res
 
     async def collectGarbage(self) -> Optional[dict]:
-        mayberes = await self.chrome.send('HeapProfiler.collectGarbage')
-        return mayberes
+        res = await self.chrome.send('HeapProfiler.collectGarbage')
+        return res
 
     async def disable(self) -> Optional[dict]:
-        mayberes = await self.chrome.send('HeapProfiler.disable')
-        return mayberes
+        res = await self.chrome.send('HeapProfiler.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
-        mayberes = await self.chrome.send('HeapProfiler.enable')
-        return mayberes
+        res = await self.chrome.send('HeapProfiler.enable')
+        return res
 
     async def getHeapObjectId(self, objectId: str) -> Optional[dict]:
         """
@@ -53,8 +53,7 @@ $x functions).
         msg_dict = dict()
         if objectId is not None:
             msg_dict['objectId'] = objectId
-        mayberes = await self.chrome.send('HeapProfiler.getHeapObjectId', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('HeapProfiler.getHeapObjectId', msg_dict)
         return res
 
     async def getObjectByHeapObjectId(self, objectId: str, objectGroup: Optional[str] = None) -> Optional[dict]:
@@ -69,14 +68,12 @@ $x functions).
             msg_dict['objectId'] = objectId
         if objectGroup is not None:
             msg_dict['objectGroup'] = objectGroup
-        mayberes = await self.chrome.send('HeapProfiler.getObjectByHeapObjectId', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('HeapProfiler.getObjectByHeapObjectId', msg_dict)
         res['result'] = Runtime.RemoteObject.safe_create(res['result'])
         return res
 
     async def getSamplingProfile(self) -> Optional[dict]:
-        mayberes = await self.chrome.send('HeapProfiler.getSamplingProfile')
-        res = await mayberes
+        res = await self.chrome.send('HeapProfiler.getSamplingProfile')
         res['profile'] = Types.SamplingHeapProfile.safe_create(res['profile'])
         return res
 
@@ -88,8 +85,8 @@ $x functions).
         msg_dict = dict()
         if samplingInterval is not None:
             msg_dict['samplingInterval'] = samplingInterval
-        mayberes = await self.chrome.send('HeapProfiler.startSampling', msg_dict)
-        return mayberes
+        res = await self.chrome.send('HeapProfiler.startSampling', msg_dict)
+        return res
 
     async def startTrackingHeapObjects(self, trackAllocations: Optional[bool] = None) -> Optional[dict]:
         """
@@ -99,12 +96,11 @@ $x functions).
         msg_dict = dict()
         if trackAllocations is not None:
             msg_dict['trackAllocations'] = trackAllocations
-        mayberes = await self.chrome.send('HeapProfiler.startTrackingHeapObjects', msg_dict)
-        return mayberes
+        res = await self.chrome.send('HeapProfiler.startTrackingHeapObjects', msg_dict)
+        return res
 
     async def stopSampling(self) -> Optional[dict]:
-        mayberes = await self.chrome.send('HeapProfiler.stopSampling')
-        res = await mayberes
+        res = await self.chrome.send('HeapProfiler.stopSampling')
         res['profile'] = Types.SamplingHeapProfile.safe_create(res['profile'])
         return res
 
@@ -116,8 +112,8 @@ $x functions).
         msg_dict = dict()
         if reportProgress is not None:
             msg_dict['reportProgress'] = reportProgress
-        mayberes = await self.chrome.send('HeapProfiler.stopTrackingHeapObjects', msg_dict)
-        return mayberes
+        res = await self.chrome.send('HeapProfiler.stopTrackingHeapObjects', msg_dict)
+        return res
 
     async def takeHeapSnapshot(self, reportProgress: Optional[bool] = None) -> Optional[dict]:
         """
@@ -127,8 +123,38 @@ $x functions).
         msg_dict = dict()
         if reportProgress is not None:
             msg_dict['reportProgress'] = reportProgress
-        mayberes = await self.chrome.send('HeapProfiler.takeHeapSnapshot', msg_dict)
-        return mayberes
+        res = await self.chrome.send('HeapProfiler.takeHeapSnapshot', msg_dict)
+        return res
+
+    def addHeapSnapshotChunk(self, fn, once=False):
+        if once:
+            self.chrome.once("HeapProfiler.addHeapSnapshotChunk", fn)
+        else:
+            self.chrome.on("HeapProfiler.addHeapSnapshotChunk", fn)
+
+    def heapStatsUpdate(self, fn, once=False):
+        if once:
+            self.chrome.once("HeapProfiler.heapStatsUpdate", fn)
+        else:
+            self.chrome.on("HeapProfiler.heapStatsUpdate", fn)
+
+    def lastSeenObjectId(self, fn, once=False):
+        if once:
+            self.chrome.once("HeapProfiler.lastSeenObjectId", fn)
+        else:
+            self.chrome.on("HeapProfiler.lastSeenObjectId", fn)
+
+    def reportHeapSnapshotProgress(self, fn, once=False):
+        if once:
+            self.chrome.once("HeapProfiler.reportHeapSnapshotProgress", fn)
+        else:
+            self.chrome.on("HeapProfiler.reportHeapSnapshotProgress", fn)
+
+    def resetProfiles(self, fn, once=False):
+        if once:
+            self.chrome.once("HeapProfiler.resetProfiles", fn)
+        else:
+            self.chrome.on("HeapProfiler.resetProfiles", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

@@ -7,7 +7,6 @@ __all__ = [
     "ReceivedMessageFromTargetEvent",
     "TargetCreatedEvent",
     "TargetDestroyedEvent",
-    "TargetCrashedEvent",
     "TargetInfoChangedEvent",
     "TARGET_EVENTS_TO_CLASS",
     "TARGET_EVENTS_NS"
@@ -375,83 +374,6 @@ class TargetDestroyedEvent(object):
             return init
 
 
-class TargetCrashedEvent(object):
-    """
-    Issued when a target has crashed.
-    """
-
-    __slots__ = ["targetId", "status", "errorCode"]
-
-    def __init__(self, targetId, status, errorCode):
-        """
-        Create a new instance of TargetCrashedEvent
-
-        :param targetId: The targetId
-        :type targetId: str
-        :param status: Termination status type.
-        :type status: str
-        :param errorCode: Termination error code.
-        :type errorCode: int
-        """
-        super(TargetCrashedEvent, self).__init__()
-        self.targetId = targetId
-        self.status = status
-        self.errorCode = errorCode
-
-    def __repr__(self):
-        repr_args = []
-        if self.targetId is not None:
-            repr_args.append("targetId={!r}".format(self.targetId))
-        if self.status is not None:
-            repr_args.append("status={!r}".format(self.status))
-        if self.errorCode is not None:
-            repr_args.append("errorCode={!r}".format(self.errorCode))
-        return "TargetCrashedEvent(" + ', '.join(repr_args)+")"
-
-    @staticmethod
-    def safe_create(init):
-        """
-        Safely create TargetCrashedEvent from the supplied init dictionary.
-
-        This method will not throw an Exception and will return a new instance of TargetCrashedEvent
-        if init is not None otherwise returns init or None if init was None.
-
-        :param init: The init dictionary
-        :type init: dict
-        :return: A new instance of TargetCrashedEvent if creation did not fail
-        :rtype: Optional[Union[dict, TargetCrashedEvent]]
-        """
-        if init is not None:
-            try:
-                ourselves = TargetCrashedEvent(**init)
-                return ourselves
-            except Exception:
-                return init
-        else:
-            return init
-
-    @staticmethod
-    def safe_create_from_list(init):
-        """
-        Safely create a new list TargetCrashedEvents from the supplied list of dictionaries.
-
-        This method will not throw an Exception and will return a new list TargetCrashedEvent instances
-        if init is not None otherwise returns init or None if init was None.
-
-        :param init: The init dictionary
-        :type init: dict
-        :return: A new list of TargetCrashedEvent instances if creation did not fail
-        :rtype: Optional[List[Union[dict, TargetCrashedEvent]]]
-        """
-        if init is not None:
-            list_of_self = []
-            for it in init:
-                list_of_self.append(TargetCrashedEvent.safe_create(it))
-            return list_of_self
-        else:
-            return init
-
-
 class TargetInfoChangedEvent(object):
     """
     Issued when some information about a target has changed.
@@ -526,11 +448,10 @@ TARGET_EVENTS_TO_CLASS = {
    "Target.receivedMessageFromTarget": ReceivedMessageFromTargetEvent,
    "Target.targetCreated": TargetCreatedEvent,
    "Target.targetDestroyed": TargetDestroyedEvent,
-   "Target.targetCrashed": TargetCrashedEvent,
    "Target.targetInfoChanged": TargetInfoChangedEvent,
 }
 
-TargetNS = namedtuple("TargetNS", ["AttachedToTarget", "DetachedFromTarget", "ReceivedMessageFromTarget", "TargetCreated", "TargetDestroyed", "TargetCrashed", "TargetInfoChanged"])
+TargetNS = namedtuple("TargetNS", ["AttachedToTarget", "DetachedFromTarget", "ReceivedMessageFromTarget", "TargetCreated", "TargetDestroyed", "TargetInfoChanged"])
 
 TARGET_EVENTS_NS = TargetNS(
   AttachedToTarget="Target.attachedToTarget",
@@ -538,6 +459,5 @@ TARGET_EVENTS_NS = TargetNS(
   ReceivedMessageFromTarget="Target.receivedMessageFromTarget",
   TargetCreated="Target.targetCreated",
   TargetDestroyed="Target.targetDestroyed",
-  TargetCrashed="Target.targetCrashed",
   TargetInfoChanged="Target.targetInfoChanged",
 )

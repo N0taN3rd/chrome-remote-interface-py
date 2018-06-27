@@ -10,7 +10,6 @@ __all__ = ["Event"]
 
 
 class Event(FRefCollector):
-
     def __init__(self, domain: str, event: dict) -> None:
         super().__init__()
         self.domain: str = domain
@@ -70,6 +69,7 @@ class Event(FRefCollector):
         props: List[Property] = list()
         for p in plist:
             prop = Property(self.scoped_name, p)
+            prop.domain = self.domain
             self._if_foreign_ref_add(prop)
             props.append(prop)
         return props

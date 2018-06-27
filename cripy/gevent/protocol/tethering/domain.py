@@ -44,6 +44,9 @@ class Tethering(object):
         wres = self.chrome.send('Tethering.unbind', msg_dict)
         return wres.get()
 
+    def accepted(self, fn, once=False):
+        self.chrome.on("Tethering.accepted", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

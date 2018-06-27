@@ -114,7 +114,7 @@ class SecurityStateChangedEvent(object):
         super(SecurityStateChangedEvent, self).__init__()
         self.securityState = securityState
         self.schemeIsCryptographic = schemeIsCryptographic
-        self.explanations = explanations
+        self.explanations = SecurityStateExplanation.safe_create_from_list(explanations)
         self.insecureContentStatus = InsecureContentStatus.safe_create(insecureContentStatus)
         self.summary = summary
 

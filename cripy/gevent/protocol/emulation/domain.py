@@ -1,5 +1,5 @@
-from cripy.gevent.protocol.network import types as Network
 from cripy.gevent.protocol.page import types as Page
+from cripy.gevent.protocol.network import types as Network
 from cripy.gevent.protocol.dom import types as DOM
 from cripy.gevent.protocol.emulation import events as Events
 from cripy.gevent.protocol.emulation import types as Types
@@ -137,28 +137,6 @@ query results).
         if viewport is not None:
             msg_dict['viewport'] = viewport
         wres = self.chrome.send('Emulation.setDeviceMetricsOverride', msg_dict)
-        return wres.get()
-
-    def setScrollbarsHidden(self, hidden):
-        """
-        :param hidden: Whether scrollbars should be always hidden.
-        :type hidden: bool
-        """
-        msg_dict = dict()
-        if hidden is not None:
-            msg_dict['hidden'] = hidden
-        wres = self.chrome.send('Emulation.setScrollbarsHidden', msg_dict)
-        return wres.get()
-
-    def setDocumentCookieDisabled(self, disabled):
-        """
-        :param disabled: Whether document.coookie API should be disabled.
-        :type disabled: bool
-        """
-        msg_dict = dict()
-        if disabled is not None:
-            msg_dict['disabled'] = disabled
-        wres = self.chrome.send('Emulation.setDocumentCookieDisabled', msg_dict)
         return wres.get()
 
     def setEmitTouchEventsForMouse(self, enabled, configuration=None):
@@ -317,26 +295,14 @@ on Android.
         wres = self.chrome.send('Emulation.setVisibleSize', msg_dict)
         return wres.get()
 
-    def setUserAgentOverride(self, userAgent, acceptLanguage=None, platform=None):
-        """
-        Allows overriding user agent with the given string.
+    def virtualTimeAdvanced(self, fn, once=False):
+        self.chrome.on("Emulation.virtualTimeAdvanced", fn, once=once)
 
-        :param userAgent: User agent to use.
-        :type userAgent: str
-        :param acceptLanguage: Browser langugage to emulate.
-        :type acceptLanguage: Optional[str]
-        :param platform: The platform navigator.platform should return.
-        :type platform: Optional[str]
-        """
-        msg_dict = dict()
-        if userAgent is not None:
-            msg_dict['userAgent'] = userAgent
-        if acceptLanguage is not None:
-            msg_dict['acceptLanguage'] = acceptLanguage
-        if platform is not None:
-            msg_dict['platform'] = platform
-        wres = self.chrome.send('Emulation.setUserAgentOverride', msg_dict)
-        return wres.get()
+    def virtualTimeBudgetExpired(self, fn, once=False):
+        self.chrome.on("Emulation.virtualTimeBudgetExpired", fn, once=once)
+
+    def virtualTimePaused(self, fn, once=False):
+        self.chrome.on("Emulation.virtualTimePaused", fn, once=once)
 
     @staticmethod
     def get_event_classes():

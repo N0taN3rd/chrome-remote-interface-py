@@ -28,6 +28,15 @@ class Inspector(object):
         wres = self.chrome.send('Inspector.enable')
         return wres.get()
 
+    def detached(self, fn, once=False):
+        self.chrome.on("Inspector.detached", fn, once=once)
+
+    def targetCrashed(self, fn, once=False):
+        self.chrome.on("Inspector.targetCrashed", fn, once=once)
+
+    def targetReloadedAfterCrash(self, fn, once=False):
+        self.chrome.on("Inspector.targetReloadedAfterCrash", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

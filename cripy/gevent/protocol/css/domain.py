@@ -367,6 +367,21 @@ instrumentation)
         res['coverage'] = Types.RuleUsage.safe_create_from_list(res['coverage'])
         return res
 
+    def fontsUpdated(self, fn, once=False):
+        self.chrome.on("CSS.fontsUpdated", fn, once=once)
+
+    def mediaQueryResultChanged(self, fn, once=False):
+        self.chrome.on("CSS.mediaQueryResultChanged", fn, once=once)
+
+    def styleSheetAdded(self, fn, once=False):
+        self.chrome.on("CSS.styleSheetAdded", fn, once=once)
+
+    def styleSheetChanged(self, fn, once=False):
+        self.chrome.on("CSS.styleSheetChanged", fn, once=once)
+
+    def styleSheetRemoved(self, fn, once=False):
+        self.chrome.on("CSS.styleSheetRemoved", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

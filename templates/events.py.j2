@@ -16,6 +16,7 @@ __all__ = [
     "{{ domain | upper }}_EVENTS_NS"
 ]
 
+
 {%+ for event in events %}
 {% if event.has_parameters %}
 class {{ event.class_name }}(object):
@@ -28,7 +29,6 @@ class {{ event.class_name }}(dict):
     """
     {% endif %}
 
-    event = "{{ event.scoped_name }}"
 
     {% if event.has_parameters %}
     __slots__ = [{{ slotgen(event.parameters) }}]

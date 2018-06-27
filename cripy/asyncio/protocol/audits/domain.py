@@ -42,8 +42,7 @@ applies to images.
             msg_dict['quality'] = quality
         if sizeOnly is not None:
             msg_dict['sizeOnly'] = sizeOnly
-        mayberes = await self.chrome.send('Audits.getEncodedResponse', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Audits.getEncodedResponse', msg_dict)
         return res
 
     @staticmethod

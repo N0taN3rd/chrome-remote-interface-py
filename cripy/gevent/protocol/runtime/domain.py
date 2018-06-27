@@ -361,19 +361,6 @@ object.
         res['exceptionDetails'] = Types.ExceptionDetails.safe_create(res['exceptionDetails'])
         return res
 
-    def setAsyncCallStackDepth(self, maxDepth):
-        """
-        Enables or disables async call stacks tracking.
-
-        :param maxDepth: Maximum depth of async call stacks. Setting to `0` will effectively disable collecting async call stacks (default).
-        :type maxDepth: int
-        """
-        msg_dict = dict()
-        if maxDepth is not None:
-            msg_dict['maxDepth'] = maxDepth
-        wres = self.chrome.send('Runtime.setAsyncCallStackDepth', msg_dict)
-        return wres.get()
-
     def setCustomObjectFormatterEnabled(self, enabled):
         """
         :param enabled: The enabled
@@ -385,17 +372,6 @@ object.
         wres = self.chrome.send('Runtime.setCustomObjectFormatterEnabled', msg_dict)
         return wres.get()
 
-    def setMaxCallStackSizeToCapture(self, size):
-        """
-        :param size: The size
-        :type size: int
-        """
-        msg_dict = dict()
-        if size is not None:
-            msg_dict['size'] = size
-        wres = self.chrome.send('Runtime.setMaxCallStackSizeToCapture', msg_dict)
-        return wres.get()
-
     def terminateExecution(self):
         """
         Terminate current or next JavaScript execution.
@@ -404,43 +380,26 @@ Will cancel the termination when the outer-most script execution ends.
         wres = self.chrome.send('Runtime.terminateExecution')
         return wres.get()
 
-    def addBinding(self, name, executionContextId=None):
-        """
-        If executionContextId is empty, adds binding with the given name on the
-global objects of all inspected contexts, including those created later,
-bindings survive reloads.
-If executionContextId is specified, adds binding only on global object of
-given execution context.
-Binding function takes exactly one argument, this argument should be string,
-in case of any other input, function throws an exception.
-Each binding function call produces Runtime.bindingCalled notification.
+    def consoleAPICalled(self, fn, once=False):
+        self.chrome.on("Runtime.consoleAPICalled", fn, once=once)
 
-        :param name: The name
-        :type name: str
-        :param executionContextId: The executionContextId
-        :type executionContextId: Optional[int]
-        """
-        msg_dict = dict()
-        if name is not None:
-            msg_dict['name'] = name
-        if executionContextId is not None:
-            msg_dict['executionContextId'] = executionContextId
-        wres = self.chrome.send('Runtime.addBinding', msg_dict)
-        return wres.get()
+    def exceptionRevoked(self, fn, once=False):
+        self.chrome.on("Runtime.exceptionRevoked", fn, once=once)
 
-    def removeBinding(self, name):
-        """
-        This method does not remove binding function from global object but
-unsubscribes current runtime agent from Runtime.bindingCalled notifications.
+    def exceptionThrown(self, fn, once=False):
+        self.chrome.on("Runtime.exceptionThrown", fn, once=once)
 
-        :param name: The name
-        :type name: str
-        """
-        msg_dict = dict()
-        if name is not None:
-            msg_dict['name'] = name
-        wres = self.chrome.send('Runtime.removeBinding', msg_dict)
-        return wres.get()
+    def executionContextCreated(self, fn, once=False):
+        self.chrome.on("Runtime.executionContextCreated", fn, once=once)
+
+    def executionContextDestroyed(self, fn, once=False):
+        self.chrome.on("Runtime.executionContextDestroyed", fn, once=once)
+
+    def executionContextsCleared(self, fn, once=False):
+        self.chrome.on("Runtime.executionContextsCleared", fn, once=once)
+
+    def inspectRequested(self, fn, once=False):
+        self.chrome.on("Runtime.inspectRequested", fn, once=once)
 
     @staticmethod
     def get_event_classes():

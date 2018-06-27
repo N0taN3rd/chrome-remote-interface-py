@@ -20,24 +20,29 @@ class Performance(object):
         """
         Disable collecting and reporting metrics.
         """
-        mayberes = await self.chrome.send('Performance.disable')
-        return mayberes
+        res = await self.chrome.send('Performance.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
         Enable collecting and reporting metrics.
         """
-        mayberes = await self.chrome.send('Performance.enable')
-        return mayberes
+        res = await self.chrome.send('Performance.enable')
+        return res
 
     async def getMetrics(self) -> Optional[dict]:
         """
         Retrieve current values of run-time metrics.
         """
-        mayberes = await self.chrome.send('Performance.getMetrics')
-        res = await mayberes
+        res = await self.chrome.send('Performance.getMetrics')
         res['metrics'] = Types.Metric.safe_create_from_list(res['metrics'])
         return res
+
+    def metrics(self, fn, once=False):
+        if once:
+            self.chrome.once("Performance.metrics", fn)
+        else:
+            self.chrome.on("Performance.metrics", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

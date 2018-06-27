@@ -39,8 +39,7 @@ class Accessibility(object):
             msg_dict['objectId'] = objectId
         if fetchRelatives is not None:
             msg_dict['fetchRelatives'] = fetchRelatives
-        mayberes = await self.chrome.send('Accessibility.getPartialAXTree', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Accessibility.getPartialAXTree', msg_dict)
         res['nodes'] = Types.AXNode.safe_create_from_list(res['nodes'])
         return res
 

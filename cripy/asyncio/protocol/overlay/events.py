@@ -12,13 +12,13 @@ __all__ = [
     "OVERLAY_EVENTS_NS"
 ]
 
+
 class InspectNodeRequestedEvent(object):
     """
     Fired when the node should be inspected.
 	This happens after call to `setInspectMode` or when user manually inspects an element.
     """
 
-    event = "Overlay.inspectNodeRequested"
 
     __slots__ = ["backendNodeId"]
 
@@ -88,7 +88,6 @@ class NodeHighlightRequestedEvent(object):
 	This happens after call to `setInspectMode`.
     """
 
-    event = "Overlay.nodeHighlightRequested"
 
     __slots__ = ["nodeId"]
 
@@ -157,7 +156,6 @@ class ScreenshotRequestedEvent(object):
     Fired when user asks to capture screenshot of some area on the page.
     """
 
-    event = "Overlay.screenshotRequested"
 
     __slots__ = ["viewport"]
 

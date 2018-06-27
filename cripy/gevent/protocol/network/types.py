@@ -1,6 +1,6 @@
-from cripy.gevent.protocol.runtime import types as Runtime
-from cripy.gevent.protocol.security import types as Security
 from cripy.gevent.protocol.page import types as Page
+from cripy.gevent.protocol.security import types as Security
+from cripy.gevent.protocol.runtime import types as Runtime
 
 __all__ = [
     "WebSocketResponse",
@@ -9,7 +9,6 @@ __all__ = [
     "SignedExchangeSignature",
     "SignedExchangeInfo",
     "SignedExchangeHeader",
-    "SignedExchangeError",
     "SignedCertificateTimestamp",
     "SecurityDetails",
     "Response",
@@ -263,60 +262,45 @@ class SignedExchangeSignature(object):
 https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-impl.html#rfc.section.3.1
     """
 
-    __slots__ = ["label", "signature", "integrity", "certUrl", "certSha256", "validityUrl", "date", "expires", "certificates"]
+    __slots__ = ["label", "integrity", "certUrl", "validityUrl", "date", "expires"]
 
-    def __init__(self, label, signature, integrity, validityUrl, date, expires, certUrl=None, certSha256=None, certificates=None):
+    def __init__(self, label, integrity, certUrl, validityUrl, date, expires):
         """
         :param label: Signed exchange signature label.
         :type label: str
-        :param signature: The hex string of signed exchange signature.
-        :type signature: str
         :param integrity: Signed exchange signature integrity.
         :type integrity: str
         :param certUrl: Signed exchange signature cert Url.
-        :type certUrl: Optional[str]
-        :param certSha256: The hex string of signed exchange signature cert sha256.
-        :type certSha256: Optional[str]
+        :type certUrl: str
         :param validityUrl: Signed exchange signature validity Url.
         :type validityUrl: str
         :param date: Signed exchange signature date.
         :type date: int
         :param expires: Signed exchange signature expires.
         :type expires: int
-        :param certificates: The encoded certificates.
-        :type certificates: Optional[List[str]]
         """
         super(SignedExchangeSignature, self).__init__()
         self.label = label
-        self.signature = signature
         self.integrity = integrity
         self.certUrl = certUrl
-        self.certSha256 = certSha256
         self.validityUrl = validityUrl
         self.date = date
         self.expires = expires
-        self.certificates = certificates
 
     def __repr__(self):
         repr_args = []
         if self.label is not None:
             repr_args.append("label={!r}".format(self.label))
-        if self.signature is not None:
-            repr_args.append("signature={!r}".format(self.signature))
         if self.integrity is not None:
             repr_args.append("integrity={!r}".format(self.integrity))
         if self.certUrl is not None:
             repr_args.append("certUrl={!r}".format(self.certUrl))
-        if self.certSha256 is not None:
-            repr_args.append("certSha256={!r}".format(self.certSha256))
         if self.validityUrl is not None:
             repr_args.append("validityUrl={!r}".format(self.validityUrl))
         if self.date is not None:
             repr_args.append("date={!r}".format(self.date))
         if self.expires is not None:
             repr_args.append("expires={!r}".format(self.expires))
-        if self.certificates is not None:
-            repr_args.append("certificates={!r}".format(self.certificates))
         return "SignedExchangeSignature(" + ', '.join(repr_args)+")"
 
     @staticmethod
@@ -379,13 +363,13 @@ class SignedExchangeInfo(object):
         :param securityDetails: Security details for the signed exchange header.
         :type securityDetails: Optional[dict]
         :param errors: Errors occurred while handling the signed exchagne.
-        :type errors: Optional[List[dict]]
+        :type errors: Optional[List[str]]
         """
         super(SignedExchangeInfo, self).__init__()
         self.outerResponse = Response.safe_create(outerResponse)
         self.header = SignedExchangeHeader.safe_create(header)
         self.securityDetails = SecurityDetails.safe_create(securityDetails)
-        self.errors = SignedExchangeError.safe_create_from_list(errors)
+        self.errors = errors
 
     def __repr__(self):
         repr_args = []
@@ -524,81 +508,6 @@ https://wicg.github.io/webpackage/draft-yasskin-httpbis-origin-signed-exchanges-
             list_of_self = []
             for it in init:
                 list_of_self.append(SignedExchangeHeader.safe_create(it))
-            return list_of_self
-        else:
-            return init
-
-
-class SignedExchangeError(object):
-    """
-    Information about a signed exchange response.
-    """
-
-    __slots__ = ["message", "signatureIndex", "errorField"]
-
-    def __init__(self, message, signatureIndex=None, errorField=None):
-        """
-        :param message: Error message.
-        :type message: str
-        :param signatureIndex: The index of the signature which caused the error.
-        :type signatureIndex: Optional[int]
-        :param errorField: The field which caused the error.
-        :type errorField: Optional[str]
-        """
-        super(SignedExchangeError, self).__init__()
-        self.message = message
-        self.signatureIndex = signatureIndex
-        self.errorField = errorField
-
-    def __repr__(self):
-        repr_args = []
-        if self.message is not None:
-            repr_args.append("message={!r}".format(self.message))
-        if self.signatureIndex is not None:
-            repr_args.append("signatureIndex={!r}".format(self.signatureIndex))
-        if self.errorField is not None:
-            repr_args.append("errorField={!r}".format(self.errorField))
-        return "SignedExchangeError(" + ', '.join(repr_args)+")"
-
-    @staticmethod
-    def safe_create(init):
-        """
-        Safely create SignedExchangeError from the supplied init dictionary.
-
-        This method will not throw an Exception and will return a new instance of SignedExchangeError
-        if init is not None otherwise returns init or None if init was None.
-
-        :param init: The init dictionary
-        :type init: dict
-        :return: A new instance of SignedExchangeError if creation did not fail
-        :rtype: Optional[Union[dict, SignedExchangeError]]
-        """
-        if init is not None:
-            try:
-                ourselves = SignedExchangeError(**init)
-                return ourselves
-            except Exception:
-                return init
-        else:
-            return init
-
-    @staticmethod
-    def safe_create_from_list(init):
-        """
-        Safely create a new list SignedExchangeErrors from the supplied list of dictionaries.
-
-        This method will not throw an Exception and will return a new list SignedExchangeError instances
-        if init is not None otherwise returns init or None if init was None.
-
-        :param init: The init dictionary
-        :type init: dict
-        :return: A new list of SignedExchangeError instances if creation did not fail
-        :rtype: Optional[List[Union[dict, SignedExchangeError]]]
-        """
-        if init is not None:
-            list_of_self = []
-            for it in init:
-                list_of_self.append(SignedExchangeError.safe_create(it))
             return list_of_self
         else:
             return init
@@ -1204,14 +1113,12 @@ class Request(object):
     HTTP request data.
     """
 
-    __slots__ = ["url", "urlFragment", "method", "headers", "postData", "hasPostData", "mixedContentType", "initialPriority", "referrerPolicy", "isLinkPreload"]
+    __slots__ = ["url", "method", "headers", "postData", "hasPostData", "mixedContentType", "initialPriority", "referrerPolicy", "isLinkPreload"]
 
-    def __init__(self, url, method, headers, initialPriority, referrerPolicy, urlFragment=None, postData=None, hasPostData=None, mixedContentType=None, isLinkPreload=None):
+    def __init__(self, url, method, headers, initialPriority, referrerPolicy, postData=None, hasPostData=None, mixedContentType=None, isLinkPreload=None):
         """
-        :param url: Request URL (without fragment).
+        :param url: Request URL.
         :type url: str
-        :param urlFragment: Fragment of the requested URL starting with hash, if present.
-        :type urlFragment: Optional[str]
         :param method: HTTP request method.
         :type method: str
         :param headers: HTTP request headers.
@@ -1231,7 +1138,6 @@ class Request(object):
         """
         super(Request, self).__init__()
         self.url = url
-        self.urlFragment = urlFragment
         self.method = method
         self.headers = Headers.safe_create(headers)
         self.postData = postData
@@ -1245,8 +1151,6 @@ class Request(object):
         repr_args = []
         if self.url is not None:
             repr_args.append("url={!r}".format(self.url))
-        if self.urlFragment is not None:
-            repr_args.append("urlFragment={!r}".format(self.urlFragment))
         if self.method is not None:
             repr_args.append("method={!r}".format(self.method))
         if self.headers is not None:
@@ -1899,7 +1803,6 @@ NETWORK_TYPE_TO_OBJECT = {
     "SignedExchangeSignature": SignedExchangeSignature,
     "SignedExchangeInfo": SignedExchangeInfo,
     "SignedExchangeHeader": SignedExchangeHeader,
-    "SignedExchangeError": SignedExchangeError,
     "SignedCertificateTimestamp": SignedCertificateTimestamp,
     "SecurityDetails": SecurityDetails,
     "Response": Response,

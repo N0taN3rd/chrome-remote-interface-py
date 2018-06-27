@@ -21,9 +21,13 @@ def run():
     c.on("*", star_msg)
     c.connect()
     res = c.Page.getFrameTree()
-    print(res)
+    mfid = res["frameTree"].frame.id
+
     print(c.Page.enable())
     print(c.Network.enable())
+    print(c.Runtime.enable())
+    print(c.DOM.enable())
+    print(c.Log.enable())
     print(c.Page.setLifecycleEventsEnabled(enabled=True))
     # c.Page.navigate(url="https://google.com")
 
@@ -44,3 +48,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+    # with open("protocol.json", "w") as out:
+    #     proto = Client.Protocol()
+    #     print(proto)
+    #     import ujson
+    #     out.write(ujson.dumps(proto))

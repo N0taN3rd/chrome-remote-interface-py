@@ -10,9 +10,9 @@ __all__ = [
     "LAYERTREE_EVENTS_NS"
 ]
 
+
 class LayerPaintedEvent(object):
 
-    event = "LayerTree.layerPainted"
 
     __slots__ = ["layerId", "clip"]
 
@@ -83,7 +83,6 @@ class LayerPaintedEvent(object):
 
 class LayerTreeDidChangeEvent(object):
 
-    event = "LayerTree.layerTreeDidChange"
 
     __slots__ = ["layers"]
 

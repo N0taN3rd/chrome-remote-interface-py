@@ -10,12 +10,12 @@ __all__ = [
     "EMULATION_EVENTS_NS"
 ]
 
+
 class VirtualTimeAdvancedEvent(object):
     """
     Notification sent after the virtual time has advanced.
     """
 
-    event = "Emulation.virtualTimeAdvanced"
 
     __slots__ = ["virtualTimeElapsed"]
 
@@ -84,7 +84,6 @@ class VirtualTimeBudgetExpiredEvent(dict):
     Notification sent after the virtual time budget for the current VirtualTimePolicy has run out.
     """
 
-    event = "Emulation.virtualTimeBudgetExpired"
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
@@ -141,7 +140,6 @@ class VirtualTimePausedEvent(object):
     Notification sent after the virtual time has paused.
     """
 
-    event = "Emulation.virtualTimePaused"
 
     __slots__ = ["virtualTimeElapsed"]
 

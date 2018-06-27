@@ -30,8 +30,8 @@ class Storage(object):
             msg_dict['origin'] = origin
         if storageTypes is not None:
             msg_dict['storageTypes'] = storageTypes
-        mayberes = await self.chrome.send('Storage.clearDataForOrigin', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Storage.clearDataForOrigin', msg_dict)
+        return res
 
     async def getUsageAndQuota(self, origin: str) -> Optional[dict]:
         """
@@ -43,8 +43,7 @@ class Storage(object):
         msg_dict = dict()
         if origin is not None:
             msg_dict['origin'] = origin
-        mayberes = await self.chrome.send('Storage.getUsageAndQuota', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Storage.getUsageAndQuota', msg_dict)
         res['usageBreakdown'] = Types.UsageForType.safe_create_from_list(res['usageBreakdown'])
         return res
 
@@ -58,8 +57,8 @@ class Storage(object):
         msg_dict = dict()
         if origin is not None:
             msg_dict['origin'] = origin
-        mayberes = await self.chrome.send('Storage.trackCacheStorageForOrigin', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Storage.trackCacheStorageForOrigin', msg_dict)
+        return res
 
     async def trackIndexedDBForOrigin(self, origin: str) -> Optional[dict]:
         """
@@ -71,8 +70,8 @@ class Storage(object):
         msg_dict = dict()
         if origin is not None:
             msg_dict['origin'] = origin
-        mayberes = await self.chrome.send('Storage.trackIndexedDBForOrigin', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Storage.trackIndexedDBForOrigin', msg_dict)
+        return res
 
     async def untrackCacheStorageForOrigin(self, origin: str) -> Optional[dict]:
         """
@@ -84,8 +83,8 @@ class Storage(object):
         msg_dict = dict()
         if origin is not None:
             msg_dict['origin'] = origin
-        mayberes = await self.chrome.send('Storage.untrackCacheStorageForOrigin', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Storage.untrackCacheStorageForOrigin', msg_dict)
+        return res
 
     async def untrackIndexedDBForOrigin(self, origin: str) -> Optional[dict]:
         """
@@ -97,8 +96,32 @@ class Storage(object):
         msg_dict = dict()
         if origin is not None:
             msg_dict['origin'] = origin
-        mayberes = await self.chrome.send('Storage.untrackIndexedDBForOrigin', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Storage.untrackIndexedDBForOrigin', msg_dict)
+        return res
+
+    def cacheStorageContentUpdated(self, fn, once=False):
+        if once:
+            self.chrome.once("Storage.cacheStorageContentUpdated", fn)
+        else:
+            self.chrome.on("Storage.cacheStorageContentUpdated", fn)
+
+    def cacheStorageListUpdated(self, fn, once=False):
+        if once:
+            self.chrome.once("Storage.cacheStorageListUpdated", fn)
+        else:
+            self.chrome.on("Storage.cacheStorageListUpdated", fn)
+
+    def indexedDBContentUpdated(self, fn, once=False):
+        if once:
+            self.chrome.once("Storage.indexedDBContentUpdated", fn)
+        else:
+            self.chrome.on("Storage.indexedDBContentUpdated", fn)
+
+    def indexedDBListUpdated(self, fn, once=False):
+        if once:
+            self.chrome.once("Storage.indexedDBListUpdated", fn)
+        else:
+            self.chrome.on("Storage.indexedDBListUpdated", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

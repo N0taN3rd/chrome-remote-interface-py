@@ -25,12 +25,12 @@ __all__ = [
     "NETWORK_EVENTS_NS"
 ]
 
+
 class DataReceivedEvent(object):
     """
     Fired when data chunk was received over the network.
     """
 
-    event = "Network.dataReceived"
 
     __slots__ = ["requestId", "timestamp", "dataLength", "encodedDataLength"]
 
@@ -114,7 +114,6 @@ class EventSourceMessageReceivedEvent(object):
     Fired when EventSource message is received.
     """
 
-    event = "Network.eventSourceMessageReceived"
 
     __slots__ = ["requestId", "timestamp", "eventName", "eventId", "data"]
 
@@ -203,7 +202,6 @@ class LoadingFailedEvent(object):
     Fired when HTTP request has failed to load.
     """
 
-    event = "Network.loadingFailed"
 
     __slots__ = ["requestId", "timestamp", "type", "errorText", "canceled", "blockedReason"]
 
@@ -297,7 +295,6 @@ class LoadingFinishedEvent(object):
     Fired when HTTP request has finished loading.
     """
 
-    event = "Network.loadingFinished"
 
     __slots__ = ["requestId", "timestamp", "encodedDataLength", "shouldReportCorbBlocking"]
 
@@ -381,7 +378,6 @@ class RequestInterceptedEvent(object):
     Details of an intercepted HTTP request, which must be either allowed, blocked, modified or mocked.
     """
 
-    event = "Network.requestIntercepted"
 
     __slots__ = ["interceptionId", "request", "frameId", "resourceType", "isNavigationRequest", "isDownload", "redirectUrl", "authChallenge", "responseErrorReason", "responseStatusCode", "responseHeaders"]
 
@@ -500,7 +496,6 @@ class RequestServedFromCacheEvent(object):
     Fired if request ended up loading from cache.
     """
 
-    event = "Network.requestServedFromCache"
 
     __slots__ = ["requestId"]
 
@@ -569,7 +564,6 @@ class RequestWillBeSentEvent(object):
     Fired when page is about to send HTTP request.
     """
 
-    event = "Network.requestWillBeSent"
 
     __slots__ = ["requestId", "loaderId", "documentURL", "request", "timestamp", "wallTime", "initiator", "redirectResponse", "type", "frameId", "hasUserGesture"]
 
@@ -688,7 +682,6 @@ class ResourceChangedPriorityEvent(object):
     Fired when resource loading priority is changed
     """
 
-    event = "Network.resourceChangedPriority"
 
     __slots__ = ["requestId", "newPriority", "timestamp"]
 
@@ -767,7 +760,6 @@ class SignedExchangeReceivedEvent(object):
     Fired when a signed exchange was received over the network
     """
 
-    event = "Network.signedExchangeReceived"
 
     __slots__ = ["requestId", "info"]
 
@@ -841,7 +833,6 @@ class ResponseReceivedEvent(object):
     Fired when HTTP response is available.
     """
 
-    event = "Network.responseReceived"
 
     __slots__ = ["requestId", "loaderId", "timestamp", "type", "response", "frameId"]
 
@@ -935,7 +926,6 @@ class WebSocketClosedEvent(object):
     Fired when WebSocket is closed.
     """
 
-    event = "Network.webSocketClosed"
 
     __slots__ = ["requestId", "timestamp"]
 
@@ -1009,7 +999,6 @@ class WebSocketCreatedEvent(object):
     Fired upon WebSocket creation.
     """
 
-    event = "Network.webSocketCreated"
 
     __slots__ = ["requestId", "url", "initiator"]
 
@@ -1088,7 +1077,6 @@ class WebSocketFrameErrorEvent(object):
     Fired when WebSocket frame error occurs.
     """
 
-    event = "Network.webSocketFrameError"
 
     __slots__ = ["requestId", "timestamp", "errorMessage"]
 
@@ -1167,7 +1155,6 @@ class WebSocketFrameReceivedEvent(object):
     Fired when WebSocket frame is received.
     """
 
-    event = "Network.webSocketFrameReceived"
 
     __slots__ = ["requestId", "timestamp", "response"]
 
@@ -1246,7 +1233,6 @@ class WebSocketFrameSentEvent(object):
     Fired when WebSocket frame is sent.
     """
 
-    event = "Network.webSocketFrameSent"
 
     __slots__ = ["requestId", "timestamp", "response"]
 
@@ -1325,7 +1311,6 @@ class WebSocketHandshakeResponseReceivedEvent(object):
     Fired when WebSocket handshake response becomes available.
     """
 
-    event = "Network.webSocketHandshakeResponseReceived"
 
     __slots__ = ["requestId", "timestamp", "response"]
 
@@ -1404,7 +1389,6 @@ class WebSocketWillSendHandshakeRequestEvent(object):
     Fired when WebSocket is about to initiate handshake.
     """
 
-    event = "Network.webSocketWillSendHandshakeRequest"
 
     __slots__ = ["requestId", "timestamp", "wallTime", "request"]
 

@@ -20,6 +20,12 @@ def get_free_port() -> int:
 
 
 def merge_dict(dict1: Optional[Dict], dict2: Optional[Dict]) -> Dict:
+    """
+
+    :param dict1: Optional[Dict]: 
+    :param dict2: Optional[Dict]: 
+
+    """
     new_dict = {}
     if dict1:
         new_dict.update(dict1)

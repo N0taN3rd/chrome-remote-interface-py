@@ -47,23 +47,28 @@ https://goo.gl/3zHXhB for more background.
             msg_dict['noDisplayUpdates'] = noDisplayUpdates
         if screenshot is not None:
             msg_dict['screenshot'] = screenshot
-        mayberes = await self.chrome.send('HeadlessExperimental.beginFrame', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('HeadlessExperimental.beginFrame', msg_dict)
         return res
 
     async def disable(self) -> Optional[dict]:
         """
         Disables headless events for the target.
         """
-        mayberes = await self.chrome.send('HeadlessExperimental.disable')
-        return mayberes
+        res = await self.chrome.send('HeadlessExperimental.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
         Enables headless events for the target.
         """
-        mayberes = await self.chrome.send('HeadlessExperimental.enable')
-        return mayberes
+        res = await self.chrome.send('HeadlessExperimental.enable')
+        return res
+
+    def needsBeginFramesChanged(self, fn, once=False):
+        if once:
+            self.chrome.once("HeadlessExperimental.needsBeginFramesChanged", fn)
+        else:
+            self.chrome.on("HeadlessExperimental.needsBeginFramesChanged", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

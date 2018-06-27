@@ -1,9 +1,9 @@
 from typing import Any, List, Optional, Union
-from cripy.asyncio.protocol.network import types as Network
+from cripy.asyncio.protocol.dom import types as DOM
 from cripy.asyncio.protocol.emulation import types as Emulation
 from cripy.asyncio.protocol.debugger import types as Debugger
+from cripy.asyncio.protocol.network import types as Network
 from cripy.asyncio.protocol.runtime import types as Runtime
-from cripy.asyncio.protocol.dom import types as DOM
 from cripy.asyncio.protocol.page import events as Events
 from cripy.asyncio.protocol.page import types as Types
 
@@ -37,8 +37,7 @@ class Page(object):
         msg_dict = dict()
         if scriptSource is not None:
             msg_dict['scriptSource'] = scriptSource
-        mayberes = await self.chrome.send('Page.addScriptToEvaluateOnLoad', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Page.addScriptToEvaluateOnLoad', msg_dict)
         return res
 
     async def addScriptToEvaluateOnNewDocument(self, source: str) -> Optional[dict]:
@@ -51,16 +50,15 @@ class Page(object):
         msg_dict = dict()
         if source is not None:
             msg_dict['source'] = source
-        mayberes = await self.chrome.send('Page.addScriptToEvaluateOnNewDocument', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Page.addScriptToEvaluateOnNewDocument', msg_dict)
         return res
 
     async def bringToFront(self) -> Optional[dict]:
         """
         Brings page to front (activates tab).
         """
-        mayberes = await self.chrome.send('Page.bringToFront')
-        return mayberes
+        res = await self.chrome.send('Page.bringToFront')
+        return res
 
     async def captureScreenshot(self, format: Optional[str] = None, quality: Optional[int] = None, clip: Optional[dict] = None, fromSurface: Optional[bool] = None) -> Optional[dict]:
         """
@@ -84,30 +82,29 @@ class Page(object):
             msg_dict['clip'] = clip
         if fromSurface is not None:
             msg_dict['fromSurface'] = fromSurface
-        mayberes = await self.chrome.send('Page.captureScreenshot', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Page.captureScreenshot', msg_dict)
         return res
 
     async def clearDeviceMetricsOverride(self) -> Optional[dict]:
         """
         Clears the overriden device metrics.
         """
-        mayberes = await self.chrome.send('Page.clearDeviceMetricsOverride')
-        return mayberes
+        res = await self.chrome.send('Page.clearDeviceMetricsOverride')
+        return res
 
     async def clearDeviceOrientationOverride(self) -> Optional[dict]:
         """
         Clears the overridden Device Orientation.
         """
-        mayberes = await self.chrome.send('Page.clearDeviceOrientationOverride')
-        return mayberes
+        res = await self.chrome.send('Page.clearDeviceOrientationOverride')
+        return res
 
     async def clearGeolocationOverride(self) -> Optional[dict]:
         """
         Clears the overriden Geolocation Position and Error.
         """
-        mayberes = await self.chrome.send('Page.clearGeolocationOverride')
-        return mayberes
+        res = await self.chrome.send('Page.clearGeolocationOverride')
+        return res
 
     async def createIsolatedWorld(self, frameId: str, worldName: Optional[str] = None, grantUniveralAccess: Optional[bool] = None) -> Optional[dict]:
         """
@@ -127,8 +124,7 @@ class Page(object):
             msg_dict['worldName'] = worldName
         if grantUniveralAccess is not None:
             msg_dict['grantUniveralAccess'] = grantUniveralAccess
-        mayberes = await self.chrome.send('Page.createIsolatedWorld', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Page.createIsolatedWorld', msg_dict)
         return res
 
     async def deleteCookie(self, cookieName: str, url: str) -> Optional[dict]:
@@ -145,26 +141,25 @@ class Page(object):
             msg_dict['cookieName'] = cookieName
         if url is not None:
             msg_dict['url'] = url
-        mayberes = await self.chrome.send('Page.deleteCookie', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.deleteCookie', msg_dict)
+        return res
 
     async def disable(self) -> Optional[dict]:
         """
         Disables page domain notifications.
         """
-        mayberes = await self.chrome.send('Page.disable')
-        return mayberes
+        res = await self.chrome.send('Page.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
         Enables page domain notifications.
         """
-        mayberes = await self.chrome.send('Page.enable')
-        return mayberes
+        res = await self.chrome.send('Page.enable')
+        return res
 
     async def getAppManifest(self) -> Optional[dict]:
-        mayberes = await self.chrome.send('Page.getAppManifest')
-        res = await mayberes
+        res = await self.chrome.send('Page.getAppManifest')
         res['errors'] = Types.AppManifestError.safe_create_from_list(res['errors'])
         return res
 
@@ -173,8 +168,7 @@ class Page(object):
         Returns all browser cookies. Depending on the backend support, will return detailed cookie
 information in the `cookies` field.
         """
-        mayberes = await self.chrome.send('Page.getCookies')
-        res = await mayberes
+        res = await self.chrome.send('Page.getCookies')
         res['cookies'] = Network.Cookie.safe_create_from_list(res['cookies'])
         return res
 
@@ -182,8 +176,7 @@ information in the `cookies` field.
         """
         Returns present frame tree structure.
         """
-        mayberes = await self.chrome.send('Page.getFrameTree')
-        res = await mayberes
+        res = await self.chrome.send('Page.getFrameTree')
         res['frameTree'] = Types.FrameTree.safe_create(res['frameTree'])
         return res
 
@@ -191,8 +184,7 @@ information in the `cookies` field.
         """
         Returns metrics relating to the layouting of the page, such as viewport bounds/scale.
         """
-        mayberes = await self.chrome.send('Page.getLayoutMetrics')
-        res = await mayberes
+        res = await self.chrome.send('Page.getLayoutMetrics')
         res['layoutViewport'] = Types.LayoutViewport.safe_create(res['layoutViewport'])
         res['visualViewport'] = Types.VisualViewport.safe_create(res['visualViewport'])
         res['contentSize'] = DOM.Rect.safe_create(res['contentSize'])
@@ -202,8 +194,7 @@ information in the `cookies` field.
         """
         Returns navigation history for the current page.
         """
-        mayberes = await self.chrome.send('Page.getNavigationHistory')
-        res = await mayberes
+        res = await self.chrome.send('Page.getNavigationHistory')
         res['entries'] = Types.NavigationEntry.safe_create_from_list(res['entries'])
         return res
 
@@ -221,16 +212,14 @@ information in the `cookies` field.
             msg_dict['frameId'] = frameId
         if url is not None:
             msg_dict['url'] = url
-        mayberes = await self.chrome.send('Page.getResourceContent', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Page.getResourceContent', msg_dict)
         return res
 
     async def getResourceTree(self) -> Optional[dict]:
         """
         Returns present frame / resource tree structure.
         """
-        mayberes = await self.chrome.send('Page.getResourceTree')
-        res = await mayberes
+        res = await self.chrome.send('Page.getResourceTree')
         res['frameTree'] = Types.FrameResourceTree.safe_create(res['frameTree'])
         return res
 
@@ -248,8 +237,8 @@ information in the `cookies` field.
             msg_dict['accept'] = accept
         if promptText is not None:
             msg_dict['promptText'] = promptText
-        mayberes = await self.chrome.send('Page.handleJavaScriptDialog', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.handleJavaScriptDialog', msg_dict)
+        return res
 
     async def navigate(self, url: str, referrer: Optional[str] = None, transitionType: Optional[str] = None, frameId: Optional[str] = None) -> Optional[dict]:
         """
@@ -273,8 +262,7 @@ information in the `cookies` field.
             msg_dict['transitionType'] = transitionType
         if frameId is not None:
             msg_dict['frameId'] = frameId
-        mayberes = await self.chrome.send('Page.navigate', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Page.navigate', msg_dict)
         return res
 
     async def navigateToHistoryEntry(self, entryId: int) -> Optional[dict]:
@@ -287,8 +275,8 @@ information in the `cookies` field.
         msg_dict = dict()
         if entryId is not None:
             msg_dict['entryId'] = entryId
-        mayberes = await self.chrome.send('Page.navigateToHistoryEntry', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.navigateToHistoryEntry', msg_dict)
+        return res
 
     async def printToPDF(self, landscape: Optional[bool] = None, displayHeaderFooter: Optional[bool] = None, printBackground: Optional[bool] = None, scale: Optional[float] = None, paperWidth: Optional[float] = None, paperHeight: Optional[float] = None, marginTop: Optional[float] = None, marginBottom: Optional[float] = None, marginLeft: Optional[float] = None, marginRight: Optional[float] = None, pageRanges: Optional[str] = None, ignoreInvalidPageRanges: Optional[bool] = None, headerTemplate: Optional[str] = None, footerTemplate: Optional[str] = None, preferCSSPageSize: Optional[bool] = None) -> Optional[dict]:
         """
@@ -356,8 +344,7 @@ information in the `cookies` field.
             msg_dict['footerTemplate'] = footerTemplate
         if preferCSSPageSize is not None:
             msg_dict['preferCSSPageSize'] = preferCSSPageSize
-        mayberes = await self.chrome.send('Page.printToPDF', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Page.printToPDF', msg_dict)
         return res
 
     async def reload(self, ignoreCache: Optional[bool] = None, scriptToEvaluateOnLoad: Optional[str] = None) -> Optional[dict]:
@@ -374,8 +361,8 @@ information in the `cookies` field.
             msg_dict['ignoreCache'] = ignoreCache
         if scriptToEvaluateOnLoad is not None:
             msg_dict['scriptToEvaluateOnLoad'] = scriptToEvaluateOnLoad
-        mayberes = await self.chrome.send('Page.reload', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.reload', msg_dict)
+        return res
 
     async def removeScriptToEvaluateOnLoad(self, identifier: str) -> Optional[dict]:
         """
@@ -387,8 +374,8 @@ information in the `cookies` field.
         msg_dict = dict()
         if identifier is not None:
             msg_dict['identifier'] = identifier
-        mayberes = await self.chrome.send('Page.removeScriptToEvaluateOnLoad', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.removeScriptToEvaluateOnLoad', msg_dict)
+        return res
 
     async def removeScriptToEvaluateOnNewDocument(self, identifier: str) -> Optional[dict]:
         """
@@ -400,12 +387,12 @@ information in the `cookies` field.
         msg_dict = dict()
         if identifier is not None:
             msg_dict['identifier'] = identifier
-        mayberes = await self.chrome.send('Page.removeScriptToEvaluateOnNewDocument', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.removeScriptToEvaluateOnNewDocument', msg_dict)
+        return res
 
     async def requestAppBanner(self) -> Optional[dict]:
-        mayberes = await self.chrome.send('Page.requestAppBanner')
-        return mayberes
+        res = await self.chrome.send('Page.requestAppBanner')
+        return res
 
     async def screencastFrameAck(self, sessionId: int) -> Optional[dict]:
         """
@@ -417,8 +404,8 @@ information in the `cookies` field.
         msg_dict = dict()
         if sessionId is not None:
             msg_dict['sessionId'] = sessionId
-        mayberes = await self.chrome.send('Page.screencastFrameAck', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.screencastFrameAck', msg_dict)
+        return res
 
     async def searchInResource(self, frameId: str, url: str, query: str, caseSensitive: Optional[bool] = None, isRegex: Optional[bool] = None) -> Optional[dict]:
         """
@@ -446,8 +433,7 @@ information in the `cookies` field.
             msg_dict['caseSensitive'] = caseSensitive
         if isRegex is not None:
             msg_dict['isRegex'] = isRegex
-        mayberes = await self.chrome.send('Page.searchInResource', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Page.searchInResource', msg_dict)
         res['result'] = Debugger.SearchMatch.safe_create_from_list(res['result'])
         return res
 
@@ -461,8 +447,8 @@ information in the `cookies` field.
         msg_dict = dict()
         if enabled is not None:
             msg_dict['enabled'] = enabled
-        mayberes = await self.chrome.send('Page.setAdBlockingEnabled', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.setAdBlockingEnabled', msg_dict)
+        return res
 
     async def setBypassCSP(self, enabled: bool) -> Optional[dict]:
         """
@@ -474,8 +460,8 @@ information in the `cookies` field.
         msg_dict = dict()
         if enabled is not None:
             msg_dict['enabled'] = enabled
-        mayberes = await self.chrome.send('Page.setBypassCSP', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.setBypassCSP', msg_dict)
+        return res
 
     async def setDeviceMetricsOverride(self, width: int, height: int, deviceScaleFactor: float, mobile: bool, scale: Optional[float] = None, screenWidth: Optional[int] = None, screenHeight: Optional[int] = None, positionX: Optional[int] = None, positionY: Optional[int] = None, dontSetVisibleSize: Optional[bool] = None, screenOrientation: Optional[dict] = None, viewport: Optional[dict] = None) -> Optional[dict]:
         """
@@ -533,8 +519,8 @@ query results).
             msg_dict['screenOrientation'] = screenOrientation
         if viewport is not None:
             msg_dict['viewport'] = viewport
-        mayberes = await self.chrome.send('Page.setDeviceMetricsOverride', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.setDeviceMetricsOverride', msg_dict)
+        return res
 
     async def setDeviceOrientationOverride(self, alpha: float, beta: float, gamma: float) -> Optional[dict]:
         """
@@ -554,8 +540,8 @@ query results).
             msg_dict['beta'] = beta
         if gamma is not None:
             msg_dict['gamma'] = gamma
-        mayberes = await self.chrome.send('Page.setDeviceOrientationOverride', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.setDeviceOrientationOverride', msg_dict)
+        return res
 
     async def setFontFamilies(self, fontFamilies: dict) -> Optional[dict]:
         """
@@ -567,8 +553,8 @@ query results).
         msg_dict = dict()
         if fontFamilies is not None:
             msg_dict['fontFamilies'] = fontFamilies
-        mayberes = await self.chrome.send('Page.setFontFamilies', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.setFontFamilies', msg_dict)
+        return res
 
     async def setFontSizes(self, fontSizes: dict) -> Optional[dict]:
         """
@@ -580,8 +566,8 @@ query results).
         msg_dict = dict()
         if fontSizes is not None:
             msg_dict['fontSizes'] = fontSizes
-        mayberes = await self.chrome.send('Page.setFontSizes', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.setFontSizes', msg_dict)
+        return res
 
     async def setDocumentContent(self, frameId: str, html: str) -> Optional[dict]:
         """
@@ -597,8 +583,8 @@ query results).
             msg_dict['frameId'] = frameId
         if html is not None:
             msg_dict['html'] = html
-        mayberes = await self.chrome.send('Page.setDocumentContent', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.setDocumentContent', msg_dict)
+        return res
 
     async def setDownloadBehavior(self, behavior: str, downloadPath: Optional[str] = None) -> Optional[dict]:
         """
@@ -614,8 +600,8 @@ query results).
             msg_dict['behavior'] = behavior
         if downloadPath is not None:
             msg_dict['downloadPath'] = downloadPath
-        mayberes = await self.chrome.send('Page.setDownloadBehavior', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.setDownloadBehavior', msg_dict)
+        return res
 
     async def setGeolocationOverride(self, latitude: Optional[float] = None, longitude: Optional[float] = None, accuracy: Optional[float] = None) -> Optional[dict]:
         """
@@ -636,8 +622,8 @@ unavailable.
             msg_dict['longitude'] = longitude
         if accuracy is not None:
             msg_dict['accuracy'] = accuracy
-        mayberes = await self.chrome.send('Page.setGeolocationOverride', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.setGeolocationOverride', msg_dict)
+        return res
 
     async def setLifecycleEventsEnabled(self, enabled: bool) -> Optional[dict]:
         """
@@ -649,8 +635,8 @@ unavailable.
         msg_dict = dict()
         if enabled is not None:
             msg_dict['enabled'] = enabled
-        mayberes = await self.chrome.send('Page.setLifecycleEventsEnabled', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.setLifecycleEventsEnabled', msg_dict)
+        return res
 
     async def setTouchEmulationEnabled(self, enabled: bool, configuration: Optional[str] = None) -> Optional[dict]:
         """
@@ -666,8 +652,8 @@ unavailable.
             msg_dict['enabled'] = enabled
         if configuration is not None:
             msg_dict['configuration'] = configuration
-        mayberes = await self.chrome.send('Page.setTouchEmulationEnabled', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.setTouchEmulationEnabled', msg_dict)
+        return res
 
     async def startScreencast(self, format: Optional[str] = None, quality: Optional[int] = None, maxWidth: Optional[int] = None, maxHeight: Optional[int] = None, everyNthFrame: Optional[int] = None) -> Optional[dict]:
         """
@@ -695,29 +681,29 @@ unavailable.
             msg_dict['maxHeight'] = maxHeight
         if everyNthFrame is not None:
             msg_dict['everyNthFrame'] = everyNthFrame
-        mayberes = await self.chrome.send('Page.startScreencast', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.startScreencast', msg_dict)
+        return res
 
     async def stopLoading(self) -> Optional[dict]:
         """
         Force the page stop all navigations and pending resource fetches.
         """
-        mayberes = await self.chrome.send('Page.stopLoading')
-        return mayberes
+        res = await self.chrome.send('Page.stopLoading')
+        return res
 
     async def crash(self) -> Optional[dict]:
         """
         Crashes renderer on the IO thread, generates minidumps.
         """
-        mayberes = await self.chrome.send('Page.crash')
-        return mayberes
+        res = await self.chrome.send('Page.crash')
+        return res
 
     async def close(self) -> Optional[dict]:
         """
         Tries to close page, running its beforeunload hooks, if any.
         """
-        mayberes = await self.chrome.send('Page.close')
-        return mayberes
+        res = await self.chrome.send('Page.close')
+        return res
 
     async def setWebLifecycleState(self, state: str) -> Optional[dict]:
         """
@@ -731,15 +717,129 @@ https://github.com/WICG/web-lifecycle/
         msg_dict = dict()
         if state is not None:
             msg_dict['state'] = state
-        mayberes = await self.chrome.send('Page.setWebLifecycleState', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Page.setWebLifecycleState', msg_dict)
+        return res
 
     async def stopScreencast(self) -> Optional[dict]:
         """
         Stops sending each frame in the `screencastFrame`.
         """
-        mayberes = await self.chrome.send('Page.stopScreencast')
-        return mayberes
+        res = await self.chrome.send('Page.stopScreencast')
+        return res
+
+    def domContentEventFired(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.domContentEventFired", fn)
+        else:
+            self.chrome.on("Page.domContentEventFired", fn)
+
+    def frameAttached(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.frameAttached", fn)
+        else:
+            self.chrome.on("Page.frameAttached", fn)
+
+    def frameClearedScheduledNavigation(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.frameClearedScheduledNavigation", fn)
+        else:
+            self.chrome.on("Page.frameClearedScheduledNavigation", fn)
+
+    def frameDetached(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.frameDetached", fn)
+        else:
+            self.chrome.on("Page.frameDetached", fn)
+
+    def frameNavigated(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.frameNavigated", fn)
+        else:
+            self.chrome.on("Page.frameNavigated", fn)
+
+    def frameResized(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.frameResized", fn)
+        else:
+            self.chrome.on("Page.frameResized", fn)
+
+    def frameScheduledNavigation(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.frameScheduledNavigation", fn)
+        else:
+            self.chrome.on("Page.frameScheduledNavigation", fn)
+
+    def frameStartedLoading(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.frameStartedLoading", fn)
+        else:
+            self.chrome.on("Page.frameStartedLoading", fn)
+
+    def frameStoppedLoading(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.frameStoppedLoading", fn)
+        else:
+            self.chrome.on("Page.frameStoppedLoading", fn)
+
+    def interstitialHidden(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.interstitialHidden", fn)
+        else:
+            self.chrome.on("Page.interstitialHidden", fn)
+
+    def interstitialShown(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.interstitialShown", fn)
+        else:
+            self.chrome.on("Page.interstitialShown", fn)
+
+    def javascriptDialogClosed(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.javascriptDialogClosed", fn)
+        else:
+            self.chrome.on("Page.javascriptDialogClosed", fn)
+
+    def javascriptDialogOpening(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.javascriptDialogOpening", fn)
+        else:
+            self.chrome.on("Page.javascriptDialogOpening", fn)
+
+    def lifecycleEvent(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.lifecycleEvent", fn)
+        else:
+            self.chrome.on("Page.lifecycleEvent", fn)
+
+    def loadEventFired(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.loadEventFired", fn)
+        else:
+            self.chrome.on("Page.loadEventFired", fn)
+
+    def navigatedWithinDocument(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.navigatedWithinDocument", fn)
+        else:
+            self.chrome.on("Page.navigatedWithinDocument", fn)
+
+    def screencastFrame(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.screencastFrame", fn)
+        else:
+            self.chrome.on("Page.screencastFrame", fn)
+
+    def screencastVisibilityChanged(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.screencastVisibilityChanged", fn)
+        else:
+            self.chrome.on("Page.screencastVisibilityChanged", fn)
+
+    def windowOpen(self, fn, once=False):
+        if once:
+            self.chrome.once("Page.windowOpen", fn)
+        else:
+            self.chrome.on("Page.windowOpen", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

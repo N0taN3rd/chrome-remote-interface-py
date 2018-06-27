@@ -10,7 +10,7 @@ from pyee import EventEmitter
 
 from ..protocol import ProtocolMixin
 
-__all__ = ["Client"]
+__all__ = ["Client", "connect"]
 
 DEFAULT_HOST: str = "localhost"
 DEFAULT_PORT: int = 9222
@@ -26,6 +26,7 @@ class NetworkError(Exception):  # noqa: D204
 
 
 class Client(ProtocolMixin, EventEmitter):
+    """ """
 
     def __init__(
         self,
@@ -49,17 +50,20 @@ class Client(ProtocolMixin, EventEmitter):
         self._message_id = 1
         self._connected = False
         self._callbacks: Dict[int, asyncio.Future] = dict()
+        self._loop = asyncio.get_event_loop()
+
+    def __await__(self):
+        yield from self.connect().__await__()
+        return self
 
     async def disconnect(self):
         if self._recv_task:
             self._recv_task.cancel()
-            await self._recv_task
+        self._connected = False
         try:
             await self._ws.close()
         except Exception as e:
             print(e)
-        self._connected = False
-        asyncio.get_event_loop().close()
 
     async def connect(self):
         if self._ws_url is not None:
@@ -75,7 +79,6 @@ class Client(ProtocolMixin, EventEmitter):
                 self._ws_url, compression=None, max_queue=0, timeout=20
             )
             self._recv_task = asyncio.ensure_future(self._recv_loop())
-        print("connect done")
 
     async def _recv_loop(self):
         self._connected = True
@@ -84,7 +87,6 @@ class Client(ProtocolMixin, EventEmitter):
                 resp = await self._ws.recv()
                 if resp:
                     self._on_message(resp)
-                print(resp)
             except (
                 websockets.ConnectionClosed,
                 ConnectionResetError,
@@ -94,6 +96,11 @@ class Client(ProtocolMixin, EventEmitter):
                 break
 
     def _on_message(self, message: str) -> None:
+        """
+
+        :param message: str: 
+
+        """
         msg = ujson.loads(message)
         if msg.get("id") in self._callbacks:
             self._on_response(msg)
@@ -101,6 +108,11 @@ class Client(ProtocolMixin, EventEmitter):
             self._on_query(msg)
 
     def _on_response(self, msg: dict) -> None:
+        """
+
+        :param msg: dict: 
+
+        """
         callback = self._callbacks.pop(msg.get("id", -1))
         if "error" in msg:
             error = msg["error"]
@@ -109,6 +121,11 @@ class Client(ProtocolMixin, EventEmitter):
             callback.set_result(msg.get("result"))
 
     def _on_query(self, msg: dict) -> None:
+        """
+
+        :param msg: dict: 
+
+        """
         params = msg.get("params", {})
         method = msg.get("method", "")
         if method in self.protocol_events:
@@ -120,18 +137,23 @@ class Client(ProtocolMixin, EventEmitter):
 
     async def _send_async(self, msg: str) -> None:
         while not self._connected:
-            print("while not connected")
             await asyncio.sleep(0)
         await self._ws.send(msg)
 
-    def send(self, method: str = None, params: dict = None) -> None:
+    def send(self, method: str = None, params: dict = None) -> asyncio.Future:
+        """
+
+        :param method: str:  (Default value = None)
+        :param params: dict:  (Default value = None)
+
+        """
         if params is None:
             params = dict()
         self._message_id += 1
         _id = self._message_id
         msg = ujson.dumps(dict(method=method, params=params, id=_id))
         asyncio.ensure_future(self._send_async(msg))
-        callback = asyncio.get_event_loop().create_future()
+        callback = self._loop.create_future()
         self._callbacks[_id] = callback
         callback.method = method  # type: ignore
         return callback
@@ -141,18 +163,22 @@ class Client(ProtocolMixin, EventEmitter):
 
     @property
     def connected(self):
+        """ """
         return self._connected
 
     @property
     def host(self):
+        """ """
         return self._host
 
     @property
     def port(self):
+        """ """
         return self._port
 
     @property
     def url(self):
+        """ """
         return self._url
 
     @classmethod
@@ -173,6 +199,12 @@ class Client(ProtocolMixin, EventEmitter):
         return json_
 
     def _make_url(self, url: Optional[str] = None, secure: Optional[bool] = False):
+        """
+
+        :param url: Optional[str]:  (Default value = None)
+        :param secure: Optional[bool]:  (Default value = False)
+
+        """
         if url is None:
             return f"{'https:' if secure else 'http:'}//{self._host}:{self._port}"
         return url
@@ -252,3 +284,9 @@ class Client(ProtocolMixin, EventEmitter):
             data = await session.get(urljoin(url, "json/version"))
             json_ = await data.json()
             return json_
+
+
+async def connect(*args, **kwargs) -> Client:
+    client = Client(*args, **kwargs)
+    await client.connect()
+    return client

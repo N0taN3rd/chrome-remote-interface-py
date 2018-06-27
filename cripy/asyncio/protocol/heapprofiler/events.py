@@ -12,9 +12,9 @@ __all__ = [
     "HEAPPROFILER_EVENTS_NS"
 ]
 
+
 class AddHeapSnapshotChunkEvent(object):
 
-    event = "HeapProfiler.addHeapSnapshotChunk"
 
     __slots__ = ["chunk"]
 
@@ -83,7 +83,6 @@ class HeapStatsUpdateEvent(object):
     If heap objects tracking has been started then backend may send update for one or more fragments
     """
 
-    event = "HeapProfiler.heapStatsUpdate"
 
     __slots__ = ["statsUpdate"]
 
@@ -153,7 +152,6 @@ class LastSeenObjectIdEvent(object):
 	If the were changes in the heap since last event then one or more heapStatsUpdate events will be sent before a new lastSeenObjectId event.
     """
 
-    event = "HeapProfiler.lastSeenObjectId"
 
     __slots__ = ["lastSeenObjectId", "timestamp"]
 
@@ -224,7 +222,6 @@ class LastSeenObjectIdEvent(object):
 
 class ReportHeapSnapshotProgressEvent(object):
 
-    event = "HeapProfiler.reportHeapSnapshotProgress"
 
     __slots__ = ["done", "total", "finished"]
 
@@ -300,7 +297,6 @@ class ReportHeapSnapshotProgressEvent(object):
 
 class ResetProfilesEvent(dict):
 
-    event = "HeapProfiler.resetProfiles"
 
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)

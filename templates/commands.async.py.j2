@@ -68,21 +68,30 @@ class {{ d.domain }}(object):
         if {{ param.name }} is not None:
             msg_dict['{{ param.name }}'] = {{ param.name }}
         {% endfor %}
-        mayberes = await self.chrome.send('{{ command.scoped_name }}', msg_dict)
+        res = await self.chrome.send('{{ command.scoped_name }}', msg_dict)
         {% else %}
-        mayberes = await self.chrome.send('{{ command.scoped_name }}')
+        res = await self.chrome.send('{{ command.scoped_name }}')
         {% endif %}
         {% if command.returns %}
-        res = await mayberes
         {% for trans in command.returns.yield_result_trans() %}
         {{ trans }}
         {% endfor %}
         return res
         {% else %}
-        return mayberes
+        return res
         {% endif %}
 
     {% endfor %}
+    {% if events %}
+    {% for e, _ in events %}
+    def {{ onEvent(e) }}(self, fn, once=False):
+        if once:
+            self.chrome.once("{{ e }}", fn)
+        else:
+            self.chrome.on("{{ e }}", fn)
+
+    {% endfor %}
+    {% endif %}
     @staticmethod
     def get_event_classes() -> Optional[dict]:
         """

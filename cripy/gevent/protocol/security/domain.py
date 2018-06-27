@@ -77,6 +77,12 @@ be handled by the DevTools client and should be answered with `handleCertificate
         wres = self.chrome.send('Security.setOverrideCertificateErrors', msg_dict)
         return wres.get()
 
+    def certificateError(self, fn, once=False):
+        self.chrome.on("Security.certificateError", fn, once=once)
+
+    def securityStateChanged(self, fn, once=False):
+        self.chrome.on("Security.securityStateChanged", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

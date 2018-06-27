@@ -29,23 +29,22 @@ class LayerTree(object):
         msg_dict = dict()
         if layerId is not None:
             msg_dict['layerId'] = layerId
-        mayberes = await self.chrome.send('LayerTree.compositingReasons', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('LayerTree.compositingReasons', msg_dict)
         return res
 
     async def disable(self) -> Optional[dict]:
         """
         Disables compositing tree inspection.
         """
-        mayberes = await self.chrome.send('LayerTree.disable')
-        return mayberes
+        res = await self.chrome.send('LayerTree.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
         Enables compositing tree inspection.
         """
-        mayberes = await self.chrome.send('LayerTree.enable')
-        return mayberes
+        res = await self.chrome.send('LayerTree.enable')
+        return res
 
     async def loadSnapshot(self, tiles: List[dict]) -> Optional[dict]:
         """
@@ -57,8 +56,7 @@ class LayerTree(object):
         msg_dict = dict()
         if tiles is not None:
             msg_dict['tiles'] = tiles
-        mayberes = await self.chrome.send('LayerTree.loadSnapshot', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('LayerTree.loadSnapshot', msg_dict)
         return res
 
     async def makeSnapshot(self, layerId: str) -> Optional[dict]:
@@ -71,8 +69,7 @@ class LayerTree(object):
         msg_dict = dict()
         if layerId is not None:
             msg_dict['layerId'] = layerId
-        mayberes = await self.chrome.send('LayerTree.makeSnapshot', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('LayerTree.makeSnapshot', msg_dict)
         return res
 
     async def profileSnapshot(self, snapshotId: str, minRepeatCount: Optional[int] = None, minDuration: Optional[float] = None, clipRect: Optional[dict] = None) -> Optional[dict]:
@@ -95,8 +92,7 @@ class LayerTree(object):
             msg_dict['minDuration'] = minDuration
         if clipRect is not None:
             msg_dict['clipRect'] = clipRect
-        mayberes = await self.chrome.send('LayerTree.profileSnapshot', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('LayerTree.profileSnapshot', msg_dict)
         return res
 
     async def releaseSnapshot(self, snapshotId: str) -> Optional[dict]:
@@ -109,8 +105,8 @@ class LayerTree(object):
         msg_dict = dict()
         if snapshotId is not None:
             msg_dict['snapshotId'] = snapshotId
-        mayberes = await self.chrome.send('LayerTree.releaseSnapshot', msg_dict)
-        return mayberes
+        res = await self.chrome.send('LayerTree.releaseSnapshot', msg_dict)
+        return res
 
     async def replaySnapshot(self, snapshotId: str, fromStep: Optional[int] = None, toStep: Optional[int] = None, scale: Optional[float] = None) -> Optional[dict]:
         """
@@ -134,8 +130,7 @@ class LayerTree(object):
             msg_dict['toStep'] = toStep
         if scale is not None:
             msg_dict['scale'] = scale
-        mayberes = await self.chrome.send('LayerTree.replaySnapshot', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('LayerTree.replaySnapshot', msg_dict)
         return res
 
     async def snapshotCommandLog(self, snapshotId: str) -> Optional[dict]:
@@ -148,9 +143,20 @@ class LayerTree(object):
         msg_dict = dict()
         if snapshotId is not None:
             msg_dict['snapshotId'] = snapshotId
-        mayberes = await self.chrome.send('LayerTree.snapshotCommandLog', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('LayerTree.snapshotCommandLog', msg_dict)
         return res
+
+    def layerPainted(self, fn, once=False):
+        if once:
+            self.chrome.once("LayerTree.layerPainted", fn)
+        else:
+            self.chrome.on("LayerTree.layerPainted", fn)
+
+    def layerTreeDidChange(self, fn, once=False):
+        if once:
+            self.chrome.once("LayerTree.layerTreeDidChange", fn)
+        else:
+            self.chrome.on("LayerTree.layerTreeDidChange", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

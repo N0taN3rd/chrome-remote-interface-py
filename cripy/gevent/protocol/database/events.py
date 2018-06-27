@@ -19,7 +19,7 @@ class AddDatabaseEvent(object):
         :type database: dict
         """
         super(AddDatabaseEvent, self).__init__()
-        self.database = Database.safe_create(database)
+        self.database = DatabaseT.safe_create(database)
 
     def __repr__(self):
         repr_args = []

@@ -7,12 +7,12 @@ __all__ = [
     "TETHERING_EVENTS_NS"
 ]
 
+
 class AcceptedEvent(object):
     """
     Informs that port was successfully bound and got a specified connection id.
     """
 
-    event = "Tethering.accepted"
 
     __slots__ = ["port", "connectionId"]
 

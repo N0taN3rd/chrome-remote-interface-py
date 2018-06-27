@@ -150,6 +150,15 @@ class Animation(object):
         wres = self.chrome.send('Animation.setTiming', msg_dict)
         return wres.get()
 
+    def animationCanceled(self, fn, once=False):
+        self.chrome.on("Animation.animationCanceled", fn, once=once)
+
+    def animationCreated(self, fn, once=False):
+        self.chrome.on("Animation.animationCreated", fn, once=once)
+
+    def animationStarted(self, fn, once=False):
+        self.chrome.on("Animation.animationStarted", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

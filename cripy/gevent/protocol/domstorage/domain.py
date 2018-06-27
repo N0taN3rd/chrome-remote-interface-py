@@ -90,6 +90,18 @@ class DOMStorage(object):
         wres = self.chrome.send('DOMStorage.setDOMStorageItem', msg_dict)
         return wres.get()
 
+    def domStorageItemAdded(self, fn, once=False):
+        self.chrome.on("DOMStorage.domStorageItemAdded", fn, once=once)
+
+    def domStorageItemRemoved(self, fn, once=False):
+        self.chrome.on("DOMStorage.domStorageItemRemoved", fn, once=once)
+
+    def domStorageItemUpdated(self, fn, once=False):
+        self.chrome.on("DOMStorage.domStorageItemUpdated", fn, once=once)
+
+    def domStorageItemsCleared(self, fn, once=False):
+        self.chrome.on("DOMStorage.domStorageItemsCleared", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """

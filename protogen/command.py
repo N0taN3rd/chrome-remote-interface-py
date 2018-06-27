@@ -1,8 +1,8 @@
-from typing import List, Optional, Union, Iterator
+from typing import List, Optional, Iterator
 
-from .shared import FRefCollector
 from .property import Property
 from .returns import Returns
+from .shared import FRefCollector
 
 __all__ = ["Command"]
 
@@ -96,6 +96,7 @@ class Command(FRefCollector):
         params = []
         for param in param_list:
             para = Property(self.name, param)
+            para.domain = self.domain
             self._if_foreign_ref_add(para)
             params.append(para)
         return params

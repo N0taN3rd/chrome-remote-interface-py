@@ -469,26 +469,69 @@ attribute, user, password.
         wres = self.chrome.send('Network.setRequestInterception', msg_dict)
         return wres.get()
 
-    def setUserAgentOverride(self, userAgent, acceptLanguage=None, platform=None):
+    def setUserAgentOverride(self, userAgent):
         """
         Allows overriding user agent with the given string.
 
         :param userAgent: User agent to use.
         :type userAgent: str
-        :param acceptLanguage: Browser langugage to emulate.
-        :type acceptLanguage: Optional[str]
-        :param platform: The platform navigator.platform should return.
-        :type platform: Optional[str]
         """
         msg_dict = dict()
         if userAgent is not None:
             msg_dict['userAgent'] = userAgent
-        if acceptLanguage is not None:
-            msg_dict['acceptLanguage'] = acceptLanguage
-        if platform is not None:
-            msg_dict['platform'] = platform
         wres = self.chrome.send('Network.setUserAgentOverride', msg_dict)
         return wres.get()
+
+    def dataReceived(self, fn, once=False):
+        self.chrome.on("Network.dataReceived", fn, once=once)
+
+    def eventSourceMessageReceived(self, fn, once=False):
+        self.chrome.on("Network.eventSourceMessageReceived", fn, once=once)
+
+    def loadingFailed(self, fn, once=False):
+        self.chrome.on("Network.loadingFailed", fn, once=once)
+
+    def loadingFinished(self, fn, once=False):
+        self.chrome.on("Network.loadingFinished", fn, once=once)
+
+    def requestIntercepted(self, fn, once=False):
+        self.chrome.on("Network.requestIntercepted", fn, once=once)
+
+    def requestServedFromCache(self, fn, once=False):
+        self.chrome.on("Network.requestServedFromCache", fn, once=once)
+
+    def requestWillBeSent(self, fn, once=False):
+        self.chrome.on("Network.requestWillBeSent", fn, once=once)
+
+    def resourceChangedPriority(self, fn, once=False):
+        self.chrome.on("Network.resourceChangedPriority", fn, once=once)
+
+    def signedExchangeReceived(self, fn, once=False):
+        self.chrome.on("Network.signedExchangeReceived", fn, once=once)
+
+    def responseReceived(self, fn, once=False):
+        self.chrome.on("Network.responseReceived", fn, once=once)
+
+    def webSocketClosed(self, fn, once=False):
+        self.chrome.on("Network.webSocketClosed", fn, once=once)
+
+    def webSocketCreated(self, fn, once=False):
+        self.chrome.on("Network.webSocketCreated", fn, once=once)
+
+    def webSocketFrameError(self, fn, once=False):
+        self.chrome.on("Network.webSocketFrameError", fn, once=once)
+
+    def webSocketFrameReceived(self, fn, once=False):
+        self.chrome.on("Network.webSocketFrameReceived", fn, once=once)
+
+    def webSocketFrameSent(self, fn, once=False):
+        self.chrome.on("Network.webSocketFrameSent", fn, once=once)
+
+    def webSocketHandshakeResponseReceived(self, fn, once=False):
+        self.chrome.on("Network.webSocketHandshakeResponseReceived", fn, once=once)
+
+    def webSocketWillSendHandshakeRequest(self, fn, once=False):
+        self.chrome.on("Network.webSocketWillSendHandshakeRequest", fn, once=once)
 
     @staticmethod
     def get_event_classes():

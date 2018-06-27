@@ -22,15 +22,14 @@ class Tracing(object):
         """
         Stop trace events collection.
         """
-        mayberes = await self.chrome.send('Tracing.end')
-        return mayberes
+        res = await self.chrome.send('Tracing.end')
+        return res
 
     async def getCategories(self) -> Optional[dict]:
         """
         Gets supported tracing categories.
         """
-        mayberes = await self.chrome.send('Tracing.getCategories')
-        res = await mayberes
+        res = await self.chrome.send('Tracing.getCategories')
         return res
 
     async def recordClockSyncMarker(self, syncId: str) -> Optional[dict]:
@@ -43,15 +42,14 @@ class Tracing(object):
         msg_dict = dict()
         if syncId is not None:
             msg_dict['syncId'] = syncId
-        mayberes = await self.chrome.send('Tracing.recordClockSyncMarker', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Tracing.recordClockSyncMarker', msg_dict)
+        return res
 
     async def requestMemoryDump(self) -> Optional[dict]:
         """
         Request a global memory dump.
         """
-        mayberes = await self.chrome.send('Tracing.requestMemoryDump')
-        res = await mayberes
+        res = await self.chrome.send('Tracing.requestMemoryDump')
         return res
 
     async def start(self, categories: Optional[str] = None, options: Optional[str] = None, bufferUsageReportingInterval: Optional[float] = None, transferMode: Optional[str] = None, streamCompression: Optional[str] = None, traceConfig: Optional[dict] = None) -> Optional[dict]:
@@ -84,8 +82,26 @@ class Tracing(object):
             msg_dict['streamCompression'] = streamCompression
         if traceConfig is not None:
             msg_dict['traceConfig'] = traceConfig
-        mayberes = await self.chrome.send('Tracing.start', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Tracing.start', msg_dict)
+        return res
+
+    def bufferUsage(self, fn, once=False):
+        if once:
+            self.chrome.once("Tracing.bufferUsage", fn)
+        else:
+            self.chrome.on("Tracing.bufferUsage", fn)
+
+    def dataCollected(self, fn, once=False):
+        if once:
+            self.chrome.once("Tracing.dataCollected", fn)
+        else:
+            self.chrome.on("Tracing.dataCollected", fn)
+
+    def tracingComplete(self, fn, once=False):
+        if once:
+            self.chrome.once("Tracing.tracingComplete", fn)
+        else:
+            self.chrome.on("Tracing.tracingComplete", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

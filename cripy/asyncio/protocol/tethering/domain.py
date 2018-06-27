@@ -29,8 +29,8 @@ class Tethering(object):
         msg_dict = dict()
         if port is not None:
             msg_dict['port'] = port
-        mayberes = await self.chrome.send('Tethering.bind', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Tethering.bind', msg_dict)
+        return res
 
     async def unbind(self, port: int) -> Optional[dict]:
         """
@@ -42,8 +42,14 @@ class Tethering(object):
         msg_dict = dict()
         if port is not None:
             msg_dict['port'] = port
-        mayberes = await self.chrome.send('Tethering.unbind', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Tethering.unbind', msg_dict)
+        return res
+
+    def accepted(self, fn, once=False):
+        if once:
+            self.chrome.once("Tethering.accepted", fn)
+        else:
+            self.chrome.on("Tethering.accepted", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

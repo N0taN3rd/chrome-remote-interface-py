@@ -1,8 +1,8 @@
-from cripy.gevent.protocol.network import types as Network
+from cripy.gevent.protocol.dom import types as DOM
 from cripy.gevent.protocol.emulation import types as Emulation
 from cripy.gevent.protocol.debugger import types as Debugger
+from cripy.gevent.protocol.network import types as Network
 from cripy.gevent.protocol.runtime import types as Runtime
-from cripy.gevent.protocol.dom import types as DOM
 from cripy.gevent.protocol.page import events as Events
 from cripy.gevent.protocol.page import types as Types
 
@@ -556,32 +556,6 @@ query results).
         wres = self.chrome.send('Page.setDeviceOrientationOverride', msg_dict)
         return wres.get()
 
-    def setFontFamilies(self, fontFamilies):
-        """
-        Set generic font families.
-
-        :param fontFamilies: Specifies font families to set. If a font family is not specified, it won't be changed.
-        :type fontFamilies: dict
-        """
-        msg_dict = dict()
-        if fontFamilies is not None:
-            msg_dict['fontFamilies'] = fontFamilies
-        wres = self.chrome.send('Page.setFontFamilies', msg_dict)
-        return wres.get()
-
-    def setFontSizes(self, fontSizes):
-        """
-        Set default font sizes.
-
-        :param fontSizes: Specifies font sizes to set. If a font size is not specified, it won't be changed.
-        :type fontSizes: dict
-        """
-        msg_dict = dict()
-        if fontSizes is not None:
-            msg_dict['fontSizes'] = fontSizes
-        wres = self.chrome.send('Page.setFontSizes', msg_dict)
-        return wres.get()
-
     def setDocumentContent(self, frameId, html):
         """
         Sets given markup as the document's HTML.
@@ -739,6 +713,63 @@ https://github.com/WICG/web-lifecycle/
         """
         wres = self.chrome.send('Page.stopScreencast')
         return wres.get()
+
+    def domContentEventFired(self, fn, once=False):
+        self.chrome.on("Page.domContentEventFired", fn, once=once)
+
+    def frameAttached(self, fn, once=False):
+        self.chrome.on("Page.frameAttached", fn, once=once)
+
+    def frameClearedScheduledNavigation(self, fn, once=False):
+        self.chrome.on("Page.frameClearedScheduledNavigation", fn, once=once)
+
+    def frameDetached(self, fn, once=False):
+        self.chrome.on("Page.frameDetached", fn, once=once)
+
+    def frameNavigated(self, fn, once=False):
+        self.chrome.on("Page.frameNavigated", fn, once=once)
+
+    def frameResized(self, fn, once=False):
+        self.chrome.on("Page.frameResized", fn, once=once)
+
+    def frameScheduledNavigation(self, fn, once=False):
+        self.chrome.on("Page.frameScheduledNavigation", fn, once=once)
+
+    def frameStartedLoading(self, fn, once=False):
+        self.chrome.on("Page.frameStartedLoading", fn, once=once)
+
+    def frameStoppedLoading(self, fn, once=False):
+        self.chrome.on("Page.frameStoppedLoading", fn, once=once)
+
+    def interstitialHidden(self, fn, once=False):
+        self.chrome.on("Page.interstitialHidden", fn, once=once)
+
+    def interstitialShown(self, fn, once=False):
+        self.chrome.on("Page.interstitialShown", fn, once=once)
+
+    def javascriptDialogClosed(self, fn, once=False):
+        self.chrome.on("Page.javascriptDialogClosed", fn, once=once)
+
+    def javascriptDialogOpening(self, fn, once=False):
+        self.chrome.on("Page.javascriptDialogOpening", fn, once=once)
+
+    def lifecycleEvent(self, fn, once=False):
+        self.chrome.on("Page.lifecycleEvent", fn, once=once)
+
+    def loadEventFired(self, fn, once=False):
+        self.chrome.on("Page.loadEventFired", fn, once=once)
+
+    def navigatedWithinDocument(self, fn, once=False):
+        self.chrome.on("Page.navigatedWithinDocument", fn, once=once)
+
+    def screencastFrame(self, fn, once=False):
+        self.chrome.on("Page.screencastFrame", fn, once=once)
+
+    def screencastVisibilityChanged(self, fn, once=False):
+        self.chrome.on("Page.screencastVisibilityChanged", fn, once=once)
+
+    def windowOpen(self, fn, once=False):
+        self.chrome.on("Page.windowOpen", fn, once=once)
 
     @staticmethod
     def get_event_classes():

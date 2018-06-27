@@ -82,6 +82,13 @@ class {{ d.domain }}(object):
         {% endif %}
 
     {% endfor %}
+    {% if events %}
+    {% for e, _ in events %}
+    def {{ onEvent(e) }}(self, fn, once=False):
+        self.chrome.on("{{ e }}", fn, once=once)
+
+    {% endfor %}
+    {% endif %}
     @staticmethod
     def get_event_classes():
         """

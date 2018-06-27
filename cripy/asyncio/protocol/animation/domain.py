@@ -23,15 +23,15 @@ class Animation(object):
         """
         Disables animation domain notifications.
         """
-        mayberes = await self.chrome.send('Animation.disable')
-        return mayberes
+        res = await self.chrome.send('Animation.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
         Enables animation domain notifications.
         """
-        mayberes = await self.chrome.send('Animation.enable')
-        return mayberes
+        res = await self.chrome.send('Animation.enable')
+        return res
 
     async def getCurrentTime(self, id: str) -> Optional[dict]:
         """
@@ -43,16 +43,14 @@ class Animation(object):
         msg_dict = dict()
         if id is not None:
             msg_dict['id'] = id
-        mayberes = await self.chrome.send('Animation.getCurrentTime', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Animation.getCurrentTime', msg_dict)
         return res
 
     async def getPlaybackRate(self) -> Optional[dict]:
         """
         Gets the playback rate of the document timeline.
         """
-        mayberes = await self.chrome.send('Animation.getPlaybackRate')
-        res = await mayberes
+        res = await self.chrome.send('Animation.getPlaybackRate')
         return res
 
     async def releaseAnimations(self, animations: List[str]) -> Optional[dict]:
@@ -65,8 +63,8 @@ class Animation(object):
         msg_dict = dict()
         if animations is not None:
             msg_dict['animations'] = animations
-        mayberes = await self.chrome.send('Animation.releaseAnimations', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Animation.releaseAnimations', msg_dict)
+        return res
 
     async def resolveAnimation(self, animationId: str) -> Optional[dict]:
         """
@@ -78,8 +76,7 @@ class Animation(object):
         msg_dict = dict()
         if animationId is not None:
             msg_dict['animationId'] = animationId
-        mayberes = await self.chrome.send('Animation.resolveAnimation', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Animation.resolveAnimation', msg_dict)
         res['remoteObject'] = Runtime.RemoteObject.safe_create(res['remoteObject'])
         return res
 
@@ -97,8 +94,8 @@ class Animation(object):
             msg_dict['animations'] = animations
         if currentTime is not None:
             msg_dict['currentTime'] = currentTime
-        mayberes = await self.chrome.send('Animation.seekAnimations', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Animation.seekAnimations', msg_dict)
+        return res
 
     async def setPaused(self, animations: List[str], paused: bool) -> Optional[dict]:
         """
@@ -114,8 +111,8 @@ class Animation(object):
             msg_dict['animations'] = animations
         if paused is not None:
             msg_dict['paused'] = paused
-        mayberes = await self.chrome.send('Animation.setPaused', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Animation.setPaused', msg_dict)
+        return res
 
     async def setPlaybackRate(self, playbackRate: float) -> Optional[dict]:
         """
@@ -127,8 +124,8 @@ class Animation(object):
         msg_dict = dict()
         if playbackRate is not None:
             msg_dict['playbackRate'] = playbackRate
-        mayberes = await self.chrome.send('Animation.setPlaybackRate', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Animation.setPlaybackRate', msg_dict)
+        return res
 
     async def setTiming(self, animationId: str, duration: float, delay: float) -> Optional[dict]:
         """
@@ -148,8 +145,26 @@ class Animation(object):
             msg_dict['duration'] = duration
         if delay is not None:
             msg_dict['delay'] = delay
-        mayberes = await self.chrome.send('Animation.setTiming', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Animation.setTiming', msg_dict)
+        return res
+
+    def animationCanceled(self, fn, once=False):
+        if once:
+            self.chrome.once("Animation.animationCanceled", fn)
+        else:
+            self.chrome.on("Animation.animationCanceled", fn)
+
+    def animationCreated(self, fn, once=False):
+        if once:
+            self.chrome.once("Animation.animationCreated", fn)
+        else:
+            self.chrome.on("Animation.animationCreated", fn)
+
+    def animationStarted(self, fn, once=False):
+        if once:
+            self.chrome.once("Animation.animationStarted", fn)
+        else:
+            self.chrome.on("Animation.animationStarted", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

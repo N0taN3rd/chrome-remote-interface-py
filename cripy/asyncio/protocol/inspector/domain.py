@@ -19,15 +19,33 @@ class Inspector(object):
         """
         Disables inspector domain notifications.
         """
-        mayberes = await self.chrome.send('Inspector.disable')
-        return mayberes
+        res = await self.chrome.send('Inspector.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
         Enables inspector domain notifications.
         """
-        mayberes = await self.chrome.send('Inspector.enable')
-        return mayberes
+        res = await self.chrome.send('Inspector.enable')
+        return res
+
+    def detached(self, fn, once=False):
+        if once:
+            self.chrome.once("Inspector.detached", fn)
+        else:
+            self.chrome.on("Inspector.detached", fn)
+
+    def targetCrashed(self, fn, once=False):
+        if once:
+            self.chrome.once("Inspector.targetCrashed", fn)
+        else:
+            self.chrome.on("Inspector.targetCrashed", fn)
+
+    def targetReloadedAfterCrash(self, fn, once=False):
+        if once:
+            self.chrome.once("Inspector.targetReloadedAfterCrash", fn)
+        else:
+            self.chrome.on("Inspector.targetReloadedAfterCrash", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

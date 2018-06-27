@@ -10,9 +10,9 @@ __all__ = [
     "TRACING_EVENTS_NS"
 ]
 
+
 class BufferUsageEvent(object):
 
-    event = "Tracing.bufferUsage"
 
     __slots__ = ["percentFull", "eventCount", "value"]
 
@@ -92,7 +92,6 @@ class DataCollectedEvent(object):
 	When tracing is stopped collected events will be send as a sequence of dataCollected events followed by tracingComplete event.
     """
 
-    event = "Tracing.dataCollected"
 
     __slots__ = ["value"]
 
@@ -161,7 +160,6 @@ class TracingCompleteEvent(object):
     Signals that tracing is stopped and there is no trace buffers pending flush, all data were delivered via dataCollected events.
     """
 
-    event = "Tracing.tracingComplete"
 
     __slots__ = ["stream", "streamCompression"]
 

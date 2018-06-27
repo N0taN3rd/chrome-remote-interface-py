@@ -1,9 +1,3 @@
-from cripy.gevent.protocol.console import Console
-from cripy.gevent.protocol.debugger import Debugger
-from cripy.gevent.protocol.heapprofiler import HeapProfiler
-from cripy.gevent.protocol.profiler import Profiler
-from cripy.gevent.protocol.runtime import Runtime
-from cripy.gevent.protocol.schema import Schema
 from cripy.gevent.protocol.accessibility import Accessibility
 from cripy.gevent.protocol.animation import Animation
 from cripy.gevent.protocol.applicationcache import ApplicationCache
@@ -37,6 +31,12 @@ from cripy.gevent.protocol.systeminfo import SystemInfo
 from cripy.gevent.protocol.target import Target
 from cripy.gevent.protocol.tethering import Tethering
 from cripy.gevent.protocol.tracing import Tracing
+from cripy.gevent.protocol.console import Console
+from cripy.gevent.protocol.debugger import Debugger
+from cripy.gevent.protocol.heapprofiler import HeapProfiler
+from cripy.gevent.protocol.profiler import Profiler
+from cripy.gevent.protocol.runtime import Runtime
+from cripy.gevent.protocol.schema import Schema
 
 __all__ = [ "ProtocolMixin" ]
 
@@ -45,18 +45,6 @@ class ProtocolMixin(object):
     def __init__(self, *args, **kwargs):
         super(ProtocolMixin, self).__init__(*args, **kwargs)
         self.protocol_events = dict()
-        self.Console: Console = Console(self)
-        self._update_protocol_events(self.Console.get_event_classes())
-        self.Debugger: Debugger = Debugger(self)
-        self._update_protocol_events(self.Debugger.get_event_classes())
-        self.HeapProfiler: HeapProfiler = HeapProfiler(self)
-        self._update_protocol_events(self.HeapProfiler.get_event_classes())
-        self.Profiler: Profiler = Profiler(self)
-        self._update_protocol_events(self.Profiler.get_event_classes())
-        self.Runtime: Runtime = Runtime(self)
-        self._update_protocol_events(self.Runtime.get_event_classes())
-        self.Schema: Schema = Schema(self)
-        self._update_protocol_events(self.Schema.get_event_classes())
         self.Accessibility: Accessibility = Accessibility(self)
         self._update_protocol_events(self.Accessibility.get_event_classes())
         self.Animation: Animation = Animation(self)
@@ -123,6 +111,18 @@ class ProtocolMixin(object):
         self._update_protocol_events(self.Tethering.get_event_classes())
         self.Tracing: Tracing = Tracing(self)
         self._update_protocol_events(self.Tracing.get_event_classes())
+        self.Console: Console = Console(self)
+        self._update_protocol_events(self.Console.get_event_classes())
+        self.Debugger: Debugger = Debugger(self)
+        self._update_protocol_events(self.Debugger.get_event_classes())
+        self.HeapProfiler: HeapProfiler = HeapProfiler(self)
+        self._update_protocol_events(self.HeapProfiler.get_event_classes())
+        self.Profiler: Profiler = Profiler(self)
+        self._update_protocol_events(self.Profiler.get_event_classes())
+        self.Runtime: Runtime = Runtime(self)
+        self._update_protocol_events(self.Runtime.get_event_classes())
+        self.Schema: Schema = Schema(self)
+        self._update_protocol_events(self.Schema.get_event_classes())
 
     def _update_protocol_events(self, events):
         if events is not None:

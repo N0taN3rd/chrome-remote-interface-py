@@ -22,15 +22,14 @@ class Browser(object):
         """
         Close browser gracefully.
         """
-        mayberes = await self.chrome.send('Browser.close')
-        return mayberes
+        res = await self.chrome.send('Browser.close')
+        return res
 
     async def getVersion(self) -> Optional[dict]:
         """
         Returns version information.
         """
-        mayberes = await self.chrome.send('Browser.getVersion')
-        res = await mayberes
+        res = await self.chrome.send('Browser.getVersion')
         return res
 
     async def getBrowserCommandLine(self) -> Optional[dict]:
@@ -38,8 +37,7 @@ class Browser(object):
         Returns the command line switches for the browser process if, and only if
 --enable-automation is on the commandline.
         """
-        mayberes = await self.chrome.send('Browser.getBrowserCommandLine')
-        res = await mayberes
+        res = await self.chrome.send('Browser.getBrowserCommandLine')
         return res
 
     async def getHistograms(self, query: Optional[str] = None) -> Optional[dict]:
@@ -52,8 +50,7 @@ class Browser(object):
         msg_dict = dict()
         if query is not None:
             msg_dict['query'] = query
-        mayberes = await self.chrome.send('Browser.getHistograms', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Browser.getHistograms', msg_dict)
         res['histograms'] = Types.Histogram.safe_create_from_list(res['histograms'])
         return res
 
@@ -67,8 +64,7 @@ class Browser(object):
         msg_dict = dict()
         if name is not None:
             msg_dict['name'] = name
-        mayberes = await self.chrome.send('Browser.getHistogram', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Browser.getHistogram', msg_dict)
         res['histogram'] = Types.Histogram.safe_create(res['histogram'])
         return res
 
@@ -82,8 +78,7 @@ class Browser(object):
         msg_dict = dict()
         if windowId is not None:
             msg_dict['windowId'] = windowId
-        mayberes = await self.chrome.send('Browser.getWindowBounds', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Browser.getWindowBounds', msg_dict)
         res['bounds'] = Types.Bounds.safe_create(res['bounds'])
         return res
 
@@ -97,8 +92,7 @@ class Browser(object):
         msg_dict = dict()
         if targetId is not None:
             msg_dict['targetId'] = targetId
-        mayberes = await self.chrome.send('Browser.getWindowForTarget', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('Browser.getWindowForTarget', msg_dict)
         res['bounds'] = Types.Bounds.safe_create(res['bounds'])
         return res
 
@@ -116,8 +110,8 @@ class Browser(object):
             msg_dict['windowId'] = windowId
         if bounds is not None:
             msg_dict['bounds'] = bounds
-        mayberes = await self.chrome.send('Browser.setWindowBounds', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Browser.setWindowBounds', msg_dict)
+        return res
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

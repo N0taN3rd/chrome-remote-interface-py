@@ -10,12 +10,12 @@ __all__ = [
     "ANIMATION_EVENTS_NS"
 ]
 
+
 class AnimationCanceledEvent(object):
     """
     Event for when an animation has been cancelled.
     """
 
-    event = "Animation.animationCanceled"
 
     __slots__ = ["id"]
 
@@ -84,7 +84,6 @@ class AnimationCreatedEvent(object):
     Event for each animation that has been created.
     """
 
-    event = "Animation.animationCreated"
 
     __slots__ = ["id"]
 
@@ -153,7 +152,6 @@ class AnimationStartedEvent(object):
     Event for animation that has been started.
     """
 
-    event = "Animation.animationStarted"
 
     __slots__ = ["animation"]
 
@@ -165,7 +163,7 @@ class AnimationStartedEvent(object):
         :type animation: dict
         """
         super().__init__()
-        self.animation = Animation.safe_create(animation)
+        self.animation = AnimationT.safe_create(animation)
 
     def __repr__(self) -> str:
         repr_args = []

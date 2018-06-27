@@ -7,7 +7,6 @@ __all__ = ["FRefCollector"]
 
 
 class FRefCollector(object):
-
     def __init__(self) -> None:
         self.foreign_refs: Optional[Set[str]] = None
 

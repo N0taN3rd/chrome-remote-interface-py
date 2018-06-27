@@ -11,12 +11,12 @@ __all__ = [
     "STORAGE_EVENTS_NS"
 ]
 
+
 class CacheStorageContentUpdatedEvent(object):
     """
     A cache's contents have been modified.
     """
 
-    event = "Storage.cacheStorageContentUpdated"
 
     __slots__ = ["origin", "cacheName"]
 
@@ -90,7 +90,6 @@ class CacheStorageListUpdatedEvent(object):
     A cache has been added/deleted.
     """
 
-    event = "Storage.cacheStorageListUpdated"
 
     __slots__ = ["origin"]
 
@@ -159,7 +158,6 @@ class IndexedDBContentUpdatedEvent(object):
     The origin's IndexedDB object store has been modified.
     """
 
-    event = "Storage.indexedDBContentUpdated"
 
     __slots__ = ["origin", "databaseName", "objectStoreName"]
 
@@ -238,7 +236,6 @@ class IndexedDBListUpdatedEvent(object):
     The origin's IndexedDB database list has been modified.
     """
 
-    event = "Storage.indexedDBListUpdated"
 
     __slots__ = ["origin"]
 

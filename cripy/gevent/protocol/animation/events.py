@@ -159,7 +159,7 @@ class AnimationStartedEvent(object):
         :type animation: dict
         """
         super(AnimationStartedEvent, self).__init__()
-        self.animation = Animation.safe_create(animation)
+        self.animation = AnimationT.safe_create(animation)
 
     def __repr__(self):
         repr_args = []

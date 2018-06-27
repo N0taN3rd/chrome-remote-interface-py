@@ -1,24 +1,17 @@
 ujson
-jinja2
-black
 pyee
 websockets
-aiohttp
-aiojobs
+cchardet        # faster asyncio
+aiodns          # faster asyncio dns resolution
 async-timeout
-cchardet
-aiodns
-stringcase
-uvloop
-numpy
-wsaccel
+aiohttp
+numpy           # faster websocket-client frame py3
+wsaccel         # faster websocket-client frame py2
 websocket-client
-idna
-dnspython
-zope.event
-zope.interface
-zope.component
-cffi >= 1.11.5 ; platform_python_implementation == "CPython"
-greenlet>=0.4.13 ; platform_python_implementation == "CPython"
-git+git://github.com/gevent/gevent.git#egg=gevent
+cffi            # gevent dep
+idna            # faster gevent dns py2
+dnspython       # faster gevent dns py3+
+gevent>=1.3.0
 requests
+psutil
+gevent-eventemitter

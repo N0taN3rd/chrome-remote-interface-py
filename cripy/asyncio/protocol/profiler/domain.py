@@ -19,20 +19,19 @@ class Profiler(object):
         self.chrome = chrome
 
     async def disable(self) -> Optional[dict]:
-        mayberes = await self.chrome.send('Profiler.disable')
-        return mayberes
+        res = await self.chrome.send('Profiler.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
-        mayberes = await self.chrome.send('Profiler.enable')
-        return mayberes
+        res = await self.chrome.send('Profiler.enable')
+        return res
 
     async def getBestEffortCoverage(self) -> Optional[dict]:
         """
         Collect coverage data for the current isolate. The coverage data may be incomplete due to
 garbage collection.
         """
-        mayberes = await self.chrome.send('Profiler.getBestEffortCoverage')
-        res = await mayberes
+        res = await self.chrome.send('Profiler.getBestEffortCoverage')
         res['result'] = Types.ScriptCoverage.safe_create_from_list(res['result'])
         return res
 
@@ -46,12 +45,12 @@ garbage collection.
         msg_dict = dict()
         if interval is not None:
             msg_dict['interval'] = interval
-        mayberes = await self.chrome.send('Profiler.setSamplingInterval', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Profiler.setSamplingInterval', msg_dict)
+        return res
 
     async def start(self) -> Optional[dict]:
-        mayberes = await self.chrome.send('Profiler.start')
-        return mayberes
+        res = await self.chrome.send('Profiler.start')
+        return res
 
     async def startPreciseCoverage(self, callCount: Optional[bool] = None, detailed: Optional[bool] = None) -> Optional[dict]:
         """
@@ -69,19 +68,18 @@ counters.
             msg_dict['callCount'] = callCount
         if detailed is not None:
             msg_dict['detailed'] = detailed
-        mayberes = await self.chrome.send('Profiler.startPreciseCoverage', msg_dict)
-        return mayberes
+        res = await self.chrome.send('Profiler.startPreciseCoverage', msg_dict)
+        return res
 
     async def startTypeProfile(self) -> Optional[dict]:
         """
         Enable type profile.
         """
-        mayberes = await self.chrome.send('Profiler.startTypeProfile')
-        return mayberes
+        res = await self.chrome.send('Profiler.startTypeProfile')
+        return res
 
     async def stop(self) -> Optional[dict]:
-        mayberes = await self.chrome.send('Profiler.stop')
-        res = await mayberes
+        res = await self.chrome.send('Profiler.stop')
         res['profile'] = Types.Profile.safe_create(res['profile'])
         return res
 
@@ -90,23 +88,22 @@ counters.
         Disable precise code coverage. Disabling releases unnecessary execution count records and allows
 executing optimized code.
         """
-        mayberes = await self.chrome.send('Profiler.stopPreciseCoverage')
-        return mayberes
+        res = await self.chrome.send('Profiler.stopPreciseCoverage')
+        return res
 
     async def stopTypeProfile(self) -> Optional[dict]:
         """
         Disable type profile. Disabling releases type profile data collected so far.
         """
-        mayberes = await self.chrome.send('Profiler.stopTypeProfile')
-        return mayberes
+        res = await self.chrome.send('Profiler.stopTypeProfile')
+        return res
 
     async def takePreciseCoverage(self) -> Optional[dict]:
         """
         Collect coverage data for the current isolate, and resets execution counters. Precise code
 coverage needs to have started.
         """
-        mayberes = await self.chrome.send('Profiler.takePreciseCoverage')
-        res = await mayberes
+        res = await self.chrome.send('Profiler.takePreciseCoverage')
         res['result'] = Types.ScriptCoverage.safe_create_from_list(res['result'])
         return res
 
@@ -114,10 +111,21 @@ coverage needs to have started.
         """
         Collect type profile.
         """
-        mayberes = await self.chrome.send('Profiler.takeTypeProfile')
-        res = await mayberes
+        res = await self.chrome.send('Profiler.takeTypeProfile')
         res['result'] = Types.ScriptTypeProfile.safe_create_from_list(res['result'])
         return res
+
+    def consoleProfileFinished(self, fn, once=False):
+        if once:
+            self.chrome.once("Profiler.consoleProfileFinished", fn)
+        else:
+            self.chrome.on("Profiler.consoleProfileFinished", fn)
+
+    def consoleProfileStarted(self, fn, once=False):
+        if once:
+            self.chrome.once("Profiler.consoleProfileStarted", fn)
+        else:
+            self.chrome.on("Profiler.consoleProfileStarted", fn)
 
     @staticmethod
     def get_event_classes() -> Optional[dict]:

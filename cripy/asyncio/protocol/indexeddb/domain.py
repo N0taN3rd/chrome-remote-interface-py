@@ -33,8 +33,8 @@ class IndexedDB(object):
             msg_dict['databaseName'] = databaseName
         if objectStoreName is not None:
             msg_dict['objectStoreName'] = objectStoreName
-        mayberes = await self.chrome.send('IndexedDB.clearObjectStore', msg_dict)
-        return mayberes
+        res = await self.chrome.send('IndexedDB.clearObjectStore', msg_dict)
+        return res
 
     async def deleteDatabase(self, securityOrigin: str, databaseName: str) -> Optional[dict]:
         """
@@ -50,8 +50,8 @@ class IndexedDB(object):
             msg_dict['securityOrigin'] = securityOrigin
         if databaseName is not None:
             msg_dict['databaseName'] = databaseName
-        mayberes = await self.chrome.send('IndexedDB.deleteDatabase', msg_dict)
-        return mayberes
+        res = await self.chrome.send('IndexedDB.deleteDatabase', msg_dict)
+        return res
 
     async def deleteObjectStoreEntries(self, securityOrigin: str, databaseName: str, objectStoreName: str, keyRange: dict) -> Optional[dict]:
         """
@@ -75,22 +75,22 @@ class IndexedDB(object):
             msg_dict['objectStoreName'] = objectStoreName
         if keyRange is not None:
             msg_dict['keyRange'] = keyRange
-        mayberes = await self.chrome.send('IndexedDB.deleteObjectStoreEntries', msg_dict)
-        return mayberes
+        res = await self.chrome.send('IndexedDB.deleteObjectStoreEntries', msg_dict)
+        return res
 
     async def disable(self) -> Optional[dict]:
         """
         Disables events from backend.
         """
-        mayberes = await self.chrome.send('IndexedDB.disable')
-        return mayberes
+        res = await self.chrome.send('IndexedDB.disable')
+        return res
 
     async def enable(self) -> Optional[dict]:
         """
         Enables events from backend.
         """
-        mayberes = await self.chrome.send('IndexedDB.enable')
-        return mayberes
+        res = await self.chrome.send('IndexedDB.enable')
+        return res
 
     async def requestData(self, securityOrigin: str, databaseName: str, objectStoreName: str, indexName: str, skipCount: int, pageSize: int, keyRange: Optional[dict] = None) -> Optional[dict]:
         """
@@ -126,8 +126,7 @@ class IndexedDB(object):
             msg_dict['pageSize'] = pageSize
         if keyRange is not None:
             msg_dict['keyRange'] = keyRange
-        mayberes = await self.chrome.send('IndexedDB.requestData', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('IndexedDB.requestData', msg_dict)
         res['objectStoreDataEntries'] = Types.DataEntry.safe_create_from_list(res['objectStoreDataEntries'])
         return res
 
@@ -145,8 +144,7 @@ class IndexedDB(object):
             msg_dict['securityOrigin'] = securityOrigin
         if databaseName is not None:
             msg_dict['databaseName'] = databaseName
-        mayberes = await self.chrome.send('IndexedDB.requestDatabase', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('IndexedDB.requestDatabase', msg_dict)
         res['databaseWithObjectStores'] = Types.DatabaseWithObjectStores.safe_create(res['databaseWithObjectStores'])
         return res
 
@@ -160,8 +158,7 @@ class IndexedDB(object):
         msg_dict = dict()
         if securityOrigin is not None:
             msg_dict['securityOrigin'] = securityOrigin
-        mayberes = await self.chrome.send('IndexedDB.requestDatabaseNames', msg_dict)
-        res = await mayberes
+        res = await self.chrome.send('IndexedDB.requestDatabaseNames', msg_dict)
         return res
 
     @staticmethod

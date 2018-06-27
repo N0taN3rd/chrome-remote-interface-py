@@ -64,6 +64,9 @@ https://goo.gl/3zHXhB for more background.
         wres = self.chrome.send('HeadlessExperimental.enable')
         return wres.get()
 
+    def needsBeginFramesChanged(self, fn, once=False):
+        self.chrome.on("HeadlessExperimental.needsBeginFramesChanged", fn, once=once)
+
     @staticmethod
     def get_event_classes():
         """
