@@ -29,8 +29,6 @@ test_script_fp = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "check_generation.py")
 )
 
-with open("templates/domain_init.py.j2", "r") as iin:
-    DOMAIN_INIT = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
 
 PT_PYT = dict(
     object="dict",
@@ -82,57 +80,19 @@ def generate_types(d, template, dp) -> None:
                 obj_types.append(dt)
             else:
                 py_types.append(dt)
-        typep = dp.joinpath("types.py")
-        with typep.open("w") as tout:
-            tout.write(
-                template.render(
-                    py_types=py_types,
-                    obj_types=obj_types,
-                    timports=timports,
-                    domain=d.domain,
-                    slotgen=slotgen,
-                    dtype_name=dtype_name,
-                )
-            )
-
 
 def generate_events(d: Domain, template, dp: Path) -> Optional[List[Tuple[str, str]]]:
     if d.has_events:
-        eventsp = dp.joinpath("events.py")
-        with eventsp.open("w") as tout:
-            event_to_clazz = []
-            timports = set()
-            types = set()
-            for e in d.events:
-                e.prune(set(e.domain))
-                if e.has_foreign_refs:
-                    timports.update(e.foreign_refs)
-                if e.has_parameters:
-                    for param in e.parameters:
-                        if param.type.is_ref and not param.type.is_foreign_ref:
-                            types.add(param.type)
-                event_to_clazz.append((e.scoped_name, e.class_name))
-            timports.discard("IO")
-            tout.write(
-                template.render(
-                    pascalcase=pascalcase,
-                    dhastype=d.has_types,
-                    events=d.events,
-                    domain=d.domain,
-                    event_to_clazz=event_to_clazz,
-                    timports=timports,
-                    types=types,
-                    slotgen=slotgen,
-                    event_ns_init=event_ns_init,
-                )
-            )
+        event_to_clazz = []
+        for e in d.events:
+            event_to_clazz.append((e.scoped_name, e.class_name))
             return event_to_clazz
     return None
 
 
 def generate_commands(d: Domain, template, dp: Path, events) -> None:
     if d.has_commands:
-        eventsp = dp.joinpath("domain.py")
+        eventsp = dp.joinpath(f"{d.domain.lower()}.py")
         with eventsp.open("w") as tout:
             timports = set()
             types = set()
@@ -163,7 +123,7 @@ def onEvent(fe):
 
 
 def generate_domain_init(d: Domain, template, dp: Path) -> None:
-    init_p = dp.joinpath("__init__.py")
+    init_p = dp.joinpath(f"{d.domain.lower()}.py")
     with init_p.open("w") as tout:
         tout.write(template.render(d=d))
 
@@ -176,13 +136,9 @@ def proto_gen_good() -> None:
 
 
 def gen() -> None:
-    with open("templates/domain_type.py.j2", "r") as iin:
-        domain_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
-    with open("templates/events.py.j2", "r") as iin:
-        event_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
-    with open("templates/commands.async.py.j2", "r") as iin:
+    with open("templates/simple/commands.async.py.j2", "r") as iin:
         command_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
-    with open("templates/protocol_init.py.j2", "r") as iin:
+    with open("templates/simple/protocol_init.py.j2", "r") as iin:
         pinit = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
 
     domains = []
@@ -195,13 +151,12 @@ def gen() -> None:
             allstrs.append(f'"{domain["domain"]}"')
             domains.append(Domain(domain))
     for d in domains:
-        dp = Path(output_dir_fp, d.domain.lower())
-        if not dp.exists():
-            dp.mkdir(parents=True)
-        generate_types(d, domain_template, dp)
-        events = generate_events(d, event_template, dp)
+        dp = Path(output_dir_fp)
+        events = []
+        if d.has_events:
+            for e in d.events:
+                events.append((e.scoped_name, e.description))
         generate_commands(d, command_template, dp, events)
-        generate_domain_init(d, DOMAIN_INIT, dp)
     init = Path(output_dir_fp, "__init__.py")
     with init.open("w") as out:
         out.write(pinit.render(domains=mixin_imports, which="asyncio"))
@@ -209,15 +164,11 @@ def gen() -> None:
 
 
 def gen_no_types() -> None:
-    with open("templates/domain_typent.py.j2", "r") as iin:
-        domain_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
-    with open("templates/eventsnt.py.j2", "r") as iin:
-        event_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
-    with open("templates/commands.py.j2", "r") as iin:
+    with open("templates/simple/commands.py.j2", "r") as iin:
         command_template_sync = Template(
             iin.read(), trim_blocks=True, lstrip_blocks=True
         )
-    with open("templates/protocol_init.py.j2", "r") as iin:
+    with open("templates/simple/protocol_init.py.j2", "r") as iin:
         pinit = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
 
     domains = []
@@ -230,13 +181,14 @@ def gen_no_types() -> None:
             allstrs.append(f'"{domain["domain"]}"')
             domains.append(Domain(domain))
     for d in domains:
-        dp_sync = Path(output_dirsync_fp, d.domain.lower())
+        dp_sync = Path(output_dirsync_fp)
         if not dp_sync.exists():
             dp_sync.mkdir(parents=True)
-        generate_types(d, domain_template, dp_sync)
-        events = generate_events(d, event_template, dp_sync)
+        events = []
+        if d.has_events:
+            for e in d.events:
+                events.append((e.scoped_name, e.description))
         generate_commands(d, command_template_sync, dp_sync, events)
-        generate_domain_init(d, DOMAIN_INIT, dp_sync)
     init = Path(output_dirsync_fp, "__init__.py")
     with init.open("w") as out:
         out.write(pinit.render(domains=mixin_imports, which="gevent"))
@@ -244,8 +196,6 @@ def gen_no_types() -> None:
 
     class IT(ProtocolMixin):
         pass
-
-    print(IT().protocol_events)
 
 
 if __name__ == "__main__":

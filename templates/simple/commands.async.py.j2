@@ -1,0 +1,86 @@
+{% set dl = d.domain | lower %}
+from typing import Any, List, Optional, Union
+
+
+__all__ = ["{{ d.domain }}"]
+
+
+class {{ d.domain }}(object):
+{% if d.description %}
+    """
+    {{ d.description }}
+    """
+
+{% endif %}
+{% if d.has_deps %}
+    {{ d.dep_list_str }}
+
+{% endif %}
+
+    def __init__(self, chrome):
+        """
+        Construct a new {{ d.domain }} object
+
+        :param chrome: An instance of the devtools protocol client
+        """
+        self.chrome = chrome
+
+    {% for command in d.commands %}
+    {% if command.has_parameters %}
+    async def {{ command.name }}(self, {{ command.command_arg_string }}) -> Optional[dict]:
+    {% else %}
+    async def {{ command.name }}(self) -> Optional[dict]:
+    {% endif %}
+        {% if command.has_parameters %}
+        """
+        {% if command.description %}
+        {{ command.description }}
+
+        {% endif %}
+        {% for prop in command.parameters %}
+        {% if prop.description %}
+        :param {{ prop.name }}: {{ prop.nice_description }}
+        {% else %}
+        :param {{ prop.name }}: The {{ prop.name }}
+        {% endif %}
+        :type {{ prop.name }}: {{ prop.constructor_docstr }}
+        {% endfor %}
+        """
+        {% elif command.description %}
+        """
+        {{ command.description }}
+        """
+        {% endif %}
+        {% if command.has_parameters %}
+        msg_dict = dict()
+        {% for param in command.parameters %}
+        if {{ param.name }} is not None:
+            msg_dict['{{ param.name }}'] = {{ param.name }}
+        {% endfor %}
+        res = await self.chrome.send('{{ command.scoped_name }}', msg_dict)
+        {% else %}
+        res = await self.chrome.send('{{ command.scoped_name }}')
+        {% endif %}
+        return res
+
+    {% endfor %}
+    {% if events %}
+    {% for e, d in events %}
+    def {{ onEvent(e) }}(self, fn, once=False) -> None:
+        {% if d %}
+        """
+        {% for l in d %}
+        {{ l }}
+        {% endfor %}
+        """
+        {% endif %}
+        if once:
+            self.chrome.once("{{ e }}", fn)
+        else:
+            self.chrome.on("{{ e }}", fn)
+
+    {% endfor %}
+    {% endif %}
+
+
+

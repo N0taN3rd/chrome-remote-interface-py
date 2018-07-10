@@ -21,14 +21,13 @@ def run():
     c.on("*", star_msg)
     c.connect()
     res = c.Page.getFrameTree()
-    mfid = res["frameTree"].frame.id
-
-    print(c.Page.enable())
-    print(c.Network.enable())
-    print(c.Runtime.enable())
-    print(c.DOM.enable())
-    print(c.Log.enable())
-    print(c.Page.setLifecycleEventsEnabled(enabled=True))
+    print(res)
+    # print(c.Page.enable())
+    # print(c.Network.enable())
+    # print(c.Runtime.enable())
+    # print(c.DOM.enable())
+    # print(c.Log.enable())
+    # print(c.Page.setLifecycleEventsEnabled(enabled=True))
     # c.Page.navigate(url="https://google.com")
 
 

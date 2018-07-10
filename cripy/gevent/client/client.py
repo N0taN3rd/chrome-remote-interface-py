@@ -2,9 +2,9 @@ import gevent
 from gevent import monkey as george; george.patch_all()
 import ujson as json
 from gevent.event import AsyncResult
-from gevent.queue import UnboundQueue
 import websocket
 import requests
+from websocket import WebSocketConnectionClosedException
 from urllib.parse import urljoin
 from eventemitter import EventEmitter
 from ..protocol import ProtocolMixin
@@ -17,13 +17,11 @@ DEFAULT_PORT: int = 9222
 
 def ensure_url(url, host, port, secure, suffix):
     """
-
-    :param url: 
+    :param url:
     :param host: 
     :param port: 
     :param secure: 
     :param suffix: 
-
     """
     if url is None:
         url = "{0}//{1}:{2}".format("https:" if secure else "http:", host, port)
@@ -55,8 +53,6 @@ class Client(ProtocolMixin, EventEmitter):
         self._message_id = 0  # type: int
         self._callbacks = dict()  # type: Dict[int, AsyncResult]
         self._recv_let = None  # type: gevent.Greenlet
-        self._send_queue = UnboundQueue()  # type: UnboundQueue
-        self._sendlet = None  # type: gevent.Greenlet
 
     def _make_url(self, url=None, secure=False):
         """
@@ -90,35 +86,21 @@ class Client(ProtocolMixin, EventEmitter):
         cb = AsyncResult()
         self._callbacks[_id] = cb
         msg = json.dumps(dict(method=method, params=params, id=_id))
-        self._send_async(msg)
+        gevent.spawn(self.ws.send, msg)
         # self.ws.send(msg)
         return cb
-
-    def _send_async(self, msg):
-        """
-        :param msg:
-        """
-        self._send_queue.put(msg, block=False)
-        if self._sendlet is None or self._sendlet.ready():
-            self._sendlet = gevent.spawn(self._send_worker)
-        # gevent.spawn(self.ws.send, msg)
-
-    def _send_worker(self):
-        """ """
-        for msg in self._send_queue:
-            # self.ws.send(msg)
-            gevent.spawn(self.ws.send, msg)
-            gevent.idle()
-            if self._send_queue.empty():
-                break
 
     def _recv_loop(self):
         """ """
         self.connected = True
         while self.connected:
-            rmsg = self.ws.recv()
-            if rmsg:
-                self._on_message(rmsg)
+            try:
+                rmsg = self.ws.recv()
+                if rmsg:
+                    self._on_message(rmsg)
+            except WebSocketConnectionClosedException:
+                self.connected = False
+                break
 
     def _on_message(self, rmsg):
         """
@@ -135,18 +117,14 @@ class Client(ProtocolMixin, EventEmitter):
         else:
             params = msg.get("params", {})
             method = msg.get("method", "")
-            if method in self.protocol_events:
-                params = self.protocol_events[method].safe_create(params)
             try:
                 self.emit(method, params)
-                self.emit("*", (method, params))
             except Exception as e:
                 print("emit execption", e)
 
     @classmethod
     def JSON(cls, url=None, host=DEFAULT_HOST, port=DEFAULT_PORT, secure=False):
         """
-
         :param url:  (Default value = None)
         :param host:  (Default value = DEFAULT_HOST)
         :param port:  (Default value = DEFAULT_PORT)
@@ -162,8 +140,7 @@ class Client(ProtocolMixin, EventEmitter):
     @classmethod
     def Activate(cls, id, url=None, host=DEFAULT_HOST, port=DEFAULT_PORT, secure=False):
         """
-
-        :param id: 
+        :param id:
         :param url:  (Default value = None)
         :param host:  (Default value = DEFAULT_HOST)
         :param port:  (Default value = DEFAULT_PORT)
@@ -179,12 +156,10 @@ class Client(ProtocolMixin, EventEmitter):
     @classmethod
     def List(cls, url=None, host=DEFAULT_HOST, port=DEFAULT_PORT, secure=False):
         """
-
         :param url:  (Default value = None)
         :param host:  (Default value = DEFAULT_HOST)
         :param port:  (Default value = DEFAULT_PORT)
         :param secure:  (Default value = False)
-
         """
         url = ensure_url(url, host, port, secure, "json/list")
         try:
@@ -196,12 +171,10 @@ class Client(ProtocolMixin, EventEmitter):
     @classmethod
     def New(cls, url=None, host=DEFAULT_HOST, port=DEFAULT_PORT, secure=False):
         """
-
         :param url:  (Default value = None)
         :param host:  (Default value = DEFAULT_HOST)
         :param port:  (Default value = DEFAULT_PORT)
         :param secure:  (Default value = False)
-
         """
         url = ensure_url(url, host, port, secure, "/json/new")
         try:
@@ -213,12 +186,10 @@ class Client(ProtocolMixin, EventEmitter):
     @classmethod
     def Protocol(cls, url=None, host=DEFAULT_HOST, port=DEFAULT_PORT, secure=False):
         """
-
         :param url:  (Default value = None)
         :param host:  (Default value = DEFAULT_HOST)
         :param port:  (Default value = DEFAULT_PORT)
         :param secure:  (Default value = False)
-
         """
         url = ensure_url(url, host, port, secure, "/json/protocol")
         try:
@@ -230,12 +201,10 @@ class Client(ProtocolMixin, EventEmitter):
     @classmethod
     def Version(cls, url=None, host=DEFAULT_HOST, port=DEFAULT_PORT, secure=False):
         """
-
         :param url:  (Default value = None)
         :param host:  (Default value = DEFAULT_HOST)
         :param port:  (Default value = DEFAULT_PORT)
         :param secure:  (Default value = False)
-
         """
         url = ensure_url(url, host, port, secure, "/json/version")
         try:
@@ -243,3 +212,9 @@ class Client(ProtocolMixin, EventEmitter):
             return res.json()
         except Exception:
             return {}
+
+
+def connect(*args, **kwargs):
+    client = Client(*args, **kwargs)
+    client.connect()
+    return client

@@ -52,7 +52,10 @@ class Event(FRefCollector):
     def _get_description(self, event: dict) -> Optional[str]:
         des = event.get("description", None)
         if des is not None:
-            return " ".join(des.split("\n")).replace(". ", ".\n\t")
+            d = []
+            for l in des.split("\n"):
+                d.append(l.strip())
+            return d
         return des
 
     @property

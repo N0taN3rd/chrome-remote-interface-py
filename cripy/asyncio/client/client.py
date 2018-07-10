@@ -122,14 +122,10 @@ class Client(ProtocolMixin, EventEmitter):
 
     def _on_query(self, msg: dict) -> None:
         """
-
-        :param msg: dict: 
-
+        :param msg: dict:
         """
         params = msg.get("params", {})
         method = msg.get("method", "")
-        if method in self.protocol_events:
-            params = self.protocol_events[method].safe_create(params)
         try:
             self.emit(method, params)
         except Exception as e:
@@ -142,10 +138,8 @@ class Client(ProtocolMixin, EventEmitter):
 
     def send(self, method: str = None, params: dict = None) -> asyncio.Future:
         """
-
         :param method: str:  (Default value = None)
         :param params: dict:  (Default value = None)
-
         """
         if params is None:
             params = dict()

@@ -1,0 +1,792 @@
+__all__ = ["Page"]
+
+
+class Page(object):
+    """
+    Actions and events related to the inspected page belong to the page domain.
+    """
+
+    dependencies = ['Debugger', 'DOM', 'Network']
+
+    def __init__(self, chrome):
+        """
+        Construct a new Page object
+
+        :param chrome: An instance of the devtools protocol client
+        """
+        self.chrome = chrome
+
+    def addScriptToEvaluateOnLoad(self, scriptSource):
+        """
+        Deprecated, please use addScriptToEvaluateOnNewDocument instead.
+
+        :param scriptSource: The scriptSource
+        :type scriptSource: str
+        """
+        msg_dict = dict()
+        if scriptSource is not None:
+            msg_dict['scriptSource'] = scriptSource
+        wres = self.chrome.send('Page.addScriptToEvaluateOnLoad', msg_dict)
+        return wres.get()
+
+    def addScriptToEvaluateOnNewDocument(self, source):
+        """
+        Evaluates given script in every frame upon creation (before loading frame's scripts).
+
+        :param source: The source
+        :type source: str
+        """
+        msg_dict = dict()
+        if source is not None:
+            msg_dict['source'] = source
+        wres = self.chrome.send('Page.addScriptToEvaluateOnNewDocument', msg_dict)
+        return wres.get()
+
+    def bringToFront(self):
+        """
+        Brings page to front (activates tab).
+        """
+        wres = self.chrome.send('Page.bringToFront')
+        return wres.get()
+
+    def captureScreenshot(self, format=None, quality=None, clip=None, fromSurface=None):
+        """
+        Capture page screenshot.
+
+        :param format: Image compression format (defaults to png).
+        :type format: Optional[str]
+        :param quality: Compression quality from range [0..100] (jpeg only).
+        :type quality: Optional[int]
+        :param clip: Capture the screenshot of a given region only.
+        :type clip: Optional[dict]
+        :param fromSurface: Capture the screenshot from the surface, rather than the view. Defaults to true.
+        :type fromSurface: Optional[bool]
+        """
+        msg_dict = dict()
+        if format is not None:
+            msg_dict['format'] = format
+        if quality is not None:
+            msg_dict['quality'] = quality
+        if clip is not None:
+            msg_dict['clip'] = clip
+        if fromSurface is not None:
+            msg_dict['fromSurface'] = fromSurface
+        wres = self.chrome.send('Page.captureScreenshot', msg_dict)
+        return wres.get()
+
+    def clearDeviceMetricsOverride(self):
+        """
+        Clears the overriden device metrics.
+        """
+        wres = self.chrome.send('Page.clearDeviceMetricsOverride')
+        return wres.get()
+
+    def clearDeviceOrientationOverride(self):
+        """
+        Clears the overridden Device Orientation.
+        """
+        wres = self.chrome.send('Page.clearDeviceOrientationOverride')
+        return wres.get()
+
+    def clearGeolocationOverride(self):
+        """
+        Clears the overriden Geolocation Position and Error.
+        """
+        wres = self.chrome.send('Page.clearGeolocationOverride')
+        return wres.get()
+
+    def createIsolatedWorld(self, frameId, worldName=None, grantUniveralAccess=None):
+        """
+        Creates an isolated world for the given frame.
+
+        :param frameId: Id of the frame in which the isolated world should be created.
+        :type frameId: str
+        :param worldName: An optional name which is reported in the Execution Context.
+        :type worldName: Optional[str]
+        :param grantUniveralAccess: Whether or not universal access should be granted to the isolated world. This is a powerful option, use with caution.
+        :type grantUniveralAccess: Optional[bool]
+        """
+        msg_dict = dict()
+        if frameId is not None:
+            msg_dict['frameId'] = frameId
+        if worldName is not None:
+            msg_dict['worldName'] = worldName
+        if grantUniveralAccess is not None:
+            msg_dict['grantUniveralAccess'] = grantUniveralAccess
+        wres = self.chrome.send('Page.createIsolatedWorld', msg_dict)
+        return wres.get()
+
+    def deleteCookie(self, cookieName, url):
+        """
+        Deletes browser cookie with given name, domain and path.
+
+        :param cookieName: Name of the cookie to remove.
+        :type cookieName: str
+        :param url: URL to match cooke domain and path.
+        :type url: str
+        """
+        msg_dict = dict()
+        if cookieName is not None:
+            msg_dict['cookieName'] = cookieName
+        if url is not None:
+            msg_dict['url'] = url
+        wres = self.chrome.send('Page.deleteCookie', msg_dict)
+        return wres.get()
+
+    def disable(self):
+        """
+        Disables page domain notifications.
+        """
+        wres = self.chrome.send('Page.disable')
+        return wres.get()
+
+    def enable(self):
+        """
+        Enables page domain notifications.
+        """
+        wres = self.chrome.send('Page.enable')
+        return wres.get()
+
+    def getAppManifest(self):
+        wres = self.chrome.send('Page.getAppManifest')
+        return wres.get()
+
+    def getCookies(self):
+        """
+        Returns all browser cookies. Depending on the backend support, will return detailed cookie
+information in the `cookies` field.
+        """
+        wres = self.chrome.send('Page.getCookies')
+        return wres.get()
+
+    def getFrameTree(self):
+        """
+        Returns present frame tree structure.
+        """
+        wres = self.chrome.send('Page.getFrameTree')
+        return wres.get()
+
+    def getLayoutMetrics(self):
+        """
+        Returns metrics relating to the layouting of the page, such as viewport bounds/scale.
+        """
+        wres = self.chrome.send('Page.getLayoutMetrics')
+        return wres.get()
+
+    def getNavigationHistory(self):
+        """
+        Returns navigation history for the current page.
+        """
+        wres = self.chrome.send('Page.getNavigationHistory')
+        return wres.get()
+
+    def getResourceContent(self, frameId, url):
+        """
+        Returns content of the given resource.
+
+        :param frameId: Frame id to get resource for.
+        :type frameId: str
+        :param url: URL of the resource to get content for.
+        :type url: str
+        """
+        msg_dict = dict()
+        if frameId is not None:
+            msg_dict['frameId'] = frameId
+        if url is not None:
+            msg_dict['url'] = url
+        wres = self.chrome.send('Page.getResourceContent', msg_dict)
+        return wres.get()
+
+    def getResourceTree(self):
+        """
+        Returns present frame / resource tree structure.
+        """
+        wres = self.chrome.send('Page.getResourceTree')
+        return wres.get()
+
+    def handleJavaScriptDialog(self, accept, promptText=None):
+        """
+        Accepts or dismisses a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload).
+
+        :param accept: Whether to accept or dismiss the dialog.
+        :type accept: bool
+        :param promptText: The text to enter into the dialog prompt before accepting. Used only if this is a prompt dialog.
+        :type promptText: Optional[str]
+        """
+        msg_dict = dict()
+        if accept is not None:
+            msg_dict['accept'] = accept
+        if promptText is not None:
+            msg_dict['promptText'] = promptText
+        wres = self.chrome.send('Page.handleJavaScriptDialog', msg_dict)
+        return wres.get()
+
+    def navigate(self, url, referrer=None, transitionType=None, frameId=None):
+        """
+        Navigates current page to the given URL.
+
+        :param url: URL to navigate the page to.
+        :type url: str
+        :param referrer: Referrer URL.
+        :type referrer: Optional[str]
+        :param transitionType: Intended transition type.
+        :type transitionType: Optional[str]
+        :param frameId: Frame id to navigate, if not specified navigates the top frame.
+        :type frameId: Optional[str]
+        """
+        msg_dict = dict()
+        if url is not None:
+            msg_dict['url'] = url
+        if referrer is not None:
+            msg_dict['referrer'] = referrer
+        if transitionType is not None:
+            msg_dict['transitionType'] = transitionType
+        if frameId is not None:
+            msg_dict['frameId'] = frameId
+        wres = self.chrome.send('Page.navigate', msg_dict)
+        return wres.get()
+
+    def navigateToHistoryEntry(self, entryId):
+        """
+        Navigates current page to the given history entry.
+
+        :param entryId: Unique id of the entry to navigate to.
+        :type entryId: int
+        """
+        msg_dict = dict()
+        if entryId is not None:
+            msg_dict['entryId'] = entryId
+        wres = self.chrome.send('Page.navigateToHistoryEntry', msg_dict)
+        return wres.get()
+
+    def printToPDF(self, landscape=None, displayHeaderFooter=None, printBackground=None, scale=None, paperWidth=None, paperHeight=None, marginTop=None, marginBottom=None, marginLeft=None, marginRight=None, pageRanges=None, ignoreInvalidPageRanges=None, headerTemplate=None, footerTemplate=None, preferCSSPageSize=None):
+        """
+        Print page as PDF.
+
+        :param landscape: Paper orientation. Defaults to false.
+        :type landscape: Optional[bool]
+        :param displayHeaderFooter: Display header and footer. Defaults to false.
+        :type displayHeaderFooter: Optional[bool]
+        :param printBackground: Print background graphics. Defaults to false.
+        :type printBackground: Optional[bool]
+        :param scale: Scale of the webpage rendering. Defaults to 1.
+        :type scale: Optional[float]
+        :param paperWidth: Paper width in inches. Defaults to 8.5 inches.
+        :type paperWidth: Optional[float]
+        :param paperHeight: Paper height in inches. Defaults to 11 inches.
+        :type paperHeight: Optional[float]
+        :param marginTop: Top margin in inches. Defaults to 1cm (~0.4 inches).
+        :type marginTop: Optional[float]
+        :param marginBottom: Bottom margin in inches. Defaults to 1cm (~0.4 inches).
+        :type marginBottom: Optional[float]
+        :param marginLeft: Left margin in inches. Defaults to 1cm (~0.4 inches).
+        :type marginLeft: Optional[float]
+        :param marginRight: Right margin in inches. Defaults to 1cm (~0.4 inches).
+        :type marginRight: Optional[float]
+        :param pageRanges: Paper ranges to print, e.g., '1-5, 8, 11-13'. Defaults to the empty string, which means print all pages.
+        :type pageRanges: Optional[str]
+        :param ignoreInvalidPageRanges: Whether to silently ignore invalid but successfully parsed page ranges, such as '3-2'. Defaults to false.
+        :type ignoreInvalidPageRanges: Optional[bool]
+        :param headerTemplate: HTML template for the print header. Should be valid HTML markup with following classes used to inject printing values into them: - `date`: formatted print date - `title`: document title - `url`: document location - `pageNumber`: current page number - `totalPages`: total pages in the document  For example, `<span class=title></span>` would generate span containing the title.
+        :type headerTemplate: Optional[str]
+        :param footerTemplate: HTML template for the print footer. Should use the same format as the `headerTemplate`.
+        :type footerTemplate: Optional[str]
+        :param preferCSSPageSize: Whether or not to prefer page size as defined by css. Defaults to false, in which case the content will be scaled to fit the paper size.
+        :type preferCSSPageSize: Optional[bool]
+        """
+        msg_dict = dict()
+        if landscape is not None:
+            msg_dict['landscape'] = landscape
+        if displayHeaderFooter is not None:
+            msg_dict['displayHeaderFooter'] = displayHeaderFooter
+        if printBackground is not None:
+            msg_dict['printBackground'] = printBackground
+        if scale is not None:
+            msg_dict['scale'] = scale
+        if paperWidth is not None:
+            msg_dict['paperWidth'] = paperWidth
+        if paperHeight is not None:
+            msg_dict['paperHeight'] = paperHeight
+        if marginTop is not None:
+            msg_dict['marginTop'] = marginTop
+        if marginBottom is not None:
+            msg_dict['marginBottom'] = marginBottom
+        if marginLeft is not None:
+            msg_dict['marginLeft'] = marginLeft
+        if marginRight is not None:
+            msg_dict['marginRight'] = marginRight
+        if pageRanges is not None:
+            msg_dict['pageRanges'] = pageRanges
+        if ignoreInvalidPageRanges is not None:
+            msg_dict['ignoreInvalidPageRanges'] = ignoreInvalidPageRanges
+        if headerTemplate is not None:
+            msg_dict['headerTemplate'] = headerTemplate
+        if footerTemplate is not None:
+            msg_dict['footerTemplate'] = footerTemplate
+        if preferCSSPageSize is not None:
+            msg_dict['preferCSSPageSize'] = preferCSSPageSize
+        wres = self.chrome.send('Page.printToPDF', msg_dict)
+        return wres.get()
+
+    def reload(self, ignoreCache=None, scriptToEvaluateOnLoad=None):
+        """
+        Reloads given page optionally ignoring the cache.
+
+        :param ignoreCache: If true, browser cache is ignored (as if the user pressed Shift+refresh).
+        :type ignoreCache: Optional[bool]
+        :param scriptToEvaluateOnLoad: If set, the script will be injected into all frames of the inspected page after reload. Argument will be ignored if reloading dataURL origin.
+        :type scriptToEvaluateOnLoad: Optional[str]
+        """
+        msg_dict = dict()
+        if ignoreCache is not None:
+            msg_dict['ignoreCache'] = ignoreCache
+        if scriptToEvaluateOnLoad is not None:
+            msg_dict['scriptToEvaluateOnLoad'] = scriptToEvaluateOnLoad
+        wres = self.chrome.send('Page.reload', msg_dict)
+        return wres.get()
+
+    def removeScriptToEvaluateOnLoad(self, identifier):
+        """
+        Deprecated, please use removeScriptToEvaluateOnNewDocument instead.
+
+        :param identifier: The identifier
+        :type identifier: str
+        """
+        msg_dict = dict()
+        if identifier is not None:
+            msg_dict['identifier'] = identifier
+        wres = self.chrome.send('Page.removeScriptToEvaluateOnLoad', msg_dict)
+        return wres.get()
+
+    def removeScriptToEvaluateOnNewDocument(self, identifier):
+        """
+        Removes given script from the list.
+
+        :param identifier: The identifier
+        :type identifier: str
+        """
+        msg_dict = dict()
+        if identifier is not None:
+            msg_dict['identifier'] = identifier
+        wres = self.chrome.send('Page.removeScriptToEvaluateOnNewDocument', msg_dict)
+        return wres.get()
+
+    def requestAppBanner(self):
+        wres = self.chrome.send('Page.requestAppBanner')
+        return wres.get()
+
+    def screencastFrameAck(self, sessionId):
+        """
+        Acknowledges that a screencast frame has been received by the frontend.
+
+        :param sessionId: Frame number.
+        :type sessionId: int
+        """
+        msg_dict = dict()
+        if sessionId is not None:
+            msg_dict['sessionId'] = sessionId
+        wres = self.chrome.send('Page.screencastFrameAck', msg_dict)
+        return wres.get()
+
+    def searchInResource(self, frameId, url, query, caseSensitive=None, isRegex=None):
+        """
+        Searches for given string in resource content.
+
+        :param frameId: Frame id for resource to search in.
+        :type frameId: str
+        :param url: URL of the resource to search in.
+        :type url: str
+        :param query: String to search for.
+        :type query: str
+        :param caseSensitive: If true, search is case sensitive.
+        :type caseSensitive: Optional[bool]
+        :param isRegex: If true, treats string parameter as regex.
+        :type isRegex: Optional[bool]
+        """
+        msg_dict = dict()
+        if frameId is not None:
+            msg_dict['frameId'] = frameId
+        if url is not None:
+            msg_dict['url'] = url
+        if query is not None:
+            msg_dict['query'] = query
+        if caseSensitive is not None:
+            msg_dict['caseSensitive'] = caseSensitive
+        if isRegex is not None:
+            msg_dict['isRegex'] = isRegex
+        wres = self.chrome.send('Page.searchInResource', msg_dict)
+        return wres.get()
+
+    def setAdBlockingEnabled(self, enabled):
+        """
+        Enable Chrome's experimental ad filter on all sites.
+
+        :param enabled: Whether to block ads.
+        :type enabled: bool
+        """
+        msg_dict = dict()
+        if enabled is not None:
+            msg_dict['enabled'] = enabled
+        wres = self.chrome.send('Page.setAdBlockingEnabled', msg_dict)
+        return wres.get()
+
+    def setBypassCSP(self, enabled):
+        """
+        Enable page Content Security Policy by-passing.
+
+        :param enabled: Whether to bypass page CSP.
+        :type enabled: bool
+        """
+        msg_dict = dict()
+        if enabled is not None:
+            msg_dict['enabled'] = enabled
+        wres = self.chrome.send('Page.setBypassCSP', msg_dict)
+        return wres.get()
+
+    def setDeviceMetricsOverride(self, width, height, deviceScaleFactor, mobile, scale=None, screenWidth=None, screenHeight=None, positionX=None, positionY=None, dontSetVisibleSize=None, screenOrientation=None, viewport=None):
+        """
+        Overrides the values of device screen dimensions (window.screen.width, window.screen.height,
+window.innerWidth, window.innerHeight, and "device-width"/"device-height"-related CSS media
+query results).
+
+        :param width: Overriding width value in pixels (minimum 0, maximum 10000000). 0 disables the override.
+        :type width: int
+        :param height: Overriding height value in pixels (minimum 0, maximum 10000000). 0 disables the override.
+        :type height: int
+        :param deviceScaleFactor: Overriding device scale factor value. 0 disables the override.
+        :type deviceScaleFactor: float
+        :param mobile: Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text autosizing and more.
+        :type mobile: bool
+        :param scale: Scale to apply to resulting view image.
+        :type scale: Optional[float]
+        :param screenWidth: Overriding screen width value in pixels (minimum 0, maximum 10000000).
+        :type screenWidth: Optional[int]
+        :param screenHeight: Overriding screen height value in pixels (minimum 0, maximum 10000000).
+        :type screenHeight: Optional[int]
+        :param positionX: Overriding view X position on screen in pixels (minimum 0, maximum 10000000).
+        :type positionX: Optional[int]
+        :param positionY: Overriding view Y position on screen in pixels (minimum 0, maximum 10000000).
+        :type positionY: Optional[int]
+        :param dontSetVisibleSize: Do not set visible view size, rely upon explicit setVisibleSize call.
+        :type dontSetVisibleSize: Optional[bool]
+        :param screenOrientation: Screen orientation override.
+        :type screenOrientation: Optional[dict]
+        :param viewport: The viewport dimensions and scale. If not set, the override is cleared.
+        :type viewport: Optional[dict]
+        """
+        msg_dict = dict()
+        if width is not None:
+            msg_dict['width'] = width
+        if height is not None:
+            msg_dict['height'] = height
+        if deviceScaleFactor is not None:
+            msg_dict['deviceScaleFactor'] = deviceScaleFactor
+        if mobile is not None:
+            msg_dict['mobile'] = mobile
+        if scale is not None:
+            msg_dict['scale'] = scale
+        if screenWidth is not None:
+            msg_dict['screenWidth'] = screenWidth
+        if screenHeight is not None:
+            msg_dict['screenHeight'] = screenHeight
+        if positionX is not None:
+            msg_dict['positionX'] = positionX
+        if positionY is not None:
+            msg_dict['positionY'] = positionY
+        if dontSetVisibleSize is not None:
+            msg_dict['dontSetVisibleSize'] = dontSetVisibleSize
+        if screenOrientation is not None:
+            msg_dict['screenOrientation'] = screenOrientation
+        if viewport is not None:
+            msg_dict['viewport'] = viewport
+        wres = self.chrome.send('Page.setDeviceMetricsOverride', msg_dict)
+        return wres.get()
+
+    def setDeviceOrientationOverride(self, alpha, beta, gamma):
+        """
+        Overrides the Device Orientation.
+
+        :param alpha: Mock alpha
+        :type alpha: float
+        :param beta: Mock beta
+        :type beta: float
+        :param gamma: Mock gamma
+        :type gamma: float
+        """
+        msg_dict = dict()
+        if alpha is not None:
+            msg_dict['alpha'] = alpha
+        if beta is not None:
+            msg_dict['beta'] = beta
+        if gamma is not None:
+            msg_dict['gamma'] = gamma
+        wres = self.chrome.send('Page.setDeviceOrientationOverride', msg_dict)
+        return wres.get()
+
+    def setDocumentContent(self, frameId, html):
+        """
+        Sets given markup as the document's HTML.
+
+        :param frameId: Frame id to set HTML for.
+        :type frameId: str
+        :param html: HTML content to set.
+        :type html: str
+        """
+        msg_dict = dict()
+        if frameId is not None:
+            msg_dict['frameId'] = frameId
+        if html is not None:
+            msg_dict['html'] = html
+        wres = self.chrome.send('Page.setDocumentContent', msg_dict)
+        return wres.get()
+
+    def setDownloadBehavior(self, behavior, downloadPath=None):
+        """
+        Set the behavior when downloading a file.
+
+        :param behavior: Whether to allow all or deny all download requests, or use default Chrome behavior if available (otherwise deny).
+        :type behavior: str
+        :param downloadPath: The default path to save downloaded files to. This is requred if behavior is set to 'allow'
+        :type downloadPath: Optional[str]
+        """
+        msg_dict = dict()
+        if behavior is not None:
+            msg_dict['behavior'] = behavior
+        if downloadPath is not None:
+            msg_dict['downloadPath'] = downloadPath
+        wres = self.chrome.send('Page.setDownloadBehavior', msg_dict)
+        return wres.get()
+
+    def setGeolocationOverride(self, latitude=None, longitude=None, accuracy=None):
+        """
+        Overrides the Geolocation Position or Error. Omitting any of the parameters emulates position
+unavailable.
+
+        :param latitude: Mock latitude
+        :type latitude: Optional[float]
+        :param longitude: Mock longitude
+        :type longitude: Optional[float]
+        :param accuracy: Mock accuracy
+        :type accuracy: Optional[float]
+        """
+        msg_dict = dict()
+        if latitude is not None:
+            msg_dict['latitude'] = latitude
+        if longitude is not None:
+            msg_dict['longitude'] = longitude
+        if accuracy is not None:
+            msg_dict['accuracy'] = accuracy
+        wres = self.chrome.send('Page.setGeolocationOverride', msg_dict)
+        return wres.get()
+
+    def setLifecycleEventsEnabled(self, enabled):
+        """
+        Controls whether page will emit lifecycle events.
+
+        :param enabled: If true, starts emitting lifecycle events.
+        :type enabled: bool
+        """
+        msg_dict = dict()
+        if enabled is not None:
+            msg_dict['enabled'] = enabled
+        wres = self.chrome.send('Page.setLifecycleEventsEnabled', msg_dict)
+        return wres.get()
+
+    def setTouchEmulationEnabled(self, enabled, configuration=None):
+        """
+        Toggles mouse event-based touch event emulation.
+
+        :param enabled: Whether the touch event emulation should be enabled.
+        :type enabled: bool
+        :param configuration: Touch/gesture events configuration. Default: current platform.
+        :type configuration: Optional[str]
+        """
+        msg_dict = dict()
+        if enabled is not None:
+            msg_dict['enabled'] = enabled
+        if configuration is not None:
+            msg_dict['configuration'] = configuration
+        wres = self.chrome.send('Page.setTouchEmulationEnabled', msg_dict)
+        return wres.get()
+
+    def startScreencast(self, format=None, quality=None, maxWidth=None, maxHeight=None, everyNthFrame=None):
+        """
+        Starts sending each frame using the `screencastFrame` event.
+
+        :param format: Image compression format.
+        :type format: Optional[str]
+        :param quality: Compression quality from range [0..100].
+        :type quality: Optional[int]
+        :param maxWidth: Maximum screenshot width.
+        :type maxWidth: Optional[int]
+        :param maxHeight: Maximum screenshot height.
+        :type maxHeight: Optional[int]
+        :param everyNthFrame: Send every n-th frame.
+        :type everyNthFrame: Optional[int]
+        """
+        msg_dict = dict()
+        if format is not None:
+            msg_dict['format'] = format
+        if quality is not None:
+            msg_dict['quality'] = quality
+        if maxWidth is not None:
+            msg_dict['maxWidth'] = maxWidth
+        if maxHeight is not None:
+            msg_dict['maxHeight'] = maxHeight
+        if everyNthFrame is not None:
+            msg_dict['everyNthFrame'] = everyNthFrame
+        wres = self.chrome.send('Page.startScreencast', msg_dict)
+        return wres.get()
+
+    def stopLoading(self):
+        """
+        Force the page stop all navigations and pending resource fetches.
+        """
+        wres = self.chrome.send('Page.stopLoading')
+        return wres.get()
+
+    def crash(self):
+        """
+        Crashes renderer on the IO thread, generates minidumps.
+        """
+        wres = self.chrome.send('Page.crash')
+        return wres.get()
+
+    def close(self):
+        """
+        Tries to close page, running its beforeunload hooks, if any.
+        """
+        wres = self.chrome.send('Page.close')
+        return wres.get()
+
+    def setWebLifecycleState(self, state):
+        """
+        Tries to update the web lifecycle state of the page.
+It will transition the page to the given state according to:
+https://github.com/WICG/web-lifecycle/
+
+        :param state: Target lifecycle state
+        :type state: str
+        """
+        msg_dict = dict()
+        if state is not None:
+            msg_dict['state'] = state
+        wres = self.chrome.send('Page.setWebLifecycleState', msg_dict)
+        return wres.get()
+
+    def stopScreencast(self):
+        """
+        Stops sending each frame in the `screencastFrame`.
+        """
+        wres = self.chrome.send('Page.stopScreencast')
+        return wres.get()
+
+    def domContentEventFired(self, fn, once=False):
+        self.chrome.on("Page.domContentEventFired", fn, once=once)
+
+    def frameAttached(self, fn, once=False):
+        """
+        Fired when frame has been attached to its parent.
+        """
+        self.chrome.on("Page.frameAttached", fn, once=once)
+
+    def frameClearedScheduledNavigation(self, fn, once=False):
+        """
+        Fired when frame no longer has a scheduled navigation.
+        """
+        self.chrome.on("Page.frameClearedScheduledNavigation", fn, once=once)
+
+    def frameDetached(self, fn, once=False):
+        """
+        Fired when frame has been detached from its parent.
+        """
+        self.chrome.on("Page.frameDetached", fn, once=once)
+
+    def frameNavigated(self, fn, once=False):
+        """
+        Fired once navigation of the frame has completed. Frame is now associated with the new loader.
+        """
+        self.chrome.on("Page.frameNavigated", fn, once=once)
+
+    def frameResized(self, fn, once=False):
+        self.chrome.on("Page.frameResized", fn, once=once)
+
+    def frameScheduledNavigation(self, fn, once=False):
+        """
+        Fired when frame schedules a potential navigation.
+        """
+        self.chrome.on("Page.frameScheduledNavigation", fn, once=once)
+
+    def frameStartedLoading(self, fn, once=False):
+        """
+        Fired when frame has started loading.
+        """
+        self.chrome.on("Page.frameStartedLoading", fn, once=once)
+
+    def frameStoppedLoading(self, fn, once=False):
+        """
+        Fired when frame has stopped loading.
+        """
+        self.chrome.on("Page.frameStoppedLoading", fn, once=once)
+
+    def interstitialHidden(self, fn, once=False):
+        """
+        Fired when interstitial page was hidden
+        """
+        self.chrome.on("Page.interstitialHidden", fn, once=once)
+
+    def interstitialShown(self, fn, once=False):
+        """
+        Fired when interstitial page was shown
+        """
+        self.chrome.on("Page.interstitialShown", fn, once=once)
+
+    def javascriptDialogClosed(self, fn, once=False):
+        """
+        Fired when a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload) has been
+        closed.
+        """
+        self.chrome.on("Page.javascriptDialogClosed", fn, once=once)
+
+    def javascriptDialogOpening(self, fn, once=False):
+        """
+        Fired when a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload) is about to
+        open.
+        """
+        self.chrome.on("Page.javascriptDialogOpening", fn, once=once)
+
+    def lifecycleEvent(self, fn, once=False):
+        """
+        Fired for top level page lifecycle events such as navigation, load, paint, etc.
+        """
+        self.chrome.on("Page.lifecycleEvent", fn, once=once)
+
+    def loadEventFired(self, fn, once=False):
+        self.chrome.on("Page.loadEventFired", fn, once=once)
+
+    def navigatedWithinDocument(self, fn, once=False):
+        """
+        Fired when same-document navigation happens, e.g. due to history API usage or anchor navigation.
+        """
+        self.chrome.on("Page.navigatedWithinDocument", fn, once=once)
+
+    def screencastFrame(self, fn, once=False):
+        """
+        Compressed image data requested by the `startScreencast`.
+        """
+        self.chrome.on("Page.screencastFrame", fn, once=once)
+
+    def screencastVisibilityChanged(self, fn, once=False):
+        """
+        Fired when the page with currently enabled screencast was shown or hidden `.
+        """
+        self.chrome.on("Page.screencastVisibilityChanged", fn, once=once)
+
+    def windowOpen(self, fn, once=False):
+        """
+        Fired when a new window is going to be opened, via window.open(), link click, form submission,
+        etc.
+        """
+        self.chrome.on("Page.windowOpen", fn, once=once)
+
+
