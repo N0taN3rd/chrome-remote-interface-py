@@ -11,7 +11,9 @@ websocket-client
 cffi            # gevent dep
 idna            # faster gevent dns py2
 dnspython       # faster gevent dns py3+
-gevent>=1.3.0
+gevent[dnspython]
 requests
 psutil
 gevent-eventemitter
+uvloop
+attrs

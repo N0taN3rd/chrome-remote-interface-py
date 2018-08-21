@@ -30,6 +30,11 @@ class Domain(FRefCollector):
         nice = map(lambda x: f"'{x}'", self.dependencies)
         return f"dependencies = [{', '.join(nice)}]"
 
+    @property
+    def dep_list_str_typed(self) -> str:
+        nice = map(lambda x: f"'{x}'", self.dependencies)
+        return f"dependencies: ClassVar[List[str]] = [{', '.join(nice)}]"
+
     @lru_cache()
     def types_all_primative(self):
         return all(map(lambda x: x.type.is_primitive, self.types))

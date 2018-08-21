@@ -9,10 +9,17 @@ from protogen.typer import TYPER
 from stringcase import pascalcase, snakecase
 
 output_dir_fp = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "cripy/asyncio/protocol/")
+    os.path.join(os.path.dirname(__file__), "cripy/asyncio/")
 )
 output_dirsync_fp = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "cripy/gevent/protocol")
+    os.path.join(os.path.dirname(__file__), "cripy/gevent")
+)
+
+version_def_fp = (
+    "full",
+    os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "data/70.0.3521.2-protocol.json")
+    ),
 )
 
 browser_json_fp = (
@@ -81,6 +88,7 @@ def generate_types(d, template, dp) -> None:
             else:
                 py_types.append(dt)
 
+
 def generate_events(d: Domain, template, dp: Path) -> Optional[List[Tuple[str, str]]]:
     if d.has_events:
         event_to_clazz = []
@@ -129,10 +137,8 @@ def generate_domain_init(d: Domain, template, dp: Path) -> None:
 
 
 def proto_gen_good() -> None:
-    from cripy.asyncio.protocol import ProtocolMixin
-
-    class IT(ProtocolMixin):
-        pass
+    from cripy.asyncio.client import Client
+    c = Client("")
 
 
 def gen() -> None:
@@ -144,7 +150,7 @@ def gen() -> None:
     domains = []
     mixin_imports = []
     allstrs = []
-    for which, fp in [js_json_fp, browser_json_fp]:
+    for which, fp in [version_def_fp]:
         data = read_json(fp)
         for domain in data["domains"]:
             mixin_imports.append((domain["domain"].lower(), domain["domain"]))
@@ -157,9 +163,6 @@ def gen() -> None:
             for e in d.events:
                 events.append((e.scoped_name, e.description))
         generate_commands(d, command_template, dp, events)
-    init = Path(output_dir_fp, "__init__.py")
-    with init.open("w") as out:
-        out.write(pinit.render(domains=mixin_imports, which="asyncio"))
     proto_gen_good()
 
 
@@ -174,7 +177,7 @@ def gen_no_types() -> None:
     domains = []
     mixin_imports = []
     allstrs = []
-    for which, fp in [("all", "data/protocol.json")]:
+    for which, fp in [version_def_fp]:
         data = read_json(fp)
         for domain in data["domains"]:
             mixin_imports.append((domain["domain"].lower(), domain["domain"]))
@@ -200,4 +203,4 @@ def gen_no_types() -> None:
 
 if __name__ == "__main__":
     gen()
-    gen_no_types()
+    # gen_no_types()

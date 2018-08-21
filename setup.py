@@ -27,7 +27,7 @@ requirements_gevent = [
     "gevent",
     "requests",
     "psutil",
-    "gevent-eventemitter",
+    "gevent-eventemitter"
 ]
 
 requirements_asyncio = [
@@ -37,17 +37,18 @@ requirements_asyncio = [
     "aiodns",  # faster asyncio dns resolution
     "async-timeout",
     "aiohttp",
+    "uvloop"
 ]
 
-requirements = ["ujson"] + requirements_gevent
+requirements = ["attrs", "ujson"] + requirements_gevent
 
-if sys.version_info.major == 3 and sys.version_info.minor >= 6:
+if sys.version_info.major == 3 and sys.version_info.minor >= 5:
     requirements += requirements_asyncio
 
 
 setup(
     name="cripy",
-    version="1.0.0",
+    version="1.1.0",
     description="Unofficial port of chrome-remote-interface",
     author="John Berlin",
     author_email="john.berlin@rhizome.com",

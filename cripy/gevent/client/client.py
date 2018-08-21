@@ -1,10 +1,12 @@
 import gevent
-from gevent import monkey as george; george.patch_all()
+from gevent import monkey as george
+
+george.patch_all()
 import ujson as json
 from gevent.event import AsyncResult
 import websocket
 import requests
-from websocket import WebSocketConnectionClosedException
+from websocket import WebSocketConnectionClosedException, WebSocket
 from urllib.parse import urljoin
 from eventemitter import EventEmitter
 from ..protocol import ProtocolMixin
@@ -45,7 +47,7 @@ class Client(ProtocolMixin, EventEmitter):
     ):
         super(Client, self).__init__(*args, **kwargs)
         self.connected = False
-        self.ws = None
+        self.ws = None  # type: WebSocket
         self._ws_url = wsurl  # type: str
         self._host = host  # type: str
         self._port = port  # type: int
@@ -64,6 +66,10 @@ class Client(ProtocolMixin, EventEmitter):
                 "https:" if secure else "http:", self._host, self._port
             )
         return url
+
+    def disconnect(self):
+        self.connected = False
+        self.ws.close()
 
     def connect(self):
         """ """

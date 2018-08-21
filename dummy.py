@@ -1,54 +1,24 @@
-from gevent import monkey as george
-
-george.patch_all()
-
-import gevent
-import signal
-
-from cripy.gevent.client import Client
+import asyncio
+import uvloop
+from cripy.asyncio.client import Client
+import ujson as json
+# asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 
 
-def signal_shutdown(*args, **kwargs):
-    raise KeyboardInterrupt
+def on_life(event):
+    print(event)
 
 
-def star_msg(msg):
-    print(msg)
+async def run() -> None:
+    client = await Client.connect_to_remote()
+    client.Page.lifecycleEvent(on_life)
+    await client.Page.enable()
+    await client.Page.setLifecycleEventsEnabled(enabled=True)
+    await client.Page.navigate('https://www.reuters.com/')
+    await asyncio.sleep(15)
+    await client.Browser.close()
 
 
-def run():
-    c = Client()
-    c.on("*", star_msg)
-    c.connect()
-    res = c.Page.getFrameTree()
-    print(res)
-    # print(c.Page.enable())
-    # print(c.Network.enable())
-    # print(c.Runtime.enable())
-    # print(c.DOM.enable())
-    # print(c.Log.enable())
-    # print(c.Page.setLifecycleEventsEnabled(enabled=True))
-    # c.Page.navigate(url="https://google.com")
-
-
-def main():
-    gevent.signal(signal.SIGQUIT, signal_shutdown)
-    gevent.signal(signal.SIGINT, signal_shutdown)
-    gevent.signal(signal.SIGTERM, signal_shutdown)
-    greenlet = gevent.spawn(run)
-    greenlet.join()
-    forever = gevent.event.Event()
-    try:
-        forever.wait()
-    except KeyboardInterrupt:
-        print("done")
-        gevent.kill(greenlet)
-
-
-if __name__ == "__main__":
-    main()
-    # with open("protocol.json", "w") as out:
-    #     proto = Client.Protocol()
-    #     print(proto)
-    #     import ujson
-    #     out.write(ujson.dumps(proto))
+if __name__ == '__main__':
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(run())
