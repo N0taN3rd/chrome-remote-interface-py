@@ -1,7 +1,4 @@
 import gevent
-from gevent import monkey as george
-
-george.patch_all()
 import ujson as json
 from gevent.event import AsyncResult
 import websocket
