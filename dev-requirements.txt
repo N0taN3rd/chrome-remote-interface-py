@@ -1,9 +1,6 @@
 black
-astunparse
-stringcase
 m2r
-uvloop          # faster asycnio event-loop
-jinja2
-stringcase
 pytest
 pytest-asyncio
+git+https://github.com/python/mypy.git
+requests

@@ -1,16 +1,10 @@
-import os
-import subprocess
-import sys
-import time
-from typing import Any, AsyncGenerator, Generator
-from requests import Session
+from typing import Any, Generator
 
-import psutil
 import pytest
 import uvloop
 from _pytest.fixtures import SubRequest
 
-from cripy.asyncio import Client
+from cripy.client import Client
 from .helpers import ChromeLauncher
 
 
@@ -33,9 +27,9 @@ def chrome(request: SubRequest):
 
 
 @pytest.fixture(scope="class")
-async def async_client(request: SubRequest):
-    client = Client(wsurl=request.cls.wsurl)
+async def client(request: SubRequest):
+    client = Client(ws_url=request.cls.wsurl)
     await client.connect()
     request.cls.client = client
     yield client
-    await client.disconnect()
+    await client.dispose()

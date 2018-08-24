@@ -1,19 +1,13 @@
-ujson
-pyee
-websockets
-cchardet        # faster asyncio
-aiodns          # faster asyncio dns resolution
-async-timeout
+aiodns
+aiofiles
 aiohttp
-numpy           # faster websocket-client frame py3
-wsaccel         # faster websocket-client frame py2
-websocket-client
-cffi            # gevent dep
-idna            # faster gevent dns py2
-dnspython       # faster gevent dns py3+
-gevent[dnspython]
-requests
-psutil
-gevent-eventemitter
-uvloop
+async-timeout
 attrs
+cchardet
+jinja2
+pyee
+psutil
+stringcase
+ujson
+uvloop
+websockets

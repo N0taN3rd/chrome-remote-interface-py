@@ -1,24 +1,21 @@
-import ujson as json
 import os.path
 from pathlib import Path
 from typing import Optional, List, Tuple
 
+import ujson as json
 from jinja2 import Template
-from protogen.domain import Domain
-from protogen.typer import TYPER
-from stringcase import pascalcase, snakecase
+from stringcase import pascalcase
 
-output_dir_fp = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "cripy/asyncio/")
-)
-output_dirsync_fp = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "cripy/gevent")
-)
+from cripy.protogen.domain import Domain
+
+output_dir_fp = os.path.abspath(os.path.join(os.path.dirname(__file__), "cripy"))
+
+protocol_output_dir = os.path.abspath(os.path.join(output_dir_fp, "protocol"))
 
 version_def_fp = (
     "full",
     os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "data/70.0.3521.2-protocol.json")
+        os.path.join(os.path.dirname(__file__), "data/70.0.3528.4-protocol.json")
     ),
 )
 
@@ -137,68 +134,35 @@ def generate_domain_init(d: Domain, template, dp: Path) -> None:
 
 
 def proto_gen_good() -> None:
-    from cripy.asyncio.client import Client
+    from cripy.client import Client
+
     c = Client("")
 
 
 def gen() -> None:
-    with open("templates/simple/commands.async.py.j2", "r") as iin:
+    with open("cripy/templates/simple/commands.async.py.j2", "r") as iin:
         command_template = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
-    with open("templates/simple/protocol_init.py.j2", "r") as iin:
+    with open("cripy/templates/simple/protocol_init.py.j2", "r") as iin:
         pinit = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
 
     domains = []
     mixin_imports = []
-    allstrs = []
     for which, fp in [version_def_fp]:
         data = read_json(fp)
         for domain in data["domains"]:
             mixin_imports.append((domain["domain"].lower(), domain["domain"]))
-            allstrs.append(f'"{domain["domain"]}"')
             domains.append(Domain(domain))
     for d in domains:
-        dp = Path(output_dir_fp)
+        dp = Path(protocol_output_dir)
         events = []
         if d.has_events:
             for e in d.events:
                 events.append((e.scoped_name, e.description))
         generate_commands(d, command_template, dp, events)
-    proto_gen_good()
-
-
-def gen_no_types() -> None:
-    with open("templates/simple/commands.py.j2", "r") as iin:
-        command_template_sync = Template(
-            iin.read(), trim_blocks=True, lstrip_blocks=True
-        )
-    with open("templates/simple/protocol_init.py.j2", "r") as iin:
-        pinit = Template(iin.read(), trim_blocks=True, lstrip_blocks=True)
-
-    domains = []
-    mixin_imports = []
-    allstrs = []
-    for which, fp in [version_def_fp]:
-        data = read_json(fp)
-        for domain in data["domains"]:
-            mixin_imports.append((domain["domain"].lower(), domain["domain"]))
-            allstrs.append(f'"{domain["domain"]}"')
-            domains.append(Domain(domain))
-    for d in domains:
-        dp_sync = Path(output_dirsync_fp)
-        if not dp_sync.exists():
-            dp_sync.mkdir(parents=True)
-        events = []
-        if d.has_events:
-            for e in d.events:
-                events.append((e.scoped_name, e.description))
-        generate_commands(d, command_template_sync, dp_sync, events)
-    init = Path(output_dirsync_fp, "__init__.py")
+    init = Path(protocol_output_dir, "__init__.py")
     with init.open("w") as out:
-        out.write(pinit.render(domains=mixin_imports, which="gevent"))
-    from cripy.gevent.protocol import ProtocolMixin
-
-    class IT(ProtocolMixin):
-        pass
+        out.write(pinit.render(domains=mixin_imports, which="asyncio"))
+    proto_gen_good()
 
 
 if __name__ == "__main__":
