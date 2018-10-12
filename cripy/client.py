@@ -5,15 +5,18 @@ import traceback
 import ujson as json
 from asyncio import Future, AbstractEventLoop
 from concurrent.futures import CancelledError
-from typing import Callable, Optional, Dict
+from typing import Callable, Optional, Dict, ClassVar
 from typing import List, Any
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 
 import aiohttp
+import attr
 import websockets
 import websockets.protocol
 from pyee import EventEmitter
 from websockets import WebSocketClientProtocol
+
+from .protogen.generate import dynamically_generate_domains
 
 try:
     import uvloop
@@ -73,6 +76,8 @@ __all__ = [
     "DEFAULT_PORT",
     "DEFAULT_URL",
     "createProtocolError",
+    "ConnectEvents",
+    "gen_proto_classes",
 ]
 
 DEFAULT_HOST: str = "localhost"
@@ -91,6 +96,11 @@ def createProtocolError(method, msg) -> str:
     return emsg
 
 
+@attr.dataclass
+class ConnectEvents(object):
+    Disconnected: str = attr.ib(default="Disconnected")
+
+
 class NetworkError(Exception):
     """Network/Protocol related exception."""
 
@@ -104,6 +114,8 @@ class Client(EventEmitter):
 
     This class provides a simple abstraction for using the CDP.
     """
+
+    Events: ClassVar[ConnectEvents] = ConnectEvents()
 
     def __init__(
         self,
@@ -129,6 +141,7 @@ class Client(EventEmitter):
         self._closeCallback: Optional[Callable[[], None]] = None
         self._sessions: Dict[str, TargetSession] = dict()
         self._proto_def = proto_def
+        self._closed: bool = False
 
         if proto_def is None:
             self.Accessibility: Accessibility = Accessibility(self)
@@ -319,6 +332,9 @@ class Client(EventEmitter):
         All pending protocol method callbacks are canceled and the receive loop is stopped.
         Calls the on close callback if it was supplied and the "connection-closed" method is emitted
         """
+        if self._closed:
+            return
+        self._closed = True
         if self._closeCallback:
             self._closeCallback()
             self._closeCallback = None
@@ -326,6 +342,10 @@ class Client(EventEmitter):
         for cb in self._callbacks.values():
             cb.cancel()
         self._callbacks.clear()
+
+        for session in self._sessions.values():
+            session.on_closed()
+        self._sessions.clear()
 
         # close connection
         if not self._recv_fut.done():
@@ -336,7 +356,7 @@ class Client(EventEmitter):
         except Exception:
             pass
 
-        self.emit("connection-closed")
+        self.emit(self.Events.Disconnected)
 
     @staticmethod
     async def Close(
@@ -603,10 +623,19 @@ class TargetSession(EventEmitter):
             cb.cancel()
         self._callbacks.clear()
         self._connection = None
-        self.emit('session-closed')
+        self.emit("session-closed")
 
     def __repr__(self):
         return f"TargetSession(targetId={self._targetId:}, sessionId={self._sessionId})"
+
+
+async def gen_proto_classes(url: str) -> Dict[str, Any]:
+    purl = urlparse(url)
+    host, port = purl.netloc.split(":")
+    is_https = purl.scheme.startswith("wss") or purl.scheme.startswith("https")
+    raw_proto = await Client.Protocol(host=host, port=port, secure=is_https)
+    proto_def = await dynamically_generate_domains(raw_proto)
+    return proto_def
 
 
 async def connect(
@@ -623,15 +652,7 @@ async def connect(
     :return: CDP Client
     """
     if remote:
-        from .protogen.generate import dynamically_generate_domains
-        from urllib.parse import urlparse
-
-        purl = urlparse(url)
-        host, port = purl.netloc.split(":")
-        is_https = purl.scheme.startswith("wss") or purl.scheme.startswith("https")
-        proto_def = await dynamically_generate_domains(
-            await Client.Protocol(host=host, port=port, secure=is_https)
-        )
+        proto_def = await gen_proto_classes(url)
     else:
         proto_def = None
 

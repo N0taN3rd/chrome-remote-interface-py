@@ -32,6 +32,7 @@ setup(
     package_data={"": ["templates/simple/*.j2", "templates/full/*.j2"]},
     include_package_data=True,
     zip_safe=False,
+    license="Apache",
     keywords="cripy",
     classifiers=[
         "Development Status :: 1 - Alpha",

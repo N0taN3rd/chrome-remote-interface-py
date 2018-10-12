@@ -7,6 +7,8 @@ from .client import (
     DEFAULT_PORT,
     DEFAULT_URL,
     NetworkError,
+    gen_proto_classes,
+    ConnectEvents,
 )
 from .protocol import *
 from .protogen import *
@@ -22,7 +24,9 @@ __all__ = (
         "DEFAULT_HOST",
         "DEFAULT_PORT",
         "DEFAULT_URL",
-        "TargetSession"
+        "TargetSession",
+        "gen_proto_classes",
+        "ConnectEvents",
     ]
     + protocol.__all__
     + protogen.__all__
