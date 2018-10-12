@@ -39,7 +39,7 @@ DEFAULT_ARGS = [
     "--disable-domain-reliability",  # no Domain Reliability Monitoring
     "--disable-renderer-backgrounding",
     "--disable-infobars",
-    "--disable-translate"
+    "--disable-translate",
 ]
 
 
@@ -149,11 +149,7 @@ class ChromeLauncher(ChromeFinder):
         if headless:
             args += ["--headless", "--disable-gpu", "--hide-scrollbars"]
         args.append("--remote-debugging-port=9222")
-        cp = psutil.Popen(
-            args,
-            stderr=subprocess.DEVNULL,
-            env=os.environ.copy(),
-        )
+        cp = psutil.Popen(args, stderr=subprocess.DEVNULL, env=os.environ.copy())
         with Session() as session:
             for i in range(100):
                 time.sleep(0.1)
