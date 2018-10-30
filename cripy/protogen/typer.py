@@ -57,7 +57,7 @@ class Typer(object):
                     return self.primitives.get(t, f"'{t}'")
                 return f"'{t}'"
             return f"{t}"
-        print("wtf", t)
+        return "Any"
 
     def command_sig(self, t: Union[List[Type], Type], domain) -> str:
         if isinstance(t, list):
