@@ -90,25 +90,27 @@ class Property(FRefCollector):
         if self.is_array:
             ars = TYPER.constructor_sig(self.items)
             if ars is None:
-                print(
-                    "wtf is_array",
-                    self.name,
-                    self.type,
-                    self.items,
-                    TYPER.you_are_in(self.items),
-                )
+                ars = "Any"
+                # print(
+                #     "wtf is_array",
+                #     self.name,
+                #     self.type,
+                #     self.items,
+                #     TYPER.you_are_in(self.items),
+                # )
             ts = self._wrap_if_optionalc(f"List[{ars}]")
         else:
             ars = TYPER.constructor_sig(self.type)
             if ars is None:
-                print(
-                    "wtf",
-                    self.name,
-                    self.type,
-                    self.type.is_array,
-                    self.items,
-                    TYPER.you_are_in(self.items),
-                )
+                ars = "Any"
+                # print(
+                #     "wtf",
+                #     self.name,
+                #     self.type,
+                #     self.type.is_array,
+                #     self.items,
+                #     TYPER.you_are_in(self.items),
+                # )
             ts = self._wrap_if_optionalc(ars)
         return f"{self.name}: {ts}"
 
@@ -122,17 +124,19 @@ class Property(FRefCollector):
         if self.is_array:
             ars = TYPER.command_sig(self.items, domain)
             if ars is None:
-                print(
-                    "wtf is_array",
-                    self.name,
-                    self.type,
-                    self.items,
-                    TYPER.you_are_in(self.items),
-                )
+                ars = "Any"
+                # print(
+                #     "wtf is_array",
+                #     self.name,
+                #     self.type,
+                #     self.items,
+                #     TYPER.you_are_in(self.items),
+                # )
             ts = self._wrap_if_optionalc(f"List[{ars}]")
         else:
             ars = TYPER.command_sig(self.type, domain)
             if ars is None:
+                ars = "Any"
                 print(
                     "wtf",
                     self.name,
@@ -154,13 +158,14 @@ class Property(FRefCollector):
         if self.is_array:
             ars = TYPER.constructor_docstr(self.items)
             if ars is None:
-                print(
-                    "wtf constructor_docstr is_array",
-                    self.name,
-                    self.type,
-                    self.items,
-                    TYPER.you_are_in(self.items),
-                )
+                ars = "Any"
+                # print(
+                #     "wtf constructor_docstr is_array",
+                #     self.name,
+                #     self.type,
+                #     self.items,
+                #     TYPER.you_are_in(self.items),
+                # )
             ts = self._wrap_if_optional(f"List[{ars}]")
         else:
             ts = self._wrap_if_optional(TYPER.constructor_docstr(self.type))

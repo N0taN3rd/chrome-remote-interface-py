@@ -1,6 +1,13 @@
 from typing import Optional
 
-PT_PYT = dict(
+
+class PTPYT(dict):
+    def __missing__(self, key) -> str:
+        return "Any"
+
+
+PT_PYT = PTPYT(
+    binary="str",
     object="dict",
     string="str",
     integer="int",
