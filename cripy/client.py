@@ -191,7 +191,12 @@ class Client(EventEmitter):
     async def connect(self) -> None:
         """Connect to the remote websocket endpoint"""
         self._ws = await websockets.client.connect(
-            self._url, max_size=None, compression=None, max_queue=2 ** 7
+            self._url,
+            ping_interval=None,  # chrome no ping pong and websockets closes down on no pong :'(
+            max_size=None,
+            compression=None,
+            max_queue=2 ** 7,
+            loop=self._loop,
         )
         self._recv_task = self._loop.create_task(self._recv_loop())
 
