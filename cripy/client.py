@@ -2,29 +2,18 @@
 import asyncio
 import logging
 import traceback
-import ujson as json
-from asyncio import Future, AbstractEventLoop
-from concurrent.futures import CancelledError
-from typing import Callable, Optional, Dict, ClassVar
+from asyncio import Future, AbstractEventLoop, Task
+from typing import Callable, Optional, Dict, ClassVar, Union
 from typing import List, Any
 from urllib.parse import urljoin, urlparse
 
 import aiohttp
 import attr
+import ujson as json
 import websockets
 import websockets.protocol
 from pyee import EventEmitter
 from websockets import WebSocketClientProtocol
-
-from .protogen.generate import dynamically_generate_domains
-
-try:
-    import uvloop
-
-    if not isinstance(asyncio.get_event_loop(), uvloop.Loop):
-        asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
-except ImportError:
-    pass
 
 from .protocol.accessibility import Accessibility
 from .protocol.animation import Animation
@@ -65,6 +54,7 @@ from .protocol.systeminfo import SystemInfo
 from .protocol.target import Target
 from .protocol.tethering import Tethering
 from .protocol.tracing import Tracing
+from .protogen.generate import dynamically_generate_domains
 
 __all__ = [
     "Client",
@@ -137,7 +127,7 @@ class Client(EventEmitter):
         self._lastId: int = 0
         self._callbacks: Dict[int, Future] = dict()
         self._ws: WebSocketClientProtocol = None
-        self._recv_fut: Optional[Future] = None
+        self._recv_task: Optional[Task] = None
         self._closeCallback: Optional[Callable[[], None]] = None
         self._sessions: Dict[str, TargetSession] = dict()
         self._proto_def = proto_def
@@ -187,6 +177,12 @@ class Client(EventEmitter):
             for domain, clazz in proto_def.items():
                 setattr(self, domain, clazz(self))
 
+    @staticmethod
+    def fromSession(sessionOrClient: Union["Client", "TargetSession"]) -> "Client":
+        if isinstance(sessionOrClient, TargetSession):
+            return sessionOrClient._connection
+        return sessionOrClient
+
     @property
     def url(self) -> str:
         """Get connected WebSocket url."""
@@ -195,9 +191,9 @@ class Client(EventEmitter):
     async def connect(self) -> None:
         """Connect to the remote websocket endpoint"""
         self._ws = await websockets.client.connect(
-            self._url, compression=None, max_queue=0, timeout=20
+            self._url, max_size=None, compression=None, max_queue=2 ** 7
         )
-        self._recv_fut = asyncio.ensure_future(self._recv_loop(), loop=self._loop)
+        self._recv_task = self._loop.create_task(self._recv_loop())
 
     async def createTargetSession(self, targetId: str) -> "TargetSession":
         """Attach to the target specified by target id and create new TargetSession for direct communication to it."""
@@ -211,7 +207,7 @@ class Client(EventEmitter):
         """Set closed callback."""
         self._closeCallback = callback
 
-    def send(self, method: str, params: Optional[dict] = None) -> Future:
+    def send(self, method: str, params: Optional[Dict] = None) -> Future:
         """Send a protocol msg to the remote chrome instance.
 
         :param method: The method to be used
@@ -225,7 +221,7 @@ class Client(EventEmitter):
         self._lastId += 1
         _id = self._lastId
         msg = json.dumps(dict(method=method, params=params, id=_id))
-        asyncio.ensure_future(self._send_async(msg, _id), loop=self._loop)
+        self._loop.create_task(self._send_async(msg, _id))
         callback = self._loop.create_future()
         self._callbacks[_id] = callback
         callback.method = method  # type: ignore
@@ -250,8 +246,9 @@ class Client(EventEmitter):
             except (websockets.ConnectionClosed, ConnectionResetError) as e:
                 logger.info("connection closed")
                 break
+            await asyncio.sleep(0)
         if self.connected:
-            await self.dispose()
+            self._loop.create_task(self.dispose())
 
     async def _send_async(self, msg: str, callback_id: int) -> None:
         """Actually send the msg to remote instance.
@@ -284,7 +281,7 @@ class Client(EventEmitter):
         else:
             self._on_unsolicited(msg)
 
-    def _on_response(self, msg: dict) -> None:
+    def _on_response(self, msg: Dict) -> None:
         """Handles a response to protocol method.
 
         If the response is an error, the callback (future) associated with the messages id has
@@ -300,7 +297,7 @@ class Client(EventEmitter):
             else:
                 callback.set_result(msg.get("result"))
 
-    def _on_unsolicited(self, msg: dict) -> None:
+    def _on_unsolicited(self, msg: Dict) -> None:
         """Emits the message ent by the remote chrome instance that were not requested as the method -> params events.
 
         If an listener to one of these unsolicited messages throws an error. It is caught here and reported.
@@ -308,13 +305,13 @@ class Client(EventEmitter):
         """
         params = msg.get("params", {})
         method = msg.get("method", "")
+        sessionId = params.get("sessionId")
         try:
             if method == "Target.receivedMessageFromTarget":
-                session = self._sessions.get(params.get("sessionId"))
+                session = self._sessions.get(sessionId)
                 if session:
                     session.on_message(params.get("message"))
             elif method == "Target.detachedFromTarget":
-                sessionId = params.get("sessionId")
                 session = self._sessions.get(sessionId)
                 if session:
                     session.on_closed()
@@ -340,7 +337,10 @@ class Client(EventEmitter):
             self._closeCallback = None
 
         for cb in self._callbacks.values():
-            cb.cancel()
+            if not cb.done():
+                cb.set_exception(
+                    NetworkError(f"Protocol error {cb.method}: Target closed.")
+                )
         self._callbacks.clear()
 
         for session in self._sessions.values():
@@ -348,13 +348,14 @@ class Client(EventEmitter):
         self._sessions.clear()
 
         # close connection
-        if not self._recv_fut.done():
-            self._recv_fut.cancel()
+        if not self._ws.closed:
+            try:
+                await self._ws.close()
+            except Exception:
+                pass
 
-        try:
-            await self._ws.close()
-        except Exception:
-            pass
+        if self._recv_task is not None and not self._recv_task.done():
+            self._recv_task.cancel()
 
         self.emit(self.Events.Disconnected)
 
@@ -509,7 +510,7 @@ class TargetSession(EventEmitter):
         """Make new session."""
         super().__init__(loop=client._loop)
         self._lastId: int = 0
-        self._callbacks: Dict[int, Future] = {}
+        self._callbacks: Dict[int, Future] = dict()
         self._connection: Client = client
         self._targetId: str = targetId
         self._sessionId: str = sessionId
@@ -559,32 +560,38 @@ class TargetSession(EventEmitter):
             for domain, clazz in self._connection._proto_def.items():
                 setattr(self, domain, clazz(self))
 
-    async def send(self, method: str, params: Optional[dict] = None) -> Any:
+    def send(self, method: str, params: Optional[dict] = None) -> Future:
         """Send message to the connected session.
         :arg str method: Protocol method name.
         :arg dict params: Optional method parameters.
         """
         if not self._connection:
-            raise NetworkError("Connection closed.")
+            raise NetworkError(
+                f"Protocol Error ({method}): Session closed. Most likely the "
+                f"target has been closed."
+            )
 
         if params is None:
             params = dict()
         self._lastId += 1
         _id = self._lastId
         msg = json.dumps(dict(id=_id, method=method, params=params))
-
         callback = self._connection._loop.create_future()
         self._callbacks[_id] = callback
         callback.method = method
-
         try:
-            await self._connection.send(
+            self._connection.send(
                 "Target.sendMessageToTarget",
                 {"sessionId": self._sessionId, "message": msg},
             )
-        except CancelledError:
-            raise NetworkError("connection unexpectedly closed")
-        return await callback
+        except Exception as e:
+            # The response from target might have been already dispatched
+            if _id in self._callbacks:
+                cb = self._callbacks[_id]
+                del self._callbacks[_id]
+                if not cb.done():
+                    cb.set_exception(NetworkError(e.args[0]))
+        return callback
 
     async def detach(self) -> None:
         """Detach session from target.
@@ -603,27 +610,43 @@ class TargetSession(EventEmitter):
         return sesh
 
     def on_message(self, message: str) -> None:
-        msg = json.loads(message)
-        _id = msg.get("id")
+        obj = json.loads(message)
+        _id = obj.get("id")
         if _id and _id in self._callbacks:
             callback = self._callbacks.pop(_id)
-            if "error" in msg:
+            if "error" in obj:
                 callback.set_exception(
-                    NetworkError(createProtocolError(callback.method, msg))
+                    NetworkError(createProtocolError(callback.method, obj))
                 )
             else:
-                result = msg.get("result")
+                result = obj.get("result")
                 if callback and not callback.done():
                     callback.set_result(result)
         else:
-            self.emit(msg.get("method"), msg.get("params"))
+            method = obj.get("method")
+            params = obj.get("params")
+            if method == "Target.receivedMessageFromTarget":
+                session = self._sessions.get(params.get("sessionId"))
+                if session is not None:
+                    session.on_message(params.get("message"))
+            elif method == "Target.detachedFromTarget":
+                sessionId = params.get("sessionId")
+                session = self._sessions.get(sessionId)
+                if session is not None:
+                    session.on_closed()
+                    del self._sessions[sessionId]
+            self.emit(method, params)
 
     def on_closed(self) -> None:
         for cb in self._callbacks.values():
-            cb.cancel()
+            if not cb.done():
+                cb.set_exception(
+                    NetworkError(
+                        f"Protocol error {cb.method}: Target closed."  # type: ignore
+                    )
+                )
         self._callbacks.clear()
         self._connection = None
-        self.emit("session-closed")
 
     def __repr__(self):
         return f"TargetSession(targetId={self._targetId:}, sessionId={self._sessionId})"
