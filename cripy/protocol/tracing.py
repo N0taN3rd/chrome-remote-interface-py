@@ -1,33 +1,43 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import (
+    Awaitable,
+    Any,
+    Callable,
+    ClassVar,
+    List,
+    Optional,
+    Union,
+    TYPE_CHECKING,
+)
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["Tracing"]
 
 
+@attr.dataclass(slots=True)
 class Tracing(object):
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
+
     dependencies: ClassVar[List[str]] = ["IO"]
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
-    async def end(self) -> Optional[dict]:
+    def end(self) -> Awaitable[Optional[dict]]:
         """
         Stop trace events collection.
         """
-        res = await self.client.send("Tracing.end")
-        return res
+        return self.client.send("Tracing.end")
 
-    async def getCategories(self) -> Optional[dict]:
+    def getCategories(self) -> Awaitable[Optional[dict]]:
         """
         Gets supported tracing categories.
         """
-        res = await self.client.send("Tracing.getCategories")
-        return res
+        return self.client.send("Tracing.getCategories")
 
-    async def recordClockSyncMarker(self, syncId: str) -> Optional[dict]:
+    def recordClockSyncMarker(self, syncId: str) -> Awaitable[Optional[dict]]:
         """
         Record a clock sync marker in the trace.
 
@@ -37,17 +47,15 @@ class Tracing(object):
         msg_dict = dict()
         if syncId is not None:
             msg_dict["syncId"] = syncId
-        res = await self.client.send("Tracing.recordClockSyncMarker", msg_dict)
-        return res
+        return self.client.send("Tracing.recordClockSyncMarker", msg_dict)
 
-    async def requestMemoryDump(self) -> Optional[dict]:
+    def requestMemoryDump(self) -> Awaitable[Optional[dict]]:
         """
         Request a global memory dump.
         """
-        res = await self.client.send("Tracing.requestMemoryDump")
-        return res
+        return self.client.send("Tracing.requestMemoryDump")
 
-    async def start(
+    def start(
         self,
         categories: Optional[str] = None,
         options: Optional[str] = None,
@@ -55,7 +63,7 @@ class Tracing(object):
         transferMode: Optional[str] = None,
         streamCompression: Optional[str] = None,
         traceConfig: Optional[dict] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Start trace events collection.
 
@@ -85,34 +93,51 @@ class Tracing(object):
             msg_dict["streamCompression"] = streamCompression
         if traceConfig is not None:
             msg_dict["traceConfig"] = traceConfig
-        res = await self.client.send("Tracing.start", msg_dict)
-        return res
+        return self.client.send("Tracing.start", msg_dict)
 
-    def bufferUsage(self, fn: Callable[..., Any], once: bool = False) -> None:
-        if once:
-            self.client.once("Tracing.bufferUsage", fn)
-        else:
-            self.client.on("Tracing.bufferUsage", fn)
+    def bufferUsage(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def dataCollected(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Tracing.bufferUsage", _cb)
+
+            return future
+
+        self.client.on("Tracing.bufferUsage", cb)
+
+    def dataCollected(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Contains an bucket of collected trace events. When tracing is stopped collected events will be
         send as a sequence of dataCollected events followed by tracingComplete event.
         """
-        if once:
-            self.client.once("Tracing.dataCollected", fn)
-        else:
-            self.client.on("Tracing.dataCollected", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def tracingComplete(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Tracing.dataCollected", _cb)
+
+            return future
+
+        self.client.on("Tracing.dataCollected", cb)
+
+    def tracingComplete(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Signals that tracing is stopped and there is no trace buffers pending flush, all data were
         delivered via dataCollected events.
         """
-        if once:
-            self.client.once("Tracing.tracingComplete", fn)
-        else:
-            self.client.on("Tracing.tracingComplete", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Tracing()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Tracing.tracingComplete", _cb)
+
+            return future
+
+        self.client.on("Tracing.tracingComplete", cb)

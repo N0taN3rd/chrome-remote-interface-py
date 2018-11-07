@@ -1,33 +1,43 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import (
+    Awaitable,
+    Any,
+    Callable,
+    ClassVar,
+    List,
+    Optional,
+    Union,
+    TYPE_CHECKING,
+)
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["Animation"]
 
 
+@attr.dataclass(slots=True)
 class Animation(object):
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
+
     dependencies: ClassVar[List[str]] = ["Runtime", "DOM"]
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables animation domain notifications.
         """
-        res = await self.client.send("Animation.disable")
-        return res
+        return self.client.send("Animation.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables animation domain notifications.
         """
-        res = await self.client.send("Animation.enable")
-        return res
+        return self.client.send("Animation.enable")
 
-    async def getCurrentTime(self, id: str) -> Optional[dict]:
+    def getCurrentTime(self, id: str) -> Awaitable[Optional[dict]]:
         """
         Returns the current time of the an animation.
 
@@ -37,17 +47,15 @@ class Animation(object):
         msg_dict = dict()
         if id is not None:
             msg_dict["id"] = id
-        res = await self.client.send("Animation.getCurrentTime", msg_dict)
-        return res
+        return self.client.send("Animation.getCurrentTime", msg_dict)
 
-    async def getPlaybackRate(self) -> Optional[dict]:
+    def getPlaybackRate(self) -> Awaitable[Optional[dict]]:
         """
         Gets the playback rate of the document timeline.
         """
-        res = await self.client.send("Animation.getPlaybackRate")
-        return res
+        return self.client.send("Animation.getPlaybackRate")
 
-    async def releaseAnimations(self, animations: List[str]) -> Optional[dict]:
+    def releaseAnimations(self, animations: List[str]) -> Awaitable[Optional[dict]]:
         """
         Releases a set of animations to no longer be manipulated.
 
@@ -57,10 +65,9 @@ class Animation(object):
         msg_dict = dict()
         if animations is not None:
             msg_dict["animations"] = animations
-        res = await self.client.send("Animation.releaseAnimations", msg_dict)
-        return res
+        return self.client.send("Animation.releaseAnimations", msg_dict)
 
-    async def resolveAnimation(self, animationId: str) -> Optional[dict]:
+    def resolveAnimation(self, animationId: str) -> Awaitable[Optional[dict]]:
         """
         Gets the remote object of the Animation.
 
@@ -70,12 +77,11 @@ class Animation(object):
         msg_dict = dict()
         if animationId is not None:
             msg_dict["animationId"] = animationId
-        res = await self.client.send("Animation.resolveAnimation", msg_dict)
-        return res
+        return self.client.send("Animation.resolveAnimation", msg_dict)
 
-    async def seekAnimations(
+    def seekAnimations(
         self, animations: List[str], currentTime: float
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Seek a set of animations to a particular time within each animation.
 
@@ -89,10 +95,11 @@ class Animation(object):
             msg_dict["animations"] = animations
         if currentTime is not None:
             msg_dict["currentTime"] = currentTime
-        res = await self.client.send("Animation.seekAnimations", msg_dict)
-        return res
+        return self.client.send("Animation.seekAnimations", msg_dict)
 
-    async def setPaused(self, animations: List[str], paused: bool) -> Optional[dict]:
+    def setPaused(
+        self, animations: List[str], paused: bool
+    ) -> Awaitable[Optional[dict]]:
         """
         Sets the paused state of a set of animations.
 
@@ -106,10 +113,9 @@ class Animation(object):
             msg_dict["animations"] = animations
         if paused is not None:
             msg_dict["paused"] = paused
-        res = await self.client.send("Animation.setPaused", msg_dict)
-        return res
+        return self.client.send("Animation.setPaused", msg_dict)
 
-    async def setPlaybackRate(self, playbackRate: float) -> Optional[dict]:
+    def setPlaybackRate(self, playbackRate: float) -> Awaitable[Optional[dict]]:
         """
         Sets the playback rate of the document timeline.
 
@@ -119,12 +125,11 @@ class Animation(object):
         msg_dict = dict()
         if playbackRate is not None:
             msg_dict["playbackRate"] = playbackRate
-        res = await self.client.send("Animation.setPlaybackRate", msg_dict)
-        return res
+        return self.client.send("Animation.setPlaybackRate", msg_dict)
 
-    async def setTiming(
+    def setTiming(
         self, animationId: str, duration: float, delay: float
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Sets the timing of an animation node.
 
@@ -142,35 +147,52 @@ class Animation(object):
             msg_dict["duration"] = duration
         if delay is not None:
             msg_dict["delay"] = delay
-        res = await self.client.send("Animation.setTiming", msg_dict)
-        return res
+        return self.client.send("Animation.setTiming", msg_dict)
 
-    def animationCanceled(self, fn: Callable[..., Any], once: bool = False) -> None:
+    def animationCanceled(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Event for when an animation has been cancelled.
         """
-        if once:
-            self.client.once("Animation.animationCanceled", fn)
-        else:
-            self.client.on("Animation.animationCanceled", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def animationCreated(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Animation.animationCanceled", _cb)
+
+            return future
+
+        self.client.on("Animation.animationCanceled", cb)
+
+    def animationCreated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Event for each animation that has been created.
         """
-        if once:
-            self.client.once("Animation.animationCreated", fn)
-        else:
-            self.client.on("Animation.animationCreated", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def animationStarted(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Animation.animationCreated", _cb)
+
+            return future
+
+        self.client.on("Animation.animationCreated", cb)
+
+    def animationStarted(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Event for animation that has been started.
         """
-        if once:
-            self.client.once("Animation.animationStarted", fn)
-        else:
-            self.client.on("Animation.animationStarted", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Animation()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Animation.animationStarted", _cb)
+
+            return future
+
+        self.client.on("Animation.animationStarted", cb)

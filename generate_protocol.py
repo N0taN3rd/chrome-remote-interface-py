@@ -15,7 +15,7 @@ protocol_output_dir = os.path.abspath(os.path.join(output_dir_fp, "protocol"))
 version_def_fp = (
     "full",
     os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "data/70.0.3528.4-protocol.json")
+        os.path.join(os.path.dirname(__file__), "data/protocol.json")
     ),
 )
 
@@ -147,7 +147,7 @@ def gen() -> None:
 
     domains = []
     mixin_imports = []
-    for which, fp in [version_def_fp]:
+    for which, fp in [('', 'proto.json')]:
         data = read_json(fp)
         for domain in data["domains"]:
             mixin_imports.append((domain["domain"].lower(), domain["domain"]))

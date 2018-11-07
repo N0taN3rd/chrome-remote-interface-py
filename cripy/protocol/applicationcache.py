@@ -1,24 +1,26 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["ApplicationCache"]
 
 
+@attr.dataclass(slots=True)
 class ApplicationCache(object):
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables application cache domain notifications.
         """
-        res = await self.client.send("ApplicationCache.enable")
-        return res
+        return self.client.send("ApplicationCache.enable")
 
-    async def getApplicationCacheForFrame(self, frameId: str) -> Optional[dict]:
+    def getApplicationCacheForFrame(self, frameId: str) -> Awaitable[Optional[dict]]:
         """
         Returns relevant application cache data for the document in given frame.
 
@@ -28,20 +30,18 @@ class ApplicationCache(object):
         msg_dict = dict()
         if frameId is not None:
             msg_dict["frameId"] = frameId
-        res = await self.client.send(
+        return self.client.send(
             "ApplicationCache.getApplicationCacheForFrame", msg_dict
         )
-        return res
 
-    async def getFramesWithManifests(self) -> Optional[dict]:
+    def getFramesWithManifests(self) -> Awaitable[Optional[dict]]:
         """
         Returns array of frame identifiers with manifest urls for each frame containing a document
 associated with some application cache.
         """
-        res = await self.client.send("ApplicationCache.getFramesWithManifests")
-        return res
+        return self.client.send("ApplicationCache.getFramesWithManifests")
 
-    async def getManifestForFrame(self, frameId: str) -> Optional[dict]:
+    def getManifestForFrame(self, frameId: str) -> Awaitable[Optional[dict]]:
         """
         Returns manifest URL for document in the given frame.
 
@@ -51,22 +51,32 @@ associated with some application cache.
         msg_dict = dict()
         if frameId is not None:
             msg_dict["frameId"] = frameId
-        res = await self.client.send("ApplicationCache.getManifestForFrame", msg_dict)
-        return res
+        return self.client.send("ApplicationCache.getManifestForFrame", msg_dict)
 
     def applicationCacheStatusUpdated(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
-        if once:
-            self.client.once("ApplicationCache.applicationCacheStatusUpdated", fn)
-        else:
-            self.client.on("ApplicationCache.applicationCacheStatusUpdated", fn)
+        self, cb: Optional[Callable[..., Any]] = None
+    ) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def networkStateUpdated(self, fn: Callable[..., Any], once: bool = False) -> None:
-        if once:
-            self.client.once("ApplicationCache.networkStateUpdated", fn)
-        else:
-            self.client.on("ApplicationCache.networkStateUpdated", fn)
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
 
-    def __repr__(self):
-        return f"ApplicationCache()"
+            self.client.once("ApplicationCache.applicationCacheStatusUpdated", _cb)
+
+            return future
+
+        self.client.on("ApplicationCache.applicationCacheStatusUpdated", cb)
+
+    def networkStateUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("ApplicationCache.networkStateUpdated", _cb)
+
+            return future
+
+        self.client.on("ApplicationCache.networkStateUpdated", cb)

@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
+"""This is an auto-generated file. Modify at your own risk"""
 {% set dl = d.domain | lower %}
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable,{% if events %} Any, Callable,{% endif %}{% if d.has_deps %} ClassVar,{% endif %} List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["{{ d.domain }}"]
 
 
+@attr.dataclass(slots=True)
 class {{ d.domain }}(object):
 {% if d.description %}
     """
@@ -15,18 +19,17 @@ class {{ d.domain }}(object):
     """
 
 {% endif %}
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 {% if d.has_deps %}
+
     {{ d.dep_list_str_typed }}
 {% endif %}
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
     {% for command in d.commands %}
     {% if command.has_parameters %}
-    async def {{ command.name }}(self, {{ command.command_arg_string }}) -> Optional[dict]:
+    def {{ command.name }}(self, {{ command.command_arg_string }}) -> Awaitable[Optional[dict]]:
     {% else %}
-    async def {{ command.name }}(self) -> Optional[dict]:
+    def {{ command.name }}(self) -> Awaitable[Optional[dict]]:
     {% endif %}
         {% if command.has_parameters %}
         """
@@ -54,16 +57,15 @@ class {{ d.domain }}(object):
         if {{ param.name }} is not None:
             msg_dict["{{ param.name }}"] = {{ param.name }}
         {% endfor %}
-        res = await self.client.send("{{ command.scoped_name }}", msg_dict)
+        return self.client.send("{{ command.scoped_name }}", msg_dict)
         {% else %}
-        res = await self.client.send("{{ command.scoped_name }}")
+        return self.client.send("{{ command.scoped_name }}")
         {% endif %}
-        return res
 
     {% endfor %}
     {% if events %}
     {% for e, d in events %}
-    def {{ onEvent(e) }}(self, fn: Callable[..., Any], once: bool = False) -> None:
+    def {{ onEvent(e) }}(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         {% if d %}
         """
         {% for l in d %}
@@ -71,14 +73,19 @@ class {{ d.domain }}(object):
         {% endfor %}
         """
         {% endif %}
-        if once:
-            self.client.once("{{ e }}", fn)
-        else:
-            self.client.on("{{ e }}", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("{{ e }}", _cb)
+
+            return future
+
+        self.client.on("{{ e }}", cb)
 
     {% endfor %}
     {% endif %}
-    def __repr__(self):
-        return f"{{ d.domain }}()"
 
 

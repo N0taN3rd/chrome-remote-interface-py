@@ -1,58 +1,75 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["Inspector"]
 
 
+@attr.dataclass(slots=True)
 class Inspector(object):
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables inspector domain notifications.
         """
-        res = await self.client.send("Inspector.disable")
-        return res
+        return self.client.send("Inspector.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables inspector domain notifications.
         """
-        res = await self.client.send("Inspector.enable")
-        return res
+        return self.client.send("Inspector.enable")
 
-    def detached(self, fn: Callable[..., Any], once: bool = False) -> None:
+    def detached(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when remote debugging connection is about to be terminated. Contains detach reason.
         """
-        if once:
-            self.client.once("Inspector.detached", fn)
-        else:
-            self.client.on("Inspector.detached", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def targetCrashed(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Inspector.detached", _cb)
+
+            return future
+
+        self.client.on("Inspector.detached", cb)
+
+    def targetCrashed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when debugging target has crashed
         """
-        if once:
-            self.client.once("Inspector.targetCrashed", fn)
-        else:
-            self.client.on("Inspector.targetCrashed", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def targetReloadedAfterCrash(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Inspector.targetCrashed", _cb)
+
+            return future
+
+        self.client.on("Inspector.targetCrashed", cb)
+
+    def targetReloadedAfterCrash(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when debugging target has reloaded after crash
         """
-        if once:
-            self.client.once("Inspector.targetReloadedAfterCrash", fn)
-        else:
-            self.client.on("Inspector.targetReloadedAfterCrash", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Inspector()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Inspector.targetReloadedAfterCrash", _cb)
+
+            return future
+
+        self.client.on("Inspector.targetReloadedAfterCrash", cb)

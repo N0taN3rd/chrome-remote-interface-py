@@ -1,52 +1,65 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import (
+    Awaitable,
+    Any,
+    Callable,
+    ClassVar,
+    List,
+    Optional,
+    Union,
+    TYPE_CHECKING,
+)
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["Console"]
 
 
+@attr.dataclass(slots=True)
 class Console(object):
     """
     This domain is deprecated - use Runtime or Log instead.
     """
 
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
+
     dependencies: ClassVar[List[str]] = ["Runtime"]
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
-    async def clearMessages(self) -> Optional[dict]:
+    def clearMessages(self) -> Awaitable[Optional[dict]]:
         """
         Does nothing.
         """
-        res = await self.client.send("Console.clearMessages")
-        return res
+        return self.client.send("Console.clearMessages")
 
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables console domain, prevents further console messages from being reported to the client.
         """
-        res = await self.client.send("Console.disable")
-        return res
+        return self.client.send("Console.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables console domain, sends the messages collected so far to the client by means of the
 `messageAdded` notification.
         """
-        res = await self.client.send("Console.enable")
-        return res
+        return self.client.send("Console.enable")
 
-    def messageAdded(self, fn: Callable[..., Any], once: bool = False) -> None:
+    def messageAdded(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Issued when new console message is added.
         """
-        if once:
-            self.client.once("Console.messageAdded", fn)
-        else:
-            self.client.on("Console.messageAdded", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Console()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Console.messageAdded", _cb)
+
+            return future
+
+        self.client.on("Console.messageAdded", cb)

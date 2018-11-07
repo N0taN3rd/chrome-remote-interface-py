@@ -1,19 +1,31 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import (
+    Awaitable,
+    Any,
+    Callable,
+    ClassVar,
+    List,
+    Optional,
+    Union,
+    TYPE_CHECKING,
+)
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["LayerTree"]
 
 
+@attr.dataclass(slots=True)
 class LayerTree(object):
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
+
     dependencies: ClassVar[List[str]] = ["DOM"]
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
-    async def compositingReasons(self, layerId: str) -> Optional[dict]:
+    def compositingReasons(self, layerId: str) -> Awaitable[Optional[dict]]:
         """
         Provides the reasons why the given layer was composited.
 
@@ -23,24 +35,21 @@ class LayerTree(object):
         msg_dict = dict()
         if layerId is not None:
             msg_dict["layerId"] = layerId
-        res = await self.client.send("LayerTree.compositingReasons", msg_dict)
-        return res
+        return self.client.send("LayerTree.compositingReasons", msg_dict)
 
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables compositing tree inspection.
         """
-        res = await self.client.send("LayerTree.disable")
-        return res
+        return self.client.send("LayerTree.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables compositing tree inspection.
         """
-        res = await self.client.send("LayerTree.enable")
-        return res
+        return self.client.send("LayerTree.enable")
 
-    async def loadSnapshot(self, tiles: List[dict]) -> Optional[dict]:
+    def loadSnapshot(self, tiles: List[dict]) -> Awaitable[Optional[dict]]:
         """
         Returns the snapshot identifier.
 
@@ -50,10 +59,9 @@ class LayerTree(object):
         msg_dict = dict()
         if tiles is not None:
             msg_dict["tiles"] = tiles
-        res = await self.client.send("LayerTree.loadSnapshot", msg_dict)
-        return res
+        return self.client.send("LayerTree.loadSnapshot", msg_dict)
 
-    async def makeSnapshot(self, layerId: str) -> Optional[dict]:
+    def makeSnapshot(self, layerId: str) -> Awaitable[Optional[dict]]:
         """
         Returns the layer snapshot identifier.
 
@@ -63,16 +71,15 @@ class LayerTree(object):
         msg_dict = dict()
         if layerId is not None:
             msg_dict["layerId"] = layerId
-        res = await self.client.send("LayerTree.makeSnapshot", msg_dict)
-        return res
+        return self.client.send("LayerTree.makeSnapshot", msg_dict)
 
-    async def profileSnapshot(
+    def profileSnapshot(
         self,
         snapshotId: str,
         minRepeatCount: Optional[int] = None,
         minDuration: Optional[float] = None,
         clipRect: Optional[dict] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         :param snapshotId: The id of the layer snapshot.
         :type snapshotId: str
@@ -92,10 +99,9 @@ class LayerTree(object):
             msg_dict["minDuration"] = minDuration
         if clipRect is not None:
             msg_dict["clipRect"] = clipRect
-        res = await self.client.send("LayerTree.profileSnapshot", msg_dict)
-        return res
+        return self.client.send("LayerTree.profileSnapshot", msg_dict)
 
-    async def releaseSnapshot(self, snapshotId: str) -> Optional[dict]:
+    def releaseSnapshot(self, snapshotId: str) -> Awaitable[Optional[dict]]:
         """
         Releases layer snapshot captured by the back-end.
 
@@ -105,16 +111,15 @@ class LayerTree(object):
         msg_dict = dict()
         if snapshotId is not None:
             msg_dict["snapshotId"] = snapshotId
-        res = await self.client.send("LayerTree.releaseSnapshot", msg_dict)
-        return res
+        return self.client.send("LayerTree.releaseSnapshot", msg_dict)
 
-    async def replaySnapshot(
+    def replaySnapshot(
         self,
         snapshotId: str,
         fromStep: Optional[int] = None,
         toStep: Optional[int] = None,
         scale: Optional[float] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Replays the layer snapshot and returns the resulting bitmap.
 
@@ -136,10 +141,9 @@ class LayerTree(object):
             msg_dict["toStep"] = toStep
         if scale is not None:
             msg_dict["scale"] = scale
-        res = await self.client.send("LayerTree.replaySnapshot", msg_dict)
-        return res
+        return self.client.send("LayerTree.replaySnapshot", msg_dict)
 
-    async def snapshotCommandLog(self, snapshotId: str) -> Optional[dict]:
+    def snapshotCommandLog(self, snapshotId: str) -> Awaitable[Optional[dict]]:
         """
         Replays the layer snapshot and returns canvas log.
 
@@ -149,20 +153,30 @@ class LayerTree(object):
         msg_dict = dict()
         if snapshotId is not None:
             msg_dict["snapshotId"] = snapshotId
-        res = await self.client.send("LayerTree.snapshotCommandLog", msg_dict)
-        return res
+        return self.client.send("LayerTree.snapshotCommandLog", msg_dict)
 
-    def layerPainted(self, fn: Callable[..., Any], once: bool = False) -> None:
-        if once:
-            self.client.once("LayerTree.layerPainted", fn)
-        else:
-            self.client.on("LayerTree.layerPainted", fn)
+    def layerPainted(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def layerTreeDidChange(self, fn: Callable[..., Any], once: bool = False) -> None:
-        if once:
-            self.client.once("LayerTree.layerTreeDidChange", fn)
-        else:
-            self.client.on("LayerTree.layerTreeDidChange", fn)
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
 
-    def __repr__(self):
-        return f"LayerTree()"
+            self.client.once("LayerTree.layerPainted", _cb)
+
+            return future
+
+        self.client.on("LayerTree.layerPainted", cb)
+
+    def layerTreeDidChange(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("LayerTree.layerTreeDidChange", _cb)
+
+            return future
+
+        self.client.on("LayerTree.layerTreeDidChange", cb)

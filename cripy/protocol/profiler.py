@@ -1,35 +1,44 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import (
+    Awaitable,
+    Any,
+    Callable,
+    ClassVar,
+    List,
+    Optional,
+    Union,
+    TYPE_CHECKING,
+)
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["Profiler"]
 
 
+@attr.dataclass(slots=True)
 class Profiler(object):
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
+
     dependencies: ClassVar[List[str]] = ["Runtime", "Debugger"]
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    def disable(self) -> Awaitable[Optional[dict]]:
+        return self.client.send("Profiler.disable")
 
-    async def disable(self) -> Optional[dict]:
-        res = await self.client.send("Profiler.disable")
-        return res
+    def enable(self) -> Awaitable[Optional[dict]]:
+        return self.client.send("Profiler.enable")
 
-    async def enable(self) -> Optional[dict]:
-        res = await self.client.send("Profiler.enable")
-        return res
-
-    async def getBestEffortCoverage(self) -> Optional[dict]:
+    def getBestEffortCoverage(self) -> Awaitable[Optional[dict]]:
         """
         Collect coverage data for the current isolate. The coverage data may be incomplete due to
 garbage collection.
         """
-        res = await self.client.send("Profiler.getBestEffortCoverage")
-        return res
+        return self.client.send("Profiler.getBestEffortCoverage")
 
-    async def setSamplingInterval(self, interval: int) -> Optional[dict]:
+    def setSamplingInterval(self, interval: int) -> Awaitable[Optional[dict]]:
         """
         Changes CPU profiler sampling interval. Must be called before CPU profiles recording started.
 
@@ -39,16 +48,14 @@ garbage collection.
         msg_dict = dict()
         if interval is not None:
             msg_dict["interval"] = interval
-        res = await self.client.send("Profiler.setSamplingInterval", msg_dict)
-        return res
+        return self.client.send("Profiler.setSamplingInterval", msg_dict)
 
-    async def start(self) -> Optional[dict]:
-        res = await self.client.send("Profiler.start")
-        return res
+    def start(self) -> Awaitable[Optional[dict]]:
+        return self.client.send("Profiler.start")
 
-    async def startPreciseCoverage(
+    def startPreciseCoverage(
         self, callCount: Optional[bool] = None, detailed: Optional[bool] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Enable precise code coverage. Coverage data for JavaScript executed before enabling precise code
 coverage may be incomplete. Enabling prevents running optimized code and resets execution
@@ -64,66 +71,68 @@ counters.
             msg_dict["callCount"] = callCount
         if detailed is not None:
             msg_dict["detailed"] = detailed
-        res = await self.client.send("Profiler.startPreciseCoverage", msg_dict)
-        return res
+        return self.client.send("Profiler.startPreciseCoverage", msg_dict)
 
-    async def startTypeProfile(self) -> Optional[dict]:
+    def startTypeProfile(self) -> Awaitable[Optional[dict]]:
         """
         Enable type profile.
         """
-        res = await self.client.send("Profiler.startTypeProfile")
-        return res
+        return self.client.send("Profiler.startTypeProfile")
 
-    async def stop(self) -> Optional[dict]:
-        res = await self.client.send("Profiler.stop")
-        return res
+    def stop(self) -> Awaitable[Optional[dict]]:
+        return self.client.send("Profiler.stop")
 
-    async def stopPreciseCoverage(self) -> Optional[dict]:
+    def stopPreciseCoverage(self) -> Awaitable[Optional[dict]]:
         """
         Disable precise code coverage. Disabling releases unnecessary execution count records and allows
 executing optimized code.
         """
-        res = await self.client.send("Profiler.stopPreciseCoverage")
-        return res
+        return self.client.send("Profiler.stopPreciseCoverage")
 
-    async def stopTypeProfile(self) -> Optional[dict]:
+    def stopTypeProfile(self) -> Awaitable[Optional[dict]]:
         """
         Disable type profile. Disabling releases type profile data collected so far.
         """
-        res = await self.client.send("Profiler.stopTypeProfile")
-        return res
+        return self.client.send("Profiler.stopTypeProfile")
 
-    async def takePreciseCoverage(self) -> Optional[dict]:
+    def takePreciseCoverage(self) -> Awaitable[Optional[dict]]:
         """
         Collect coverage data for the current isolate, and resets execution counters. Precise code
 coverage needs to have started.
         """
-        res = await self.client.send("Profiler.takePreciseCoverage")
-        return res
+        return self.client.send("Profiler.takePreciseCoverage")
 
-    async def takeTypeProfile(self) -> Optional[dict]:
+    def takeTypeProfile(self) -> Awaitable[Optional[dict]]:
         """
         Collect type profile.
         """
-        res = await self.client.send("Profiler.takeTypeProfile")
-        return res
+        return self.client.send("Profiler.takeTypeProfile")
 
-    def consoleProfileFinished(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
-        if once:
-            self.client.once("Profiler.consoleProfileFinished", fn)
-        else:
-            self.client.on("Profiler.consoleProfileFinished", fn)
+    def consoleProfileFinished(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def consoleProfileStarted(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Profiler.consoleProfileFinished", _cb)
+
+            return future
+
+        self.client.on("Profiler.consoleProfileFinished", cb)
+
+    def consoleProfileStarted(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Sent when new profile recording is started using console.profile() call.
         """
-        if once:
-            self.client.once("Profiler.consoleProfileStarted", fn)
-        else:
-            self.client.on("Profiler.consoleProfileStarted", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Profiler()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Profiler.consoleProfileStarted", _cb)
+
+            return future
+
+        self.client.on("Profiler.consoleProfileStarted", cb)

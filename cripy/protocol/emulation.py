@@ -1,51 +1,71 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import (
+    Awaitable,
+    Any,
+    Callable,
+    ClassVar,
+    List,
+    Optional,
+    Union,
+    TYPE_CHECKING,
+)
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["Emulation"]
 
 
+@attr.dataclass(slots=True)
 class Emulation(object):
     """
     This domain emulates different environments for the page.
     """
 
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
+
     dependencies: ClassVar[List[str]] = ["DOM", "Page", "Runtime"]
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
-    async def canEmulate(self) -> Optional[dict]:
+    def canEmulate(self) -> Awaitable[Optional[dict]]:
         """
         Tells whether emulation is supported.
         """
-        res = await self.client.send("Emulation.canEmulate")
-        return res
+        return self.client.send("Emulation.canEmulate")
 
-    async def clearDeviceMetricsOverride(self) -> Optional[dict]:
+    def clearDeviceMetricsOverride(self) -> Awaitable[Optional[dict]]:
         """
         Clears the overriden device metrics.
         """
-        res = await self.client.send("Emulation.clearDeviceMetricsOverride")
-        return res
+        return self.client.send("Emulation.clearDeviceMetricsOverride")
 
-    async def clearGeolocationOverride(self) -> Optional[dict]:
+    def clearGeolocationOverride(self) -> Awaitable[Optional[dict]]:
         """
         Clears the overriden Geolocation Position and Error.
         """
-        res = await self.client.send("Emulation.clearGeolocationOverride")
-        return res
+        return self.client.send("Emulation.clearGeolocationOverride")
 
-    async def resetPageScaleFactor(self) -> Optional[dict]:
+    def resetPageScaleFactor(self) -> Awaitable[Optional[dict]]:
         """
         Requests that page scale factor is reset to initial values.
         """
-        res = await self.client.send("Emulation.resetPageScaleFactor")
-        return res
+        return self.client.send("Emulation.resetPageScaleFactor")
 
-    async def setCPUThrottlingRate(self, rate: float) -> Optional[dict]:
+    def setFocusEmulationEnabled(self, enabled: bool) -> Awaitable[Optional[dict]]:
+        """
+        Enables or disables simulating a focused and active page.
+
+        :param enabled: Whether to enable to disable focus emulation.
+        :type enabled: bool
+        """
+        msg_dict = dict()
+        if enabled is not None:
+            msg_dict["enabled"] = enabled
+        return self.client.send("Emulation.setFocusEmulationEnabled", msg_dict)
+
+    def setCPUThrottlingRate(self, rate: float) -> Awaitable[Optional[dict]]:
         """
         Enables CPU throttling to emulate slow CPUs.
 
@@ -55,12 +75,11 @@ class Emulation(object):
         msg_dict = dict()
         if rate is not None:
             msg_dict["rate"] = rate
-        res = await self.client.send("Emulation.setCPUThrottlingRate", msg_dict)
-        return res
+        return self.client.send("Emulation.setCPUThrottlingRate", msg_dict)
 
-    async def setDefaultBackgroundColorOverride(
+    def setDefaultBackgroundColorOverride(
         self, color: Optional[dict] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Sets or clears an override of the default background color of the frame. This override is used
 if the content does not specify one.
@@ -71,12 +90,9 @@ if the content does not specify one.
         msg_dict = dict()
         if color is not None:
             msg_dict["color"] = color
-        res = await self.client.send(
-            "Emulation.setDefaultBackgroundColorOverride", msg_dict
-        )
-        return res
+        return self.client.send("Emulation.setDefaultBackgroundColorOverride", msg_dict)
 
-    async def setDeviceMetricsOverride(
+    def setDeviceMetricsOverride(
         self,
         width: int,
         height: int,
@@ -90,7 +106,7 @@ if the content does not specify one.
         dontSetVisibleSize: Optional[bool] = None,
         screenOrientation: Optional[dict] = None,
         viewport: Optional[dict] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Overrides the values of device screen dimensions (window.screen.width, window.screen.height,
 window.innerWidth, window.innerHeight, and "device-width"/"device-height"-related CSS media
@@ -146,10 +162,9 @@ query results).
             msg_dict["screenOrientation"] = screenOrientation
         if viewport is not None:
             msg_dict["viewport"] = viewport
-        res = await self.client.send("Emulation.setDeviceMetricsOverride", msg_dict)
-        return res
+        return self.client.send("Emulation.setDeviceMetricsOverride", msg_dict)
 
-    async def setScrollbarsHidden(self, hidden: bool) -> Optional[dict]:
+    def setScrollbarsHidden(self, hidden: bool) -> Awaitable[Optional[dict]]:
         """
         :param hidden: Whether scrollbars should be always hidden.
         :type hidden: bool
@@ -157,10 +172,9 @@ query results).
         msg_dict = dict()
         if hidden is not None:
             msg_dict["hidden"] = hidden
-        res = await self.client.send("Emulation.setScrollbarsHidden", msg_dict)
-        return res
+        return self.client.send("Emulation.setScrollbarsHidden", msg_dict)
 
-    async def setDocumentCookieDisabled(self, disabled: bool) -> Optional[dict]:
+    def setDocumentCookieDisabled(self, disabled: bool) -> Awaitable[Optional[dict]]:
         """
         :param disabled: Whether document.coookie API should be disabled.
         :type disabled: bool
@@ -168,12 +182,11 @@ query results).
         msg_dict = dict()
         if disabled is not None:
             msg_dict["disabled"] = disabled
-        res = await self.client.send("Emulation.setDocumentCookieDisabled", msg_dict)
-        return res
+        return self.client.send("Emulation.setDocumentCookieDisabled", msg_dict)
 
-    async def setEmitTouchEventsForMouse(
+    def setEmitTouchEventsForMouse(
         self, enabled: bool, configuration: Optional[str] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         :param enabled: Whether touch emulation based on mouse input should be enabled.
         :type enabled: bool
@@ -185,10 +198,9 @@ query results).
             msg_dict["enabled"] = enabled
         if configuration is not None:
             msg_dict["configuration"] = configuration
-        res = await self.client.send("Emulation.setEmitTouchEventsForMouse", msg_dict)
-        return res
+        return self.client.send("Emulation.setEmitTouchEventsForMouse", msg_dict)
 
-    async def setEmulatedMedia(self, media: str) -> Optional[dict]:
+    def setEmulatedMedia(self, media: str) -> Awaitable[Optional[dict]]:
         """
         Emulates the given media for CSS media queries.
 
@@ -198,15 +210,14 @@ query results).
         msg_dict = dict()
         if media is not None:
             msg_dict["media"] = media
-        res = await self.client.send("Emulation.setEmulatedMedia", msg_dict)
-        return res
+        return self.client.send("Emulation.setEmulatedMedia", msg_dict)
 
-    async def setGeolocationOverride(
+    def setGeolocationOverride(
         self,
         latitude: Optional[float] = None,
         longitude: Optional[float] = None,
         accuracy: Optional[float] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Overrides the Geolocation Position or Error. Omitting any of the parameters emulates position
 unavailable.
@@ -225,10 +236,9 @@ unavailable.
             msg_dict["longitude"] = longitude
         if accuracy is not None:
             msg_dict["accuracy"] = accuracy
-        res = await self.client.send("Emulation.setGeolocationOverride", msg_dict)
-        return res
+        return self.client.send("Emulation.setGeolocationOverride", msg_dict)
 
-    async def setNavigatorOverrides(self, platform: str) -> Optional[dict]:
+    def setNavigatorOverrides(self, platform: str) -> Awaitable[Optional[dict]]:
         """
         Overrides value returned by the javascript navigator object.
 
@@ -238,10 +248,9 @@ unavailable.
         msg_dict = dict()
         if platform is not None:
             msg_dict["platform"] = platform
-        res = await self.client.send("Emulation.setNavigatorOverrides", msg_dict)
-        return res
+        return self.client.send("Emulation.setNavigatorOverrides", msg_dict)
 
-    async def setPageScaleFactor(self, pageScaleFactor: float) -> Optional[dict]:
+    def setPageScaleFactor(self, pageScaleFactor: float) -> Awaitable[Optional[dict]]:
         """
         Sets a specified page scale factor.
 
@@ -251,10 +260,9 @@ unavailable.
         msg_dict = dict()
         if pageScaleFactor is not None:
             msg_dict["pageScaleFactor"] = pageScaleFactor
-        res = await self.client.send("Emulation.setPageScaleFactor", msg_dict)
-        return res
+        return self.client.send("Emulation.setPageScaleFactor", msg_dict)
 
-    async def setScriptExecutionDisabled(self, value: bool) -> Optional[dict]:
+    def setScriptExecutionDisabled(self, value: bool) -> Awaitable[Optional[dict]]:
         """
         Switches script execution in the page.
 
@@ -264,12 +272,11 @@ unavailable.
         msg_dict = dict()
         if value is not None:
             msg_dict["value"] = value
-        res = await self.client.send("Emulation.setScriptExecutionDisabled", msg_dict)
-        return res
+        return self.client.send("Emulation.setScriptExecutionDisabled", msg_dict)
 
-    async def setTouchEmulationEnabled(
+    def setTouchEmulationEnabled(
         self, enabled: bool, maxTouchPoints: Optional[int] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Enables touch on platforms which do not support them.
 
@@ -283,17 +290,16 @@ unavailable.
             msg_dict["enabled"] = enabled
         if maxTouchPoints is not None:
             msg_dict["maxTouchPoints"] = maxTouchPoints
-        res = await self.client.send("Emulation.setTouchEmulationEnabled", msg_dict)
-        return res
+        return self.client.send("Emulation.setTouchEmulationEnabled", msg_dict)
 
-    async def setVirtualTimePolicy(
+    def setVirtualTimePolicy(
         self,
         policy: str,
         budget: Optional[float] = None,
         maxVirtualTimeTaskStarvationCount: Optional[int] = None,
         waitForNavigation: Optional[bool] = None,
         initialVirtualTime: Optional[float] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Turns on virtual time for all frames (replacing real-time with a synthetic time source) and sets
 the current virtual time policy.  Note this supersedes any previous time budget.
@@ -322,10 +328,9 @@ the current virtual time policy.  Note this supersedes any previous time budget.
             msg_dict["waitForNavigation"] = waitForNavigation
         if initialVirtualTime is not None:
             msg_dict["initialVirtualTime"] = initialVirtualTime
-        res = await self.client.send("Emulation.setVirtualTimePolicy", msg_dict)
-        return res
+        return self.client.send("Emulation.setVirtualTimePolicy", msg_dict)
 
-    async def setVisibleSize(self, width: int, height: int) -> Optional[dict]:
+    def setVisibleSize(self, width: int, height: int) -> Awaitable[Optional[dict]]:
         """
         Resizes the frame/viewport of the page. Note that this does not affect the frame's container
 (e.g. browser window). Can be used to produce screenshots of the specified size. Not supported
@@ -341,15 +346,14 @@ on Android.
             msg_dict["width"] = width
         if height is not None:
             msg_dict["height"] = height
-        res = await self.client.send("Emulation.setVisibleSize", msg_dict)
-        return res
+        return self.client.send("Emulation.setVisibleSize", msg_dict)
 
-    async def setUserAgentOverride(
+    def setUserAgentOverride(
         self,
         userAgent: str,
         acceptLanguage: Optional[str] = None,
         platform: Optional[str] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Allows overriding user agent with the given string.
 
@@ -367,37 +371,52 @@ on Android.
             msg_dict["acceptLanguage"] = acceptLanguage
         if platform is not None:
             msg_dict["platform"] = platform
-        res = await self.client.send("Emulation.setUserAgentOverride", msg_dict)
-        return res
+        return self.client.send("Emulation.setUserAgentOverride", msg_dict)
 
-    def virtualTimeAdvanced(self, fn: Callable[..., Any], once: bool = False) -> None:
+    def virtualTimeAdvanced(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Notification sent after the virtual time has advanced.
         """
-        if once:
-            self.client.once("Emulation.virtualTimeAdvanced", fn)
-        else:
-            self.client.on("Emulation.virtualTimeAdvanced", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def virtualTimeBudgetExpired(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Emulation.virtualTimeAdvanced", _cb)
+
+            return future
+
+        self.client.on("Emulation.virtualTimeAdvanced", cb)
+
+    def virtualTimeBudgetExpired(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Notification sent after the virtual time budget for the current VirtualTimePolicy has run out.
         """
-        if once:
-            self.client.once("Emulation.virtualTimeBudgetExpired", fn)
-        else:
-            self.client.on("Emulation.virtualTimeBudgetExpired", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def virtualTimePaused(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Emulation.virtualTimeBudgetExpired", _cb)
+
+            return future
+
+        self.client.on("Emulation.virtualTimeBudgetExpired", cb)
+
+    def virtualTimePaused(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Notification sent after the virtual time has paused.
         """
-        if once:
-            self.client.once("Emulation.virtualTimePaused", fn)
-        else:
-            self.client.on("Emulation.virtualTimePaused", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Emulation()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Emulation.virtualTimePaused", _cb)
+
+            return future
+
+        self.client.on("Emulation.virtualTimePaused", cb)

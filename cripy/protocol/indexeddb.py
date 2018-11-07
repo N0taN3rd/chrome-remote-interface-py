@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, ClassVar, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["IndexedDB"]
 
 
+@attr.dataclass(slots=True)
 class IndexedDB(object):
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
+
     dependencies: ClassVar[List[str]] = ["Runtime"]
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
-    async def clearObjectStore(
+    def clearObjectStore(
         self, securityOrigin: str, databaseName: str, objectStoreName: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Clears all entries from an object store.
 
@@ -33,12 +36,11 @@ class IndexedDB(object):
             msg_dict["databaseName"] = databaseName
         if objectStoreName is not None:
             msg_dict["objectStoreName"] = objectStoreName
-        res = await self.client.send("IndexedDB.clearObjectStore", msg_dict)
-        return res
+        return self.client.send("IndexedDB.clearObjectStore", msg_dict)
 
-    async def deleteDatabase(
+    def deleteDatabase(
         self, securityOrigin: str, databaseName: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Deletes a database.
 
@@ -52,16 +54,15 @@ class IndexedDB(object):
             msg_dict["securityOrigin"] = securityOrigin
         if databaseName is not None:
             msg_dict["databaseName"] = databaseName
-        res = await self.client.send("IndexedDB.deleteDatabase", msg_dict)
-        return res
+        return self.client.send("IndexedDB.deleteDatabase", msg_dict)
 
-    async def deleteObjectStoreEntries(
+    def deleteObjectStoreEntries(
         self,
         securityOrigin: str,
         databaseName: str,
         objectStoreName: str,
         keyRange: dict,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Delete a range of entries from an object store
 
@@ -83,24 +84,21 @@ class IndexedDB(object):
             msg_dict["objectStoreName"] = objectStoreName
         if keyRange is not None:
             msg_dict["keyRange"] = keyRange
-        res = await self.client.send("IndexedDB.deleteObjectStoreEntries", msg_dict)
-        return res
+        return self.client.send("IndexedDB.deleteObjectStoreEntries", msg_dict)
 
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables events from backend.
         """
-        res = await self.client.send("IndexedDB.disable")
-        return res
+        return self.client.send("IndexedDB.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables events from backend.
         """
-        res = await self.client.send("IndexedDB.enable")
-        return res
+        return self.client.send("IndexedDB.enable")
 
-    async def requestData(
+    def requestData(
         self,
         securityOrigin: str,
         databaseName: str,
@@ -109,7 +107,7 @@ class IndexedDB(object):
         skipCount: int,
         pageSize: int,
         keyRange: Optional[dict] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Requests data from object store or index.
 
@@ -143,12 +141,11 @@ class IndexedDB(object):
             msg_dict["pageSize"] = pageSize
         if keyRange is not None:
             msg_dict["keyRange"] = keyRange
-        res = await self.client.send("IndexedDB.requestData", msg_dict)
-        return res
+        return self.client.send("IndexedDB.requestData", msg_dict)
 
-    async def requestDatabase(
+    def requestDatabase(
         self, securityOrigin: str, databaseName: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Requests database with given name in given frame.
 
@@ -162,10 +159,9 @@ class IndexedDB(object):
             msg_dict["securityOrigin"] = securityOrigin
         if databaseName is not None:
             msg_dict["databaseName"] = databaseName
-        res = await self.client.send("IndexedDB.requestDatabase", msg_dict)
-        return res
+        return self.client.send("IndexedDB.requestDatabase", msg_dict)
 
-    async def requestDatabaseNames(self, securityOrigin: str) -> Optional[dict]:
+    def requestDatabaseNames(self, securityOrigin: str) -> Awaitable[Optional[dict]]:
         """
         Requests database names for given security origin.
 
@@ -175,8 +171,4 @@ class IndexedDB(object):
         msg_dict = dict()
         if securityOrigin is not None:
             msg_dict["securityOrigin"] = securityOrigin
-        res = await self.client.send("IndexedDB.requestDatabaseNames", msg_dict)
-        return res
-
-    def __repr__(self):
-        return f"IndexedDB()"
+        return self.client.send("IndexedDB.requestDatabaseNames", msg_dict)

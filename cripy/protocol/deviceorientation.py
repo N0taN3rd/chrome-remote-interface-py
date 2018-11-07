@@ -1,26 +1,28 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["DeviceOrientation"]
 
 
+@attr.dataclass(slots=True)
 class DeviceOrientation(object):
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def clearDeviceOrientationOverride(self) -> Optional[dict]:
+    def clearDeviceOrientationOverride(self) -> Awaitable[Optional[dict]]:
         """
         Clears the overridden Device Orientation.
         """
-        res = await self.client.send("DeviceOrientation.clearDeviceOrientationOverride")
-        return res
+        return self.client.send("DeviceOrientation.clearDeviceOrientationOverride")
 
-    async def setDeviceOrientationOverride(
+    def setDeviceOrientationOverride(
         self, alpha: float, beta: float, gamma: float
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Overrides the Device Orientation.
 
@@ -38,10 +40,6 @@ class DeviceOrientation(object):
             msg_dict["beta"] = beta
         if gamma is not None:
             msg_dict["gamma"] = gamma
-        res = await self.client.send(
+        return self.client.send(
             "DeviceOrientation.setDeviceOrientationOverride", msg_dict
         )
-        return res
-
-    def __repr__(self):
-        return f"DeviceOrientation()"

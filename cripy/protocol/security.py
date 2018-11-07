@@ -1,35 +1,36 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["Security"]
 
 
+@attr.dataclass(slots=True)
 class Security(object):
     """
     Security
     """
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables tracking security state changes.
         """
-        res = await self.client.send("Security.disable")
-        return res
+        return self.client.send("Security.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables tracking security state changes.
         """
-        res = await self.client.send("Security.enable")
-        return res
+        return self.client.send("Security.enable")
 
-    async def setIgnoreCertificateErrors(self, ignore: bool) -> Optional[dict]:
+    def setIgnoreCertificateErrors(self, ignore: bool) -> Awaitable[Optional[dict]]:
         """
         Enable/disable whether all certificate errors should be ignored.
 
@@ -39,10 +40,11 @@ class Security(object):
         msg_dict = dict()
         if ignore is not None:
             msg_dict["ignore"] = ignore
-        res = await self.client.send("Security.setIgnoreCertificateErrors", msg_dict)
-        return res
+        return self.client.send("Security.setIgnoreCertificateErrors", msg_dict)
 
-    async def handleCertificateError(self, eventId: int, action: str) -> Optional[dict]:
+    def handleCertificateError(
+        self, eventId: int, action: str
+    ) -> Awaitable[Optional[dict]]:
         """
         Handles a certificate error that fired a certificateError event.
 
@@ -56,10 +58,9 @@ class Security(object):
             msg_dict["eventId"] = eventId
         if action is not None:
             msg_dict["action"] = action
-        res = await self.client.send("Security.handleCertificateError", msg_dict)
-        return res
+        return self.client.send("Security.handleCertificateError", msg_dict)
 
-    async def setOverrideCertificateErrors(self, override: bool) -> Optional[dict]:
+    def setOverrideCertificateErrors(self, override: bool) -> Awaitable[Optional[dict]]:
         """
         Enable/disable overriding certificate errors. If enabled, all certificate error events need to
 be handled by the DevTools client and should be answered with `handleCertificateError` commands.
@@ -70,29 +71,39 @@ be handled by the DevTools client and should be answered with `handleCertificate
         msg_dict = dict()
         if override is not None:
             msg_dict["override"] = override
-        res = await self.client.send("Security.setOverrideCertificateErrors", msg_dict)
-        return res
+        return self.client.send("Security.setOverrideCertificateErrors", msg_dict)
 
-    def certificateError(self, fn: Callable[..., Any], once: bool = False) -> None:
+    def certificateError(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         There is a certificate error. If overriding certificate errors is enabled, then it should be
         handled with the `handleCertificateError` command. Note: this event does not fire if the
         certificate error has been allowed internally. Only one client per target should override
         certificate errors at the same time.
         """
-        if once:
-            self.client.once("Security.certificateError", fn)
-        else:
-            self.client.on("Security.certificateError", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def securityStateChanged(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Security.certificateError", _cb)
+
+            return future
+
+        self.client.on("Security.certificateError", cb)
+
+    def securityStateChanged(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         The security state of the page changed.
         """
-        if once:
-            self.client.once("Security.securityStateChanged", fn)
-        else:
-            self.client.on("Security.securityStateChanged", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Security()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Security.securityStateChanged", _cb)
+
+            return future
+
+        self.client.on("Security.securityStateChanged", cb)

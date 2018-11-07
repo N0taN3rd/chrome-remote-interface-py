@@ -1,29 +1,32 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, ClassVar, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["Audits"]
 
 
+@attr.dataclass(slots=True)
 class Audits(object):
     """
     Audits domain allows investigation of page violations and possible improvements.
     """
 
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
+
     dependencies: ClassVar[List[str]] = ["Network"]
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
-    async def getEncodedResponse(
+    def getEncodedResponse(
         self,
         requestId: str,
         encoding: str,
         quality: Optional[float] = None,
         sizeOnly: Optional[bool] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Returns the response body and size if it were re-encoded with the specified settings. Only
 applies to images.
@@ -46,8 +49,4 @@ applies to images.
             msg_dict["quality"] = quality
         if sizeOnly is not None:
             msg_dict["sizeOnly"] = sizeOnly
-        res = await self.client.send("Audits.getEncodedResponse", msg_dict)
-        return res
-
-    def __repr__(self):
-        return f"Audits()"
+        return self.client.send("Audits.getEncodedResponse", msg_dict)

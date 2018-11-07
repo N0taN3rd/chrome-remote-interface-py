@@ -1,27 +1,28 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["Memory"]
 
 
+@attr.dataclass(slots=True)
 class Memory(object):
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def getDOMCounters(self) -> Optional[dict]:
-        res = await self.client.send("Memory.getDOMCounters")
-        return res
+    def getDOMCounters(self) -> Awaitable[Optional[dict]]:
+        return self.client.send("Memory.getDOMCounters")
 
-    async def prepareForLeakDetection(self) -> Optional[dict]:
-        res = await self.client.send("Memory.prepareForLeakDetection")
-        return res
+    def prepareForLeakDetection(self) -> Awaitable[Optional[dict]]:
+        return self.client.send("Memory.prepareForLeakDetection")
 
-    async def setPressureNotificationsSuppressed(
+    def setPressureNotificationsSuppressed(
         self, suppressed: bool
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Enable/disable suppressing memory pressure notifications in all processes.
 
@@ -31,12 +32,9 @@ class Memory(object):
         msg_dict = dict()
         if suppressed is not None:
             msg_dict["suppressed"] = suppressed
-        res = await self.client.send(
-            "Memory.setPressureNotificationsSuppressed", msg_dict
-        )
-        return res
+        return self.client.send("Memory.setPressureNotificationsSuppressed", msg_dict)
 
-    async def simulatePressureNotification(self, level: str) -> Optional[dict]:
+    def simulatePressureNotification(self, level: str) -> Awaitable[Optional[dict]]:
         """
         Simulate a memory pressure notification in all processes.
 
@@ -46,14 +44,13 @@ class Memory(object):
         msg_dict = dict()
         if level is not None:
             msg_dict["level"] = level
-        res = await self.client.send("Memory.simulatePressureNotification", msg_dict)
-        return res
+        return self.client.send("Memory.simulatePressureNotification", msg_dict)
 
-    async def startSampling(
+    def startSampling(
         self,
         samplingInterval: Optional[int] = None,
         suppressRandomness: Optional[bool] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Start collecting native memory profile.
 
@@ -67,39 +64,31 @@ class Memory(object):
             msg_dict["samplingInterval"] = samplingInterval
         if suppressRandomness is not None:
             msg_dict["suppressRandomness"] = suppressRandomness
-        res = await self.client.send("Memory.startSampling", msg_dict)
-        return res
+        return self.client.send("Memory.startSampling", msg_dict)
 
-    async def stopSampling(self) -> Optional[dict]:
+    def stopSampling(self) -> Awaitable[Optional[dict]]:
         """
         Stop collecting native memory profile.
         """
-        res = await self.client.send("Memory.stopSampling")
-        return res
+        return self.client.send("Memory.stopSampling")
 
-    async def getAllTimeSamplingProfile(self) -> Optional[dict]:
+    def getAllTimeSamplingProfile(self) -> Awaitable[Optional[dict]]:
         """
         Retrieve native memory allocations profile
 collected since renderer process startup.
         """
-        res = await self.client.send("Memory.getAllTimeSamplingProfile")
-        return res
+        return self.client.send("Memory.getAllTimeSamplingProfile")
 
-    async def getBrowserSamplingProfile(self) -> Optional[dict]:
+    def getBrowserSamplingProfile(self) -> Awaitable[Optional[dict]]:
         """
         Retrieve native memory allocations profile
 collected since browser process startup.
         """
-        res = await self.client.send("Memory.getBrowserSamplingProfile")
-        return res
+        return self.client.send("Memory.getBrowserSamplingProfile")
 
-    async def getSamplingProfile(self) -> Optional[dict]:
+    def getSamplingProfile(self) -> Awaitable[Optional[dict]]:
         """
         Retrieve native memory allocations profile collected since last
 `startSampling` call.
         """
-        res = await self.client.send("Memory.getSamplingProfile")
-        return res
-
-    def __repr__(self):
-        return f"Memory()"
+        return self.client.send("Memory.getSamplingProfile")

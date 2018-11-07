@@ -1,43 +1,44 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, ClassVar, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["DOMSnapshot"]
 
 
+@attr.dataclass(slots=True)
 class DOMSnapshot(object):
     """
     This domain facilitates obtaining document snapshots with DOM, layout, and style information.
     """
 
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
+
     dependencies: ClassVar[List[str]] = ["CSS", "DOM", "DOMDebugger", "Page"]
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables DOM snapshot agent for the given page.
         """
-        res = await self.client.send("DOMSnapshot.disable")
-        return res
+        return self.client.send("DOMSnapshot.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables DOM snapshot agent for the given page.
         """
-        res = await self.client.send("DOMSnapshot.enable")
-        return res
+        return self.client.send("DOMSnapshot.enable")
 
-    async def getSnapshot(
+    def getSnapshot(
         self,
         computedStyleWhitelist: List[str],
         includeEventListeners: Optional[bool] = None,
         includePaintOrder: Optional[bool] = None,
         includeUserAgentShadowTree: Optional[bool] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Returns a document snapshot, including the full DOM tree of the root node (including iframes,
 template contents, and imported documents) in a flattened array, as well as layout and
@@ -62,10 +63,9 @@ flattened.
             msg_dict["includePaintOrder"] = includePaintOrder
         if includeUserAgentShadowTree is not None:
             msg_dict["includeUserAgentShadowTree"] = includeUserAgentShadowTree
-        res = await self.client.send("DOMSnapshot.getSnapshot", msg_dict)
-        return res
+        return self.client.send("DOMSnapshot.getSnapshot", msg_dict)
 
-    async def captureSnapshot(self, computedStyles: List[str]) -> Optional[dict]:
+    def captureSnapshot(self, computedStyles: List[str]) -> Awaitable[Optional[dict]]:
         """
         Returns a document snapshot, including the full DOM tree of the root node (including iframes,
 template contents, and imported documents) in a flattened array, as well as layout and
@@ -78,8 +78,4 @@ flattened.
         msg_dict = dict()
         if computedStyles is not None:
             msg_dict["computedStyles"] = computedStyles
-        res = await self.client.send("DOMSnapshot.captureSnapshot", msg_dict)
-        return res
-
-    def __repr__(self):
-        return f"DOMSnapshot()"
+        return self.client.send("DOMSnapshot.captureSnapshot", msg_dict)

@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["Input"]
 
 
+@attr.dataclass(slots=True)
 class Input(object):
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def dispatchKeyEvent(
+    def dispatchKeyEvent(
         self,
         type: str,
         modifiers: Optional[int] = None,
@@ -27,7 +30,7 @@ class Input(object):
         isKeypad: Optional[bool] = None,
         isSystemKey: Optional[bool] = None,
         location: Optional[int] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Dispatches a key event to the page.
 
@@ -89,10 +92,9 @@ class Input(object):
             msg_dict["isSystemKey"] = isSystemKey
         if location is not None:
             msg_dict["location"] = location
-        res = await self.client.send("Input.dispatchKeyEvent", msg_dict)
-        return res
+        return self.client.send("Input.dispatchKeyEvent", msg_dict)
 
-    async def insertText(self, text: str) -> Optional[dict]:
+    def insertText(self, text: str) -> Awaitable[Optional[dict]]:
         """
         This method emulates inserting text that doesn't come from a key press,
 for example an emoji keyboard or an IME.
@@ -103,10 +105,9 @@ for example an emoji keyboard or an IME.
         msg_dict = dict()
         if text is not None:
             msg_dict["text"] = text
-        res = await self.client.send("Input.insertText", msg_dict)
-        return res
+        return self.client.send("Input.insertText", msg_dict)
 
-    async def dispatchMouseEvent(
+    def dispatchMouseEvent(
         self,
         type: str,
         x: float,
@@ -117,7 +118,7 @@ for example an emoji keyboard or an IME.
         clickCount: Optional[int] = None,
         deltaX: Optional[float] = None,
         deltaY: Optional[float] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Dispatches a mouse event to the page.
 
@@ -159,16 +160,15 @@ for example an emoji keyboard or an IME.
             msg_dict["deltaX"] = deltaX
         if deltaY is not None:
             msg_dict["deltaY"] = deltaY
-        res = await self.client.send("Input.dispatchMouseEvent", msg_dict)
-        return res
+        return self.client.send("Input.dispatchMouseEvent", msg_dict)
 
-    async def dispatchTouchEvent(
+    def dispatchTouchEvent(
         self,
         type: str,
         touchPoints: List[dict],
         modifiers: Optional[int] = None,
         timestamp: Optional[float] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Dispatches a touch event to the page.
 
@@ -190,10 +190,9 @@ for example an emoji keyboard or an IME.
             msg_dict["modifiers"] = modifiers
         if timestamp is not None:
             msg_dict["timestamp"] = timestamp
-        res = await self.client.send("Input.dispatchTouchEvent", msg_dict)
-        return res
+        return self.client.send("Input.dispatchTouchEvent", msg_dict)
 
-    async def emulateTouchFromMouseEvent(
+    def emulateTouchFromMouseEvent(
         self,
         type: str,
         x: int,
@@ -204,7 +203,7 @@ for example an emoji keyboard or an IME.
         deltaY: Optional[float] = None,
         modifiers: Optional[int] = None,
         clickCount: Optional[int] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Emulates touch event from the mouse event parameters.
 
@@ -246,10 +245,9 @@ for example an emoji keyboard or an IME.
             msg_dict["modifiers"] = modifiers
         if clickCount is not None:
             msg_dict["clickCount"] = clickCount
-        res = await self.client.send("Input.emulateTouchFromMouseEvent", msg_dict)
-        return res
+        return self.client.send("Input.emulateTouchFromMouseEvent", msg_dict)
 
-    async def setIgnoreInputEvents(self, ignore: bool) -> Optional[dict]:
+    def setIgnoreInputEvents(self, ignore: bool) -> Awaitable[Optional[dict]]:
         """
         Ignores input events (useful while auditing page).
 
@@ -259,17 +257,16 @@ for example an emoji keyboard or an IME.
         msg_dict = dict()
         if ignore is not None:
             msg_dict["ignore"] = ignore
-        res = await self.client.send("Input.setIgnoreInputEvents", msg_dict)
-        return res
+        return self.client.send("Input.setIgnoreInputEvents", msg_dict)
 
-    async def synthesizePinchGesture(
+    def synthesizePinchGesture(
         self,
         x: float,
         y: float,
         scaleFactor: float,
         relativeSpeed: Optional[int] = None,
         gestureSourceType: Optional[str] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Synthesizes a pinch gesture over a time period by issuing appropriate touch events.
 
@@ -295,10 +292,9 @@ for example an emoji keyboard or an IME.
             msg_dict["relativeSpeed"] = relativeSpeed
         if gestureSourceType is not None:
             msg_dict["gestureSourceType"] = gestureSourceType
-        res = await self.client.send("Input.synthesizePinchGesture", msg_dict)
-        return res
+        return self.client.send("Input.synthesizePinchGesture", msg_dict)
 
-    async def synthesizeScrollGesture(
+    def synthesizeScrollGesture(
         self,
         x: float,
         y: float,
@@ -312,7 +308,7 @@ for example an emoji keyboard or an IME.
         repeatCount: Optional[int] = None,
         repeatDelayMs: Optional[int] = None,
         interactionMarkerName: Optional[str] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Synthesizes a scroll gesture over a time period by issuing appropriate touch events.
 
@@ -366,17 +362,16 @@ for example an emoji keyboard or an IME.
             msg_dict["repeatDelayMs"] = repeatDelayMs
         if interactionMarkerName is not None:
             msg_dict["interactionMarkerName"] = interactionMarkerName
-        res = await self.client.send("Input.synthesizeScrollGesture", msg_dict)
-        return res
+        return self.client.send("Input.synthesizeScrollGesture", msg_dict)
 
-    async def synthesizeTapGesture(
+    def synthesizeTapGesture(
         self,
         x: float,
         y: float,
         duration: Optional[int] = None,
         tapCount: Optional[int] = None,
         gestureSourceType: Optional[str] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Synthesizes a tap gesture over a time period by issuing appropriate touch events.
 
@@ -402,8 +397,4 @@ for example an emoji keyboard or an IME.
             msg_dict["tapCount"] = tapCount
         if gestureSourceType is not None:
             msg_dict["gestureSourceType"] = gestureSourceType
-        res = await self.client.send("Input.synthesizeTapGesture", msg_dict)
-        return res
-
-    def __repr__(self):
-        return f"Input()"
+        return self.client.send("Input.synthesizeTapGesture", msg_dict)

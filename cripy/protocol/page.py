@@ -1,23 +1,35 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import (
+    Awaitable,
+    Any,
+    Callable,
+    ClassVar,
+    List,
+    Optional,
+    Union,
+    TYPE_CHECKING,
+)
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["Page"]
 
 
+@attr.dataclass(slots=True)
 class Page(object):
     """
     Actions and events related to the inspected page belong to the page domain.
     """
 
-    dependencies: ClassVar[List[str]] = ["Debugger", "DOM", "Network"]
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    dependencies: ClassVar[List[str]] = ["Debugger", "DOM", "Network", "Runtime"]
 
-    async def addScriptToEvaluateOnLoad(self, scriptSource: str) -> Optional[dict]:
+    def addScriptToEvaluateOnLoad(self, scriptSource: str) -> Awaitable[Optional[dict]]:
         """
         Deprecated, please use addScriptToEvaluateOnNewDocument instead.
 
@@ -27,36 +39,39 @@ class Page(object):
         msg_dict = dict()
         if scriptSource is not None:
             msg_dict["scriptSource"] = scriptSource
-        res = await self.client.send("Page.addScriptToEvaluateOnLoad", msg_dict)
-        return res
+        return self.client.send("Page.addScriptToEvaluateOnLoad", msg_dict)
 
-    async def addScriptToEvaluateOnNewDocument(self, source: str) -> Optional[dict]:
+    def addScriptToEvaluateOnNewDocument(
+        self, source: str, worldName: Optional[str] = None
+    ) -> Awaitable[Optional[dict]]:
         """
         Evaluates given script in every frame upon creation (before loading frame's scripts).
 
         :param source: The source
         :type source: str
+        :param worldName: If specified, creates an isolated world with the given name and evaluates given script in it. This world name will be used as the ExecutionContextDescription::name when the corresponding event is emitted.
+        :type worldName: Optional[str]
         """
         msg_dict = dict()
         if source is not None:
             msg_dict["source"] = source
-        res = await self.client.send("Page.addScriptToEvaluateOnNewDocument", msg_dict)
-        return res
+        if worldName is not None:
+            msg_dict["worldName"] = worldName
+        return self.client.send("Page.addScriptToEvaluateOnNewDocument", msg_dict)
 
-    async def bringToFront(self) -> Optional[dict]:
+    def bringToFront(self) -> Awaitable[Optional[dict]]:
         """
         Brings page to front (activates tab).
         """
-        res = await self.client.send("Page.bringToFront")
-        return res
+        return self.client.send("Page.bringToFront")
 
-    async def captureScreenshot(
+    def captureScreenshot(
         self,
         format: Optional[str] = None,
         quality: Optional[int] = None,
         clip: Optional[dict] = None,
         fromSurface: Optional[bool] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Capture page screenshot.
 
@@ -78,36 +93,32 @@ class Page(object):
             msg_dict["clip"] = clip
         if fromSurface is not None:
             msg_dict["fromSurface"] = fromSurface
-        res = await self.client.send("Page.captureScreenshot", msg_dict)
-        return res
+        return self.client.send("Page.captureScreenshot", msg_dict)
 
-    async def clearDeviceMetricsOverride(self) -> Optional[dict]:
+    def clearDeviceMetricsOverride(self) -> Awaitable[Optional[dict]]:
         """
         Clears the overriden device metrics.
         """
-        res = await self.client.send("Page.clearDeviceMetricsOverride")
-        return res
+        return self.client.send("Page.clearDeviceMetricsOverride")
 
-    async def clearDeviceOrientationOverride(self) -> Optional[dict]:
+    def clearDeviceOrientationOverride(self) -> Awaitable[Optional[dict]]:
         """
         Clears the overridden Device Orientation.
         """
-        res = await self.client.send("Page.clearDeviceOrientationOverride")
-        return res
+        return self.client.send("Page.clearDeviceOrientationOverride")
 
-    async def clearGeolocationOverride(self) -> Optional[dict]:
+    def clearGeolocationOverride(self) -> Awaitable[Optional[dict]]:
         """
         Clears the overriden Geolocation Position and Error.
         """
-        res = await self.client.send("Page.clearGeolocationOverride")
-        return res
+        return self.client.send("Page.clearGeolocationOverride")
 
-    async def createIsolatedWorld(
+    def createIsolatedWorld(
         self,
         frameId: str,
         worldName: Optional[str] = None,
         grantUniveralAccess: Optional[bool] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Creates an isolated world for the given frame.
 
@@ -125,10 +136,9 @@ class Page(object):
             msg_dict["worldName"] = worldName
         if grantUniveralAccess is not None:
             msg_dict["grantUniveralAccess"] = grantUniveralAccess
-        res = await self.client.send("Page.createIsolatedWorld", msg_dict)
-        return res
+        return self.client.send("Page.createIsolatedWorld", msg_dict)
 
-    async def deleteCookie(self, cookieName: str, url: str) -> Optional[dict]:
+    def deleteCookie(self, cookieName: str, url: str) -> Awaitable[Optional[dict]]:
         """
         Deletes browser cookie with given name, domain and path.
 
@@ -142,57 +152,49 @@ class Page(object):
             msg_dict["cookieName"] = cookieName
         if url is not None:
             msg_dict["url"] = url
-        res = await self.client.send("Page.deleteCookie", msg_dict)
-        return res
+        return self.client.send("Page.deleteCookie", msg_dict)
 
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables page domain notifications.
         """
-        res = await self.client.send("Page.disable")
-        return res
+        return self.client.send("Page.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables page domain notifications.
         """
-        res = await self.client.send("Page.enable")
-        return res
+        return self.client.send("Page.enable")
 
-    async def getAppManifest(self) -> Optional[dict]:
-        res = await self.client.send("Page.getAppManifest")
-        return res
+    def getAppManifest(self) -> Awaitable[Optional[dict]]:
+        return self.client.send("Page.getAppManifest")
 
-    async def getCookies(self) -> Optional[dict]:
+    def getCookies(self) -> Awaitable[Optional[dict]]:
         """
         Returns all browser cookies. Depending on the backend support, will return detailed cookie
 information in the `cookies` field.
         """
-        res = await self.client.send("Page.getCookies")
-        return res
+        return self.client.send("Page.getCookies")
 
-    async def getFrameTree(self) -> Optional[dict]:
+    def getFrameTree(self) -> Awaitable[Optional[dict]]:
         """
         Returns present frame tree structure.
         """
-        res = await self.client.send("Page.getFrameTree")
-        return res
+        return self.client.send("Page.getFrameTree")
 
-    async def getLayoutMetrics(self) -> Optional[dict]:
+    def getLayoutMetrics(self) -> Awaitable[Optional[dict]]:
         """
         Returns metrics relating to the layouting of the page, such as viewport bounds/scale.
         """
-        res = await self.client.send("Page.getLayoutMetrics")
-        return res
+        return self.client.send("Page.getLayoutMetrics")
 
-    async def getNavigationHistory(self) -> Optional[dict]:
+    def getNavigationHistory(self) -> Awaitable[Optional[dict]]:
         """
         Returns navigation history for the current page.
         """
-        res = await self.client.send("Page.getNavigationHistory")
-        return res
+        return self.client.send("Page.getNavigationHistory")
 
-    async def getResourceContent(self, frameId: str, url: str) -> Optional[dict]:
+    def getResourceContent(self, frameId: str, url: str) -> Awaitable[Optional[dict]]:
         """
         Returns content of the given resource.
 
@@ -206,19 +208,17 @@ information in the `cookies` field.
             msg_dict["frameId"] = frameId
         if url is not None:
             msg_dict["url"] = url
-        res = await self.client.send("Page.getResourceContent", msg_dict)
-        return res
+        return self.client.send("Page.getResourceContent", msg_dict)
 
-    async def getResourceTree(self) -> Optional[dict]:
+    def getResourceTree(self) -> Awaitable[Optional[dict]]:
         """
         Returns present frame / resource tree structure.
         """
-        res = await self.client.send("Page.getResourceTree")
-        return res
+        return self.client.send("Page.getResourceTree")
 
-    async def handleJavaScriptDialog(
+    def handleJavaScriptDialog(
         self, accept: bool, promptText: Optional[str] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Accepts or dismisses a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload).
 
@@ -232,16 +232,15 @@ information in the `cookies` field.
             msg_dict["accept"] = accept
         if promptText is not None:
             msg_dict["promptText"] = promptText
-        res = await self.client.send("Page.handleJavaScriptDialog", msg_dict)
-        return res
+        return self.client.send("Page.handleJavaScriptDialog", msg_dict)
 
-    async def navigate(
+    def navigate(
         self,
         url: str,
         referrer: Optional[str] = None,
         transitionType: Optional[str] = None,
         frameId: Optional[str] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Navigates current page to the given URL.
 
@@ -263,10 +262,9 @@ information in the `cookies` field.
             msg_dict["transitionType"] = transitionType
         if frameId is not None:
             msg_dict["frameId"] = frameId
-        res = await self.client.send("Page.navigate", msg_dict)
-        return res
+        return self.client.send("Page.navigate", msg_dict)
 
-    async def navigateToHistoryEntry(self, entryId: int) -> Optional[dict]:
+    def navigateToHistoryEntry(self, entryId: int) -> Awaitable[Optional[dict]]:
         """
         Navigates current page to the given history entry.
 
@@ -276,10 +274,9 @@ information in the `cookies` field.
         msg_dict = dict()
         if entryId is not None:
             msg_dict["entryId"] = entryId
-        res = await self.client.send("Page.navigateToHistoryEntry", msg_dict)
-        return res
+        return self.client.send("Page.navigateToHistoryEntry", msg_dict)
 
-    async def printToPDF(
+    def printToPDF(
         self,
         landscape: Optional[bool] = None,
         displayHeaderFooter: Optional[bool] = None,
@@ -296,7 +293,7 @@ information in the `cookies` field.
         headerTemplate: Optional[str] = None,
         footerTemplate: Optional[str] = None,
         preferCSSPageSize: Optional[bool] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Print page as PDF.
 
@@ -362,14 +359,13 @@ information in the `cookies` field.
             msg_dict["footerTemplate"] = footerTemplate
         if preferCSSPageSize is not None:
             msg_dict["preferCSSPageSize"] = preferCSSPageSize
-        res = await self.client.send("Page.printToPDF", msg_dict)
-        return res
+        return self.client.send("Page.printToPDF", msg_dict)
 
-    async def reload(
+    def reload(
         self,
         ignoreCache: Optional[bool] = None,
         scriptToEvaluateOnLoad: Optional[str] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Reloads given page optionally ignoring the cache.
 
@@ -383,10 +379,11 @@ information in the `cookies` field.
             msg_dict["ignoreCache"] = ignoreCache
         if scriptToEvaluateOnLoad is not None:
             msg_dict["scriptToEvaluateOnLoad"] = scriptToEvaluateOnLoad
-        res = await self.client.send("Page.reload", msg_dict)
-        return res
+        return self.client.send("Page.reload", msg_dict)
 
-    async def removeScriptToEvaluateOnLoad(self, identifier: str) -> Optional[dict]:
+    def removeScriptToEvaluateOnLoad(
+        self, identifier: str
+    ) -> Awaitable[Optional[dict]]:
         """
         Deprecated, please use removeScriptToEvaluateOnNewDocument instead.
 
@@ -396,12 +393,11 @@ information in the `cookies` field.
         msg_dict = dict()
         if identifier is not None:
             msg_dict["identifier"] = identifier
-        res = await self.client.send("Page.removeScriptToEvaluateOnLoad", msg_dict)
-        return res
+        return self.client.send("Page.removeScriptToEvaluateOnLoad", msg_dict)
 
-    async def removeScriptToEvaluateOnNewDocument(
+    def removeScriptToEvaluateOnNewDocument(
         self, identifier: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Removes given script from the list.
 
@@ -411,16 +407,12 @@ information in the `cookies` field.
         msg_dict = dict()
         if identifier is not None:
             msg_dict["identifier"] = identifier
-        res = await self.client.send(
-            "Page.removeScriptToEvaluateOnNewDocument", msg_dict
-        )
-        return res
+        return self.client.send("Page.removeScriptToEvaluateOnNewDocument", msg_dict)
 
-    async def requestAppBanner(self) -> Optional[dict]:
-        res = await self.client.send("Page.requestAppBanner")
-        return res
+    def requestAppBanner(self) -> Awaitable[Optional[dict]]:
+        return self.client.send("Page.requestAppBanner")
 
-    async def screencastFrameAck(self, sessionId: int) -> Optional[dict]:
+    def screencastFrameAck(self, sessionId: int) -> Awaitable[Optional[dict]]:
         """
         Acknowledges that a screencast frame has been received by the frontend.
 
@@ -430,17 +422,16 @@ information in the `cookies` field.
         msg_dict = dict()
         if sessionId is not None:
             msg_dict["sessionId"] = sessionId
-        res = await self.client.send("Page.screencastFrameAck", msg_dict)
-        return res
+        return self.client.send("Page.screencastFrameAck", msg_dict)
 
-    async def searchInResource(
+    def searchInResource(
         self,
         frameId: str,
         url: str,
         query: str,
         caseSensitive: Optional[bool] = None,
         isRegex: Optional[bool] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Searches for given string in resource content.
 
@@ -466,10 +457,9 @@ information in the `cookies` field.
             msg_dict["caseSensitive"] = caseSensitive
         if isRegex is not None:
             msg_dict["isRegex"] = isRegex
-        res = await self.client.send("Page.searchInResource", msg_dict)
-        return res
+        return self.client.send("Page.searchInResource", msg_dict)
 
-    async def setAdBlockingEnabled(self, enabled: bool) -> Optional[dict]:
+    def setAdBlockingEnabled(self, enabled: bool) -> Awaitable[Optional[dict]]:
         """
         Enable Chrome's experimental ad filter on all sites.
 
@@ -479,10 +469,9 @@ information in the `cookies` field.
         msg_dict = dict()
         if enabled is not None:
             msg_dict["enabled"] = enabled
-        res = await self.client.send("Page.setAdBlockingEnabled", msg_dict)
-        return res
+        return self.client.send("Page.setAdBlockingEnabled", msg_dict)
 
-    async def setBypassCSP(self, enabled: bool) -> Optional[dict]:
+    def setBypassCSP(self, enabled: bool) -> Awaitable[Optional[dict]]:
         """
         Enable page Content Security Policy by-passing.
 
@@ -492,10 +481,9 @@ information in the `cookies` field.
         msg_dict = dict()
         if enabled is not None:
             msg_dict["enabled"] = enabled
-        res = await self.client.send("Page.setBypassCSP", msg_dict)
-        return res
+        return self.client.send("Page.setBypassCSP", msg_dict)
 
-    async def setDeviceMetricsOverride(
+    def setDeviceMetricsOverride(
         self,
         width: int,
         height: int,
@@ -509,7 +497,7 @@ information in the `cookies` field.
         dontSetVisibleSize: Optional[bool] = None,
         screenOrientation: Optional[dict] = None,
         viewport: Optional[dict] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Overrides the values of device screen dimensions (window.screen.width, window.screen.height,
 window.innerWidth, window.innerHeight, and "device-width"/"device-height"-related CSS media
@@ -565,12 +553,11 @@ query results).
             msg_dict["screenOrientation"] = screenOrientation
         if viewport is not None:
             msg_dict["viewport"] = viewport
-        res = await self.client.send("Page.setDeviceMetricsOverride", msg_dict)
-        return res
+        return self.client.send("Page.setDeviceMetricsOverride", msg_dict)
 
-    async def setDeviceOrientationOverride(
+    def setDeviceOrientationOverride(
         self, alpha: float, beta: float, gamma: float
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Overrides the Device Orientation.
 
@@ -588,10 +575,9 @@ query results).
             msg_dict["beta"] = beta
         if gamma is not None:
             msg_dict["gamma"] = gamma
-        res = await self.client.send("Page.setDeviceOrientationOverride", msg_dict)
-        return res
+        return self.client.send("Page.setDeviceOrientationOverride", msg_dict)
 
-    async def setFontFamilies(self, fontFamilies: dict) -> Optional[dict]:
+    def setFontFamilies(self, fontFamilies: dict) -> Awaitable[Optional[dict]]:
         """
         Set generic font families.
 
@@ -601,10 +587,9 @@ query results).
         msg_dict = dict()
         if fontFamilies is not None:
             msg_dict["fontFamilies"] = fontFamilies
-        res = await self.client.send("Page.setFontFamilies", msg_dict)
-        return res
+        return self.client.send("Page.setFontFamilies", msg_dict)
 
-    async def setFontSizes(self, fontSizes: dict) -> Optional[dict]:
+    def setFontSizes(self, fontSizes: dict) -> Awaitable[Optional[dict]]:
         """
         Set default font sizes.
 
@@ -614,10 +599,9 @@ query results).
         msg_dict = dict()
         if fontSizes is not None:
             msg_dict["fontSizes"] = fontSizes
-        res = await self.client.send("Page.setFontSizes", msg_dict)
-        return res
+        return self.client.send("Page.setFontSizes", msg_dict)
 
-    async def setDocumentContent(self, frameId: str, html: str) -> Optional[dict]:
+    def setDocumentContent(self, frameId: str, html: str) -> Awaitable[Optional[dict]]:
         """
         Sets given markup as the document's HTML.
 
@@ -631,12 +615,11 @@ query results).
             msg_dict["frameId"] = frameId
         if html is not None:
             msg_dict["html"] = html
-        res = await self.client.send("Page.setDocumentContent", msg_dict)
-        return res
+        return self.client.send("Page.setDocumentContent", msg_dict)
 
-    async def setDownloadBehavior(
+    def setDownloadBehavior(
         self, behavior: str, downloadPath: Optional[str] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Set the behavior when downloading a file.
 
@@ -650,15 +633,14 @@ query results).
             msg_dict["behavior"] = behavior
         if downloadPath is not None:
             msg_dict["downloadPath"] = downloadPath
-        res = await self.client.send("Page.setDownloadBehavior", msg_dict)
-        return res
+        return self.client.send("Page.setDownloadBehavior", msg_dict)
 
-    async def setGeolocationOverride(
+    def setGeolocationOverride(
         self,
         latitude: Optional[float] = None,
         longitude: Optional[float] = None,
         accuracy: Optional[float] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Overrides the Geolocation Position or Error. Omitting any of the parameters emulates position
 unavailable.
@@ -677,10 +659,9 @@ unavailable.
             msg_dict["longitude"] = longitude
         if accuracy is not None:
             msg_dict["accuracy"] = accuracy
-        res = await self.client.send("Page.setGeolocationOverride", msg_dict)
-        return res
+        return self.client.send("Page.setGeolocationOverride", msg_dict)
 
-    async def setLifecycleEventsEnabled(self, enabled: bool) -> Optional[dict]:
+    def setLifecycleEventsEnabled(self, enabled: bool) -> Awaitable[Optional[dict]]:
         """
         Controls whether page will emit lifecycle events.
 
@@ -690,12 +671,11 @@ unavailable.
         msg_dict = dict()
         if enabled is not None:
             msg_dict["enabled"] = enabled
-        res = await self.client.send("Page.setLifecycleEventsEnabled", msg_dict)
-        return res
+        return self.client.send("Page.setLifecycleEventsEnabled", msg_dict)
 
-    async def setTouchEmulationEnabled(
+    def setTouchEmulationEnabled(
         self, enabled: bool, configuration: Optional[str] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Toggles mouse event-based touch event emulation.
 
@@ -709,17 +689,16 @@ unavailable.
             msg_dict["enabled"] = enabled
         if configuration is not None:
             msg_dict["configuration"] = configuration
-        res = await self.client.send("Page.setTouchEmulationEnabled", msg_dict)
-        return res
+        return self.client.send("Page.setTouchEmulationEnabled", msg_dict)
 
-    async def startScreencast(
+    def startScreencast(
         self,
         format: Optional[str] = None,
         quality: Optional[int] = None,
         maxWidth: Optional[int] = None,
         maxHeight: Optional[int] = None,
         everyNthFrame: Optional[int] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Starts sending each frame using the `screencastFrame` event.
 
@@ -745,31 +724,27 @@ unavailable.
             msg_dict["maxHeight"] = maxHeight
         if everyNthFrame is not None:
             msg_dict["everyNthFrame"] = everyNthFrame
-        res = await self.client.send("Page.startScreencast", msg_dict)
-        return res
+        return self.client.send("Page.startScreencast", msg_dict)
 
-    async def stopLoading(self) -> Optional[dict]:
+    def stopLoading(self) -> Awaitable[Optional[dict]]:
         """
         Force the page stop all navigations and pending resource fetches.
         """
-        res = await self.client.send("Page.stopLoading")
-        return res
+        return self.client.send("Page.stopLoading")
 
-    async def crash(self) -> Optional[dict]:
+    def crash(self) -> Awaitable[Optional[dict]]:
         """
         Crashes renderer on the IO thread, generates minidumps.
         """
-        res = await self.client.send("Page.crash")
-        return res
+        return self.client.send("Page.crash")
 
-    async def close(self) -> Optional[dict]:
+    def close(self) -> Awaitable[Optional[dict]]:
         """
         Tries to close page, running its beforeunload hooks, if any.
         """
-        res = await self.client.send("Page.close")
-        return res
+        return self.client.send("Page.close")
 
-    async def setWebLifecycleState(self, state: str) -> Optional[dict]:
+    def setWebLifecycleState(self, state: str) -> Awaitable[Optional[dict]]:
         """
         Tries to update the web lifecycle state of the page.
 It will transition the page to the given state according to:
@@ -781,17 +756,15 @@ https://github.com/WICG/web-lifecycle/
         msg_dict = dict()
         if state is not None:
             msg_dict["state"] = state
-        res = await self.client.send("Page.setWebLifecycleState", msg_dict)
-        return res
+        return self.client.send("Page.setWebLifecycleState", msg_dict)
 
-    async def stopScreencast(self) -> Optional[dict]:
+    def stopScreencast(self) -> Awaitable[Optional[dict]]:
         """
         Stops sending each frame in the `screencastFrame`.
         """
-        res = await self.client.send("Page.stopScreencast")
-        return res
+        return self.client.send("Page.stopScreencast")
 
-    async def setProduceCompilationCache(self, enabled: bool) -> Optional[dict]:
+    def setProduceCompilationCache(self, enabled: bool) -> Awaitable[Optional[dict]]:
         """
         Forces compilation cache to be generated for every subresource script.
 
@@ -801,10 +774,9 @@ https://github.com/WICG/web-lifecycle/
         msg_dict = dict()
         if enabled is not None:
             msg_dict["enabled"] = enabled
-        res = await self.client.send("Page.setProduceCompilationCache", msg_dict)
-        return res
+        return self.client.send("Page.setProduceCompilationCache", msg_dict)
 
-    async def addCompilationCache(self, url: str, data: str) -> Optional[dict]:
+    def addCompilationCache(self, url: str, data: str) -> Awaitable[Optional[dict]]:
         """
         Seeds compilation cache for given url. Compilation cache does not survive
 cross-process navigation.
@@ -819,204 +791,347 @@ cross-process navigation.
             msg_dict["url"] = url
         if data is not None:
             msg_dict["data"] = data
-        res = await self.client.send("Page.addCompilationCache", msg_dict)
-        return res
+        return self.client.send("Page.addCompilationCache", msg_dict)
 
-    async def clearCompilationCache(self) -> Optional[dict]:
+    def clearCompilationCache(self) -> Awaitable[Optional[dict]]:
         """
         Clears seeded compilation cache.
         """
-        res = await self.client.send("Page.clearCompilationCache")
-        return res
+        return self.client.send("Page.clearCompilationCache")
 
-    def domContentEventFired(self, fn: Callable[..., Any], once: bool = False) -> None:
-        if once:
-            self.client.once("Page.domContentEventFired", fn)
-        else:
-            self.client.on("Page.domContentEventFired", fn)
+    def generateTestReport(
+        self, message: str, group: Optional[str] = None
+    ) -> Awaitable[Optional[dict]]:
+        """
+        Generates a report for testing.
 
-    def frameAttached(self, fn: Callable[..., Any], once: bool = False) -> None:
+        :param message: Message to be displayed in the report.
+        :type message: str
+        :param group: Specifies the endpoint group to deliver the report to.
+        :type group: Optional[str]
+        """
+        msg_dict = dict()
+        if message is not None:
+            msg_dict["message"] = message
+        if group is not None:
+            msg_dict["group"] = group
+        return self.client.send("Page.generateTestReport", msg_dict)
+
+    def domContentEventFired(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.domContentEventFired", _cb)
+
+            return future
+
+        self.client.on("Page.domContentEventFired", cb)
+
+    def frameAttached(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when frame has been attached to its parent.
         """
-        if once:
-            self.client.once("Page.frameAttached", fn)
-        else:
-            self.client.on("Page.frameAttached", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.frameAttached", _cb)
+
+            return future
+
+        self.client.on("Page.frameAttached", cb)
 
     def frameClearedScheduledNavigation(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+        self, cb: Optional[Callable[..., Any]] = None
+    ) -> Any:
         """
         Fired when frame no longer has a scheduled navigation.
         """
-        if once:
-            self.client.once("Page.frameClearedScheduledNavigation", fn)
-        else:
-            self.client.on("Page.frameClearedScheduledNavigation", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def frameDetached(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.frameClearedScheduledNavigation", _cb)
+
+            return future
+
+        self.client.on("Page.frameClearedScheduledNavigation", cb)
+
+    def frameDetached(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when frame has been detached from its parent.
         """
-        if once:
-            self.client.once("Page.frameDetached", fn)
-        else:
-            self.client.on("Page.frameDetached", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def frameNavigated(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.frameDetached", _cb)
+
+            return future
+
+        self.client.on("Page.frameDetached", cb)
+
+    def frameNavigated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired once navigation of the frame has completed. Frame is now associated with the new loader.
         """
-        if once:
-            self.client.once("Page.frameNavigated", fn)
-        else:
-            self.client.on("Page.frameNavigated", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def frameResized(self, fn: Callable[..., Any], once: bool = False) -> None:
-        if once:
-            self.client.once("Page.frameResized", fn)
-        else:
-            self.client.on("Page.frameResized", fn)
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
 
-    def frameScheduledNavigation(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            self.client.once("Page.frameNavigated", _cb)
+
+            return future
+
+        self.client.on("Page.frameNavigated", cb)
+
+    def frameResized(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.frameResized", _cb)
+
+            return future
+
+        self.client.on("Page.frameResized", cb)
+
+    def frameScheduledNavigation(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when frame schedules a potential navigation.
         """
-        if once:
-            self.client.once("Page.frameScheduledNavigation", fn)
-        else:
-            self.client.on("Page.frameScheduledNavigation", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def frameStartedLoading(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.frameScheduledNavigation", _cb)
+
+            return future
+
+        self.client.on("Page.frameScheduledNavigation", cb)
+
+    def frameStartedLoading(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when frame has started loading.
         """
-        if once:
-            self.client.once("Page.frameStartedLoading", fn)
-        else:
-            self.client.on("Page.frameStartedLoading", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def frameStoppedLoading(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.frameStartedLoading", _cb)
+
+            return future
+
+        self.client.on("Page.frameStartedLoading", cb)
+
+    def frameStoppedLoading(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when frame has stopped loading.
         """
-        if once:
-            self.client.once("Page.frameStoppedLoading", fn)
-        else:
-            self.client.on("Page.frameStoppedLoading", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def interstitialHidden(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.frameStoppedLoading", _cb)
+
+            return future
+
+        self.client.on("Page.frameStoppedLoading", cb)
+
+    def interstitialHidden(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when interstitial page was hidden
         """
-        if once:
-            self.client.once("Page.interstitialHidden", fn)
-        else:
-            self.client.on("Page.interstitialHidden", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def interstitialShown(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.interstitialHidden", _cb)
+
+            return future
+
+        self.client.on("Page.interstitialHidden", cb)
+
+    def interstitialShown(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when interstitial page was shown
         """
-        if once:
-            self.client.once("Page.interstitialShown", fn)
-        else:
-            self.client.on("Page.interstitialShown", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def javascriptDialogClosed(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.interstitialShown", _cb)
+
+            return future
+
+        self.client.on("Page.interstitialShown", cb)
+
+    def javascriptDialogClosed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload) has been
         closed.
         """
-        if once:
-            self.client.once("Page.javascriptDialogClosed", fn)
-        else:
-            self.client.on("Page.javascriptDialogClosed", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def javascriptDialogOpening(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.javascriptDialogClosed", _cb)
+
+            return future
+
+        self.client.on("Page.javascriptDialogClosed", cb)
+
+    def javascriptDialogOpening(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload) is about to
         open.
         """
-        if once:
-            self.client.once("Page.javascriptDialogOpening", fn)
-        else:
-            self.client.on("Page.javascriptDialogOpening", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def lifecycleEvent(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.javascriptDialogOpening", _cb)
+
+            return future
+
+        self.client.on("Page.javascriptDialogOpening", cb)
+
+    def lifecycleEvent(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired for top level page lifecycle events such as navigation, load, paint, etc.
         """
-        if once:
-            self.client.once("Page.lifecycleEvent", fn)
-        else:
-            self.client.on("Page.lifecycleEvent", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def loadEventFired(self, fn: Callable[..., Any], once: bool = False) -> None:
-        if once:
-            self.client.once("Page.loadEventFired", fn)
-        else:
-            self.client.on("Page.loadEventFired", fn)
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
 
-    def navigatedWithinDocument(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            self.client.once("Page.lifecycleEvent", _cb)
+
+            return future
+
+        self.client.on("Page.lifecycleEvent", cb)
+
+    def loadEventFired(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.loadEventFired", _cb)
+
+            return future
+
+        self.client.on("Page.loadEventFired", cb)
+
+    def navigatedWithinDocument(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when same-document navigation happens, e.g. due to history API usage or anchor navigation.
         """
-        if once:
-            self.client.once("Page.navigatedWithinDocument", fn)
-        else:
-            self.client.on("Page.navigatedWithinDocument", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def screencastFrame(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.navigatedWithinDocument", _cb)
+
+            return future
+
+        self.client.on("Page.navigatedWithinDocument", cb)
+
+    def screencastFrame(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Compressed image data requested by the `startScreencast`.
         """
-        if once:
-            self.client.once("Page.screencastFrame", fn)
-        else:
-            self.client.on("Page.screencastFrame", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.screencastFrame", _cb)
+
+            return future
+
+        self.client.on("Page.screencastFrame", cb)
 
     def screencastVisibilityChanged(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+        self, cb: Optional[Callable[..., Any]] = None
+    ) -> Any:
         """
         Fired when the page with currently enabled screencast was shown or hidden `.
         """
-        if once:
-            self.client.once("Page.screencastVisibilityChanged", fn)
-        else:
-            self.client.on("Page.screencastVisibilityChanged", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def windowOpen(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.screencastVisibilityChanged", _cb)
+
+            return future
+
+        self.client.on("Page.screencastVisibilityChanged", cb)
+
+    def windowOpen(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when a new window is going to be opened, via window.open(), link click, form submission,
         etc.
         """
-        if once:
-            self.client.once("Page.windowOpen", fn)
-        else:
-            self.client.on("Page.windowOpen", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def compilationCacheProduced(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.windowOpen", _cb)
+
+            return future
+
+        self.client.on("Page.windowOpen", cb)
+
+    def compilationCacheProduced(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Issued for every compilation cache generated. Is only available
         if Page.setGenerateCompilationCache is enabled.
         """
-        if once:
-            self.client.once("Page.compilationCacheProduced", fn)
-        else:
-            self.client.on("Page.compilationCacheProduced", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Page()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Page.compilationCacheProduced", _cb)
+
+            return future
+
+        self.client.on("Page.compilationCacheProduced", cb)

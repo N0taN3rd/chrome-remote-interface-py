@@ -1,37 +1,47 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import (
+    Awaitable,
+    Any,
+    Callable,
+    ClassVar,
+    List,
+    Optional,
+    Union,
+    TYPE_CHECKING,
+)
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["Overlay"]
 
 
+@attr.dataclass(slots=True)
 class Overlay(object):
     """
     This domain provides various functionality related to drawing atop the inspected page.
     """
 
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
+
     dependencies: ClassVar[List[str]] = ["DOM", "Page", "Runtime"]
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables domain notifications.
         """
-        res = await self.client.send("Overlay.disable")
-        return res
+        return self.client.send("Overlay.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables domain notifications.
         """
-        res = await self.client.send("Overlay.enable")
-        return res
+        return self.client.send("Overlay.enable")
 
-    async def getHighlightObjectForTest(self, nodeId: int) -> Optional[dict]:
+    def getHighlightObjectForTest(self, nodeId: int) -> Awaitable[Optional[dict]]:
         """
         For testing.
 
@@ -41,22 +51,20 @@ class Overlay(object):
         msg_dict = dict()
         if nodeId is not None:
             msg_dict["nodeId"] = nodeId
-        res = await self.client.send("Overlay.getHighlightObjectForTest", msg_dict)
-        return res
+        return self.client.send("Overlay.getHighlightObjectForTest", msg_dict)
 
-    async def hideHighlight(self) -> Optional[dict]:
+    def hideHighlight(self) -> Awaitable[Optional[dict]]:
         """
         Hides any highlight.
         """
-        res = await self.client.send("Overlay.hideHighlight")
-        return res
+        return self.client.send("Overlay.hideHighlight")
 
-    async def highlightFrame(
+    def highlightFrame(
         self,
         frameId: str,
         contentColor: Optional[dict] = None,
         contentOutlineColor: Optional[dict] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Highlights owner element of the frame with given id.
 
@@ -74,16 +82,15 @@ class Overlay(object):
             msg_dict["contentColor"] = contentColor
         if contentOutlineColor is not None:
             msg_dict["contentOutlineColor"] = contentOutlineColor
-        res = await self.client.send("Overlay.highlightFrame", msg_dict)
-        return res
+        return self.client.send("Overlay.highlightFrame", msg_dict)
 
-    async def highlightNode(
+    def highlightNode(
         self,
         highlightConfig: dict,
         nodeId: Optional[int] = None,
         backendNodeId: Optional[int] = None,
         objectId: Optional[str] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Highlights DOM node with given id or with the given JavaScript object wrapper. Either nodeId or
 objectId must be specified.
@@ -106,15 +113,14 @@ objectId must be specified.
             msg_dict["backendNodeId"] = backendNodeId
         if objectId is not None:
             msg_dict["objectId"] = objectId
-        res = await self.client.send("Overlay.highlightNode", msg_dict)
-        return res
+        return self.client.send("Overlay.highlightNode", msg_dict)
 
-    async def highlightQuad(
+    def highlightQuad(
         self,
         quad: list,
         color: Optional[dict] = None,
         outlineColor: Optional[dict] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Highlights given quad. Coordinates are absolute with respect to the main frame viewport.
 
@@ -132,10 +138,9 @@ objectId must be specified.
             msg_dict["color"] = color
         if outlineColor is not None:
             msg_dict["outlineColor"] = outlineColor
-        res = await self.client.send("Overlay.highlightQuad", msg_dict)
-        return res
+        return self.client.send("Overlay.highlightQuad", msg_dict)
 
-    async def highlightRect(
+    def highlightRect(
         self,
         x: int,
         y: int,
@@ -143,7 +148,7 @@ objectId must be specified.
         height: int,
         color: Optional[dict] = None,
         outlineColor: Optional[dict] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Highlights given rectangle. Coordinates are absolute with respect to the main frame viewport.
 
@@ -173,12 +178,11 @@ objectId must be specified.
             msg_dict["color"] = color
         if outlineColor is not None:
             msg_dict["outlineColor"] = outlineColor
-        res = await self.client.send("Overlay.highlightRect", msg_dict)
-        return res
+        return self.client.send("Overlay.highlightRect", msg_dict)
 
-    async def setInspectMode(
+    def setInspectMode(
         self, mode: str, highlightConfig: Optional[dict] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Enters the 'inspect' mode. In this mode, elements that user is hovering over are highlighted.
 Backend then generates 'inspectNodeRequested' event upon element selection.
@@ -193,12 +197,11 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
             msg_dict["mode"] = mode
         if highlightConfig is not None:
             msg_dict["highlightConfig"] = highlightConfig
-        res = await self.client.send("Overlay.setInspectMode", msg_dict)
-        return res
+        return self.client.send("Overlay.setInspectMode", msg_dict)
 
-    async def setPausedInDebuggerMessage(
+    def setPausedInDebuggerMessage(
         self, message: Optional[str] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         :param message: The message to display, also triggers resume and step over controls.
         :type message: Optional[str]
@@ -206,10 +209,9 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         msg_dict = dict()
         if message is not None:
             msg_dict["message"] = message
-        res = await self.client.send("Overlay.setPausedInDebuggerMessage", msg_dict)
-        return res
+        return self.client.send("Overlay.setPausedInDebuggerMessage", msg_dict)
 
-    async def setShowDebugBorders(self, show: bool) -> Optional[dict]:
+    def setShowDebugBorders(self, show: bool) -> Awaitable[Optional[dict]]:
         """
         Requests that backend shows debug borders on layers
 
@@ -219,10 +221,9 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         msg_dict = dict()
         if show is not None:
             msg_dict["show"] = show
-        res = await self.client.send("Overlay.setShowDebugBorders", msg_dict)
-        return res
+        return self.client.send("Overlay.setShowDebugBorders", msg_dict)
 
-    async def setShowFPSCounter(self, show: bool) -> Optional[dict]:
+    def setShowFPSCounter(self, show: bool) -> Awaitable[Optional[dict]]:
         """
         Requests that backend shows the FPS counter
 
@@ -232,10 +233,9 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         msg_dict = dict()
         if show is not None:
             msg_dict["show"] = show
-        res = await self.client.send("Overlay.setShowFPSCounter", msg_dict)
-        return res
+        return self.client.send("Overlay.setShowFPSCounter", msg_dict)
 
-    async def setShowPaintRects(self, result: bool) -> Optional[dict]:
+    def setShowPaintRects(self, result: bool) -> Awaitable[Optional[dict]]:
         """
         Requests that backend shows paint rectangles
 
@@ -245,10 +245,9 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         msg_dict = dict()
         if result is not None:
             msg_dict["result"] = result
-        res = await self.client.send("Overlay.setShowPaintRects", msg_dict)
-        return res
+        return self.client.send("Overlay.setShowPaintRects", msg_dict)
 
-    async def setShowScrollBottleneckRects(self, show: bool) -> Optional[dict]:
+    def setShowScrollBottleneckRects(self, show: bool) -> Awaitable[Optional[dict]]:
         """
         Requests that backend shows scroll bottleneck rects
 
@@ -258,10 +257,9 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         msg_dict = dict()
         if show is not None:
             msg_dict["show"] = show
-        res = await self.client.send("Overlay.setShowScrollBottleneckRects", msg_dict)
-        return res
+        return self.client.send("Overlay.setShowScrollBottleneckRects", msg_dict)
 
-    async def setShowViewportSizeOnResize(self, show: bool) -> Optional[dict]:
+    def setShowViewportSizeOnResize(self, show: bool) -> Awaitable[Optional[dict]]:
         """
         Paints viewport size upon main frame resize.
 
@@ -271,10 +269,9 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         msg_dict = dict()
         if show is not None:
             msg_dict["show"] = show
-        res = await self.client.send("Overlay.setShowViewportSizeOnResize", msg_dict)
-        return res
+        return self.client.send("Overlay.setShowViewportSizeOnResize", msg_dict)
 
-    async def setSuspended(self, suspended: bool) -> Optional[dict]:
+    def setSuspended(self, suspended: bool) -> Awaitable[Optional[dict]]:
         """
         :param suspended: Whether overlay should be suspended and not consume any resources until resumed.
         :type suspended: bool
@@ -282,38 +279,53 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         msg_dict = dict()
         if suspended is not None:
             msg_dict["suspended"] = suspended
-        res = await self.client.send("Overlay.setSuspended", msg_dict)
-        return res
+        return self.client.send("Overlay.setSuspended", msg_dict)
 
-    def inspectNodeRequested(self, fn: Callable[..., Any], once: bool = False) -> None:
+    def inspectNodeRequested(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when the node should be inspected. This happens after call to `setInspectMode` or when
         user manually inspects an element.
         """
-        if once:
-            self.client.once("Overlay.inspectNodeRequested", fn)
-        else:
-            self.client.on("Overlay.inspectNodeRequested", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def nodeHighlightRequested(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Overlay.inspectNodeRequested", _cb)
+
+            return future
+
+        self.client.on("Overlay.inspectNodeRequested", cb)
+
+    def nodeHighlightRequested(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when the node should be highlighted. This happens after call to `setInspectMode`.
         """
-        if once:
-            self.client.once("Overlay.nodeHighlightRequested", fn)
-        else:
-            self.client.on("Overlay.nodeHighlightRequested", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def screenshotRequested(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Overlay.nodeHighlightRequested", _cb)
+
+            return future
+
+        self.client.on("Overlay.nodeHighlightRequested", cb)
+
+    def screenshotRequested(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when user asks to capture screenshot of some area on the page.
         """
-        if once:
-            self.client.once("Overlay.screenshotRequested", fn)
-        else:
-            self.client.on("Overlay.screenshotRequested", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Overlay()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Overlay.screenshotRequested", _cb)
+
+            return future
+
+        self.client.on("Overlay.screenshotRequested", cb)

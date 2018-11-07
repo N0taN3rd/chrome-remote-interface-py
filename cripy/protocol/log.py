@@ -1,45 +1,54 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import (
+    Awaitable,
+    Any,
+    Callable,
+    ClassVar,
+    List,
+    Optional,
+    Union,
+    TYPE_CHECKING,
+)
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["Log"]
 
 
+@attr.dataclass(slots=True)
 class Log(object):
     """
     Provides access to log entries.
     """
 
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
+
     dependencies: ClassVar[List[str]] = ["Runtime", "Network"]
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
-    async def clear(self) -> Optional[dict]:
+    def clear(self) -> Awaitable[Optional[dict]]:
         """
         Clears the log.
         """
-        res = await self.client.send("Log.clear")
-        return res
+        return self.client.send("Log.clear")
 
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables log domain, prevents further log entries from being reported to the client.
         """
-        res = await self.client.send("Log.disable")
-        return res
+        return self.client.send("Log.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables log domain, sends the entries collected so far to the client by means of the
 `entryAdded` notification.
         """
-        res = await self.client.send("Log.enable")
-        return res
+        return self.client.send("Log.enable")
 
-    async def startViolationsReport(self, config: List[dict]) -> Optional[dict]:
+    def startViolationsReport(self, config: List[dict]) -> Awaitable[Optional[dict]]:
         """
         start violation reporting.
 
@@ -49,24 +58,26 @@ class Log(object):
         msg_dict = dict()
         if config is not None:
             msg_dict["config"] = config
-        res = await self.client.send("Log.startViolationsReport", msg_dict)
-        return res
+        return self.client.send("Log.startViolationsReport", msg_dict)
 
-    async def stopViolationsReport(self) -> Optional[dict]:
+    def stopViolationsReport(self) -> Awaitable[Optional[dict]]:
         """
         Stop violation reporting.
         """
-        res = await self.client.send("Log.stopViolationsReport")
-        return res
+        return self.client.send("Log.stopViolationsReport")
 
-    def entryAdded(self, fn: Callable[..., Any], once: bool = False) -> None:
+    def entryAdded(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Issued when new message was logged.
         """
-        if once:
-            self.client.once("Log.entryAdded", fn)
-        else:
-            self.client.on("Log.entryAdded", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Log()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Log.entryAdded", _cb)
+
+            return future
+
+        self.client.on("Log.entryAdded", cb)

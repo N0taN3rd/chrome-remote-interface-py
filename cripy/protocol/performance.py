@@ -1,45 +1,63 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy.types import ConnectionType, SessionType
 
 __all__ = ["Performance"]
 
 
+@attr.dataclass(slots=True)
 class Performance(object):
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disable collecting and reporting metrics.
         """
-        res = await self.client.send("Performance.disable")
-        return res
+        return self.client.send("Performance.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enable collecting and reporting metrics.
         """
-        res = await self.client.send("Performance.enable")
-        return res
+        return self.client.send("Performance.enable")
 
-    async def getMetrics(self) -> Optional[dict]:
+    def setTimeDomain(self, timeDomain: str) -> Awaitable[Optional[dict]]:
+        """
+        Sets time domain to use for collecting and reporting duration metrics.
+Note that this must be called before enabling metrics collection. Calling
+this method while metrics collection is enabled returns an error.
+
+        :param timeDomain: Time domain
+        :type timeDomain: str
+        """
+        msg_dict = dict()
+        if timeDomain is not None:
+            msg_dict["timeDomain"] = timeDomain
+        return self.client.send("Performance.setTimeDomain", msg_dict)
+
+    def getMetrics(self) -> Awaitable[Optional[dict]]:
         """
         Retrieve current values of run-time metrics.
         """
-        res = await self.client.send("Performance.getMetrics")
-        return res
+        return self.client.send("Performance.getMetrics")
 
-    def metrics(self, fn: Callable[..., Any], once: bool = False) -> None:
+    def metrics(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Current values of the metrics.
         """
-        if once:
-            self.client.once("Performance.metrics", fn)
-        else:
-            self.client.on("Performance.metrics", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Performance()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Performance.metrics", _cb)
+
+            return future
+
+        self.client.on("Performance.metrics", cb)
