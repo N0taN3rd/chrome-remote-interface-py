@@ -299,7 +299,7 @@ class CDPSession(EventEmitter):
         messages.
         """
         if not self._connection:
-            raise NetworkError("TargetSession already closed.")
+            raise NetworkError("CDPSession already closed.")
         await self._connection.send(
             "Target.detachFromTarget", {"sessionId": self._sessionId}
         )

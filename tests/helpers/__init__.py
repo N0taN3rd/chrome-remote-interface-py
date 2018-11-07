@@ -1,3 +1,4 @@
-from .chrome import *
+from .chrome import launch_chrome
+from .utils import Cleaner
 
-__all__ = chrome.__all__
+__all__ = ["launch_chrome", "Cleaner"]
