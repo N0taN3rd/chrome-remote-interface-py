@@ -87,7 +87,7 @@ class Connection(EventEmitter):
         """Attach to the target specified by target id and create new CDPSession for direct communication to it."""
         resp = await self.send("Target.attachToTarget", {"targetId": targetId})
         sessionId = resp.get("sessionId")
-        session = CDPSession(self, targetId, sessionId)
+        session = CDPSession(self, resp.get("type", "unknown"), sessionId)
         self._sessions[sessionId] = session
         return session
 
@@ -249,7 +249,10 @@ class Connection(EventEmitter):
 
 class CDPSession(EventEmitter):
     def __init__(
-        self, connection: Union[Connection, "Client"], targetId: str, sessionId: str
+        self,
+        connection: Union[Connection, "Client", "CDPSession", "TargetSession"],
+        targetType: str,
+        sessionId: str,
     ) -> None:
         """Make new session."""
         if connection.loop is None:
@@ -260,7 +263,7 @@ class CDPSession(EventEmitter):
         self._lastId: int = 0
         self._callbacks: Dict[int, Future] = dict()
         self._connection: Union[Connection, "Client"] = connection
-        self._targetId: str = targetId
+        self._targetType: str = targetType
         self._sessionId: str = sessionId
         self._sessions: Dict[str, Union[CDPSession, "TargetSession"]] = dict()
 
@@ -276,7 +279,7 @@ class CDPSession(EventEmitter):
         if not self._connection:
             raise NetworkError(
                 f"Protocol Error ({method}): Session closed. Most likely the "
-                f"target has been closed."
+                f"target {self._targetType} has been closed."
             )
 
         if params is None:
@@ -307,13 +310,13 @@ class CDPSession(EventEmitter):
         messages.
         """
         if not self._connection:
-            raise NetworkError("CDPSession already closed.")
+            raise NetworkError(f"CDPSession for {self._targetType} already closed.")
         await self._connection.send(
             "Target.detachFromTarget", {"sessionId": self._sessionId}
         )
 
-    def createTargetSession(self, targetId: str, sessionId: str) -> "CDPSession":
-        sesh = CDPSession(self._connection, targetId, sessionId)
+    def createSession(self, targetType: str, sessionId: str) -> "CDPSession":
+        sesh = CDPSession(self, targetType, sessionId)
         self._sessions[sessionId] = sesh
         return sesh
 
@@ -350,7 +353,7 @@ class CDPSession(EventEmitter):
             if not cb.done():
                 cb.set_exception(
                     NetworkError(
-                        f"Protocol error {cb.method}: Target closed."  # type: ignore
+                        f"Protocol error {cb.method}: {self._targetType} closed."  # type: ignore
                     )
                 )
         self._callbacks.clear()
@@ -360,7 +363,7 @@ class CDPSession(EventEmitter):
         self._connection = None
 
     def __str__(self) -> str:
-        return f"CDPSession(targetId={self._targetId}, sessionId={self._sessionId})"
+        return f"CDPSession(target={self._targetType}, sessionId={self._sessionId})"
 
     def __repr__(self) -> str:
         return self.__str__()

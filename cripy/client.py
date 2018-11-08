@@ -128,7 +128,9 @@ class Client(Connection):
         """Attach to the target specified by target id and create new TargetSession for direct communication to it."""
         resp = await self.send("Target.attachToTarget", {"targetId": targetId})
         sessionId = resp.get("sessionId")
-        session = TargetSession(self, targetId, sessionId, proto_def=self._proto_def)
+        session = TargetSession(
+            self, resp.get("type", "unknown"), sessionId, proto_def=self._proto_def
+        )
         self._sessions[sessionId] = session
         return session
 
@@ -300,13 +302,13 @@ class Client(Connection):
 class TargetSession(CDPSession):
     def __init__(
         self,
-        client: Client,
-        targetId: str,
+        client: Union[Client, "TargetSession"],
+        targetType: str,
         sessionId: str,
         proto_def: Optional[dict] = None,
     ) -> None:
         """Make new session."""
-        super().__init__(client, targetId, sessionId)
+        super().__init__(client, targetType, sessionId)
         self._proto_def: Optional[dict] = proto_def
         if proto_def is None:
             self.Accessibility: Accessibility = Accessibility(self)
@@ -353,15 +355,15 @@ class TargetSession(CDPSession):
             for domain, clazz in proto_def.items():
                 setattr(self, domain, clazz(self))
 
-    def createTargetSession(self, targetId: str, sessionId: str) -> "TargetSession":
+    def createSession(self, targetType: str, sessionId: str) -> "TargetSession":
         sesh = TargetSession(
-            self._connection, targetId, sessionId, proto_def=self._proto_def
+            self, targetType, sessionId, proto_def=self._proto_def
         )
         self._sessions[sessionId] = sesh
         return sesh
 
     def __str__(self) -> str:
-        return f"TargetSession(targetId={self._targetId}, sessionId={self._sessionId})"
+        return f"TargetSession(target={self._targetType}, sessionId={self._sessionId})"
 
 
 async def gen_proto_classes(url: str) -> Dict[str, Any]:
