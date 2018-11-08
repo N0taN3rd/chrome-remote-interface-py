@@ -1,3 +1,5 @@
+from typing import Union
+
 from .client import (
     Client,
     TargetSession,
@@ -8,6 +10,9 @@ from .client import (
 )
 from .connection import Connection, CDPSession, ConnectionEvents
 from .errors import ClientError, NetworkError
+
+ConnectionType = Union[Client, Connection]
+SessionType = Union[TargetSession, CDPSession]
 
 __all__ = [
     "Connection",
@@ -21,4 +26,6 @@ __all__ = [
     "DEFAULT_URL",
     "NetworkError",
     "ClientError",
+    "ConnectionType",
+    "SessionType",
 ]

@@ -2,6 +2,7 @@
 from asyncio import AbstractEventLoop
 from typing import List, Optional, Dict, Any, Union, Tuple
 from urllib.parse import urljoin, urlparse
+
 import aiohttp
 
 from .connection import Connection, CDPSession
@@ -152,8 +153,8 @@ class Client(Connection):
                 frontend_url = (
                     f"{'https:' if secure else 'http:'}//{host}:{port}/json/close/"
                 )
-            if 'json/close' in frontend_url and not frontend_url.endswith("/"):
-                frontend_url += '/'
+            if "json/close" in frontend_url and not frontend_url.endswith("/"):
+                frontend_url += "/"
             if not frontend_url.endswith("json/close/"):
                 frontend_url = urljoin(frontend_url, "json/close/")
             res = await session.get(urljoin(frontend_url, target_id))
@@ -181,8 +182,8 @@ class Client(Connection):
                 frontend_url = (
                     f"{'https:' if secure else 'http:'}//{host}:{port}/json/activate/"
                 )
-            if 'json/activate' in frontend_url and not frontend_url.endswith("/"):
-                frontend_url += '/'
+            if "json/activate" in frontend_url and not frontend_url.endswith("/"):
+                frontend_url += "/"
             if not frontend_url.endswith("json/activate/"):
                 frontend_url = urljoin(frontend_url, "json/activate/")
             res = await session.get(urljoin(frontend_url, target_id))

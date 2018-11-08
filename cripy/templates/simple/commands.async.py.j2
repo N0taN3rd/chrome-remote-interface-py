@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
 {% set dl = d.domain | lower %}
-from typing import Awaitable,{% if events %} Any, Callable,{% endif %}{% if d.has_deps %} ClassVar,{% endif %} List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable,{% if events %} Any, Callable,{% endif %} List, Optional, Union, TYPE_CHECKING
 
 import attr
 
 if TYPE_CHECKING:
-    from cripy.types import ConnectionType, SessionType
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["{{ d.domain }}"]
 
 
-@attr.dataclass(slots=True)
+@attr.dataclass(slots=True, cmp=False)
 class {{ d.domain }}(object):
 {% if d.description %}
     """
@@ -20,10 +20,6 @@ class {{ d.domain }}(object):
 
 {% endif %}
     client: Union["ConnectionType", "SessionType"] = attr.ib()
-{% if d.has_deps %}
-
-    {{ d.dep_list_str_typed }}
-{% endif %}
 
     {% for command in d.commands %}
     {% if command.has_parameters %}

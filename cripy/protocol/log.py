@@ -1,33 +1,22 @@
 # -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import (
-    Awaitable,
-    Any,
-    Callable,
-    ClassVar,
-    List,
-    Optional,
-    Union,
-    TYPE_CHECKING,
-)
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
 if TYPE_CHECKING:
-    from cripy.types import ConnectionType, SessionType
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["Log"]
 
 
-@attr.dataclass(slots=True)
+@attr.dataclass(slots=True, cmp=False)
 class Log(object):
     """
     Provides access to log entries.
     """
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
-
-    dependencies: ClassVar[List[str]] = ["Runtime", "Network"]
 
     def clear(self) -> Awaitable[Optional[dict]]:
         """

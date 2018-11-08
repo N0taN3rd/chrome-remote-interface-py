@@ -147,7 +147,7 @@ def gen() -> None:
 
     domains = []
     mixin_imports = []
-    for which, fp in [('', 'proto.json')]:
+    for _which, fp in [version_def_fp]:
         data = read_json(fp)
         for domain in data["domains"]:
             mixin_imports.append((domain["domain"].lower(), domain["domain"]))

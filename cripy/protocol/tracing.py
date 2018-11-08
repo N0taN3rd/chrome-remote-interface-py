@@ -1,29 +1,18 @@
 # -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import (
-    Awaitable,
-    Any,
-    Callable,
-    ClassVar,
-    List,
-    Optional,
-    Union,
-    TYPE_CHECKING,
-)
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
 if TYPE_CHECKING:
-    from cripy.types import ConnectionType, SessionType
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["Tracing"]
 
 
-@attr.dataclass(slots=True)
+@attr.dataclass(slots=True, cmp=False)
 class Tracing(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
-
-    dependencies: ClassVar[List[str]] = ["IO"]
 
     def end(self) -> Awaitable[Optional[dict]]:
         """

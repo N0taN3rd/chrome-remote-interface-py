@@ -7,10 +7,8 @@ from asyncio import Future, AbstractEventLoop, Task
 from typing import Callable, Optional, Dict, ClassVar, Union, TYPE_CHECKING
 
 import attr
-import websockets
-import websockets.protocol
 from pyee import EventEmitter
-from websockets import WebSocketClientProtocol
+from websockets import WebSocketClientProtocol, ConnectionClosed, connect as wsconnect
 
 from .errors import NetworkError
 
@@ -65,16 +63,17 @@ class Connection(EventEmitter):
 
     @property
     def loop(self) -> AbstractEventLoop:
+        """Returns the event loop the connection is using"""
         return self._loop
 
     @property
     def url(self) -> str:
-        """Get connected WebSocket url."""
+        """Get connected WebSocket url"""
         return self._url
 
     async def connect(self) -> None:
         """Connect to the remote websocket endpoint"""
-        self._ws = await websockets.client.connect(
+        self._ws = await wsconnect(
             self._url,
             ping_interval=None,  # chrome no ping pong and websockets closes down on no pong :'(
             max_size=None,
@@ -85,7 +84,7 @@ class Connection(EventEmitter):
         self._recv_task = self._loop.create_task(self._recv_loop())
 
     async def createSession(self, targetId: str) -> "CDPSession":
-        """Attach to the target specified by target id and create new TargetSession for direct communication to it."""
+        """Attach to the target specified by target id and create new CDPSession for direct communication to it."""
         resp = await self.send("Target.attachToTarget", {"targetId": targetId})
         sessionId = resp.get("sessionId")
         session = CDPSession(self, targetId, sessionId)
@@ -97,16 +96,17 @@ class Connection(EventEmitter):
         self._closeCallback = callback
 
     def send(self, method: str, params: Optional[Dict] = None) -> Future:
-        """Send a protocol msg to the remote chrome instance.
+        """Send a command to the remote chrome instance.
 
-        :param method: The method to be used
-        :param params: The optional parameters (arguments) for the command
+        :param str method: The method to be used
+        :param dict params: The optional parameters (arguments) for the command
         :return: A future that resolves once the commands response is received
         """
         if self._lastId and not self.connected:
             raise NetworkError("Connection is closed")
         if params is None:
             params = dict()
+        # increment the id for the next message
         self._lastId += 1
         _id = self._lastId
         msg = json.dumps(dict(method=method, params=params, id=_id))
@@ -132,10 +132,11 @@ class Connection(EventEmitter):
                 resp = await self._ws.recv()
                 if resp:
                     self._on_message(resp)
-            except (websockets.ConnectionClosed, ConnectionResetError) as e:
+            except (ConnectionClosed, ConnectionResetError) as e:
                 logger.info("connection closed")
                 break
-            await asyncio.sleep(0)
+            # ensures that we emit one event per event loop cycle
+            # await asyncio.sleep(0)
         if self.connected:
             self._loop.create_task(self.dispose())
 
@@ -150,7 +151,7 @@ class Connection(EventEmitter):
 
         try:
             await self._ws.send(msg)
-        except websockets.ConnectionClosed:
+        except ConnectionClosed:
             logger.error("connection unexpectedly closed")
             callback = self._callbacks.get(callback_id, None)
             if callback and not callback.done():
@@ -160,14 +161,17 @@ class Connection(EventEmitter):
     def _on_message(self, message: str) -> None:
         """Handles a message received from the remote browser instance.
 
-        If the message contains a callback id, _on_response is called with the parsed message.
-        Otherwise _on_unsolicited is called with the parsed message.
+        If the message contains a callback id, the future associated with the id has
+        its result set or exception set if the command was unsuccessful.
+        Otherwise the if the method is for a target the message is forwarded to the CDPSession
+        and if it is not for a target it is emitted.
+
         :param message: The JSON message string.
         """
         msg = json.loads(message)
         _id = msg.get("id")
         if _id and _id in self._callbacks:
-            callback = self._callbacks.pop(msg.get("id", -1))
+            callback = self._callbacks.pop(_id)
             if callback and not callback.done():
                 if "error" in msg:
                     callback.set_exception(
@@ -248,7 +252,11 @@ class CDPSession(EventEmitter):
         self, connection: Union[Connection, "Client"], targetId: str, sessionId: str
     ) -> None:
         """Make new session."""
-        super().__init__(loop=connection.loop)
+        if connection.loop is None:
+            loop = asyncio.get_event_loop()
+        else:
+            loop = connection.loop
+        super().__init__(loop=loop)
         self._lastId: int = 0
         self._callbacks: Dict[int, Future] = dict()
         self._connection: Union[Connection, "Client"] = connection
@@ -276,7 +284,7 @@ class CDPSession(EventEmitter):
         self._lastId += 1
         _id = self._lastId
         msg = json.dumps(dict(id=_id, method=method, params=params))
-        callback: Future = self._connection._loop.create_future()
+        callback: Future = self._loop.create_future()
         self._callbacks[_id] = callback
         callback.method = method
         try:

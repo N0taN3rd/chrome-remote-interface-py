@@ -5,12 +5,12 @@ from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
 import attr
 
 if TYPE_CHECKING:
-    from cripy.types import ConnectionType, SessionType
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["CacheStorage"]
 
 
-@attr.dataclass(slots=True)
+@attr.dataclass(slots=True, cmp=False)
 class CacheStorage(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 

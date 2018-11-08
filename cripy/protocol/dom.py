@@ -1,25 +1,16 @@
 # -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import (
-    Awaitable,
-    Any,
-    Callable,
-    ClassVar,
-    List,
-    Optional,
-    Union,
-    TYPE_CHECKING,
-)
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
 if TYPE_CHECKING:
-    from cripy.types import ConnectionType, SessionType
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["DOM"]
 
 
-@attr.dataclass(slots=True)
+@attr.dataclass(slots=True, cmp=False)
 class DOM(object):
     """
     This domain exposes DOM read/write operations. Each DOM Node is represented with its mirror object
@@ -32,8 +23,6 @@ corresponding document elements as their child nodes.</p>
     """
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
-
-    dependencies: ClassVar[List[str]] = ["Runtime"]
 
     def collectClassNamesFromSubtree(self, nodeId: int) -> Awaitable[Optional[dict]]:
         """

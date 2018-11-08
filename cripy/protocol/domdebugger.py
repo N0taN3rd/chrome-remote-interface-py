@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, ClassVar, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
 if TYPE_CHECKING:
-    from cripy.types import ConnectionType, SessionType
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["DOMDebugger"]
 
 
-@attr.dataclass(slots=True)
+@attr.dataclass(slots=True, cmp=False)
 class DOMDebugger(object):
     """
     DOM debugging allows setting breakpoints on particular DOM operations and events. JavaScript
@@ -18,8 +18,6 @@ execution will stop on these operations as if there was a regular breakpoint set
     """
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
-
-    dependencies: ClassVar[List[str]] = ["DOM", "Debugger", "Runtime"]
 
     def getEventListeners(
         self, objectId: str, depth: Optional[int] = None, pierce: Optional[bool] = None

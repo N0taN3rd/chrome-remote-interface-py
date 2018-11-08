@@ -5,12 +5,12 @@ from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKIN
 import attr
 
 if TYPE_CHECKING:
-    from cripy.types import ConnectionType, SessionType
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["Database"]
 
 
-@attr.dataclass(slots=True)
+@attr.dataclass(slots=True, cmp=False)
 class Database(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 

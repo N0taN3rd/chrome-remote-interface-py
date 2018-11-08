@@ -5,12 +5,12 @@ from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKIN
 import attr
 
 if TYPE_CHECKING:
-    from cripy.types import ConnectionType, SessionType
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["Runtime"]
 
 
-@attr.dataclass(slots=True)
+@attr.dataclass(slots=True, cmp=False)
 class Runtime(object):
     """
     Runtime domain exposes JavaScript runtime by means of remote evaluation and mirror objects.

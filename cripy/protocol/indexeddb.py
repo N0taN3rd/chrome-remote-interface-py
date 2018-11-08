@@ -1,20 +1,18 @@
 # -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, ClassVar, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
 if TYPE_CHECKING:
-    from cripy.types import ConnectionType, SessionType
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["IndexedDB"]
 
 
-@attr.dataclass(slots=True)
+@attr.dataclass(slots=True, cmp=False)
 class IndexedDB(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
-
-    dependencies: ClassVar[List[str]] = ["Runtime"]
 
     def clearObjectStore(
         self, securityOrigin: str, databaseName: str, objectStoreName: str
