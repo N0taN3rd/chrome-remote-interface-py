@@ -353,7 +353,7 @@ class TargetSession(CDPSession):
             for domain, clazz in proto_def.items():
                 setattr(self, domain, clazz(self))
 
-    def create_session(self, targetId: str, sessionId: str) -> "TargetSession":
+    def createTargetSession(self, targetId: str, sessionId: str) -> "TargetSession":
         sesh = TargetSession(
             self._connection, targetId, sessionId, proto_def=self._proto_def
         )

@@ -83,7 +83,7 @@ class Connection(EventEmitter):
         )
         self._recv_task = self._loop.create_task(self._recv_loop())
 
-    async def createSession(self, targetId: str) -> "CDPSession":
+    async def createTargetSession(self, targetId: str) -> "CDPSession":
         """Attach to the target specified by target id and create new CDPSession for direct communication to it."""
         resp = await self.send("Target.attachToTarget", {"targetId": targetId})
         sessionId = resp.get("sessionId")
@@ -312,7 +312,7 @@ class CDPSession(EventEmitter):
             "Target.detachFromTarget", {"sessionId": self._sessionId}
         )
 
-    def create_session(self, targetId: str, sessionId: str) -> "CDPSession":
+    def createTargetSession(self, targetId: str, sessionId: str) -> "CDPSession":
         sesh = CDPSession(self._connection, targetId, sessionId)
         self._sessions[sessionId] = sesh
         return sesh
