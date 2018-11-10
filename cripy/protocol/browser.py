@@ -1,45 +1,90 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["Browser"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class Browser(object):
     """
     The Browser domain defines methods and events for browser managing.
     """
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def close(self) -> Optional[dict]:
+    def grantPermissions(
+        self,
+        origin: str,
+        permissions: List[str],
+        browserContextId: Optional[str] = None,
+    ) -> Awaitable[Optional[dict]]:
+        """
+        Grant specific permissions to the given origin and reject all others.
+
+        :param origin: The origin
+        :type origin: str
+        :param permissions: The permissions
+        :type permissions: List[str]
+        :param browserContextId: BrowserContext to override permissions. When omitted, default browser context is used.
+        :type browserContextId: Optional[str]
+        """
+        msg_dict = dict()
+        if origin is not None:
+            msg_dict["origin"] = origin
+        if permissions is not None:
+            msg_dict["permissions"] = permissions
+        if browserContextId is not None:
+            msg_dict["browserContextId"] = browserContextId
+        return self.client.send("Browser.grantPermissions", msg_dict)
+
+    def resetPermissions(
+        self, browserContextId: Optional[str] = None
+    ) -> Awaitable[Optional[dict]]:
+        """
+        Reset all permission management for all origins.
+
+        :param browserContextId: BrowserContext to reset permissions. When omitted, default browser context is used.
+        :type browserContextId: Optional[str]
+        """
+        msg_dict = dict()
+        if browserContextId is not None:
+            msg_dict["browserContextId"] = browserContextId
+        return self.client.send("Browser.resetPermissions", msg_dict)
+
+    def close(self) -> Awaitable[Optional[dict]]:
         """
         Close browser gracefully.
         """
-        res = await self.client.send("Browser.close")
-        return res
+        return self.client.send("Browser.close")
 
-    async def getVersion(self) -> Optional[dict]:
+    def crash(self) -> Awaitable[Optional[dict]]:
+        """
+        Crashes browser on the main thread.
+        """
+        return self.client.send("Browser.crash")
+
+    def getVersion(self) -> Awaitable[Optional[dict]]:
         """
         Returns version information.
         """
-        res = await self.client.send("Browser.getVersion")
-        return res
+        return self.client.send("Browser.getVersion")
 
-    async def getBrowserCommandLine(self) -> Optional[dict]:
+    def getBrowserCommandLine(self) -> Awaitable[Optional[dict]]:
         """
         Returns the command line switches for the browser process if, and only if
 --enable-automation is on the commandline.
         """
-        res = await self.client.send("Browser.getBrowserCommandLine")
-        return res
+        return self.client.send("Browser.getBrowserCommandLine")
 
-    async def getHistograms(
+    def getHistograms(
         self, query: Optional[str] = None, delta: Optional[bool] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Get Chrome histograms.
 
@@ -53,12 +98,11 @@ class Browser(object):
             msg_dict["query"] = query
         if delta is not None:
             msg_dict["delta"] = delta
-        res = await self.client.send("Browser.getHistograms", msg_dict)
-        return res
+        return self.client.send("Browser.getHistograms", msg_dict)
 
-    async def getHistogram(
+    def getHistogram(
         self, name: str, delta: Optional[bool] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Get a Chrome histogram by name.
 
@@ -72,10 +116,9 @@ class Browser(object):
             msg_dict["name"] = name
         if delta is not None:
             msg_dict["delta"] = delta
-        res = await self.client.send("Browser.getHistogram", msg_dict)
-        return res
+        return self.client.send("Browser.getHistogram", msg_dict)
 
-    async def getWindowBounds(self, windowId: int) -> Optional[dict]:
+    def getWindowBounds(self, windowId: int) -> Awaitable[Optional[dict]]:
         """
         Get position and size of the browser window.
 
@@ -85,10 +128,9 @@ class Browser(object):
         msg_dict = dict()
         if windowId is not None:
             msg_dict["windowId"] = windowId
-        res = await self.client.send("Browser.getWindowBounds", msg_dict)
-        return res
+        return self.client.send("Browser.getWindowBounds", msg_dict)
 
-    async def getWindowForTarget(self, targetId: str) -> Optional[dict]:
+    def getWindowForTarget(self, targetId: str) -> Awaitable[Optional[dict]]:
         """
         Get the browser window that contains the devtools target.
 
@@ -98,10 +140,9 @@ class Browser(object):
         msg_dict = dict()
         if targetId is not None:
             msg_dict["targetId"] = targetId
-        res = await self.client.send("Browser.getWindowForTarget", msg_dict)
-        return res
+        return self.client.send("Browser.getWindowForTarget", msg_dict)
 
-    async def setWindowBounds(self, windowId: int, bounds: dict) -> Optional[dict]:
+    def setWindowBounds(self, windowId: int, bounds: dict) -> Awaitable[Optional[dict]]:
         """
         Set position and/or size of the browser window.
 
@@ -115,8 +156,4 @@ class Browser(object):
             msg_dict["windowId"] = windowId
         if bounds is not None:
             msg_dict["bounds"] = bounds
-        res = await self.client.send("Browser.setWindowBounds", msg_dict)
-        return res
-
-    def __repr__(self):
-        return f"Browser()"
+        return self.client.send("Browser.setWindowBounds", msg_dict)

@@ -1,26 +1,27 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["Debugger"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class Debugger(object):
     """
     Debugger domain exposes JavaScript debugging capabilities. It allows setting and removing
 breakpoints, stepping through execution, exploring stack traces, etc.
     """
 
-    dependencies: ClassVar[List[str]] = ["Runtime"]
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
-    async def continueToLocation(
+    def continueToLocation(
         self, location: dict, targetCallFrames: Optional[str] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Continues execution until specific location is reached.
 
@@ -34,25 +35,22 @@ breakpoints, stepping through execution, exploring stack traces, etc.
             msg_dict["location"] = location
         if targetCallFrames is not None:
             msg_dict["targetCallFrames"] = targetCallFrames
-        res = await self.client.send("Debugger.continueToLocation", msg_dict)
-        return res
+        return self.client.send("Debugger.continueToLocation", msg_dict)
 
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables debugger for given page.
         """
-        res = await self.client.send("Debugger.disable")
-        return res
+        return self.client.send("Debugger.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables debugger for the given page. Clients should not assume that the debugging has been
 enabled until the result for this command is received.
         """
-        res = await self.client.send("Debugger.enable")
-        return res
+        return self.client.send("Debugger.enable")
 
-    async def evaluateOnCallFrame(
+    def evaluateOnCallFrame(
         self,
         callFrameId: str,
         expression: str,
@@ -63,7 +61,7 @@ enabled until the result for this command is received.
         generatePreview: Optional[bool] = None,
         throwOnSideEffect: Optional[bool] = None,
         timeout: Optional[float] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Evaluates expression on a given call frame.
 
@@ -105,15 +103,14 @@ enabled until the result for this command is received.
             msg_dict["throwOnSideEffect"] = throwOnSideEffect
         if timeout is not None:
             msg_dict["timeout"] = timeout
-        res = await self.client.send("Debugger.evaluateOnCallFrame", msg_dict)
-        return res
+        return self.client.send("Debugger.evaluateOnCallFrame", msg_dict)
 
-    async def getPossibleBreakpoints(
+    def getPossibleBreakpoints(
         self,
         start: dict,
         end: Optional[dict] = None,
         restrictToFunction: Optional[bool] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Returns possible locations for breakpoint. scriptId in start and end range locations should be
 the same.
@@ -132,10 +129,9 @@ the same.
             msg_dict["end"] = end
         if restrictToFunction is not None:
             msg_dict["restrictToFunction"] = restrictToFunction
-        res = await self.client.send("Debugger.getPossibleBreakpoints", msg_dict)
-        return res
+        return self.client.send("Debugger.getPossibleBreakpoints", msg_dict)
 
-    async def getScriptSource(self, scriptId: str) -> Optional[dict]:
+    def getScriptSource(self, scriptId: str) -> Awaitable[Optional[dict]]:
         """
         Returns source for the script with given id.
 
@@ -145,10 +141,9 @@ the same.
         msg_dict = dict()
         if scriptId is not None:
             msg_dict["scriptId"] = scriptId
-        res = await self.client.send("Debugger.getScriptSource", msg_dict)
-        return res
+        return self.client.send("Debugger.getScriptSource", msg_dict)
 
-    async def getStackTrace(self, stackTraceId: dict) -> Optional[dict]:
+    def getStackTrace(self, stackTraceId: dict) -> Awaitable[Optional[dict]]:
         """
         Returns stack trace with given `stackTraceId`.
 
@@ -158,17 +153,15 @@ the same.
         msg_dict = dict()
         if stackTraceId is not None:
             msg_dict["stackTraceId"] = stackTraceId
-        res = await self.client.send("Debugger.getStackTrace", msg_dict)
-        return res
+        return self.client.send("Debugger.getStackTrace", msg_dict)
 
-    async def pause(self) -> Optional[dict]:
+    def pause(self) -> Awaitable[Optional[dict]]:
         """
         Stops on the next JavaScript statement.
         """
-        res = await self.client.send("Debugger.pause")
-        return res
+        return self.client.send("Debugger.pause")
 
-    async def pauseOnAsyncCall(self, parentStackTraceId: dict) -> Optional[dict]:
+    def pauseOnAsyncCall(self, parentStackTraceId: dict) -> Awaitable[Optional[dict]]:
         """
         :param parentStackTraceId: Debugger will pause when async call with given stack trace is started.
         :type parentStackTraceId: dict
@@ -176,10 +169,9 @@ the same.
         msg_dict = dict()
         if parentStackTraceId is not None:
             msg_dict["parentStackTraceId"] = parentStackTraceId
-        res = await self.client.send("Debugger.pauseOnAsyncCall", msg_dict)
-        return res
+        return self.client.send("Debugger.pauseOnAsyncCall", msg_dict)
 
-    async def removeBreakpoint(self, breakpointId: str) -> Optional[dict]:
+    def removeBreakpoint(self, breakpointId: str) -> Awaitable[Optional[dict]]:
         """
         Removes JavaScript breakpoint.
 
@@ -189,10 +181,9 @@ the same.
         msg_dict = dict()
         if breakpointId is not None:
             msg_dict["breakpointId"] = breakpointId
-        res = await self.client.send("Debugger.removeBreakpoint", msg_dict)
-        return res
+        return self.client.send("Debugger.removeBreakpoint", msg_dict)
 
-    async def restartFrame(self, callFrameId: str) -> Optional[dict]:
+    def restartFrame(self, callFrameId: str) -> Awaitable[Optional[dict]]:
         """
         Restarts particular call frame from the beginning.
 
@@ -202,33 +193,30 @@ the same.
         msg_dict = dict()
         if callFrameId is not None:
             msg_dict["callFrameId"] = callFrameId
-        res = await self.client.send("Debugger.restartFrame", msg_dict)
-        return res
+        return self.client.send("Debugger.restartFrame", msg_dict)
 
-    async def resume(self) -> Optional[dict]:
+    def resume(self) -> Awaitable[Optional[dict]]:
         """
         Resumes JavaScript execution.
         """
-        res = await self.client.send("Debugger.resume")
-        return res
+        return self.client.send("Debugger.resume")
 
-    async def scheduleStepIntoAsync(self) -> Optional[dict]:
+    def scheduleStepIntoAsync(self) -> Awaitable[Optional[dict]]:
         """
         This method is deprecated - use Debugger.stepInto with breakOnAsyncCall and
 Debugger.pauseOnAsyncTask instead. Steps into next scheduled async task if any is scheduled
 before next pause. Returns success when async task is actually scheduled, returns error if no
 task were scheduled or another scheduleStepIntoAsync was called.
         """
-        res = await self.client.send("Debugger.scheduleStepIntoAsync")
-        return res
+        return self.client.send("Debugger.scheduleStepIntoAsync")
 
-    async def searchInContent(
+    def searchInContent(
         self,
         scriptId: str,
         query: str,
         caseSensitive: Optional[bool] = None,
         isRegex: Optional[bool] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Searches for given string in script content.
 
@@ -250,10 +238,9 @@ task were scheduled or another scheduleStepIntoAsync was called.
             msg_dict["caseSensitive"] = caseSensitive
         if isRegex is not None:
             msg_dict["isRegex"] = isRegex
-        res = await self.client.send("Debugger.searchInContent", msg_dict)
-        return res
+        return self.client.send("Debugger.searchInContent", msg_dict)
 
-    async def setAsyncCallStackDepth(self, maxDepth: int) -> Optional[dict]:
+    def setAsyncCallStackDepth(self, maxDepth: int) -> Awaitable[Optional[dict]]:
         """
         Enables or disables async call stacks tracking.
 
@@ -263,10 +250,9 @@ task were scheduled or another scheduleStepIntoAsync was called.
         msg_dict = dict()
         if maxDepth is not None:
             msg_dict["maxDepth"] = maxDepth
-        res = await self.client.send("Debugger.setAsyncCallStackDepth", msg_dict)
-        return res
+        return self.client.send("Debugger.setAsyncCallStackDepth", msg_dict)
 
-    async def setBlackboxPatterns(self, patterns: List[str]) -> Optional[dict]:
+    def setBlackboxPatterns(self, patterns: List[str]) -> Awaitable[Optional[dict]]:
         """
         Replace previous blackbox patterns with passed ones. Forces backend to skip stepping/pausing in
 scripts with url matching one of the patterns. VM will try to leave blackboxed script by
@@ -278,12 +264,11 @@ performing 'step in' several times, finally resorting to 'step out' if unsuccess
         msg_dict = dict()
         if patterns is not None:
             msg_dict["patterns"] = patterns
-        res = await self.client.send("Debugger.setBlackboxPatterns", msg_dict)
-        return res
+        return self.client.send("Debugger.setBlackboxPatterns", msg_dict)
 
-    async def setBlackboxedRanges(
+    def setBlackboxedRanges(
         self, scriptId: str, positions: List[dict]
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Makes backend skip steps in the script in blackboxed ranges. VM will try leave blacklisted
 scripts by performing 'step in' several times, finally resorting to 'step out' if unsuccessful.
@@ -300,12 +285,11 @@ blackboxed. Array should be sorted.
             msg_dict["scriptId"] = scriptId
         if positions is not None:
             msg_dict["positions"] = positions
-        res = await self.client.send("Debugger.setBlackboxedRanges", msg_dict)
-        return res
+        return self.client.send("Debugger.setBlackboxedRanges", msg_dict)
 
-    async def setBreakpoint(
+    def setBreakpoint(
         self, location: dict, condition: Optional[str] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Sets JavaScript breakpoint at a given location.
 
@@ -319,10 +303,9 @@ blackboxed. Array should be sorted.
             msg_dict["location"] = location
         if condition is not None:
             msg_dict["condition"] = condition
-        res = await self.client.send("Debugger.setBreakpoint", msg_dict)
-        return res
+        return self.client.send("Debugger.setBreakpoint", msg_dict)
 
-    async def setBreakpointByUrl(
+    def setBreakpointByUrl(
         self,
         lineNumber: int,
         url: Optional[str] = None,
@@ -330,7 +313,7 @@ blackboxed. Array should be sorted.
         scriptHash: Optional[str] = None,
         columnNumber: Optional[int] = None,
         condition: Optional[str] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Sets JavaScript breakpoint at given location specified either by URL or URL regex. Once this
 command is issued, all existing parsed scripts will have breakpoints resolved and returned in
@@ -363,12 +346,11 @@ command is issued, all existing parsed scripts will have breakpoints resolved an
             msg_dict["columnNumber"] = columnNumber
         if condition is not None:
             msg_dict["condition"] = condition
-        res = await self.client.send("Debugger.setBreakpointByUrl", msg_dict)
-        return res
+        return self.client.send("Debugger.setBreakpointByUrl", msg_dict)
 
-    async def setBreakpointOnFunctionCall(
+    def setBreakpointOnFunctionCall(
         self, objectId: str, condition: Optional[str] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Sets JavaScript breakpoint before each call to the given function.
 If another function was created from the same source as a given one,
@@ -384,10 +366,9 @@ calling it will also trigger the breakpoint.
             msg_dict["objectId"] = objectId
         if condition is not None:
             msg_dict["condition"] = condition
-        res = await self.client.send("Debugger.setBreakpointOnFunctionCall", msg_dict)
-        return res
+        return self.client.send("Debugger.setBreakpointOnFunctionCall", msg_dict)
 
-    async def setBreakpointsActive(self, active: bool) -> Optional[dict]:
+    def setBreakpointsActive(self, active: bool) -> Awaitable[Optional[dict]]:
         """
         Activates / deactivates all breakpoints on the page.
 
@@ -397,10 +378,9 @@ calling it will also trigger the breakpoint.
         msg_dict = dict()
         if active is not None:
             msg_dict["active"] = active
-        res = await self.client.send("Debugger.setBreakpointsActive", msg_dict)
-        return res
+        return self.client.send("Debugger.setBreakpointsActive", msg_dict)
 
-    async def setPauseOnExceptions(self, state: str) -> Optional[dict]:
+    def setPauseOnExceptions(self, state: str) -> Awaitable[Optional[dict]]:
         """
         Defines pause on exceptions state. Can be set to stop on all exceptions, uncaught exceptions or
 no exceptions. Initial pause on exceptions state is `none`.
@@ -411,10 +391,9 @@ no exceptions. Initial pause on exceptions state is `none`.
         msg_dict = dict()
         if state is not None:
             msg_dict["state"] = state
-        res = await self.client.send("Debugger.setPauseOnExceptions", msg_dict)
-        return res
+        return self.client.send("Debugger.setPauseOnExceptions", msg_dict)
 
-    async def setReturnValue(self, newValue: dict) -> Optional[dict]:
+    def setReturnValue(self, newValue: dict) -> Awaitable[Optional[dict]]:
         """
         Changes return value in top frame. Available only at return break position.
 
@@ -424,12 +403,11 @@ no exceptions. Initial pause on exceptions state is `none`.
         msg_dict = dict()
         if newValue is not None:
             msg_dict["newValue"] = newValue
-        res = await self.client.send("Debugger.setReturnValue", msg_dict)
-        return res
+        return self.client.send("Debugger.setReturnValue", msg_dict)
 
-    async def setScriptSource(
+    def setScriptSource(
         self, scriptId: str, scriptSource: str, dryRun: Optional[bool] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Edits JavaScript source live.
 
@@ -447,10 +425,9 @@ no exceptions. Initial pause on exceptions state is `none`.
             msg_dict["scriptSource"] = scriptSource
         if dryRun is not None:
             msg_dict["dryRun"] = dryRun
-        res = await self.client.send("Debugger.setScriptSource", msg_dict)
-        return res
+        return self.client.send("Debugger.setScriptSource", msg_dict)
 
-    async def setSkipAllPauses(self, skip: bool) -> Optional[dict]:
+    def setSkipAllPauses(self, skip: bool) -> Awaitable[Optional[dict]]:
         """
         Makes page not interrupt on any pauses (breakpoint, exception, dom exception etc).
 
@@ -460,12 +437,11 @@ no exceptions. Initial pause on exceptions state is `none`.
         msg_dict = dict()
         if skip is not None:
             msg_dict["skip"] = skip
-        res = await self.client.send("Debugger.setSkipAllPauses", msg_dict)
-        return res
+        return self.client.send("Debugger.setSkipAllPauses", msg_dict)
 
-    async def setVariableValue(
+    def setVariableValue(
         self, scopeNumber: int, variableName: str, newValue: dict, callFrameId: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Changes value of variable in a callframe. Object-based scopes are not supported and must be
 mutated manually.
@@ -488,10 +464,11 @@ mutated manually.
             msg_dict["newValue"] = newValue
         if callFrameId is not None:
             msg_dict["callFrameId"] = callFrameId
-        res = await self.client.send("Debugger.setVariableValue", msg_dict)
-        return res
+        return self.client.send("Debugger.setVariableValue", msg_dict)
 
-    async def stepInto(self, breakOnAsyncCall: Optional[bool] = None) -> Optional[dict]:
+    def stepInto(
+        self, breakOnAsyncCall: Optional[bool] = None
+    ) -> Awaitable[Optional[dict]]:
         """
         Steps into the function call.
 
@@ -501,68 +478,97 @@ mutated manually.
         msg_dict = dict()
         if breakOnAsyncCall is not None:
             msg_dict["breakOnAsyncCall"] = breakOnAsyncCall
-        res = await self.client.send("Debugger.stepInto", msg_dict)
-        return res
+        return self.client.send("Debugger.stepInto", msg_dict)
 
-    async def stepOut(self) -> Optional[dict]:
+    def stepOut(self) -> Awaitable[Optional[dict]]:
         """
         Steps out of the function call.
         """
-        res = await self.client.send("Debugger.stepOut")
-        return res
+        return self.client.send("Debugger.stepOut")
 
-    async def stepOver(self) -> Optional[dict]:
+    def stepOver(self) -> Awaitable[Optional[dict]]:
         """
         Steps over the statement.
         """
-        res = await self.client.send("Debugger.stepOver")
-        return res
+        return self.client.send("Debugger.stepOver")
 
-    def breakpointResolved(self, fn: Callable[..., Any], once: bool = False) -> None:
+    def breakpointResolved(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when breakpoint is resolved to an actual script and location.
         """
-        if once:
-            self.client.once("Debugger.breakpointResolved", fn)
-        else:
-            self.client.on("Debugger.breakpointResolved", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def paused(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Debugger.breakpointResolved", _cb)
+
+            return future
+
+        self.client.on("Debugger.breakpointResolved", cb)
+
+    def paused(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when the virtual machine stopped on breakpoint or exception or any other stop criteria.
         """
-        if once:
-            self.client.once("Debugger.paused", fn)
-        else:
-            self.client.on("Debugger.paused", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def resumed(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Debugger.paused", _cb)
+
+            return future
+
+        self.client.on("Debugger.paused", cb)
+
+    def resumed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when the virtual machine resumed execution.
         """
-        if once:
-            self.client.once("Debugger.resumed", fn)
-        else:
-            self.client.on("Debugger.resumed", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def scriptFailedToParse(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Debugger.resumed", _cb)
+
+            return future
+
+        self.client.on("Debugger.resumed", cb)
+
+    def scriptFailedToParse(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when virtual machine fails to parse the script.
         """
-        if once:
-            self.client.once("Debugger.scriptFailedToParse", fn)
-        else:
-            self.client.on("Debugger.scriptFailedToParse", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def scriptParsed(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Debugger.scriptFailedToParse", _cb)
+
+            return future
+
+        self.client.on("Debugger.scriptFailedToParse", cb)
+
+    def scriptParsed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when virtual machine parses script. This event is also fired for all known and uncollected
         scripts upon enabling debugger.
         """
-        if once:
-            self.client.once("Debugger.scriptParsed", fn)
-        else:
-            self.client.on("Debugger.scriptParsed", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Debugger()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Debugger.scriptParsed", _cb)
+
+            return future
+
+        self.client.on("Debugger.scriptParsed", cb)

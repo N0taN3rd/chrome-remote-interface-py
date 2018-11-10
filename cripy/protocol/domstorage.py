@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["DOMStorage"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class DOMStorage(object):
     """
     Query and modify DOM storage.
     """
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def clear(self, storageId: dict) -> Optional[dict]:
+    def clear(self, storageId: dict) -> Awaitable[Optional[dict]]:
         """
         :param storageId: The storageId
         :type storageId: dict
@@ -23,24 +26,21 @@ class DOMStorage(object):
         msg_dict = dict()
         if storageId is not None:
             msg_dict["storageId"] = storageId
-        res = await self.client.send("DOMStorage.clear", msg_dict)
-        return res
+        return self.client.send("DOMStorage.clear", msg_dict)
 
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables storage tracking, prevents storage events from being sent to the client.
         """
-        res = await self.client.send("DOMStorage.disable")
-        return res
+        return self.client.send("DOMStorage.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables storage tracking, storage events will now be delivered to the client.
         """
-        res = await self.client.send("DOMStorage.enable")
-        return res
+        return self.client.send("DOMStorage.enable")
 
-    async def getDOMStorageItems(self, storageId: dict) -> Optional[dict]:
+    def getDOMStorageItems(self, storageId: dict) -> Awaitable[Optional[dict]]:
         """
         :param storageId: The storageId
         :type storageId: dict
@@ -48,10 +48,11 @@ class DOMStorage(object):
         msg_dict = dict()
         if storageId is not None:
             msg_dict["storageId"] = storageId
-        res = await self.client.send("DOMStorage.getDOMStorageItems", msg_dict)
-        return res
+        return self.client.send("DOMStorage.getDOMStorageItems", msg_dict)
 
-    async def removeDOMStorageItem(self, storageId: dict, key: str) -> Optional[dict]:
+    def removeDOMStorageItem(
+        self, storageId: dict, key: str
+    ) -> Awaitable[Optional[dict]]:
         """
         :param storageId: The storageId
         :type storageId: dict
@@ -63,12 +64,11 @@ class DOMStorage(object):
             msg_dict["storageId"] = storageId
         if key is not None:
             msg_dict["key"] = key
-        res = await self.client.send("DOMStorage.removeDOMStorageItem", msg_dict)
-        return res
+        return self.client.send("DOMStorage.removeDOMStorageItem", msg_dict)
 
-    async def setDOMStorageItem(
+    def setDOMStorageItem(
         self, storageId: dict, key: str, value: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         :param storageId: The storageId
         :type storageId: dict
@@ -84,34 +84,56 @@ class DOMStorage(object):
             msg_dict["key"] = key
         if value is not None:
             msg_dict["value"] = value
-        res = await self.client.send("DOMStorage.setDOMStorageItem", msg_dict)
-        return res
+        return self.client.send("DOMStorage.setDOMStorageItem", msg_dict)
 
-    def domStorageItemAdded(self, fn: Callable[..., Any], once: bool = False) -> None:
-        if once:
-            self.client.once("DOMStorage.domStorageItemAdded", fn)
-        else:
-            self.client.on("DOMStorage.domStorageItemAdded", fn)
+    def domStorageItemAdded(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def domStorageItemRemoved(self, fn: Callable[..., Any], once: bool = False) -> None:
-        if once:
-            self.client.once("DOMStorage.domStorageItemRemoved", fn)
-        else:
-            self.client.on("DOMStorage.domStorageItemRemoved", fn)
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
 
-    def domStorageItemUpdated(self, fn: Callable[..., Any], once: bool = False) -> None:
-        if once:
-            self.client.once("DOMStorage.domStorageItemUpdated", fn)
-        else:
-            self.client.on("DOMStorage.domStorageItemUpdated", fn)
+            self.client.once("DOMStorage.domStorageItemAdded", _cb)
 
-    def domStorageItemsCleared(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
-        if once:
-            self.client.once("DOMStorage.domStorageItemsCleared", fn)
-        else:
-            self.client.on("DOMStorage.domStorageItemsCleared", fn)
+            return future
 
-    def __repr__(self):
-        return f"DOMStorage()"
+        self.client.on("DOMStorage.domStorageItemAdded", cb)
+
+    def domStorageItemRemoved(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("DOMStorage.domStorageItemRemoved", _cb)
+
+            return future
+
+        self.client.on("DOMStorage.domStorageItemRemoved", cb)
+
+    def domStorageItemUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("DOMStorage.domStorageItemUpdated", _cb)
+
+            return future
+
+        self.client.on("DOMStorage.domStorageItemUpdated", cb)
+
+    def domStorageItemsCleared(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("DOMStorage.domStorageItemsCleared", _cb)
+
+            return future
+
+        self.client.on("DOMStorage.domStorageItemsCleared", cb)

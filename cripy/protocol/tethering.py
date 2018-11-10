@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["Tethering"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class Tethering(object):
     """
     The Tethering domain defines methods and events for browser port binding.
     """
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def bind(self, port: int) -> Optional[dict]:
+    def bind(self, port: int) -> Awaitable[Optional[dict]]:
         """
         Request browser port binding.
 
@@ -25,10 +28,9 @@ class Tethering(object):
         msg_dict = dict()
         if port is not None:
             msg_dict["port"] = port
-        res = await self.client.send("Tethering.bind", msg_dict)
-        return res
+        return self.client.send("Tethering.bind", msg_dict)
 
-    async def unbind(self, port: int) -> Optional[dict]:
+    def unbind(self, port: int) -> Awaitable[Optional[dict]]:
         """
         Request browser port unbinding.
 
@@ -38,17 +40,20 @@ class Tethering(object):
         msg_dict = dict()
         if port is not None:
             msg_dict["port"] = port
-        res = await self.client.send("Tethering.unbind", msg_dict)
-        return res
+        return self.client.send("Tethering.unbind", msg_dict)
 
-    def accepted(self, fn: Callable[..., Any], once: bool = False) -> None:
+    def accepted(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Informs that port was successfully bound and got a specified connection id.
         """
-        if once:
-            self.client.once("Tethering.accepted", fn)
-        else:
-            self.client.on("Tethering.accepted", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Tethering()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Tethering.accepted", _cb)
+
+            return future
+
+        self.client.on("Tethering.accepted", cb)

@@ -1,31 +1,32 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["Database"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class Database(object):
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables database tracking, prevents database events from being sent to the client.
         """
-        res = await self.client.send("Database.disable")
-        return res
+        return self.client.send("Database.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables database tracking, database events will now be delivered to the client.
         """
-        res = await self.client.send("Database.enable")
-        return res
+        return self.client.send("Database.enable")
 
-    async def executeSQL(self, databaseId: str, query: str) -> Optional[dict]:
+    def executeSQL(self, databaseId: str, query: str) -> Awaitable[Optional[dict]]:
         """
         :param databaseId: The databaseId
         :type databaseId: str
@@ -37,10 +38,9 @@ class Database(object):
             msg_dict["databaseId"] = databaseId
         if query is not None:
             msg_dict["query"] = query
-        res = await self.client.send("Database.executeSQL", msg_dict)
-        return res
+        return self.client.send("Database.executeSQL", msg_dict)
 
-    async def getDatabaseTableNames(self, databaseId: str) -> Optional[dict]:
+    def getDatabaseTableNames(self, databaseId: str) -> Awaitable[Optional[dict]]:
         """
         :param databaseId: The databaseId
         :type databaseId: str
@@ -48,14 +48,17 @@ class Database(object):
         msg_dict = dict()
         if databaseId is not None:
             msg_dict["databaseId"] = databaseId
-        res = await self.client.send("Database.getDatabaseTableNames", msg_dict)
-        return res
+        return self.client.send("Database.getDatabaseTableNames", msg_dict)
 
-    def addDatabase(self, fn: Callable[..., Any], once: bool = False) -> None:
-        if once:
-            self.client.once("Database.addDatabase", fn)
-        else:
-            self.client.on("Database.addDatabase", fn)
+    def addDatabase(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Database()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Database.addDatabase", _cb)
+
+            return future
+
+        self.client.on("Database.addDatabase", cb)

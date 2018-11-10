@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["CacheStorage"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class CacheStorage(object):
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def deleteCache(self, cacheId: str) -> Optional[dict]:
+    def deleteCache(self, cacheId: str) -> Awaitable[Optional[dict]]:
         """
         Deletes a cache.
 
@@ -21,10 +24,9 @@ class CacheStorage(object):
         msg_dict = dict()
         if cacheId is not None:
             msg_dict["cacheId"] = cacheId
-        res = await self.client.send("CacheStorage.deleteCache", msg_dict)
-        return res
+        return self.client.send("CacheStorage.deleteCache", msg_dict)
 
-    async def deleteEntry(self, cacheId: str, request: str) -> Optional[dict]:
+    def deleteEntry(self, cacheId: str, request: str) -> Awaitable[Optional[dict]]:
         """
         Deletes a cache entry.
 
@@ -38,10 +40,9 @@ class CacheStorage(object):
             msg_dict["cacheId"] = cacheId
         if request is not None:
             msg_dict["request"] = request
-        res = await self.client.send("CacheStorage.deleteEntry", msg_dict)
-        return res
+        return self.client.send("CacheStorage.deleteEntry", msg_dict)
 
-    async def requestCacheNames(self, securityOrigin: str) -> Optional[dict]:
+    def requestCacheNames(self, securityOrigin: str) -> Awaitable[Optional[dict]]:
         """
         Requests cache names.
 
@@ -51,12 +52,11 @@ class CacheStorage(object):
         msg_dict = dict()
         if securityOrigin is not None:
             msg_dict["securityOrigin"] = securityOrigin
-        res = await self.client.send("CacheStorage.requestCacheNames", msg_dict)
-        return res
+        return self.client.send("CacheStorage.requestCacheNames", msg_dict)
 
-    async def requestCachedResponse(
+    def requestCachedResponse(
         self, cacheId: str, requestURL: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Fetches cache entry.
 
@@ -70,12 +70,11 @@ class CacheStorage(object):
             msg_dict["cacheId"] = cacheId
         if requestURL is not None:
             msg_dict["requestURL"] = requestURL
-        res = await self.client.send("CacheStorage.requestCachedResponse", msg_dict)
-        return res
+        return self.client.send("CacheStorage.requestCachedResponse", msg_dict)
 
-    async def requestEntries(
+    def requestEntries(
         self, cacheId: str, skipCount: int, pageSize: int
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Requests data from cache.
 
@@ -93,8 +92,4 @@ class CacheStorage(object):
             msg_dict["skipCount"] = skipCount
         if pageSize is not None:
             msg_dict["pageSize"] = pageSize
-        res = await self.client.send("CacheStorage.requestEntries", msg_dict)
-        return res
-
-    def __repr__(self):
-        return f"CacheStorage()"
+        return self.client.send("CacheStorage.requestEntries", msg_dict)

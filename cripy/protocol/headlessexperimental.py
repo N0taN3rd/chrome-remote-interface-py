@@ -1,29 +1,30 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["HeadlessExperimental"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class HeadlessExperimental(object):
     """
     This domain provides experimental commands only supported in headless mode.
     """
 
-    dependencies: ClassVar[List[str]] = ["Page", "Runtime"]
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
-    async def beginFrame(
+    def beginFrame(
         self,
         frameTimeTicks: Optional[float] = None,
         interval: Optional[float] = None,
         noDisplayUpdates: Optional[bool] = None,
         screenshot: Optional[dict] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Sends a BeginFrame to the target and returns when the frame was completed. Optionally captures a
 screenshot from the resulting frame. Requires that the target was created with enabled
@@ -48,33 +49,32 @@ https://goo.gl/3zHXhB for more background.
             msg_dict["noDisplayUpdates"] = noDisplayUpdates
         if screenshot is not None:
             msg_dict["screenshot"] = screenshot
-        res = await self.client.send("HeadlessExperimental.beginFrame", msg_dict)
-        return res
+        return self.client.send("HeadlessExperimental.beginFrame", msg_dict)
 
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables headless events for the target.
         """
-        res = await self.client.send("HeadlessExperimental.disable")
-        return res
+        return self.client.send("HeadlessExperimental.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables headless events for the target.
         """
-        res = await self.client.send("HeadlessExperimental.enable")
-        return res
+        return self.client.send("HeadlessExperimental.enable")
 
-    def needsBeginFramesChanged(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+    def needsBeginFramesChanged(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Issued when the target starts or stops needing BeginFrames.
         """
-        if once:
-            self.client.once("HeadlessExperimental.needsBeginFramesChanged", fn)
-        else:
-            self.client.on("HeadlessExperimental.needsBeginFramesChanged", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"HeadlessExperimental()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("HeadlessExperimental.needsBeginFramesChanged", _cb)
+
+            return future
+
+        self.client.on("HeadlessExperimental.needsBeginFramesChanged", cb)

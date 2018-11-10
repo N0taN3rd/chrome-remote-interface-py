@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["IO"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class IO(object):
     """
     Input/Output operations for streams produced by DevTools.
     """
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def close(self, handle: str) -> Optional[dict]:
+    def close(self, handle: str) -> Awaitable[Optional[dict]]:
         """
         Close the stream, discard any temporary backing storage.
 
@@ -25,12 +28,11 @@ class IO(object):
         msg_dict = dict()
         if handle is not None:
             msg_dict["handle"] = handle
-        res = await self.client.send("IO.close", msg_dict)
-        return res
+        return self.client.send("IO.close", msg_dict)
 
-    async def read(
+    def read(
         self, handle: str, offset: Optional[int] = None, size: Optional[int] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Read a chunk of the stream
 
@@ -48,10 +50,9 @@ class IO(object):
             msg_dict["offset"] = offset
         if size is not None:
             msg_dict["size"] = size
-        res = await self.client.send("IO.read", msg_dict)
-        return res
+        return self.client.send("IO.read", msg_dict)
 
-    async def resolveBlob(self, objectId: str) -> Optional[dict]:
+    def resolveBlob(self, objectId: str) -> Awaitable[Optional[dict]]:
         """
         Return UUID of Blob object specified by a remote object id.
 
@@ -61,8 +62,4 @@ class IO(object):
         msg_dict = dict()
         if objectId is not None:
             msg_dict["objectId"] = objectId
-        res = await self.client.send("IO.resolveBlob", msg_dict)
-        return res
-
-    def __repr__(self):
-        return f"IO()"
+        return self.client.send("IO.resolveBlob", msg_dict)

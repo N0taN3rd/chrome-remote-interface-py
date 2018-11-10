@@ -1,19 +1,22 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["ServiceWorker"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class ServiceWorker(object):
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def deliverPushMessage(
+    def deliverPushMessage(
         self, origin: str, registrationId: str, data: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         :param origin: The origin
         :type origin: str
@@ -29,16 +32,14 @@ class ServiceWorker(object):
             msg_dict["registrationId"] = registrationId
         if data is not None:
             msg_dict["data"] = data
-        res = await self.client.send("ServiceWorker.deliverPushMessage", msg_dict)
-        return res
+        return self.client.send("ServiceWorker.deliverPushMessage", msg_dict)
 
-    async def disable(self) -> Optional[dict]:
-        res = await self.client.send("ServiceWorker.disable")
-        return res
+    def disable(self) -> Awaitable[Optional[dict]]:
+        return self.client.send("ServiceWorker.disable")
 
-    async def dispatchSyncEvent(
+    def dispatchSyncEvent(
         self, origin: str, registrationId: str, tag: str, lastChance: bool
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         :param origin: The origin
         :type origin: str
@@ -58,14 +59,12 @@ class ServiceWorker(object):
             msg_dict["tag"] = tag
         if lastChance is not None:
             msg_dict["lastChance"] = lastChance
-        res = await self.client.send("ServiceWorker.dispatchSyncEvent", msg_dict)
-        return res
+        return self.client.send("ServiceWorker.dispatchSyncEvent", msg_dict)
 
-    async def enable(self) -> Optional[dict]:
-        res = await self.client.send("ServiceWorker.enable")
-        return res
+    def enable(self) -> Awaitable[Optional[dict]]:
+        return self.client.send("ServiceWorker.enable")
 
-    async def inspectWorker(self, versionId: str) -> Optional[dict]:
+    def inspectWorker(self, versionId: str) -> Awaitable[Optional[dict]]:
         """
         :param versionId: The versionId
         :type versionId: str
@@ -73,12 +72,11 @@ class ServiceWorker(object):
         msg_dict = dict()
         if versionId is not None:
             msg_dict["versionId"] = versionId
-        res = await self.client.send("ServiceWorker.inspectWorker", msg_dict)
-        return res
+        return self.client.send("ServiceWorker.inspectWorker", msg_dict)
 
-    async def setForceUpdateOnPageLoad(
+    def setForceUpdateOnPageLoad(
         self, forceUpdateOnPageLoad: bool
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         :param forceUpdateOnPageLoad: The forceUpdateOnPageLoad
         :type forceUpdateOnPageLoad: bool
@@ -86,10 +84,9 @@ class ServiceWorker(object):
         msg_dict = dict()
         if forceUpdateOnPageLoad is not None:
             msg_dict["forceUpdateOnPageLoad"] = forceUpdateOnPageLoad
-        res = await self.client.send("ServiceWorker.setForceUpdateOnPageLoad", msg_dict)
-        return res
+        return self.client.send("ServiceWorker.setForceUpdateOnPageLoad", msg_dict)
 
-    async def skipWaiting(self, scopeURL: str) -> Optional[dict]:
+    def skipWaiting(self, scopeURL: str) -> Awaitable[Optional[dict]]:
         """
         :param scopeURL: The scopeURL
         :type scopeURL: str
@@ -97,10 +94,9 @@ class ServiceWorker(object):
         msg_dict = dict()
         if scopeURL is not None:
             msg_dict["scopeURL"] = scopeURL
-        res = await self.client.send("ServiceWorker.skipWaiting", msg_dict)
-        return res
+        return self.client.send("ServiceWorker.skipWaiting", msg_dict)
 
-    async def startWorker(self, scopeURL: str) -> Optional[dict]:
+    def startWorker(self, scopeURL: str) -> Awaitable[Optional[dict]]:
         """
         :param scopeURL: The scopeURL
         :type scopeURL: str
@@ -108,14 +104,12 @@ class ServiceWorker(object):
         msg_dict = dict()
         if scopeURL is not None:
             msg_dict["scopeURL"] = scopeURL
-        res = await self.client.send("ServiceWorker.startWorker", msg_dict)
-        return res
+        return self.client.send("ServiceWorker.startWorker", msg_dict)
 
-    async def stopAllWorkers(self) -> Optional[dict]:
-        res = await self.client.send("ServiceWorker.stopAllWorkers")
-        return res
+    def stopAllWorkers(self) -> Awaitable[Optional[dict]]:
+        return self.client.send("ServiceWorker.stopAllWorkers")
 
-    async def stopWorker(self, versionId: str) -> Optional[dict]:
+    def stopWorker(self, versionId: str) -> Awaitable[Optional[dict]]:
         """
         :param versionId: The versionId
         :type versionId: str
@@ -123,10 +117,9 @@ class ServiceWorker(object):
         msg_dict = dict()
         if versionId is not None:
             msg_dict["versionId"] = versionId
-        res = await self.client.send("ServiceWorker.stopWorker", msg_dict)
-        return res
+        return self.client.send("ServiceWorker.stopWorker", msg_dict)
 
-    async def unregister(self, scopeURL: str) -> Optional[dict]:
+    def unregister(self, scopeURL: str) -> Awaitable[Optional[dict]]:
         """
         :param scopeURL: The scopeURL
         :type scopeURL: str
@@ -134,10 +127,9 @@ class ServiceWorker(object):
         msg_dict = dict()
         if scopeURL is not None:
             msg_dict["scopeURL"] = scopeURL
-        res = await self.client.send("ServiceWorker.unregister", msg_dict)
-        return res
+        return self.client.send("ServiceWorker.unregister", msg_dict)
 
-    async def updateRegistration(self, scopeURL: str) -> Optional[dict]:
+    def updateRegistration(self, scopeURL: str) -> Awaitable[Optional[dict]]:
         """
         :param scopeURL: The scopeURL
         :type scopeURL: str
@@ -145,28 +137,43 @@ class ServiceWorker(object):
         msg_dict = dict()
         if scopeURL is not None:
             msg_dict["scopeURL"] = scopeURL
-        res = await self.client.send("ServiceWorker.updateRegistration", msg_dict)
-        return res
+        return self.client.send("ServiceWorker.updateRegistration", msg_dict)
 
-    def workerErrorReported(self, fn: Callable[..., Any], once: bool = False) -> None:
-        if once:
-            self.client.once("ServiceWorker.workerErrorReported", fn)
-        else:
-            self.client.on("ServiceWorker.workerErrorReported", fn)
+    def workerErrorReported(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def workerRegistrationUpdated(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
-        if once:
-            self.client.once("ServiceWorker.workerRegistrationUpdated", fn)
-        else:
-            self.client.on("ServiceWorker.workerRegistrationUpdated", fn)
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
 
-    def workerVersionUpdated(self, fn: Callable[..., Any], once: bool = False) -> None:
-        if once:
-            self.client.once("ServiceWorker.workerVersionUpdated", fn)
-        else:
-            self.client.on("ServiceWorker.workerVersionUpdated", fn)
+            self.client.once("ServiceWorker.workerErrorReported", _cb)
 
-    def __repr__(self):
-        return f"ServiceWorker()"
+            return future
+
+        self.client.on("ServiceWorker.workerErrorReported", cb)
+
+    def workerRegistrationUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("ServiceWorker.workerRegistrationUpdated", _cb)
+
+            return future
+
+        self.client.on("ServiceWorker.workerRegistrationUpdated", cb)
+
+    def workerVersionUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("ServiceWorker.workerVersionUpdated", _cb)
+
+            return future
+
+        self.client.on("ServiceWorker.workerVersionUpdated", cb)

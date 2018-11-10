@@ -24,7 +24,7 @@ class Command(FRefCollector):
 
     def stringify_thy_args(self) -> Iterator[str]:
         for parm in self.parameters:
-            yield (f"if {arg.name} is not None")
+            yield (f"if {parm.name} is not None")
         if len(self.parameters) > 0:
             dict_body = ", ".join(map(self._argstr, self.parameters))
             return f", dict({dict_body})"

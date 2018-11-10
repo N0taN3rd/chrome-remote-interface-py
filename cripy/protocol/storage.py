@@ -1,19 +1,22 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["Storage"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class Storage(object):
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def clearDataForOrigin(
+    def clearDataForOrigin(
         self, origin: str, storageTypes: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Clears storage for origin.
 
@@ -27,10 +30,9 @@ class Storage(object):
             msg_dict["origin"] = origin
         if storageTypes is not None:
             msg_dict["storageTypes"] = storageTypes
-        res = await self.client.send("Storage.clearDataForOrigin", msg_dict)
-        return res
+        return self.client.send("Storage.clearDataForOrigin", msg_dict)
 
-    async def getUsageAndQuota(self, origin: str) -> Optional[dict]:
+    def getUsageAndQuota(self, origin: str) -> Awaitable[Optional[dict]]:
         """
         Returns usage and quota in bytes.
 
@@ -40,10 +42,9 @@ class Storage(object):
         msg_dict = dict()
         if origin is not None:
             msg_dict["origin"] = origin
-        res = await self.client.send("Storage.getUsageAndQuota", msg_dict)
-        return res
+        return self.client.send("Storage.getUsageAndQuota", msg_dict)
 
-    async def trackCacheStorageForOrigin(self, origin: str) -> Optional[dict]:
+    def trackCacheStorageForOrigin(self, origin: str) -> Awaitable[Optional[dict]]:
         """
         Registers origin to be notified when an update occurs to its cache storage list.
 
@@ -53,10 +54,9 @@ class Storage(object):
         msg_dict = dict()
         if origin is not None:
             msg_dict["origin"] = origin
-        res = await self.client.send("Storage.trackCacheStorageForOrigin", msg_dict)
-        return res
+        return self.client.send("Storage.trackCacheStorageForOrigin", msg_dict)
 
-    async def trackIndexedDBForOrigin(self, origin: str) -> Optional[dict]:
+    def trackIndexedDBForOrigin(self, origin: str) -> Awaitable[Optional[dict]]:
         """
         Registers origin to be notified when an update occurs to its IndexedDB.
 
@@ -66,10 +66,9 @@ class Storage(object):
         msg_dict = dict()
         if origin is not None:
             msg_dict["origin"] = origin
-        res = await self.client.send("Storage.trackIndexedDBForOrigin", msg_dict)
-        return res
+        return self.client.send("Storage.trackIndexedDBForOrigin", msg_dict)
 
-    async def untrackCacheStorageForOrigin(self, origin: str) -> Optional[dict]:
+    def untrackCacheStorageForOrigin(self, origin: str) -> Awaitable[Optional[dict]]:
         """
         Unregisters origin from receiving notifications for cache storage.
 
@@ -79,10 +78,9 @@ class Storage(object):
         msg_dict = dict()
         if origin is not None:
             msg_dict["origin"] = origin
-        res = await self.client.send("Storage.untrackCacheStorageForOrigin", msg_dict)
-        return res
+        return self.client.send("Storage.untrackCacheStorageForOrigin", msg_dict)
 
-    async def untrackIndexedDBForOrigin(self, origin: str) -> Optional[dict]:
+    def untrackIndexedDBForOrigin(self, origin: str) -> Awaitable[Optional[dict]]:
         """
         Unregisters origin from receiving notifications for IndexedDB.
 
@@ -92,50 +90,70 @@ class Storage(object):
         msg_dict = dict()
         if origin is not None:
             msg_dict["origin"] = origin
-        res = await self.client.send("Storage.untrackIndexedDBForOrigin", msg_dict)
-        return res
+        return self.client.send("Storage.untrackIndexedDBForOrigin", msg_dict)
 
     def cacheStorageContentUpdated(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+        self, cb: Optional[Callable[..., Any]] = None
+    ) -> Any:
         """
         A cache's contents have been modified.
         """
-        if once:
-            self.client.once("Storage.cacheStorageContentUpdated", fn)
-        else:
-            self.client.on("Storage.cacheStorageContentUpdated", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def cacheStorageListUpdated(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Storage.cacheStorageContentUpdated", _cb)
+
+            return future
+
+        self.client.on("Storage.cacheStorageContentUpdated", cb)
+
+    def cacheStorageListUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         A cache has been added/deleted.
         """
-        if once:
-            self.client.once("Storage.cacheStorageListUpdated", fn)
-        else:
-            self.client.on("Storage.cacheStorageListUpdated", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def indexedDBContentUpdated(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Storage.cacheStorageListUpdated", _cb)
+
+            return future
+
+        self.client.on("Storage.cacheStorageListUpdated", cb)
+
+    def indexedDBContentUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         The origin's IndexedDB object store has been modified.
         """
-        if once:
-            self.client.once("Storage.indexedDBContentUpdated", fn)
-        else:
-            self.client.on("Storage.indexedDBContentUpdated", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def indexedDBListUpdated(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Storage.indexedDBContentUpdated", _cb)
+
+            return future
+
+        self.client.on("Storage.indexedDBContentUpdated", cb)
+
+    def indexedDBListUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         The origin's IndexedDB database list has been modified.
         """
-        if once:
-            self.client.once("Storage.indexedDBListUpdated", fn)
-        else:
-            self.client.on("Storage.indexedDBListUpdated", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Storage()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Storage.indexedDBListUpdated", _cb)
+
+            return future
+
+        self.client.on("Storage.indexedDBListUpdated", cb)

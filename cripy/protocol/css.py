@@ -1,12 +1,16 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["CSS"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class CSS(object):
     """
     This domain exposes CSS read/write operations. All CSS objects (stylesheets, rules, and styles)
@@ -17,14 +21,11 @@ can also keep track of stylesheets via the `styleSheetAdded`/`styleSheetRemoved`
 subsequently load the required stylesheet contents using the `getStyleSheet[Text]()` methods.
     """
 
-    dependencies: ClassVar[List[str]] = ["DOM"]
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
-    async def addRule(
+    def addRule(
         self, styleSheetId: str, ruleText: str, location: dict
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Inserts a new rule with the given `ruleText` in a stylesheet with given `styleSheetId`, at the
 position specified by `location`.
@@ -43,10 +44,9 @@ position specified by `location`.
             msg_dict["ruleText"] = ruleText
         if location is not None:
             msg_dict["location"] = location
-        res = await self.client.send("CSS.addRule", msg_dict)
-        return res
+        return self.client.send("CSS.addRule", msg_dict)
 
-    async def collectClassNames(self, styleSheetId: str) -> Optional[dict]:
+    def collectClassNames(self, styleSheetId: str) -> Awaitable[Optional[dict]]:
         """
         Returns all class names from specified stylesheet.
 
@@ -56,10 +56,9 @@ position specified by `location`.
         msg_dict = dict()
         if styleSheetId is not None:
             msg_dict["styleSheetId"] = styleSheetId
-        res = await self.client.send("CSS.collectClassNames", msg_dict)
-        return res
+        return self.client.send("CSS.collectClassNames", msg_dict)
 
-    async def createStyleSheet(self, frameId: str) -> Optional[dict]:
+    def createStyleSheet(self, frameId: str) -> Awaitable[Optional[dict]]:
         """
         Creates a new special "via-inspector" stylesheet in the frame with given `frameId`.
 
@@ -69,27 +68,24 @@ position specified by `location`.
         msg_dict = dict()
         if frameId is not None:
             msg_dict["frameId"] = frameId
-        res = await self.client.send("CSS.createStyleSheet", msg_dict)
-        return res
+        return self.client.send("CSS.createStyleSheet", msg_dict)
 
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables the CSS agent for the given page.
         """
-        res = await self.client.send("CSS.disable")
-        return res
+        return self.client.send("CSS.disable")
 
-    async def enable(self) -> Optional[dict]:
+    def enable(self) -> Awaitable[Optional[dict]]:
         """
         Enables the CSS agent for the given page. Clients should not assume that the CSS agent has been
 enabled until the result of this command is received.
         """
-        res = await self.client.send("CSS.enable")
-        return res
+        return self.client.send("CSS.enable")
 
-    async def forcePseudoState(
+    def forcePseudoState(
         self, nodeId: int, forcedPseudoClasses: List[str]
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Ensures that the given node will have specified pseudo-classes whenever its style is computed by
 the browser.
@@ -104,10 +100,9 @@ the browser.
             msg_dict["nodeId"] = nodeId
         if forcedPseudoClasses is not None:
             msg_dict["forcedPseudoClasses"] = forcedPseudoClasses
-        res = await self.client.send("CSS.forcePseudoState", msg_dict)
-        return res
+        return self.client.send("CSS.forcePseudoState", msg_dict)
 
-    async def getBackgroundColors(self, nodeId: int) -> Optional[dict]:
+    def getBackgroundColors(self, nodeId: int) -> Awaitable[Optional[dict]]:
         """
         :param nodeId: Id of the node to get background colors for.
         :type nodeId: int
@@ -115,10 +110,9 @@ the browser.
         msg_dict = dict()
         if nodeId is not None:
             msg_dict["nodeId"] = nodeId
-        res = await self.client.send("CSS.getBackgroundColors", msg_dict)
-        return res
+        return self.client.send("CSS.getBackgroundColors", msg_dict)
 
-    async def getComputedStyleForNode(self, nodeId: int) -> Optional[dict]:
+    def getComputedStyleForNode(self, nodeId: int) -> Awaitable[Optional[dict]]:
         """
         Returns the computed style for a DOM node identified by `nodeId`.
 
@@ -128,10 +122,9 @@ the browser.
         msg_dict = dict()
         if nodeId is not None:
             msg_dict["nodeId"] = nodeId
-        res = await self.client.send("CSS.getComputedStyleForNode", msg_dict)
-        return res
+        return self.client.send("CSS.getComputedStyleForNode", msg_dict)
 
-    async def getInlineStylesForNode(self, nodeId: int) -> Optional[dict]:
+    def getInlineStylesForNode(self, nodeId: int) -> Awaitable[Optional[dict]]:
         """
         Returns the styles defined inline (explicitly in the "style" attribute and implicitly, using DOM
 attributes) for a DOM node identified by `nodeId`.
@@ -142,10 +135,9 @@ attributes) for a DOM node identified by `nodeId`.
         msg_dict = dict()
         if nodeId is not None:
             msg_dict["nodeId"] = nodeId
-        res = await self.client.send("CSS.getInlineStylesForNode", msg_dict)
-        return res
+        return self.client.send("CSS.getInlineStylesForNode", msg_dict)
 
-    async def getMatchedStylesForNode(self, nodeId: int) -> Optional[dict]:
+    def getMatchedStylesForNode(self, nodeId: int) -> Awaitable[Optional[dict]]:
         """
         Returns requested styles for a DOM node identified by `nodeId`.
 
@@ -155,17 +147,15 @@ attributes) for a DOM node identified by `nodeId`.
         msg_dict = dict()
         if nodeId is not None:
             msg_dict["nodeId"] = nodeId
-        res = await self.client.send("CSS.getMatchedStylesForNode", msg_dict)
-        return res
+        return self.client.send("CSS.getMatchedStylesForNode", msg_dict)
 
-    async def getMediaQueries(self) -> Optional[dict]:
+    def getMediaQueries(self) -> Awaitable[Optional[dict]]:
         """
         Returns all media queries parsed by the rendering engine.
         """
-        res = await self.client.send("CSS.getMediaQueries")
-        return res
+        return self.client.send("CSS.getMediaQueries")
 
-    async def getPlatformFontsForNode(self, nodeId: int) -> Optional[dict]:
+    def getPlatformFontsForNode(self, nodeId: int) -> Awaitable[Optional[dict]]:
         """
         Requests information about platform fonts which we used to render child TextNodes in the given
 node.
@@ -176,10 +166,9 @@ node.
         msg_dict = dict()
         if nodeId is not None:
             msg_dict["nodeId"] = nodeId
-        res = await self.client.send("CSS.getPlatformFontsForNode", msg_dict)
-        return res
+        return self.client.send("CSS.getPlatformFontsForNode", msg_dict)
 
-    async def getStyleSheetText(self, styleSheetId: str) -> Optional[dict]:
+    def getStyleSheetText(self, styleSheetId: str) -> Awaitable[Optional[dict]]:
         """
         Returns the current textual content for a stylesheet.
 
@@ -189,12 +178,11 @@ node.
         msg_dict = dict()
         if styleSheetId is not None:
             msg_dict["styleSheetId"] = styleSheetId
-        res = await self.client.send("CSS.getStyleSheetText", msg_dict)
-        return res
+        return self.client.send("CSS.getStyleSheetText", msg_dict)
 
-    async def setEffectivePropertyValueForNode(
+    def setEffectivePropertyValueForNode(
         self, nodeId: int, propertyName: str, value: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Find a rule with the given active property for the given node and set the new value for this
 property
@@ -213,12 +201,11 @@ property
             msg_dict["propertyName"] = propertyName
         if value is not None:
             msg_dict["value"] = value
-        res = await self.client.send("CSS.setEffectivePropertyValueForNode", msg_dict)
-        return res
+        return self.client.send("CSS.setEffectivePropertyValueForNode", msg_dict)
 
-    async def setKeyframeKey(
+    def setKeyframeKey(
         self, styleSheetId: str, range: dict, keyText: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Modifies the keyframe rule key text.
 
@@ -236,12 +223,11 @@ property
             msg_dict["range"] = range
         if keyText is not None:
             msg_dict["keyText"] = keyText
-        res = await self.client.send("CSS.setKeyframeKey", msg_dict)
-        return res
+        return self.client.send("CSS.setKeyframeKey", msg_dict)
 
-    async def setMediaText(
+    def setMediaText(
         self, styleSheetId: str, range: dict, text: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Modifies the rule selector.
 
@@ -259,12 +245,11 @@ property
             msg_dict["range"] = range
         if text is not None:
             msg_dict["text"] = text
-        res = await self.client.send("CSS.setMediaText", msg_dict)
-        return res
+        return self.client.send("CSS.setMediaText", msg_dict)
 
-    async def setRuleSelector(
+    def setRuleSelector(
         self, styleSheetId: str, range: dict, selector: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Modifies the rule selector.
 
@@ -282,10 +267,11 @@ property
             msg_dict["range"] = range
         if selector is not None:
             msg_dict["selector"] = selector
-        res = await self.client.send("CSS.setRuleSelector", msg_dict)
-        return res
+        return self.client.send("CSS.setRuleSelector", msg_dict)
 
-    async def setStyleSheetText(self, styleSheetId: str, text: str) -> Optional[dict]:
+    def setStyleSheetText(
+        self, styleSheetId: str, text: str
+    ) -> Awaitable[Optional[dict]]:
         """
         Sets the new stylesheet text.
 
@@ -299,10 +285,9 @@ property
             msg_dict["styleSheetId"] = styleSheetId
         if text is not None:
             msg_dict["text"] = text
-        res = await self.client.send("CSS.setStyleSheetText", msg_dict)
-        return res
+        return self.client.send("CSS.setStyleSheetText", msg_dict)
 
-    async def setStyleTexts(self, edits: List[dict]) -> Optional[dict]:
+    def setStyleTexts(self, edits: List[dict]) -> Awaitable[Optional[dict]]:
         """
         Applies specified style edits one after another in the given order.
 
@@ -312,80 +297,106 @@ property
         msg_dict = dict()
         if edits is not None:
             msg_dict["edits"] = edits
-        res = await self.client.send("CSS.setStyleTexts", msg_dict)
-        return res
+        return self.client.send("CSS.setStyleTexts", msg_dict)
 
-    async def startRuleUsageTracking(self) -> Optional[dict]:
+    def startRuleUsageTracking(self) -> Awaitable[Optional[dict]]:
         """
         Enables the selector recording.
         """
-        res = await self.client.send("CSS.startRuleUsageTracking")
-        return res
+        return self.client.send("CSS.startRuleUsageTracking")
 
-    async def stopRuleUsageTracking(self) -> Optional[dict]:
+    def stopRuleUsageTracking(self) -> Awaitable[Optional[dict]]:
         """
         Stop tracking rule usage and return the list of rules that were used since last call to
 `takeCoverageDelta` (or since start of coverage instrumentation)
         """
-        res = await self.client.send("CSS.stopRuleUsageTracking")
-        return res
+        return self.client.send("CSS.stopRuleUsageTracking")
 
-    async def takeCoverageDelta(self) -> Optional[dict]:
+    def takeCoverageDelta(self) -> Awaitable[Optional[dict]]:
         """
         Obtain list of rules that became used since last call to this method (or since start of coverage
 instrumentation)
         """
-        res = await self.client.send("CSS.takeCoverageDelta")
-        return res
+        return self.client.send("CSS.takeCoverageDelta")
 
-    def fontsUpdated(self, fn: Callable[..., Any], once: bool = False) -> None:
+    def fontsUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fires whenever a web font is updated.  A non-empty font parameter indicates a successfully loaded
         web font
         """
-        if once:
-            self.client.once("CSS.fontsUpdated", fn)
-        else:
-            self.client.on("CSS.fontsUpdated", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def mediaQueryResultChanged(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("CSS.fontsUpdated", _cb)
+
+            return future
+
+        self.client.on("CSS.fontsUpdated", cb)
+
+    def mediaQueryResultChanged(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fires whenever a MediaQuery result changes (for example, after a browser window has been
         resized.) The current implementation considers only viewport-dependent media features.
         """
-        if once:
-            self.client.once("CSS.mediaQueryResultChanged", fn)
-        else:
-            self.client.on("CSS.mediaQueryResultChanged", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def styleSheetAdded(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("CSS.mediaQueryResultChanged", _cb)
+
+            return future
+
+        self.client.on("CSS.mediaQueryResultChanged", cb)
+
+    def styleSheetAdded(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired whenever an active document stylesheet is added.
         """
-        if once:
-            self.client.once("CSS.styleSheetAdded", fn)
-        else:
-            self.client.on("CSS.styleSheetAdded", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def styleSheetChanged(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("CSS.styleSheetAdded", _cb)
+
+            return future
+
+        self.client.on("CSS.styleSheetAdded", cb)
+
+    def styleSheetChanged(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired whenever a stylesheet is changed as a result of the client operation.
         """
-        if once:
-            self.client.once("CSS.styleSheetChanged", fn)
-        else:
-            self.client.on("CSS.styleSheetChanged", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def styleSheetRemoved(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("CSS.styleSheetChanged", _cb)
+
+            return future
+
+        self.client.on("CSS.styleSheetChanged", cb)
+
+    def styleSheetRemoved(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired whenever an active document stylesheet is removed.
         """
-        if once:
-            self.client.once("CSS.styleSheetRemoved", fn)
-        else:
-            self.client.on("CSS.styleSheetRemoved", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"CSS()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("CSS.styleSheetRemoved", _cb)
+
+            return future
+
+        self.client.on("CSS.styleSheetRemoved", cb)

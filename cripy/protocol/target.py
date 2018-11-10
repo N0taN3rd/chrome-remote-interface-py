@@ -1,21 +1,24 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["Target"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class Target(object):
     """
     Supports additional targets discovery and allows to attach to them.
     """
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def activateTarget(self, targetId: str) -> Optional[dict]:
+    def activateTarget(self, targetId: str) -> Awaitable[Optional[dict]]:
         """
         Activates (focuses) the target.
 
@@ -25,12 +28,11 @@ class Target(object):
         msg_dict = dict()
         if targetId is not None:
             msg_dict["targetId"] = targetId
-        res = await self.client.send("Target.activateTarget", msg_dict)
-        return res
+        return self.client.send("Target.activateTarget", msg_dict)
 
-    async def attachToTarget(
+    def attachToTarget(
         self, targetId: str, flatten: Optional[bool] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Attaches to the target with given id.
 
@@ -44,17 +46,15 @@ class Target(object):
             msg_dict["targetId"] = targetId
         if flatten is not None:
             msg_dict["flatten"] = flatten
-        res = await self.client.send("Target.attachToTarget", msg_dict)
-        return res
+        return self.client.send("Target.attachToTarget", msg_dict)
 
-    async def attachToBrowserTarget(self) -> Optional[dict]:
+    def attachToBrowserTarget(self) -> Awaitable[Optional[dict]]:
         """
         Attaches to the browser target, only uses flat sessionId mode.
         """
-        res = await self.client.send("Target.attachToBrowserTarget")
-        return res
+        return self.client.send("Target.attachToBrowserTarget")
 
-    async def closeTarget(self, targetId: str) -> Optional[dict]:
+    def closeTarget(self, targetId: str) -> Awaitable[Optional[dict]]:
         """
         Closes the target. If the target is a page that gets closed too.
 
@@ -64,12 +64,11 @@ class Target(object):
         msg_dict = dict()
         if targetId is not None:
             msg_dict["targetId"] = targetId
-        res = await self.client.send("Target.closeTarget", msg_dict)
-        return res
+        return self.client.send("Target.closeTarget", msg_dict)
 
-    async def exposeDevToolsProtocol(
+    def exposeDevToolsProtocol(
         self, targetId: str, bindingName: Optional[str] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Inject object to the target's main frame that provides a communication
 channel with browser target.
@@ -90,32 +89,29 @@ The object has the follwing API:
             msg_dict["targetId"] = targetId
         if bindingName is not None:
             msg_dict["bindingName"] = bindingName
-        res = await self.client.send("Target.exposeDevToolsProtocol", msg_dict)
-        return res
+        return self.client.send("Target.exposeDevToolsProtocol", msg_dict)
 
-    async def createBrowserContext(self) -> Optional[dict]:
+    def createBrowserContext(self) -> Awaitable[Optional[dict]]:
         """
         Creates a new empty BrowserContext. Similar to an incognito profile but you can have more than
 one.
         """
-        res = await self.client.send("Target.createBrowserContext")
-        return res
+        return self.client.send("Target.createBrowserContext")
 
-    async def getBrowserContexts(self) -> Optional[dict]:
+    def getBrowserContexts(self) -> Awaitable[Optional[dict]]:
         """
         Returns all browser contexts created with `Target.createBrowserContext` method.
         """
-        res = await self.client.send("Target.getBrowserContexts")
-        return res
+        return self.client.send("Target.getBrowserContexts")
 
-    async def createTarget(
+    def createTarget(
         self,
         url: str,
         width: Optional[int] = None,
         height: Optional[int] = None,
         browserContextId: Optional[str] = None,
         enableBeginFrameControl: Optional[bool] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Creates a new page.
 
@@ -141,12 +137,11 @@ one.
             msg_dict["browserContextId"] = browserContextId
         if enableBeginFrameControl is not None:
             msg_dict["enableBeginFrameControl"] = enableBeginFrameControl
-        res = await self.client.send("Target.createTarget", msg_dict)
-        return res
+        return self.client.send("Target.createTarget", msg_dict)
 
-    async def detachFromTarget(
+    def detachFromTarget(
         self, sessionId: Optional[str] = None, targetId: Optional[str] = None
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Detaches session with given id.
 
@@ -160,10 +155,9 @@ one.
             msg_dict["sessionId"] = sessionId
         if targetId is not None:
             msg_dict["targetId"] = targetId
-        res = await self.client.send("Target.detachFromTarget", msg_dict)
-        return res
+        return self.client.send("Target.detachFromTarget", msg_dict)
 
-    async def disposeBrowserContext(self, browserContextId: str) -> Optional[dict]:
+    def disposeBrowserContext(self, browserContextId: str) -> Awaitable[Optional[dict]]:
         """
         Deletes a BrowserContext. All the belonging pages will be closed without calling their
 beforeunload hooks.
@@ -174,10 +168,11 @@ beforeunload hooks.
         msg_dict = dict()
         if browserContextId is not None:
             msg_dict["browserContextId"] = browserContextId
-        res = await self.client.send("Target.disposeBrowserContext", msg_dict)
-        return res
+        return self.client.send("Target.disposeBrowserContext", msg_dict)
 
-    async def getTargetInfo(self, targetId: Optional[str] = None) -> Optional[dict]:
+    def getTargetInfo(
+        self, targetId: Optional[str] = None
+    ) -> Awaitable[Optional[dict]]:
         """
         Returns information about a target.
 
@@ -187,22 +182,20 @@ beforeunload hooks.
         msg_dict = dict()
         if targetId is not None:
             msg_dict["targetId"] = targetId
-        res = await self.client.send("Target.getTargetInfo", msg_dict)
-        return res
+        return self.client.send("Target.getTargetInfo", msg_dict)
 
-    async def getTargets(self) -> Optional[dict]:
+    def getTargets(self) -> Awaitable[Optional[dict]]:
         """
         Retrieves a list of available targets.
         """
-        res = await self.client.send("Target.getTargets")
-        return res
+        return self.client.send("Target.getTargets")
 
-    async def sendMessageToTarget(
+    def sendMessageToTarget(
         self,
         message: str,
         sessionId: Optional[str] = None,
         targetId: Optional[str] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Sends protocol message over session with given id.
 
@@ -220,15 +213,14 @@ beforeunload hooks.
             msg_dict["sessionId"] = sessionId
         if targetId is not None:
             msg_dict["targetId"] = targetId
-        res = await self.client.send("Target.sendMessageToTarget", msg_dict)
-        return res
+        return self.client.send("Target.sendMessageToTarget", msg_dict)
 
-    async def setAutoAttach(
+    def setAutoAttach(
         self,
         autoAttach: bool,
         waitForDebuggerOnStart: bool,
         flatten: Optional[bool] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Controls whether to automatically attach to new targets which are considered to be related to
 this one. When turned on, attaches to all existing related targets as well. When turned off,
@@ -248,10 +240,9 @@ automatically detaches from all currently attached targets.
             msg_dict["waitForDebuggerOnStart"] = waitForDebuggerOnStart
         if flatten is not None:
             msg_dict["flatten"] = flatten
-        res = await self.client.send("Target.setAutoAttach", msg_dict)
-        return res
+        return self.client.send("Target.setAutoAttach", msg_dict)
 
-    async def setDiscoverTargets(self, discover: bool) -> Optional[dict]:
+    def setDiscoverTargets(self, discover: bool) -> Awaitable[Optional[dict]]:
         """
         Controls whether to discover available targets and notify via
 `targetCreated/targetInfoChanged/targetDestroyed` events.
@@ -262,10 +253,9 @@ automatically detaches from all currently attached targets.
         msg_dict = dict()
         if discover is not None:
             msg_dict["discover"] = discover
-        res = await self.client.send("Target.setDiscoverTargets", msg_dict)
-        return res
+        return self.client.send("Target.setDiscoverTargets", msg_dict)
 
-    async def setRemoteLocations(self, locations: List[dict]) -> Optional[dict]:
+    def setRemoteLocations(self, locations: List[dict]) -> Awaitable[Optional[dict]]:
         """
         Enables target discovery for the specified locations, when `setDiscoverTargets` was set to
 `true`.
@@ -276,76 +266,119 @@ automatically detaches from all currently attached targets.
         msg_dict = dict()
         if locations is not None:
             msg_dict["locations"] = locations
-        res = await self.client.send("Target.setRemoteLocations", msg_dict)
-        return res
+        return self.client.send("Target.setRemoteLocations", msg_dict)
 
-    def attachedToTarget(self, fn: Callable[..., Any], once: bool = False) -> None:
+    def attachedToTarget(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Issued when attached to target because of auto-attach or `attachToTarget` command.
         """
-        if once:
-            self.client.once("Target.attachedToTarget", fn)
-        else:
-            self.client.on("Target.attachedToTarget", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def detachedFromTarget(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Target.attachedToTarget", _cb)
+
+            return future
+
+        self.client.on("Target.attachedToTarget", cb)
+
+    def detachedFromTarget(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Issued when detached from target for any reason (including `detachFromTarget` command). Can be
         issued multiple times per target if multiple sessions have been attached to it.
         """
-        if once:
-            self.client.once("Target.detachedFromTarget", fn)
-        else:
-            self.client.on("Target.detachedFromTarget", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def receivedMessageFromTarget(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Target.detachedFromTarget", _cb)
+
+            return future
+
+        self.client.on("Target.detachedFromTarget", cb)
+
+    def receivedMessageFromTarget(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Notifies about a new protocol message received from the session (as reported in
         `attachedToTarget` event).
         """
-        if once:
-            self.client.once("Target.receivedMessageFromTarget", fn)
-        else:
-            self.client.on("Target.receivedMessageFromTarget", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def targetCreated(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Target.receivedMessageFromTarget", _cb)
+
+            return future
+
+        self.client.on("Target.receivedMessageFromTarget", cb)
+
+    def targetCreated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Issued when a possible inspection target is created.
         """
-        if once:
-            self.client.once("Target.targetCreated", fn)
-        else:
-            self.client.on("Target.targetCreated", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def targetDestroyed(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Target.targetCreated", _cb)
+
+            return future
+
+        self.client.on("Target.targetCreated", cb)
+
+    def targetDestroyed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Issued when a target is destroyed.
         """
-        if once:
-            self.client.once("Target.targetDestroyed", fn)
-        else:
-            self.client.on("Target.targetDestroyed", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def targetCrashed(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Target.targetDestroyed", _cb)
+
+            return future
+
+        self.client.on("Target.targetDestroyed", cb)
+
+    def targetCrashed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Issued when a target has crashed.
         """
-        if once:
-            self.client.once("Target.targetCrashed", fn)
-        else:
-            self.client.on("Target.targetCrashed", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def targetInfoChanged(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Target.targetCrashed", _cb)
+
+            return future
+
+        self.client.on("Target.targetCrashed", cb)
+
+    def targetInfoChanged(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Issued when some information about a target has changed. This only happens between
         `targetCreated` and `targetDestroyed`.
         """
-        if once:
-            self.client.once("Target.targetInfoChanged", fn)
-        else:
-            self.client.on("Target.targetInfoChanged", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Target()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Target.targetInfoChanged", _cb)
+
+            return future
+
+        self.client.on("Target.targetInfoChanged", cb)

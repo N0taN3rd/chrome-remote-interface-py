@@ -1,59 +1,55 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["Network"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class Network(object):
     """
     Network domain allows tracking network activities of the page. It exposes information about http,
 file, data and other requests and responses, their headers, bodies, timing, etc.
     """
 
-    dependencies: ClassVar[List[str]] = ["Debugger", "Runtime", "Security"]
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
-
-    async def canClearBrowserCache(self) -> Optional[dict]:
+    def canClearBrowserCache(self) -> Awaitable[Optional[dict]]:
         """
         Tells whether clearing browser cache is supported.
         """
-        res = await self.client.send("Network.canClearBrowserCache")
-        return res
+        return self.client.send("Network.canClearBrowserCache")
 
-    async def canClearBrowserCookies(self) -> Optional[dict]:
+    def canClearBrowserCookies(self) -> Awaitable[Optional[dict]]:
         """
         Tells whether clearing browser cookies is supported.
         """
-        res = await self.client.send("Network.canClearBrowserCookies")
-        return res
+        return self.client.send("Network.canClearBrowserCookies")
 
-    async def canEmulateNetworkConditions(self) -> Optional[dict]:
+    def canEmulateNetworkConditions(self) -> Awaitable[Optional[dict]]:
         """
         Tells whether emulation of network conditions is supported.
         """
-        res = await self.client.send("Network.canEmulateNetworkConditions")
-        return res
+        return self.client.send("Network.canEmulateNetworkConditions")
 
-    async def clearBrowserCache(self) -> Optional[dict]:
+    def clearBrowserCache(self) -> Awaitable[Optional[dict]]:
         """
         Clears browser cache.
         """
-        res = await self.client.send("Network.clearBrowserCache")
-        return res
+        return self.client.send("Network.clearBrowserCache")
 
-    async def clearBrowserCookies(self) -> Optional[dict]:
+    def clearBrowserCookies(self) -> Awaitable[Optional[dict]]:
         """
         Clears browser cookies.
         """
-        res = await self.client.send("Network.clearBrowserCookies")
-        return res
+        return self.client.send("Network.clearBrowserCookies")
 
-    async def continueInterceptedRequest(
+    def continueInterceptedRequest(
         self,
         interceptionId: str,
         errorReason: Optional[str] = None,
@@ -63,7 +59,7 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         postData: Optional[str] = None,
         headers: Optional[dict] = None,
         authChallengeResponse: Optional[dict] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Response to Network.requestIntercepted which either modifies the request to continue with any
 modifications, or blocks it, or completes it with the provided response bytes. If a network
@@ -104,16 +100,15 @@ event will be sent with the same InterceptionId.
             msg_dict["headers"] = headers
         if authChallengeResponse is not None:
             msg_dict["authChallengeResponse"] = authChallengeResponse
-        res = await self.client.send("Network.continueInterceptedRequest", msg_dict)
-        return res
+        return self.client.send("Network.continueInterceptedRequest", msg_dict)
 
-    async def deleteCookies(
+    def deleteCookies(
         self,
         name: str,
         url: Optional[str] = None,
         domain: Optional[str] = None,
         path: Optional[str] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Deletes browser cookies with matching name and url or domain/path pair.
 
@@ -135,24 +130,22 @@ event will be sent with the same InterceptionId.
             msg_dict["domain"] = domain
         if path is not None:
             msg_dict["path"] = path
-        res = await self.client.send("Network.deleteCookies", msg_dict)
-        return res
+        return self.client.send("Network.deleteCookies", msg_dict)
 
-    async def disable(self) -> Optional[dict]:
+    def disable(self) -> Awaitable[Optional[dict]]:
         """
         Disables network tracking, prevents network events from being sent to the client.
         """
-        res = await self.client.send("Network.disable")
-        return res
+        return self.client.send("Network.disable")
 
-    async def emulateNetworkConditions(
+    def emulateNetworkConditions(
         self,
         offline: bool,
         latency: float,
         downloadThroughput: float,
         uploadThroughput: float,
         connectionType: Optional[str] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Activates emulation of network conditions.
 
@@ -178,15 +171,14 @@ event will be sent with the same InterceptionId.
             msg_dict["uploadThroughput"] = uploadThroughput
         if connectionType is not None:
             msg_dict["connectionType"] = connectionType
-        res = await self.client.send("Network.emulateNetworkConditions", msg_dict)
-        return res
+        return self.client.send("Network.emulateNetworkConditions", msg_dict)
 
-    async def enable(
+    def enable(
         self,
         maxTotalBufferSize: Optional[int] = None,
         maxResourceBufferSize: Optional[int] = None,
         maxPostDataSize: Optional[int] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Enables network tracking, network events will now be delivered to the client.
 
@@ -204,18 +196,16 @@ event will be sent with the same InterceptionId.
             msg_dict["maxResourceBufferSize"] = maxResourceBufferSize
         if maxPostDataSize is not None:
             msg_dict["maxPostDataSize"] = maxPostDataSize
-        res = await self.client.send("Network.enable", msg_dict)
-        return res
+        return self.client.send("Network.enable", msg_dict)
 
-    async def getAllCookies(self) -> Optional[dict]:
+    def getAllCookies(self) -> Awaitable[Optional[dict]]:
         """
         Returns all browser cookies. Depending on the backend support, will return detailed cookie
 information in the `cookies` field.
         """
-        res = await self.client.send("Network.getAllCookies")
-        return res
+        return self.client.send("Network.getAllCookies")
 
-    async def getCertificate(self, origin: str) -> Optional[dict]:
+    def getCertificate(self, origin: str) -> Awaitable[Optional[dict]]:
         """
         Returns the DER-encoded certificate.
 
@@ -225,10 +215,9 @@ information in the `cookies` field.
         msg_dict = dict()
         if origin is not None:
             msg_dict["origin"] = origin
-        res = await self.client.send("Network.getCertificate", msg_dict)
-        return res
+        return self.client.send("Network.getCertificate", msg_dict)
 
-    async def getCookies(self, urls: Optional[List[str]] = None) -> Optional[dict]:
+    def getCookies(self, urls: Optional[List[str]] = None) -> Awaitable[Optional[dict]]:
         """
         Returns all browser cookies for the current URL. Depending on the backend support, will return
 detailed cookie information in the `cookies` field.
@@ -239,10 +228,9 @@ detailed cookie information in the `cookies` field.
         msg_dict = dict()
         if urls is not None:
             msg_dict["urls"] = urls
-        res = await self.client.send("Network.getCookies", msg_dict)
-        return res
+        return self.client.send("Network.getCookies", msg_dict)
 
-    async def getResponseBody(self, requestId: str) -> Optional[dict]:
+    def getResponseBody(self, requestId: str) -> Awaitable[Optional[dict]]:
         """
         Returns content served for the given request.
 
@@ -252,10 +240,9 @@ detailed cookie information in the `cookies` field.
         msg_dict = dict()
         if requestId is not None:
             msg_dict["requestId"] = requestId
-        res = await self.client.send("Network.getResponseBody", msg_dict)
-        return res
+        return self.client.send("Network.getResponseBody", msg_dict)
 
-    async def getRequestPostData(self, requestId: str) -> Optional[dict]:
+    def getRequestPostData(self, requestId: str) -> Awaitable[Optional[dict]]:
         """
         Returns post data sent with the request. Returns an error when no data was sent with the request.
 
@@ -265,12 +252,11 @@ detailed cookie information in the `cookies` field.
         msg_dict = dict()
         if requestId is not None:
             msg_dict["requestId"] = requestId
-        res = await self.client.send("Network.getRequestPostData", msg_dict)
-        return res
+        return self.client.send("Network.getRequestPostData", msg_dict)
 
-    async def getResponseBodyForInterception(
+    def getResponseBodyForInterception(
         self, interceptionId: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Returns content served for the given currently intercepted request.
 
@@ -280,12 +266,11 @@ detailed cookie information in the `cookies` field.
         msg_dict = dict()
         if interceptionId is not None:
             msg_dict["interceptionId"] = interceptionId
-        res = await self.client.send("Network.getResponseBodyForInterception", msg_dict)
-        return res
+        return self.client.send("Network.getResponseBodyForInterception", msg_dict)
 
-    async def takeResponseBodyForInterceptionAsStream(
+    def takeResponseBodyForInterceptionAsStream(
         self, interceptionId: str
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Returns a handle to the stream representing the response body. Note that after this command,
 the intercepted request can't be continued as is -- you either need to cancel it or to provide
@@ -298,12 +283,11 @@ is specified.
         msg_dict = dict()
         if interceptionId is not None:
             msg_dict["interceptionId"] = interceptionId
-        res = await self.client.send(
+        return self.client.send(
             "Network.takeResponseBodyForInterceptionAsStream", msg_dict
         )
-        return res
 
-    async def replayXHR(self, requestId: str) -> Optional[dict]:
+    def replayXHR(self, requestId: str) -> Awaitable[Optional[dict]]:
         """
         This method sends a new XMLHttpRequest which is identical to the original one. The following
 parameters should be identical: method, url, async, request body, extra headers, withCredentials
@@ -315,16 +299,15 @@ attribute, user, password.
         msg_dict = dict()
         if requestId is not None:
             msg_dict["requestId"] = requestId
-        res = await self.client.send("Network.replayXHR", msg_dict)
-        return res
+        return self.client.send("Network.replayXHR", msg_dict)
 
-    async def searchInResponseBody(
+    def searchInResponseBody(
         self,
         requestId: str,
         query: str,
         caseSensitive: Optional[bool] = None,
         isRegex: Optional[bool] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Searches for given string in response content.
 
@@ -346,10 +329,9 @@ attribute, user, password.
             msg_dict["caseSensitive"] = caseSensitive
         if isRegex is not None:
             msg_dict["isRegex"] = isRegex
-        res = await self.client.send("Network.searchInResponseBody", msg_dict)
-        return res
+        return self.client.send("Network.searchInResponseBody", msg_dict)
 
-    async def setBlockedURLs(self, urls: List[str]) -> Optional[dict]:
+    def setBlockedURLs(self, urls: List[str]) -> Awaitable[Optional[dict]]:
         """
         Blocks URLs from loading.
 
@@ -359,10 +341,9 @@ attribute, user, password.
         msg_dict = dict()
         if urls is not None:
             msg_dict["urls"] = urls
-        res = await self.client.send("Network.setBlockedURLs", msg_dict)
-        return res
+        return self.client.send("Network.setBlockedURLs", msg_dict)
 
-    async def setBypassServiceWorker(self, bypass: bool) -> Optional[dict]:
+    def setBypassServiceWorker(self, bypass: bool) -> Awaitable[Optional[dict]]:
         """
         Toggles ignoring of service worker for each request.
 
@@ -372,10 +353,9 @@ attribute, user, password.
         msg_dict = dict()
         if bypass is not None:
             msg_dict["bypass"] = bypass
-        res = await self.client.send("Network.setBypassServiceWorker", msg_dict)
-        return res
+        return self.client.send("Network.setBypassServiceWorker", msg_dict)
 
-    async def setCacheDisabled(self, cacheDisabled: bool) -> Optional[dict]:
+    def setCacheDisabled(self, cacheDisabled: bool) -> Awaitable[Optional[dict]]:
         """
         Toggles ignoring cache for each request. If `true`, cache will not be used.
 
@@ -385,10 +365,9 @@ attribute, user, password.
         msg_dict = dict()
         if cacheDisabled is not None:
             msg_dict["cacheDisabled"] = cacheDisabled
-        res = await self.client.send("Network.setCacheDisabled", msg_dict)
-        return res
+        return self.client.send("Network.setCacheDisabled", msg_dict)
 
-    async def setCookie(
+    def setCookie(
         self,
         name: str,
         value: str,
@@ -399,7 +378,7 @@ attribute, user, password.
         httpOnly: Optional[bool] = None,
         sameSite: Optional[str] = None,
         expires: Optional[float] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Sets a cookie with the given cookie data; may overwrite equivalent cookies if they exist.
 
@@ -441,10 +420,9 @@ attribute, user, password.
             msg_dict["sameSite"] = sameSite
         if expires is not None:
             msg_dict["expires"] = expires
-        res = await self.client.send("Network.setCookie", msg_dict)
-        return res
+        return self.client.send("Network.setCookie", msg_dict)
 
-    async def setCookies(self, cookies: List[dict]) -> Optional[dict]:
+    def setCookies(self, cookies: List[dict]) -> Awaitable[Optional[dict]]:
         """
         Sets given cookies.
 
@@ -454,12 +432,11 @@ attribute, user, password.
         msg_dict = dict()
         if cookies is not None:
             msg_dict["cookies"] = cookies
-        res = await self.client.send("Network.setCookies", msg_dict)
-        return res
+        return self.client.send("Network.setCookies", msg_dict)
 
-    async def setDataSizeLimitsForTest(
+    def setDataSizeLimitsForTest(
         self, maxTotalSize: int, maxResourceSize: int
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         For testing.
 
@@ -473,10 +450,9 @@ attribute, user, password.
             msg_dict["maxTotalSize"] = maxTotalSize
         if maxResourceSize is not None:
             msg_dict["maxResourceSize"] = maxResourceSize
-        res = await self.client.send("Network.setDataSizeLimitsForTest", msg_dict)
-        return res
+        return self.client.send("Network.setDataSizeLimitsForTest", msg_dict)
 
-    async def setExtraHTTPHeaders(self, headers: dict) -> Optional[dict]:
+    def setExtraHTTPHeaders(self, headers: dict) -> Awaitable[Optional[dict]]:
         """
         Specifies whether to always send extra HTTP headers with the requests from this page.
 
@@ -486,10 +462,9 @@ attribute, user, password.
         msg_dict = dict()
         if headers is not None:
             msg_dict["headers"] = headers
-        res = await self.client.send("Network.setExtraHTTPHeaders", msg_dict)
-        return res
+        return self.client.send("Network.setExtraHTTPHeaders", msg_dict)
 
-    async def setRequestInterception(self, patterns: List[dict]) -> Optional[dict]:
+    def setRequestInterception(self, patterns: List[dict]) -> Awaitable[Optional[dict]]:
         """
         Sets the requests to intercept that match a the provided patterns and optionally resource types.
 
@@ -499,15 +474,14 @@ attribute, user, password.
         msg_dict = dict()
         if patterns is not None:
             msg_dict["patterns"] = patterns
-        res = await self.client.send("Network.setRequestInterception", msg_dict)
-        return res
+        return self.client.send("Network.setRequestInterception", msg_dict)
 
-    async def setUserAgentOverride(
+    def setUserAgentOverride(
         self,
         userAgent: str,
         acceptLanguage: Optional[str] = None,
         platform: Optional[str] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Allows overriding user agent with the given string.
 
@@ -525,176 +499,283 @@ attribute, user, password.
             msg_dict["acceptLanguage"] = acceptLanguage
         if platform is not None:
             msg_dict["platform"] = platform
-        res = await self.client.send("Network.setUserAgentOverride", msg_dict)
-        return res
+        return self.client.send("Network.setUserAgentOverride", msg_dict)
 
-    def dataReceived(self, fn: Callable[..., Any], once: bool = False) -> None:
+    def dataReceived(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when data chunk was received over the network.
         """
-        if once:
-            self.client.once("Network.dataReceived", fn)
-        else:
-            self.client.on("Network.dataReceived", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.dataReceived", _cb)
+
+            return future
+
+        self.client.on("Network.dataReceived", cb)
 
     def eventSourceMessageReceived(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+        self, cb: Optional[Callable[..., Any]] = None
+    ) -> Any:
         """
         Fired when EventSource message is received.
         """
-        if once:
-            self.client.once("Network.eventSourceMessageReceived", fn)
-        else:
-            self.client.on("Network.eventSourceMessageReceived", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def loadingFailed(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.eventSourceMessageReceived", _cb)
+
+            return future
+
+        self.client.on("Network.eventSourceMessageReceived", cb)
+
+    def loadingFailed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when HTTP request has failed to load.
         """
-        if once:
-            self.client.once("Network.loadingFailed", fn)
-        else:
-            self.client.on("Network.loadingFailed", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def loadingFinished(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.loadingFailed", _cb)
+
+            return future
+
+        self.client.on("Network.loadingFailed", cb)
+
+    def loadingFinished(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when HTTP request has finished loading.
         """
-        if once:
-            self.client.once("Network.loadingFinished", fn)
-        else:
-            self.client.on("Network.loadingFinished", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def requestIntercepted(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.loadingFinished", _cb)
+
+            return future
+
+        self.client.on("Network.loadingFinished", cb)
+
+    def requestIntercepted(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Details of an intercepted HTTP request, which must be either allowed, blocked, modified or
         mocked.
         """
-        if once:
-            self.client.once("Network.requestIntercepted", fn)
-        else:
-            self.client.on("Network.requestIntercepted", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def requestServedFromCache(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.requestIntercepted", _cb)
+
+            return future
+
+        self.client.on("Network.requestIntercepted", cb)
+
+    def requestServedFromCache(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired if request ended up loading from cache.
         """
-        if once:
-            self.client.once("Network.requestServedFromCache", fn)
-        else:
-            self.client.on("Network.requestServedFromCache", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def requestWillBeSent(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.requestServedFromCache", _cb)
+
+            return future
+
+        self.client.on("Network.requestServedFromCache", cb)
+
+    def requestWillBeSent(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when page is about to send HTTP request.
         """
-        if once:
-            self.client.once("Network.requestWillBeSent", fn)
-        else:
-            self.client.on("Network.requestWillBeSent", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def resourceChangedPriority(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.requestWillBeSent", _cb)
+
+            return future
+
+        self.client.on("Network.requestWillBeSent", cb)
+
+    def resourceChangedPriority(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when resource loading priority is changed
         """
-        if once:
-            self.client.once("Network.resourceChangedPriority", fn)
-        else:
-            self.client.on("Network.resourceChangedPriority", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def signedExchangeReceived(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.resourceChangedPriority", _cb)
+
+            return future
+
+        self.client.on("Network.resourceChangedPriority", cb)
+
+    def signedExchangeReceived(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when a signed exchange was received over the network
         """
-        if once:
-            self.client.once("Network.signedExchangeReceived", fn)
-        else:
-            self.client.on("Network.signedExchangeReceived", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def responseReceived(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.signedExchangeReceived", _cb)
+
+            return future
+
+        self.client.on("Network.signedExchangeReceived", cb)
+
+    def responseReceived(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when HTTP response is available.
         """
-        if once:
-            self.client.once("Network.responseReceived", fn)
-        else:
-            self.client.on("Network.responseReceived", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def webSocketClosed(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.responseReceived", _cb)
+
+            return future
+
+        self.client.on("Network.responseReceived", cb)
+
+    def webSocketClosed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when WebSocket is closed.
         """
-        if once:
-            self.client.once("Network.webSocketClosed", fn)
-        else:
-            self.client.on("Network.webSocketClosed", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def webSocketCreated(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.webSocketClosed", _cb)
+
+            return future
+
+        self.client.on("Network.webSocketClosed", cb)
+
+    def webSocketCreated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired upon WebSocket creation.
         """
-        if once:
-            self.client.once("Network.webSocketCreated", fn)
-        else:
-            self.client.on("Network.webSocketCreated", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def webSocketFrameError(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.webSocketCreated", _cb)
+
+            return future
+
+        self.client.on("Network.webSocketCreated", cb)
+
+    def webSocketFrameError(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when WebSocket frame error occurs.
         """
-        if once:
-            self.client.once("Network.webSocketFrameError", fn)
-        else:
-            self.client.on("Network.webSocketFrameError", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def webSocketFrameReceived(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.webSocketFrameError", _cb)
+
+            return future
+
+        self.client.on("Network.webSocketFrameError", cb)
+
+    def webSocketFrameReceived(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when WebSocket frame is received.
         """
-        if once:
-            self.client.once("Network.webSocketFrameReceived", fn)
-        else:
-            self.client.on("Network.webSocketFrameReceived", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def webSocketFrameSent(self, fn: Callable[..., Any], once: bool = False) -> None:
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.webSocketFrameReceived", _cb)
+
+            return future
+
+        self.client.on("Network.webSocketFrameReceived", cb)
+
+    def webSocketFrameSent(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Fired when WebSocket frame is sent.
         """
-        if once:
-            self.client.once("Network.webSocketFrameSent", fn)
-        else:
-            self.client.on("Network.webSocketFrameSent", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.webSocketFrameSent", _cb)
+
+            return future
+
+        self.client.on("Network.webSocketFrameSent", cb)
 
     def webSocketHandshakeResponseReceived(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+        self, cb: Optional[Callable[..., Any]] = None
+    ) -> Any:
         """
         Fired when WebSocket handshake response becomes available.
         """
-        if once:
-            self.client.once("Network.webSocketHandshakeResponseReceived", fn)
-        else:
-            self.client.on("Network.webSocketHandshakeResponseReceived", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.webSocketHandshakeResponseReceived", _cb)
+
+            return future
+
+        self.client.on("Network.webSocketHandshakeResponseReceived", cb)
 
     def webSocketWillSendHandshakeRequest(
-        self, fn: Callable[..., Any], once: bool = False
-    ) -> None:
+        self, cb: Optional[Callable[..., Any]] = None
+    ) -> Any:
         """
         Fired when WebSocket is about to initiate handshake.
         """
-        if once:
-            self.client.once("Network.webSocketWillSendHandshakeRequest", fn)
-        else:
-            self.client.on("Network.webSocketWillSendHandshakeRequest", fn)
+        if cb is None:
+            future = self.client.loop.create_future()
 
-    def __repr__(self):
-        return f"Network()"
+            def _cb(msg: Any) -> None:
+                future.set_result(msg)
+
+            self.client.once("Network.webSocketWillSendHandshakeRequest", _cb)
+
+            return future
+
+        self.client.on("Network.webSocketWillSendHandshakeRequest", cb)

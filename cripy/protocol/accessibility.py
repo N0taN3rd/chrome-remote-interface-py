@@ -1,25 +1,39 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["Accessibility"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class Accessibility(object):
-    dependencies: ClassVar[List[str]] = ["DOM"]
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    def disable(self) -> Awaitable[Optional[dict]]:
+        """
+        Disables the accessibility domain.
+        """
+        return self.client.send("Accessibility.disable")
 
-    async def getPartialAXTree(
+    def enable(self) -> Awaitable[Optional[dict]]:
+        """
+        Enables the accessibility domain which causes `AXNodeId`s to remain consistent between method calls.
+This turns on accessibility for the page, which can impact performance until accessibility is disabled.
+        """
+        return self.client.send("Accessibility.enable")
+
+    def getPartialAXTree(
         self,
         nodeId: Optional[int] = None,
         backendNodeId: Optional[int] = None,
         objectId: Optional[str] = None,
         fetchRelatives: Optional[bool] = None,
-    ) -> Optional[dict]:
+    ) -> Awaitable[Optional[dict]]:
         """
         Fetches the accessibility node and partial accessibility tree for this DOM node, if it exists.
 
@@ -41,8 +55,10 @@ class Accessibility(object):
             msg_dict["objectId"] = objectId
         if fetchRelatives is not None:
             msg_dict["fetchRelatives"] = fetchRelatives
-        res = await self.client.send("Accessibility.getPartialAXTree", msg_dict)
-        return res
+        return self.client.send("Accessibility.getPartialAXTree", msg_dict)
 
-    def __repr__(self):
-        return f"Accessibility()"
+    def getFullAXTree(self) -> Awaitable[Optional[dict]]:
+        """
+        Fetches the entire accessibility tree
+        """
+        return self.client.send("Accessibility.getFullAXTree")

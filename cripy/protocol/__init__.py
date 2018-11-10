@@ -32,6 +32,7 @@ from .systeminfo import SystemInfo
 from .target import Target
 from .tethering import Tethering
 from .tracing import Tracing
+from .testing import Testing
 from .console import Console
 from .debugger import Debugger
 from .heapprofiler import HeapProfiler
@@ -73,6 +74,7 @@ __all__ = [
     "Target",
     "Tethering",
     "Tracing",
+    "Testing",
     "Console",
     "Debugger",
     "HeapProfiler",

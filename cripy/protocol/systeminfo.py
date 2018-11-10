@@ -1,26 +1,25 @@
 # -*- coding: utf-8 -*-
-from typing import Any, Callable, ClassVar, List, Optional, Union, TYPE_CHECKING
+"""This is an auto-generated file. Modify at your own risk"""
+from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+
+import attr
 
 if TYPE_CHECKING:
-    from cripy.client import Client, TargetSession
+    from cripy import ConnectionType, SessionType
 
 __all__ = ["SystemInfo"]
 
 
+@attr.dataclass(slots=True, cmp=False)
 class SystemInfo(object):
     """
     The SystemInfo domain defines methods and events for querying low-level system information.
     """
 
-    def __init__(self, client: Union["Client", "TargetSession"]) -> None:
-        self.client: Union["Client", "TargetSession"] = client
+    client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    async def getInfo(self) -> Optional[dict]:
+    def getInfo(self) -> Awaitable[Optional[dict]]:
         """
         Returns information about the system.
         """
-        res = await self.client.send("SystemInfo.getInfo")
-        return res
-
-    def __repr__(self):
-        return f"SystemInfo()"
+        return self.client.send("SystemInfo.getInfo")
