@@ -38,8 +38,9 @@ Implementations
 ---------------
 
 This module should work with every application implementing the
-[Chrome Debugging Protocol]. In particular, it has been tested against the
-following implementations:
+[Chrome Debugging Protocol]. 
+
+Below is a list of known implementations for reference
 
 Implementation             | Protocol version   | [Protocol] | [List] | [New] | [Activate] | [Close] | [Version]
 ---------------------------|--------------------|------------|--------|-------|------------|---------|-----------
