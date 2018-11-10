@@ -29,7 +29,7 @@ def createProtocolError(method: str, msg: Dict) -> str:
     return emsg
 
 
-@attr.dataclass
+@attr.dataclass(slots=True, frozen=True)
 class ConnectionEvents(object):
     Disconnected: str = attr.ib(default="Disconnected")
 
@@ -82,6 +82,9 @@ class Connection(EventEmitter):
             loop=self._loop,
         )
         self._recv_task = self._loop.create_task(self._recv_loop())
+        # ensure that _recv_loop gets going
+        # by sleeping until next event loop tick
+        await asyncio.sleep(0, loop=self._loop)
 
     async def createTargetSession(self, targetId: str) -> "CDPSession":
         """Attach to the target specified by target id and create new CDPSession for direct communication to it."""
@@ -262,7 +265,9 @@ class CDPSession(EventEmitter):
         super().__init__(loop=loop)
         self._lastId: int = 0
         self._callbacks: Dict[int, Future] = dict()
-        self._connection: Union[Connection, "Client"] = connection
+        self._connection: Union[
+            Connection, "Client", CDPSession, "TargetSession"
+        ] = connection
         self._targetType: str = targetType
         self._sessionId: str = sessionId
         self._sessions: Dict[str, Union[CDPSession, "TargetSession"]] = dict()

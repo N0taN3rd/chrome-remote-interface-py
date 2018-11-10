@@ -386,7 +386,7 @@ async def connect(
     :param loop: The event loop instance to use. Defaults to asyncio.get_event_loop
     :param remote: Boolean indicating if the protocol should be fetched from the remote instance or
     to use the local one. Defaults to False (use local)
-    :return: ChromeRemoteInterface
+    :return: Client instance connected to the browser
     """
     ws_url = None
     if not url.startswith("ws"):
