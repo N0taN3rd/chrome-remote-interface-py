@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import asyncio
 import logging
-import traceback
 import ujson as json
 from asyncio import Future, AbstractEventLoop, Task
 from typing import Callable, Optional, Dict, ClassVar, Union, TYPE_CHECKING
@@ -198,10 +197,8 @@ class Connection(EventEmitter):
                         del self._sessions[sessionId]
                 else:
                     self.emit(method, params)
-            except Exception as e:
-                traceback.print_exc()
-                print(f"_on_unsolicited error {method}", e)
-                print(f"_on_unsolicited error {method}", params)
+            except Exception:
+                pass
 
     async def _on_close(self) -> None:
         """Closes the websocket connection and cleans up internals.
