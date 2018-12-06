@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -14,7 +13,7 @@ __all__ = ["HeapProfiler"]
 class HeapProfiler(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def addInspectedHeapObject(self, heapObjectId: str) -> Awaitable[Optional[dict]]:
+    def addInspectedHeapObject(self, heapObjectId: str) -> Awaitable[Dict]:
         """
         Enables console to refer to the node with given id via $x (see Command Line API for more details
 $x functions).
@@ -27,16 +26,16 @@ $x functions).
             msg_dict["heapObjectId"] = heapObjectId
         return self.client.send("HeapProfiler.addInspectedHeapObject", msg_dict)
 
-    def collectGarbage(self) -> Awaitable[Optional[dict]]:
+    def collectGarbage(self) -> Awaitable[Dict]:
         return self.client.send("HeapProfiler.collectGarbage")
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         return self.client.send("HeapProfiler.disable")
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         return self.client.send("HeapProfiler.enable")
 
-    def getHeapObjectId(self, objectId: str) -> Awaitable[Optional[dict]]:
+    def getHeapObjectId(self, objectId: str) -> Awaitable[Dict]:
         """
         :param objectId: Identifier of the object to get heap object id for.
         :type objectId: str
@@ -48,7 +47,7 @@ $x functions).
 
     def getObjectByHeapObjectId(
         self, objectId: str, objectGroup: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         :param objectId: The objectId
         :type objectId: str
@@ -62,12 +61,12 @@ $x functions).
             msg_dict["objectGroup"] = objectGroup
         return self.client.send("HeapProfiler.getObjectByHeapObjectId", msg_dict)
 
-    def getSamplingProfile(self) -> Awaitable[Optional[dict]]:
+    def getSamplingProfile(self) -> Awaitable[Dict]:
         return self.client.send("HeapProfiler.getSamplingProfile")
 
     def startSampling(
         self, samplingInterval: Optional[float] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         :param samplingInterval: Average sample interval in bytes. Poisson distribution is used for the intervals. The default value is 32768 bytes.
         :type samplingInterval: Optional[float]
@@ -79,7 +78,7 @@ $x functions).
 
     def startTrackingHeapObjects(
         self, trackAllocations: Optional[bool] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         :param trackAllocations: The trackAllocations
         :type trackAllocations: Optional[bool]
@@ -89,12 +88,12 @@ $x functions).
             msg_dict["trackAllocations"] = trackAllocations
         return self.client.send("HeapProfiler.startTrackingHeapObjects", msg_dict)
 
-    def stopSampling(self) -> Awaitable[Optional[dict]]:
+    def stopSampling(self) -> Awaitable[Dict]:
         return self.client.send("HeapProfiler.stopSampling")
 
     def stopTrackingHeapObjects(
         self, reportProgress: Optional[bool] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         :param reportProgress: If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken when the tracking is stopped.
         :type reportProgress: Optional[bool]
@@ -106,7 +105,7 @@ $x functions).
 
     def takeHeapSnapshot(
         self, reportProgress: Optional[bool] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         :param reportProgress: If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken.
         :type reportProgress: Optional[bool]
@@ -120,7 +119,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("HeapProfiler.addHeapSnapshotChunk", _cb)
@@ -128,6 +127,9 @@ $x functions).
             return future
 
         self.client.on("HeapProfiler.addHeapSnapshotChunk", cb)
+        return lambda: self.client.remove_listener(
+            "HeapProfiler.addHeapSnapshotChunk", cb
+        )
 
     def heapStatsUpdate(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -136,7 +138,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("HeapProfiler.heapStatsUpdate", _cb)
@@ -144,6 +146,7 @@ $x functions).
             return future
 
         self.client.on("HeapProfiler.heapStatsUpdate", cb)
+        return lambda: self.client.remove_listener("HeapProfiler.heapStatsUpdate", cb)
 
     def lastSeenObjectId(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -154,7 +157,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("HeapProfiler.lastSeenObjectId", _cb)
@@ -162,6 +165,7 @@ $x functions).
             return future
 
         self.client.on("HeapProfiler.lastSeenObjectId", cb)
+        return lambda: self.client.remove_listener("HeapProfiler.lastSeenObjectId", cb)
 
     def reportHeapSnapshotProgress(
         self, cb: Optional[Callable[..., Any]] = None
@@ -169,7 +173,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("HeapProfiler.reportHeapSnapshotProgress", _cb)
@@ -177,12 +181,15 @@ $x functions).
             return future
 
         self.client.on("HeapProfiler.reportHeapSnapshotProgress", cb)
+        return lambda: self.client.remove_listener(
+            "HeapProfiler.reportHeapSnapshotProgress", cb
+        )
 
     def resetProfiles(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("HeapProfiler.resetProfiles", _cb)
@@ -190,3 +197,4 @@ $x functions).
             return future
 
         self.client.on("HeapProfiler.resetProfiles", cb)
+        return lambda: self.client.remove_listener("HeapProfiler.resetProfiles", cb)

@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -24,7 +23,7 @@ class HeadlessExperimental(object):
         interval: Optional[float] = None,
         noDisplayUpdates: Optional[bool] = None,
         screenshot: Optional[dict] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Sends a BeginFrame to the target and returns when the frame was completed. Optionally captures a
 screenshot from the resulting frame. Requires that the target was created with enabled
@@ -51,13 +50,13 @@ https://goo.gl/3zHXhB for more background.
             msg_dict["screenshot"] = screenshot
         return self.client.send("HeadlessExperimental.beginFrame", msg_dict)
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         """
         Disables headless events for the target.
         """
         return self.client.send("HeadlessExperimental.disable")
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enables headless events for the target.
         """
@@ -70,7 +69,7 @@ https://goo.gl/3zHXhB for more background.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("HeadlessExperimental.needsBeginFramesChanged", _cb)
@@ -78,3 +77,6 @@ https://goo.gl/3zHXhB for more background.
             return future
 
         self.client.on("HeadlessExperimental.needsBeginFramesChanged", cb)
+        return lambda: self.client.remove_listener(
+            "HeadlessExperimental.needsBeginFramesChanged", cb
+        )

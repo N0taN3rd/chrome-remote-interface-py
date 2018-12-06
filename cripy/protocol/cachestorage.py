@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -14,7 +13,7 @@ __all__ = ["CacheStorage"]
 class CacheStorage(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def deleteCache(self, cacheId: str) -> Awaitable[Optional[dict]]:
+    def deleteCache(self, cacheId: str) -> Awaitable[Dict]:
         """
         Deletes a cache.
 
@@ -26,7 +25,7 @@ class CacheStorage(object):
             msg_dict["cacheId"] = cacheId
         return self.client.send("CacheStorage.deleteCache", msg_dict)
 
-    def deleteEntry(self, cacheId: str, request: str) -> Awaitable[Optional[dict]]:
+    def deleteEntry(self, cacheId: str, request: str) -> Awaitable[Dict]:
         """
         Deletes a cache entry.
 
@@ -42,7 +41,7 @@ class CacheStorage(object):
             msg_dict["request"] = request
         return self.client.send("CacheStorage.deleteEntry", msg_dict)
 
-    def requestCacheNames(self, securityOrigin: str) -> Awaitable[Optional[dict]]:
+    def requestCacheNames(self, securityOrigin: str) -> Awaitable[Dict]:
         """
         Requests cache names.
 
@@ -54,9 +53,7 @@ class CacheStorage(object):
             msg_dict["securityOrigin"] = securityOrigin
         return self.client.send("CacheStorage.requestCacheNames", msg_dict)
 
-    def requestCachedResponse(
-        self, cacheId: str, requestURL: str
-    ) -> Awaitable[Optional[dict]]:
+    def requestCachedResponse(self, cacheId: str, requestURL: str) -> Awaitable[Dict]:
         """
         Fetches cache entry.
 
@@ -74,7 +71,7 @@ class CacheStorage(object):
 
     def requestEntries(
         self, cacheId: str, skipCount: int, pageSize: int
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Requests data from cache.
 

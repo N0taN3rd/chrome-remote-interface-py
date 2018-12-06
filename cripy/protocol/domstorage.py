@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -18,7 +17,7 @@ class DOMStorage(object):
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def clear(self, storageId: dict) -> Awaitable[Optional[dict]]:
+    def clear(self, storageId: dict) -> Awaitable[Dict]:
         """
         :param storageId: The storageId
         :type storageId: dict
@@ -28,19 +27,19 @@ class DOMStorage(object):
             msg_dict["storageId"] = storageId
         return self.client.send("DOMStorage.clear", msg_dict)
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         """
         Disables storage tracking, prevents storage events from being sent to the client.
         """
         return self.client.send("DOMStorage.disable")
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enables storage tracking, storage events will now be delivered to the client.
         """
         return self.client.send("DOMStorage.enable")
 
-    def getDOMStorageItems(self, storageId: dict) -> Awaitable[Optional[dict]]:
+    def getDOMStorageItems(self, storageId: dict) -> Awaitable[Dict]:
         """
         :param storageId: The storageId
         :type storageId: dict
@@ -50,9 +49,7 @@ class DOMStorage(object):
             msg_dict["storageId"] = storageId
         return self.client.send("DOMStorage.getDOMStorageItems", msg_dict)
 
-    def removeDOMStorageItem(
-        self, storageId: dict, key: str
-    ) -> Awaitable[Optional[dict]]:
+    def removeDOMStorageItem(self, storageId: dict, key: str) -> Awaitable[Dict]:
         """
         :param storageId: The storageId
         :type storageId: dict
@@ -68,7 +65,7 @@ class DOMStorage(object):
 
     def setDOMStorageItem(
         self, storageId: dict, key: str, value: str
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         :param storageId: The storageId
         :type storageId: dict
@@ -90,7 +87,7 @@ class DOMStorage(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOMStorage.domStorageItemAdded", _cb)
@@ -98,12 +95,13 @@ class DOMStorage(object):
             return future
 
         self.client.on("DOMStorage.domStorageItemAdded", cb)
+        return lambda: self.client.remove_listener("DOMStorage.domStorageItemAdded", cb)
 
     def domStorageItemRemoved(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOMStorage.domStorageItemRemoved", _cb)
@@ -111,12 +109,15 @@ class DOMStorage(object):
             return future
 
         self.client.on("DOMStorage.domStorageItemRemoved", cb)
+        return lambda: self.client.remove_listener(
+            "DOMStorage.domStorageItemRemoved", cb
+        )
 
     def domStorageItemUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOMStorage.domStorageItemUpdated", _cb)
@@ -124,12 +125,15 @@ class DOMStorage(object):
             return future
 
         self.client.on("DOMStorage.domStorageItemUpdated", cb)
+        return lambda: self.client.remove_listener(
+            "DOMStorage.domStorageItemUpdated", cb
+        )
 
     def domStorageItemsCleared(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOMStorage.domStorageItemsCleared", _cb)
@@ -137,3 +141,6 @@ class DOMStorage(object):
             return future
 
         self.client.on("DOMStorage.domStorageItemsCleared", cb)
+        return lambda: self.client.remove_listener(
+            "DOMStorage.domStorageItemsCleared", cb
+        )

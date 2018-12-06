@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -18,31 +17,31 @@ class Emulation(object):
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def canEmulate(self) -> Awaitable[Optional[dict]]:
+    def canEmulate(self) -> Awaitable[Dict]:
         """
         Tells whether emulation is supported.
         """
         return self.client.send("Emulation.canEmulate")
 
-    def clearDeviceMetricsOverride(self) -> Awaitable[Optional[dict]]:
+    def clearDeviceMetricsOverride(self) -> Awaitable[Dict]:
         """
         Clears the overriden device metrics.
         """
         return self.client.send("Emulation.clearDeviceMetricsOverride")
 
-    def clearGeolocationOverride(self) -> Awaitable[Optional[dict]]:
+    def clearGeolocationOverride(self) -> Awaitable[Dict]:
         """
         Clears the overriden Geolocation Position and Error.
         """
         return self.client.send("Emulation.clearGeolocationOverride")
 
-    def resetPageScaleFactor(self) -> Awaitable[Optional[dict]]:
+    def resetPageScaleFactor(self) -> Awaitable[Dict]:
         """
         Requests that page scale factor is reset to initial values.
         """
         return self.client.send("Emulation.resetPageScaleFactor")
 
-    def setFocusEmulationEnabled(self, enabled: bool) -> Awaitable[Optional[dict]]:
+    def setFocusEmulationEnabled(self, enabled: bool) -> Awaitable[Dict]:
         """
         Enables or disables simulating a focused and active page.
 
@@ -54,7 +53,7 @@ class Emulation(object):
             msg_dict["enabled"] = enabled
         return self.client.send("Emulation.setFocusEmulationEnabled", msg_dict)
 
-    def setCPUThrottlingRate(self, rate: float) -> Awaitable[Optional[dict]]:
+    def setCPUThrottlingRate(self, rate: float) -> Awaitable[Dict]:
         """
         Enables CPU throttling to emulate slow CPUs.
 
@@ -68,7 +67,7 @@ class Emulation(object):
 
     def setDefaultBackgroundColorOverride(
         self, color: Optional[dict] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Sets or clears an override of the default background color of the frame. This override is used
 if the content does not specify one.
@@ -95,7 +94,7 @@ if the content does not specify one.
         dontSetVisibleSize: Optional[bool] = None,
         screenOrientation: Optional[dict] = None,
         viewport: Optional[dict] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Overrides the values of device screen dimensions (window.screen.width, window.screen.height,
 window.innerWidth, window.innerHeight, and "device-width"/"device-height"-related CSS media
@@ -153,7 +152,7 @@ query results).
             msg_dict["viewport"] = viewport
         return self.client.send("Emulation.setDeviceMetricsOverride", msg_dict)
 
-    def setScrollbarsHidden(self, hidden: bool) -> Awaitable[Optional[dict]]:
+    def setScrollbarsHidden(self, hidden: bool) -> Awaitable[Dict]:
         """
         :param hidden: Whether scrollbars should be always hidden.
         :type hidden: bool
@@ -163,7 +162,7 @@ query results).
             msg_dict["hidden"] = hidden
         return self.client.send("Emulation.setScrollbarsHidden", msg_dict)
 
-    def setDocumentCookieDisabled(self, disabled: bool) -> Awaitable[Optional[dict]]:
+    def setDocumentCookieDisabled(self, disabled: bool) -> Awaitable[Dict]:
         """
         :param disabled: Whether document.coookie API should be disabled.
         :type disabled: bool
@@ -175,7 +174,7 @@ query results).
 
     def setEmitTouchEventsForMouse(
         self, enabled: bool, configuration: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         :param enabled: Whether touch emulation based on mouse input should be enabled.
         :type enabled: bool
@@ -189,7 +188,7 @@ query results).
             msg_dict["configuration"] = configuration
         return self.client.send("Emulation.setEmitTouchEventsForMouse", msg_dict)
 
-    def setEmulatedMedia(self, media: str) -> Awaitable[Optional[dict]]:
+    def setEmulatedMedia(self, media: str) -> Awaitable[Dict]:
         """
         Emulates the given media for CSS media queries.
 
@@ -206,7 +205,7 @@ query results).
         latitude: Optional[float] = None,
         longitude: Optional[float] = None,
         accuracy: Optional[float] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Overrides the Geolocation Position or Error. Omitting any of the parameters emulates position
 unavailable.
@@ -227,7 +226,7 @@ unavailable.
             msg_dict["accuracy"] = accuracy
         return self.client.send("Emulation.setGeolocationOverride", msg_dict)
 
-    def setNavigatorOverrides(self, platform: str) -> Awaitable[Optional[dict]]:
+    def setNavigatorOverrides(self, platform: str) -> Awaitable[Dict]:
         """
         Overrides value returned by the javascript navigator object.
 
@@ -239,7 +238,7 @@ unavailable.
             msg_dict["platform"] = platform
         return self.client.send("Emulation.setNavigatorOverrides", msg_dict)
 
-    def setPageScaleFactor(self, pageScaleFactor: float) -> Awaitable[Optional[dict]]:
+    def setPageScaleFactor(self, pageScaleFactor: float) -> Awaitable[Dict]:
         """
         Sets a specified page scale factor.
 
@@ -251,7 +250,7 @@ unavailable.
             msg_dict["pageScaleFactor"] = pageScaleFactor
         return self.client.send("Emulation.setPageScaleFactor", msg_dict)
 
-    def setScriptExecutionDisabled(self, value: bool) -> Awaitable[Optional[dict]]:
+    def setScriptExecutionDisabled(self, value: bool) -> Awaitable[Dict]:
         """
         Switches script execution in the page.
 
@@ -265,7 +264,7 @@ unavailable.
 
     def setTouchEmulationEnabled(
         self, enabled: bool, maxTouchPoints: Optional[int] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Enables touch on platforms which do not support them.
 
@@ -288,7 +287,7 @@ unavailable.
         maxVirtualTimeTaskStarvationCount: Optional[int] = None,
         waitForNavigation: Optional[bool] = None,
         initialVirtualTime: Optional[float] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Turns on virtual time for all frames (replacing real-time with a synthetic time source) and sets
 the current virtual time policy.  Note this supersedes any previous time budget.
@@ -319,7 +318,7 @@ the current virtual time policy.  Note this supersedes any previous time budget.
             msg_dict["initialVirtualTime"] = initialVirtualTime
         return self.client.send("Emulation.setVirtualTimePolicy", msg_dict)
 
-    def setVisibleSize(self, width: int, height: int) -> Awaitable[Optional[dict]]:
+    def setVisibleSize(self, width: int, height: int) -> Awaitable[Dict]:
         """
         Resizes the frame/viewport of the page. Note that this does not affect the frame's container
 (e.g. browser window). Can be used to produce screenshots of the specified size. Not supported
@@ -342,7 +341,7 @@ on Android.
         userAgent: str,
         acceptLanguage: Optional[str] = None,
         platform: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Allows overriding user agent with the given string.
 
@@ -369,7 +368,7 @@ on Android.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Emulation.virtualTimeAdvanced", _cb)
@@ -377,6 +376,7 @@ on Android.
             return future
 
         self.client.on("Emulation.virtualTimeAdvanced", cb)
+        return lambda: self.client.remove_listener("Emulation.virtualTimeAdvanced", cb)
 
     def virtualTimeBudgetExpired(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -385,7 +385,7 @@ on Android.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Emulation.virtualTimeBudgetExpired", _cb)
@@ -393,6 +393,9 @@ on Android.
             return future
 
         self.client.on("Emulation.virtualTimeBudgetExpired", cb)
+        return lambda: self.client.remove_listener(
+            "Emulation.virtualTimeBudgetExpired", cb
+        )
 
     def virtualTimePaused(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -401,7 +404,7 @@ on Android.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Emulation.virtualTimePaused", _cb)
@@ -409,3 +412,4 @@ on Android.
             return future
 
         self.client.on("Emulation.virtualTimePaused", cb)
+        return lambda: self.client.remove_listener("Emulation.virtualTimePaused", cb)

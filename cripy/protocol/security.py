@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -18,19 +17,19 @@ class Security(object):
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         """
         Disables tracking security state changes.
         """
         return self.client.send("Security.disable")
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enables tracking security state changes.
         """
         return self.client.send("Security.enable")
 
-    def setIgnoreCertificateErrors(self, ignore: bool) -> Awaitable[Optional[dict]]:
+    def setIgnoreCertificateErrors(self, ignore: bool) -> Awaitable[Dict]:
         """
         Enable/disable whether all certificate errors should be ignored.
 
@@ -42,9 +41,7 @@ class Security(object):
             msg_dict["ignore"] = ignore
         return self.client.send("Security.setIgnoreCertificateErrors", msg_dict)
 
-    def handleCertificateError(
-        self, eventId: int, action: str
-    ) -> Awaitable[Optional[dict]]:
+    def handleCertificateError(self, eventId: int, action: str) -> Awaitable[Dict]:
         """
         Handles a certificate error that fired a certificateError event.
 
@@ -60,7 +57,7 @@ class Security(object):
             msg_dict["action"] = action
         return self.client.send("Security.handleCertificateError", msg_dict)
 
-    def setOverrideCertificateErrors(self, override: bool) -> Awaitable[Optional[dict]]:
+    def setOverrideCertificateErrors(self, override: bool) -> Awaitable[Dict]:
         """
         Enable/disable overriding certificate errors. If enabled, all certificate error events need to
 be handled by the DevTools client and should be answered with `handleCertificateError` commands.
@@ -83,7 +80,7 @@ be handled by the DevTools client and should be answered with `handleCertificate
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Security.certificateError", _cb)
@@ -91,6 +88,7 @@ be handled by the DevTools client and should be answered with `handleCertificate
             return future
 
         self.client.on("Security.certificateError", cb)
+        return lambda: self.client.remove_listener("Security.certificateError", cb)
 
     def securityStateChanged(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -99,7 +97,7 @@ be handled by the DevTools client and should be answered with `handleCertificate
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Security.securityStateChanged", _cb)
@@ -107,3 +105,4 @@ be handled by the DevTools client and should be answered with `handleCertificate
             return future
 
         self.client.on("Security.securityStateChanged", cb)
+        return lambda: self.client.remove_listener("Security.securityStateChanged", cb)

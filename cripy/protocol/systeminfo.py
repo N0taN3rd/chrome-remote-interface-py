@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -18,8 +17,14 @@ class SystemInfo(object):
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def getInfo(self) -> Awaitable[Optional[dict]]:
+    def getInfo(self) -> Awaitable[Dict]:
         """
         Returns information about the system.
         """
         return self.client.send("SystemInfo.getInfo")
+
+    def getProcessInfo(self) -> Awaitable[Dict]:
+        """
+        Returns information about all running processes.
+        """
+        return self.client.send("SystemInfo.getProcessInfo")

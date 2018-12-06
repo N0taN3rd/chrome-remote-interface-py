@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -16,7 +15,7 @@ class ServiceWorker(object):
 
     def deliverPushMessage(
         self, origin: str, registrationId: str, data: str
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         :param origin: The origin
         :type origin: str
@@ -34,12 +33,12 @@ class ServiceWorker(object):
             msg_dict["data"] = data
         return self.client.send("ServiceWorker.deliverPushMessage", msg_dict)
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         return self.client.send("ServiceWorker.disable")
 
     def dispatchSyncEvent(
         self, origin: str, registrationId: str, tag: str, lastChance: bool
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         :param origin: The origin
         :type origin: str
@@ -61,10 +60,10 @@ class ServiceWorker(object):
             msg_dict["lastChance"] = lastChance
         return self.client.send("ServiceWorker.dispatchSyncEvent", msg_dict)
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         return self.client.send("ServiceWorker.enable")
 
-    def inspectWorker(self, versionId: str) -> Awaitable[Optional[dict]]:
+    def inspectWorker(self, versionId: str) -> Awaitable[Dict]:
         """
         :param versionId: The versionId
         :type versionId: str
@@ -74,9 +73,7 @@ class ServiceWorker(object):
             msg_dict["versionId"] = versionId
         return self.client.send("ServiceWorker.inspectWorker", msg_dict)
 
-    def setForceUpdateOnPageLoad(
-        self, forceUpdateOnPageLoad: bool
-    ) -> Awaitable[Optional[dict]]:
+    def setForceUpdateOnPageLoad(self, forceUpdateOnPageLoad: bool) -> Awaitable[Dict]:
         """
         :param forceUpdateOnPageLoad: The forceUpdateOnPageLoad
         :type forceUpdateOnPageLoad: bool
@@ -86,7 +83,7 @@ class ServiceWorker(object):
             msg_dict["forceUpdateOnPageLoad"] = forceUpdateOnPageLoad
         return self.client.send("ServiceWorker.setForceUpdateOnPageLoad", msg_dict)
 
-    def skipWaiting(self, scopeURL: str) -> Awaitable[Optional[dict]]:
+    def skipWaiting(self, scopeURL: str) -> Awaitable[Dict]:
         """
         :param scopeURL: The scopeURL
         :type scopeURL: str
@@ -96,7 +93,7 @@ class ServiceWorker(object):
             msg_dict["scopeURL"] = scopeURL
         return self.client.send("ServiceWorker.skipWaiting", msg_dict)
 
-    def startWorker(self, scopeURL: str) -> Awaitable[Optional[dict]]:
+    def startWorker(self, scopeURL: str) -> Awaitable[Dict]:
         """
         :param scopeURL: The scopeURL
         :type scopeURL: str
@@ -106,10 +103,10 @@ class ServiceWorker(object):
             msg_dict["scopeURL"] = scopeURL
         return self.client.send("ServiceWorker.startWorker", msg_dict)
 
-    def stopAllWorkers(self) -> Awaitable[Optional[dict]]:
+    def stopAllWorkers(self) -> Awaitable[Dict]:
         return self.client.send("ServiceWorker.stopAllWorkers")
 
-    def stopWorker(self, versionId: str) -> Awaitable[Optional[dict]]:
+    def stopWorker(self, versionId: str) -> Awaitable[Dict]:
         """
         :param versionId: The versionId
         :type versionId: str
@@ -119,7 +116,7 @@ class ServiceWorker(object):
             msg_dict["versionId"] = versionId
         return self.client.send("ServiceWorker.stopWorker", msg_dict)
 
-    def unregister(self, scopeURL: str) -> Awaitable[Optional[dict]]:
+    def unregister(self, scopeURL: str) -> Awaitable[Dict]:
         """
         :param scopeURL: The scopeURL
         :type scopeURL: str
@@ -129,7 +126,7 @@ class ServiceWorker(object):
             msg_dict["scopeURL"] = scopeURL
         return self.client.send("ServiceWorker.unregister", msg_dict)
 
-    def updateRegistration(self, scopeURL: str) -> Awaitable[Optional[dict]]:
+    def updateRegistration(self, scopeURL: str) -> Awaitable[Dict]:
         """
         :param scopeURL: The scopeURL
         :type scopeURL: str
@@ -143,7 +140,7 @@ class ServiceWorker(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("ServiceWorker.workerErrorReported", _cb)
@@ -151,12 +148,15 @@ class ServiceWorker(object):
             return future
 
         self.client.on("ServiceWorker.workerErrorReported", cb)
+        return lambda: self.client.remove_listener(
+            "ServiceWorker.workerErrorReported", cb
+        )
 
     def workerRegistrationUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("ServiceWorker.workerRegistrationUpdated", _cb)
@@ -164,12 +164,15 @@ class ServiceWorker(object):
             return future
 
         self.client.on("ServiceWorker.workerRegistrationUpdated", cb)
+        return lambda: self.client.remove_listener(
+            "ServiceWorker.workerRegistrationUpdated", cb
+        )
 
     def workerVersionUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("ServiceWorker.workerVersionUpdated", _cb)
@@ -177,3 +180,6 @@ class ServiceWorker(object):
             return future
 
         self.client.on("ServiceWorker.workerVersionUpdated", cb)
+        return lambda: self.client.remove_listener(
+            "ServiceWorker.workerVersionUpdated", cb
+        )

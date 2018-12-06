@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -30,7 +29,7 @@ class Input(object):
         isKeypad: Optional[bool] = None,
         isSystemKey: Optional[bool] = None,
         location: Optional[int] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Dispatches a key event to the page.
 
@@ -94,7 +93,7 @@ class Input(object):
             msg_dict["location"] = location
         return self.client.send("Input.dispatchKeyEvent", msg_dict)
 
-    def insertText(self, text: str) -> Awaitable[Optional[dict]]:
+    def insertText(self, text: str) -> Awaitable[Dict]:
         """
         This method emulates inserting text that doesn't come from a key press,
 for example an emoji keyboard or an IME.
@@ -118,7 +117,7 @@ for example an emoji keyboard or an IME.
         clickCount: Optional[int] = None,
         deltaX: Optional[float] = None,
         deltaY: Optional[float] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Dispatches a mouse event to the page.
 
@@ -168,7 +167,7 @@ for example an emoji keyboard or an IME.
         touchPoints: List[dict],
         modifiers: Optional[int] = None,
         timestamp: Optional[float] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Dispatches a touch event to the page.
 
@@ -203,7 +202,7 @@ for example an emoji keyboard or an IME.
         deltaY: Optional[float] = None,
         modifiers: Optional[int] = None,
         clickCount: Optional[int] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Emulates touch event from the mouse event parameters.
 
@@ -247,7 +246,7 @@ for example an emoji keyboard or an IME.
             msg_dict["clickCount"] = clickCount
         return self.client.send("Input.emulateTouchFromMouseEvent", msg_dict)
 
-    def setIgnoreInputEvents(self, ignore: bool) -> Awaitable[Optional[dict]]:
+    def setIgnoreInputEvents(self, ignore: bool) -> Awaitable[Dict]:
         """
         Ignores input events (useful while auditing page).
 
@@ -266,7 +265,7 @@ for example an emoji keyboard or an IME.
         scaleFactor: float,
         relativeSpeed: Optional[int] = None,
         gestureSourceType: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Synthesizes a pinch gesture over a time period by issuing appropriate touch events.
 
@@ -308,7 +307,7 @@ for example an emoji keyboard or an IME.
         repeatCount: Optional[int] = None,
         repeatDelayMs: Optional[int] = None,
         interactionMarkerName: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Synthesizes a scroll gesture over a time period by issuing appropriate touch events.
 
@@ -371,7 +370,7 @@ for example an emoji keyboard or an IME.
         duration: Optional[int] = None,
         tapCount: Optional[int] = None,
         gestureSourceType: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Synthesizes a tap gesture over a time period by issuing appropriate touch events.
 

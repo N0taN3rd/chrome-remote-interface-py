@@ -23,6 +23,7 @@ from .protocol.domdebugger import DOMDebugger
 from .protocol.domsnapshot import DOMSnapshot
 from .protocol.domstorage import DOMStorage
 from .protocol.emulation import Emulation
+from .protocol.fetch import Fetch
 from .protocol.headlessexperimental import HeadlessExperimental
 from .protocol.heapprofiler import HeapProfiler
 from .protocol.indexeddb import IndexedDB
@@ -75,7 +76,8 @@ class Client(Connection):
 
         :param ws_url: The WS endpoint of the remote instance
         :param loop:  Optional event loop to use. Defaults to asyncio.get_event_loop
-        :param proto_def: Optional protocol domain classes to be used rather than the pre-generated ones
+        :param proto_def: Optional protocol domain classes to be used rather than
+        the pre-generated ones
         """
         super().__init__(ws_url, loop)
         self._proto_def: Optional[dict] = proto_def
@@ -96,6 +98,7 @@ class Client(Connection):
             self.DOMSnapshot: DOMSnapshot = DOMSnapshot(self)
             self.DOMStorage: DOMStorage = DOMStorage(self)
             self.Emulation: Emulation = Emulation(self)
+            self.Fetch: Fetch = Fetch(self)
             self.HeadlessExperimental: HeadlessExperimental = HeadlessExperimental(self)
             self.HeapProfiler: HeapProfiler = HeapProfiler(self)
             self.IO: IO = IO(self)
@@ -125,7 +128,8 @@ class Client(Connection):
                 setattr(self, domain, clazz(self))
 
     async def createTargetSession(self, targetId: str) -> "TargetSession":
-        """Attach to the target specified by target id and create new TargetSession for direct communication to it."""
+        """Attach to the target specified by target id and create new TargetSession for direct
+        communication to it."""
         resp = await self.send("Target.attachToTarget", {"targetId": targetId})
         sessionId = resp.get("sessionId")
         session = TargetSession(
@@ -296,7 +300,7 @@ class Client(Connection):
         return self
 
     def __str__(self) -> str:
-        return f"Client(wsurl={self._url}, connected={self.connected})"
+        return f"Client(wsurl={self._ws_url}, connected={self.connected})"
 
 
 class TargetSession(CDPSession):
@@ -355,7 +359,7 @@ class TargetSession(CDPSession):
             for domain, clazz in proto_def.items():
                 setattr(self, domain, clazz(self))
 
-    def createSession(self, targetType: str, sessionId: str) -> "TargetSession":
+    def createTargetSession(self, targetType: str, sessionId: str) -> "TargetSession":
         sesh = TargetSession(self, targetType, sessionId, proto_def=self._proto_def)
         self._sessions[sessionId] = sesh
         return sesh
@@ -378,12 +382,14 @@ async def connect(
     loop: Optional[AbstractEventLoop] = None,
     remote: bool = False,
 ) -> Client:
-    """Convince function for creating an instance of the ChromeRemoteInterface and connecting it to the remote instance.
+    """Convince function for creating an instance of the ChromeRemoteInterface and connecting it
+    to the remote instance.
 
-    :param url: URL or WS URL to use for making the CDP connection. Defaults to http://localhost:9222
+    :param url: URL or WS URL to use for making the CDP connection. Defaults to
+    http://localhost:9222
     :param loop: The event loop instance to use. Defaults to asyncio.get_event_loop
-    :param remote: Boolean indicating if the protocol should be fetched from the remote instance or
-    to use the local one. Defaults to False (use local)
+    :param remote: Boolean indicating if the protocol should be fetched from the
+    remote instance or to use the local one. Defaults to False (use local)
     :return: Client instance connected to the browser
     """
     ws_url = None

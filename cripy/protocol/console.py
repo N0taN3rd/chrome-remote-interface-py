@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -18,19 +17,19 @@ class Console(object):
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def clearMessages(self) -> Awaitable[Optional[dict]]:
+    def clearMessages(self) -> Awaitable[Dict]:
         """
         Does nothing.
         """
         return self.client.send("Console.clearMessages")
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         """
         Disables console domain, prevents further console messages from being reported to the client.
         """
         return self.client.send("Console.disable")
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enables console domain, sends the messages collected so far to the client by means of the
 `messageAdded` notification.
@@ -44,7 +43,7 @@ class Console(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Console.messageAdded", _cb)
@@ -52,3 +51,4 @@ class Console(object):
             return future
 
         self.client.on("Console.messageAdded", cb)
+        return lambda: self.client.remove_listener("Console.messageAdded", cb)

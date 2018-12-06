@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -16,7 +15,7 @@ class IndexedDB(object):
 
     def clearObjectStore(
         self, securityOrigin: str, databaseName: str, objectStoreName: str
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Clears all entries from an object store.
 
@@ -36,9 +35,7 @@ class IndexedDB(object):
             msg_dict["objectStoreName"] = objectStoreName
         return self.client.send("IndexedDB.clearObjectStore", msg_dict)
 
-    def deleteDatabase(
-        self, securityOrigin: str, databaseName: str
-    ) -> Awaitable[Optional[dict]]:
+    def deleteDatabase(self, securityOrigin: str, databaseName: str) -> Awaitable[Dict]:
         """
         Deletes a database.
 
@@ -60,7 +57,7 @@ class IndexedDB(object):
         databaseName: str,
         objectStoreName: str,
         keyRange: dict,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Delete a range of entries from an object store
 
@@ -84,13 +81,13 @@ class IndexedDB(object):
             msg_dict["keyRange"] = keyRange
         return self.client.send("IndexedDB.deleteObjectStoreEntries", msg_dict)
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         """
         Disables events from backend.
         """
         return self.client.send("IndexedDB.disable")
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enables events from backend.
         """
@@ -105,7 +102,7 @@ class IndexedDB(object):
         skipCount: int,
         pageSize: int,
         keyRange: Optional[dict] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Requests data from object store or index.
 
@@ -143,7 +140,7 @@ class IndexedDB(object):
 
     def requestDatabase(
         self, securityOrigin: str, databaseName: str
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Requests database with given name in given frame.
 
@@ -159,7 +156,7 @@ class IndexedDB(object):
             msg_dict["databaseName"] = databaseName
         return self.client.send("IndexedDB.requestDatabase", msg_dict)
 
-    def requestDatabaseNames(self, securityOrigin: str) -> Awaitable[Optional[dict]]:
+    def requestDatabaseNames(self, securityOrigin: str) -> Awaitable[Dict]:
         """
         Requests database names for given security origin.
 

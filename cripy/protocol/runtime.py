@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -27,7 +26,7 @@ other objects in their object group.
         promiseObjectId: str,
         returnByValue: Optional[bool] = None,
         generatePreview: Optional[bool] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Add handler to promise with given promise object id.
 
@@ -59,7 +58,7 @@ other objects in their object group.
         awaitPromise: Optional[bool] = None,
         executionContextId: Optional[int] = None,
         objectGroup: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Calls function with given declaration on the given object. Object group of the result is
 inherited from the target object.
@@ -114,7 +113,7 @@ inherited from the target object.
         sourceURL: str,
         persistScript: bool,
         executionContextId: Optional[int] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Compiles expression.
 
@@ -138,19 +137,19 @@ inherited from the target object.
             msg_dict["executionContextId"] = executionContextId
         return self.client.send("Runtime.compileScript", msg_dict)
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         """
         Disables reporting of execution contexts creation.
         """
         return self.client.send("Runtime.disable")
 
-    def discardConsoleEntries(self) -> Awaitable[Optional[dict]]:
+    def discardConsoleEntries(self) -> Awaitable[Dict]:
         """
         Discards collected exceptions and console API calls.
         """
         return self.client.send("Runtime.discardConsoleEntries")
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enables reporting of execution contexts creation by means of `executionContextCreated` event.
 When the reporting gets enabled the event will be sent immediately for each existing execution
@@ -171,7 +170,7 @@ context.
         awaitPromise: Optional[bool] = None,
         throwOnSideEffect: Optional[bool] = None,
         timeout: Optional[float] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Evaluates expression on global object.
 
@@ -223,13 +222,13 @@ context.
             msg_dict["timeout"] = timeout
         return self.client.send("Runtime.evaluate", msg_dict)
 
-    def getIsolateId(self) -> Awaitable[Optional[dict]]:
+    def getIsolateId(self) -> Awaitable[Dict]:
         """
         Returns the isolate id.
         """
         return self.client.send("Runtime.getIsolateId")
 
-    def getHeapUsage(self) -> Awaitable[Optional[dict]]:
+    def getHeapUsage(self) -> Awaitable[Dict]:
         """
         Returns the JavaScript heap usage.
 It is the total usage of the corresponding isolate not scoped to a particular Runtime.
@@ -242,7 +241,7 @@ It is the total usage of the corresponding isolate not scoped to a particular Ru
         ownProperties: Optional[bool] = None,
         accessorPropertiesOnly: Optional[bool] = None,
         generatePreview: Optional[bool] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Returns properties of a given object. Object group of the result is inherited from the target
 object.
@@ -269,7 +268,7 @@ object.
 
     def globalLexicalScopeNames(
         self, executionContextId: Optional[int] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Returns all let, const and class variables from global scope.
 
@@ -283,7 +282,7 @@ object.
 
     def queryObjects(
         self, prototypeObjectId: str, objectGroup: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         :param prototypeObjectId: Identifier of the prototype to return objects for.
         :type prototypeObjectId: str
@@ -297,7 +296,7 @@ object.
             msg_dict["objectGroup"] = objectGroup
         return self.client.send("Runtime.queryObjects", msg_dict)
 
-    def releaseObject(self, objectId: str) -> Awaitable[Optional[dict]]:
+    def releaseObject(self, objectId: str) -> Awaitable[Dict]:
         """
         Releases remote object with given id.
 
@@ -309,7 +308,7 @@ object.
             msg_dict["objectId"] = objectId
         return self.client.send("Runtime.releaseObject", msg_dict)
 
-    def releaseObjectGroup(self, objectGroup: str) -> Awaitable[Optional[dict]]:
+    def releaseObjectGroup(self, objectGroup: str) -> Awaitable[Dict]:
         """
         Releases all remote objects that belong to a given group.
 
@@ -321,7 +320,7 @@ object.
             msg_dict["objectGroup"] = objectGroup
         return self.client.send("Runtime.releaseObjectGroup", msg_dict)
 
-    def runIfWaitingForDebugger(self) -> Awaitable[Optional[dict]]:
+    def runIfWaitingForDebugger(self) -> Awaitable[Dict]:
         """
         Tells inspected instance to run if it was waiting for debugger to attach.
         """
@@ -337,7 +336,7 @@ object.
         returnByValue: Optional[bool] = None,
         generatePreview: Optional[bool] = None,
         awaitPromise: Optional[bool] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Runs script with given id in a given context.
 
@@ -377,7 +376,7 @@ object.
             msg_dict["awaitPromise"] = awaitPromise
         return self.client.send("Runtime.runScript", msg_dict)
 
-    def setAsyncCallStackDepth(self, maxDepth: int) -> Awaitable[Optional[dict]]:
+    def setAsyncCallStackDepth(self, maxDepth: int) -> Awaitable[Dict]:
         """
         Enables or disables async call stacks tracking.
 
@@ -389,9 +388,7 @@ object.
             msg_dict["maxDepth"] = maxDepth
         return self.client.send("Runtime.setAsyncCallStackDepth", msg_dict)
 
-    def setCustomObjectFormatterEnabled(
-        self, enabled: bool
-    ) -> Awaitable[Optional[dict]]:
+    def setCustomObjectFormatterEnabled(self, enabled: bool) -> Awaitable[Dict]:
         """
         :param enabled: The enabled
         :type enabled: bool
@@ -401,7 +398,7 @@ object.
             msg_dict["enabled"] = enabled
         return self.client.send("Runtime.setCustomObjectFormatterEnabled", msg_dict)
 
-    def setMaxCallStackSizeToCapture(self, size: int) -> Awaitable[Optional[dict]]:
+    def setMaxCallStackSizeToCapture(self, size: int) -> Awaitable[Dict]:
         """
         :param size: The size
         :type size: int
@@ -411,7 +408,7 @@ object.
             msg_dict["size"] = size
         return self.client.send("Runtime.setMaxCallStackSizeToCapture", msg_dict)
 
-    def terminateExecution(self) -> Awaitable[Optional[dict]]:
+    def terminateExecution(self) -> Awaitable[Dict]:
         """
         Terminate current or next JavaScript execution.
 Will cancel the termination when the outer-most script execution ends.
@@ -420,7 +417,7 @@ Will cancel the termination when the outer-most script execution ends.
 
     def addBinding(
         self, name: str, executionContextId: Optional[int] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         If executionContextId is empty, adds binding with the given name on the
 global objects of all inspected contexts, including those created later,
@@ -443,7 +440,7 @@ Each binding function call produces Runtime.bindingCalled notification.
             msg_dict["executionContextId"] = executionContextId
         return self.client.send("Runtime.addBinding", msg_dict)
 
-    def removeBinding(self, name: str) -> Awaitable[Optional[dict]]:
+    def removeBinding(self, name: str) -> Awaitable[Dict]:
         """
         This method does not remove binding function from global object but
 unsubscribes current runtime agent from Runtime.bindingCalled notifications.
@@ -463,7 +460,7 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Runtime.bindingCalled", _cb)
@@ -471,6 +468,7 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
             return future
 
         self.client.on("Runtime.bindingCalled", cb)
+        return lambda: self.client.remove_listener("Runtime.bindingCalled", cb)
 
     def consoleAPICalled(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -479,7 +477,7 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Runtime.consoleAPICalled", _cb)
@@ -487,6 +485,7 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
             return future
 
         self.client.on("Runtime.consoleAPICalled", cb)
+        return lambda: self.client.remove_listener("Runtime.consoleAPICalled", cb)
 
     def exceptionRevoked(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -495,7 +494,7 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Runtime.exceptionRevoked", _cb)
@@ -503,6 +502,7 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
             return future
 
         self.client.on("Runtime.exceptionRevoked", cb)
+        return lambda: self.client.remove_listener("Runtime.exceptionRevoked", cb)
 
     def exceptionThrown(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -511,7 +511,7 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Runtime.exceptionThrown", _cb)
@@ -519,6 +519,7 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
             return future
 
         self.client.on("Runtime.exceptionThrown", cb)
+        return lambda: self.client.remove_listener("Runtime.exceptionThrown", cb)
 
     def executionContextCreated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -527,7 +528,7 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Runtime.executionContextCreated", _cb)
@@ -535,6 +536,9 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
             return future
 
         self.client.on("Runtime.executionContextCreated", cb)
+        return lambda: self.client.remove_listener(
+            "Runtime.executionContextCreated", cb
+        )
 
     def executionContextDestroyed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -543,7 +547,7 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Runtime.executionContextDestroyed", _cb)
@@ -551,6 +555,9 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
             return future
 
         self.client.on("Runtime.executionContextDestroyed", cb)
+        return lambda: self.client.remove_listener(
+            "Runtime.executionContextDestroyed", cb
+        )
 
     def executionContextsCleared(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -559,7 +566,7 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Runtime.executionContextsCleared", _cb)
@@ -567,6 +574,9 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
             return future
 
         self.client.on("Runtime.executionContextsCleared", cb)
+        return lambda: self.client.remove_listener(
+            "Runtime.executionContextsCleared", cb
+        )
 
     def inspectRequested(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -576,7 +586,7 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Runtime.inspectRequested", _cb)
@@ -584,3 +594,4 @@ unsubscribes current runtime agent from Runtime.bindingCalled notifications.
             return future
 
         self.client.on("Runtime.inspectRequested", cb)
+        return lambda: self.client.remove_listener("Runtime.inspectRequested", cb)

@@ -8,7 +8,7 @@ from .client import (
     DEFAULT_PORT,
     DEFAULT_URL,
 )
-from .connection import Connection, CDPSession, ConnectionEvents
+from .connection import Connection, CDPSession, ConnectionEvents, SessionEvents
 from .errors import ClientError, NetworkError
 
 ConnectionType = Union[Client, Connection]
@@ -20,6 +20,7 @@ __all__ = [
     "CDPSession",
     "TargetSession",
     "ConnectionEvents",
+    "SessionEvents",
     "connect",
     "DEFAULT_HOST",
     "DEFAULT_PORT",

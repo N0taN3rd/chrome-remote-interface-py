@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -18,7 +17,7 @@ class Tethering(object):
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def bind(self, port: int) -> Awaitable[Optional[dict]]:
+    def bind(self, port: int) -> Awaitable[Dict]:
         """
         Request browser port binding.
 
@@ -30,7 +29,7 @@ class Tethering(object):
             msg_dict["port"] = port
         return self.client.send("Tethering.bind", msg_dict)
 
-    def unbind(self, port: int) -> Awaitable[Optional[dict]]:
+    def unbind(self, port: int) -> Awaitable[Dict]:
         """
         Request browser port unbinding.
 
@@ -49,7 +48,7 @@ class Tethering(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Tethering.accepted", _cb)
@@ -57,3 +56,4 @@ class Tethering(object):
             return future
 
         self.client.on("Tethering.accepted", cb)
+        return lambda: self.client.remove_listener("Tethering.accepted", cb)

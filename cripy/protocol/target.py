@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -18,7 +17,7 @@ class Target(object):
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def activateTarget(self, targetId: str) -> Awaitable[Optional[dict]]:
+    def activateTarget(self, targetId: str) -> Awaitable[Dict]:
         """
         Activates (focuses) the target.
 
@@ -32,7 +31,7 @@ class Target(object):
 
     def attachToTarget(
         self, targetId: str, flatten: Optional[bool] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Attaches to the target with given id.
 
@@ -48,13 +47,13 @@ class Target(object):
             msg_dict["flatten"] = flatten
         return self.client.send("Target.attachToTarget", msg_dict)
 
-    def attachToBrowserTarget(self) -> Awaitable[Optional[dict]]:
+    def attachToBrowserTarget(self) -> Awaitable[Dict]:
         """
         Attaches to the browser target, only uses flat sessionId mode.
         """
         return self.client.send("Target.attachToBrowserTarget")
 
-    def closeTarget(self, targetId: str) -> Awaitable[Optional[dict]]:
+    def closeTarget(self, targetId: str) -> Awaitable[Dict]:
         """
         Closes the target. If the target is a page that gets closed too.
 
@@ -68,7 +67,7 @@ class Target(object):
 
     def exposeDevToolsProtocol(
         self, targetId: str, bindingName: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Inject object to the target's main frame that provides a communication
 channel with browser target.
@@ -91,14 +90,14 @@ The object has the follwing API:
             msg_dict["bindingName"] = bindingName
         return self.client.send("Target.exposeDevToolsProtocol", msg_dict)
 
-    def createBrowserContext(self) -> Awaitable[Optional[dict]]:
+    def createBrowserContext(self) -> Awaitable[Dict]:
         """
         Creates a new empty BrowserContext. Similar to an incognito profile but you can have more than
 one.
         """
         return self.client.send("Target.createBrowserContext")
 
-    def getBrowserContexts(self) -> Awaitable[Optional[dict]]:
+    def getBrowserContexts(self) -> Awaitable[Dict]:
         """
         Returns all browser contexts created with `Target.createBrowserContext` method.
         """
@@ -111,7 +110,7 @@ one.
         height: Optional[int] = None,
         browserContextId: Optional[str] = None,
         enableBeginFrameControl: Optional[bool] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Creates a new page.
 
@@ -141,7 +140,7 @@ one.
 
     def detachFromTarget(
         self, sessionId: Optional[str] = None, targetId: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Detaches session with given id.
 
@@ -157,7 +156,7 @@ one.
             msg_dict["targetId"] = targetId
         return self.client.send("Target.detachFromTarget", msg_dict)
 
-    def disposeBrowserContext(self, browserContextId: str) -> Awaitable[Optional[dict]]:
+    def disposeBrowserContext(self, browserContextId: str) -> Awaitable[Dict]:
         """
         Deletes a BrowserContext. All the belonging pages will be closed without calling their
 beforeunload hooks.
@@ -170,9 +169,7 @@ beforeunload hooks.
             msg_dict["browserContextId"] = browserContextId
         return self.client.send("Target.disposeBrowserContext", msg_dict)
 
-    def getTargetInfo(
-        self, targetId: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    def getTargetInfo(self, targetId: Optional[str] = None) -> Awaitable[Dict]:
         """
         Returns information about a target.
 
@@ -184,7 +181,7 @@ beforeunload hooks.
             msg_dict["targetId"] = targetId
         return self.client.send("Target.getTargetInfo", msg_dict)
 
-    def getTargets(self) -> Awaitable[Optional[dict]]:
+    def getTargets(self) -> Awaitable[Dict]:
         """
         Retrieves a list of available targets.
         """
@@ -195,7 +192,7 @@ beforeunload hooks.
         message: str,
         sessionId: Optional[str] = None,
         targetId: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Sends protocol message over session with given id.
 
@@ -220,7 +217,7 @@ beforeunload hooks.
         autoAttach: bool,
         waitForDebuggerOnStart: bool,
         flatten: Optional[bool] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Controls whether to automatically attach to new targets which are considered to be related to
 this one. When turned on, attaches to all existing related targets as well. When turned off,
@@ -242,7 +239,7 @@ automatically detaches from all currently attached targets.
             msg_dict["flatten"] = flatten
         return self.client.send("Target.setAutoAttach", msg_dict)
 
-    def setDiscoverTargets(self, discover: bool) -> Awaitable[Optional[dict]]:
+    def setDiscoverTargets(self, discover: bool) -> Awaitable[Dict]:
         """
         Controls whether to discover available targets and notify via
 `targetCreated/targetInfoChanged/targetDestroyed` events.
@@ -255,7 +252,7 @@ automatically detaches from all currently attached targets.
             msg_dict["discover"] = discover
         return self.client.send("Target.setDiscoverTargets", msg_dict)
 
-    def setRemoteLocations(self, locations: List[dict]) -> Awaitable[Optional[dict]]:
+    def setRemoteLocations(self, locations: List[dict]) -> Awaitable[Dict]:
         """
         Enables target discovery for the specified locations, when `setDiscoverTargets` was set to
 `true`.
@@ -275,7 +272,7 @@ automatically detaches from all currently attached targets.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Target.attachedToTarget", _cb)
@@ -283,6 +280,7 @@ automatically detaches from all currently attached targets.
             return future
 
         self.client.on("Target.attachedToTarget", cb)
+        return lambda: self.client.remove_listener("Target.attachedToTarget", cb)
 
     def detachedFromTarget(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -292,7 +290,7 @@ automatically detaches from all currently attached targets.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Target.detachedFromTarget", _cb)
@@ -300,6 +298,7 @@ automatically detaches from all currently attached targets.
             return future
 
         self.client.on("Target.detachedFromTarget", cb)
+        return lambda: self.client.remove_listener("Target.detachedFromTarget", cb)
 
     def receivedMessageFromTarget(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -309,7 +308,7 @@ automatically detaches from all currently attached targets.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Target.receivedMessageFromTarget", _cb)
@@ -317,6 +316,9 @@ automatically detaches from all currently attached targets.
             return future
 
         self.client.on("Target.receivedMessageFromTarget", cb)
+        return lambda: self.client.remove_listener(
+            "Target.receivedMessageFromTarget", cb
+        )
 
     def targetCreated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -325,7 +327,7 @@ automatically detaches from all currently attached targets.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Target.targetCreated", _cb)
@@ -333,6 +335,7 @@ automatically detaches from all currently attached targets.
             return future
 
         self.client.on("Target.targetCreated", cb)
+        return lambda: self.client.remove_listener("Target.targetCreated", cb)
 
     def targetDestroyed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -341,7 +344,7 @@ automatically detaches from all currently attached targets.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Target.targetDestroyed", _cb)
@@ -349,6 +352,7 @@ automatically detaches from all currently attached targets.
             return future
 
         self.client.on("Target.targetDestroyed", cb)
+        return lambda: self.client.remove_listener("Target.targetDestroyed", cb)
 
     def targetCrashed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -357,7 +361,7 @@ automatically detaches from all currently attached targets.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Target.targetCrashed", _cb)
@@ -365,6 +369,7 @@ automatically detaches from all currently attached targets.
             return future
 
         self.client.on("Target.targetCrashed", cb)
+        return lambda: self.client.remove_listener("Target.targetCrashed", cb)
 
     def targetInfoChanged(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -374,7 +379,7 @@ automatically detaches from all currently attached targets.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Target.targetInfoChanged", _cb)
@@ -382,3 +387,4 @@ automatically detaches from all currently attached targets.
             return future
 
         self.client.on("Target.targetInfoChanged", cb)
+        return lambda: self.client.remove_listener("Target.targetInfoChanged", cb)

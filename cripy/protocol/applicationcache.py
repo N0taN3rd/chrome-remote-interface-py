@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -14,13 +13,13 @@ __all__ = ["ApplicationCache"]
 class ApplicationCache(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enables application cache domain notifications.
         """
         return self.client.send("ApplicationCache.enable")
 
-    def getApplicationCacheForFrame(self, frameId: str) -> Awaitable[Optional[dict]]:
+    def getApplicationCacheForFrame(self, frameId: str) -> Awaitable[Dict]:
         """
         Returns relevant application cache data for the document in given frame.
 
@@ -34,14 +33,14 @@ class ApplicationCache(object):
             "ApplicationCache.getApplicationCacheForFrame", msg_dict
         )
 
-    def getFramesWithManifests(self) -> Awaitable[Optional[dict]]:
+    def getFramesWithManifests(self) -> Awaitable[Dict]:
         """
         Returns array of frame identifiers with manifest urls for each frame containing a document
 associated with some application cache.
         """
         return self.client.send("ApplicationCache.getFramesWithManifests")
 
-    def getManifestForFrame(self, frameId: str) -> Awaitable[Optional[dict]]:
+    def getManifestForFrame(self, frameId: str) -> Awaitable[Dict]:
         """
         Returns manifest URL for document in the given frame.
 
@@ -59,7 +58,7 @@ associated with some application cache.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("ApplicationCache.applicationCacheStatusUpdated", _cb)
@@ -67,12 +66,15 @@ associated with some application cache.
             return future
 
         self.client.on("ApplicationCache.applicationCacheStatusUpdated", cb)
+        return lambda: self.client.remove_listener(
+            "ApplicationCache.applicationCacheStatusUpdated", cb
+        )
 
     def networkStateUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("ApplicationCache.networkStateUpdated", _cb)
@@ -80,3 +82,6 @@ associated with some application cache.
             return future
 
         self.client.on("ApplicationCache.networkStateUpdated", cb)
+        return lambda: self.client.remove_listener(
+            "ApplicationCache.networkStateUpdated", cb
+        )

@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -14,19 +13,19 @@ __all__ = ["Animation"]
 class Animation(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         """
         Disables animation domain notifications.
         """
         return self.client.send("Animation.disable")
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enables animation domain notifications.
         """
         return self.client.send("Animation.enable")
 
-    def getCurrentTime(self, id: str) -> Awaitable[Optional[dict]]:
+    def getCurrentTime(self, id: str) -> Awaitable[Dict]:
         """
         Returns the current time of the an animation.
 
@@ -38,13 +37,13 @@ class Animation(object):
             msg_dict["id"] = id
         return self.client.send("Animation.getCurrentTime", msg_dict)
 
-    def getPlaybackRate(self) -> Awaitable[Optional[dict]]:
+    def getPlaybackRate(self) -> Awaitable[Dict]:
         """
         Gets the playback rate of the document timeline.
         """
         return self.client.send("Animation.getPlaybackRate")
 
-    def releaseAnimations(self, animations: List[str]) -> Awaitable[Optional[dict]]:
+    def releaseAnimations(self, animations: List[str]) -> Awaitable[Dict]:
         """
         Releases a set of animations to no longer be manipulated.
 
@@ -56,7 +55,7 @@ class Animation(object):
             msg_dict["animations"] = animations
         return self.client.send("Animation.releaseAnimations", msg_dict)
 
-    def resolveAnimation(self, animationId: str) -> Awaitable[Optional[dict]]:
+    def resolveAnimation(self, animationId: str) -> Awaitable[Dict]:
         """
         Gets the remote object of the Animation.
 
@@ -70,7 +69,7 @@ class Animation(object):
 
     def seekAnimations(
         self, animations: List[str], currentTime: float
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Seek a set of animations to a particular time within each animation.
 
@@ -86,9 +85,7 @@ class Animation(object):
             msg_dict["currentTime"] = currentTime
         return self.client.send("Animation.seekAnimations", msg_dict)
 
-    def setPaused(
-        self, animations: List[str], paused: bool
-    ) -> Awaitable[Optional[dict]]:
+    def setPaused(self, animations: List[str], paused: bool) -> Awaitable[Dict]:
         """
         Sets the paused state of a set of animations.
 
@@ -104,7 +101,7 @@ class Animation(object):
             msg_dict["paused"] = paused
         return self.client.send("Animation.setPaused", msg_dict)
 
-    def setPlaybackRate(self, playbackRate: float) -> Awaitable[Optional[dict]]:
+    def setPlaybackRate(self, playbackRate: float) -> Awaitable[Dict]:
         """
         Sets the playback rate of the document timeline.
 
@@ -118,7 +115,7 @@ class Animation(object):
 
     def setTiming(
         self, animationId: str, duration: float, delay: float
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Sets the timing of an animation node.
 
@@ -145,7 +142,7 @@ class Animation(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Animation.animationCanceled", _cb)
@@ -153,6 +150,7 @@ class Animation(object):
             return future
 
         self.client.on("Animation.animationCanceled", cb)
+        return lambda: self.client.remove_listener("Animation.animationCanceled", cb)
 
     def animationCreated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -161,7 +159,7 @@ class Animation(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Animation.animationCreated", _cb)
@@ -169,6 +167,7 @@ class Animation(object):
             return future
 
         self.client.on("Animation.animationCreated", cb)
+        return lambda: self.client.remove_listener("Animation.animationCreated", cb)
 
     def animationStarted(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -177,7 +176,7 @@ class Animation(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Animation.animationStarted", _cb)
@@ -185,3 +184,4 @@ class Animation(object):
             return future
 
         self.client.on("Animation.animationStarted", cb)
+        return lambda: self.client.remove_listener("Animation.animationStarted", cb)

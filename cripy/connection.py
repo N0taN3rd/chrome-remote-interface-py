@@ -12,9 +12,15 @@ from websockets import WebSocketClientProtocol, ConnectionClosed, connect as wsc
 from .errors import NetworkError
 
 if TYPE_CHECKING:
-    from .client import Client, TargetSession
+    from .client import Client, TargetSession  # noqa: F401
 
-__all__ = ["Connection", "CDPSession", "ConnectionEvents", "createProtocolError"]
+__all__ = [
+    "Connection",
+    "CDPSession",
+    "ConnectionEvents",
+    "SessionEvents",
+    "createProtocolError",
+]
 
 logger = logging.getLogger(__name__)
 
@@ -28,9 +34,18 @@ def createProtocolError(method: str, msg: Dict) -> str:
     return emsg
 
 
+class CDPResultFuture(Future):
+    """A subclass of asyncio.Future to make linting happy about adding method to it"""
+
+    def __init__(self, method: str, loop: Optional[AbstractEventLoop] = None) -> None:
+        super().__init__(loop=loop)
+        self.method: str = method
+
+
 @attr.dataclass(slots=True, frozen=True)
 class ConnectionEvents(object):
-    Disconnected: str = attr.ib(default="Disconnected")
+    Disconnected: str = attr.ib(default="Connection.Disconnected")
+    Ready: str = attr.ib(default="Connection.Ready")
 
 
 class Connection(EventEmitter):
@@ -41,19 +56,20 @@ class Connection(EventEmitter):
 
     Events: ClassVar[ConnectionEvents] = ConnectionEvents()
 
-    def __init__(self, ws_url: str, loop: Optional[AbstractEventLoop] = None) -> None:
+    def __init__(self, ws_url: Optional[str] = None, loop: Optional[AbstractEventLoop] = None) -> None:
         """Construct a new instance of the CDP Client.
 
-        :param ws_url: The WS endpoint of the remote instance
+        :param ws_url: The WS endpoint of the remote instance.
+        If a ws url is not supplied it is expected to be supplied via connect.
         :param loop:  Optional event loop to use. Defaults to asyncio.get_event_loop
         """
         if loop is None:
             loop = asyncio.get_event_loop()
         super().__init__(loop=loop)
         self.connected: bool = False
-        self._url: str = ws_url
+        self._ws_url: str = ws_url
         self._lastId: int = 0
-        self._callbacks: Dict[int, Future] = dict()
+        self._callbacks: Dict[int, CDPResultFuture] = dict()
         self._ws: WebSocketClientProtocol = None
         self._recv_task: Optional[Task] = None
         self._closeCallback: Optional[Callable[[], None]] = None
@@ -66,27 +82,33 @@ class Connection(EventEmitter):
         return self._loop
 
     @property
-    def url(self) -> str:
+    def ws_url(self) -> str:
         """Get connected WebSocket url"""
-        return self._url
+        return self._ws_url
 
-    async def connect(self) -> None:
+    async def connect(self, ws_url: Optional[str] = None) -> None:
         """Connect to the remote websocket endpoint"""
+        if ws_url is not None:
+            self._ws_url = ws_url
         self._ws = await wsconnect(
-            self._url,
+            self._ws_url,
             ping_interval=None,  # chrome no ping pong and websockets closes down on no pong :'(
+            ping_timeout=None,
             max_size=None,
             compression=None,
             max_queue=2 ** 7,
             loop=self._loop,
         )
-        self._recv_task = self._loop.create_task(self._recv_loop())
+        self._closed = False
         # ensure that _recv_loop gets going
-        # by sleeping until next event loop tick
-        await asyncio.sleep(0, loop=self._loop)
+        ready_event = asyncio.Event(loop=self._loop)
+        self._recv_task = self._loop.create_task(self._recv_loop())
+        self.once(Connection.Events.Ready, lambda: ready_event.set())
+        await ready_event.wait()
 
-    async def createTargetSession(self, targetId: str) -> "CDPSession":
-        """Attach to the target specified by target id and create new CDPSession for direct communication to it."""
+    async def createCDPSession(self, targetId: str) -> "CDPSession":
+        """Attach to the target specified by target id and create new CDPSession for
+        direct communication to it."""
         resp = await self.send("Target.attachToTarget", {"targetId": targetId})
         sessionId = resp.get("sessionId")
         session = CDPSession(self, resp.get("type", "unknown"), sessionId)
@@ -112,8 +134,7 @@ class Connection(EventEmitter):
         self._lastId += 1
         _id = self._lastId
         msg = json.dumps(dict(method=method, params=params, id=_id))
-        callback: Future = self._loop.create_future()
-        callback.method = method  # type: ignore
+        callback = CDPResultFuture(method, loop=self._loop)
         self._callbacks[_id] = callback
         self._loop.create_task(self._send_async(msg, _id))
         return callback
@@ -128,17 +149,16 @@ class Connection(EventEmitter):
 
         When a msg is received, the _on_message method is called with the raw msg contents.
         """
+        self.emit(Connection.Events.Ready)
         self.connected = True
         while self.connected:
             try:
                 resp = await self._ws.recv()
                 if resp:
                     self._on_message(resp)
-            except (ConnectionClosed, ConnectionResetError) as e:
+            except (ConnectionClosed, ConnectionResetError):
                 logger.info("connection closed")
                 break
-            # ensures that we emit one event per event loop cycle
-            # await asyncio.sleep(0)
         if self.connected:
             self._loop.create_task(self.dispose())
 
@@ -204,7 +224,8 @@ class Connection(EventEmitter):
         """Closes the websocket connection and cleans up internals.
 
         All pending protocol method callbacks are canceled and the receive loop is stopped.
-        Calls the on close callback if it was supplied and the "connection-closed" method is emitted
+        Calls the on close callback if it was supplied and the "connection-closed" method
+        is emitted
         """
         if self._closed:
             return
@@ -225,7 +246,7 @@ class Connection(EventEmitter):
         self._sessions.clear()
 
         # close connection
-        if not self._ws.closed:
+        if self._ws and not self._ws.closed:
             try:
                 await self._ws.close()
             except Exception:
@@ -234,20 +255,27 @@ class Connection(EventEmitter):
         if self._recv_task is not None and not self._recv_task.done():
             self._recv_task.cancel()
 
-        self.emit(self.Events.Disconnected)
+        self.emit(Connection.Events.Disconnected)
 
     def __await__(self) -> "Connection":
         yield from self.connect().__await__()
         return self
 
     def __str__(self) -> str:
-        return f"Connection(wsurl={self._url}, connected={self.connected})"
+        return f"Connection(wsurl={self._ws_url}, connected={self.connected})"
 
     def __repr__(self) -> str:
         return self.__str__()
 
 
+@attr.dataclass(slots=True, frozen=True)
+class SessionEvents(object):
+    Disconnected: str = attr.ib(default="Session.Disconnected")
+
+
 class CDPSession(EventEmitter):
+    Events: ClassVar[SessionEvents] = SessionEvents()
+
     def __init__(
         self,
         connection: Union[Connection, "Client", "CDPSession", "TargetSession"],
@@ -261,7 +289,7 @@ class CDPSession(EventEmitter):
             loop = connection.loop
         super().__init__(loop=loop)
         self._lastId: int = 0
-        self._callbacks: Dict[int, Future] = dict()
+        self._callbacks: Dict[int, CDPResultFuture] = dict()
         self._connection: Union[
             Connection, "Client", CDPSession, "TargetSession"
         ] = connection
@@ -289,7 +317,7 @@ class CDPSession(EventEmitter):
         self._lastId += 1
         _id = self._lastId
         msg = json.dumps(dict(id=_id, method=method, params=params))
-        callback: Future = self._loop.create_future()
+        callback = CDPResultFuture(method, self._loop)
         self._callbacks[_id] = callback
         callback.method = method
         try:
@@ -317,7 +345,7 @@ class CDPSession(EventEmitter):
             "Target.detachFromTarget", {"sessionId": self._sessionId}
         )
 
-    def createSession(self, targetType: str, sessionId: str) -> "CDPSession":
+    def createCDPSession(self, targetType: str, sessionId: str) -> "CDPSession":
         sesh = CDPSession(self, targetType, sessionId)
         self._sessions[sessionId] = sesh
         return sesh
@@ -355,7 +383,7 @@ class CDPSession(EventEmitter):
             if not cb.done():
                 cb.set_exception(
                     NetworkError(
-                        f"Protocol error {cb.method}: {self._targetType} closed."  # type: ignore
+                        f"Protocol error {cb.method}: {self._targetType} closed."
                     )
                 )
         self._callbacks.clear()
@@ -363,6 +391,7 @@ class CDPSession(EventEmitter):
             session.on_closed()
         self._sessions.clear()
         self._connection = None
+        self.emit(CDPSession.Events.Disconnected)
 
     def __str__(self) -> str:
         return f"CDPSession(target={self._targetType}, sessionId={self._sessionId})"

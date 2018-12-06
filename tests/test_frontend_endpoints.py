@@ -40,5 +40,11 @@ class TestFontEndFns(object):
                 target_listed = True
                 break
         assert target_listed
-        assert await Client.Activate(target_id=new_target['id']) == (200, 'Target activated')
-        assert await Client.Close(target_id=new_target["id"]) == (200, 'Target is closing')
+        assert await Client.Activate(target_id=new_target["id"]) == (
+            200,
+            "Target activated",
+        )
+        assert await Client.Close(target_id=new_target["id"]) == (
+            200,
+            "Target is closing",
+        )

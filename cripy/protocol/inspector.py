@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -14,13 +13,13 @@ __all__ = ["Inspector"]
 class Inspector(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         """
         Disables inspector domain notifications.
         """
         return self.client.send("Inspector.disable")
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enables inspector domain notifications.
         """
@@ -33,7 +32,7 @@ class Inspector(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Inspector.detached", _cb)
@@ -41,6 +40,7 @@ class Inspector(object):
             return future
 
         self.client.on("Inspector.detached", cb)
+        return lambda: self.client.remove_listener("Inspector.detached", cb)
 
     def targetCrashed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -49,7 +49,7 @@ class Inspector(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Inspector.targetCrashed", _cb)
@@ -57,6 +57,7 @@ class Inspector(object):
             return future
 
         self.client.on("Inspector.targetCrashed", cb)
+        return lambda: self.client.remove_listener("Inspector.targetCrashed", cb)
 
     def targetReloadedAfterCrash(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -65,7 +66,7 @@ class Inspector(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Inspector.targetReloadedAfterCrash", _cb)
@@ -73,3 +74,6 @@ class Inspector(object):
             return future
 
         self.client.on("Inspector.targetReloadedAfterCrash", cb)
+        return lambda: self.client.remove_listener(
+            "Inspector.targetReloadedAfterCrash", cb
+        )

@@ -150,10 +150,12 @@ async def launch_chrome(
             break
     if found:
         for tab in await Client.List():
+            print(tab)
             if tab["type"] == "page":
                 return chrome_proc, tmpdir, tab["webSocketDebuggerUrl"]
+    chrome_proc.kill()
+    await chrome_proc.wait()
     tmpdir.cleanup()
-    chrome_proc.terminate()
     raise LaunchError("Could not find tab for connecting to")
 
 

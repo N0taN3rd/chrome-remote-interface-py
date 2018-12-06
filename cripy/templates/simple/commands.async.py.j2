@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
 {% set dl = d.domain | lower %}
-from typing import Awaitable,{% if events %} Any, Callable,{% endif %} List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable,{% if events %} Any, Callable,{% endif %} Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -23,9 +22,9 @@ class {{ d.domain }}(object):
 
     {% for command in d.commands %}
     {% if command.has_parameters %}
-    def {{ command.name }}(self, {{ command.command_arg_string }}) -> Awaitable[Optional[dict]]:
+    def {{ command.name }}(self, {{ command.command_arg_string }}) -> Awaitable[Dict]:
     {% else %}
-    def {{ command.name }}(self) -> Awaitable[Optional[dict]]:
+    def {{ command.name }}(self) -> Awaitable[Dict]:
     {% endif %}
         {% if command.has_parameters %}
         """
@@ -72,7 +71,7 @@ class {{ d.domain }}(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("{{ e }}", _cb)
@@ -80,6 +79,7 @@ class {{ d.domain }}(object):
             return future
 
         self.client.on("{{ e }}", cb)
+        return lambda: self.client.remove_listener("{{ e }}", cb)
 
     {% endfor %}
     {% endif %}

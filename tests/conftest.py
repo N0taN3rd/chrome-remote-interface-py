@@ -19,9 +19,9 @@ async def chrome(request: SubRequest):
     if request.cls:
         request.cls.wsurl = wsurl
     yield wsurl
-    tempdir.cleanup()
-    cp.terminate()
+    cp.kill()
     await cp.wait()
+    tempdir.cleanup()
 
 
 @pytest.yield_fixture

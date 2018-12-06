@@ -167,4 +167,3 @@ def gen() -> None:
 
 if __name__ == "__main__":
     gen()
-    # gen_no_types()

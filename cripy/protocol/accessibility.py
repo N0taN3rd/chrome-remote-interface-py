@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -14,13 +13,13 @@ __all__ = ["Accessibility"]
 class Accessibility(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         """
         Disables the accessibility domain.
         """
         return self.client.send("Accessibility.disable")
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enables the accessibility domain which causes `AXNodeId`s to remain consistent between method calls.
 This turns on accessibility for the page, which can impact performance until accessibility is disabled.
@@ -33,7 +32,7 @@ This turns on accessibility for the page, which can impact performance until acc
         backendNodeId: Optional[int] = None,
         objectId: Optional[str] = None,
         fetchRelatives: Optional[bool] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Fetches the accessibility node and partial accessibility tree for this DOM node, if it exists.
 
@@ -57,7 +56,7 @@ This turns on accessibility for the page, which can impact performance until acc
             msg_dict["fetchRelatives"] = fetchRelatives
         return self.client.send("Accessibility.getPartialAXTree", msg_dict)
 
-    def getFullAXTree(self) -> Awaitable[Optional[dict]]:
+    def getFullAXTree(self) -> Awaitable[Dict]:
         """
         Fetches the entire accessibility tree
         """

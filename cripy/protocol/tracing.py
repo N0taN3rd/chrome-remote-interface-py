@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -14,19 +13,19 @@ __all__ = ["Tracing"]
 class Tracing(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def end(self) -> Awaitable[Optional[dict]]:
+    def end(self) -> Awaitable[Dict]:
         """
         Stop trace events collection.
         """
         return self.client.send("Tracing.end")
 
-    def getCategories(self) -> Awaitable[Optional[dict]]:
+    def getCategories(self) -> Awaitable[Dict]:
         """
         Gets supported tracing categories.
         """
         return self.client.send("Tracing.getCategories")
 
-    def recordClockSyncMarker(self, syncId: str) -> Awaitable[Optional[dict]]:
+    def recordClockSyncMarker(self, syncId: str) -> Awaitable[Dict]:
         """
         Record a clock sync marker in the trace.
 
@@ -38,7 +37,7 @@ class Tracing(object):
             msg_dict["syncId"] = syncId
         return self.client.send("Tracing.recordClockSyncMarker", msg_dict)
 
-    def requestMemoryDump(self) -> Awaitable[Optional[dict]]:
+    def requestMemoryDump(self) -> Awaitable[Dict]:
         """
         Request a global memory dump.
         """
@@ -52,7 +51,7 @@ class Tracing(object):
         transferMode: Optional[str] = None,
         streamCompression: Optional[str] = None,
         traceConfig: Optional[dict] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Start trace events collection.
 
@@ -88,7 +87,7 @@ class Tracing(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Tracing.bufferUsage", _cb)
@@ -96,6 +95,7 @@ class Tracing(object):
             return future
 
         self.client.on("Tracing.bufferUsage", cb)
+        return lambda: self.client.remove_listener("Tracing.bufferUsage", cb)
 
     def dataCollected(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -105,7 +105,7 @@ class Tracing(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Tracing.dataCollected", _cb)
@@ -113,6 +113,7 @@ class Tracing(object):
             return future
 
         self.client.on("Tracing.dataCollected", cb)
+        return lambda: self.client.remove_listener("Tracing.dataCollected", cb)
 
     def tracingComplete(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -122,7 +123,7 @@ class Tracing(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Tracing.tracingComplete", _cb)
@@ -130,3 +131,4 @@ class Tracing(object):
             return future
 
         self.client.on("Tracing.tracingComplete", cb)
+        return lambda: self.client.remove_listener("Tracing.tracingComplete", cb)
