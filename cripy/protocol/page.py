@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -18,7 +17,7 @@ class Page(object):
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def addScriptToEvaluateOnLoad(self, scriptSource: str) -> Awaitable[Optional[dict]]:
+    def addScriptToEvaluateOnLoad(self, scriptSource: str) -> Awaitable[Dict]:
         """
         Deprecated, please use addScriptToEvaluateOnNewDocument instead.
 
@@ -32,7 +31,7 @@ class Page(object):
 
     def addScriptToEvaluateOnNewDocument(
         self, source: str, worldName: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Evaluates given script in every frame upon creation (before loading frame's scripts).
 
@@ -48,7 +47,7 @@ class Page(object):
             msg_dict["worldName"] = worldName
         return self.client.send("Page.addScriptToEvaluateOnNewDocument", msg_dict)
 
-    def bringToFront(self) -> Awaitable[Optional[dict]]:
+    def bringToFront(self) -> Awaitable[Dict]:
         """
         Brings page to front (activates tab).
         """
@@ -60,7 +59,7 @@ class Page(object):
         quality: Optional[int] = None,
         clip: Optional[dict] = None,
         fromSurface: Optional[bool] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Capture page screenshot.
 
@@ -84,19 +83,32 @@ class Page(object):
             msg_dict["fromSurface"] = fromSurface
         return self.client.send("Page.captureScreenshot", msg_dict)
 
-    def clearDeviceMetricsOverride(self) -> Awaitable[Optional[dict]]:
+    def captureSnapshot(self, format: Optional[str] = None) -> Awaitable[Dict]:
+        """
+        Returns a snapshot of the page as a string. For MHTML format, the serialization includes
+iframes, shadow DOM, external resources, and element-inline styles.
+
+        :param format: Format (defaults to mhtml).
+        :type format: Optional[str]
+        """
+        msg_dict = dict()
+        if format is not None:
+            msg_dict["format"] = format
+        return self.client.send("Page.captureSnapshot", msg_dict)
+
+    def clearDeviceMetricsOverride(self) -> Awaitable[Dict]:
         """
         Clears the overriden device metrics.
         """
         return self.client.send("Page.clearDeviceMetricsOverride")
 
-    def clearDeviceOrientationOverride(self) -> Awaitable[Optional[dict]]:
+    def clearDeviceOrientationOverride(self) -> Awaitable[Dict]:
         """
         Clears the overridden Device Orientation.
         """
         return self.client.send("Page.clearDeviceOrientationOverride")
 
-    def clearGeolocationOverride(self) -> Awaitable[Optional[dict]]:
+    def clearGeolocationOverride(self) -> Awaitable[Dict]:
         """
         Clears the overriden Geolocation Position and Error.
         """
@@ -107,7 +119,7 @@ class Page(object):
         frameId: str,
         worldName: Optional[str] = None,
         grantUniveralAccess: Optional[bool] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Creates an isolated world for the given frame.
 
@@ -127,7 +139,7 @@ class Page(object):
             msg_dict["grantUniveralAccess"] = grantUniveralAccess
         return self.client.send("Page.createIsolatedWorld", msg_dict)
 
-    def deleteCookie(self, cookieName: str, url: str) -> Awaitable[Optional[dict]]:
+    def deleteCookie(self, cookieName: str, url: str) -> Awaitable[Dict]:
         """
         Deletes browser cookie with given name, domain and path.
 
@@ -143,47 +155,47 @@ class Page(object):
             msg_dict["url"] = url
         return self.client.send("Page.deleteCookie", msg_dict)
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         """
         Disables page domain notifications.
         """
         return self.client.send("Page.disable")
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enables page domain notifications.
         """
         return self.client.send("Page.enable")
 
-    def getAppManifest(self) -> Awaitable[Optional[dict]]:
+    def getAppManifest(self) -> Awaitable[Dict]:
         return self.client.send("Page.getAppManifest")
 
-    def getCookies(self) -> Awaitable[Optional[dict]]:
+    def getCookies(self) -> Awaitable[Dict]:
         """
         Returns all browser cookies. Depending on the backend support, will return detailed cookie
 information in the `cookies` field.
         """
         return self.client.send("Page.getCookies")
 
-    def getFrameTree(self) -> Awaitable[Optional[dict]]:
+    def getFrameTree(self) -> Awaitable[Dict]:
         """
         Returns present frame tree structure.
         """
         return self.client.send("Page.getFrameTree")
 
-    def getLayoutMetrics(self) -> Awaitable[Optional[dict]]:
+    def getLayoutMetrics(self) -> Awaitable[Dict]:
         """
         Returns metrics relating to the layouting of the page, such as viewport bounds/scale.
         """
         return self.client.send("Page.getLayoutMetrics")
 
-    def getNavigationHistory(self) -> Awaitable[Optional[dict]]:
+    def getNavigationHistory(self) -> Awaitable[Dict]:
         """
         Returns navigation history for the current page.
         """
         return self.client.send("Page.getNavigationHistory")
 
-    def getResourceContent(self, frameId: str, url: str) -> Awaitable[Optional[dict]]:
+    def getResourceContent(self, frameId: str, url: str) -> Awaitable[Dict]:
         """
         Returns content of the given resource.
 
@@ -199,7 +211,7 @@ information in the `cookies` field.
             msg_dict["url"] = url
         return self.client.send("Page.getResourceContent", msg_dict)
 
-    def getResourceTree(self) -> Awaitable[Optional[dict]]:
+    def getResourceTree(self) -> Awaitable[Dict]:
         """
         Returns present frame / resource tree structure.
         """
@@ -207,7 +219,7 @@ information in the `cookies` field.
 
     def handleJavaScriptDialog(
         self, accept: bool, promptText: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Accepts or dismisses a JavaScript initiated dialog (alert, confirm, prompt, or onbeforeunload).
 
@@ -229,7 +241,7 @@ information in the `cookies` field.
         referrer: Optional[str] = None,
         transitionType: Optional[str] = None,
         frameId: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Navigates current page to the given URL.
 
@@ -253,7 +265,7 @@ information in the `cookies` field.
             msg_dict["frameId"] = frameId
         return self.client.send("Page.navigate", msg_dict)
 
-    def navigateToHistoryEntry(self, entryId: int) -> Awaitable[Optional[dict]]:
+    def navigateToHistoryEntry(self, entryId: int) -> Awaitable[Dict]:
         """
         Navigates current page to the given history entry.
 
@@ -282,7 +294,7 @@ information in the `cookies` field.
         headerTemplate: Optional[str] = None,
         footerTemplate: Optional[str] = None,
         preferCSSPageSize: Optional[bool] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Print page as PDF.
 
@@ -354,7 +366,7 @@ information in the `cookies` field.
         self,
         ignoreCache: Optional[bool] = None,
         scriptToEvaluateOnLoad: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Reloads given page optionally ignoring the cache.
 
@@ -370,9 +382,7 @@ information in the `cookies` field.
             msg_dict["scriptToEvaluateOnLoad"] = scriptToEvaluateOnLoad
         return self.client.send("Page.reload", msg_dict)
 
-    def removeScriptToEvaluateOnLoad(
-        self, identifier: str
-    ) -> Awaitable[Optional[dict]]:
+    def removeScriptToEvaluateOnLoad(self, identifier: str) -> Awaitable[Dict]:
         """
         Deprecated, please use removeScriptToEvaluateOnNewDocument instead.
 
@@ -384,9 +394,7 @@ information in the `cookies` field.
             msg_dict["identifier"] = identifier
         return self.client.send("Page.removeScriptToEvaluateOnLoad", msg_dict)
 
-    def removeScriptToEvaluateOnNewDocument(
-        self, identifier: str
-    ) -> Awaitable[Optional[dict]]:
+    def removeScriptToEvaluateOnNewDocument(self, identifier: str) -> Awaitable[Dict]:
         """
         Removes given script from the list.
 
@@ -398,10 +406,10 @@ information in the `cookies` field.
             msg_dict["identifier"] = identifier
         return self.client.send("Page.removeScriptToEvaluateOnNewDocument", msg_dict)
 
-    def requestAppBanner(self) -> Awaitable[Optional[dict]]:
+    def requestAppBanner(self) -> Awaitable[Dict]:
         return self.client.send("Page.requestAppBanner")
 
-    def screencastFrameAck(self, sessionId: int) -> Awaitable[Optional[dict]]:
+    def screencastFrameAck(self, sessionId: int) -> Awaitable[Dict]:
         """
         Acknowledges that a screencast frame has been received by the frontend.
 
@@ -420,7 +428,7 @@ information in the `cookies` field.
         query: str,
         caseSensitive: Optional[bool] = None,
         isRegex: Optional[bool] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Searches for given string in resource content.
 
@@ -448,7 +456,7 @@ information in the `cookies` field.
             msg_dict["isRegex"] = isRegex
         return self.client.send("Page.searchInResource", msg_dict)
 
-    def setAdBlockingEnabled(self, enabled: bool) -> Awaitable[Optional[dict]]:
+    def setAdBlockingEnabled(self, enabled: bool) -> Awaitable[Dict]:
         """
         Enable Chrome's experimental ad filter on all sites.
 
@@ -460,7 +468,7 @@ information in the `cookies` field.
             msg_dict["enabled"] = enabled
         return self.client.send("Page.setAdBlockingEnabled", msg_dict)
 
-    def setBypassCSP(self, enabled: bool) -> Awaitable[Optional[dict]]:
+    def setBypassCSP(self, enabled: bool) -> Awaitable[Dict]:
         """
         Enable page Content Security Policy by-passing.
 
@@ -486,7 +494,7 @@ information in the `cookies` field.
         dontSetVisibleSize: Optional[bool] = None,
         screenOrientation: Optional[dict] = None,
         viewport: Optional[dict] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Overrides the values of device screen dimensions (window.screen.width, window.screen.height,
 window.innerWidth, window.innerHeight, and "device-width"/"device-height"-related CSS media
@@ -546,7 +554,7 @@ query results).
 
     def setDeviceOrientationOverride(
         self, alpha: float, beta: float, gamma: float
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Overrides the Device Orientation.
 
@@ -566,7 +574,7 @@ query results).
             msg_dict["gamma"] = gamma
         return self.client.send("Page.setDeviceOrientationOverride", msg_dict)
 
-    def setFontFamilies(self, fontFamilies: dict) -> Awaitable[Optional[dict]]:
+    def setFontFamilies(self, fontFamilies: dict) -> Awaitable[Dict]:
         """
         Set generic font families.
 
@@ -578,7 +586,7 @@ query results).
             msg_dict["fontFamilies"] = fontFamilies
         return self.client.send("Page.setFontFamilies", msg_dict)
 
-    def setFontSizes(self, fontSizes: dict) -> Awaitable[Optional[dict]]:
+    def setFontSizes(self, fontSizes: dict) -> Awaitable[Dict]:
         """
         Set default font sizes.
 
@@ -590,7 +598,7 @@ query results).
             msg_dict["fontSizes"] = fontSizes
         return self.client.send("Page.setFontSizes", msg_dict)
 
-    def setDocumentContent(self, frameId: str, html: str) -> Awaitable[Optional[dict]]:
+    def setDocumentContent(self, frameId: str, html: str) -> Awaitable[Dict]:
         """
         Sets given markup as the document's HTML.
 
@@ -608,7 +616,7 @@ query results).
 
     def setDownloadBehavior(
         self, behavior: str, downloadPath: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Set the behavior when downloading a file.
 
@@ -629,7 +637,7 @@ query results).
         latitude: Optional[float] = None,
         longitude: Optional[float] = None,
         accuracy: Optional[float] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Overrides the Geolocation Position or Error. Omitting any of the parameters emulates position
 unavailable.
@@ -650,7 +658,7 @@ unavailable.
             msg_dict["accuracy"] = accuracy
         return self.client.send("Page.setGeolocationOverride", msg_dict)
 
-    def setLifecycleEventsEnabled(self, enabled: bool) -> Awaitable[Optional[dict]]:
+    def setLifecycleEventsEnabled(self, enabled: bool) -> Awaitable[Dict]:
         """
         Controls whether page will emit lifecycle events.
 
@@ -664,7 +672,7 @@ unavailable.
 
     def setTouchEmulationEnabled(
         self, enabled: bool, configuration: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Toggles mouse event-based touch event emulation.
 
@@ -687,7 +695,7 @@ unavailable.
         maxWidth: Optional[int] = None,
         maxHeight: Optional[int] = None,
         everyNthFrame: Optional[int] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Starts sending each frame using the `screencastFrame` event.
 
@@ -715,25 +723,25 @@ unavailable.
             msg_dict["everyNthFrame"] = everyNthFrame
         return self.client.send("Page.startScreencast", msg_dict)
 
-    def stopLoading(self) -> Awaitable[Optional[dict]]:
+    def stopLoading(self) -> Awaitable[Dict]:
         """
         Force the page stop all navigations and pending resource fetches.
         """
         return self.client.send("Page.stopLoading")
 
-    def crash(self) -> Awaitable[Optional[dict]]:
+    def crash(self) -> Awaitable[Dict]:
         """
         Crashes renderer on the IO thread, generates minidumps.
         """
         return self.client.send("Page.crash")
 
-    def close(self) -> Awaitable[Optional[dict]]:
+    def close(self) -> Awaitable[Dict]:
         """
         Tries to close page, running its beforeunload hooks, if any.
         """
         return self.client.send("Page.close")
 
-    def setWebLifecycleState(self, state: str) -> Awaitable[Optional[dict]]:
+    def setWebLifecycleState(self, state: str) -> Awaitable[Dict]:
         """
         Tries to update the web lifecycle state of the page.
 It will transition the page to the given state according to:
@@ -747,13 +755,13 @@ https://github.com/WICG/web-lifecycle/
             msg_dict["state"] = state
         return self.client.send("Page.setWebLifecycleState", msg_dict)
 
-    def stopScreencast(self) -> Awaitable[Optional[dict]]:
+    def stopScreencast(self) -> Awaitable[Dict]:
         """
         Stops sending each frame in the `screencastFrame`.
         """
         return self.client.send("Page.stopScreencast")
 
-    def setProduceCompilationCache(self, enabled: bool) -> Awaitable[Optional[dict]]:
+    def setProduceCompilationCache(self, enabled: bool) -> Awaitable[Dict]:
         """
         Forces compilation cache to be generated for every subresource script.
 
@@ -765,7 +773,7 @@ https://github.com/WICG/web-lifecycle/
             msg_dict["enabled"] = enabled
         return self.client.send("Page.setProduceCompilationCache", msg_dict)
 
-    def addCompilationCache(self, url: str, data: str) -> Awaitable[Optional[dict]]:
+    def addCompilationCache(self, url: str, data: str) -> Awaitable[Dict]:
         """
         Seeds compilation cache for given url. Compilation cache does not survive
 cross-process navigation.
@@ -782,7 +790,7 @@ cross-process navigation.
             msg_dict["data"] = data
         return self.client.send("Page.addCompilationCache", msg_dict)
 
-    def clearCompilationCache(self) -> Awaitable[Optional[dict]]:
+    def clearCompilationCache(self) -> Awaitable[Dict]:
         """
         Clears seeded compilation cache.
         """
@@ -790,7 +798,7 @@ cross-process navigation.
 
     def generateTestReport(
         self, message: str, group: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Generates a report for testing.
 
@@ -810,7 +818,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.domContentEventFired", _cb)
@@ -818,6 +826,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.domContentEventFired", cb)
+        return lambda: self.client.remove_listener("Page.domContentEventFired", cb)
 
     def frameAttached(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -826,7 +835,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.frameAttached", _cb)
@@ -834,6 +843,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.frameAttached", cb)
+        return lambda: self.client.remove_listener("Page.frameAttached", cb)
 
     def frameClearedScheduledNavigation(
         self, cb: Optional[Callable[..., Any]] = None
@@ -844,7 +854,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.frameClearedScheduledNavigation", _cb)
@@ -852,6 +862,9 @@ cross-process navigation.
             return future
 
         self.client.on("Page.frameClearedScheduledNavigation", cb)
+        return lambda: self.client.remove_listener(
+            "Page.frameClearedScheduledNavigation", cb
+        )
 
     def frameDetached(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -860,7 +873,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.frameDetached", _cb)
@@ -868,6 +881,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.frameDetached", cb)
+        return lambda: self.client.remove_listener("Page.frameDetached", cb)
 
     def frameNavigated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -876,7 +890,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.frameNavigated", _cb)
@@ -884,12 +898,13 @@ cross-process navigation.
             return future
 
         self.client.on("Page.frameNavigated", cb)
+        return lambda: self.client.remove_listener("Page.frameNavigated", cb)
 
     def frameResized(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.frameResized", _cb)
@@ -897,6 +912,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.frameResized", cb)
+        return lambda: self.client.remove_listener("Page.frameResized", cb)
 
     def frameScheduledNavigation(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -905,7 +921,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.frameScheduledNavigation", _cb)
@@ -913,6 +929,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.frameScheduledNavigation", cb)
+        return lambda: self.client.remove_listener("Page.frameScheduledNavigation", cb)
 
     def frameStartedLoading(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -921,7 +938,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.frameStartedLoading", _cb)
@@ -929,6 +946,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.frameStartedLoading", cb)
+        return lambda: self.client.remove_listener("Page.frameStartedLoading", cb)
 
     def frameStoppedLoading(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -937,7 +955,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.frameStoppedLoading", _cb)
@@ -945,6 +963,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.frameStoppedLoading", cb)
+        return lambda: self.client.remove_listener("Page.frameStoppedLoading", cb)
 
     def interstitialHidden(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -953,7 +972,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.interstitialHidden", _cb)
@@ -961,6 +980,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.interstitialHidden", cb)
+        return lambda: self.client.remove_listener("Page.interstitialHidden", cb)
 
     def interstitialShown(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -969,7 +989,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.interstitialShown", _cb)
@@ -977,6 +997,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.interstitialShown", cb)
+        return lambda: self.client.remove_listener("Page.interstitialShown", cb)
 
     def javascriptDialogClosed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -986,7 +1007,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.javascriptDialogClosed", _cb)
@@ -994,6 +1015,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.javascriptDialogClosed", cb)
+        return lambda: self.client.remove_listener("Page.javascriptDialogClosed", cb)
 
     def javascriptDialogOpening(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -1003,7 +1025,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.javascriptDialogOpening", _cb)
@@ -1011,6 +1033,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.javascriptDialogOpening", cb)
+        return lambda: self.client.remove_listener("Page.javascriptDialogOpening", cb)
 
     def lifecycleEvent(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -1019,7 +1042,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.lifecycleEvent", _cb)
@@ -1027,12 +1050,13 @@ cross-process navigation.
             return future
 
         self.client.on("Page.lifecycleEvent", cb)
+        return lambda: self.client.remove_listener("Page.lifecycleEvent", cb)
 
     def loadEventFired(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.loadEventFired", _cb)
@@ -1040,6 +1064,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.loadEventFired", cb)
+        return lambda: self.client.remove_listener("Page.loadEventFired", cb)
 
     def navigatedWithinDocument(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -1048,7 +1073,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.navigatedWithinDocument", _cb)
@@ -1056,6 +1081,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.navigatedWithinDocument", cb)
+        return lambda: self.client.remove_listener("Page.navigatedWithinDocument", cb)
 
     def screencastFrame(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -1064,7 +1090,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.screencastFrame", _cb)
@@ -1072,6 +1098,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.screencastFrame", cb)
+        return lambda: self.client.remove_listener("Page.screencastFrame", cb)
 
     def screencastVisibilityChanged(
         self, cb: Optional[Callable[..., Any]] = None
@@ -1082,7 +1109,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.screencastVisibilityChanged", _cb)
@@ -1090,6 +1117,9 @@ cross-process navigation.
             return future
 
         self.client.on("Page.screencastVisibilityChanged", cb)
+        return lambda: self.client.remove_listener(
+            "Page.screencastVisibilityChanged", cb
+        )
 
     def windowOpen(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -1099,7 +1129,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.windowOpen", _cb)
@@ -1107,6 +1137,7 @@ cross-process navigation.
             return future
 
         self.client.on("Page.windowOpen", cb)
+        return lambda: self.client.remove_listener("Page.windowOpen", cb)
 
     def compilationCacheProduced(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -1116,7 +1147,7 @@ cross-process navigation.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Page.compilationCacheProduced", _cb)
@@ -1124,3 +1155,4 @@ cross-process navigation.
             return future
 
         self.client.on("Page.compilationCacheProduced", cb)
+        return lambda: self.client.remove_listener("Page.compilationCacheProduced", cb)

@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -14,7 +13,7 @@ __all__ = ["LayerTree"]
 class LayerTree(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def compositingReasons(self, layerId: str) -> Awaitable[Optional[dict]]:
+    def compositingReasons(self, layerId: str) -> Awaitable[Dict]:
         """
         Provides the reasons why the given layer was composited.
 
@@ -26,19 +25,19 @@ class LayerTree(object):
             msg_dict["layerId"] = layerId
         return self.client.send("LayerTree.compositingReasons", msg_dict)
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         """
         Disables compositing tree inspection.
         """
         return self.client.send("LayerTree.disable")
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enables compositing tree inspection.
         """
         return self.client.send("LayerTree.enable")
 
-    def loadSnapshot(self, tiles: List[dict]) -> Awaitable[Optional[dict]]:
+    def loadSnapshot(self, tiles: List[dict]) -> Awaitable[Dict]:
         """
         Returns the snapshot identifier.
 
@@ -50,7 +49,7 @@ class LayerTree(object):
             msg_dict["tiles"] = tiles
         return self.client.send("LayerTree.loadSnapshot", msg_dict)
 
-    def makeSnapshot(self, layerId: str) -> Awaitable[Optional[dict]]:
+    def makeSnapshot(self, layerId: str) -> Awaitable[Dict]:
         """
         Returns the layer snapshot identifier.
 
@@ -68,7 +67,7 @@ class LayerTree(object):
         minRepeatCount: Optional[int] = None,
         minDuration: Optional[float] = None,
         clipRect: Optional[dict] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         :param snapshotId: The id of the layer snapshot.
         :type snapshotId: str
@@ -90,7 +89,7 @@ class LayerTree(object):
             msg_dict["clipRect"] = clipRect
         return self.client.send("LayerTree.profileSnapshot", msg_dict)
 
-    def releaseSnapshot(self, snapshotId: str) -> Awaitable[Optional[dict]]:
+    def releaseSnapshot(self, snapshotId: str) -> Awaitable[Dict]:
         """
         Releases layer snapshot captured by the back-end.
 
@@ -108,7 +107,7 @@ class LayerTree(object):
         fromStep: Optional[int] = None,
         toStep: Optional[int] = None,
         scale: Optional[float] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Replays the layer snapshot and returns the resulting bitmap.
 
@@ -132,7 +131,7 @@ class LayerTree(object):
             msg_dict["scale"] = scale
         return self.client.send("LayerTree.replaySnapshot", msg_dict)
 
-    def snapshotCommandLog(self, snapshotId: str) -> Awaitable[Optional[dict]]:
+    def snapshotCommandLog(self, snapshotId: str) -> Awaitable[Dict]:
         """
         Replays the layer snapshot and returns canvas log.
 
@@ -148,7 +147,7 @@ class LayerTree(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("LayerTree.layerPainted", _cb)
@@ -156,12 +155,13 @@ class LayerTree(object):
             return future
 
         self.client.on("LayerTree.layerPainted", cb)
+        return lambda: self.client.remove_listener("LayerTree.layerPainted", cb)
 
     def layerTreeDidChange(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("LayerTree.layerTreeDidChange", _cb)
@@ -169,3 +169,4 @@ class LayerTree(object):
             return future
 
         self.client.on("LayerTree.layerTreeDidChange", cb)
+        return lambda: self.client.remove_listener("LayerTree.layerTreeDidChange", cb)

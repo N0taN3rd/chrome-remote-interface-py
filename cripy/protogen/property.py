@@ -137,14 +137,6 @@ class Property(FRefCollector):
             ars = TYPER.command_sig(self.type, domain)
             if ars is None:
                 ars = "Any"
-                print(
-                    "wtf",
-                    self.name,
-                    self.type,
-                    self.type.is_array,
-                    self.items,
-                    TYPER.you_are_in(self.items),
-                )
             ts = self._wrap_if_optionalc(ars)
         return f"{self.name}: {ts}"
 

@@ -1,13 +1,11 @@
 aiodns
 aiofiles
 aiohttp
-async-timeout
 attrs
 cchardet
 jinja2
 pyee
-psutil
 stringcase
 ujson
-uvloop
 websockets
+uvloop

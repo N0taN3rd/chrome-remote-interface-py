@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -21,7 +20,7 @@ execution will stop on these operations as if there was a regular breakpoint set
 
     def getEventListeners(
         self, objectId: str, depth: Optional[int] = None, pierce: Optional[bool] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Returns event listeners of the given object.
 
@@ -41,7 +40,7 @@ execution will stop on these operations as if there was a regular breakpoint set
             msg_dict["pierce"] = pierce
         return self.client.send("DOMDebugger.getEventListeners", msg_dict)
 
-    def removeDOMBreakpoint(self, nodeId: int, type: str) -> Awaitable[Optional[dict]]:
+    def removeDOMBreakpoint(self, nodeId: int, type: str) -> Awaitable[Dict]:
         """
         Removes DOM breakpoint that was set using `setDOMBreakpoint`.
 
@@ -59,7 +58,7 @@ execution will stop on these operations as if there was a regular breakpoint set
 
     def removeEventListenerBreakpoint(
         self, eventName: str, targetName: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Removes breakpoint on particular DOM event.
 
@@ -75,9 +74,7 @@ execution will stop on these operations as if there was a regular breakpoint set
             msg_dict["targetName"] = targetName
         return self.client.send("DOMDebugger.removeEventListenerBreakpoint", msg_dict)
 
-    def removeInstrumentationBreakpoint(
-        self, eventName: str
-    ) -> Awaitable[Optional[dict]]:
+    def removeInstrumentationBreakpoint(self, eventName: str) -> Awaitable[Dict]:
         """
         Removes breakpoint on particular native event.
 
@@ -89,7 +86,7 @@ execution will stop on these operations as if there was a regular breakpoint set
             msg_dict["eventName"] = eventName
         return self.client.send("DOMDebugger.removeInstrumentationBreakpoint", msg_dict)
 
-    def removeXHRBreakpoint(self, url: str) -> Awaitable[Optional[dict]]:
+    def removeXHRBreakpoint(self, url: str) -> Awaitable[Dict]:
         """
         Removes breakpoint from XMLHttpRequest.
 
@@ -101,7 +98,7 @@ execution will stop on these operations as if there was a regular breakpoint set
             msg_dict["url"] = url
         return self.client.send("DOMDebugger.removeXHRBreakpoint", msg_dict)
 
-    def setDOMBreakpoint(self, nodeId: int, type: str) -> Awaitable[Optional[dict]]:
+    def setDOMBreakpoint(self, nodeId: int, type: str) -> Awaitable[Dict]:
         """
         Sets breakpoint on particular operation with DOM.
 
@@ -119,7 +116,7 @@ execution will stop on these operations as if there was a regular breakpoint set
 
     def setEventListenerBreakpoint(
         self, eventName: str, targetName: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Sets breakpoint on particular DOM event.
 
@@ -135,7 +132,7 @@ execution will stop on these operations as if there was a regular breakpoint set
             msg_dict["targetName"] = targetName
         return self.client.send("DOMDebugger.setEventListenerBreakpoint", msg_dict)
 
-    def setInstrumentationBreakpoint(self, eventName: str) -> Awaitable[Optional[dict]]:
+    def setInstrumentationBreakpoint(self, eventName: str) -> Awaitable[Dict]:
         """
         Sets breakpoint on particular native event.
 
@@ -147,7 +144,7 @@ execution will stop on these operations as if there was a regular breakpoint set
             msg_dict["eventName"] = eventName
         return self.client.send("DOMDebugger.setInstrumentationBreakpoint", msg_dict)
 
-    def setXHRBreakpoint(self, url: str) -> Awaitable[Optional[dict]]:
+    def setXHRBreakpoint(self, url: str) -> Awaitable[Dict]:
         """
         Sets breakpoint on XMLHttpRequest.
 

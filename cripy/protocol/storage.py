@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -14,9 +13,7 @@ __all__ = ["Storage"]
 class Storage(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def clearDataForOrigin(
-        self, origin: str, storageTypes: str
-    ) -> Awaitable[Optional[dict]]:
+    def clearDataForOrigin(self, origin: str, storageTypes: str) -> Awaitable[Dict]:
         """
         Clears storage for origin.
 
@@ -32,7 +29,7 @@ class Storage(object):
             msg_dict["storageTypes"] = storageTypes
         return self.client.send("Storage.clearDataForOrigin", msg_dict)
 
-    def getUsageAndQuota(self, origin: str) -> Awaitable[Optional[dict]]:
+    def getUsageAndQuota(self, origin: str) -> Awaitable[Dict]:
         """
         Returns usage and quota in bytes.
 
@@ -44,7 +41,7 @@ class Storage(object):
             msg_dict["origin"] = origin
         return self.client.send("Storage.getUsageAndQuota", msg_dict)
 
-    def trackCacheStorageForOrigin(self, origin: str) -> Awaitable[Optional[dict]]:
+    def trackCacheStorageForOrigin(self, origin: str) -> Awaitable[Dict]:
         """
         Registers origin to be notified when an update occurs to its cache storage list.
 
@@ -56,7 +53,7 @@ class Storage(object):
             msg_dict["origin"] = origin
         return self.client.send("Storage.trackCacheStorageForOrigin", msg_dict)
 
-    def trackIndexedDBForOrigin(self, origin: str) -> Awaitable[Optional[dict]]:
+    def trackIndexedDBForOrigin(self, origin: str) -> Awaitable[Dict]:
         """
         Registers origin to be notified when an update occurs to its IndexedDB.
 
@@ -68,7 +65,7 @@ class Storage(object):
             msg_dict["origin"] = origin
         return self.client.send("Storage.trackIndexedDBForOrigin", msg_dict)
 
-    def untrackCacheStorageForOrigin(self, origin: str) -> Awaitable[Optional[dict]]:
+    def untrackCacheStorageForOrigin(self, origin: str) -> Awaitable[Dict]:
         """
         Unregisters origin from receiving notifications for cache storage.
 
@@ -80,7 +77,7 @@ class Storage(object):
             msg_dict["origin"] = origin
         return self.client.send("Storage.untrackCacheStorageForOrigin", msg_dict)
 
-    def untrackIndexedDBForOrigin(self, origin: str) -> Awaitable[Optional[dict]]:
+    def untrackIndexedDBForOrigin(self, origin: str) -> Awaitable[Dict]:
         """
         Unregisters origin from receiving notifications for IndexedDB.
 
@@ -101,7 +98,7 @@ class Storage(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Storage.cacheStorageContentUpdated", _cb)
@@ -109,6 +106,9 @@ class Storage(object):
             return future
 
         self.client.on("Storage.cacheStorageContentUpdated", cb)
+        return lambda: self.client.remove_listener(
+            "Storage.cacheStorageContentUpdated", cb
+        )
 
     def cacheStorageListUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -117,7 +117,7 @@ class Storage(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Storage.cacheStorageListUpdated", _cb)
@@ -125,6 +125,9 @@ class Storage(object):
             return future
 
         self.client.on("Storage.cacheStorageListUpdated", cb)
+        return lambda: self.client.remove_listener(
+            "Storage.cacheStorageListUpdated", cb
+        )
 
     def indexedDBContentUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -133,7 +136,7 @@ class Storage(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Storage.indexedDBContentUpdated", _cb)
@@ -141,6 +144,9 @@ class Storage(object):
             return future
 
         self.client.on("Storage.indexedDBContentUpdated", cb)
+        return lambda: self.client.remove_listener(
+            "Storage.indexedDBContentUpdated", cb
+        )
 
     def indexedDBListUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -149,7 +155,7 @@ class Storage(object):
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Storage.indexedDBListUpdated", _cb)
@@ -157,3 +163,4 @@ class Storage(object):
             return future
 
         self.client.on("Storage.indexedDBListUpdated", cb)
+        return lambda: self.client.remove_listener("Storage.indexedDBListUpdated", cb)

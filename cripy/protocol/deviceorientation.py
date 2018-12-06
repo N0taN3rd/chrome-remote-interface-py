@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -14,7 +13,7 @@ __all__ = ["DeviceOrientation"]
 class DeviceOrientation(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def clearDeviceOrientationOverride(self) -> Awaitable[Optional[dict]]:
+    def clearDeviceOrientationOverride(self) -> Awaitable[Dict]:
         """
         Clears the overridden Device Orientation.
         """
@@ -22,7 +21,7 @@ class DeviceOrientation(object):
 
     def setDeviceOrientationOverride(
         self, alpha: float, beta: float, gamma: float
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Overrides the Device Orientation.
 

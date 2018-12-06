@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -18,7 +17,7 @@ class IO(object):
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def close(self, handle: str) -> Awaitable[Optional[dict]]:
+    def close(self, handle: str) -> Awaitable[Dict]:
         """
         Close the stream, discard any temporary backing storage.
 
@@ -32,7 +31,7 @@ class IO(object):
 
     def read(
         self, handle: str, offset: Optional[int] = None, size: Optional[int] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Read a chunk of the stream
 
@@ -52,7 +51,7 @@ class IO(object):
             msg_dict["size"] = size
         return self.client.send("IO.read", msg_dict)
 
-    def resolveBlob(self, objectId: str) -> Awaitable[Optional[dict]]:
+    def resolveBlob(self, objectId: str) -> Awaitable[Dict]:
         """
         Return UUID of Blob object specified by a remote object id.
 

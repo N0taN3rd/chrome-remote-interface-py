@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -18,7 +17,7 @@ class Schema(object):
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def getDomains(self) -> Awaitable[Optional[dict]]:
+    def getDomains(self) -> Awaitable[Dict]:
         """
         Returns supported domains.
         """

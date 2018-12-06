@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -14,19 +13,19 @@ __all__ = ["Performance"]
 class Performance(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         """
         Disable collecting and reporting metrics.
         """
         return self.client.send("Performance.disable")
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enable collecting and reporting metrics.
         """
         return self.client.send("Performance.enable")
 
-    def setTimeDomain(self, timeDomain: str) -> Awaitable[Optional[dict]]:
+    def setTimeDomain(self, timeDomain: str) -> Awaitable[Dict]:
         """
         Sets time domain to use for collecting and reporting duration metrics.
 Note that this must be called before enabling metrics collection. Calling
@@ -40,7 +39,7 @@ this method while metrics collection is enabled returns an error.
             msg_dict["timeDomain"] = timeDomain
         return self.client.send("Performance.setTimeDomain", msg_dict)
 
-    def getMetrics(self) -> Awaitable[Optional[dict]]:
+    def getMetrics(self) -> Awaitable[Dict]:
         """
         Retrieve current values of run-time metrics.
         """
@@ -53,7 +52,7 @@ this method while metrics collection is enabled returns an error.
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("Performance.metrics", _cb)
@@ -61,3 +60,4 @@ this method while metrics collection is enabled returns an error.
             return future
 
         self.client.on("Performance.metrics", cb)
+        return lambda: self.client.remove_listener("Performance.metrics", cb)

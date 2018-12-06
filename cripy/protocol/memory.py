@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -14,15 +13,13 @@ __all__ = ["Memory"]
 class Memory(object):
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def getDOMCounters(self) -> Awaitable[Optional[dict]]:
+    def getDOMCounters(self) -> Awaitable[Dict]:
         return self.client.send("Memory.getDOMCounters")
 
-    def prepareForLeakDetection(self) -> Awaitable[Optional[dict]]:
+    def prepareForLeakDetection(self) -> Awaitable[Dict]:
         return self.client.send("Memory.prepareForLeakDetection")
 
-    def setPressureNotificationsSuppressed(
-        self, suppressed: bool
-    ) -> Awaitable[Optional[dict]]:
+    def setPressureNotificationsSuppressed(self, suppressed: bool) -> Awaitable[Dict]:
         """
         Enable/disable suppressing memory pressure notifications in all processes.
 
@@ -34,7 +31,7 @@ class Memory(object):
             msg_dict["suppressed"] = suppressed
         return self.client.send("Memory.setPressureNotificationsSuppressed", msg_dict)
 
-    def simulatePressureNotification(self, level: str) -> Awaitable[Optional[dict]]:
+    def simulatePressureNotification(self, level: str) -> Awaitable[Dict]:
         """
         Simulate a memory pressure notification in all processes.
 
@@ -50,7 +47,7 @@ class Memory(object):
         self,
         samplingInterval: Optional[int] = None,
         suppressRandomness: Optional[bool] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Start collecting native memory profile.
 
@@ -66,27 +63,27 @@ class Memory(object):
             msg_dict["suppressRandomness"] = suppressRandomness
         return self.client.send("Memory.startSampling", msg_dict)
 
-    def stopSampling(self) -> Awaitable[Optional[dict]]:
+    def stopSampling(self) -> Awaitable[Dict]:
         """
         Stop collecting native memory profile.
         """
         return self.client.send("Memory.stopSampling")
 
-    def getAllTimeSamplingProfile(self) -> Awaitable[Optional[dict]]:
+    def getAllTimeSamplingProfile(self) -> Awaitable[Dict]:
         """
         Retrieve native memory allocations profile
 collected since renderer process startup.
         """
         return self.client.send("Memory.getAllTimeSamplingProfile")
 
-    def getBrowserSamplingProfile(self) -> Awaitable[Optional[dict]]:
+    def getBrowserSamplingProfile(self) -> Awaitable[Dict]:
         """
         Retrieve native memory allocations profile
 collected since browser process startup.
         """
         return self.client.send("Memory.getBrowserSamplingProfile")
 
-    def getSamplingProfile(self) -> Awaitable[Optional[dict]]:
+    def getSamplingProfile(self) -> Awaitable[Dict]:
         """
         Retrieve native memory allocations profile collected since last
 `startSampling` call.

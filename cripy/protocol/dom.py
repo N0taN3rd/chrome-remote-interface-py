@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Any, Callable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -24,7 +23,7 @@ corresponding document elements as their child nodes.</p>
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def collectClassNamesFromSubtree(self, nodeId: int) -> Awaitable[Optional[dict]]:
+    def collectClassNamesFromSubtree(self, nodeId: int) -> Awaitable[Dict]:
         """
         Collects class names for the node with given id and all of it's child nodes.
 
@@ -38,7 +37,7 @@ corresponding document elements as their child nodes.</p>
 
     def copyTo(
         self, nodeId: int, targetNodeId: int, insertBeforeNodeId: Optional[int] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Creates a deep copy of the specified node and places it into the target container before the
 given anchor.
@@ -66,7 +65,7 @@ given anchor.
         objectId: Optional[str] = None,
         depth: Optional[int] = None,
         pierce: Optional[bool] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Describes node given its id, does not require domain to be enabled. Does not start tracking any
 objects, can be used for automation.
@@ -95,13 +94,13 @@ objects, can be used for automation.
             msg_dict["pierce"] = pierce
         return self.client.send("DOM.describeNode", msg_dict)
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         """
         Disables DOM agent for the given page.
         """
         return self.client.send("DOM.disable")
 
-    def discardSearchResults(self, searchId: str) -> Awaitable[Optional[dict]]:
+    def discardSearchResults(self, searchId: str) -> Awaitable[Dict]:
         """
         Discards search results from the session with the given id. `getSearchResults` should no longer
 be called for that search.
@@ -114,7 +113,7 @@ be called for that search.
             msg_dict["searchId"] = searchId
         return self.client.send("DOM.discardSearchResults", msg_dict)
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enables DOM agent for the given page.
         """
@@ -125,7 +124,7 @@ be called for that search.
         nodeId: Optional[int] = None,
         backendNodeId: Optional[int] = None,
         objectId: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Focuses the given element.
 
@@ -145,7 +144,7 @@ be called for that search.
             msg_dict["objectId"] = objectId
         return self.client.send("DOM.focus", msg_dict)
 
-    def getAttributes(self, nodeId: int) -> Awaitable[Optional[dict]]:
+    def getAttributes(self, nodeId: int) -> Awaitable[Dict]:
         """
         Returns attributes for the specified node.
 
@@ -162,7 +161,7 @@ be called for that search.
         nodeId: Optional[int] = None,
         backendNodeId: Optional[int] = None,
         objectId: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Returns boxes for the given node.
 
@@ -187,7 +186,7 @@ be called for that search.
         nodeId: Optional[int] = None,
         backendNodeId: Optional[int] = None,
         objectId: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Returns quads that describe node position on the page. This method
 might return multiple quads for inline nodes.
@@ -210,7 +209,7 @@ might return multiple quads for inline nodes.
 
     def getDocument(
         self, depth: Optional[int] = None, pierce: Optional[bool] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Returns the root DOM node (and optionally the subtree) to the caller.
 
@@ -228,7 +227,7 @@ might return multiple quads for inline nodes.
 
     def getFlattenedDocument(
         self, depth: Optional[int] = None, pierce: Optional[bool] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Returns the root DOM node (and optionally the subtree) to the caller.
 
@@ -246,7 +245,7 @@ might return multiple quads for inline nodes.
 
     def getNodeForLocation(
         self, x: int, y: int, includeUserAgentShadowDOM: Optional[bool] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Returns node id at given location. Depending on whether DOM domain is enabled, nodeId is
 either returned or not.
@@ -272,7 +271,7 @@ either returned or not.
         nodeId: Optional[int] = None,
         backendNodeId: Optional[int] = None,
         objectId: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Returns node's HTML markup.
 
@@ -292,7 +291,7 @@ either returned or not.
             msg_dict["objectId"] = objectId
         return self.client.send("DOM.getOuterHTML", msg_dict)
 
-    def getRelayoutBoundary(self, nodeId: int) -> Awaitable[Optional[dict]]:
+    def getRelayoutBoundary(self, nodeId: int) -> Awaitable[Dict]:
         """
         Returns the id of the nearest ancestor that is a relayout boundary.
 
@@ -306,7 +305,7 @@ either returned or not.
 
     def getSearchResults(
         self, searchId: str, fromIndex: int, toIndex: int
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Returns search results from given `fromIndex` to given `toIndex` from the search with the given
 identifier.
@@ -327,25 +326,25 @@ identifier.
             msg_dict["toIndex"] = toIndex
         return self.client.send("DOM.getSearchResults", msg_dict)
 
-    def hideHighlight(self) -> Awaitable[Optional[dict]]:
+    def hideHighlight(self) -> Awaitable[Dict]:
         """
         Hides any highlight.
         """
         return self.client.send("DOM.hideHighlight")
 
-    def highlightNode(self) -> Awaitable[Optional[dict]]:
+    def highlightNode(self) -> Awaitable[Dict]:
         """
         Highlights DOM node.
         """
         return self.client.send("DOM.highlightNode")
 
-    def highlightRect(self) -> Awaitable[Optional[dict]]:
+    def highlightRect(self) -> Awaitable[Dict]:
         """
         Highlights given rectangle.
         """
         return self.client.send("DOM.highlightRect")
 
-    def markUndoableState(self) -> Awaitable[Optional[dict]]:
+    def markUndoableState(self) -> Awaitable[Dict]:
         """
         Marks last undoable state.
         """
@@ -353,7 +352,7 @@ identifier.
 
     def moveTo(
         self, nodeId: int, targetNodeId: int, insertBeforeNodeId: Optional[int] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Moves node into the new container, places it before the given anchor.
 
@@ -375,7 +374,7 @@ identifier.
 
     def performSearch(
         self, query: str, includeUserAgentShadowDOM: Optional[bool] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Searches for a given string in the DOM tree. Use `getSearchResults` to access search results or
 `cancelSearch` to end this search session.
@@ -392,7 +391,7 @@ identifier.
             msg_dict["includeUserAgentShadowDOM"] = includeUserAgentShadowDOM
         return self.client.send("DOM.performSearch", msg_dict)
 
-    def pushNodeByPathToFrontend(self, path: str) -> Awaitable[Optional[dict]]:
+    def pushNodeByPathToFrontend(self, path: str) -> Awaitable[Dict]:
         """
         Requests that the node is sent to the caller given its path. // FIXME, use XPath
 
@@ -406,7 +405,7 @@ identifier.
 
     def pushNodesByBackendIdsToFrontend(
         self, backendNodeIds: List[int]
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Requests that a batch of nodes is sent to the caller given their backend node ids.
 
@@ -418,7 +417,7 @@ identifier.
             msg_dict["backendNodeIds"] = backendNodeIds
         return self.client.send("DOM.pushNodesByBackendIdsToFrontend", msg_dict)
 
-    def querySelector(self, nodeId: int, selector: str) -> Awaitable[Optional[dict]]:
+    def querySelector(self, nodeId: int, selector: str) -> Awaitable[Dict]:
         """
         Executes `querySelector` on a given node.
 
@@ -434,7 +433,7 @@ identifier.
             msg_dict["selector"] = selector
         return self.client.send("DOM.querySelector", msg_dict)
 
-    def querySelectorAll(self, nodeId: int, selector: str) -> Awaitable[Optional[dict]]:
+    def querySelectorAll(self, nodeId: int, selector: str) -> Awaitable[Dict]:
         """
         Executes `querySelectorAll` on a given node.
 
@@ -450,13 +449,13 @@ identifier.
             msg_dict["selector"] = selector
         return self.client.send("DOM.querySelectorAll", msg_dict)
 
-    def redo(self) -> Awaitable[Optional[dict]]:
+    def redo(self) -> Awaitable[Dict]:
         """
         Re-does the last undone action.
         """
         return self.client.send("DOM.redo")
 
-    def removeAttribute(self, nodeId: int, name: str) -> Awaitable[Optional[dict]]:
+    def removeAttribute(self, nodeId: int, name: str) -> Awaitable[Dict]:
         """
         Removes attribute with given name from an element with given id.
 
@@ -472,7 +471,7 @@ identifier.
             msg_dict["name"] = name
         return self.client.send("DOM.removeAttribute", msg_dict)
 
-    def removeNode(self, nodeId: int) -> Awaitable[Optional[dict]]:
+    def removeNode(self, nodeId: int) -> Awaitable[Dict]:
         """
         Removes node with given id.
 
@@ -486,7 +485,7 @@ identifier.
 
     def requestChildNodes(
         self, nodeId: int, depth: Optional[int] = None, pierce: Optional[bool] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Requests that children of the node with given id are returned to the caller in form of
 `setChildNodes` events where not only immediate children are retrieved, but all children down to
@@ -508,7 +507,7 @@ the specified depth.
             msg_dict["pierce"] = pierce
         return self.client.send("DOM.requestChildNodes", msg_dict)
 
-    def requestNode(self, objectId: str) -> Awaitable[Optional[dict]]:
+    def requestNode(self, objectId: str) -> Awaitable[Dict]:
         """
         Requests that the node is sent to the caller given the JavaScript node object reference. All
 nodes that form the path from the node to the root are also sent to the client as a series of
@@ -527,7 +526,7 @@ nodes that form the path from the node to the root are also sent to the client a
         nodeId: Optional[int] = None,
         backendNodeId: Optional[int] = None,
         objectGroup: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Resolves the JavaScript node object for a given NodeId or BackendNodeId.
 
@@ -547,9 +546,7 @@ nodes that form the path from the node to the root are also sent to the client a
             msg_dict["objectGroup"] = objectGroup
         return self.client.send("DOM.resolveNode", msg_dict)
 
-    def setAttributeValue(
-        self, nodeId: int, name: str, value: str
-    ) -> Awaitable[Optional[dict]]:
+    def setAttributeValue(self, nodeId: int, name: str, value: str) -> Awaitable[Dict]:
         """
         Sets attribute for an element with given id.
 
@@ -571,7 +568,7 @@ nodes that form the path from the node to the root are also sent to the client a
 
     def setAttributesAsText(
         self, nodeId: int, text: str, name: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Sets attributes on element with given id. This method is useful when user edits some existing
 attribute value and types in several attribute name/value pairs.
@@ -598,7 +595,7 @@ attribute value and types in several attribute name/value pairs.
         nodeId: Optional[int] = None,
         backendNodeId: Optional[int] = None,
         objectId: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Sets files for the given file input element.
 
@@ -622,7 +619,7 @@ attribute value and types in several attribute name/value pairs.
             msg_dict["objectId"] = objectId
         return self.client.send("DOM.setFileInputFiles", msg_dict)
 
-    def setInspectedNode(self, nodeId: int) -> Awaitable[Optional[dict]]:
+    def setInspectedNode(self, nodeId: int) -> Awaitable[Dict]:
         """
         Enables console to refer to the node with given id via $x (see Command Line API for more details
 $x functions).
@@ -635,7 +632,7 @@ $x functions).
             msg_dict["nodeId"] = nodeId
         return self.client.send("DOM.setInspectedNode", msg_dict)
 
-    def setNodeName(self, nodeId: int, name: str) -> Awaitable[Optional[dict]]:
+    def setNodeName(self, nodeId: int, name: str) -> Awaitable[Dict]:
         """
         Sets node name for a node with given id.
 
@@ -651,7 +648,7 @@ $x functions).
             msg_dict["name"] = name
         return self.client.send("DOM.setNodeName", msg_dict)
 
-    def setNodeValue(self, nodeId: int, value: str) -> Awaitable[Optional[dict]]:
+    def setNodeValue(self, nodeId: int, value: str) -> Awaitable[Dict]:
         """
         Sets node value for a node with given id.
 
@@ -667,7 +664,7 @@ $x functions).
             msg_dict["value"] = value
         return self.client.send("DOM.setNodeValue", msg_dict)
 
-    def setOuterHTML(self, nodeId: int, outerHTML: str) -> Awaitable[Optional[dict]]:
+    def setOuterHTML(self, nodeId: int, outerHTML: str) -> Awaitable[Dict]:
         """
         Sets node HTML markup, returns new node id.
 
@@ -683,13 +680,13 @@ $x functions).
             msg_dict["outerHTML"] = outerHTML
         return self.client.send("DOM.setOuterHTML", msg_dict)
 
-    def undo(self) -> Awaitable[Optional[dict]]:
+    def undo(self) -> Awaitable[Dict]:
         """
         Undoes the last performed action.
         """
         return self.client.send("DOM.undo")
 
-    def getFrameOwner(self, frameId: str) -> Awaitable[Optional[dict]]:
+    def getFrameOwner(self, frameId: str) -> Awaitable[Dict]:
         """
         Returns iframe node that owns iframe with the given domain.
 
@@ -708,7 +705,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOM.attributeModified", _cb)
@@ -716,6 +713,7 @@ $x functions).
             return future
 
         self.client.on("DOM.attributeModified", cb)
+        return lambda: self.client.remove_listener("DOM.attributeModified", cb)
 
     def attributeRemoved(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -724,7 +722,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOM.attributeRemoved", _cb)
@@ -732,6 +730,7 @@ $x functions).
             return future
 
         self.client.on("DOM.attributeRemoved", cb)
+        return lambda: self.client.remove_listener("DOM.attributeRemoved", cb)
 
     def characterDataModified(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -740,7 +739,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOM.characterDataModified", _cb)
@@ -748,6 +747,7 @@ $x functions).
             return future
 
         self.client.on("DOM.characterDataModified", cb)
+        return lambda: self.client.remove_listener("DOM.characterDataModified", cb)
 
     def childNodeCountUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -756,7 +756,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOM.childNodeCountUpdated", _cb)
@@ -764,6 +764,7 @@ $x functions).
             return future
 
         self.client.on("DOM.childNodeCountUpdated", cb)
+        return lambda: self.client.remove_listener("DOM.childNodeCountUpdated", cb)
 
     def childNodeInserted(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -772,7 +773,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOM.childNodeInserted", _cb)
@@ -780,6 +781,7 @@ $x functions).
             return future
 
         self.client.on("DOM.childNodeInserted", cb)
+        return lambda: self.client.remove_listener("DOM.childNodeInserted", cb)
 
     def childNodeRemoved(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -788,7 +790,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOM.childNodeRemoved", _cb)
@@ -796,6 +798,7 @@ $x functions).
             return future
 
         self.client.on("DOM.childNodeRemoved", cb)
+        return lambda: self.client.remove_listener("DOM.childNodeRemoved", cb)
 
     def distributedNodesUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -804,7 +807,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOM.distributedNodesUpdated", _cb)
@@ -812,6 +815,7 @@ $x functions).
             return future
 
         self.client.on("DOM.distributedNodesUpdated", cb)
+        return lambda: self.client.remove_listener("DOM.distributedNodesUpdated", cb)
 
     def documentUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -820,7 +824,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOM.documentUpdated", _cb)
@@ -828,6 +832,7 @@ $x functions).
             return future
 
         self.client.on("DOM.documentUpdated", cb)
+        return lambda: self.client.remove_listener("DOM.documentUpdated", cb)
 
     def inlineStyleInvalidated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -836,7 +841,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOM.inlineStyleInvalidated", _cb)
@@ -844,6 +849,7 @@ $x functions).
             return future
 
         self.client.on("DOM.inlineStyleInvalidated", cb)
+        return lambda: self.client.remove_listener("DOM.inlineStyleInvalidated", cb)
 
     def pseudoElementAdded(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -852,7 +858,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOM.pseudoElementAdded", _cb)
@@ -860,6 +866,7 @@ $x functions).
             return future
 
         self.client.on("DOM.pseudoElementAdded", cb)
+        return lambda: self.client.remove_listener("DOM.pseudoElementAdded", cb)
 
     def pseudoElementRemoved(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -868,7 +875,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOM.pseudoElementRemoved", _cb)
@@ -876,6 +883,7 @@ $x functions).
             return future
 
         self.client.on("DOM.pseudoElementRemoved", cb)
+        return lambda: self.client.remove_listener("DOM.pseudoElementRemoved", cb)
 
     def setChildNodes(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -885,7 +893,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOM.setChildNodes", _cb)
@@ -893,6 +901,7 @@ $x functions).
             return future
 
         self.client.on("DOM.setChildNodes", cb)
+        return lambda: self.client.remove_listener("DOM.setChildNodes", cb)
 
     def shadowRootPopped(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -901,7 +910,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOM.shadowRootPopped", _cb)
@@ -909,6 +918,7 @@ $x functions).
             return future
 
         self.client.on("DOM.shadowRootPopped", cb)
+        return lambda: self.client.remove_listener("DOM.shadowRootPopped", cb)
 
     def shadowRootPushed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
@@ -917,7 +927,7 @@ $x functions).
         if cb is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Any) -> None:
+            def _cb(msg: Optional[Any] = None) -> None:
                 future.set_result(msg)
 
             self.client.once("DOM.shadowRootPushed", _cb)
@@ -925,3 +935,4 @@ $x functions).
             return future
 
         self.client.on("DOM.shadowRootPushed", cb)
+        return lambda: self.client.remove_listener("DOM.shadowRootPushed", cb)

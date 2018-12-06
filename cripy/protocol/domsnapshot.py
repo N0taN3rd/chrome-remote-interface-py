@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -18,13 +17,13 @@ class DOMSnapshot(object):
 
     client: Union["ConnectionType", "SessionType"] = attr.ib()
 
-    def disable(self) -> Awaitable[Optional[dict]]:
+    def disable(self) -> Awaitable[Dict]:
         """
         Disables DOM snapshot agent for the given page.
         """
         return self.client.send("DOMSnapshot.disable")
 
-    def enable(self) -> Awaitable[Optional[dict]]:
+    def enable(self) -> Awaitable[Dict]:
         """
         Enables DOM snapshot agent for the given page.
         """
@@ -36,7 +35,7 @@ class DOMSnapshot(object):
         includeEventListeners: Optional[bool] = None,
         includePaintOrder: Optional[bool] = None,
         includeUserAgentShadowTree: Optional[bool] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Returns a document snapshot, including the full DOM tree of the root node (including iframes,
 template contents, and imported documents) in a flattened array, as well as layout and
@@ -63,7 +62,7 @@ flattened.
             msg_dict["includeUserAgentShadowTree"] = includeUserAgentShadowTree
         return self.client.send("DOMSnapshot.getSnapshot", msg_dict)
 
-    def captureSnapshot(self, computedStyles: List[str]) -> Awaitable[Optional[dict]]:
+    def captureSnapshot(self, computedStyles: List[str]) -> Awaitable[Dict]:
         """
         Returns a document snapshot, including the full DOM tree of the root node (including iframes,
 template contents, and imported documents) in a flattened array, as well as layout and

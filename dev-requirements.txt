@@ -3,6 +3,7 @@ m2r
 pytest
 pytest-asyncio
 git+https://github.com/python/mypy.git
-requests
 flake8
 flake8-bugbear
+async-timeout
+psutil

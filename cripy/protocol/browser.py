@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, List, Optional, Union, TYPE_CHECKING
+from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
 
 import attr
 
@@ -23,7 +22,7 @@ class Browser(object):
         origin: str,
         permissions: List[str],
         browserContextId: Optional[str] = None,
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Grant specific permissions to the given origin and reject all others.
 
@@ -45,7 +44,7 @@ class Browser(object):
 
     def resetPermissions(
         self, browserContextId: Optional[str] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Reset all permission management for all origins.
 
@@ -57,25 +56,25 @@ class Browser(object):
             msg_dict["browserContextId"] = browserContextId
         return self.client.send("Browser.resetPermissions", msg_dict)
 
-    def close(self) -> Awaitable[Optional[dict]]:
+    def close(self) -> Awaitable[Dict]:
         """
         Close browser gracefully.
         """
         return self.client.send("Browser.close")
 
-    def crash(self) -> Awaitable[Optional[dict]]:
+    def crash(self) -> Awaitable[Dict]:
         """
         Crashes browser on the main thread.
         """
         return self.client.send("Browser.crash")
 
-    def getVersion(self) -> Awaitable[Optional[dict]]:
+    def getVersion(self) -> Awaitable[Dict]:
         """
         Returns version information.
         """
         return self.client.send("Browser.getVersion")
 
-    def getBrowserCommandLine(self) -> Awaitable[Optional[dict]]:
+    def getBrowserCommandLine(self) -> Awaitable[Dict]:
         """
         Returns the command line switches for the browser process if, and only if
 --enable-automation is on the commandline.
@@ -84,7 +83,7 @@ class Browser(object):
 
     def getHistograms(
         self, query: Optional[str] = None, delta: Optional[bool] = None
-    ) -> Awaitable[Optional[dict]]:
+    ) -> Awaitable[Dict]:
         """
         Get Chrome histograms.
 
@@ -100,9 +99,7 @@ class Browser(object):
             msg_dict["delta"] = delta
         return self.client.send("Browser.getHistograms", msg_dict)
 
-    def getHistogram(
-        self, name: str, delta: Optional[bool] = None
-    ) -> Awaitable[Optional[dict]]:
+    def getHistogram(self, name: str, delta: Optional[bool] = None) -> Awaitable[Dict]:
         """
         Get a Chrome histogram by name.
 
@@ -118,7 +115,7 @@ class Browser(object):
             msg_dict["delta"] = delta
         return self.client.send("Browser.getHistogram", msg_dict)
 
-    def getWindowBounds(self, windowId: int) -> Awaitable[Optional[dict]]:
+    def getWindowBounds(self, windowId: int) -> Awaitable[Dict]:
         """
         Get position and size of the browser window.
 
@@ -130,19 +127,19 @@ class Browser(object):
             msg_dict["windowId"] = windowId
         return self.client.send("Browser.getWindowBounds", msg_dict)
 
-    def getWindowForTarget(self, targetId: str) -> Awaitable[Optional[dict]]:
+    def getWindowForTarget(self, targetId: Optional[str] = None) -> Awaitable[Dict]:
         """
         Get the browser window that contains the devtools target.
 
-        :param targetId: Devtools agent host id.
-        :type targetId: str
+        :param targetId: Devtools agent host id. If called as a part of the session, associated targetId is used.
+        :type targetId: Optional[str]
         """
         msg_dict = dict()
         if targetId is not None:
             msg_dict["targetId"] = targetId
         return self.client.send("Browser.getWindowForTarget", msg_dict)
 
-    def setWindowBounds(self, windowId: int, bounds: dict) -> Awaitable[Optional[dict]]:
+    def setWindowBounds(self, windowId: int, bounds: dict) -> Awaitable[Dict]:
         """
         Set position and/or size of the browser window.
 
@@ -157,3 +154,21 @@ class Browser(object):
         if bounds is not None:
             msg_dict["bounds"] = bounds
         return self.client.send("Browser.setWindowBounds", msg_dict)
+
+    def setDockTile(
+        self, badgeLabel: Optional[str] = None, image: Optional[str] = None
+    ) -> Awaitable[Dict]:
+        """
+        Set dock tile details, platform-specific.
+
+        :param badgeLabel: The badgeLabel
+        :type badgeLabel: Optional[str]
+        :param image: Png encoded image.
+        :type image: Optional[str]
+        """
+        msg_dict = dict()
+        if badgeLabel is not None:
+            msg_dict["badgeLabel"] = badgeLabel
+        if image is not None:
+            msg_dict["image"] = image
+        return self.client.send("Browser.setDockTile", msg_dict)

@@ -29,5 +29,5 @@ __all__ = [
     "dynamically_generate_domains",
     "generate_domain",
     "get_default_templates",
-    "create_domains"
+    "create_domains",
 ]

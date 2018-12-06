@@ -3,21 +3,41 @@ from asyncio import AbstractEventLoop
 import pytest
 from aiohttp import ClientConnectorError
 from async_timeout import timeout
+from websockets import InvalidURI
 
 from cripy.client import connect
+from cripy.connection import Connection
 from .helpers import Cleaner
 
 
 class TestConnectFailsNoChrome(object):
     @pytest.mark.asyncio
-    async def test_connect_fails_no_args(self):
+    async def test_connect_fails_with_nothing_to_connect_to(self):
         with pytest.raises(ClientConnectorError):
             await connect()
 
     @pytest.mark.asyncio
-    async def test_connect_fails_supplied_ws_url(self):
+    async def test_connect_fails_supplied_ws_url_bad(self):
         with pytest.raises(Exception):
             await connect("ws://nope")
+
+    @pytest.mark.asyncio
+    async def test_connection_connect_fails_with_no_supplied_ws_url(self):
+        with pytest.raises(InvalidURI):
+            conn = Connection()
+            await conn.connect()
+
+    @pytest.mark.asyncio
+    async def test_client_connect_fails_supplied_ws_url_bad_constructor(self):
+        with pytest.raises(Exception):
+            conn = Connection("ws://nope")
+            await conn.connect()
+
+    @pytest.mark.asyncio
+    async def test_client_connect_fails_supplied_ws_url_bad_connect(self):
+        with pytest.raises(Exception):
+            conn = Connection()
+            await conn.connect("ws://nope")
 
 
 @pytest.mark.usefixtures("chrome")
