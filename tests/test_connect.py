@@ -1,11 +1,11 @@
 from asyncio import AbstractEventLoop
-
+from typing import Any
 import pytest
 from aiohttp import ClientConnectorError
 from async_timeout import timeout
 from websockets import InvalidURI
 
-from cripy.client import connect
+from cripy.cdp import CDP, connect
 from cripy.connection import Connection
 from .helpers import Cleaner
 
@@ -41,31 +41,45 @@ class TestConnectFailsNoChrome(object):
 
 
 @pytest.mark.usefixtures("chrome")
-class TestConnect(object):
+class TestConnecting(object):
+    @pytest.mark.parametrize(
+        "url,additional_args",
+        [
+            (None, dict()),
+            (None, dict(remote=True)),
+            ("http://localhost:9222", dict()),
+            ("http://localhost:9222", dict(remote=True)),
+        ],
+        ids=[
+            "default url",
+            "default url, remote protocol",
+            "supplied HTTP url",
+            "supplied HTTP url, remote protocol",
+        ]
+    )
     @pytest.mark.asyncio
-    async def test_connects_using_default_url(self, mr_clean: Cleaner):
-        client = await connect()
+    async def test_connects_using(self, url: Any, additional_args: Any):
+        if url is not None:
+            client = await connect(url=url, **additional_args)
+        else:
+            client = await connect(**additional_args)
+        version = await client.Browser.getVersion()
+        assert version["product"] in version["userAgent"]
+        assert client.ws_url is not None
+        await client.dispose()
+
+    @pytest.mark.asyncio
+    async def test_connects_using_default_url_supplied_proto(self, mr_clean: Cleaner):
+        proto = await CDP.Protocol()
+        client = await connect(protocol=proto)
         mr_clean.add_disposable(client)
         version = await client.Browser.getVersion()
         assert version["product"] in version["userAgent"]
 
     @pytest.mark.asyncio
-    async def test_connects_using_default_url_remote(self, mr_clean: Cleaner):
-        client = await connect(remote=True)
-        mr_clean.add_disposable(client)
-        version = await client.Browser.getVersion()
-        assert version["product"] in version["userAgent"]
-
-    @pytest.mark.asyncio
-    async def test_connects_using_supplied_url(self, mr_clean: Cleaner):
-        client = await connect(url="http://localhost:9222")
-        mr_clean.add_disposable(client)
-        version = await client.Browser.getVersion()
-        assert version["product"] in version["userAgent"]
-
-    @pytest.mark.asyncio
-    async def test_connects_using_supplied_url_remote(self, mr_clean: Cleaner):
-        client = await connect(url="http://localhost:9222", remote=True)
+    async def test_connects_using_supplied_url_proto(self, mr_clean: Cleaner):
+        proto = await CDP.Protocol()
+        client = await connect(url="http://localhost:9222", protocol=proto)
         mr_clean.add_disposable(client)
         version = await client.Browser.getVersion()
         assert version["product"] in version["userAgent"]

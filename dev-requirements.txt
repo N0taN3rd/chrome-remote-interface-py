@@ -2,6 +2,7 @@ black
 m2r
 pytest
 pytest-asyncio
+pytest-cov
 git+https://github.com/python/mypy.git
 flake8
 flake8-bugbear

@@ -9,7 +9,7 @@ from typing import Dict, Tuple, Optional
 
 import uvloop
 
-from cripy.client import Client
+from cripy.cdp import CDP
 
 __all__ = ["launch_chrome", "LaunchError"]
 
@@ -50,7 +50,6 @@ DEFAULT_ARGS = [
     "--use-mock-keychain",
     "--mute-audio",
     "--autoplay-policy=no-user-gesture-required",
-    "about:blank",
 ]
 
 
@@ -133,26 +132,25 @@ async def launch_chrome(
     tmpdir = TemporaryDirectory()
     args = [chrome_exe, f"--user-data-dir={tmpdir.name}"] + DEFAULT_ARGS
     if headless:
-        args += ["--headless", "--hide-scrollbars"]
+        args.extend(["--headless", "--hide-scrollbars", "about:blank"])
+    else:
+        args.append("about:blank")
     chrome_proc = await asyncio.create_subprocess_exec(
         *args,
-        stderr=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.DEVNULL,
         stdin=asyncio.subprocess.DEVNULL,
         loop=loop,
         env=env,
     )
-    found = False
     for _ in range(100):
-        line = await chrome_proc.stderr.readline()
-        if b"DevTools listening on" in line:
-            print(f"{line}")
-            found = True
-            break
-    if found:
-        for tab in await Client.List():
-            print(tab)
-            if tab["type"] == "page":
-                return chrome_proc, tmpdir, tab["webSocketDebuggerUrl"]
+        try:
+            targets = await CDP.List()
+            for tab in targets:
+                print(tab)
+                if tab["type"] == "page":
+                    return chrome_proc, tmpdir, tab["webSocketDebuggerUrl"]
+        except Exception:
+            await asyncio.sleep(1, loop=loop)
     chrome_proc.kill()
     await chrome_proc.wait()
     tmpdir.cleanup()
