@@ -1,0 +1,25 @@
+[run]
+omit =
+    cripy/protocol/*.py
+
+[report]
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover
+
+    # Don't complain if tests don't hit defensive code:
+    raise ClientError
+    raise NetworkError
+    if loop is None
+    loop = asyncio\.get_event_loop\(\)
+    if not self\._connection:
+    if not (cb|callback)\.done\(\):
+    (cb|callback)\.set_exception\(
+
+
+    # Don't complain about missing debug-only code:
+    def __repr__
+    def __str__
+
+    # Don't complain about utility code
+    def loop

@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 from asyncio import AbstractEventLoop
-from typing import List, Optional, Dict, Any, Union, Tuple
-from urllib.parse import urljoin, urlparse
-
-import aiohttp
+from typing import Optional, Union
 
 from .connection import Connection, CDPSession
-from .errors import ClientError
 from .protocol.accessibility import Accessibility
 from .protocol.animation import Animation
 from .protocol.applicationcache import ApplicationCache
@@ -48,21 +44,11 @@ from .protocol.target import Target
 from .protocol.testing import Testing
 from .protocol.tethering import Tethering
 from .protocol.tracing import Tracing
-from .protogen.generate import dynamically_generate_domains
 
 __all__ = [
     "Client",
     "TargetSession",
-    "DEFAULT_HOST",
-    "DEFAULT_PORT",
-    "DEFAULT_URL",
-    "connect",
-    "gen_proto_classes",
 ]
-
-DEFAULT_HOST: str = "localhost"
-DEFAULT_PORT: int = 9222
-DEFAULT_URL: str = "http://localhost:9222"
 
 
 class Client(Connection):
@@ -138,170 +124,6 @@ class Client(Connection):
         self._sessions[sessionId] = session
         return session
 
-    @staticmethod
-    async def Close(
-        target_id: str,
-        frontend_url: Optional[str] = None,
-        host: Optional[str] = DEFAULT_HOST,
-        port: Optional[Union[int, str]] = DEFAULT_PORT,
-        secure: Optional[bool] = False,
-    ) -> Tuple[int, str]:
-        """Close an open target/tab of the remote instance.
-
-        :param target_id: Target id. Required, no default
-        :param frontend_url: Base HTTP endpoint url to use (e.g. http(s)://localhost:9222)
-        :param host: HTTP frontend host. Defaults to localhost
-        :param port: HTTP frontend port. Defaults to 9222
-        :param secure: HTTPS/WSS frontend. Defaults to false
-        """
-        async with aiohttp.ClientSession() as session:
-            if frontend_url is None:
-                frontend_url = (
-                    f"{'https:' if secure else 'http:'}//{host}:{port}/json/close/"
-                )
-            if "json/close" in frontend_url and not frontend_url.endswith("/"):
-                frontend_url += "/"
-            if not frontend_url.endswith("json/close/"):
-                frontend_url = urljoin(frontend_url, "json/close/")
-            res = await session.get(urljoin(frontend_url, target_id))
-            text = await res.text()
-            return res.status, text
-
-    @staticmethod
-    async def Activate(
-        target_id: str,
-        frontend_url: Optional[str] = None,
-        host: Optional[str] = DEFAULT_HOST,
-        port: Optional[Union[int, str]] = DEFAULT_PORT,
-        secure: Optional[bool] = False,
-    ) -> Tuple[int, str]:
-        """Activate an open target/tab of the remote instance.
-
-        :param target_id: Target id. Required, no default
-        :param frontend_url: Base HTTP endpoint url to use (e.g. http(s)://localhost:9222)
-        :param host: HTTP frontend host. Defaults to localhost
-        :param port: HTTP frontend port. Defaults to 9222
-        :param secure: HTTPS/WSS frontend. Defaults to false
-        """
-        async with aiohttp.ClientSession() as session:
-            if frontend_url is None:
-                frontend_url = (
-                    f"{'https:' if secure else 'http:'}//{host}:{port}/json/activate/"
-                )
-            if "json/activate" in frontend_url and not frontend_url.endswith("/"):
-                frontend_url += "/"
-            if not frontend_url.endswith("json/activate/"):
-                frontend_url = urljoin(frontend_url, "json/activate/")
-            res = await session.get(urljoin(frontend_url, target_id))
-            text = await res.text()
-            return res.status, text
-
-    @staticmethod
-    async def Protocol(
-        frontend_url: Optional[str] = None,
-        host: Optional[str] = DEFAULT_HOST,
-        port: Optional[Union[int, str]] = DEFAULT_PORT,
-        secure: Optional[bool] = False,
-    ) -> Dict[str, Union[List[Dict], Dict]]:
-        """Fetch the Chrome DevTools Protocol descriptor.
-
-        :param frontend_url: Base HTTP endpoint url to use (e.g. http(s)://localhost:9222)
-        :param host: HTTP frontend host. Defaults to localhost
-        :param port: HTTP frontend port. Defaults to 9222
-        :param secure: HTTPS/WSS frontend. Defaults to false
-        """
-        async with aiohttp.ClientSession() as session:
-            if frontend_url is None:
-                frontend_url = (
-                    f"{'https:' if secure else 'http:'}//{host}:{port}/json/protocol"
-                )
-            if not frontend_url.endswith("json/protocol"):
-                frontend_url = urljoin(frontend_url, "json/protocol")
-            data = await session.get(frontend_url)
-            return await data.json()
-
-    @staticmethod
-    async def List(
-        frontend_url: Optional[str] = None,
-        host: Optional[str] = DEFAULT_HOST,
-        port: Optional[Union[int, str]] = DEFAULT_PORT,
-        secure: Optional[bool] = False,
-    ) -> List[Dict[str, str]]:
-        """Request a list of the available open targets/tabs of the remote instance.
-
-        :param frontend_url: Base HTTP endpoint url to use (e.g. http(s)://localhost:9222)
-        :param host: HTTP frontend host. Defaults to localhost
-        :param port: HTTP frontend port. Defaults to 9222
-        :param secure: HTTPS/WSS frontend. Defaults to false
-        """
-        async with aiohttp.ClientSession() as session:
-            if frontend_url is None:
-                frontend_url = (
-                    f"{'https:' if secure else 'http:'}//{host}:{port}/json/list"
-                )
-            if not frontend_url.endswith("json/list"):
-                frontend_url = urljoin(frontend_url, "json/list")
-            data = await session.get(frontend_url)
-            return await data.json()
-
-    @staticmethod
-    async def New(
-        url: Optional[str] = None,
-        frontend_url: Optional[str] = None,
-        host: Optional[str] = DEFAULT_HOST,
-        port: Optional[Union[int, str]] = DEFAULT_PORT,
-        secure: Optional[bool] = False,
-    ) -> Dict[str, str]:
-        """Create a new target/tab in the remote instance.
-
-        :param url: The URL for the new tab. Defaults to about:blank
-        :param frontend_url: Base HTTP endpoint url to use (e.g. http(s)://localhost:9222)
-        :param host: HTTP frontend host. Defaults to localhost
-        :param port: HTTP frontend port. Defaults to 9222
-        :param secure: HTTPS/WSS frontend. Defaults to false
-        :return:
-        """
-        async with aiohttp.ClientSession() as session:
-            if frontend_url is None:
-                frontend_url = f"{'https:' if secure else 'http:'}//{host}:{port}"
-            if not frontend_url.endswith("json/new"):
-                frontend_url = urljoin(frontend_url, "json/new")
-            if url is not None:
-                frontend_url = f"{frontend_url}?{url}"
-            data = await session.get(frontend_url)
-            return await data.json()
-
-    @staticmethod
-    async def Version(
-        frontend_url: Optional[str] = None,
-        host: Optional[str] = DEFAULT_HOST,
-        port: Optional[Union[int, str]] = DEFAULT_PORT,
-        secure: Optional[bool] = False,
-    ) -> Dict[str, str]:
-        """Request version information from the remote instance.
-
-        :param frontend_url: Base HTTP endpoint url to use (e.g. http(s)://localhost:9222)
-        :param host: HTTP frontend host. Defaults to localhost
-        :param port: HTTP frontend port. Defaults to 9222
-        :param secure: HTTPS/WSS frontend. Defaults to false
-        """
-        async with aiohttp.ClientSession() as session:
-            if frontend_url is None:
-                frontend_url = (
-                    f"{'https:' if secure else 'http:'}//{host}:{port}/json/version"
-                )
-            if not frontend_url.endswith("json/version"):
-                frontend_url = urljoin(frontend_url, "json/version")
-            data = await session.get(frontend_url)
-            return await data.json()
-
-    def __await__(self) -> "Client":
-        yield from self.connect().__await__()
-        return self
-
-    def __str__(self) -> str:
-        return f"Client(wsurl={self._ws_url}, connected={self.connected})"
-
 
 class TargetSession(CDPSession):
     def __init__(
@@ -363,48 +185,3 @@ class TargetSession(CDPSession):
         sesh = TargetSession(self, targetType, sessionId, proto_def=self._proto_def)
         self._sessions[sessionId] = sesh
         return sesh
-
-    def __str__(self) -> str:
-        return f"TargetSession(target={self._targetType}, sessionId={self._sessionId})"
-
-
-async def gen_proto_classes(url: str) -> Dict[str, Any]:
-    purl = urlparse(url)
-    host, port = purl.netloc.split(":")
-    is_https = purl.scheme.startswith("wss") or purl.scheme.startswith("https")
-    raw_proto = await Client.Protocol(host=host, port=port, secure=is_https)
-    proto_def = await dynamically_generate_domains(raw_proto)
-    return proto_def
-
-
-async def connect(
-    url: Optional[str] = DEFAULT_URL,
-    loop: Optional[AbstractEventLoop] = None,
-    remote: bool = False,
-) -> Client:
-    """Convince function for creating an instance of the ChromeRemoteInterface and connecting it
-    to the remote instance.
-
-    :param url: URL or WS URL to use for making the CDP connection. Defaults to
-    http://localhost:9222
-    :param loop: The event loop instance to use. Defaults to asyncio.get_event_loop
-    :param remote: Boolean indicating if the protocol should be fetched from the
-    remote instance or to use the local one. Defaults to False (use local)
-    :return: Client instance connected to the browser
-    """
-    ws_url = None
-    if not url.startswith("ws"):
-        tabs = await Client.List(frontend_url=url)
-        for tab in tabs:
-            if tab["type"] == "page":
-                ws_url = tab["webSocketDebuggerUrl"]
-                break
-        if ws_url is None:
-            raise ClientError("Could not find a page to connect to.")
-    else:
-        ws_url = url
-    if remote:
-        proto_def = await gen_proto_classes(ws_url)
-    else:
-        proto_def = None
-    return await Client(ws_url, loop=loop, proto_def=proto_def)

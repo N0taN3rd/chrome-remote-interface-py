@@ -1,0 +1,13 @@
+dist: xenial
+sudo: required
+language: python
+python:
+  - "3.6"
+  - "3.7"
+addons:
+  chrome: stable
+before_install:
+  - "sysctl kernel.unprivileged_userns_clone=1"
+install:
+  - pip install --upgrade -r requirements.txt -r dev-requirements.txt
+script: pytest -v

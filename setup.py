@@ -20,7 +20,7 @@ def get_requirements():
 
 setup(
     name="cripy",
-    version="1.2.0",
+    version="1.3.0",
     description="Unofficial port of chrome-remote-interface",
     long_description=README,
     long_description_content_type="text/markdown",

@@ -11,7 +11,7 @@ from websockets import WebSocketClientProtocol, ConnectionClosed, connect as wsc
 
 from .errors import NetworkError
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from .client import Client, TargetSession  # noqa: F401
 
 __all__ = [
@@ -160,7 +160,7 @@ class Connection(EventEmitter):
                 logger.info("connection closed")
                 break
         if self.connected:
-            self._loop.create_task(self.dispose())
+            self._loop.create_task(self.dispose())  # pragma: no cover
 
     async def _send_async(self, msg: str, callback_id: int) -> None:
         """Actually send the msg to remote instance.
@@ -169,7 +169,7 @@ class Connection(EventEmitter):
         :param callback_id: The id identifying the callback associated with the msg
         """
         while not self.connected:
-            await asyncio.sleep(0)
+            await asyncio.sleep(0)  # pragma: no cover
 
         try:
             await self._ws.send(msg)
@@ -227,7 +227,7 @@ class Connection(EventEmitter):
         Calls the on close callback if it was supplied and the "connection-closed" method
         is emitted
         """
-        if self._closed:
+        if self._closed:  # pragma: no cover
             return
         self._closed = True
         if self._closeCallback:
@@ -235,7 +235,7 @@ class Connection(EventEmitter):
             self._closeCallback = None
 
         for cb in self._callbacks.values():
-            if not cb.done():
+            if not cb.done():  # pragma: no cover
                 cb.set_exception(
                     NetworkError(f"Protocol error {cb.method}: Target closed.")
                 )
@@ -249,7 +249,7 @@ class Connection(EventEmitter):
         if self._ws and not self._ws.closed:
             try:
                 await self._ws.close()
-            except Exception:
+            except Exception:  # pragma: no cover
                 pass
 
         if self._recv_task is not None and not self._recv_task.done():
@@ -257,12 +257,8 @@ class Connection(EventEmitter):
 
         self.emit(Connection.Events.Disconnected)
 
-    def __await__(self) -> "Connection":
-        yield from self.connect().__await__()
-        return self
-
     def __str__(self) -> str:
-        return f"Connection(wsurl={self._ws_url}, connected={self.connected})"
+        return f"{self.__class__.__name__}(wsurl={self._ws_url}, connected={self.connected})"
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -283,10 +279,10 @@ class CDPSession(EventEmitter):
         sessionId: str,
     ) -> None:
         """Make new session."""
-        if connection.loop is None:
+        if connection.loop is None:  # pragma: no cover
             loop = asyncio.get_event_loop()
         else:
-            loop = connection.loop
+            loop = connection.loop  # pragma: no cover
         super().__init__(loop=loop)
         self._lastId: int = 0
         self._callbacks: Dict[int, CDPResultFuture] = dict()
@@ -306,7 +302,7 @@ class CDPSession(EventEmitter):
         :arg str method: Protocol method name.
         :arg dict params: Optional method parameters.
         """
-        if not self._connection:
+        if not self._connection:  # pragma: no cover
             raise NetworkError(
                 f"Protocol Error ({method}): Session closed. Most likely the "
                 f"target {self._targetType} has been closed."
@@ -394,7 +390,7 @@ class CDPSession(EventEmitter):
         self.emit(CDPSession.Events.Disconnected)
 
     def __str__(self) -> str:
-        return f"CDPSession(target={self._targetType}, sessionId={self._sessionId})"
+        return f"{self.__class__.__name__}(target={self._targetType}, sessionId={self._sessionId})"
 
     def __repr__(self) -> str:
         return self.__str__()

@@ -1,6 +1,7 @@
+from asyncio import AbstractEventLoop
 from pathlib import Path
 from types import ModuleType
-from typing import List, Dict, Tuple, Any
+from typing import List, Dict, Tuple, Any, Optional
 
 import aiofiles
 from jinja2 import Template
@@ -8,7 +9,6 @@ from jinja2 import Template
 from .domain import Domain
 from .typer import TYPER
 from ..templates import SIMPLE_PROTO_INIT_PATH, SIMPLE_COMMANDS_PATH
-
 
 __all__ = [
     "onEvent",
@@ -49,8 +49,10 @@ def generate_domain(d: Domain, template, dp: Path) -> None:
             )
 
 
-async def dynamically_generate_domains(protocol_info: Dict) -> Dict[str, Any]:
-    async with aiofiles.open(SIMPLE_COMMANDS_PATH, "r") as iin:
+async def dynamically_generate_domains(
+    protocol_info: Dict, loop: Optional[AbstractEventLoop] = None
+) -> Dict[str, Any]:
+    async with aiofiles.open(SIMPLE_COMMANDS_PATH, mode="r", loop=loop) as iin:
         command_template = Template(
             await iin.read(), trim_blocks=True, lstrip_blocks=True
         )
