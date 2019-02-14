@@ -31,8 +31,6 @@ class Returns(FRefCollector):
                     t = p.type
                 else:
                     t = f"Types.{p.type}"
-                if p.name == "cssKeyframesRules":
-                    print(p, p.type, t)
                 yield f"res['{p.name}'] = {t}.safe_create(res['{p.name}'])"
             else:
                 if p.type.is_array:
@@ -63,7 +61,6 @@ class Returns(FRefCollector):
                     dt = TYPER.domain_types.get(scoped, None)
                     if dt is not None:
                         if dt.type.is_object:
-                            print(scoped.replace(self.domain, "Types"))
                             yield (
                                 f"res['{p.name}'] = "
                                 f"{scoped.replace(self.domain,'Types')}.safe_create_from_list(res['{p.name}'])"

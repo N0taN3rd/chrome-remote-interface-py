@@ -50,6 +50,7 @@ DEFAULT_ARGS = [
     "--use-mock-keychain",
     "--mute-audio",
     "--autoplay-policy=no-user-gesture-required",
+    "--enable-automation",
 ]
 
 

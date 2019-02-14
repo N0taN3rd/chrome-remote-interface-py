@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from asyncio import AbstractEventLoop
-from typing import Optional, Union
+from typing import Dict, Optional, Union
 
 from .connection import Connection, CDPSession
 from .protocol.accessibility import Accessibility
@@ -9,6 +9,7 @@ from .protocol.applicationcache import ApplicationCache
 from .protocol.audits import Audits
 from .protocol.browser import Browser
 from .protocol.cachestorage import CacheStorage
+from .protocol.cast import Cast
 from .protocol.console import Console
 from .protocol.css import CSS
 from .protocol.database import Database
@@ -45,28 +46,28 @@ from .protocol.testing import Testing
 from .protocol.tethering import Tethering
 from .protocol.tracing import Tracing
 
-__all__ = [
-    "Client",
-    "TargetSession",
-]
+__all__ = ["Client", "TargetSession"]
 
 
 class Client(Connection):
     def __init__(
         self,
         ws_url: str,
+        flatten_sessions: bool = False,
+        proto_def: Optional[Dict] = None,
         loop: Optional[AbstractEventLoop] = None,
-        proto_def: Optional[dict] = None,
     ) -> None:
         """Construct a new instance of the ChromeRemoteInterface Client.
 
         :param ws_url: The WS endpoint of the remote instance
-        :param loop:  Optional event loop to use. Defaults to asyncio.get_event_loop
+        :param flatten_sessions: Enables "flat" access to the session via specifying sessionId
+        attribute in the commands
         :param proto_def: Optional protocol domain classes to be used rather than
         the pre-generated ones
+        :param loop:  Optional event loop to use. Defaults to asyncio.get_event_loop
         """
-        super().__init__(ws_url, loop)
-        self._proto_def: Optional[dict] = proto_def
+        super().__init__(ws_url, flatten_sessions, loop)
+        self._proto_def: Optional[Dict] = proto_def
         if proto_def is None:
             self.Accessibility: Accessibility = Accessibility(self)
             self.Animation: Animation = Animation(self)
@@ -74,6 +75,7 @@ class Client(Connection):
             self.Audits: Audits = Audits(self)
             self.Browser: Browser = Browser(self)
             self.CacheStorage: CacheStorage = CacheStorage(self)
+            self.Cast: Cast = Cast(self)
             self.Console: Console = Console(self)
             self.CSS: CSS = CSS(self)
             self.Database: Database = Database(self)
@@ -113,15 +115,30 @@ class Client(Connection):
             for domain, clazz in proto_def.items():
                 setattr(self, domain, clazz(self))
 
-    async def createTargetSession(self, targetId: str) -> "TargetSession":
-        """Attach to the target specified by target id and create new TargetSession for direct
-        communication to it."""
-        resp = await self.send("Target.attachToTarget", {"targetId": targetId})
-        sessionId = resp.get("sessionId")
+    async def create_session(self, target_id: str) -> "TargetSession":
+        """Attach to the target specified by the supplied target id and creates new CDPSession for
+        direct communication to it
+
+        :param target_id: The id of the target connecting to
+        :return: A new session connected to the target
+        """
+        params = {"targetId": target_id}
+        if self._flatten_sessions:
+            params["flatten"] = self._flatten_sessions
+        resp = await self.send("Target.attachToTarget", params)
+        session_id = resp.get("sessionId")
+        if self._flatten_sessions:
+            session = self._sessions.get(session_id)
+            if session:
+                return session
         session = TargetSession(
-            self, resp.get("type", "unknown"), sessionId, proto_def=self._proto_def
+            self,
+            resp.get("type", "unknown"),
+            session_id,
+            self._flatten_sessions,
+            proto_def=self._proto_def,
         )
-        self._sessions[sessionId] = session
+        self._sessions[session_id] = session
         return session
 
 
@@ -129,13 +146,14 @@ class TargetSession(CDPSession):
     def __init__(
         self,
         client: Union[Client, "TargetSession"],
-        targetType: str,
-        sessionId: str,
-        proto_def: Optional[dict] = None,
+        target_type: str,
+        session_id: str,
+        flat_session: bool = False,
+        proto_def: Optional[Dict] = None,
     ) -> None:
         """Make new session."""
-        super().__init__(client, targetType, sessionId)
-        self._proto_def: Optional[dict] = proto_def
+        super().__init__(client, target_type, session_id, flat_session)
+        self._proto_def: Optional[Dict] = proto_def
         if proto_def is None:
             self.Accessibility: Accessibility = Accessibility(self)
             self.Animation: Animation = Animation(self)
@@ -143,6 +161,7 @@ class TargetSession(CDPSession):
             self.Audits: Audits = Audits(self)
             self.Browser: Browser = Browser(self)
             self.CacheStorage: CacheStorage = CacheStorage(self)
+            self.Cast: Cast = Cast(self)
             self.Console: Console = Console(self)
             self.CSS: CSS = CSS(self)
             self.Database: Database = Database(self)
@@ -181,7 +200,24 @@ class TargetSession(CDPSession):
             for domain, clazz in proto_def.items():
                 setattr(self, domain, clazz(self))
 
-    def createTargetSession(self, targetType: str, sessionId: str) -> "TargetSession":
-        sesh = TargetSession(self, targetType, sessionId, proto_def=self._proto_def)
-        self._sessions[sessionId] = sesh
-        return sesh
+    def create_session(self, target_type: str, session_id: str) -> "TargetSession":
+        """Creates a new session for the target being connected to specified
+        by the session_id
+
+        :param target_type: The type of the target being connected to
+        :param session_id: The session id used to communicate to the target
+        :return: A new session connected to the target
+        """
+        connection = self._connection if self._flat_session else self
+        session = TargetSession(
+            connection,
+            target_type,
+            session_id,
+            self._flat_session,
+            proto_def=self._proto_def,
+        )
+        if self._flat_session:
+            self._connection.add_session(session)
+        else:
+            self._sessions[session_id] = session
+        return session

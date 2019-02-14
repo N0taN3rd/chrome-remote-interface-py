@@ -200,7 +200,9 @@ async def fetch_ws_url(
             backup = backup or target
             if target["type"] == "page":
                 return target.get("webSocketDebuggerUrl")
-    if backup is not None and backup.get("webSocketDebuggerUrl") is not None:  # pragma: no cover
+    if (
+        backup is not None and backup.get("webSocketDebuggerUrl") is not None
+    ):  # pragma: no cover
         return backup.get("webSocketDebuggerUrl")  # pragma: no cover
     raise ClientError(
         f"Could not find a inspectable target to connect to: frontend url = {furl}, targets = {targets}"

@@ -53,24 +53,34 @@ class CacheStorage(object):
             msg_dict["securityOrigin"] = securityOrigin
         return self.client.send("CacheStorage.requestCacheNames", msg_dict)
 
-    def requestCachedResponse(self, cacheId: str, requestURL: str) -> Awaitable[Dict]:
+    def requestCachedResponse(
+        self, cacheId: str, requestURL: str, requestHeaders: List[dict]
+    ) -> Awaitable[Dict]:
         """
         Fetches cache entry.
 
-        :param cacheId: Id of cache that contains the enty.
+        :param cacheId: Id of cache that contains the entry.
         :type cacheId: str
         :param requestURL: URL spec of the request.
         :type requestURL: str
+        :param requestHeaders: headers of the request.
+        :type requestHeaders: List[dict]
         """
         msg_dict = dict()
         if cacheId is not None:
             msg_dict["cacheId"] = cacheId
         if requestURL is not None:
             msg_dict["requestURL"] = requestURL
+        if requestHeaders is not None:
+            msg_dict["requestHeaders"] = requestHeaders
         return self.client.send("CacheStorage.requestCachedResponse", msg_dict)
 
     def requestEntries(
-        self, cacheId: str, skipCount: int, pageSize: int
+        self,
+        cacheId: str,
+        skipCount: int,
+        pageSize: int,
+        pathFilter: Optional[str] = None,
     ) -> Awaitable[Dict]:
         """
         Requests data from cache.
@@ -81,6 +91,8 @@ class CacheStorage(object):
         :type skipCount: int
         :param pageSize: Number of records to fetch.
         :type pageSize: int
+        :param pathFilter: If present, only return the entries containing this substring in the path
+        :type pathFilter: Optional[str]
         """
         msg_dict = dict()
         if cacheId is not None:
@@ -89,4 +101,6 @@ class CacheStorage(object):
             msg_dict["skipCount"] = skipCount
         if pageSize is not None:
             msg_dict["pageSize"] = pageSize
+        if pathFilter is not None:
+            msg_dict["pathFilter"] = pathFilter
         return self.client.send("CacheStorage.requestEntries", msg_dict)

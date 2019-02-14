@@ -1,10 +1,11 @@
 aiodns
 aiofiles
 aiohttp
+async-timeout
 attrs
 cchardet
 jinja2
-pyee
+pyee2
 stringcase
 ujson
 websockets

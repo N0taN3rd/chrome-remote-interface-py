@@ -1,7 +1,7 @@
 from typing import List, Callable, Tuple, Dict, Union, Any, Optional
 
 import attr
-from pyee import EventEmitter
+from pyee2 import EventEmitter
 
 from cripy import Connection, Client, CDP
 

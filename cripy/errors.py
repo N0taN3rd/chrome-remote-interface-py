@@ -1,4 +1,4 @@
-__all__ = ["NetworkError", "ClientError"]
+__all__ = ["ClientError", "ConnectionClosedError", "NetworkError"]
 
 
 class NetworkError(Exception):
@@ -7,3 +7,7 @@ class NetworkError(Exception):
 
 class ClientError(Exception):
     """Client specific exception."""
+
+
+class ConnectionClosedError(Exception):
+    """Exception used to indicate that the underlying connection has closed"""

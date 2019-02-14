@@ -526,6 +526,7 @@ nodes that form the path from the node to the root are also sent to the client a
         nodeId: Optional[int] = None,
         backendNodeId: Optional[int] = None,
         objectGroup: Optional[str] = None,
+        executionContextId: Optional[int] = None,
     ) -> Awaitable[Dict]:
         """
         Resolves the JavaScript node object for a given NodeId or BackendNodeId.
@@ -536,6 +537,8 @@ nodes that form the path from the node to the root are also sent to the client a
         :type backendNodeId: Optional[int]
         :param objectGroup: Symbolic group name that can be used to release multiple objects.
         :type objectGroup: Optional[str]
+        :param executionContextId: Execution context in which to resolve the node.
+        :type executionContextId: Optional[int]
         """
         msg_dict = dict()
         if nodeId is not None:
@@ -544,6 +547,8 @@ nodes that form the path from the node to the root are also sent to the client a
             msg_dict["backendNodeId"] = backendNodeId
         if objectGroup is not None:
             msg_dict["objectGroup"] = objectGroup
+        if executionContextId is not None:
+            msg_dict["executionContextId"] = executionContextId
         return self.client.send("DOM.resolveNode", msg_dict)
 
     def setAttributeValue(self, nodeId: int, name: str, value: str) -> Awaitable[Dict]:
@@ -618,6 +623,19 @@ attribute value and types in several attribute name/value pairs.
         if objectId is not None:
             msg_dict["objectId"] = objectId
         return self.client.send("DOM.setFileInputFiles", msg_dict)
+
+    def getFileInfo(self, objectId: str) -> Awaitable[Dict]:
+        """
+        Returns file information for the given
+File wrapper.
+
+        :param objectId: JavaScript object id of the node wrapper.
+        :type objectId: str
+        """
+        msg_dict = dict()
+        if objectId is not None:
+            msg_dict["objectId"] = objectId
+        return self.client.send("DOM.getFileInfo", msg_dict)
 
     def setInspectedNode(self, nodeId: int) -> Awaitable[Dict]:
         """

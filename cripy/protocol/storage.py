@@ -19,7 +19,7 @@ class Storage(object):
 
         :param origin: Security origin.
         :type origin: str
-        :param storageTypes: Comma separated origin names.
+        :param storageTypes: Comma separated list of StorageType to clear.
         :type storageTypes: str
         """
         msg_dict = dict()

@@ -51,8 +51,6 @@ class Typer(object):
                     pts = dt.type.pytype_safe
                     if pts is not None:
                         return pts
-                    else:
-                        print("bbb", dt)
                 else:
                     return self.primitives.get(t, f"'{t}'")
                 return f"'{t}'"

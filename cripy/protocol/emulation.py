@@ -361,23 +361,6 @@ on Android.
             msg_dict["platform"] = platform
         return self.client.send("Emulation.setUserAgentOverride", msg_dict)
 
-    def virtualTimeAdvanced(self, cb: Optional[Callable[..., Any]] = None) -> Any:
-        """
-        Notification sent after the virtual time has advanced.
-        """
-        if cb is None:
-            future = self.client.loop.create_future()
-
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
-
-            self.client.once("Emulation.virtualTimeAdvanced", _cb)
-
-            return future
-
-        self.client.on("Emulation.virtualTimeAdvanced", cb)
-        return lambda: self.client.remove_listener("Emulation.virtualTimeAdvanced", cb)
-
     def virtualTimeBudgetExpired(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
         Notification sent after the virtual time budget for the current VirtualTimePolicy has run out.
@@ -396,20 +379,3 @@ on Android.
         return lambda: self.client.remove_listener(
             "Emulation.virtualTimeBudgetExpired", cb
         )
-
-    def virtualTimePaused(self, cb: Optional[Callable[..., Any]] = None) -> Any:
-        """
-        Notification sent after the virtual time has paused.
-        """
-        if cb is None:
-            future = self.client.loop.create_future()
-
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
-
-            self.client.once("Emulation.virtualTimePaused", _cb)
-
-            return future
-
-        self.client.on("Emulation.virtualTimePaused", cb)
-        return lambda: self.client.remove_listener("Emulation.virtualTimePaused", cb)

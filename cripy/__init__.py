@@ -2,26 +2,28 @@ from typing import Union
 
 from .cdp import CDP, connect, DEFAULT_HOST, DEFAULT_PORT, DEFAULT_URL
 from .client import Client, TargetSession
-from .connection import Connection, CDPSession, ConnectionEvents, SessionEvents
-from .errors import ClientError, NetworkError
+from .connection import Connection, CDPSession
+from .errors import ClientError, ConnectionClosedError, NetworkError
+from .events import ConnectionEvents, SessionEvents
 
 ConnectionType = Union[Client, Connection]
 SessionType = Union[TargetSession, CDPSession]
 
 __all__ = [
     "CDP",
-    "connect",
-    "Connection",
-    "Client",
     "CDPSession",
-    "TargetSession",
+    "Client",
+    "ClientError",
+    "Connection",
+    "ConnectionClosedError",
     "ConnectionEvents",
-    "SessionEvents",
+    "ConnectionType",
     "DEFAULT_HOST",
     "DEFAULT_PORT",
     "DEFAULT_URL",
     "NetworkError",
-    "ClientError",
-    "ConnectionType",
+    "SessionEvents",
     "SessionType",
+    "TargetSession",
+    "connect",
 ]
