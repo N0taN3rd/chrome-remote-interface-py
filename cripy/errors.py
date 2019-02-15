@@ -1,13 +1,13 @@
-__all__ = ["ClientError", "ConnectionClosedError", "NetworkError"]
+__all__ = ["ClientError", "NetworkError", "ProtocolError"]
 
 
 class NetworkError(Exception):
-    """Network/Protocol related exception."""
+    """Network related exception."""
 
 
 class ClientError(Exception):
     """Client specific exception."""
 
 
-class ConnectionClosedError(Exception):
-    """Exception used to indicate that the underlying connection has closed"""
+class ProtocolError(Exception):
+    """Exception used to indicate that a CDP command has received an error"""

@@ -115,6 +115,9 @@ class Client(Connection):
             for domain, clazz in proto_def.items():
                 setattr(self, domain, clazz(self))
 
+    def session(self, session_id: str) -> Optional["TargetSession"]:
+        return self._sessions.get(session_id)
+
     async def create_session(self, target_id: str) -> "TargetSession":
         """Attach to the target specified by the supplied target id and creates new CDPSession for
         direct communication to it
@@ -131,15 +134,18 @@ class Client(Connection):
             session = self._sessions.get(session_id)
             if session:
                 return session
-        session = TargetSession(
-            self,
-            resp.get("type", "unknown"),
-            session_id,
-            self._flatten_sessions,
-            proto_def=self._proto_def,
-        )
+        session = self._new_session(resp.get("type", "unknown"), session_id)
         self._sessions[session_id] = session
         return session
+
+    def _new_session(self, target_type: str, session_id: str) -> "TargetSession":
+        return TargetSession(
+            self,
+            target_type,
+            session_id,
+            flat_session=self._flatten_sessions,
+            proto_def=self._proto_def,
+        )
 
 
 class TargetSession(CDPSession):
@@ -213,7 +219,7 @@ class TargetSession(CDPSession):
             connection,
             target_type,
             session_id,
-            self._flat_session,
+            flat_session=self._flat_session,
             proto_def=self._proto_def,
         )
         if self._flat_session:

@@ -8,14 +8,14 @@ from asyncio import (
     get_event_loop as aio_get_event_loop,
     sleep as aio_sleep,
 )
-from typing import Callable, Optional, Dict, ClassVar, Union, TYPE_CHECKING
+from typing import Callable, Optional, Dict, ClassVar, Union, overload, TYPE_CHECKING
 from ujson import loads as ujson_loads, dumps as ujson_dumps
 
 from async_timeout import timeout
 from pyee2 import EventEmitter
 from websockets import WebSocketClientProtocol, ConnectionClosed, connect as wsconnect
 
-from .errors import NetworkError, ConnectionClosedError
+from .errors import NetworkError, ProtocolError
 from .events import ConnectionEvents, SessionEvents
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -69,15 +69,34 @@ class Connection(EventEmitter):
             loop = aio_get_event_loop()
         super().__init__(loop=loop)
         self._connected: bool = False
-        self._ws_url: str = ws_url
-        self._lastId: int = 0
         self._closed: bool = False
         self._flatten_sessions: bool = flatten_sessions
+        self._ws_url: str = ws_url
+        self._lastId: int = 0
         self._callbacks: Dict[int, CDPResultFuture] = dict()
         self._sessions: Dict[str, Union[CDPSession, "TargetSession"]] = dict()
         self._ws: WebSocketClientProtocol = None
         self._recv_task: Optional[Task] = None
         self._closeCallback: Optional[Callable[[], None]] = None
+
+    @staticmethod
+    @overload
+    def from_session(session: "CDPSession") -> "Connection":
+        ...
+
+    @staticmethod
+    @overload
+    def from_session(session: "TargetSession") -> "Client":
+        ...
+
+    @staticmethod
+    def from_session(session):
+        if session.flat_session:
+            return session._connection
+        conn = session._connection
+        while not isinstance(conn, Connection):
+            conn = conn._connection
+        return conn
 
     @property
     def loop(self) -> AbstractEventLoop:
@@ -93,12 +112,39 @@ class Connection(EventEmitter):
     def closed(self) -> bool:
         return self._closed
 
-    def add_session(self, session: Union["CDPSession", "TargetSession"]) -> None:
+    @overload
+    def add_session(self, session: "CDPSession") -> None:
+        ...
+
+    @overload
+    def add_session(self, session: "TargetSession") -> None:
+        ...
+
+    def add_session(self, session) -> None:
         self._sessions[session.session_id] = session
 
     def set_close_callback(self, callback: Callable[[], None]) -> None:
         """Set closed callback."""
         self._closeCallback = callback
+
+    def session(self, session_id: str) -> Optional["CDPSession"]:
+        return self._sessions.get(session_id)
+
+    def send(self, method: str, params: Optional[Dict] = None) -> Future:
+        """Send a command to the remote chrome instance.
+
+        :param str method: The method to be used
+        :param dict params: The optional parameters (arguments) for the command
+        :return: A future that resolves once the commands response is received
+        """
+        if self._lastId and not self._connected:
+            raise NetworkError("Connection is closed")
+        if params is None:
+            params = dict()
+        _id = self._raw_send(dict(method=method, params=params))
+        callback = CDPResultFuture(method, loop=self._loop)
+        self._callbacks[_id] = callback
+        return callback
 
     async def connect(
         self, ws_url: Optional[str] = None, flatten_sessions: Optional[bool] = None
@@ -140,27 +186,9 @@ class Connection(EventEmitter):
             session = self._sessions.get(session_id)
             if session:
                 return session
-        session = CDPSession(
-            self, resp.get("type", "unknown"), session_id, self._flatten_sessions
-        )
+        session = self._new_session(resp.get("type", "unknown"), session_id)
         self._sessions[session_id] = session
         return session
-
-    def send(self, method: str, params: Optional[Dict] = None) -> Future:
-        """Send a command to the remote chrome instance.
-
-        :param str method: The method to be used
-        :param dict params: The optional parameters (arguments) for the command
-        :return: A future that resolves once the commands response is received
-        """
-        if self._lastId and not self._connected:
-            raise NetworkError("Connection is closed")
-        if params is None:
-            params = dict()
-        _id = self._raw_send(method, params)
-        callback = CDPResultFuture(method, loop=self._loop)
-        self._callbacks[_id] = callback
-        return callback
 
     async def dispose(self) -> None:
         """Close all connection."""
@@ -219,7 +247,7 @@ class Connection(EventEmitter):
 
         for cb in self._callbacks.values():
             if not cb.done():  # pragma: no cover
-                cb.set_exception(ConnectionClosedError(f"{cb.method}: Target closed."))
+                cb.set_exception(NetworkError(f"{cb.method}: Target closed."))
         self._callbacks.clear()
 
         for session in self._sessions.values():
@@ -248,11 +276,11 @@ class Connection(EventEmitter):
 
         self.emit(Connection.Events.Disconnected)
 
-    def _raw_send(self, method: str, params: Dict) -> int:
+    def _raw_send(self, msg: Dict) -> int:
         self._lastId += 1
         _id = self._lastId
-        msg = ujson_dumps(dict(method=method, params=params, id=_id))
-        self._loop.create_task(self._send_async(msg, _id))
+        msg["id"] = _id
+        self._loop.create_task(self._send_async(ujson_dumps(msg), _id))
         return _id
 
     def _on_message(self, message: str) -> None:
@@ -271,15 +299,19 @@ class Connection(EventEmitter):
         _id = msg.get("id")
         params = msg.get("params", {})
         method = msg.get("method", "")
-        session_id = params.get("sessionId", None)
         if method == "Target.attachedToTarget":
-            pass
+            session_id = params.get("sessionId")
+            self._sessions[session_id] = self._new_session(
+                params.get("targetInfo", {}).get("type", "unknown"), session_id
+            )
         elif method == "Target.detachedFromTarget":
+            session_id = params.get("sessionId", None)
             session = self._sessions.get(session_id)
             if session:
                 session.on_closed()
                 del self._sessions[session_id]
 
+        session_id = msg.get("sessionId", None)
         if session_id:
             session = self._sessions.get(session_id)
             if session:
@@ -289,7 +321,7 @@ class Connection(EventEmitter):
             if not callback.done():
                 if "error" in msg:
                     callback.set_exception(
-                        NetworkError(create_protocol_error(callback.method, msg))
+                        ProtocolError(create_protocol_error(callback.method, msg))
                     )
                 else:
                     callback.set_result(msg.get("result"))
@@ -304,7 +336,7 @@ class Connection(EventEmitter):
             if callback and not callback.done():
                 if "error" in msg:
                     callback.set_exception(
-                        NetworkError(create_protocol_error(callback.method, msg))
+                        ProtocolError(create_protocol_error(callback.method, msg))
                     )
                 else:
                     callback.set_result(msg.get("result"))
@@ -325,7 +357,9 @@ class Connection(EventEmitter):
                 self.emit(method, params)
 
     def _new_session(self, target_type: str, session_id: str) -> "CDPSession":
-        return CDPSession(self, )
+        return CDPSession(
+            self, target_type, session_id, flat_session=self._flatten_sessions
+        )
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__}(wsurl={self._ws_url}, connected={self._connected})"
@@ -381,16 +415,29 @@ class CDPSession(EventEmitter):
         :arg dict params: Optional method parameters.
         """
         if not self._connection:  # pragma: no cover
-            raise ConnectionClosedError(
+            raise NetworkError(
                 f"Protocol Error ({method}): Session closed. Most likely the "
                 f"target {self._target_type} has been closed."
             )
+        if params is None:
+            params = dict()
         if self._flat_session:
-            _id = self._connection._raw_send(method, params)
+            _id = self._connection._raw_send(
+                dict(method=method, params=params, sessionId=self.session_id)
+            )
             callback = CDPResultFuture(method, self._loop)
             self._callbacks[_id] = callback
             return callback
-        return self._send_non_flat(method, params)
+        self._lastId += 1
+        _id = self._lastId
+        msg = ujson_dumps(dict(id=_id, method=method, params=params))
+        callback = CDPResultFuture(method, self._loop)
+        self._callbacks[_id] = callback
+        self._connection.send(
+            "Target.sendMessageToTarget",
+            {"sessionId": self._session_id, "message": msg},
+        )
+        return callback
 
     async def detach(self) -> None:
         """Detach session from target. Once detached, session won't emit any events and
@@ -411,21 +458,26 @@ class CDPSession(EventEmitter):
         :return: A new session connected to the target
         """
         connection = self._connection if self._flat_session else self
-        session = CDPSession(connection, target_type, session_id, self._flat_session)
+        session = CDPSession(
+            connection, target_type, session_id, flat_session=self._flat_session
+        )
         if self._flat_session:
             self._connection.add_session(session)
         else:
             self._sessions[session_id] = session
         return session
 
-    def on_message(self, message: str) -> None:
-        obj = ujson_loads(message)
+    def on_message(self, maybe_str_or_dict: Union[str, Dict]) -> None:
+        if not self._flat_session or isinstance(maybe_str_or_dict, str):
+            obj = ujson_loads(maybe_str_or_dict)
+        else:
+            obj = maybe_str_or_dict
         _id = obj.get("id")
         if _id and _id in self._callbacks:
             callback = self._callbacks.pop(_id)
             if "error" in obj:
                 callback.set_exception(
-                    NetworkError(create_protocol_error(callback.method, obj))
+                    ProtocolError(create_protocol_error(callback.method, obj))
                 )
             else:
                 result = obj.get("result")
@@ -434,24 +486,26 @@ class CDPSession(EventEmitter):
         else:
             method = obj.get("method")
             params = obj.get("params")
-            if method == "Target.receivedMessageFromTarget":
-                session = self._sessions.get(params.get("sessionId"))
-                if session is not None:
-                    session.on_message(params.get("message"))
-            elif method == "Target.detachedFromTarget":
-                sessionId = params.get("sessionId")
-                session = self._sessions.get(sessionId)
-                if session is not None:
-                    session.on_closed()
-                    del self._sessions[sessionId]
-            self.emit(method, params)
+            if not self._flat_session:
+                if method == "Target.receivedMessageFromTarget":
+                    session = self._sessions.get(params.get("sessionId"))
+                    if session is not None:
+                        session.on_message(params.get("message"))
+                elif method == "Target.detachedFromTarget":
+                    session_id = params.get("sessionId")
+                    session = self._sessions.get(session_id)
+                    if session is not None:
+                        session.on_closed()
+                        del self._sessions[session_id]
+            else:
+                self.emit(method, params)
 
     def on_closed(self) -> None:
         for cb in self._callbacks.values():
             if not cb.done():
                 cb.set_exception(
-                    ConnectionClosedError(
-                        f"Protocol error {cb.method}: {self._target_type} closed."
+                    NetworkError(
+                        f"Network error {cb.method}: {self._target_type} closed."
                     )
                 )
         self._callbacks.clear()
@@ -460,28 +514,6 @@ class CDPSession(EventEmitter):
         self._sessions.clear()
         self._connection = None
         self.emit(CDPSession.Events.Disconnected)
-
-    def _send_non_flat(self, method: str, params: Optional[dict] = None) -> Future:
-        if params is None:
-            params = dict()
-        self._lastId += 1
-        _id = self._lastId
-        msg = ujson_dumps(dict(id=_id, method=method, params=params))
-        callback = CDPResultFuture(method, self._loop)
-        self._callbacks[_id] = callback
-        try:
-            self._connection.send(
-                "Target.sendMessageToTarget",
-                {"sessionId": self._session_id, "message": msg},
-            )
-        except Exception as e:
-            # The response from target might have been already dispatched
-            if _id in self._callbacks:
-                cb = self._callbacks[_id]
-                del self._callbacks[_id]
-                if not cb.done():
-                    cb.set_exception(NetworkError(e.args[0]))
-        return callback
 
     def __str__(self) -> str:
         return f"{self.__class__.__name__}(target={self._target_type}, sessionId={self._session_id})"

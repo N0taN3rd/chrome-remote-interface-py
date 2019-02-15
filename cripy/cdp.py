@@ -37,7 +37,7 @@ WS_TEST: Pattern = re.compile(r"^wss?:", re.IGNORECASE)
 HTTP_TEST: Pattern = re.compile(r"^https?:", re.IGNORECASE)
 
 
-def make_session(loop: Optional[AbstractEventLoop] = None) -> ClientSession:
+def make_http_session(loop: Optional[AbstractEventLoop] = None) -> ClientSession:
     """Creates and returns a new aiohttp.ClientSession that uses AsyncResolver
 
     :param loop: Optional asyncio event loop to use. Defaults to asyncio.get_event_loop()
@@ -67,6 +67,7 @@ async def connect(
     url: Optional[str] = DEFAULT_URL,
     protocol: Optional[ProtocolDef] = None,
     remote: bool = False,
+    flatten_sessions: bool = False,
     loop: Optional[AbstractEventLoop] = None,
 ) -> Client:
     """Convince function for creating an instance of the ChromeRemoteInterface and connecting it
@@ -78,6 +79,9 @@ async def connect(
     remote option
     :param remote: a boolean indicating whether the protocol must be fetched remotely or if the local
     version should be used. It has no effect if the protocol option is set. Defaults to false
+    :param flatten_sessions: a boolean indicating whether to enables the "flat" access to the session
+    via specifying sessionId attribute in the commands when targets are connected to via either TargetSession
+    or CDPSession
     :param loop: The event loop instance to use. Defaults to asyncio.get_event_loop
     :return: Client instance connected to the browser
     """
@@ -100,7 +104,9 @@ async def connect(
         proto_def = await fetch_and_gen_proto_classes(ws_url, loop=loop)
     else:
         proto_def = None
-    client = Client(ws_url, loop=loop, proto_def=proto_def)
+    client = Client(
+        ws_url, flatten_sessions=flatten_sessions, proto_def=proto_def, loop=loop
+    )
     await client.connect()
     return client
 
@@ -283,6 +289,7 @@ class CDP(object):
         target: Optional[TargetArgT] = None,
         protocol: Optional[ProtocolDef] = None,
         remote: bool = False,
+        flatten_sessions: bool = False,
         loop: Optional[AbstractEventLoop] = None,
     ) -> Client:
         """Returns a cripy.Client instance connected to the desired target.
@@ -310,6 +317,9 @@ class CDP(object):
         remote option
         :param remote: a boolean indicating whether the protocol must be fetched remotely or if the local
         version should be used. It has no effect if the protocol option is set. Defaults to false
+        :param flatten_sessions: a boolean indicating whether to enables the "flat" access to the session
+        via specifying sessionId attribute in the commands when targets are connected to via either TargetSession
+        or CDPSession
         :param loop: The event loop instance to use. Defaults to asyncio.get_event_loop
         :return: A cripy.Client instance connected to the desired target
         """
@@ -324,7 +334,9 @@ class CDP(object):
             proto_def = await fetch_and_gen_proto_classes(ws_url, loop=loop)
         else:
             proto_def = None
-        client: Client = Client(ws_url, loop=loop, proto_def=proto_def)
+        client: Client = Client(
+            ws_url, flatten_sessions=flatten_sessions, proto_def=proto_def, loop=loop
+        )
         await client.connect()
         return client
 
@@ -334,6 +346,7 @@ class CDP(object):
         port: Optional[Union[int, str]] = DEFAULT_PORT,
         secure: Optional[bool] = False,
         target: Optional[TargetArgT] = None,
+        flatten_sessions: bool = False,
         loop: Optional[AbstractEventLoop] = None,
     ) -> Connection:
         """Returns a cripy.Connection instance connected to the desired target.
@@ -357,6 +370,9 @@ class CDP(object):
         :param port: HTTP frontend port. Defaults to 9222
         :param secure: HTTPS frontend. Defaults to false
         :param target: Determines which target this client should attach to
+        :param flatten_sessions: a boolean indicating whether to enables the "flat" access to the session
+        via specifying sessionId attribute in the commands when targets are connected to via either TargetSession
+        or CDPSession
         :param loop: The event loop instance to use. Defaults to asyncio.get_event_loop
         :return: A cripy.Connection instance connected to the desired target
         """
@@ -365,7 +381,9 @@ class CDP(object):
         ws_url = await get_connectable_target_wsurl(
             host=host, port=port, secure=secure, target=target, loop=loop
         )
-        conn: Connection = Connection(ws_url, loop=loop)
+        conn: Connection = Connection(
+            ws_url, flatten_sessions=flatten_sessions, loop=loop
+        )
         await conn.connect()
         return conn
 
@@ -395,7 +413,7 @@ class CDP(object):
             )
         else:
             frontend_url = frontend_url.lower()
-        async with make_session(loop=loop) as session:
+        async with make_http_session(loop=loop) as session:
             async with session.get(
                 urljoin(ensure_cdp_url_endswith(frontend_url, "json/close/"), target_id)
             ) as res:
@@ -427,7 +445,7 @@ class CDP(object):
             )
         else:
             frontend_url = frontend_url.lower()
-        async with make_session(loop=loop) as session:
+        async with make_http_session(loop=loop) as session:
             async with session.get(
                 urljoin(
                     ensure_cdp_url_endswith(frontend_url, "json/activate/"), target_id
@@ -459,7 +477,7 @@ class CDP(object):
             )
         else:
             frontend_url = frontend_url.lower()
-        async with make_session(loop=loop) as session:
+        async with make_http_session(loop=loop) as session:
             async with session.get(
                 ensure_cdp_url_endswith(frontend_url, "json/protocol")
             ) as res:
@@ -489,7 +507,7 @@ class CDP(object):
             )
         else:
             frontend_url = frontend_url.lower()
-        async with make_session(loop=loop) as session:
+        async with make_http_session(loop=loop) as session:
             async with session.get(
                 ensure_cdp_url_endswith(frontend_url, "json/list")
             ) as res:
@@ -524,7 +542,7 @@ class CDP(object):
         frontend_url = ensure_cdp_url_endswith(frontend_url, "json/new")
         if url is not None:
             frontend_url = f"{frontend_url}?{url}"
-        async with make_session(loop=loop) as session:
+        async with make_http_session(loop=loop) as session:
             async with session.get(frontend_url) as res:
                 return await res.json()
 
@@ -552,7 +570,7 @@ class CDP(object):
             )
         else:
             frontend_url = frontend_url.lower()
-        async with make_session(loop=loop) as session:
+        async with make_http_session(loop=loop) as session:
             async with session.get(
                 ensure_cdp_url_endswith(frontend_url, "json/version")
             ) as data:
