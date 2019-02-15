@@ -711,7 +711,7 @@ attribute, user, password.
 
     def webSocketFrameError(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
-        Fired when WebSocket frame error occurs.
+        Fired when WebSocket message error occurs.
         """
         if cb is None:
             future = self.client.loop.create_future()
@@ -728,7 +728,7 @@ attribute, user, password.
 
     def webSocketFrameReceived(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
-        Fired when WebSocket frame is received.
+        Fired when WebSocket message is received.
         """
         if cb is None:
             future = self.client.loop.create_future()
@@ -745,7 +745,7 @@ attribute, user, password.
 
     def webSocketFrameSent(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         """
-        Fired when WebSocket frame is sent.
+        Fired when WebSocket message is sent.
         """
         if cb is None:
             future = self.client.loop.create_future()

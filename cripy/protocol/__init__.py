@@ -6,6 +6,7 @@ from .audits import Audits
 from .browser import Browser
 from .css import CSS
 from .cachestorage import CacheStorage
+from .cast import Cast
 from .dom import DOM
 from .domdebugger import DOMDebugger
 from .domsnapshot import DOMSnapshot
@@ -49,6 +50,7 @@ __all__ = [
     "Browser",
     "CSS",
     "CacheStorage",
+    "Cast",
     "DOM",
     "DOMDebugger",
     "DOMSnapshot",

@@ -68,9 +68,7 @@ class Property(FRefCollector):
             return f"self.{self.name} = {self.type}.safe_create({self.name})"
 
         if self.type.is_array:
-            if isinstance(self.items, list):
-                print("we have multiple item types")
-            else:
+            if not isinstance(self.items, list):
                 if TYPER.is_primitive_or_any(self.items):
                     return f"self.{self.name} = {self.name}"
                 else:

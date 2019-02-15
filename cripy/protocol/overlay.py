@@ -78,6 +78,7 @@ class Overlay(object):
         nodeId: Optional[int] = None,
         backendNodeId: Optional[int] = None,
         objectId: Optional[str] = None,
+        selector: Optional[str] = None,
     ) -> Awaitable[Dict]:
         """
         Highlights DOM node with given id or with the given JavaScript object wrapper. Either nodeId or
@@ -91,6 +92,8 @@ objectId must be specified.
         :type backendNodeId: Optional[int]
         :param objectId: JavaScript object id of the node to be highlighted.
         :type objectId: Optional[str]
+        :param selector: Selectors to highlight relevant nodes.
+        :type selector: Optional[str]
         """
         msg_dict = dict()
         if highlightConfig is not None:
@@ -101,6 +104,8 @@ objectId must be specified.
             msg_dict["backendNodeId"] = backendNodeId
         if objectId is not None:
             msg_dict["objectId"] = objectId
+        if selector is not None:
+            msg_dict["selector"] = selector
         return self.client.send("Overlay.highlightNode", msg_dict)
 
     def highlightQuad(
@@ -186,6 +191,18 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
         if highlightConfig is not None:
             msg_dict["highlightConfig"] = highlightConfig
         return self.client.send("Overlay.setInspectMode", msg_dict)
+
+    def setShowAdHighlights(self, show: bool) -> Awaitable[Dict]:
+        """
+        Highlights owner element of all frames detected to be ads.
+
+        :param show: True for showing ad highlights
+        :type show: bool
+        """
+        msg_dict = dict()
+        if show is not None:
+            msg_dict["show"] = show
+        return self.client.send("Overlay.setShowAdHighlights", msg_dict)
 
     def setPausedInDebuggerMessage(
         self, message: Optional[str] = None
@@ -332,3 +349,20 @@ Backend then generates 'inspectNodeRequested' event upon element selection.
 
         self.client.on("Overlay.screenshotRequested", cb)
         return lambda: self.client.remove_listener("Overlay.screenshotRequested", cb)
+
+    def inspectModeCanceled(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        """
+        Fired when user cancels the inspect mode.
+        """
+        if cb is None:
+            future = self.client.loop.create_future()
+
+            def _cb(msg: Optional[Any] = None) -> None:
+                future.set_result(msg)
+
+            self.client.once("Overlay.inspectModeCanceled", _cb)
+
+            return future
+
+        self.client.on("Overlay.inspectModeCanceled", cb)
+        return lambda: self.client.remove_listener("Overlay.inspectModeCanceled", cb)

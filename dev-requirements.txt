@@ -6,5 +6,4 @@ pytest-cov
 git+https://github.com/python/mypy.git
 flake8
 flake8-bugbear
-async-timeout
 psutil

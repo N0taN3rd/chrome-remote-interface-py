@@ -2,6 +2,8 @@ import asyncio
 from aiohttp import ClientSession
 from typing import Tuple
 import pathlib
+from cripy import CDP
+from ujson import dumps
 
 try:
     import uvloop
@@ -32,10 +34,16 @@ async def fetch_all(urls):
                 out.write(res.decode("utf-8"))
 
 
+async def get_proto_from_browser():
+    proto = await CDP.Protocol(loop=asyncio.get_event_loop())
+    with open('./data/protocol.json', 'w') as out:
+        out.write(dumps(proto))
+    print(proto)
+
 if __name__ == "__main__":
-    urls = [
-        "https://raw.githubusercontent.com/ChromeDevTools/devtools-protocol/master/json/browser_protocol.json",
-        "https://raw.githubusercontent.com/ChromeDevTools/devtools-protocol/master/json/js_protocol.json",
-    ]
+    # urls = [
+    #     "https://raw.githubusercontent.com/ChromeDevTools/devtools-protocol/master/json/browser_protocol.json",
+    #     "https://raw.githubusercontent.com/ChromeDevTools/devtools-protocol/master/json/js_protocol.json",
+    # ]
     loop = asyncio.get_event_loop()  # event loop
-    loop.run_until_complete(fetch_all(urls))
+    loop.run_until_complete(get_proto_from_browser())

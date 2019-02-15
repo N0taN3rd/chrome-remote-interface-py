@@ -19,6 +19,12 @@ class Memory(object):
     def prepareForLeakDetection(self) -> Awaitable[Dict]:
         return self.client.send("Memory.prepareForLeakDetection")
 
+    def forciblyPurgeJavaScriptMemory(self) -> Awaitable[Dict]:
+        """
+        Simulate OomIntervention by purging V8 memory.
+        """
+        return self.client.send("Memory.forciblyPurgeJavaScriptMemory")
+
     def setPressureNotificationsSuppressed(self, suppressed: bool) -> Awaitable[Dict]:
         """
         Enable/disable suppressing memory pressure notifications in all processes.

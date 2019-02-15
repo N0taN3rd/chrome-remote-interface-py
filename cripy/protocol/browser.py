@@ -68,6 +68,12 @@ class Browser(object):
         """
         return self.client.send("Browser.crash")
 
+    def crashGpuProcess(self) -> Awaitable[Dict]:
+        """
+        Crashes GPU process.
+        """
+        return self.client.send("Browser.crashGpuProcess")
+
     def getVersion(self) -> Awaitable[Dict]:
         """
         Returns version information.

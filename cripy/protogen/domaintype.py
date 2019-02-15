@@ -88,10 +88,8 @@ class DomainType(FRefCollector):
                         )
                 return ", ".join(notoptional + optionals)
             else:
-                print(self.scoped_name, "is array", self.items)
                 return ""
         else:
-            print(self.scoped_name, "is array", self.items)
             return ""
 
     @property
@@ -107,10 +105,8 @@ class DomainType(FRefCollector):
                         notoptional.append(prop.constructor_string_no_type)
                 return ", ".join(notoptional + optionals)
             else:
-                print(self.scoped_name, "is array", self.items)
                 return ""
         else:
-            print(self.scoped_name, "is array", self.items)
             return ""
 
     def _build_props(self, props_list: Optional[List[dict]]) -> Props:

@@ -114,9 +114,11 @@ for example an emoji keyboard or an IME.
         modifiers: Optional[int] = None,
         timestamp: Optional[float] = None,
         button: Optional[str] = None,
+        buttons: Optional[int] = None,
         clickCount: Optional[int] = None,
         deltaX: Optional[float] = None,
         deltaY: Optional[float] = None,
+        pointerType: Optional[str] = None,
     ) -> Awaitable[Dict]:
         """
         Dispatches a mouse event to the page.
@@ -133,12 +135,16 @@ for example an emoji keyboard or an IME.
         :type timestamp: Optional[float]
         :param button: Mouse button (default: "none").
         :type button: Optional[str]
+        :param buttons: A number indicating which buttons are pressed on the mouse when a mouse event is triggered. Left=1, Right=2, Middle=4, Back=8, Forward=16, None=0.
+        :type buttons: Optional[int]
         :param clickCount: Number of times the mouse button was clicked (default: 0).
         :type clickCount: Optional[int]
         :param deltaX: X delta in CSS pixels for mouse wheel event (default: 0).
         :type deltaX: Optional[float]
         :param deltaY: Y delta in CSS pixels for mouse wheel event (default: 0).
         :type deltaY: Optional[float]
+        :param pointerType: Pointer type (default: "mouse").
+        :type pointerType: Optional[str]
         """
         msg_dict = dict()
         if type is not None:
@@ -153,12 +159,16 @@ for example an emoji keyboard or an IME.
             msg_dict["timestamp"] = timestamp
         if button is not None:
             msg_dict["button"] = button
+        if buttons is not None:
+            msg_dict["buttons"] = buttons
         if clickCount is not None:
             msg_dict["clickCount"] = clickCount
         if deltaX is not None:
             msg_dict["deltaX"] = deltaX
         if deltaY is not None:
             msg_dict["deltaY"] = deltaY
+        if pointerType is not None:
+            msg_dict["pointerType"] = pointerType
         return self.client.send("Input.dispatchMouseEvent", msg_dict)
 
     def dispatchTouchEvent(

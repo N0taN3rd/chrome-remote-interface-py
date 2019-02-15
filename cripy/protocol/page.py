@@ -195,6 +195,12 @@ information in the `cookies` field.
         """
         return self.client.send("Page.getNavigationHistory")
 
+    def resetNavigationHistory(self) -> Awaitable[Dict]:
+        """
+        Resets navigation history for the current page.
+        """
+        return self.client.send("Page.resetNavigationHistory")
+
     def getResourceContent(self, frameId: str, url: str) -> Awaitable[Dict]:
         """
         Returns content of the given resource.
@@ -405,9 +411,6 @@ information in the `cookies` field.
         if identifier is not None:
             msg_dict["identifier"] = identifier
         return self.client.send("Page.removeScriptToEvaluateOnNewDocument", msg_dict)
-
-    def requestAppBanner(self) -> Awaitable[Dict]:
-        return self.client.send("Page.requestAppBanner")
 
     def screencastFrameAck(self, sessionId: int) -> Awaitable[Dict]:
         """
@@ -813,6 +816,12 @@ cross-process navigation.
         if group is not None:
             msg_dict["group"] = group
         return self.client.send("Page.generateTestReport", msg_dict)
+
+    def waitForDebugger(self) -> Awaitable[Dict]:
+        """
+        Pauses page execution. Can be resumed using generic Runtime.runIfWaitingForDebugger.
+        """
+        return self.client.send("Page.waitForDebugger")
 
     def domContentEventFired(self, cb: Optional[Callable[..., Any]] = None) -> Any:
         if cb is None:
