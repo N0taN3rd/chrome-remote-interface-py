@@ -1,7 +1,5 @@
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
-
-import attr
+from typing import Awaitable, Any, Dict, List, Optional, Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from cripy import ConnectionType, SessionType
@@ -9,45 +7,71 @@ if TYPE_CHECKING:
 __all__ = ["Memory"]
 
 
-@attr.dataclass(slots=True, cmp=False)
-class Memory(object):
-    client: Union["ConnectionType", "SessionType"] = attr.ib()
+class Memory:
+    """
+    Status: Experimental
+     
+    See `https://chromedevtools.github.io/devtools-protocol/tot/Memory`
+    """
+
+    __slots__ = ["client"]
+
+    def __init__(self, client: Union["ConnectionType", "SessionType"]) -> None:
+        """Initialize a new instance of Memory
+
+        :param client: The client instance to be used to communicate with the remote browser instance
+        """
+        self.client: Union["ConnectionType", "SessionType"] = client
 
     def getDOMCounters(self) -> Awaitable[Dict]:
-        return self.client.send("Memory.getDOMCounters")
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Memory#method-getDOMCounters`
+
+        :return: The results of the command
+        """
+        return self.client.send("Memory.getDOMCounters", {})
 
     def prepareForLeakDetection(self) -> Awaitable[Dict]:
-        return self.client.send("Memory.prepareForLeakDetection")
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Memory#method-prepareForLeakDetection`
+
+        :return: The results of the command
+        """
+        return self.client.send("Memory.prepareForLeakDetection", {})
 
     def forciblyPurgeJavaScriptMemory(self) -> Awaitable[Dict]:
         """
         Simulate OomIntervention by purging V8 memory.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Memory#method-forciblyPurgeJavaScriptMemory`
+
+        :return: The results of the command
         """
-        return self.client.send("Memory.forciblyPurgeJavaScriptMemory")
+        return self.client.send("Memory.forciblyPurgeJavaScriptMemory", {})
 
     def setPressureNotificationsSuppressed(self, suppressed: bool) -> Awaitable[Dict]:
         """
         Enable/disable suppressing memory pressure notifications in all processes.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Memory#method-setPressureNotificationsSuppressed`
+
         :param suppressed: If true, memory pressure notifications will be suppressed.
-        :type suppressed: bool
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if suppressed is not None:
-            msg_dict["suppressed"] = suppressed
-        return self.client.send("Memory.setPressureNotificationsSuppressed", msg_dict)
+        return self.client.send(
+            "Memory.setPressureNotificationsSuppressed", {"suppressed": suppressed}
+        )
 
     def simulatePressureNotification(self, level: str) -> Awaitable[Dict]:
         """
         Simulate a memory pressure notification in all processes.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Memory#method-simulatePressureNotification`
+
         :param level: Memory pressure level of the notification.
-        :type level: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if level is not None:
-            msg_dict["level"] = level
-        return self.client.send("Memory.simulatePressureNotification", msg_dict)
+        return self.client.send("Memory.simulatePressureNotification", {"level": level})
 
     def startSampling(
         self,
@@ -57,41 +81,58 @@ class Memory(object):
         """
         Start collecting native memory profile.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Memory#method-startSampling`
+
         :param samplingInterval: Average number of bytes between samples.
-        :type samplingInterval: Optional[int]
         :param suppressRandomness: Do not randomize intervals between samples.
-        :type suppressRandomness: Optional[bool]
+        :return: The results of the command
         """
-        msg_dict = dict()
+        msg = {}
         if samplingInterval is not None:
-            msg_dict["samplingInterval"] = samplingInterval
+            msg["samplingInterval"] = samplingInterval
         if suppressRandomness is not None:
-            msg_dict["suppressRandomness"] = suppressRandomness
-        return self.client.send("Memory.startSampling", msg_dict)
+            msg["suppressRandomness"] = suppressRandomness
+        return self.client.send("Memory.startSampling", msg)
 
     def stopSampling(self) -> Awaitable[Dict]:
         """
         Stop collecting native memory profile.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Memory#method-stopSampling`
+
+        :return: The results of the command
         """
-        return self.client.send("Memory.stopSampling")
+        return self.client.send("Memory.stopSampling", {})
 
     def getAllTimeSamplingProfile(self) -> Awaitable[Dict]:
         """
         Retrieve native memory allocations profile
-collected since renderer process startup.
+        collected since renderer process startup.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Memory#method-getAllTimeSamplingProfile`
+
+        :return: The results of the command
         """
-        return self.client.send("Memory.getAllTimeSamplingProfile")
+        return self.client.send("Memory.getAllTimeSamplingProfile", {})
 
     def getBrowserSamplingProfile(self) -> Awaitable[Dict]:
         """
         Retrieve native memory allocations profile
-collected since browser process startup.
+        collected since browser process startup.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Memory#method-getBrowserSamplingProfile`
+
+        :return: The results of the command
         """
-        return self.client.send("Memory.getBrowserSamplingProfile")
+        return self.client.send("Memory.getBrowserSamplingProfile", {})
 
     def getSamplingProfile(self) -> Awaitable[Dict]:
         """
         Retrieve native memory allocations profile collected since last
-`startSampling` call.
+        `startSampling` call.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Memory#method-getSamplingProfile`
+
+        :return: The results of the command
         """
-        return self.client.send("Memory.getSamplingProfile")
+        return self.client.send("Memory.getSamplingProfile", {})

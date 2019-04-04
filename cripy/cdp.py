@@ -1,13 +1,13 @@
 import asyncio
 import re
-import ujson
 from asyncio import AbstractEventLoop
-from typing import Any, Callable, Dict, List, Pattern, Optional, Tuple, Union
+from typing import Any, Callable, Dict, List, Optional, Pattern, Tuple, Union
 from urllib.parse import urljoin, urlparse
 
-from aiohttp import ClientSession, TCPConnector, AsyncResolver
+import ujson
+from aiohttp import AsyncResolver, ClientSession, TCPConnector
 
-from .client import Client
+from .client import Client, ClientDynamic
 from .connection import Connection
 from .errors import ClientError
 from .protogen.generate import dynamically_generate_domains
@@ -69,7 +69,7 @@ async def connect(
     remote: bool = False,
     flatten_sessions: bool = False,
     loop: Optional[AbstractEventLoop] = None,
-) -> Client:
+) -> Union[Client, ClientDynamic]:
     """Convince function for creating an instance of the ChromeRemoteInterface and connecting it
     to the remote instance.
 
@@ -89,7 +89,7 @@ async def connect(
         loop = asyncio.get_event_loop()
     ws_url = None
     if HTTP_TEST.match(url) is not None:
-        tabs = await CDP.List(frontend_url=url, loop=loop)
+        tabs: List[Dict] = await CDP.List(frontend_url=url, loop=loop)
         for tab in tabs:
             if tab["type"] == "page":
                 ws_url = tab["webSocketDebuggerUrl"]
@@ -104,9 +104,12 @@ async def connect(
         proto_def = await fetch_and_gen_proto_classes(ws_url, loop=loop)
     else:
         proto_def = None
-    client = Client(
-        ws_url, flatten_sessions=flatten_sessions, proto_def=proto_def, loop=loop
-    )
+    if proto_def is not None:
+        client = ClientDynamic(
+            ws_url, flatten_sessions=flatten_sessions, proto_def=proto_def, loop=loop
+        )
+    else:
+        client = Client(ws_url, flatten_sessions=flatten_sessions, loop=loop)
     await client.connect()
     return client
 
@@ -153,8 +156,8 @@ async def get_wsurl_callable_target(
     """
     if loop is None:
         loop = asyncio.get_event_loop()
-    targets = await CDP.List(host=host, port=port, secure=secure, loop=loop)
-    result = fn(targets)
+    targets: List[Dict] = await CDP.List(host=host, port=port, secure=secure, loop=loop)
+    result: Union[Dict, str, int] = fn(targets)
     if result is None:
         raise ClientError(
             "The target selection function did not return a target for us to connect to"
@@ -199,7 +202,7 @@ async def fetch_ws_url(
         if frontend_url is not None
         else front_end_url(host=host, port=port, secure=secure)
     )
-    targets = await CDP.List(frontend_url=furl, loop=loop)
+    targets: List[Dict] = await CDP.List(frontend_url=furl, loop=loop)
     backup = None
     for target in targets:
         if target.get("webSocketDebuggerUrl") is not None:
@@ -280,7 +283,7 @@ async def get_connectable_target_wsurl(
     return await fetch_ws_url(host=host, port=port, secure=secure, loop=loop)
 
 
-class CDP(object):
+class CDP:
     @staticmethod
     async def client(
         host: Optional[str] = DEFAULT_HOST,
@@ -291,7 +294,7 @@ class CDP(object):
         remote: bool = False,
         flatten_sessions: bool = False,
         loop: Optional[AbstractEventLoop] = None,
-    ) -> Client:
+    ) -> Union[Client, ClientDynamic]:
         """Returns a cripy.Client instance connected to the desired target.
 
         The target param determines which target this client should attach to.
@@ -334,9 +337,15 @@ class CDP(object):
             proto_def = await fetch_and_gen_proto_classes(ws_url, loop=loop)
         else:
             proto_def = None
-        client: Client = Client(
-            ws_url, flatten_sessions=flatten_sessions, proto_def=proto_def, loop=loop
-        )
+        if proto_def is not None:
+            client = ClientDynamic(
+                ws_url,
+                flatten_sessions=flatten_sessions,
+                proto_def=proto_def,
+                loop=loop,
+            )
+        else:
+            client = Client(ws_url, flatten_sessions=flatten_sessions, loop=loop)
         await client.connect()
         return client
 

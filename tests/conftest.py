@@ -1,11 +1,13 @@
-from typing import Dict, Union, List
+from typing import Dict, List, Union
 
 import pytest
 import uvloop
 from _pytest.fixtures import SubRequest
 
-from cripy import Client, connect, CDP
-from .helpers import launch_chrome, Cleaner
+from cripy import CDP, Client, connect
+from .helpers import Cleaner, launch_chrome
+
+uvloop.install()
 
 
 @pytest.fixture(scope="class")
@@ -23,7 +25,10 @@ async def chrome(request: SubRequest):
     yield wsurl
     cp.kill()
     await cp.wait()
-    tempdir.cleanup()
+    try:
+        tempdir.cleanup()
+    except Exception:
+        pass
 
 
 @pytest.fixture

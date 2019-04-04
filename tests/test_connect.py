@@ -1,5 +1,6 @@
 from asyncio import AbstractEventLoop
 from typing import Any
+
 import pytest
 from aiohttp import ClientConnectorError
 from async_timeout import timeout
@@ -7,10 +8,11 @@ from websockets import InvalidURI
 
 from cripy.cdp import CDP, connect
 from cripy.connection import Connection
+from cripy.events import ConnectionEvents
 from .helpers import Cleaner
 
 
-class TestConnectFailsNoChrome(object):
+class TestConnectFailsNoChrome:
     @pytest.mark.asyncio
     async def test_connect_fails_with_nothing_to_connect_to(self):
         with pytest.raises(ClientConnectorError):
@@ -41,14 +43,14 @@ class TestConnectFailsNoChrome(object):
 
 
 @pytest.mark.usefixtures("chrome")
-class TestConnecting(object):
+class TestConnecting:
     @pytest.mark.parametrize(
         "url,additional_args",
         [
-            (None, dict()),
-            (None, dict(remote=True)),
-            ("http://localhost:9222", dict()),
-            ("http://localhost:9222", dict(remote=True)),
+            (None, {}),
+            (None, {'remote': True}),
+            ("http://localhost:9222", {}),
+            ("http://localhost:9222", {'remote': True}),
         ],
         ids=[
             "default url",
@@ -95,7 +97,7 @@ class TestConnecting(object):
             if not future.done():
                 future.set_result(True)
 
-        mr_clean.addEventListener(client, client.Events.Disconnected, listener)
+        mr_clean.addEventListener(client, ConnectionEvents.Disconnected, listener)
 
         async with timeout(10, loop=event_loop):
             await client.dispose()
@@ -133,7 +135,7 @@ class TestConnecting(object):
             if not future.done():
                 future.set_result(True)
 
-        mr_clean.addEventListener(client, client.Events.Disconnected, listener)
+        mr_clean.addEventListener(client, ConnectionEvents.Disconnected, listener)
 
         async with timeout(10, loop=event_loop):
             await client.dispose()

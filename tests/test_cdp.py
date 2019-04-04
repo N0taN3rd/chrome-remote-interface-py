@@ -24,7 +24,7 @@ TARGET_SELECTORS_IDS: List[str] = [
 ]
 
 
-class TestCDPClientConnectionFailsNoChrome(object):
+class TestCDPClientConnectionFailsNoChrome:
     @pytest.mark.asyncio
     async def test_cdp_client_fails_with_nothing_to_connect_to(self):
         with pytest.raises(ClientConnectorError):
@@ -47,7 +47,7 @@ class TestCDPClientConnectionFailsNoChrome(object):
 
 
 @pytest.mark.usefixtures("chrome")
-class TestCDPClientCreation(object):
+class TestCDPClientCreation:
     @pytest.mark.asyncio
     async def test_cdp_client_connects_using_defaults(self, mr_clean: Cleaner):
         client = await CDP.client()
@@ -164,7 +164,7 @@ class TestCDPClientCreation(object):
 
 
 @pytest.mark.usefixtures("chrome")
-class TestCDPWSConnectionCreation(object):
+class TestCDPWSConnectionCreation:
     @pytest.mark.asyncio
     async def test_cdp_ws_connection_connects_using_defaults(self, mr_clean: Cleaner):
         connection = await CDP.ws_connection()
@@ -242,7 +242,7 @@ FRONT_END_URLS_IDS: List[str] = ["using defaults", "using supplied HTTP url"]
 
 
 @pytest.mark.usefixtures("chrome")
-class TestFontEndFns(object):
+class TestFontEndFns:
     @pytest.mark.parametrize("frontend_url", FRONT_END_URLS, ids=FRONT_END_URLS_IDS)
     @pytest.mark.asyncio
     async def test_can_list_targets(self, frontend_url: Any):

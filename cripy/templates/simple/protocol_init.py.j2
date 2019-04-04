@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 {% for import_from, imported in domains %}
 from .{{ import_from }} import {{ imported }}
 {% endfor %}

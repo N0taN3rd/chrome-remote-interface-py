@@ -1,7 +1,5 @@
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
-
-import attr
+from typing import Awaitable, Any, Dict, List, Optional, Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from cripy import ConnectionType, SessionType
@@ -9,25 +7,32 @@ if TYPE_CHECKING:
 __all__ = ["IO"]
 
 
-@attr.dataclass(slots=True, cmp=False)
-class IO(object):
+class IO:
     """
     Input/Output operations for streams produced by DevTools.
+     
+    See `https://chromedevtools.github.io/devtools-protocol/tot/IO`
     """
 
-    client: Union["ConnectionType", "SessionType"] = attr.ib()
+    __slots__ = ["client"]
+
+    def __init__(self, client: Union["ConnectionType", "SessionType"]) -> None:
+        """Initialize a new instance of IO
+
+        :param client: The client instance to be used to communicate with the remote browser instance
+        """
+        self.client: Union["ConnectionType", "SessionType"] = client
 
     def close(self, handle: str) -> Awaitable[Dict]:
         """
         Close the stream, discard any temporary backing storage.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/IO#method-close`
+
         :param handle: Handle of the stream to close.
-        :type handle: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if handle is not None:
-            msg_dict["handle"] = handle
-        return self.client.send("IO.close", msg_dict)
+        return self.client.send("IO.close", {"handle": handle})
 
     def read(
         self, handle: str, offset: Optional[int] = None, size: Optional[int] = None
@@ -35,30 +40,28 @@ class IO(object):
         """
         Read a chunk of the stream
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/IO#method-read`
+
         :param handle: Handle of the stream to read.
-        :type handle: str
-        :param offset: Seek to the specified offset before reading (if not specificed, proceed with offset following the last read). Some types of streams may only support sequential reads.
-        :type offset: Optional[int]
+        :param offset: Seek to the specified offset before reading (if not specificed, proceed with offset
+         following the last read). Some types of streams may only support sequential reads.
         :param size: Maximum number of bytes to read (left upon the agent discretion if not specified).
-        :type size: Optional[int]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if handle is not None:
-            msg_dict["handle"] = handle
+        msg = {"handle": handle}
         if offset is not None:
-            msg_dict["offset"] = offset
+            msg["offset"] = offset
         if size is not None:
-            msg_dict["size"] = size
-        return self.client.send("IO.read", msg_dict)
+            msg["size"] = size
+        return self.client.send("IO.read", msg)
 
     def resolveBlob(self, objectId: str) -> Awaitable[Dict]:
         """
         Return UUID of Blob object specified by a remote object id.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/IO#method-resolveBlob`
+
         :param objectId: Object id of a Blob object wrapper.
-        :type objectId: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if objectId is not None:
-            msg_dict["objectId"] = objectId
-        return self.client.send("IO.resolveBlob", msg_dict)
+        return self.client.send("IO.resolveBlob", {"objectId": objectId})

@@ -1,6 +1,6 @@
 import asyncio
 from aiohttp import ClientSession
-from typing import Tuple
+from typing import List, Tuple
 import pathlib
 from cripy import CDP
 from ujson import dumps
@@ -12,14 +12,14 @@ except ImportError:
     pass
 
 
-async def fetch(url, session) -> Tuple[str, bytes]:
+async def fetch(url: str, session: ClientSession) -> Tuple[str, bytes]:
     """Fetch a url, using specified ClientSession."""
     async with session.get(url) as response:
         resp = await response.read()
         return url, resp
 
 
-async def fetch_all(urls):
+async def fetch_all(urls: List[str]) -> None:
     """Launch requests for all web pages."""
     tasks = []
     async with ClientSession() as session:
@@ -34,7 +34,7 @@ async def fetch_all(urls):
                 out.write(res.decode("utf-8"))
 
 
-async def get_proto_from_browser():
+async def get_proto_from_browser() -> None:
     proto = await CDP.Protocol(loop=asyncio.get_event_loop())
     with open('./data/protocol.json', 'w') as out:
         out.write(dumps(proto))

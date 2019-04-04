@@ -1,14 +1,13 @@
-import attr
+from typing import ClassVar
 
 __all__ = ["ConnectionEvents", "SessionEvents"]
 
 
-@attr.dataclass(slots=True, frozen=True)
-class ConnectionEvents(object):
-    Disconnected: str = attr.ib(default="Connection.Disconnected")
-    Ready: str = attr.ib(default="Connection.Ready")
+class ConnectionEvents:
+    Disconnected: ClassVar[str] = "Connection.Disconnected"
+    Ready: ClassVar[str] = "Connection.Ready"
+    AllMessages: ClassVar[str] = "Connection.AllMessages"
 
 
-@attr.dataclass(slots=True, frozen=True)
-class SessionEvents(object):
-    Disconnected: str = attr.ib(default="Session.Disconnected")
+class SessionEvents:
+    Disconnected: ClassVar[str] = "Session.Disconnected"

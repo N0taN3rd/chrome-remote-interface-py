@@ -1,22 +1,22 @@
 """This is an auto-generated file. Modify at your own risk"""
 from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
 
-import attr
-
 if TYPE_CHECKING:
     from cripy import ConnectionType, SessionType
 
 __all__ = ["Testing"]
 
 
-@attr.dataclass(slots=True, cmp=False)
-class Testing(object):
+class Testing:
     """
     Testing domain is a dumping ground for the capabilities requires for browser or app testing that do not fit other
 domains.
     """
 
-    client: Union["ConnectionType", "SessionType"] = attr.ib()
+    __slots__ = ["client"]
+
+    def __init__(self, client: Union["ConnectionType", "SessionType"]) -> None:
+        self.client: Union["ConnectionType", "SessionType"] = client
 
     def generateTestReport(
         self, message: str, group: Optional[str] = None
@@ -29,7 +29,7 @@ domains.
         :param group: Specifies the endpoint group to deliver the report to.
         :type group: Optional[str]
         """
-        msg_dict = dict()
+        msg_dict = {}
         if message is not None:
             msg_dict["message"] = message
         if group is not None:

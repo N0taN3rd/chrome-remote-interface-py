@@ -1,55 +1,46 @@
-# -*- coding: utf-8 -*-
-import asyncio
 import logging
-from asyncio import (
-    AbstractEventLoop,
-    Future,
-    Task,
-    get_event_loop as aio_get_event_loop,
-    sleep as aio_sleep,
-)
-from typing import Callable, Optional, Dict, ClassVar, Union, overload, TYPE_CHECKING
-from ujson import loads as ujson_loads, dumps as ujson_dumps
+from asyncio import AbstractEventLoop, Event, Task, get_event_loop, sleep
+from inspect import isawaitable
+from typing import Any, Callable, ClassVar, Dict, Optional, TYPE_CHECKING, Type, Union
 
 from async_timeout import timeout
-from pyee2 import EventEmitter
-from websockets import WebSocketClientProtocol, ConnectionClosed, connect as wsconnect
+from pyee2 import EventEmitterS
+from ujson import dumps, loads
+from websockets import ConnectionClosed, WebSocketClientProtocol, connect
 
-from .errors import NetworkError, ProtocolError
-from .events import ConnectionEvents, SessionEvents
+from .cdp_result_future import CDPResultFuture
+from .cdp_session import CDPSession
+from .errors import NetworkError, create_protocol_error
+from .events import ConnectionEvents
 
 if TYPE_CHECKING:  # pragma: no cover
-    from .client import Client, TargetSession  # noqa: F401
+    from cripy import ConnectionType, SessionType  # noqa: F401
 
-__all__ = ["CDPResultFuture", "CDPSession", "Connection", "create_protocol_error"]
+__all__ = ["Connection"]
 
 logger = logging.getLogger(__name__)
 
 
-def create_protocol_error(method: str, msg: Dict) -> str:
-    error = msg["error"]
-    data = error.get("data")
-    emsg = f"Protocol Error ({method}): {error.get('message')}"
-    if data:
-        emsg += f" {data}"
-    return emsg
-
-
-class CDPResultFuture(Future):
-    """A subclass of asyncio.Future to make linting happy about adding method to it"""
-
-    def __init__(self, method: str, loop: Optional[AbstractEventLoop] = None) -> None:
-        super().__init__(loop=loop)
-        self.method: str = method
-
-
-class Connection(EventEmitter):
+class Connection(EventEmitterS):
     """Chrome DevTools Protocol Connection Class.
 
     This class provides the websocket communication for using the CDP.
     """
 
-    Events: ClassVar[ConnectionEvents] = ConnectionEvents()
+    __slots__ = [
+        "_callbacks",
+        "_closeCallback",
+        "_closed",
+        "_connected",
+        "_flatten_sessions",
+        "_lastId",
+        "_recv_task",
+        "_sessions",
+        "_ws",
+        "_ws_url",
+    ]
+
+    Events: ClassVar[Type[ConnectionEvents]] = ConnectionEvents
 
     def __init__(
         self,
@@ -66,31 +57,26 @@ class Connection(EventEmitter):
         :param loop:  Optional event loop to use. Defaults to asyncio.get_event_loop
         """
         if loop is None:
-            loop = aio_get_event_loop()
+            loop = get_event_loop()
         super().__init__(loop=loop)
         self._connected: bool = False
         self._closed: bool = False
         self._flatten_sessions: bool = flatten_sessions
         self._ws_url: str = ws_url
         self._lastId: int = 0
-        self._callbacks: Dict[int, CDPResultFuture] = dict()
-        self._sessions: Dict[str, Union[CDPSession, "TargetSession"]] = dict()
-        self._ws: WebSocketClientProtocol = None
+        self._callbacks: Dict[int, CDPResultFuture] = {}
+        self._sessions: Dict[str, "SessionType"] = {}
+        self._ws: Optional[WebSocketClientProtocol] = None
         self._recv_task: Optional[Task] = None
-        self._closeCallback: Optional[Callable[[], None]] = None
+        self._closeCallback: Optional[Callable[[], Any]] = None
 
     @staticmethod
-    @overload
-    def from_session(session: "CDPSession") -> "Connection":
-        ...
+    def from_session(session: "SessionType") -> "ConnectionType":
+        """Returns the underlying connection given a session
 
-    @staticmethod
-    @overload
-    def from_session(session: "TargetSession") -> "Client":
-        ...
-
-    @staticmethod
-    def from_session(session):
+        :param session: The session to retrieve the underlying connection
+        :return: The underlying connection
+        """
         if session.flat_session:
             return session._connection
         conn = session._connection
@@ -110,27 +96,30 @@ class Connection(EventEmitter):
 
     @property
     def closed(self) -> bool:
+        """Returns T/F indicating if the connection is closed"""
         return self._closed
 
-    @overload
-    def add_session(self, session: "CDPSession") -> None:
-        ...
+    def add_session(self, session: "SessionType") -> None:
+        """Adds the supplied session to the tracked sessions
 
-    @overload
-    def add_session(self, session: "TargetSession") -> None:
-        ...
-
-    def add_session(self, session) -> None:
+        :param session: The session to be tracked
+        """
         self._sessions[session.session_id] = session
 
-    def set_close_callback(self, callback: Callable[[], None]) -> None:
+    def set_close_callback(self, callback: Callable[[], Any]) -> None:
         """Set closed callback."""
         self._closeCallback = callback
 
-    def session(self, session_id: str) -> Optional["CDPSession"]:
+    def session(self, session_id: str) -> Optional[CDPSession]:
+        """Returns the session instance associated with the supplied
+        session id.
+
+        :param session_id: The id of the session to be retrieved
+        :return: The session instance associated with the id if it exists
+        """
         return self._sessions.get(session_id)
 
-    def send(self, method: str, params: Optional[Dict] = None) -> Future:
+    def send(self, method: str, params: Optional[Dict] = None) -> CDPResultFuture:
         """Send a command to the remote chrome instance.
 
         :param str method: The method to be used
@@ -140,8 +129,8 @@ class Connection(EventEmitter):
         if self._lastId and not self._connected:
             raise NetworkError("Connection is closed")
         if params is None:
-            params = dict()
-        _id = self._raw_send(dict(method=method, params=params))
+            params = {}
+        _id = self._raw_send({"method": method, "params": params})
         callback = CDPResultFuture(method, loop=self._loop)
         self._callbacks[_id] = callback
         return callback
@@ -149,12 +138,16 @@ class Connection(EventEmitter):
     async def connect(
         self, ws_url: Optional[str] = None, flatten_sessions: Optional[bool] = None
     ) -> None:
-        """Connect to the remote websocket endpoint"""
+        """Connect to the remote websocket endpoint
+
+        :param ws_url: The websocket URL to connect to
+        :param flatten_sessions: Should flat session mode be used
+        """
         if ws_url is not None:
             self._ws_url = ws_url
         if flatten_sessions is not None:
             self._flatten_sessions = flatten_sessions
-        self._ws = await wsconnect(
+        self._ws = await connect(
             self._ws_url,
             ping_interval=None,  # chrome no ping pong and websockets closes down on no pong :'(
             ping_timeout=None,
@@ -165,19 +158,19 @@ class Connection(EventEmitter):
         )
         self._closed = False
         # ensure that _recv_loop gets going
-        ready_event = asyncio.Event(loop=self._loop)
+        ready_event = Event(loop=self._loop)
         self._recv_task = self._loop.create_task(self._recv_loop())
-        self.once(Connection.Events.Ready, lambda: ready_event.set())
+        self.once(ConnectionEvents.Ready, lambda: ready_event.set())
         await ready_event.wait()
 
-    async def create_session(self, target_id: str) -> "CDPSession":
+    async def create_session(self, target_id: str) -> CDPSession:
         """Attach to the target specified by the supplied target id and creates new CDPSession for
         direct communication to it
 
         :param target_id: The id of the target connecting to
         :return: A new session connected to the target
         """
-        params = {"targetId": target_id}
+        params: Dict[str, Union[str, bool]] = {"targetId": target_id}
         if self._flatten_sessions:
             params["flatten"] = self._flatten_sessions
         resp = await self.send("Target.attachToTarget", params)
@@ -191,7 +184,7 @@ class Connection(EventEmitter):
         return session
 
     async def dispose(self) -> None:
-        """Close all connection."""
+        """Close all open connections"""
         self._connected = False
         await self._on_close()
 
@@ -201,11 +194,13 @@ class Connection(EventEmitter):
         When a msg is received, the _on_message method is called with the raw msg contents.
         """
         self._connected = True
-        self.emit(Connection.Events.Ready)
+        self.emit(ConnectionEvents.Ready)
         self_ws_recv = self._ws.recv
         self_on_message = self._on_message
         logger_info = logger.info
-        while self._connected:
+        connected = self.__connected
+
+        while 1:
             try:
                 resp = await self_ws_recv()
                 if resp:
@@ -213,8 +208,17 @@ class Connection(EventEmitter):
             except (ConnectionClosed, ConnectionResetError):
                 logger_info("connection closed")
                 break
+            if not connected():
+                break
+
         if self._connected:
             await self.dispose()  # pragma: no cover
+
+    def __connected(self) -> bool:
+        """Helper method for _recv_loop
+        :return: T/F indicating if we are still connected
+        """
+        return self._connected
 
     async def _send_async(self, msg: str, callback_id: int) -> None:
         """Actually send the msg to remote instance.
@@ -223,7 +227,7 @@ class Connection(EventEmitter):
         :param callback_id: The id identifying the callback associated with the msg
         """
         while not self._connected:
-            await aio_sleep(0)  # pragma: no cover
+            await sleep(0)  # pragma: no cover
 
         try:
             await self._ws.send(msg)
@@ -257,7 +261,7 @@ class Connection(EventEmitter):
         # close connection
         if self._ws and not self._ws.closed:
             try:
-                async with timeout(10, loop=self._loop):
+                async with timeout(15, loop=self._loop):
                     await self._ws.close()
             except Exception:  # pragma: no cover
                 pass
@@ -265,22 +269,33 @@ class Connection(EventEmitter):
         if self._recv_task is not None and not self._recv_task.done():
             self._recv_task.cancel()
             try:
-                async with timeout(10, loop=self._loop):
+                async with timeout(15, loop=self._loop):
                     await self._recv_task
             except Exception:  # pragma: no cover
                 pass
 
         if self._closeCallback:
-            self._closeCallback()
+            ret = self._closeCallback()
+            if isawaitable(ret):
+                try:
+                    await ret
+                except Exception:
+                    pass
             self._closeCallback = None
 
-        self.emit(Connection.Events.Disconnected)
+        self.emit(ConnectionEvents.Disconnected)
 
     def _raw_send(self, msg: Dict) -> int:
+        """Sends a message to the remote browser returning
+        the id of the message
+
+        :param msg: The message to be sent
+        :return: The id of the message sent
+        """
         self._lastId += 1
         _id = self._lastId
         msg["id"] = _id
-        self._loop.create_task(self._send_async(ujson_dumps(msg), _id))
+        self._loop.create_task(self._send_async(dumps(msg), _id))
         return _id
 
     def _on_message(self, message: str) -> None:
@@ -293,9 +308,10 @@ class Connection(EventEmitter):
 
         :param message: The JSON message string.
         """
+        msg = loads(message)
+        self._log_msg(msg)
         if not self._flatten_sessions:
-            return self._on_message_non_flat(message)
-        msg = ujson_loads(message)
+            return self._on_message_non_flat(msg)
         _id = msg.get("id")
         params = msg.get("params", {})
         method = msg.get("method", "")
@@ -316,207 +332,74 @@ class Connection(EventEmitter):
             session = self._sessions.get(session_id)
             if session:
                 session.on_message(msg)
-        elif _id and _id in self._callbacks:
+            return
+        if _id and _id in self._callbacks:
             callback = self._callbacks.pop(_id)
             if not callback.done():
                 if "error" in msg:
-                    callback.set_exception(
-                        ProtocolError(create_protocol_error(callback.method, msg))
-                    )
+                    callback.set_exception(create_protocol_error(callback.method, msg))
                 else:
                     callback.set_result(msg.get("result"))
-        else:
-            self.emit(method, params)
+            return
+        self.emit(method, params)
 
-    def _on_message_non_flat(self, message: str) -> None:
-        msg = ujson_loads(message)
+    def _on_message_non_flat(self, msg: Dict) -> None:
+        """Handles a message received from the remote browser instance when
+        flat sessions are not used.
+
+        If the message contains a callback id, the future associated with the id has
+        its result set or exception set if the command was unsuccessful.
+        Otherwise the if the method is for a target the message is forwarded to the CDPSession
+        and if it is not for a target it is emitted.
+
+        :param msg: The JSON message string.
+        """
         _id = msg.get("id")
         if _id and _id in self._callbacks:
             callback = self._callbacks.pop(_id)
             if callback and not callback.done():
                 if "error" in msg:
-                    callback.set_exception(
-                        ProtocolError(create_protocol_error(callback.method, msg))
-                    )
+                    callback.set_exception(create_protocol_error(callback.method, msg))
                 else:
                     callback.set_result(msg.get("result"))
-        else:
-            params = msg.get("params", {})
-            method = msg.get("method", "")
-            session_id = params.get("sessionId")
-            if method == "Target.receivedMessageFromTarget":
-                session = self._sessions.get(session_id)
-                if session:
-                    session.on_message(params.get("message"))
-            elif method == "Target.detachedFromTarget":
-                session = self._sessions.get(session_id)
-                if session:
-                    session.on_closed()
-                    del self._sessions[session_id]
-            else:
-                self.emit(method, params)
+            return
+        params = msg.get("params", {})
+        method = msg.get("method", "")
+        session_id = params.get("sessionId")
+        if method == "Target.receivedMessageFromTarget":
+            session = self._sessions.get(session_id)
+            if session:
+                session.on_message(params.get("message"))
+            return
+        if method == "Target.detachedFromTarget":
+            session = self._sessions.get(session_id)
+            if session:
+                session.on_closed()
+                del self._sessions[session_id]
+            return
+        self.emit(method, params)
 
-    def _new_session(self, target_type: str, session_id: str) -> "CDPSession":
+    def _new_session(self, target_type: str, session_id: str) -> CDPSession:
+        """Creates a new session connected to the target
+
+        :param target_type: The type of the session
+        :param session_id: The id of the session
+        :return: A CDPSession connected to the target
+        """
         return CDPSession(
             self, target_type, session_id, flat_session=self._flatten_sessions
         )
 
+    def _log_msg(self, msg: Dict) -> None:
+        """Utility function to log all received messages IFF someone is listening
+
+        :param msg: The message to maybe be emitted
+        """
+        if self.has_listeners(ConnectionEvents.AllMessages):
+            self.emit(ConnectionEvents.AllMessages, msg)
+
     def __str__(self) -> str:
         return f"{self.__class__.__name__}(wsurl={self._ws_url}, connected={self._connected})"
-
-    def __repr__(self) -> str:
-        return self.__str__()
-
-
-class CDPSession(EventEmitter):
-    Events: ClassVar[SessionEvents] = SessionEvents()
-
-    def __init__(
-        self,
-        connection: Union[Connection, "Client", "CDPSession", "TargetSession"],
-        target_type: str,
-        session_id: str,
-        flat_session: bool = False,
-    ) -> None:
-        """Make new session."""
-        _loop = (
-            connection.loop if connection.loop is not None else aio_get_event_loop()
-        )  # pragma: no cover
-        super().__init__(loop=_loop)
-        self._lastId: int = 0
-        self._connection: Union[
-            Connection, "Client", "CDPSession", "TargetSession"
-        ] = connection
-        self._target_type: str = target_type
-        self._session_id: str = session_id
-        self._flat_session: bool = flat_session
-        self._callbacks: Dict[int, CDPResultFuture] = dict()
-        self._sessions: Dict[str, Union[CDPSession, "TargetSession"]] = dict()
-
-    @property
-    def loop(self) -> AbstractEventLoop:
-        return self._loop
-
-    @property
-    def flat_session(self) -> bool:
-        return self._flat_session
-
-    @property
-    def session_id(self) -> str:
-        return self._session_id
-
-    @property
-    def target_type(self) -> str:
-        return self._target_type
-
-    def send(self, method: str, params: Optional[dict] = None) -> Future:
-        """Send message to the connected session.
-        :arg str method: Protocol method name.
-        :arg dict params: Optional method parameters.
-        """
-        if not self._connection:  # pragma: no cover
-            raise NetworkError(
-                f"Protocol Error ({method}): Session closed. Most likely the "
-                f"target {self._target_type} has been closed."
-            )
-        if params is None:
-            params = dict()
-        if self._flat_session:
-            _id = self._connection._raw_send(
-                dict(method=method, params=params, sessionId=self.session_id)
-            )
-            callback = CDPResultFuture(method, self._loop)
-            self._callbacks[_id] = callback
-            return callback
-        self._lastId += 1
-        _id = self._lastId
-        msg = ujson_dumps(dict(id=_id, method=method, params=params))
-        callback = CDPResultFuture(method, self._loop)
-        self._callbacks[_id] = callback
-        self._connection.send(
-            "Target.sendMessageToTarget",
-            {"sessionId": self._session_id, "message": msg},
-        )
-        return callback
-
-    async def detach(self) -> None:
-        """Detach session from target. Once detached, session won't emit any events and
-        can't be used to send messages.
-        """
-        if not self._connection:
-            raise NetworkError(f"CDPSession for {self._target_type} already closed.")
-        await self._connection.send(
-            "Target.detachFromTarget", {"sessionId": self._session_id}
-        )
-
-    def create_session(self, target_type: str, session_id: str) -> "CDPSession":
-        """Creates a new session for the target being connected to specified
-        by the session_id
-
-        :param target_type: The type of the target being connected to
-        :param session_id: The session id used to communicate to the target
-        :return: A new session connected to the target
-        """
-        connection = self._connection if self._flat_session else self
-        session = CDPSession(
-            connection, target_type, session_id, flat_session=self._flat_session
-        )
-        if self._flat_session:
-            self._connection.add_session(session)
-        else:
-            self._sessions[session_id] = session
-        return session
-
-    def on_message(self, maybe_str_or_dict: Union[str, Dict]) -> None:
-        if not self._flat_session or isinstance(maybe_str_or_dict, str):
-            obj = ujson_loads(maybe_str_or_dict)
-        else:
-            obj = maybe_str_or_dict
-        _id = obj.get("id")
-        if _id and _id in self._callbacks:
-            callback = self._callbacks.pop(_id)
-            if "error" in obj:
-                callback.set_exception(
-                    ProtocolError(create_protocol_error(callback.method, obj))
-                )
-            else:
-                result = obj.get("result")
-                if callback and not callback.done():
-                    callback.set_result(result)
-        else:
-            method = obj.get("method")
-            params = obj.get("params")
-            if not self._flat_session:
-                if method == "Target.receivedMessageFromTarget":
-                    session = self._sessions.get(params.get("sessionId"))
-                    if session is not None:
-                        session.on_message(params.get("message"))
-                elif method == "Target.detachedFromTarget":
-                    session_id = params.get("sessionId")
-                    session = self._sessions.get(session_id)
-                    if session is not None:
-                        session.on_closed()
-                        del self._sessions[session_id]
-            else:
-                self.emit(method, params)
-
-    def on_closed(self) -> None:
-        for cb in self._callbacks.values():
-            if not cb.done():
-                cb.set_exception(
-                    NetworkError(
-                        f"Network error {cb.method}: {self._target_type} closed."
-                    )
-                )
-        self._callbacks.clear()
-        for session in self._sessions.values():
-            session.on_closed()
-        self._sessions.clear()
-        self._connection = None
-        self.emit(CDPSession.Events.Disconnected)
-
-    def __str__(self) -> str:
-        return f"{self.__class__.__name__}(target={self._target_type}, sessionId={self._session_id})"
 
     def __repr__(self) -> str:
         return self.__str__()

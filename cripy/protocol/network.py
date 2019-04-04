@@ -1,52 +1,89 @@
 """This is an auto-generated file. Modify at your own risk"""
 from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
-import attr
-
 if TYPE_CHECKING:
     from cripy import ConnectionType, SessionType
 
 __all__ = ["Network"]
 
 
-@attr.dataclass(slots=True, cmp=False)
-class Network(object):
+class Network:
     """
     Network domain allows tracking network activities of the page. It exposes information about http,
-file, data and other requests and responses, their headers, bodies, timing, etc.
+    file, data and other requests and responses, their headers, bodies, timing, etc.
+     
+    Domain Dependencies: 
+      * Debugger
+      * Runtime
+      * Security
+     
+    See `https://chromedevtools.github.io/devtools-protocol/tot/Network`
     """
 
-    client: Union["ConnectionType", "SessionType"] = attr.ib()
+    __slots__ = ["client"]
+
+    def __init__(self, client: Union["ConnectionType", "SessionType"]) -> None:
+        """Initialize a new instance of Network
+
+        :param client: The client instance to be used to communicate with the remote browser instance
+        """
+        self.client: Union["ConnectionType", "SessionType"] = client
 
     def canClearBrowserCache(self) -> Awaitable[Dict]:
         """
         Tells whether clearing browser cache is supported.
+
+        Status: Deprecated
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-canClearBrowserCache`
+
+        :return: The results of the command
         """
-        return self.client.send("Network.canClearBrowserCache")
+        return self.client.send("Network.canClearBrowserCache", {})
 
     def canClearBrowserCookies(self) -> Awaitable[Dict]:
         """
         Tells whether clearing browser cookies is supported.
+
+        Status: Deprecated
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-canClearBrowserCookies`
+
+        :return: The results of the command
         """
-        return self.client.send("Network.canClearBrowserCookies")
+        return self.client.send("Network.canClearBrowserCookies", {})
 
     def canEmulateNetworkConditions(self) -> Awaitable[Dict]:
         """
         Tells whether emulation of network conditions is supported.
+
+        Status: Deprecated
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-canEmulateNetworkConditions`
+
+        :return: The results of the command
         """
-        return self.client.send("Network.canEmulateNetworkConditions")
+        return self.client.send("Network.canEmulateNetworkConditions", {})
 
     def clearBrowserCache(self) -> Awaitable[Dict]:
         """
         Clears browser cache.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-clearBrowserCache`
+
+        :return: The results of the command
         """
-        return self.client.send("Network.clearBrowserCache")
+        return self.client.send("Network.clearBrowserCache", {})
 
     def clearBrowserCookies(self) -> Awaitable[Dict]:
         """
         Clears browser cookies.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-clearBrowserCookies`
+
+        :return: The results of the command
         """
-        return self.client.send("Network.clearBrowserCookies")
+        return self.client.send("Network.clearBrowserCookies", {})
 
     def continueInterceptedRequest(
         self,
@@ -56,50 +93,51 @@ file, data and other requests and responses, their headers, bodies, timing, etc.
         url: Optional[str] = None,
         method: Optional[str] = None,
         postData: Optional[str] = None,
-        headers: Optional[dict] = None,
-        authChallengeResponse: Optional[dict] = None,
+        headers: Optional[Dict[str, Any]] = None,
+        authChallengeResponse: Optional[Dict[str, Any]] = None,
     ) -> Awaitable[Dict]:
         """
         Response to Network.requestIntercepted which either modifies the request to continue with any
-modifications, or blocks it, or completes it with the provided response bytes. If a network
-fetch occurs as a result which encounters a redirect an additional Network.requestIntercepted
-event will be sent with the same InterceptionId.
+        modifications, or blocks it, or completes it with the provided response bytes. If a network
+        fetch occurs as a result which encounters a redirect an additional Network.requestIntercepted
+        event will be sent with the same InterceptionId.
+
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-continueInterceptedRequest`
 
         :param interceptionId: The interceptionId
-        :type interceptionId: str
-        :param errorReason: If set this causes the request to fail with the given reason. Passing `Aborted` for requests marked with `isNavigationRequest` also cancels the navigation. Must not be set in response to an authChallenge.
-        :type errorReason: Optional[str]
-        :param rawResponse: If set the requests completes using with the provided base64 encoded raw response, including HTTP status line and headers etc... Must not be set in response to an authChallenge.
-        :type rawResponse: Optional[str]
-        :param url: If set the request url will be modified in a way that's not observable by page. Must not be set in response to an authChallenge.
-        :type url: Optional[str]
-        :param method: If set this allows the request method to be overridden. Must not be set in response to an authChallenge.
-        :type method: Optional[str]
+        :param errorReason: If set this causes the request to fail with the given reason. Passing `Aborted` for requests
+         marked with `isNavigationRequest` also cancels the navigation. Must not be set in response
+         to an authChallenge.
+        :param rawResponse: If set the requests completes using with the provided base64 encoded raw response, including
+         HTTP status line and headers etc... Must not be set in response to an authChallenge.
+        :param url: If set the request url will be modified in a way that's not observable by page. Must not be
+         set in response to an authChallenge.
+        :param method: If set this allows the request method to be overridden. Must not be set in response to an
+         authChallenge.
         :param postData: If set this allows postData to be set. Must not be set in response to an authChallenge.
-        :type postData: Optional[str]
-        :param headers: If set this allows the request headers to be changed. Must not be set in response to an authChallenge.
-        :type headers: Optional[dict]
+        :param headers: If set this allows the request headers to be changed. Must not be set in response to an
+         authChallenge.
         :param authChallengeResponse: Response to a requestIntercepted with an authChallenge. Must not be set otherwise.
-        :type authChallengeResponse: Optional[dict]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if interceptionId is not None:
-            msg_dict["interceptionId"] = interceptionId
+        msg = {"interceptionId": interceptionId}
         if errorReason is not None:
-            msg_dict["errorReason"] = errorReason
+            msg["errorReason"] = errorReason
         if rawResponse is not None:
-            msg_dict["rawResponse"] = rawResponse
+            msg["rawResponse"] = rawResponse
         if url is not None:
-            msg_dict["url"] = url
+            msg["url"] = url
         if method is not None:
-            msg_dict["method"] = method
+            msg["method"] = method
         if postData is not None:
-            msg_dict["postData"] = postData
+            msg["postData"] = postData
         if headers is not None:
-            msg_dict["headers"] = headers
+            msg["headers"] = headers
         if authChallengeResponse is not None:
-            msg_dict["authChallengeResponse"] = authChallengeResponse
-        return self.client.send("Network.continueInterceptedRequest", msg_dict)
+            msg["authChallengeResponse"] = authChallengeResponse
+        return self.client.send("Network.continueInterceptedRequest", msg)
 
     def deleteCookies(
         self,
@@ -111,66 +149,63 @@ event will be sent with the same InterceptionId.
         """
         Deletes browser cookies with matching name and url or domain/path pair.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-deleteCookies`
+
         :param name: Name of the cookies to remove.
-        :type name: str
-        :param url: If specified, deletes all the cookies with the given name where domain and path match provided URL.
-        :type url: Optional[str]
+        :param url: If specified, deletes all the cookies with the given name where domain and path match
+         provided URL.
         :param domain: If specified, deletes only cookies with the exact domain.
-        :type domain: Optional[str]
         :param path: If specified, deletes only cookies with the exact path.
-        :type path: Optional[str]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if name is not None:
-            msg_dict["name"] = name
+        msg = {"name": name}
         if url is not None:
-            msg_dict["url"] = url
+            msg["url"] = url
         if domain is not None:
-            msg_dict["domain"] = domain
+            msg["domain"] = domain
         if path is not None:
-            msg_dict["path"] = path
-        return self.client.send("Network.deleteCookies", msg_dict)
+            msg["path"] = path
+        return self.client.send("Network.deleteCookies", msg)
 
     def disable(self) -> Awaitable[Dict]:
         """
         Disables network tracking, prevents network events from being sent to the client.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-disable`
+
+        :return: The results of the command
         """
-        return self.client.send("Network.disable")
+        return self.client.send("Network.disable", {})
 
     def emulateNetworkConditions(
         self,
         offline: bool,
-        latency: float,
-        downloadThroughput: float,
-        uploadThroughput: float,
+        latency: Union[int, float],
+        downloadThroughput: Union[int, float],
+        uploadThroughput: Union[int, float],
         connectionType: Optional[str] = None,
     ) -> Awaitable[Dict]:
         """
         Activates emulation of network conditions.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-emulateNetworkConditions`
+
         :param offline: True to emulate internet disconnection.
-        :type offline: bool
         :param latency: Minimum latency from request sent to response headers received (ms).
-        :type latency: float
         :param downloadThroughput: Maximal aggregated download throughput (bytes/sec). -1 disables download throttling.
-        :type downloadThroughput: float
         :param uploadThroughput: Maximal aggregated upload throughput (bytes/sec).  -1 disables upload throttling.
-        :type uploadThroughput: float
         :param connectionType: Connection type if known.
-        :type connectionType: Optional[str]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if offline is not None:
-            msg_dict["offline"] = offline
-        if latency is not None:
-            msg_dict["latency"] = latency
-        if downloadThroughput is not None:
-            msg_dict["downloadThroughput"] = downloadThroughput
-        if uploadThroughput is not None:
-            msg_dict["uploadThroughput"] = uploadThroughput
+        msg = {
+            "offline": offline,
+            "latency": latency,
+            "downloadThroughput": downloadThroughput,
+            "uploadThroughput": uploadThroughput,
+        }
         if connectionType is not None:
-            msg_dict["connectionType"] = connectionType
-        return self.client.send("Network.emulateNetworkConditions", msg_dict)
+            msg["connectionType"] = connectionType
+        return self.client.send("Network.emulateNetworkConditions", msg)
 
     def enable(
         self,
@@ -181,122 +216,133 @@ event will be sent with the same InterceptionId.
         """
         Enables network tracking, network events will now be delivered to the client.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-enable`
+
         :param maxTotalBufferSize: Buffer size in bytes to use when preserving network payloads (XHRs, etc).
-        :type maxTotalBufferSize: Optional[int]
         :param maxResourceBufferSize: Per-resource buffer size in bytes to use when preserving network payloads (XHRs, etc).
-        :type maxResourceBufferSize: Optional[int]
         :param maxPostDataSize: Longest post body size (in bytes) that would be included in requestWillBeSent notification
-        :type maxPostDataSize: Optional[int]
+        :return: The results of the command
         """
-        msg_dict = dict()
+        msg = {}
         if maxTotalBufferSize is not None:
-            msg_dict["maxTotalBufferSize"] = maxTotalBufferSize
+            msg["maxTotalBufferSize"] = maxTotalBufferSize
         if maxResourceBufferSize is not None:
-            msg_dict["maxResourceBufferSize"] = maxResourceBufferSize
+            msg["maxResourceBufferSize"] = maxResourceBufferSize
         if maxPostDataSize is not None:
-            msg_dict["maxPostDataSize"] = maxPostDataSize
-        return self.client.send("Network.enable", msg_dict)
+            msg["maxPostDataSize"] = maxPostDataSize
+        return self.client.send("Network.enable", msg)
 
     def getAllCookies(self) -> Awaitable[Dict]:
         """
         Returns all browser cookies. Depending on the backend support, will return detailed cookie
-information in the `cookies` field.
+        information in the `cookies` field.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-getAllCookies`
+
+        :return: The results of the command
         """
-        return self.client.send("Network.getAllCookies")
+        return self.client.send("Network.getAllCookies", {})
 
     def getCertificate(self, origin: str) -> Awaitable[Dict]:
         """
         Returns the DER-encoded certificate.
 
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-getCertificate`
+
         :param origin: Origin to get certificate for.
-        :type origin: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if origin is not None:
-            msg_dict["origin"] = origin
-        return self.client.send("Network.getCertificate", msg_dict)
+        return self.client.send("Network.getCertificate", {"origin": origin})
 
     def getCookies(self, urls: Optional[List[str]] = None) -> Awaitable[Dict]:
         """
         Returns all browser cookies for the current URL. Depending on the backend support, will return
-detailed cookie information in the `cookies` field.
+        detailed cookie information in the `cookies` field.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-getCookies`
 
         :param urls: The list of URLs for which applicable cookies will be fetched
-        :type urls: Optional[List[str]]
+        :return: The results of the command
         """
-        msg_dict = dict()
+        msg = {}
         if urls is not None:
-            msg_dict["urls"] = urls
-        return self.client.send("Network.getCookies", msg_dict)
+            msg["urls"] = urls
+        return self.client.send("Network.getCookies", msg)
 
     def getResponseBody(self, requestId: str) -> Awaitable[Dict]:
         """
         Returns content served for the given request.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-getResponseBody`
+
         :param requestId: Identifier of the network request to get content for.
-        :type requestId: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if requestId is not None:
-            msg_dict["requestId"] = requestId
-        return self.client.send("Network.getResponseBody", msg_dict)
+        return self.client.send("Network.getResponseBody", {"requestId": requestId})
 
     def getRequestPostData(self, requestId: str) -> Awaitable[Dict]:
         """
         Returns post data sent with the request. Returns an error when no data was sent with the request.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-getRequestPostData`
+
         :param requestId: Identifier of the network request to get content for.
-        :type requestId: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if requestId is not None:
-            msg_dict["requestId"] = requestId
-        return self.client.send("Network.getRequestPostData", msg_dict)
+        return self.client.send("Network.getRequestPostData", {"requestId": requestId})
 
     def getResponseBodyForInterception(self, interceptionId: str) -> Awaitable[Dict]:
         """
         Returns content served for the given currently intercepted request.
 
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-getResponseBodyForInterception`
+
         :param interceptionId: Identifier for the intercepted request to get body for.
-        :type interceptionId: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if interceptionId is not None:
-            msg_dict["interceptionId"] = interceptionId
-        return self.client.send("Network.getResponseBodyForInterception", msg_dict)
+        return self.client.send(
+            "Network.getResponseBodyForInterception", {"interceptionId": interceptionId}
+        )
 
     def takeResponseBodyForInterceptionAsStream(
         self, interceptionId: str
     ) -> Awaitable[Dict]:
         """
         Returns a handle to the stream representing the response body. Note that after this command,
-the intercepted request can't be continued as is -- you either need to cancel it or to provide
-the response body. The stream only supports sequential read, IO.read will fail if the position
-is specified.
+        the intercepted request can't be continued as is -- you either need to cancel it or to provide
+        the response body. The stream only supports sequential read, IO.read will fail if the position
+        is specified.
+
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-takeResponseBodyForInterceptionAsStream`
 
         :param interceptionId: The interceptionId
-        :type interceptionId: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if interceptionId is not None:
-            msg_dict["interceptionId"] = interceptionId
         return self.client.send(
-            "Network.takeResponseBodyForInterceptionAsStream", msg_dict
+            "Network.takeResponseBodyForInterceptionAsStream",
+            {"interceptionId": interceptionId},
         )
 
     def replayXHR(self, requestId: str) -> Awaitable[Dict]:
         """
         This method sends a new XMLHttpRequest which is identical to the original one. The following
-parameters should be identical: method, url, async, request body, extra headers, withCredentials
-attribute, user, password.
+        parameters should be identical: method, url, async, request body, extra headers, withCredentials
+        attribute, user, password.
+
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-replayXHR`
 
         :param requestId: Identifier of XHR to replay.
-        :type requestId: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if requestId is not None:
-            msg_dict["requestId"] = requestId
-        return self.client.send("Network.replayXHR", msg_dict)
+        return self.client.send("Network.replayXHR", {"requestId": requestId})
 
     def searchInResponseBody(
         self,
@@ -308,61 +354,61 @@ attribute, user, password.
         """
         Searches for given string in response content.
 
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-searchInResponseBody`
+
         :param requestId: Identifier of the network response to search.
-        :type requestId: str
         :param query: String to search for.
-        :type query: str
         :param caseSensitive: If true, search is case sensitive.
-        :type caseSensitive: Optional[bool]
         :param isRegex: If true, treats string parameter as regex.
-        :type isRegex: Optional[bool]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if requestId is not None:
-            msg_dict["requestId"] = requestId
-        if query is not None:
-            msg_dict["query"] = query
+        msg = {"requestId": requestId, "query": query}
         if caseSensitive is not None:
-            msg_dict["caseSensitive"] = caseSensitive
+            msg["caseSensitive"] = caseSensitive
         if isRegex is not None:
-            msg_dict["isRegex"] = isRegex
-        return self.client.send("Network.searchInResponseBody", msg_dict)
+            msg["isRegex"] = isRegex
+        return self.client.send("Network.searchInResponseBody", msg)
 
     def setBlockedURLs(self, urls: List[str]) -> Awaitable[Dict]:
         """
         Blocks URLs from loading.
 
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-setBlockedURLs`
+
         :param urls: URL patterns to block. Wildcards ('*') are allowed.
-        :type urls: List[str]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if urls is not None:
-            msg_dict["urls"] = urls
-        return self.client.send("Network.setBlockedURLs", msg_dict)
+        return self.client.send("Network.setBlockedURLs", {"urls": urls})
 
     def setBypassServiceWorker(self, bypass: bool) -> Awaitable[Dict]:
         """
         Toggles ignoring of service worker for each request.
 
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-setBypassServiceWorker`
+
         :param bypass: Bypass service worker and load from network.
-        :type bypass: bool
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if bypass is not None:
-            msg_dict["bypass"] = bypass
-        return self.client.send("Network.setBypassServiceWorker", msg_dict)
+        return self.client.send("Network.setBypassServiceWorker", {"bypass": bypass})
 
     def setCacheDisabled(self, cacheDisabled: bool) -> Awaitable[Dict]:
         """
         Toggles ignoring cache for each request. If `true`, cache will not be used.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-setCacheDisabled`
+
         :param cacheDisabled: Cache disabled state.
-        :type cacheDisabled: bool
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if cacheDisabled is not None:
-            msg_dict["cacheDisabled"] = cacheDisabled
-        return self.client.send("Network.setCacheDisabled", msg_dict)
+        return self.client.send(
+            "Network.setCacheDisabled", {"cacheDisabled": cacheDisabled}
+        )
 
     def setCookie(
         self,
@@ -374,62 +420,52 @@ attribute, user, password.
         secure: Optional[bool] = None,
         httpOnly: Optional[bool] = None,
         sameSite: Optional[str] = None,
-        expires: Optional[float] = None,
+        expires: Optional[Union[int, float]] = None,
     ) -> Awaitable[Dict]:
         """
         Sets a cookie with the given cookie data; may overwrite equivalent cookies if they exist.
 
-        :param name: Cookie name.
-        :type name: str
-        :param value: Cookie value.
-        :type value: str
-        :param url: The request-URI to associate with the setting of the cookie. This value can affect the default domain and path values of the created cookie.
-        :type url: Optional[str]
-        :param domain: Cookie domain.
-        :type domain: Optional[str]
-        :param path: Cookie path.
-        :type path: Optional[str]
-        :param secure: True if cookie is secure.
-        :type secure: Optional[bool]
-        :param httpOnly: True if cookie is http-only.
-        :type httpOnly: Optional[bool]
-        :param sameSite: Cookie SameSite type.
-        :type sameSite: Optional[str]
-        :param expires: Cookie expiration date, session cookie if not set
-        :type expires: Optional[float]
-        """
-        msg_dict = dict()
-        if name is not None:
-            msg_dict["name"] = name
-        if value is not None:
-            msg_dict["value"] = value
-        if url is not None:
-            msg_dict["url"] = url
-        if domain is not None:
-            msg_dict["domain"] = domain
-        if path is not None:
-            msg_dict["path"] = path
-        if secure is not None:
-            msg_dict["secure"] = secure
-        if httpOnly is not None:
-            msg_dict["httpOnly"] = httpOnly
-        if sameSite is not None:
-            msg_dict["sameSite"] = sameSite
-        if expires is not None:
-            msg_dict["expires"] = expires
-        return self.client.send("Network.setCookie", msg_dict)
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-setCookie`
 
-    def setCookies(self, cookies: List[dict]) -> Awaitable[Dict]:
+        :param name: Cookie name.
+        :param value: Cookie value.
+        :param url: The request-URI to associate with the setting of the cookie. This value can affect the
+         default domain and path values of the created cookie.
+        :param domain: Cookie domain.
+        :param path: Cookie path.
+        :param secure: True if cookie is secure.
+        :param httpOnly: True if cookie is http-only.
+        :param sameSite: Cookie SameSite type.
+        :param expires: Cookie expiration date, session cookie if not set
+        :return: The results of the command
+        """
+        msg = {"name": name, "value": value}
+        if url is not None:
+            msg["url"] = url
+        if domain is not None:
+            msg["domain"] = domain
+        if path is not None:
+            msg["path"] = path
+        if secure is not None:
+            msg["secure"] = secure
+        if httpOnly is not None:
+            msg["httpOnly"] = httpOnly
+        if sameSite is not None:
+            msg["sameSite"] = sameSite
+        if expires is not None:
+            msg["expires"] = expires
+        return self.client.send("Network.setCookie", msg)
+
+    def setCookies(self, cookies: List[Dict[str, Any]]) -> Awaitable[Dict]:
         """
         Sets given cookies.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-setCookies`
+
         :param cookies: Cookies to be set.
-        :type cookies: List[dict]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if cookies is not None:
-            msg_dict["cookies"] = cookies
-        return self.client.send("Network.setCookies", msg_dict)
+        return self.client.send("Network.setCookies", {"cookies": cookies})
 
     def setDataSizeLimitsForTest(
         self, maxTotalSize: int, maxResourceSize: int
@@ -437,41 +473,45 @@ attribute, user, password.
         """
         For testing.
 
-        :param maxTotalSize: Maximum total buffer size.
-        :type maxTotalSize: int
-        :param maxResourceSize: Maximum per-resource size.
-        :type maxResourceSize: int
-        """
-        msg_dict = dict()
-        if maxTotalSize is not None:
-            msg_dict["maxTotalSize"] = maxTotalSize
-        if maxResourceSize is not None:
-            msg_dict["maxResourceSize"] = maxResourceSize
-        return self.client.send("Network.setDataSizeLimitsForTest", msg_dict)
+        Status: Experimental
 
-    def setExtraHTTPHeaders(self, headers: dict) -> Awaitable[Dict]:
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-setDataSizeLimitsForTest`
+
+        :param maxTotalSize: Maximum total buffer size.
+        :param maxResourceSize: Maximum per-resource size.
+        :return: The results of the command
+        """
+        return self.client.send(
+            "Network.setDataSizeLimitsForTest",
+            {"maxTotalSize": maxTotalSize, "maxResourceSize": maxResourceSize},
+        )
+
+    def setExtraHTTPHeaders(self, headers: Dict[str, Any]) -> Awaitable[Dict]:
         """
         Specifies whether to always send extra HTTP headers with the requests from this page.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-setExtraHTTPHeaders`
+
         :param headers: Map with extra HTTP headers.
-        :type headers: dict
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if headers is not None:
-            msg_dict["headers"] = headers
-        return self.client.send("Network.setExtraHTTPHeaders", msg_dict)
+        return self.client.send("Network.setExtraHTTPHeaders", {"headers": headers})
 
-    def setRequestInterception(self, patterns: List[dict]) -> Awaitable[Dict]:
+    def setRequestInterception(self, patterns: List[Dict[str, Any]]) -> Awaitable[Dict]:
         """
-        Sets the requests to intercept that match a the provided patterns and optionally resource types.
+        Sets the requests to intercept that match the provided patterns and optionally resource types.
 
-        :param patterns: Requests matching any of these patterns will be forwarded and wait for the corresponding continueInterceptedRequest call.
-        :type patterns: List[dict]
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-setRequestInterception`
+
+        :param patterns: Requests matching any of these patterns will be forwarded and wait for the corresponding
+         continueInterceptedRequest call.
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if patterns is not None:
-            msg_dict["patterns"] = patterns
-        return self.client.send("Network.setRequestInterception", msg_dict)
+        return self.client.send(
+            "Network.setRequestInterception", {"patterns": patterns}
+        )
 
     def setUserAgentOverride(
         self,
@@ -482,322 +522,476 @@ attribute, user, password.
         """
         Allows overriding user agent with the given string.
 
-        :param userAgent: User agent to use.
-        :type userAgent: str
-        :param acceptLanguage: Browser langugage to emulate.
-        :type acceptLanguage: Optional[str]
-        :param platform: The platform navigator.platform should return.
-        :type platform: Optional[str]
-        """
-        msg_dict = dict()
-        if userAgent is not None:
-            msg_dict["userAgent"] = userAgent
-        if acceptLanguage is not None:
-            msg_dict["acceptLanguage"] = acceptLanguage
-        if platform is not None:
-            msg_dict["platform"] = platform
-        return self.client.send("Network.setUserAgentOverride", msg_dict)
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#method-setUserAgentOverride`
 
-    def dataReceived(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        :param userAgent: User agent to use.
+        :param acceptLanguage: Browser langugage to emulate.
+        :param platform: The platform navigator.platform should return.
+        :return: The results of the command
+        """
+        msg = {"userAgent": userAgent}
+        if acceptLanguage is not None:
+            msg["acceptLanguage"] = acceptLanguage
+        if platform is not None:
+            msg["platform"] = platform
+        return self.client.send("Network.setUserAgentOverride", msg)
+
+    def dataReceived(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Fired when data chunk was received over the network.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-dataReceived`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.dataReceived"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.dataReceived", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.dataReceived", cb)
-        return lambda: self.client.remove_listener("Network.dataReceived", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
     def eventSourceMessageReceived(
-        self, cb: Optional[Callable[..., Any]] = None
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
     ) -> Any:
         """
         Fired when EventSource message is received.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-eventSourceMessageReceived`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.eventSourceMessageReceived"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.eventSourceMessageReceived", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.eventSourceMessageReceived", cb)
-        return lambda: self.client.remove_listener(
-            "Network.eventSourceMessageReceived", cb
-        )
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def loadingFailed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def loadingFailed(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Fired when HTTP request has failed to load.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-loadingFailed`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.loadingFailed"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.loadingFailed", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.loadingFailed", cb)
-        return lambda: self.client.remove_listener("Network.loadingFailed", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def loadingFinished(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def loadingFinished(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Fired when HTTP request has finished loading.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-loadingFinished`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.loadingFinished"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.loadingFinished", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.loadingFinished", cb)
-        return lambda: self.client.remove_listener("Network.loadingFinished", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def requestIntercepted(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def requestIntercepted(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Details of an intercepted HTTP request, which must be either allowed, blocked, modified or
         mocked.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-requestIntercepted`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.requestIntercepted"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.requestIntercepted", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.requestIntercepted", cb)
-        return lambda: self.client.remove_listener("Network.requestIntercepted", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def requestServedFromCache(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def requestServedFromCache(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Fired if request ended up loading from cache.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-requestServedFromCache`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.requestServedFromCache"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.requestServedFromCache", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.requestServedFromCache", cb)
-        return lambda: self.client.remove_listener("Network.requestServedFromCache", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def requestWillBeSent(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def requestWillBeSent(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Fired when page is about to send HTTP request.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-requestWillBeSent`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.requestWillBeSent"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.requestWillBeSent", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.requestWillBeSent", cb)
-        return lambda: self.client.remove_listener("Network.requestWillBeSent", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def resourceChangedPriority(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def resourceChangedPriority(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Fired when resource loading priority is changed
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-resourceChangedPriority`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.resourceChangedPriority"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.resourceChangedPriority", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.resourceChangedPriority", cb)
-        return lambda: self.client.remove_listener(
-            "Network.resourceChangedPriority", cb
-        )
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def signedExchangeReceived(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def signedExchangeReceived(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Fired when a signed exchange was received over the network
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-signedExchangeReceived`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.signedExchangeReceived"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.signedExchangeReceived", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.signedExchangeReceived", cb)
-        return lambda: self.client.remove_listener("Network.signedExchangeReceived", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def responseReceived(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def responseReceived(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Fired when HTTP response is available.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-responseReceived`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.responseReceived"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.responseReceived", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.responseReceived", cb)
-        return lambda: self.client.remove_listener("Network.responseReceived", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def webSocketClosed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def webSocketClosed(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Fired when WebSocket is closed.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-webSocketClosed`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.webSocketClosed"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.webSocketClosed", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.webSocketClosed", cb)
-        return lambda: self.client.remove_listener("Network.webSocketClosed", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def webSocketCreated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def webSocketCreated(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Fired upon WebSocket creation.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-webSocketCreated`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.webSocketCreated"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.webSocketCreated", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.webSocketCreated", cb)
-        return lambda: self.client.remove_listener("Network.webSocketCreated", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def webSocketFrameError(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def webSocketFrameError(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Fired when WebSocket message error occurs.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-webSocketFrameError`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.webSocketFrameError"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.webSocketFrameError", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.webSocketFrameError", cb)
-        return lambda: self.client.remove_listener("Network.webSocketFrameError", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def webSocketFrameReceived(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def webSocketFrameReceived(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Fired when WebSocket message is received.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-webSocketFrameReceived`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.webSocketFrameReceived"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.webSocketFrameReceived", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.webSocketFrameReceived", cb)
-        return lambda: self.client.remove_listener("Network.webSocketFrameReceived", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def webSocketFrameSent(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def webSocketFrameSent(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Fired when WebSocket message is sent.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-webSocketFrameSent`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.webSocketFrameSent"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.webSocketFrameSent", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.webSocketFrameSent", cb)
-        return lambda: self.client.remove_listener("Network.webSocketFrameSent", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
     def webSocketHandshakeResponseReceived(
-        self, cb: Optional[Callable[..., Any]] = None
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
     ) -> Any:
         """
         Fired when WebSocket handshake response becomes available.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-webSocketHandshakeResponseReceived`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.webSocketHandshakeResponseReceived"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.webSocketHandshakeResponseReceived", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.webSocketHandshakeResponseReceived", cb)
-        return lambda: self.client.remove_listener(
-            "Network.webSocketHandshakeResponseReceived", cb
-        )
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
     def webSocketWillSendHandshakeRequest(
-        self, cb: Optional[Callable[..., Any]] = None
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
     ) -> Any:
         """
         Fired when WebSocket is about to initiate handshake.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Network#event-webSocketWillSendHandshakeRequest`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Network.webSocketWillSendHandshakeRequest"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Network.webSocketWillSendHandshakeRequest", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Network.webSocketWillSendHandshakeRequest", cb)
-        return lambda: self.client.remove_listener(
-            "Network.webSocketWillSendHandshakeRequest", cb
-        )
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)

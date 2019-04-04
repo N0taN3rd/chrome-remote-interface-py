@@ -1,200 +1,291 @@
 """This is an auto-generated file. Modify at your own risk"""
 from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
-import attr
-
 if TYPE_CHECKING:
     from cripy import ConnectionType, SessionType
 
 __all__ = ["HeapProfiler"]
 
 
-@attr.dataclass(slots=True, cmp=False)
-class HeapProfiler(object):
-    client: Union["ConnectionType", "SessionType"] = attr.ib()
+class HeapProfiler:
+    """
+    Domain Dependencies: 
+      * Runtime
+    Status: Experimental
+     
+    See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler`
+    """
+
+    __slots__ = ["client"]
+
+    def __init__(self, client: Union["ConnectionType", "SessionType"]) -> None:
+        """Initialize a new instance of HeapProfiler
+
+        :param client: The client instance to be used to communicate with the remote browser instance
+        """
+        self.client: Union["ConnectionType", "SessionType"] = client
 
     def addInspectedHeapObject(self, heapObjectId: str) -> Awaitable[Dict]:
         """
         Enables console to refer to the node with given id via $x (see Command Line API for more details
-$x functions).
+        $x functions).
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#method-addInspectedHeapObject`
 
         :param heapObjectId: Heap snapshot object id to be accessible by means of $x command line API.
-        :type heapObjectId: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if heapObjectId is not None:
-            msg_dict["heapObjectId"] = heapObjectId
-        return self.client.send("HeapProfiler.addInspectedHeapObject", msg_dict)
+        return self.client.send(
+            "HeapProfiler.addInspectedHeapObject", {"heapObjectId": heapObjectId}
+        )
 
     def collectGarbage(self) -> Awaitable[Dict]:
-        return self.client.send("HeapProfiler.collectGarbage")
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#method-collectGarbage`
+
+        :return: The results of the command
+        """
+        return self.client.send("HeapProfiler.collectGarbage", {})
 
     def disable(self) -> Awaitable[Dict]:
-        return self.client.send("HeapProfiler.disable")
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#method-disable`
+
+        :return: The results of the command
+        """
+        return self.client.send("HeapProfiler.disable", {})
 
     def enable(self) -> Awaitable[Dict]:
-        return self.client.send("HeapProfiler.enable")
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#method-enable`
+
+        :return: The results of the command
+        """
+        return self.client.send("HeapProfiler.enable", {})
 
     def getHeapObjectId(self, objectId: str) -> Awaitable[Dict]:
         """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#method-getHeapObjectId`
+
         :param objectId: Identifier of the object to get heap object id for.
-        :type objectId: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if objectId is not None:
-            msg_dict["objectId"] = objectId
-        return self.client.send("HeapProfiler.getHeapObjectId", msg_dict)
+        return self.client.send("HeapProfiler.getHeapObjectId", {"objectId": objectId})
 
     def getObjectByHeapObjectId(
         self, objectId: str, objectGroup: Optional[str] = None
     ) -> Awaitable[Dict]:
         """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#method-getObjectByHeapObjectId`
+
         :param objectId: The objectId
-        :type objectId: str
         :param objectGroup: Symbolic group name that can be used to release multiple objects.
-        :type objectGroup: Optional[str]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if objectId is not None:
-            msg_dict["objectId"] = objectId
+        msg = {"objectId": objectId}
         if objectGroup is not None:
-            msg_dict["objectGroup"] = objectGroup
-        return self.client.send("HeapProfiler.getObjectByHeapObjectId", msg_dict)
+            msg["objectGroup"] = objectGroup
+        return self.client.send("HeapProfiler.getObjectByHeapObjectId", msg)
 
     def getSamplingProfile(self) -> Awaitable[Dict]:
-        return self.client.send("HeapProfiler.getSamplingProfile")
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#method-getSamplingProfile`
+
+        :return: The results of the command
+        """
+        return self.client.send("HeapProfiler.getSamplingProfile", {})
 
     def startSampling(
-        self, samplingInterval: Optional[float] = None
+        self, samplingInterval: Optional[Union[int, float]] = None
     ) -> Awaitable[Dict]:
         """
-        :param samplingInterval: Average sample interval in bytes. Poisson distribution is used for the intervals. The default value is 32768 bytes.
-        :type samplingInterval: Optional[float]
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#method-startSampling`
+
+        :param samplingInterval: Average sample interval in bytes. Poisson distribution is used for the intervals. The
+         default value is 32768 bytes.
+        :return: The results of the command
         """
-        msg_dict = dict()
+        msg = {}
         if samplingInterval is not None:
-            msg_dict["samplingInterval"] = samplingInterval
-        return self.client.send("HeapProfiler.startSampling", msg_dict)
+            msg["samplingInterval"] = samplingInterval
+        return self.client.send("HeapProfiler.startSampling", msg)
 
     def startTrackingHeapObjects(
         self, trackAllocations: Optional[bool] = None
     ) -> Awaitable[Dict]:
         """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#method-startTrackingHeapObjects`
+
         :param trackAllocations: The trackAllocations
-        :type trackAllocations: Optional[bool]
+        :return: The results of the command
         """
-        msg_dict = dict()
+        msg = {}
         if trackAllocations is not None:
-            msg_dict["trackAllocations"] = trackAllocations
-        return self.client.send("HeapProfiler.startTrackingHeapObjects", msg_dict)
+            msg["trackAllocations"] = trackAllocations
+        return self.client.send("HeapProfiler.startTrackingHeapObjects", msg)
 
     def stopSampling(self) -> Awaitable[Dict]:
-        return self.client.send("HeapProfiler.stopSampling")
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#method-stopSampling`
+
+        :return: The results of the command
+        """
+        return self.client.send("HeapProfiler.stopSampling", {})
 
     def stopTrackingHeapObjects(
         self, reportProgress: Optional[bool] = None
     ) -> Awaitable[Dict]:
         """
-        :param reportProgress: If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken when the tracking is stopped.
-        :type reportProgress: Optional[bool]
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#method-stopTrackingHeapObjects`
+
+        :param reportProgress: If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken
+         when the tracking is stopped.
+        :return: The results of the command
         """
-        msg_dict = dict()
+        msg = {}
         if reportProgress is not None:
-            msg_dict["reportProgress"] = reportProgress
-        return self.client.send("HeapProfiler.stopTrackingHeapObjects", msg_dict)
+            msg["reportProgress"] = reportProgress
+        return self.client.send("HeapProfiler.stopTrackingHeapObjects", msg)
 
     def takeHeapSnapshot(
         self, reportProgress: Optional[bool] = None
     ) -> Awaitable[Dict]:
         """
-        :param reportProgress: If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken.
-        :type reportProgress: Optional[bool]
-        """
-        msg_dict = dict()
-        if reportProgress is not None:
-            msg_dict["reportProgress"] = reportProgress
-        return self.client.send("HeapProfiler.takeHeapSnapshot", msg_dict)
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#method-takeHeapSnapshot`
 
-    def addHeapSnapshotChunk(self, cb: Optional[Callable[..., Any]] = None) -> Any:
-        if cb is None:
+        :param reportProgress: If true 'reportHeapSnapshotProgress' events will be generated while snapshot is being taken.
+        :return: The results of the command
+        """
+        msg = {}
+        if reportProgress is not None:
+            msg["reportProgress"] = reportProgress
+        return self.client.send("HeapProfiler.takeHeapSnapshot", msg)
+
+    def addHeapSnapshotChunk(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#event-addHeapSnapshotChunk`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
+        """
+        event_name = "HeapProfiler.addHeapSnapshotChunk"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("HeapProfiler.addHeapSnapshotChunk", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("HeapProfiler.addHeapSnapshotChunk", cb)
-        return lambda: self.client.remove_listener(
-            "HeapProfiler.addHeapSnapshotChunk", cb
-        )
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def heapStatsUpdate(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def heapStatsUpdate(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         If heap objects tracking has been started then backend may send update for one or more fragments
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#event-heapStatsUpdate`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "HeapProfiler.heapStatsUpdate"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("HeapProfiler.heapStatsUpdate", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("HeapProfiler.heapStatsUpdate", cb)
-        return lambda: self.client.remove_listener("HeapProfiler.heapStatsUpdate", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def lastSeenObjectId(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def lastSeenObjectId(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         If heap objects tracking has been started then backend regularly sends a current value for last
         seen object id and corresponding timestamp. If the were changes in the heap since last event
         then one or more heapStatsUpdate events will be sent before a new lastSeenObjectId event.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#event-lastSeenObjectId`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "HeapProfiler.lastSeenObjectId"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("HeapProfiler.lastSeenObjectId", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("HeapProfiler.lastSeenObjectId", cb)
-        return lambda: self.client.remove_listener("HeapProfiler.lastSeenObjectId", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
     def reportHeapSnapshotProgress(
-        self, cb: Optional[Callable[..., Any]] = None
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
     ) -> Any:
-        if cb is None:
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#event-reportHeapSnapshotProgress`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
+        """
+        event_name = "HeapProfiler.reportHeapSnapshotProgress"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("HeapProfiler.reportHeapSnapshotProgress", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("HeapProfiler.reportHeapSnapshotProgress", cb)
-        return lambda: self.client.remove_listener(
-            "HeapProfiler.reportHeapSnapshotProgress", cb
-        )
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def resetProfiles(self, cb: Optional[Callable[..., Any]] = None) -> Any:
-        if cb is None:
+    def resetProfiles(self, listener: Optional[Callable[[Any], Any]] = None) -> Any:
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/HeapProfiler#event-resetProfiles`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
+        """
+        event_name = "HeapProfiler.resetProfiles"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("HeapProfiler.resetProfiles", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("HeapProfiler.resetProfiles", cb)
-        return lambda: self.client.remove_listener("HeapProfiler.resetProfiles", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)

@@ -1,114 +1,144 @@
 """This is an auto-generated file. Modify at your own risk"""
 from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
-import attr
-
 if TYPE_CHECKING:
     from cripy import ConnectionType, SessionType
 
 __all__ = ["Cast"]
 
 
-@attr.dataclass(slots=True, cmp=False)
-class Cast(object):
+class Cast:
     """
     A domain for interacting with Cast, Presentation API, and Remote Playback API
-functionalities.
+    functionalities.
+    Status: Experimental
+     
+    See `https://chromedevtools.github.io/devtools-protocol/tot/Cast`
     """
 
-    client: Union["ConnectionType", "SessionType"] = attr.ib()
+    __slots__ = ["client"]
+
+    def __init__(self, client: Union["ConnectionType", "SessionType"]) -> None:
+        """Initialize a new instance of Cast
+
+        :param client: The client instance to be used to communicate with the remote browser instance
+        """
+        self.client: Union["ConnectionType", "SessionType"] = client
 
     def enable(self, presentationUrl: Optional[str] = None) -> Awaitable[Dict]:
         """
         Starts observing for sinks that can be used for tab mirroring, and if set,
-sinks compatible with |presentationUrl| as well. When sinks are found, a
-|sinksUpdated| event is fired.
-Also starts observing for issue messages. When an issue is added or removed,
-an |issueUpdated| event is fired.
+        sinks compatible with |presentationUrl| as well. When sinks are found, a
+        |sinksUpdated| event is fired.
+        Also starts observing for issue messages. When an issue is added or removed,
+        an |issueUpdated| event is fired.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Cast#method-enable`
 
         :param presentationUrl: The presentationUrl
-        :type presentationUrl: Optional[str]
+        :return: The results of the command
         """
-        msg_dict = dict()
+        msg = {}
         if presentationUrl is not None:
-            msg_dict["presentationUrl"] = presentationUrl
-        return self.client.send("Cast.enable", msg_dict)
+            msg["presentationUrl"] = presentationUrl
+        return self.client.send("Cast.enable", msg)
 
     def disable(self) -> Awaitable[Dict]:
         """
         Stops observing for sinks and issues.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Cast#method-disable`
+
+        :return: The results of the command
         """
-        return self.client.send("Cast.disable")
+        return self.client.send("Cast.disable", {})
 
     def setSinkToUse(self, sinkName: str) -> Awaitable[Dict]:
         """
         Sets a sink to be used when the web page requests the browser to choose a
-sink via Presentation API, Remote Playback API, or Cast SDK.
+        sink via Presentation API, Remote Playback API, or Cast SDK.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Cast#method-setSinkToUse`
 
         :param sinkName: The sinkName
-        :type sinkName: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if sinkName is not None:
-            msg_dict["sinkName"] = sinkName
-        return self.client.send("Cast.setSinkToUse", msg_dict)
+        return self.client.send("Cast.setSinkToUse", {"sinkName": sinkName})
 
     def startTabMirroring(self, sinkName: str) -> Awaitable[Dict]:
         """
         Starts mirroring the tab to the sink.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Cast#method-startTabMirroring`
+
         :param sinkName: The sinkName
-        :type sinkName: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if sinkName is not None:
-            msg_dict["sinkName"] = sinkName
-        return self.client.send("Cast.startTabMirroring", msg_dict)
+        return self.client.send("Cast.startTabMirroring", {"sinkName": sinkName})
 
     def stopCasting(self, sinkName: str) -> Awaitable[Dict]:
         """
         Stops the active Cast session on the sink.
 
-        :param sinkName: The sinkName
-        :type sinkName: str
-        """
-        msg_dict = dict()
-        if sinkName is not None:
-            msg_dict["sinkName"] = sinkName
-        return self.client.send("Cast.stopCasting", msg_dict)
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Cast#method-stopCasting`
 
-    def sinksUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        :param sinkName: The sinkName
+        :return: The results of the command
+        """
+        return self.client.send("Cast.stopCasting", {"sinkName": sinkName})
+
+    def sinksUpdated(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         This is fired whenever the list of available sinks changes. A sink is a
         device or a software surface that you can cast to.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Cast#event-sinksUpdated`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Cast.sinksUpdated"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Cast.sinksUpdated", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Cast.sinksUpdated", cb)
-        return lambda: self.client.remove_listener("Cast.sinksUpdated", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def issueUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def issueUpdated(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         This is fired whenever the outstanding issue/error message changes.
         |issueMessage| is empty if there is no issue.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Cast#event-issueUpdated`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Cast.issueUpdated"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Cast.issueUpdated", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Cast.issueUpdated", cb)
-        return lambda: self.client.remove_listener("Cast.issueUpdated", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
