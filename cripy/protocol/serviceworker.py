@@ -1,185 +1,229 @@
 """This is an auto-generated file. Modify at your own risk"""
 from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
-import attr
-
 if TYPE_CHECKING:
     from cripy import ConnectionType, SessionType
 
 __all__ = ["ServiceWorker"]
 
 
-@attr.dataclass(slots=True, cmp=False)
-class ServiceWorker(object):
-    client: Union["ConnectionType", "SessionType"] = attr.ib()
+class ServiceWorker:
+    """
+    Status: Experimental
+     
+    See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker`
+    """
+
+    __slots__ = ["client"]
+
+    def __init__(self, client: Union["ConnectionType", "SessionType"]) -> None:
+        """Initialize a new instance of ServiceWorker
+
+        :param client: The client instance to be used to communicate with the remote browser instance
+        """
+        self.client: Union["ConnectionType", "SessionType"] = client
 
     def deliverPushMessage(
         self, origin: str, registrationId: str, data: str
     ) -> Awaitable[Dict]:
         """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#method-deliverPushMessage`
+
         :param origin: The origin
-        :type origin: str
         :param registrationId: The registrationId
-        :type registrationId: str
         :param data: The data
-        :type data: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if origin is not None:
-            msg_dict["origin"] = origin
-        if registrationId is not None:
-            msg_dict["registrationId"] = registrationId
-        if data is not None:
-            msg_dict["data"] = data
-        return self.client.send("ServiceWorker.deliverPushMessage", msg_dict)
+        return self.client.send(
+            "ServiceWorker.deliverPushMessage",
+            {"origin": origin, "registrationId": registrationId, "data": data},
+        )
 
     def disable(self) -> Awaitable[Dict]:
-        return self.client.send("ServiceWorker.disable")
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#method-disable`
+
+        :return: The results of the command
+        """
+        return self.client.send("ServiceWorker.disable", {})
 
     def dispatchSyncEvent(
         self, origin: str, registrationId: str, tag: str, lastChance: bool
     ) -> Awaitable[Dict]:
         """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#method-dispatchSyncEvent`
+
         :param origin: The origin
-        :type origin: str
         :param registrationId: The registrationId
-        :type registrationId: str
         :param tag: The tag
-        :type tag: str
         :param lastChance: The lastChance
-        :type lastChance: bool
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if origin is not None:
-            msg_dict["origin"] = origin
-        if registrationId is not None:
-            msg_dict["registrationId"] = registrationId
-        if tag is not None:
-            msg_dict["tag"] = tag
-        if lastChance is not None:
-            msg_dict["lastChance"] = lastChance
-        return self.client.send("ServiceWorker.dispatchSyncEvent", msg_dict)
+        return self.client.send(
+            "ServiceWorker.dispatchSyncEvent",
+            {
+                "origin": origin,
+                "registrationId": registrationId,
+                "tag": tag,
+                "lastChance": lastChance,
+            },
+        )
 
     def enable(self) -> Awaitable[Dict]:
-        return self.client.send("ServiceWorker.enable")
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#method-enable`
+
+        :return: The results of the command
+        """
+        return self.client.send("ServiceWorker.enable", {})
 
     def inspectWorker(self, versionId: str) -> Awaitable[Dict]:
         """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#method-inspectWorker`
+
         :param versionId: The versionId
-        :type versionId: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if versionId is not None:
-            msg_dict["versionId"] = versionId
-        return self.client.send("ServiceWorker.inspectWorker", msg_dict)
+        return self.client.send("ServiceWorker.inspectWorker", {"versionId": versionId})
 
     def setForceUpdateOnPageLoad(self, forceUpdateOnPageLoad: bool) -> Awaitable[Dict]:
         """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#method-setForceUpdateOnPageLoad`
+
         :param forceUpdateOnPageLoad: The forceUpdateOnPageLoad
-        :type forceUpdateOnPageLoad: bool
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if forceUpdateOnPageLoad is not None:
-            msg_dict["forceUpdateOnPageLoad"] = forceUpdateOnPageLoad
-        return self.client.send("ServiceWorker.setForceUpdateOnPageLoad", msg_dict)
+        return self.client.send(
+            "ServiceWorker.setForceUpdateOnPageLoad",
+            {"forceUpdateOnPageLoad": forceUpdateOnPageLoad},
+        )
 
     def skipWaiting(self, scopeURL: str) -> Awaitable[Dict]:
         """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#method-skipWaiting`
+
         :param scopeURL: The scopeURL
-        :type scopeURL: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if scopeURL is not None:
-            msg_dict["scopeURL"] = scopeURL
-        return self.client.send("ServiceWorker.skipWaiting", msg_dict)
+        return self.client.send("ServiceWorker.skipWaiting", {"scopeURL": scopeURL})
 
     def startWorker(self, scopeURL: str) -> Awaitable[Dict]:
         """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#method-startWorker`
+
         :param scopeURL: The scopeURL
-        :type scopeURL: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if scopeURL is not None:
-            msg_dict["scopeURL"] = scopeURL
-        return self.client.send("ServiceWorker.startWorker", msg_dict)
+        return self.client.send("ServiceWorker.startWorker", {"scopeURL": scopeURL})
 
     def stopAllWorkers(self) -> Awaitable[Dict]:
-        return self.client.send("ServiceWorker.stopAllWorkers")
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#method-stopAllWorkers`
+
+        :return: The results of the command
+        """
+        return self.client.send("ServiceWorker.stopAllWorkers", {})
 
     def stopWorker(self, versionId: str) -> Awaitable[Dict]:
         """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#method-stopWorker`
+
         :param versionId: The versionId
-        :type versionId: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if versionId is not None:
-            msg_dict["versionId"] = versionId
-        return self.client.send("ServiceWorker.stopWorker", msg_dict)
+        return self.client.send("ServiceWorker.stopWorker", {"versionId": versionId})
 
     def unregister(self, scopeURL: str) -> Awaitable[Dict]:
         """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#method-unregister`
+
         :param scopeURL: The scopeURL
-        :type scopeURL: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if scopeURL is not None:
-            msg_dict["scopeURL"] = scopeURL
-        return self.client.send("ServiceWorker.unregister", msg_dict)
+        return self.client.send("ServiceWorker.unregister", {"scopeURL": scopeURL})
 
     def updateRegistration(self, scopeURL: str) -> Awaitable[Dict]:
         """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#method-updateRegistration`
+
         :param scopeURL: The scopeURL
-        :type scopeURL: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if scopeURL is not None:
-            msg_dict["scopeURL"] = scopeURL
-        return self.client.send("ServiceWorker.updateRegistration", msg_dict)
+        return self.client.send(
+            "ServiceWorker.updateRegistration", {"scopeURL": scopeURL}
+        )
 
-    def workerErrorReported(self, cb: Optional[Callable[..., Any]] = None) -> Any:
-        if cb is None:
+    def workerErrorReported(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#event-workerErrorReported`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
+        """
+        event_name = "ServiceWorker.workerErrorReported"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("ServiceWorker.workerErrorReported", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("ServiceWorker.workerErrorReported", cb)
-        return lambda: self.client.remove_listener(
-            "ServiceWorker.workerErrorReported", cb
-        )
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def workerRegistrationUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
-        if cb is None:
+    def workerRegistrationUpdated(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#event-workerRegistrationUpdated`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
+        """
+        event_name = "ServiceWorker.workerRegistrationUpdated"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("ServiceWorker.workerRegistrationUpdated", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("ServiceWorker.workerRegistrationUpdated", cb)
-        return lambda: self.client.remove_listener(
-            "ServiceWorker.workerRegistrationUpdated", cb
-        )
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def workerVersionUpdated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
-        if cb is None:
+    def workerVersionUpdated(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/ServiceWorker#event-workerVersionUpdated`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
+        """
+        event_name = "ServiceWorker.workerVersionUpdated"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("ServiceWorker.workerVersionUpdated", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("ServiceWorker.workerVersionUpdated", cb)
-        return lambda: self.client.remove_listener(
-            "ServiceWorker.workerVersionUpdated", cb
-        )
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)

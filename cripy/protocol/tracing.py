@@ -1,134 +1,192 @@
 """This is an auto-generated file. Modify at your own risk"""
 from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
-import attr
-
 if TYPE_CHECKING:
     from cripy import ConnectionType, SessionType
 
 __all__ = ["Tracing"]
 
 
-@attr.dataclass(slots=True, cmp=False)
-class Tracing(object):
-    client: Union["ConnectionType", "SessionType"] = attr.ib()
+class Tracing:
+    """
+    Domain Dependencies: 
+      * IO
+    Status: Experimental
+     
+    See `https://chromedevtools.github.io/devtools-protocol/tot/Tracing`
+    """
+
+    __slots__ = ["client"]
+
+    def __init__(self, client: Union["ConnectionType", "SessionType"]) -> None:
+        """Initialize a new instance of Tracing
+
+        :param client: The client instance to be used to communicate with the remote browser instance
+        """
+        self.client: Union["ConnectionType", "SessionType"] = client
 
     def end(self) -> Awaitable[Dict]:
         """
         Stop trace events collection.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Tracing#method-end`
+
+        :return: The results of the command
         """
-        return self.client.send("Tracing.end")
+        return self.client.send("Tracing.end", {})
 
     def getCategories(self) -> Awaitable[Dict]:
         """
         Gets supported tracing categories.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Tracing#method-getCategories`
+
+        :return: The results of the command
         """
-        return self.client.send("Tracing.getCategories")
+        return self.client.send("Tracing.getCategories", {})
 
     def recordClockSyncMarker(self, syncId: str) -> Awaitable[Dict]:
         """
         Record a clock sync marker in the trace.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Tracing#method-recordClockSyncMarker`
+
         :param syncId: The ID of this clock sync marker
-        :type syncId: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if syncId is not None:
-            msg_dict["syncId"] = syncId
-        return self.client.send("Tracing.recordClockSyncMarker", msg_dict)
+        return self.client.send("Tracing.recordClockSyncMarker", {"syncId": syncId})
 
     def requestMemoryDump(self) -> Awaitable[Dict]:
         """
         Request a global memory dump.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Tracing#method-requestMemoryDump`
+
+        :return: The results of the command
         """
-        return self.client.send("Tracing.requestMemoryDump")
+        return self.client.send("Tracing.requestMemoryDump", {})
 
     def start(
         self,
         categories: Optional[str] = None,
         options: Optional[str] = None,
-        bufferUsageReportingInterval: Optional[float] = None,
+        bufferUsageReportingInterval: Optional[Union[int, float]] = None,
         transferMode: Optional[str] = None,
+        streamFormat: Optional[str] = None,
         streamCompression: Optional[str] = None,
-        traceConfig: Optional[dict] = None,
+        traceConfig: Optional[Dict[str, Any]] = None,
     ) -> Awaitable[Dict]:
         """
         Start trace events collection.
 
-        :param categories: Category/tag filter
-        :type categories: Optional[str]
-        :param options: Tracing options
-        :type options: Optional[str]
-        :param bufferUsageReportingInterval: If set, the agent will issue bufferUsage events at this interval, specified in milliseconds
-        :type bufferUsageReportingInterval: Optional[float]
-        :param transferMode: Whether to report trace events as series of dataCollected events or to save trace to a stream (defaults to `ReportEvents`).
-        :type transferMode: Optional[str]
-        :param streamCompression: Compression format to use. This only applies when using `ReturnAsStream` transfer mode (defaults to `none`)
-        :type streamCompression: Optional[str]
-        :param traceConfig: The traceConfig
-        :type traceConfig: Optional[dict]
-        """
-        msg_dict = dict()
-        if categories is not None:
-            msg_dict["categories"] = categories
-        if options is not None:
-            msg_dict["options"] = options
-        if bufferUsageReportingInterval is not None:
-            msg_dict["bufferUsageReportingInterval"] = bufferUsageReportingInterval
-        if transferMode is not None:
-            msg_dict["transferMode"] = transferMode
-        if streamCompression is not None:
-            msg_dict["streamCompression"] = streamCompression
-        if traceConfig is not None:
-            msg_dict["traceConfig"] = traceConfig
-        return self.client.send("Tracing.start", msg_dict)
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Tracing#method-start`
 
-    def bufferUsage(self, cb: Optional[Callable[..., Any]] = None) -> Any:
-        if cb is None:
+        :param categories: Category/tag filter
+        :param options: Tracing options
+        :param bufferUsageReportingInterval: If set, the agent will issue bufferUsage events at this interval, specified in milliseconds
+        :param transferMode: Whether to report trace events as series of dataCollected events or to save trace to a
+         stream (defaults to `ReportEvents`).
+        :param streamFormat: Trace data format to use. This only applies when using `ReturnAsStream`
+         transfer mode (defaults to `json`).
+        :param streamCompression: Compression format to use. This only applies when using `ReturnAsStream`
+         transfer mode (defaults to `none`)
+        :param traceConfig: The traceConfig
+        :return: The results of the command
+        """
+        msg = {}
+        if categories is not None:
+            msg["categories"] = categories
+        if options is not None:
+            msg["options"] = options
+        if bufferUsageReportingInterval is not None:
+            msg["bufferUsageReportingInterval"] = bufferUsageReportingInterval
+        if transferMode is not None:
+            msg["transferMode"] = transferMode
+        if streamFormat is not None:
+            msg["streamFormat"] = streamFormat
+        if streamCompression is not None:
+            msg["streamCompression"] = streamCompression
+        if traceConfig is not None:
+            msg["traceConfig"] = traceConfig
+        return self.client.send("Tracing.start", msg)
+
+    def bufferUsage(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
+        """
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Tracing#event-bufferUsage`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
+        """
+        event_name = "Tracing.bufferUsage"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Tracing.bufferUsage", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Tracing.bufferUsage", cb)
-        return lambda: self.client.remove_listener("Tracing.bufferUsage", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def dataCollected(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def dataCollected(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Contains an bucket of collected trace events. When tracing is stopped collected events will be
         send as a sequence of dataCollected events followed by tracingComplete event.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Tracing#event-dataCollected`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Tracing.dataCollected"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Tracing.dataCollected", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Tracing.dataCollected", cb)
-        return lambda: self.client.remove_listener("Tracing.dataCollected", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def tracingComplete(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def tracingComplete(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Signals that tracing is stopped and there is no trace buffers pending flush, all data were
         delivered via dataCollected events.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Tracing#event-tracingComplete`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Tracing.tracingComplete"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Tracing.tracingComplete", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Tracing.tracingComplete", cb)
-        return lambda: self.client.remove_listener("Tracing.tracingComplete", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)

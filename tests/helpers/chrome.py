@@ -147,7 +147,6 @@ async def launch_chrome(
         try:
             targets = await CDP.List()
             for tab in targets:
-                print(tab)
                 if tab["type"] == "page":
                     return chrome_proc, tmpdir, tab["webSocketDebuggerUrl"]
         except Exception:

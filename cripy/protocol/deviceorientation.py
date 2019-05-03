@@ -1,7 +1,5 @@
 """This is an auto-generated file. Modify at your own risk"""
-from typing import Awaitable, Dict, List, Optional, Union, TYPE_CHECKING
-
-import attr
+from typing import Awaitable, Any, Dict, List, Optional, Union, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from cripy import ConnectionType, SessionType
@@ -9,36 +7,49 @@ if TYPE_CHECKING:
 __all__ = ["DeviceOrientation"]
 
 
-@attr.dataclass(slots=True, cmp=False)
-class DeviceOrientation(object):
-    client: Union["ConnectionType", "SessionType"] = attr.ib()
+class DeviceOrientation:
+    """
+    Status: Experimental
+     
+    See `https://chromedevtools.github.io/devtools-protocol/tot/DeviceOrientation`
+    """
+
+    __slots__ = ["client"]
+
+    def __init__(self, client: Union["ConnectionType", "SessionType"]) -> None:
+        """Initialize a new instance of DeviceOrientation
+
+        :param client: The client instance to be used to communicate with the remote browser instance
+        """
+        self.client: Union["ConnectionType", "SessionType"] = client
 
     def clearDeviceOrientationOverride(self) -> Awaitable[Dict]:
         """
         Clears the overridden Device Orientation.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/DeviceOrientation#method-clearDeviceOrientationOverride`
+
+        :return: The results of the command
         """
-        return self.client.send("DeviceOrientation.clearDeviceOrientationOverride")
+        return self.client.send("DeviceOrientation.clearDeviceOrientationOverride", {})
 
     def setDeviceOrientationOverride(
-        self, alpha: float, beta: float, gamma: float
+        self,
+        alpha: Union[int, float],
+        beta: Union[int, float],
+        gamma: Union[int, float],
     ) -> Awaitable[Dict]:
         """
         Overrides the Device Orientation.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/DeviceOrientation#method-setDeviceOrientationOverride`
+
         :param alpha: Mock alpha
-        :type alpha: float
         :param beta: Mock beta
-        :type beta: float
         :param gamma: Mock gamma
-        :type gamma: float
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if alpha is not None:
-            msg_dict["alpha"] = alpha
-        if beta is not None:
-            msg_dict["beta"] = beta
-        if gamma is not None:
-            msg_dict["gamma"] = gamma
         return self.client.send(
-            "DeviceOrientation.setDeviceOrientationOverride", msg_dict
+            "DeviceOrientation.setDeviceOrientationOverride",
+            {"alpha": alpha, "beta": beta, "gamma": gamma},
         )

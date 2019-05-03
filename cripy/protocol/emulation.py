@@ -1,266 +1,303 @@
 """This is an auto-generated file. Modify at your own risk"""
 from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
-import attr
-
 if TYPE_CHECKING:
     from cripy import ConnectionType, SessionType
 
 __all__ = ["Emulation"]
 
 
-@attr.dataclass(slots=True, cmp=False)
-class Emulation(object):
+class Emulation:
     """
     This domain emulates different environments for the page.
+     
+    Domain Dependencies: 
+      * DOM
+      * Page
+      * Runtime
+     
+    See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation`
     """
 
-    client: Union["ConnectionType", "SessionType"] = attr.ib()
+    __slots__ = ["client"]
+
+    def __init__(self, client: Union["ConnectionType", "SessionType"]) -> None:
+        """Initialize a new instance of Emulation
+
+        :param client: The client instance to be used to communicate with the remote browser instance
+        """
+        self.client: Union["ConnectionType", "SessionType"] = client
 
     def canEmulate(self) -> Awaitable[Dict]:
         """
         Tells whether emulation is supported.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-canEmulate`
+
+        :return: The results of the command
         """
-        return self.client.send("Emulation.canEmulate")
+        return self.client.send("Emulation.canEmulate", {})
 
     def clearDeviceMetricsOverride(self) -> Awaitable[Dict]:
         """
         Clears the overriden device metrics.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-clearDeviceMetricsOverride`
+
+        :return: The results of the command
         """
-        return self.client.send("Emulation.clearDeviceMetricsOverride")
+        return self.client.send("Emulation.clearDeviceMetricsOverride", {})
 
     def clearGeolocationOverride(self) -> Awaitable[Dict]:
         """
         Clears the overriden Geolocation Position and Error.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-clearGeolocationOverride`
+
+        :return: The results of the command
         """
-        return self.client.send("Emulation.clearGeolocationOverride")
+        return self.client.send("Emulation.clearGeolocationOverride", {})
 
     def resetPageScaleFactor(self) -> Awaitable[Dict]:
         """
         Requests that page scale factor is reset to initial values.
+
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-resetPageScaleFactor`
+
+        :return: The results of the command
         """
-        return self.client.send("Emulation.resetPageScaleFactor")
+        return self.client.send("Emulation.resetPageScaleFactor", {})
 
     def setFocusEmulationEnabled(self, enabled: bool) -> Awaitable[Dict]:
         """
         Enables or disables simulating a focused and active page.
 
-        :param enabled: Whether to enable to disable focus emulation.
-        :type enabled: bool
-        """
-        msg_dict = dict()
-        if enabled is not None:
-            msg_dict["enabled"] = enabled
-        return self.client.send("Emulation.setFocusEmulationEnabled", msg_dict)
+        Status: Experimental
 
-    def setCPUThrottlingRate(self, rate: float) -> Awaitable[Dict]:
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setFocusEmulationEnabled`
+
+        :param enabled: Whether to enable to disable focus emulation.
+        :return: The results of the command
+        """
+        return self.client.send(
+            "Emulation.setFocusEmulationEnabled", {"enabled": enabled}
+        )
+
+    def setCPUThrottlingRate(self, rate: Union[int, float]) -> Awaitable[Dict]:
         """
         Enables CPU throttling to emulate slow CPUs.
 
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setCPUThrottlingRate`
+
         :param rate: Throttling rate as a slowdown factor (1 is no throttle, 2 is 2x slowdown, etc).
-        :type rate: float
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if rate is not None:
-            msg_dict["rate"] = rate
-        return self.client.send("Emulation.setCPUThrottlingRate", msg_dict)
+        return self.client.send("Emulation.setCPUThrottlingRate", {"rate": rate})
 
     def setDefaultBackgroundColorOverride(
-        self, color: Optional[dict] = None
+        self, color: Optional[Dict[str, Any]] = None
     ) -> Awaitable[Dict]:
         """
         Sets or clears an override of the default background color of the frame. This override is used
-if the content does not specify one.
+        if the content does not specify one.
 
-        :param color: RGBA of the default background color. If not specified, any existing override will be cleared.
-        :type color: Optional[dict]
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setDefaultBackgroundColorOverride`
+
+        :param color: RGBA of the default background color. If not specified, any existing override will be
+         cleared.
+        :return: The results of the command
         """
-        msg_dict = dict()
+        msg = {}
         if color is not None:
-            msg_dict["color"] = color
-        return self.client.send("Emulation.setDefaultBackgroundColorOverride", msg_dict)
+            msg["color"] = color
+        return self.client.send("Emulation.setDefaultBackgroundColorOverride", msg)
 
     def setDeviceMetricsOverride(
         self,
         width: int,
         height: int,
-        deviceScaleFactor: float,
+        deviceScaleFactor: Union[int, float],
         mobile: bool,
-        scale: Optional[float] = None,
+        scale: Optional[Union[int, float]] = None,
         screenWidth: Optional[int] = None,
         screenHeight: Optional[int] = None,
         positionX: Optional[int] = None,
         positionY: Optional[int] = None,
         dontSetVisibleSize: Optional[bool] = None,
-        screenOrientation: Optional[dict] = None,
-        viewport: Optional[dict] = None,
+        screenOrientation: Optional[Dict[str, Any]] = None,
+        viewport: Optional[Dict[str, Any]] = None,
     ) -> Awaitable[Dict]:
         """
         Overrides the values of device screen dimensions (window.screen.width, window.screen.height,
-window.innerWidth, window.innerHeight, and "device-width"/"device-height"-related CSS media
-query results).
+        window.innerWidth, window.innerHeight, and "device-width"/"device-height"-related CSS media
+        query results).
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setDeviceMetricsOverride`
 
         :param width: Overriding width value in pixels (minimum 0, maximum 10000000). 0 disables the override.
-        :type width: int
         :param height: Overriding height value in pixels (minimum 0, maximum 10000000). 0 disables the override.
-        :type height: int
         :param deviceScaleFactor: Overriding device scale factor value. 0 disables the override.
-        :type deviceScaleFactor: float
-        :param mobile: Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text autosizing and more.
-        :type mobile: bool
+        :param mobile: Whether to emulate mobile device. This includes viewport meta tag, overlay scrollbars, text
+         autosizing and more.
         :param scale: Scale to apply to resulting view image.
-        :type scale: Optional[float]
         :param screenWidth: Overriding screen width value in pixels (minimum 0, maximum 10000000).
-        :type screenWidth: Optional[int]
         :param screenHeight: Overriding screen height value in pixels (minimum 0, maximum 10000000).
-        :type screenHeight: Optional[int]
         :param positionX: Overriding view X position on screen in pixels (minimum 0, maximum 10000000).
-        :type positionX: Optional[int]
         :param positionY: Overriding view Y position on screen in pixels (minimum 0, maximum 10000000).
-        :type positionY: Optional[int]
         :param dontSetVisibleSize: Do not set visible view size, rely upon explicit setVisibleSize call.
-        :type dontSetVisibleSize: Optional[bool]
         :param screenOrientation: Screen orientation override.
-        :type screenOrientation: Optional[dict]
-        :param viewport: If set, the visible area of the page will be overridden to this viewport. This viewport change is not observed by the page, e.g. viewport-relative elements do not change positions.
-        :type viewport: Optional[dict]
+        :param viewport: If set, the visible area of the page will be overridden to this viewport. This viewport
+         change is not observed by the page, e.g. viewport-relative elements do not change positions.
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if width is not None:
-            msg_dict["width"] = width
-        if height is not None:
-            msg_dict["height"] = height
-        if deviceScaleFactor is not None:
-            msg_dict["deviceScaleFactor"] = deviceScaleFactor
-        if mobile is not None:
-            msg_dict["mobile"] = mobile
+        msg = {
+            "width": width,
+            "height": height,
+            "deviceScaleFactor": deviceScaleFactor,
+            "mobile": mobile,
+        }
         if scale is not None:
-            msg_dict["scale"] = scale
+            msg["scale"] = scale
         if screenWidth is not None:
-            msg_dict["screenWidth"] = screenWidth
+            msg["screenWidth"] = screenWidth
         if screenHeight is not None:
-            msg_dict["screenHeight"] = screenHeight
+            msg["screenHeight"] = screenHeight
         if positionX is not None:
-            msg_dict["positionX"] = positionX
+            msg["positionX"] = positionX
         if positionY is not None:
-            msg_dict["positionY"] = positionY
+            msg["positionY"] = positionY
         if dontSetVisibleSize is not None:
-            msg_dict["dontSetVisibleSize"] = dontSetVisibleSize
+            msg["dontSetVisibleSize"] = dontSetVisibleSize
         if screenOrientation is not None:
-            msg_dict["screenOrientation"] = screenOrientation
+            msg["screenOrientation"] = screenOrientation
         if viewport is not None:
-            msg_dict["viewport"] = viewport
-        return self.client.send("Emulation.setDeviceMetricsOverride", msg_dict)
+            msg["viewport"] = viewport
+        return self.client.send("Emulation.setDeviceMetricsOverride", msg)
 
     def setScrollbarsHidden(self, hidden: bool) -> Awaitable[Dict]:
         """
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setScrollbarsHidden`
+
         :param hidden: Whether scrollbars should be always hidden.
-        :type hidden: bool
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if hidden is not None:
-            msg_dict["hidden"] = hidden
-        return self.client.send("Emulation.setScrollbarsHidden", msg_dict)
+        return self.client.send("Emulation.setScrollbarsHidden", {"hidden": hidden})
 
     def setDocumentCookieDisabled(self, disabled: bool) -> Awaitable[Dict]:
         """
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setDocumentCookieDisabled`
+
         :param disabled: Whether document.coookie API should be disabled.
-        :type disabled: bool
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if disabled is not None:
-            msg_dict["disabled"] = disabled
-        return self.client.send("Emulation.setDocumentCookieDisabled", msg_dict)
+        return self.client.send(
+            "Emulation.setDocumentCookieDisabled", {"disabled": disabled}
+        )
 
     def setEmitTouchEventsForMouse(
         self, enabled: bool, configuration: Optional[str] = None
     ) -> Awaitable[Dict]:
         """
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setEmitTouchEventsForMouse`
+
         :param enabled: Whether touch emulation based on mouse input should be enabled.
-        :type enabled: bool
         :param configuration: Touch/gesture events configuration. Default: current platform.
-        :type configuration: Optional[str]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if enabled is not None:
-            msg_dict["enabled"] = enabled
+        msg = {"enabled": enabled}
         if configuration is not None:
-            msg_dict["configuration"] = configuration
-        return self.client.send("Emulation.setEmitTouchEventsForMouse", msg_dict)
+            msg["configuration"] = configuration
+        return self.client.send("Emulation.setEmitTouchEventsForMouse", msg)
 
     def setEmulatedMedia(self, media: str) -> Awaitable[Dict]:
         """
         Emulates the given media for CSS media queries.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setEmulatedMedia`
+
         :param media: Media type to emulate. Empty string disables the override.
-        :type media: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if media is not None:
-            msg_dict["media"] = media
-        return self.client.send("Emulation.setEmulatedMedia", msg_dict)
+        return self.client.send("Emulation.setEmulatedMedia", {"media": media})
 
     def setGeolocationOverride(
         self,
-        latitude: Optional[float] = None,
-        longitude: Optional[float] = None,
-        accuracy: Optional[float] = None,
+        latitude: Optional[Union[int, float]] = None,
+        longitude: Optional[Union[int, float]] = None,
+        accuracy: Optional[Union[int, float]] = None,
     ) -> Awaitable[Dict]:
         """
         Overrides the Geolocation Position or Error. Omitting any of the parameters emulates position
-unavailable.
+        unavailable.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setGeolocationOverride`
 
         :param latitude: Mock latitude
-        :type latitude: Optional[float]
         :param longitude: Mock longitude
-        :type longitude: Optional[float]
         :param accuracy: Mock accuracy
-        :type accuracy: Optional[float]
+        :return: The results of the command
         """
-        msg_dict = dict()
+        msg = {}
         if latitude is not None:
-            msg_dict["latitude"] = latitude
+            msg["latitude"] = latitude
         if longitude is not None:
-            msg_dict["longitude"] = longitude
+            msg["longitude"] = longitude
         if accuracy is not None:
-            msg_dict["accuracy"] = accuracy
-        return self.client.send("Emulation.setGeolocationOverride", msg_dict)
+            msg["accuracy"] = accuracy
+        return self.client.send("Emulation.setGeolocationOverride", msg)
 
     def setNavigatorOverrides(self, platform: str) -> Awaitable[Dict]:
         """
         Overrides value returned by the javascript navigator object.
 
-        :param platform: The platform navigator.platform should return.
-        :type platform: str
-        """
-        msg_dict = dict()
-        if platform is not None:
-            msg_dict["platform"] = platform
-        return self.client.send("Emulation.setNavigatorOverrides", msg_dict)
+        Status: Deprecated and Experimental
 
-    def setPageScaleFactor(self, pageScaleFactor: float) -> Awaitable[Dict]:
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setNavigatorOverrides`
+
+        :param platform: The platform navigator.platform should return.
+        :return: The results of the command
+        """
+        return self.client.send(
+            "Emulation.setNavigatorOverrides", {"platform": platform}
+        )
+
+    def setPageScaleFactor(self, pageScaleFactor: Union[int, float]) -> Awaitable[Dict]:
         """
         Sets a specified page scale factor.
 
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setPageScaleFactor`
+
         :param pageScaleFactor: Page scale factor.
-        :type pageScaleFactor: float
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if pageScaleFactor is not None:
-            msg_dict["pageScaleFactor"] = pageScaleFactor
-        return self.client.send("Emulation.setPageScaleFactor", msg_dict)
+        return self.client.send(
+            "Emulation.setPageScaleFactor", {"pageScaleFactor": pageScaleFactor}
+        )
 
     def setScriptExecutionDisabled(self, value: bool) -> Awaitable[Dict]:
         """
         Switches script execution in the page.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setScriptExecutionDisabled`
+
         :param value: Whether script execution should be disabled in the page.
-        :type value: bool
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if value is not None:
-            msg_dict["value"] = value
-        return self.client.send("Emulation.setScriptExecutionDisabled", msg_dict)
+        return self.client.send(
+            "Emulation.setScriptExecutionDisabled", {"value": value}
+        )
 
     def setTouchEmulationEnabled(
         self, enabled: bool, maxTouchPoints: Optional[int] = None
@@ -268,73 +305,71 @@ unavailable.
         """
         Enables touch on platforms which do not support them.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setTouchEmulationEnabled`
+
         :param enabled: Whether the touch event emulation should be enabled.
-        :type enabled: bool
         :param maxTouchPoints: Maximum touch points supported. Defaults to one.
-        :type maxTouchPoints: Optional[int]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if enabled is not None:
-            msg_dict["enabled"] = enabled
+        msg = {"enabled": enabled}
         if maxTouchPoints is not None:
-            msg_dict["maxTouchPoints"] = maxTouchPoints
-        return self.client.send("Emulation.setTouchEmulationEnabled", msg_dict)
+            msg["maxTouchPoints"] = maxTouchPoints
+        return self.client.send("Emulation.setTouchEmulationEnabled", msg)
 
     def setVirtualTimePolicy(
         self,
         policy: str,
-        budget: Optional[float] = None,
+        budget: Optional[Union[int, float]] = None,
         maxVirtualTimeTaskStarvationCount: Optional[int] = None,
         waitForNavigation: Optional[bool] = None,
-        initialVirtualTime: Optional[float] = None,
+        initialVirtualTime: Optional[Union[int, float]] = None,
     ) -> Awaitable[Dict]:
         """
         Turns on virtual time for all frames (replacing real-time with a synthetic time source) and sets
-the current virtual time policy.  Note this supersedes any previous time budget.
+        the current virtual time policy.  Note this supersedes any previous time budget.
+
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setVirtualTimePolicy`
 
         :param policy: The policy
-        :type policy: str
-        :param budget: If set, after this many virtual milliseconds have elapsed virtual time will be paused and a virtualTimeBudgetExpired event is sent.
-        :type budget: Optional[float]
-        :param maxVirtualTimeTaskStarvationCount: If set this specifies the maximum number of tasks that can be run before virtual is forced forwards to prevent deadlock.
-        :type maxVirtualTimeTaskStarvationCount: Optional[int]
-        :param waitForNavigation: If set the virtual time policy change should be deferred until any frame starts navigating. Note any previous deferred policy change is superseded.
-        :type waitForNavigation: Optional[bool]
+        :param budget: If set, after this many virtual milliseconds have elapsed virtual time will be paused and a
+         virtualTimeBudgetExpired event is sent.
+        :param maxVirtualTimeTaskStarvationCount: If set this specifies the maximum number of tasks that can be run before virtual is forced
+         forwards to prevent deadlock.
+        :param waitForNavigation: If set the virtual time policy change should be deferred until any frame starts navigating.
+         Note any previous deferred policy change is superseded.
         :param initialVirtualTime: If set, base::Time::Now will be overriden to initially return this value.
-        :type initialVirtualTime: Optional[float]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if policy is not None:
-            msg_dict["policy"] = policy
+        msg = {"policy": policy}
         if budget is not None:
-            msg_dict["budget"] = budget
+            msg["budget"] = budget
         if maxVirtualTimeTaskStarvationCount is not None:
-            msg_dict[
-                "maxVirtualTimeTaskStarvationCount"
-            ] = maxVirtualTimeTaskStarvationCount
+            msg["maxVirtualTimeTaskStarvationCount"] = maxVirtualTimeTaskStarvationCount
         if waitForNavigation is not None:
-            msg_dict["waitForNavigation"] = waitForNavigation
+            msg["waitForNavigation"] = waitForNavigation
         if initialVirtualTime is not None:
-            msg_dict["initialVirtualTime"] = initialVirtualTime
-        return self.client.send("Emulation.setVirtualTimePolicy", msg_dict)
+            msg["initialVirtualTime"] = initialVirtualTime
+        return self.client.send("Emulation.setVirtualTimePolicy", msg)
 
     def setVisibleSize(self, width: int, height: int) -> Awaitable[Dict]:
         """
         Resizes the frame/viewport of the page. Note that this does not affect the frame's container
-(e.g. browser window). Can be used to produce screenshots of the specified size. Not supported
-on Android.
+        (e.g. browser window). Can be used to produce screenshots of the specified size. Not supported
+        on Android.
+
+        Status: Deprecated and Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setVisibleSize`
 
         :param width: Frame width (DIP).
-        :type width: int
         :param height: Frame height (DIP).
-        :type height: int
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if width is not None:
-            msg_dict["width"] = width
-        if height is not None:
-            msg_dict["height"] = height
-        return self.client.send("Emulation.setVisibleSize", msg_dict)
+        return self.client.send(
+            "Emulation.setVisibleSize", {"width": width, "height": height}
+        )
 
     def setUserAgentOverride(
         self,
@@ -345,37 +380,43 @@ on Android.
         """
         Allows overriding user agent with the given string.
 
-        :param userAgent: User agent to use.
-        :type userAgent: str
-        :param acceptLanguage: Browser langugage to emulate.
-        :type acceptLanguage: Optional[str]
-        :param platform: The platform navigator.platform should return.
-        :type platform: Optional[str]
-        """
-        msg_dict = dict()
-        if userAgent is not None:
-            msg_dict["userAgent"] = userAgent
-        if acceptLanguage is not None:
-            msg_dict["acceptLanguage"] = acceptLanguage
-        if platform is not None:
-            msg_dict["platform"] = platform
-        return self.client.send("Emulation.setUserAgentOverride", msg_dict)
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#method-setUserAgentOverride`
 
-    def virtualTimeBudgetExpired(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+        :param userAgent: User agent to use.
+        :param acceptLanguage: Browser langugage to emulate.
+        :param platform: The platform navigator.platform should return.
+        :return: The results of the command
+        """
+        msg = {"userAgent": userAgent}
+        if acceptLanguage is not None:
+            msg["acceptLanguage"] = acceptLanguage
+        if platform is not None:
+            msg["platform"] = platform
+        return self.client.send("Emulation.setUserAgentOverride", msg)
+
+    def virtualTimeBudgetExpired(
+        self, listener: Optional[Callable[[Any], Any]] = None
+    ) -> Any:
         """
         Notification sent after the virtual time budget for the current VirtualTimePolicy has run out.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Emulation#event-virtualTimeBudgetExpired`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Emulation.virtualTimeBudgetExpired"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Emulation.virtualTimeBudgetExpired", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Emulation.virtualTimeBudgetExpired", cb)
-        return lambda: self.client.remove_listener(
-            "Emulation.virtualTimeBudgetExpired", cb
-        )
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)

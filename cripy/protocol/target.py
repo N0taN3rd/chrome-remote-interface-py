@@ -1,33 +1,38 @@
 """This is an auto-generated file. Modify at your own risk"""
 from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
-import attr
-
 if TYPE_CHECKING:
     from cripy import ConnectionType, SessionType
 
 __all__ = ["Target"]
 
 
-@attr.dataclass(slots=True, cmp=False)
-class Target(object):
+class Target:
     """
     Supports additional targets discovery and allows to attach to them.
+     
+    See `https://chromedevtools.github.io/devtools-protocol/tot/Target`
     """
 
-    client: Union["ConnectionType", "SessionType"] = attr.ib()
+    __slots__ = ["client"]
+
+    def __init__(self, client: Union["ConnectionType", "SessionType"]) -> None:
+        """Initialize a new instance of Target
+
+        :param client: The client instance to be used to communicate with the remote browser instance
+        """
+        self.client: Union["ConnectionType", "SessionType"] = client
 
     def activateTarget(self, targetId: str) -> Awaitable[Dict]:
         """
         Activates (focuses) the target.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-activateTarget`
+
         :param targetId: The targetId
-        :type targetId: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if targetId is not None:
-            msg_dict["targetId"] = targetId
-        return self.client.send("Target.activateTarget", msg_dict)
+        return self.client.send("Target.activateTarget", {"targetId": targetId})
 
     def attachToTarget(
         self, targetId: str, flatten: Optional[bool] = None
@@ -35,73 +40,90 @@ class Target(object):
         """
         Attaches to the target with given id.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-attachToTarget`
+
         :param targetId: The targetId
-        :type targetId: str
         :param flatten: Enables "flat" access to the session via specifying sessionId attribute in the commands.
-        :type flatten: Optional[bool]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if targetId is not None:
-            msg_dict["targetId"] = targetId
+        msg = {"targetId": targetId}
         if flatten is not None:
-            msg_dict["flatten"] = flatten
-        return self.client.send("Target.attachToTarget", msg_dict)
+            msg["flatten"] = flatten
+        return self.client.send("Target.attachToTarget", msg)
 
     def attachToBrowserTarget(self) -> Awaitable[Dict]:
         """
         Attaches to the browser target, only uses flat sessionId mode.
+
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-attachToBrowserTarget`
+
+        :return: The results of the command
         """
-        return self.client.send("Target.attachToBrowserTarget")
+        return self.client.send("Target.attachToBrowserTarget", {})
 
     def closeTarget(self, targetId: str) -> Awaitable[Dict]:
         """
         Closes the target. If the target is a page that gets closed too.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-closeTarget`
+
         :param targetId: The targetId
-        :type targetId: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if targetId is not None:
-            msg_dict["targetId"] = targetId
-        return self.client.send("Target.closeTarget", msg_dict)
+        return self.client.send("Target.closeTarget", {"targetId": targetId})
 
     def exposeDevToolsProtocol(
         self, targetId: str, bindingName: Optional[str] = None
     ) -> Awaitable[Dict]:
         """
         Inject object to the target's main frame that provides a communication
-channel with browser target.
+        channel with browser target.
+        
+        Injected object will be available as `window[bindingName]`.
+        
+        The object has the follwing API:
+        - `binding.send(json)` - a method to send messages over the remote debugging protocol
+        - `binding.onmessage = json => handleMessage(json)` - a callback that will be called for the protocol notifications and command responses.
 
-Injected object will be available as `window[bindingName]`.
+        Status: Experimental
 
-The object has the follwing API:
-- `binding.send(json)` - a method to send messages over the remote debugging protocol
-- `binding.onmessage = json => handleMessage(json)` - a callback that will be called for the protocol notifications and command responses.
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-exposeDevToolsProtocol`
 
         :param targetId: The targetId
-        :type targetId: str
         :param bindingName: Binding name, 'cdp' if not specified.
-        :type bindingName: Optional[str]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if targetId is not None:
-            msg_dict["targetId"] = targetId
+        msg = {"targetId": targetId}
         if bindingName is not None:
-            msg_dict["bindingName"] = bindingName
-        return self.client.send("Target.exposeDevToolsProtocol", msg_dict)
+            msg["bindingName"] = bindingName
+        return self.client.send("Target.exposeDevToolsProtocol", msg)
 
     def createBrowserContext(self) -> Awaitable[Dict]:
         """
         Creates a new empty BrowserContext. Similar to an incognito profile but you can have more than
-one.
+        one.
+
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-createBrowserContext`
+
+        :return: The results of the command
         """
-        return self.client.send("Target.createBrowserContext")
+        return self.client.send("Target.createBrowserContext", {})
 
     def getBrowserContexts(self) -> Awaitable[Dict]:
         """
         Returns all browser contexts created with `Target.createBrowserContext` method.
+
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-getBrowserContexts`
+
+        :return: The results of the command
         """
-        return self.client.send("Target.getBrowserContexts")
+        return self.client.send("Target.getBrowserContexts", {})
 
     def createTarget(
         self,
@@ -114,29 +136,26 @@ one.
         """
         Creates a new page.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-createTarget`
+
         :param url: The initial URL the page will be navigated to.
-        :type url: str
         :param width: Frame width in DIP (headless chrome only).
-        :type width: Optional[int]
         :param height: Frame height in DIP (headless chrome only).
-        :type height: Optional[int]
         :param browserContextId: The browser context to create the page in.
-        :type browserContextId: Optional[str]
-        :param enableBeginFrameControl: Whether BeginFrames for this target will be controlled via DevTools (headless chrome only, not supported on MacOS yet, false by default).
-        :type enableBeginFrameControl: Optional[bool]
+        :param enableBeginFrameControl: Whether BeginFrames for this target will be controlled via DevTools (headless chrome only,
+         not supported on MacOS yet, false by default).
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if url is not None:
-            msg_dict["url"] = url
+        msg = {"url": url}
         if width is not None:
-            msg_dict["width"] = width
+            msg["width"] = width
         if height is not None:
-            msg_dict["height"] = height
+            msg["height"] = height
         if browserContextId is not None:
-            msg_dict["browserContextId"] = browserContextId
+            msg["browserContextId"] = browserContextId
         if enableBeginFrameControl is not None:
-            msg_dict["enableBeginFrameControl"] = enableBeginFrameControl
-        return self.client.send("Target.createTarget", msg_dict)
+            msg["enableBeginFrameControl"] = enableBeginFrameControl
+        return self.client.send("Target.createTarget", msg)
 
     def detachFromTarget(
         self, sessionId: Optional[str] = None, targetId: Optional[str] = None
@@ -144,48 +163,60 @@ one.
         """
         Detaches session with given id.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-detachFromTarget`
+
         :param sessionId: Session to detach.
-        :type sessionId: Optional[str]
         :param targetId: Deprecated.
-        :type targetId: Optional[str]
+        :return: The results of the command
         """
-        msg_dict = dict()
+        msg = {}
         if sessionId is not None:
-            msg_dict["sessionId"] = sessionId
+            msg["sessionId"] = sessionId
         if targetId is not None:
-            msg_dict["targetId"] = targetId
-        return self.client.send("Target.detachFromTarget", msg_dict)
+            msg["targetId"] = targetId
+        return self.client.send("Target.detachFromTarget", msg)
 
     def disposeBrowserContext(self, browserContextId: str) -> Awaitable[Dict]:
         """
         Deletes a BrowserContext. All the belonging pages will be closed without calling their
-beforeunload hooks.
+        beforeunload hooks.
+
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-disposeBrowserContext`
 
         :param browserContextId: The browserContextId
-        :type browserContextId: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if browserContextId is not None:
-            msg_dict["browserContextId"] = browserContextId
-        return self.client.send("Target.disposeBrowserContext", msg_dict)
+        return self.client.send(
+            "Target.disposeBrowserContext", {"browserContextId": browserContextId}
+        )
 
     def getTargetInfo(self, targetId: Optional[str] = None) -> Awaitable[Dict]:
         """
         Returns information about a target.
 
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-getTargetInfo`
+
         :param targetId: The targetId
-        :type targetId: Optional[str]
+        :return: The results of the command
         """
-        msg_dict = dict()
+        msg = {}
         if targetId is not None:
-            msg_dict["targetId"] = targetId
-        return self.client.send("Target.getTargetInfo", msg_dict)
+            msg["targetId"] = targetId
+        return self.client.send("Target.getTargetInfo", msg)
 
     def getTargets(self) -> Awaitable[Dict]:
         """
         Retrieves a list of available targets.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-getTargets`
+
+        :return: The results of the command
         """
-        return self.client.send("Target.getTargets")
+        return self.client.send("Target.getTargets", {})
 
     def sendMessageToTarget(
         self,
@@ -196,21 +227,19 @@ beforeunload hooks.
         """
         Sends protocol message over session with given id.
 
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-sendMessageToTarget`
+
         :param message: The message
-        :type message: str
         :param sessionId: Identifier of the session.
-        :type sessionId: Optional[str]
         :param targetId: Deprecated.
-        :type targetId: Optional[str]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if message is not None:
-            msg_dict["message"] = message
+        msg = {"message": message}
         if sessionId is not None:
-            msg_dict["sessionId"] = sessionId
+            msg["sessionId"] = sessionId
         if targetId is not None:
-            msg_dict["targetId"] = targetId
-        return self.client.send("Target.sendMessageToTarget", msg_dict)
+            msg["targetId"] = targetId
+        return self.client.send("Target.sendMessageToTarget", msg)
 
     def setAutoAttach(
         self,
@@ -220,171 +249,241 @@ beforeunload hooks.
     ) -> Awaitable[Dict]:
         """
         Controls whether to automatically attach to new targets which are considered to be related to
-this one. When turned on, attaches to all existing related targets as well. When turned off,
-automatically detaches from all currently attached targets.
+        this one. When turned on, attaches to all existing related targets as well. When turned off,
+        automatically detaches from all currently attached targets.
+
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-setAutoAttach`
 
         :param autoAttach: Whether to auto-attach to related targets.
-        :type autoAttach: bool
-        :param waitForDebuggerOnStart: Whether to pause new targets when attaching to them. Use `Runtime.runIfWaitingForDebugger` to run paused targets.
-        :type waitForDebuggerOnStart: bool
+        :param waitForDebuggerOnStart: Whether to pause new targets when attaching to them. Use `Runtime.runIfWaitingForDebugger`
+         to run paused targets.
         :param flatten: Enables "flat" access to the session via specifying sessionId attribute in the commands.
-        :type flatten: Optional[bool]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if autoAttach is not None:
-            msg_dict["autoAttach"] = autoAttach
-        if waitForDebuggerOnStart is not None:
-            msg_dict["waitForDebuggerOnStart"] = waitForDebuggerOnStart
+        msg = {
+            "autoAttach": autoAttach,
+            "waitForDebuggerOnStart": waitForDebuggerOnStart,
+        }
         if flatten is not None:
-            msg_dict["flatten"] = flatten
-        return self.client.send("Target.setAutoAttach", msg_dict)
+            msg["flatten"] = flatten
+        return self.client.send("Target.setAutoAttach", msg)
 
     def setDiscoverTargets(self, discover: bool) -> Awaitable[Dict]:
         """
         Controls whether to discover available targets and notify via
-`targetCreated/targetInfoChanged/targetDestroyed` events.
+        `targetCreated/targetInfoChanged/targetDestroyed` events.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-setDiscoverTargets`
 
         :param discover: Whether to discover available targets.
-        :type discover: bool
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if discover is not None:
-            msg_dict["discover"] = discover
-        return self.client.send("Target.setDiscoverTargets", msg_dict)
+        return self.client.send("Target.setDiscoverTargets", {"discover": discover})
 
-    def setRemoteLocations(self, locations: List[dict]) -> Awaitable[Dict]:
+    def setRemoteLocations(self, locations: List[Dict[str, Any]]) -> Awaitable[Dict]:
         """
         Enables target discovery for the specified locations, when `setDiscoverTargets` was set to
-`true`.
+        `true`.
+
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#method-setRemoteLocations`
 
         :param locations: List of remote locations.
-        :type locations: List[dict]
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if locations is not None:
-            msg_dict["locations"] = locations
-        return self.client.send("Target.setRemoteLocations", msg_dict)
+        return self.client.send("Target.setRemoteLocations", {"locations": locations})
 
-    def attachedToTarget(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def attachedToTarget(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Issued when attached to target because of auto-attach or `attachToTarget` command.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#event-attachedToTarget`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Target.attachedToTarget"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Target.attachedToTarget", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Target.attachedToTarget", cb)
-        return lambda: self.client.remove_listener("Target.attachedToTarget", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def detachedFromTarget(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def detachedFromTarget(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Issued when detached from target for any reason (including `detachFromTarget` command). Can be
         issued multiple times per target if multiple sessions have been attached to it.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#event-detachedFromTarget`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Target.detachedFromTarget"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Target.detachedFromTarget", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Target.detachedFromTarget", cb)
-        return lambda: self.client.remove_listener("Target.detachedFromTarget", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def receivedMessageFromTarget(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def receivedMessageFromTarget(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Notifies about a new protocol message received from the session (as reported in
         `attachedToTarget` event).
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#event-receivedMessageFromTarget`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Target.receivedMessageFromTarget"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Target.receivedMessageFromTarget", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Target.receivedMessageFromTarget", cb)
-        return lambda: self.client.remove_listener(
-            "Target.receivedMessageFromTarget", cb
-        )
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def targetCreated(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def targetCreated(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Issued when a possible inspection target is created.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#event-targetCreated`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Target.targetCreated"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Target.targetCreated", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Target.targetCreated", cb)
-        return lambda: self.client.remove_listener("Target.targetCreated", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def targetDestroyed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def targetDestroyed(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Issued when a target is destroyed.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#event-targetDestroyed`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Target.targetDestroyed"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Target.targetDestroyed", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Target.targetDestroyed", cb)
-        return lambda: self.client.remove_listener("Target.targetDestroyed", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def targetCrashed(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def targetCrashed(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Issued when a target has crashed.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#event-targetCrashed`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Target.targetCrashed"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Target.targetCrashed", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Target.targetCrashed", cb)
-        return lambda: self.client.remove_listener("Target.targetCrashed", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def targetInfoChanged(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def targetInfoChanged(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         Issued when some information about a target has changed. This only happens between
         `targetCreated` and `targetDestroyed`.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Target#event-targetInfoChanged`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Target.targetInfoChanged"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Target.targetInfoChanged", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Target.targetInfoChanged", cb)
-        return lambda: self.client.remove_listener("Target.targetInfoChanged", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)

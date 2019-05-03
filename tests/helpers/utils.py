@@ -1,9 +1,9 @@
-from typing import List, Callable, Tuple, Dict, Union, Any, Optional
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import attr
-from pyee2 import EventEmitter
+from pyee2 import EventEmitter, EventEmitterS
 
-from cripy import Connection, Client, CDP
+from cripy import CDP, Client, Connection
 
 __all__ = [
     "Cleaner",
@@ -12,16 +12,18 @@ __all__ = [
     "get_target_from_list",
 ]
 
-EEListener = Dict[str, Union[str, EventEmitter, Callable]]
+EE = Union[EventEmitter, EventEmitterS]
+
+EEListener = Dict[str, Union[str, EE, Callable]]
 
 
 @attr.dataclass(slots=True)
-class Cleaner(object):
+class Cleaner:
     listeners: List[EEListener] = attr.ib(init=False, factory=list)
     disposables: List[Any] = attr.ib(init=False, factory=list)
 
     def addEventListener(
-        self, emitter: EventEmitter, eventName: str, handler: Callable
+        self, emitter: EE, eventName: str, handler: Callable
     ) -> None:
         emitter.on(eventName, handler)
         self.listeners.append(
@@ -29,7 +31,7 @@ class Cleaner(object):
         )
 
     def addEventListeners(
-        self, emitter: EventEmitter, eventsHandlers: List[Tuple[str, Callable]]
+        self, emitter: EE, eventsHandlers: List[Tuple[str, Callable]]
     ) -> None:
         for eventName, handler in eventsHandlers:
             self.addEventListener(emitter, eventName, handler)
@@ -52,11 +54,11 @@ class Cleaner(object):
         self.disposables.clear()
 
 
-DefaultEvalArgs = dict(includeCommandLineAPI=True, awaitPromise=True, userGesture=True)
+DefaultEvalArgs = {'includeCommandLineAPI': True, 'awaitPromise': True, 'userGesture': True}
 
 
 def merge_dicts(*dicts: Dict) -> Dict:
-    merged: Dict = dict()
+    merged: Dict = {}
     for d in dicts:
         merged.update(d)
     return merged

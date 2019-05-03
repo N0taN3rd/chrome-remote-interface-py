@@ -2,13 +2,13 @@ from asyncio import AbstractEventLoop
 
 import pytest
 
-from cripy.cdp import connect
+from cripy.cdp import connect, CDP
 from cripy.client import Client
 from .helpers import Cleaner
 
 
 @pytest.mark.usefixtures("chrome")
-class TestEventsLocal(object):
+class TestEventsLocal:
     @pytest.mark.asyncio
     async def test_event_client_on_cb(
         self, mr_clean: Cleaner, event_loop: AbstractEventLoop
@@ -85,7 +85,7 @@ class TestEventsLocal(object):
 
 
 @pytest.mark.usefixtures("chrome")
-class TestEventsRemote(object):
+class TestEventsRemote:
     @pytest.mark.asyncio
     async def test_event_client_on_cb(
         self, mr_clean: Cleaner, event_loop: AbstractEventLoop
@@ -125,7 +125,7 @@ class TestEventsRemote(object):
         self, mr_clean: Cleaner, event_loop: AbstractEventLoop
     ):
         future = event_loop.create_future()
-        client: Client = await connect(url=self.wsurl, remote=True)
+        client = await connect(url=self.wsurl, remote=True)
         mr_clean.add_disposable(client)
 
         def listener(x):
@@ -161,14 +161,16 @@ class TestEventsRemote(object):
         assert await client.Network.requestWillBeSent() is not None
 
 
-@pytest.mark.usefixtures("chrome", "protocol_def")
-class TestEventsSuppliedProto(object):
+@pytest.mark.usefixtures("chrome")
+class TestEventsSuppliedProto:
     @pytest.mark.asyncio
     async def test_event_client_on_cb(
         self, mr_clean: Cleaner, event_loop: AbstractEventLoop
     ):
         future = event_loop.create_future()
-        client = await connect(url=self.wsurl, protocol=self.protocol)
+        client = await connect(
+            url=self.wsurl, protocol=await CDP.Protocol(loop=event_loop)
+        )
         mr_clean.add_disposable(client)
 
         def listener(x):
@@ -184,7 +186,9 @@ class TestEventsSuppliedProto(object):
     @pytest.mark.asyncio
     async def test_event_on_cb(self, mr_clean: Cleaner, event_loop: AbstractEventLoop):
         future = event_loop.create_future()
-        client = await connect(url=self.wsurl, protocol=self.protocol)
+        client = await connect(
+            url=self.wsurl, protocol=await CDP.Protocol(loop=event_loop)
+        )
         mr_clean.add_disposable(client)
 
         def listener(x):
@@ -202,7 +206,9 @@ class TestEventsSuppliedProto(object):
         self, mr_clean: Cleaner, event_loop: AbstractEventLoop
     ):
         future = event_loop.create_future()
-        client: Client = await connect(url=self.wsurl, protocol=self.protocol)
+        client: Client = await connect(
+            url=self.wsurl, protocol=await CDP.Protocol(loop=event_loop)
+        )
         mr_clean.add_disposable(client)
 
         def listener(x):
@@ -222,7 +228,9 @@ class TestEventsSuppliedProto(object):
         self, mr_clean: Cleaner, event_loop: AbstractEventLoop
     ):
         future = event_loop.create_future()
-        client = await connect(url=self.wsurl, protocol=self.protocol)
+        client = await connect(
+            url=self.wsurl, protocol=await CDP.Protocol(loop=event_loop)
+        )
         mr_clean.add_disposable(client)
         client.once("Network.requestWillBeSent", lambda x: future.set_result(x))
         await client.Network.enable()
@@ -230,8 +238,12 @@ class TestEventsSuppliedProto(object):
         assert await future is not None
 
     @pytest.mark.asyncio
-    async def test_event_once_promise(self, mr_clean: Cleaner):
-        client = await connect(url=self.wsurl, protocol=self.protocol)
+    async def test_event_once_promise(
+        self, mr_clean: Cleaner, event_loop: AbstractEventLoop
+    ):
+        client = await connect(
+            url=self.wsurl, protocol=await CDP.Protocol(loop=event_loop)
+        )
         mr_clean.add_disposable(client)
         await client.Network.enable()
         await client.Page.navigate("https://google.com")

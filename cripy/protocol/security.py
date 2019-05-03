@@ -1,108 +1,148 @@
 """This is an auto-generated file. Modify at your own risk"""
 from typing import Awaitable, Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING
 
-import attr
-
 if TYPE_CHECKING:
     from cripy import ConnectionType, SessionType
 
 __all__ = ["Security"]
 
 
-@attr.dataclass(slots=True, cmp=False)
-class Security(object):
+class Security:
     """
     Security
+     
+    See `https://chromedevtools.github.io/devtools-protocol/tot/Security`
     """
 
-    client: Union["ConnectionType", "SessionType"] = attr.ib()
+    __slots__ = ["client"]
+
+    def __init__(self, client: Union["ConnectionType", "SessionType"]) -> None:
+        """Initialize a new instance of Security
+
+        :param client: The client instance to be used to communicate with the remote browser instance
+        """
+        self.client: Union["ConnectionType", "SessionType"] = client
 
     def disable(self) -> Awaitable[Dict]:
         """
         Disables tracking security state changes.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Security#method-disable`
+
+        :return: The results of the command
         """
-        return self.client.send("Security.disable")
+        return self.client.send("Security.disable", {})
 
     def enable(self) -> Awaitable[Dict]:
         """
         Enables tracking security state changes.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Security#method-enable`
+
+        :return: The results of the command
         """
-        return self.client.send("Security.enable")
+        return self.client.send("Security.enable", {})
 
     def setIgnoreCertificateErrors(self, ignore: bool) -> Awaitable[Dict]:
         """
         Enable/disable whether all certificate errors should be ignored.
 
+        Status: Experimental
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Security#method-setIgnoreCertificateErrors`
+
         :param ignore: If true, all certificate errors will be ignored.
-        :type ignore: bool
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if ignore is not None:
-            msg_dict["ignore"] = ignore
-        return self.client.send("Security.setIgnoreCertificateErrors", msg_dict)
+        return self.client.send(
+            "Security.setIgnoreCertificateErrors", {"ignore": ignore}
+        )
 
     def handleCertificateError(self, eventId: int, action: str) -> Awaitable[Dict]:
         """
         Handles a certificate error that fired a certificateError event.
 
+        Status: Deprecated
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Security#method-handleCertificateError`
+
         :param eventId: The ID of the event.
-        :type eventId: int
         :param action: The action to take on the certificate error.
-        :type action: str
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if eventId is not None:
-            msg_dict["eventId"] = eventId
-        if action is not None:
-            msg_dict["action"] = action
-        return self.client.send("Security.handleCertificateError", msg_dict)
+        return self.client.send(
+            "Security.handleCertificateError", {"eventId": eventId, "action": action}
+        )
 
     def setOverrideCertificateErrors(self, override: bool) -> Awaitable[Dict]:
         """
         Enable/disable overriding certificate errors. If enabled, all certificate error events need to
-be handled by the DevTools client and should be answered with `handleCertificateError` commands.
+        be handled by the DevTools client and should be answered with `handleCertificateError` commands.
+
+        Status: Deprecated
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Security#method-setOverrideCertificateErrors`
 
         :param override: If true, certificate errors will be overridden.
-        :type override: bool
+        :return: The results of the command
         """
-        msg_dict = dict()
-        if override is not None:
-            msg_dict["override"] = override
-        return self.client.send("Security.setOverrideCertificateErrors", msg_dict)
+        return self.client.send(
+            "Security.setOverrideCertificateErrors", {"override": override}
+        )
 
-    def certificateError(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def certificateError(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         There is a certificate error. If overriding certificate errors is enabled, then it should be
         handled with the `handleCertificateError` command. Note: this event does not fire if the
         certificate error has been allowed internally. Only one client per target should override
         certificate errors at the same time.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Security#event-certificateError`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Security.certificateError"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Security.certificateError", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Security.certificateError", cb)
-        return lambda: self.client.remove_listener("Security.certificateError", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
 
-    def securityStateChanged(self, cb: Optional[Callable[..., Any]] = None) -> Any:
+    def securityStateChanged(
+        self, listener: Optional[Callable[[Dict[str, Any]], Any]] = None
+    ) -> Any:
         """
         The security state of the page changed.
+
+        See `https://chromedevtools.github.io/devtools-protocol/tot/Security#event-securityStateChanged`
+
+        :param listener: Optional listener function
+        :return: If a listener was supplied the return value is a callable that
+        will remove the supplied listener otherwise a future that resolves
+        with the value of the event
         """
-        if cb is None:
+        event_name = "Security.securityStateChanged"
+        if listener is None:
             future = self.client.loop.create_future()
 
-            def _cb(msg: Optional[Any] = None) -> None:
-                future.set_result(msg)
+            def _listener(event: Optional[Dict] = None) -> None:
+                future.set_result(event)
 
-            self.client.once("Security.securityStateChanged", _cb)
+            self.client.once(event_name, _listener)
 
             return future
 
-        self.client.on("Security.securityStateChanged", cb)
-        return lambda: self.client.remove_listener("Security.securityStateChanged", cb)
+        self.client.on(event_name, listener)
+        return lambda: self.client.remove_listener(event_name, listener)
