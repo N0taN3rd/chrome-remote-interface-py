@@ -147,7 +147,10 @@ class CDPSession(EventEmitterS):
         if _id and _id in self._callbacks:
             callback = self._callbacks.pop(_id)
             if "error" in obj:
-                callback.set_exception(create_protocol_error(callback.method, obj))
+                # Checking state of the future object.
+                # It can be canceled.
+                if callback and not callback.done():
+                    callback.set_exception(create_protocol_error(callback.method, obj))
             else:
                 result = obj.get("result")
                 if callback and not callback.done():
